@@ -1,0 +1,647 @@
+/* SUT微信小程序管理界面样式 */
+
+/* 统计卡片样式 */
+.sut-wechat-mini-stats-cards {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 20px 0;
+    gap: 20px;
+}
+
+.sut-wechat-mini-stats-cards .stat-card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    padding: 20px;
+    flex: 1;
+    min-width: 200px;
+    text-align: center;
+}
+
+.sut-wechat-mini-stats-cards .stat-value {
+    font-size: 28px;
+    font-weight: bold;
+    color: #0073aa;
+    margin-bottom: 10px;
+}
+
+.sut-wechat-mini-stats-cards .stat-label {
+    font-size: 14px;
+    color: #666;
+}
+
+/* 图表容器样式 */
+.sut-wechat-mini-stats-charts {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 20px 0;
+    gap: 20px;
+}
+
+.sut-wechat-mini-stats-charts .chart-container {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    padding: 20px;
+    flex: 1;
+    min-width: 400px;
+}
+
+.sut-wechat-mini-stats-charts h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 16px;
+    color: #333;
+}
+
+/* 表格样式增强 */
+.sut-wechat-mini-users-wrapper table,
+.sut-wechat-mini-orders-wrapper table {
+    width: 100%;
+}
+
+.sut-wechat-mini-users-wrapper th,
+.sut-wechat-mini-orders-wrapper th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+}
+
+.sut-wechat-mini-users-wrapper .sut-wechat-mini-delete-user {
+    color: #dc3545;
+    text-decoration: none;
+}
+
+.sut-wechat-mini-users-wrapper .sut-wechat-mini-delete-user:hover {
+    text-decoration: underline;
+}
+
+/* 图片上传样式 */
+.sut-wechat-mini-image-upload {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sut-wechat-mini-image-upload .image-preview {
+    width: 100px;
+    height: 100px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sut-wechat-mini-image-upload .image-preview img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+/* 颜色选择器样式 */
+.sut-wechat-mini-color-picker {
+    width: 80px;
+    height: 35px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* 表单样式增强 */
+.sut-wechat-mini-form-group {
+    margin-bottom: 20px;
+}
+
+.sut-wechat-mini-form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.sut-wechat-mini-form-group input[type="text"],
+.sut-wechat-mini-form-group input[type="password"],
+.sut-wechat-mini-form-group input[type="email"],
+.sut-wechat-mini-form-group input[type="number"],
+.sut-wechat-mini-form-group select,
+.sut-wechat-mini-form-group textarea {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.sut-wechat-mini-form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* 响应式样式 */
+@media screen and (max-width: 768px) {
+    .sut-wechat-mini-stats-cards,
+    .sut-wechat-mini-stats-charts {
+        flex-direction: column;
+    }
+    
+    .sut-wechat-mini-stats-cards .stat-card,
+    .sut-wechat-mini-stats-charts .chart-container {
+        min-width: auto;
+    }
+}
+
+/* 工具提示样式 */
+.sut-wechat-mini-tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted #666;
+    cursor: help;
+}
+
+.sut-wechat-mini-tooltip .tooltip-text {
+    visibility: hidden;
+    width: 200px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 4px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -100px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 12px;
+}
+
+.sut-wechat-mini-tooltip:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* 通知样式 */
+.sut-wechat-mini-notice {
+    padding: 12px 16px;
+    border-left: 4px solid #0073aa;
+    background-color: #f1f1f1;
+    margin-bottom: 20px;
+    border-radius: 0 4px 4px 0;
+}
+
+.sut-wechat-mini-notice.success {
+    border-left-color: #46b450;
+}
+
+.sut-wechat-mini-notice.error {
+    border-left-color: #dc3545;
+}
+
+.sut-wechat-mini-notice.warning {
+    border-left-color: #ffc107;
+}
+
+.sut-wechat-mini-notice.info {
+    border-left-color: #17a2b8;
+}
+
+/* 加载动画 */
+.sut-wechat-mini-loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #0073aa;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* 按钮样式 */
+.sut-wechat-mini-btn {
+    display: inline-block;
+    padding: 8px 16px;
+    margin: 5px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.sut-wechat-mini-btn-primary {
+    background-color: #0073aa;
+    color: white;
+}
+
+.sut-wechat-mini-btn-primary:hover {
+    background-color: #005177;
+    color: white;
+}
+
+.sut-wechat-mini-btn-secondary {
+    background-color: #f8f9fa;
+    color: #333;
+    border: 1px solid #ddd;
+}
+
+.sut-wechat-mini-btn-secondary:hover {
+    background-color: #e9ecef;
+    color: #333;
+}
+
+.sut-wechat-mini-btn-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.sut-wechat-mini-btn-danger:hover {
+    background-color: #c82333;
+    color: white;
+}
+
+/* 标签样式 */
+.sut-wechat-mini-tag {
+    display: inline-block;
+    padding: 3px 8px;
+    background-color: #e9ecef;
+    color: #495057;
+    border-radius: 4px;
+    font-size: 12px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+.sut-wechat-mini-tag.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.sut-wechat-mini-tag.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.sut-wechat-mini-tag.warning {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.sut-wechat-mini-tag.info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+/* 网格布局 */
+.sut-wechat-mini-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.sut-wechat-mini-grid-item {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+}
+
+/* 进度条样式 */
+.sut-wechat-mini-progress {
+    height: 8px;
+    background-color: #e9ecef;
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 10px 0;
+}
+
+.sut-wechat-mini-progress-bar {
+    height: 100%;
+    background-color: #0073aa;
+    border-radius: 4px;
+}
+
+/* 卡片阴影效果 */
+.sut-wechat-mini-card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.sut-wechat-mini-card:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* 切换开关样式 */
+.sut-wechat-mini-toggle {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 24px;
+}
+
+.sut-wechat-mini-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.sut-wechat-mini-toggle .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 24px;
+}
+
+.sut-wechat-mini-toggle .slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+.sut-wechat-mini-toggle input:checked + .slider {
+    background-color: #0073aa;
+}
+
+.sut-wechat-mini-toggle input:checked + .slider:before {
+    transform: translateX(24px);
+}
+
+/* 标签页样式 */
+.sut-wechat-mini-tabs {
+    margin-bottom: 20px;
+}
+
+.sut-wechat-mini-tabs-nav {
+    display: flex;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 15px;
+}
+
+.sut-wechat-mini-tab-nav {
+    padding: 10px 20px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+}
+
+.sut-wechat-mini-tab-nav.active {
+    border-bottom-color: #0073aa;
+    color: #0073aa;
+    font-weight: 600;
+}
+
+.sut-wechat-mini-tab-content {
+    display: none;
+}
+
+.sut-wechat-mini-tab-content.active {
+    display: block;
+}
+
+/* 分页样式 */
+.sut-wechat-mini-pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.sut-wechat-mini-pagination a {
+    padding: 8px 12px;
+    margin: 0 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #0073aa;
+}
+
+.sut-wechat-mini-pagination a:hover {
+    background-color: #f1f1f1;
+}
+
+.sut-wechat-mini-pagination a.active {
+    background-color: #0073aa;
+    color: white;
+    border-color: #0073aa;
+}
+
+/* 搜索框样式 */
+.sut-wechat-mini-search {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.sut-wechat-mini-search input {
+    width: 100%;
+    padding: 10px 40px 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 25px;
+    font-size: 14px;
+}
+
+.sut-wechat-mini-search .search-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+}
+
+/* 下拉菜单样式 */
+.sut-wechat-mini-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.sut-wechat-mini-dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    min-width: 160px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    border-radius: 4px;
+    z-index: 1000;
+    overflow: hidden;
+}
+
+.sut-wechat-mini-dropdown-content a {
+    color: #333;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.sut-wechat-mini-dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+.sut-wechat-mini-dropdown:hover .sut-wechat-mini-dropdown-content {
+    display: block;
+}
+
+/* 响应式表格 */
+.sut-wechat-mini-responsive-table {
+    overflow-x: auto;
+}
+
+.sut-wechat-mini-responsive-table table {
+    min-width: 640px;
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.sut-wechat-mini-fade-in {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* 加载状态覆盖层 */
+.sut-wechat-mini-loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+/* 徽章样式 */
+.sut-wechat-mini-badge {
+    display: inline-block;
+    padding: 3px 7px;
+    background-color: #0073aa;
+    color: white;
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: 600;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    min-width: 20px;
+    text-align: center;
+}
+
+/* 折叠面板样式 */
+.sut-wechat-mini-accordion {
+    margin-bottom: 20px;
+}
+
+.sut-wechat-mini-accordion-item {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+
+.sut-wechat-mini-accordion-header {
+    background-color: #f8f9fa;
+    padding: 15px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sut-wechat-mini-accordion-header h4 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.sut-wechat-mini-accordion-content {
+    padding: 0 15px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+
+.sut-wechat-mini-accordion-content-inner {
+    padding: 15px 0;
+}
+
+.sut-wechat-mini-accordion-item.active .sut-wechat-mini-accordion-content {
+    max-height: 1000px;
+    transition: max-height 0.5s ease-in;
+}
+
+/* 开关按钮动画 */
+.sut-wechat-mini-toggle-btn {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.sut-wechat-mini-toggle-btn input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.sut-wechat-mini-toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.sut-wechat-mini-toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+.sut-wechat-mini-toggle-btn input:checked + .sut-wechat-mini-toggle-slider {
+    background-color: #0073aa;
+}
+
+.sut-wechat-mini-toggle-btn input:focus + .sut-wechat-mini-toggle-slider {
+    box-shadow: 0 0 1px #0073aa;
+}
+
+.sut-wechat-mini-toggle-btn input:checked + .sut-wechat-mini-toggle-slider:before {
+    transform: translateX(26px);
+}
