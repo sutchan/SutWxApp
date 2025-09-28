@@ -1162,3 +1162,4 @@ class SUT_WeChat_Mini_Utils {
         
         return $time;
     }
+}

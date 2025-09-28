@@ -620,7 +620,7 @@ class SUT_WeChat_Mini_Admin {
         $table_name = $wpdb->prefix . 'sut_wechat_mini_users';
         
         // 获取用户列表
-        $users = $wpdb->get_results( "SELECT * FROM $table_name ORDER BY created_at DESC" );
+        $users = $wpdb->get_results( "SELECT * FROM $table_name ORDER BY create_time DESC" );
         
         if ( empty( $users ) ) {
             echo '<div class="notice notice-info"><p>' . __( '暂无微信小程序用户', 'sut-wechat-mini' ) . '</p></div>';
@@ -669,7 +669,7 @@ class SUT_WeChat_Mini_Admin {
                             <?php endif; ?>
                         </td>
                         <td>
-                            <?php echo esc_html( $user->created_at ); ?>
+                            <?php echo esc_html( $user->create_time ); ?>
                         </td>
                         <td>
                             <a href="#" class="sut-wechat-mini-delete-user" data-id="<?php echo $user->id; ?>"><?php _e( '删除', 'sut-wechat-mini' ); ?></a>

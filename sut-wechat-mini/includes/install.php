@@ -138,8 +138,8 @@ class SUT_WeChat_Mini_Install {
             city varchar(50) DEFAULT NULL,
             language varchar(20) DEFAULT NULL,
             session_key varchar(100) DEFAULT NULL,
-            create_time datetime NOT NULL,
-            update_time datetime NOT NULL,
+            created_at datetime NOT NULL,
+            updated_at datetime NOT NULL,
             PRIMARY KEY  (id),
             UNIQUE KEY openid (openid),
             KEY user_id (user_id)
@@ -162,8 +162,8 @@ class SUT_WeChat_Mini_Install {
             address varchar(255) NOT NULL,
             zipcode varchar(20) DEFAULT NULL,
             is_default tinyint(1) DEFAULT 0,
-            create_time datetime NOT NULL,
-            update_time datetime NOT NULL,
+            created_at datetime NOT NULL,
+            updated_at datetime NOT NULL,
             PRIMARY KEY  (id),
             KEY user_id (user_id)
         ) $charset_collate;";
@@ -178,7 +178,7 @@ class SUT_WeChat_Mini_Install {
             user_id bigint(20) NOT NULL,
             object_id bigint(20) NOT NULL,
             object_type varchar(20) NOT NULL,
-            create_time datetime NOT NULL,
+            created_at datetime NOT NULL,
             PRIMARY KEY  (id),
             UNIQUE KEY user_id_object_id_object_type (user_id,object_id,object_type),
             KEY user_id (user_id),
@@ -220,13 +220,13 @@ class SUT_WeChat_Mini_Install {
             phone varchar(20) DEFAULT NULL,
             address varchar(255) DEFAULT NULL,
             remark text DEFAULT NULL,
-            create_time datetime NOT NULL,
-            update_time datetime NOT NULL,
+            created_at datetime NOT NULL,
+            updated_at datetime NOT NULL,
             PRIMARY KEY  (id),
             UNIQUE KEY order_id (order_id),
             KEY user_id (user_id),
             KEY status (status),
-            KEY create_time (create_time)
+            KEY created_at (created_at)
         ) $charset_collate;";
         
         dbDelta( $sql );
@@ -241,8 +241,8 @@ class SUT_WeChat_Mini_Install {
             quantity int(11) NOT NULL,
             variation_id bigint(20) DEFAULT NULL,
             attributes text DEFAULT NULL,
-            create_time datetime NOT NULL,
-            update_time datetime NOT NULL,
+            created_at datetime NOT NULL,
+            updated_at datetime NOT NULL,
             PRIMARY KEY  (id),
             UNIQUE KEY user_id_product_id_variation_id (user_id,product_id,variation_id),
             KEY user_id (user_id),
@@ -310,14 +310,14 @@ class SUT_WeChat_Mini_Install {
             transaction_id varchar(100) DEFAULT NULL,
             request_data text DEFAULT NULL,
             response_data text DEFAULT NULL,
-            create_time datetime NOT NULL,
-            update_time datetime NOT NULL,
+            created_at datetime NOT NULL,
+            updated_at datetime NOT NULL,
             PRIMARY KEY  (id),
             UNIQUE KEY payment_id (payment_id),
             KEY order_id (order_id),
             KEY user_id (user_id),
             KEY status (status),
-            KEY create_time (create_time)
+            KEY created_at (created_at)
         ) $charset_collate;";
         
         dbDelta( $sql );
@@ -333,7 +333,7 @@ class SUT_WeChat_Mini_Install {
             title varchar(100) NOT NULL,
             content text NOT NULL,
             is_read tinyint(1) DEFAULT 0,
-            create_time datetime NOT NULL,
+            created_at datetime NOT NULL,
             read_time datetime DEFAULT NULL,
             PRIMARY KEY  (id),
             UNIQUE KEY message_id (message_id),

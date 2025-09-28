@@ -194,7 +194,7 @@ class SUT_WeChat_Mini_Loader {
         
         // 初始化API
         $api = SUT_WeChat_Mini_API::get_instance();
-        $api->init();
+        // 注意：init()方法在构造函数中已自动调用，无需再次调用
     }
     
     /**
@@ -208,7 +208,7 @@ class SUT_WeChat_Mini_Loader {
         
         // 初始化用户模块
         $users = SUT_WeChat_Mini_Users::get_instance();
-        $users->init();
+        // 注意：init()方法在构造函数中已自动调用，无需再次调用
     }
     
     /**
@@ -222,7 +222,7 @@ class SUT_WeChat_Mini_Loader {
         
         // 初始化内容模块
         $content = SUT_WeChat_Mini_Content::get_instance();
-        $content->init();
+        // 注意：init()方法在构造函数中已自动调用，无需再次调用
     }
     
     /**
@@ -253,7 +253,7 @@ class SUT_WeChat_Mini_Loader {
         
         // 初始化支付模块
         $pay = SUT_WeChat_Mini_Pay::get_instance();
-        $pay->init();
+        // 注意：init()方法在构造函数中已自动调用，无需再次调用
     }
     
     /**
@@ -311,7 +311,7 @@ class SUT_WeChat_Mini_Loader {
             
             // 初始化管理模块
             $admin = SUT_WeChat_Mini_Admin::get_instance();
-            $admin->init();
+            // 注意：init()方法在构造函数中已自动调用，无需再次调用
         }
     }
     
