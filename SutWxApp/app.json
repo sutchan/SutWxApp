@@ -1,0 +1,70 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/categories/categories",
+    "pages/posts/list/list",
+    "pages/posts/detail/detail",
+    "pages/user/login/login",
+    "pages/user/profile/profile",
+    "pages/user/address/list/list",
+    "pages/user/address/add/add",
+    "pages/user/favorite/list/list",
+    "pages/user/signin/signin",
+    "pages/settings/settings",
+    "pages/settings/about/about",
+    "pages/settings/feedback/feedback"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "SUT微信小程序",
+    "navigationBarTextStyle": "black",
+    "enablePullDownRefresh": true,
+    "backgroundColor": "#f8f8f8"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#333333",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "images/tabbar/home.png",
+        "selectedIconPath": "images/tabbar/home_selected.png"
+      },
+      {
+        "pagePath": "pages/categories/categories",
+        "text": "分类",
+        "iconPath": "images/tabbar/category.png",
+        "selectedIconPath": "images/tabbar/category_selected.png"
+      },
+      {
+        "pagePath": "pages/user/profile/profile",
+        "text": "我的",
+        "iconPath": "images/tabbar/user.png",
+        "selectedIconPath": "images/tabbar/user_selected.png"
+      }
+    ]
+  },
+  "networkTimeout": {
+    "request": 10000,
+    "downloadFile": 10000
+  },
+  "debug": false,
+  "functionalPages": false,
+  "requiredBackgroundModes": [],
+  "sitemapLocation": "sitemap.json",
+  "style": "v2",
+  "useExtendedLib": {
+    "weui": true
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "您的位置信息将用于小程序位置接口的效果展示"
+    },
+    "scope.userInfo": {
+      "desc": "您的用户信息将用于小程序用户身份识别"
+    }
+  }
+}

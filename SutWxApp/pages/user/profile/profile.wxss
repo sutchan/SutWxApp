@@ -1,0 +1,239 @@
+/* pages/user/profile/profile.wxss */
+.profile-container {
+  width: 100%;
+  background-color: #f8f8f8;
+  min-height: 100vh;
+}
+
+/* 未登录状态样式 */
+.unlogin-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #ffffff;
+}
+
+.unlogin-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 40px;
+}
+
+.default-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-bottom: 20px;
+  opacity: 0.6;
+}
+
+.unlogin-text {
+  font-size: 16px;
+  color: #666666;
+  margin-bottom: 20px;
+}
+
+.login-btn {
+  width: 200px;
+  height: 44px;
+  background-color: #07c160;
+  color: #ffffff;
+  border-radius: 22px;
+  font-size: 16px;
+}
+
+/* 已登录状态样式 */
+.logged-container {
+  width: 100%;
+}
+
+/* 用户信息头部样式 */
+.user-header {
+  display: flex;
+  align-items: center;
+  padding: 30px 20px;
+  background-color: #07c160;
+  color: #ffffff;
+}
+
+.user-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  margin-right: 15px;
+}
+
+.user-info {
+  flex: 1;
+}
+
+.user-name-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.user-name {
+  font-size: 18px;
+  font-weight: 600;
+  margin-right: 10px;
+}
+
+.user-id {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.user-level {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.arrow-icon {
+  width: 14px;
+  height: 14px;
+  opacity: 0.8;
+}
+
+/* 积分信息卡片样式 */
+.points-card {
+  margin: 15px 15px 0;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.points-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.points-label {
+  font-size: 16px;
+  color: #333333;
+}
+
+.points-value {
+  font-size: 24px;
+  font-weight: 600;
+  color: #07c160;
+}
+
+/* 签到区域样式 */
+.signin-card {
+  margin: 15px;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.signin-info {
+  display: flex;
+  align-items: center;
+}
+
+.signin-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 15px;
+}
+
+.signin-text {
+  font-size: 16px;
+  color: #333333;
+  margin-right: 10px;
+}
+
+.signin-days {
+  font-size: 14px;
+  color: #07c160;
+}
+
+/* 功能列表样式 */
+.feature-list {
+  margin: 15px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.feature-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.feature-item:last-child {
+  border-bottom: none;
+}
+
+.feature-left {
+  display: flex;
+  align-items: center;
+}
+
+.feature-icon {
+  width: 22px;
+  height: 22px;
+  margin-right: 15px;
+}
+
+.feature-text {
+  font-size: 16px;
+  color: #333333;
+}
+
+.feature-right {
+  display: flex;
+  align-items: center;
+}
+
+.feature-count {
+  font-size: 14px;
+  color: #999999;
+  margin-right: 10px;
+}
+
+/* 退出登录按钮样式 */
+.logout-container {
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+.logout-btn {
+  width: 100%;
+  height: 44px;
+  background-color: #ffffff;
+  color: #666666;
+  border: 1px solid #dcdcdc;
+  border-radius: 22px;
+  font-size: 16px;
+}
+
+/* 加载状态 */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  font-size: 14px;
+  color: #999999;
+}
+
+/* 适配iPhone X等刘海屏 */
+.safe-area-top {
+  padding-top: env(safe-area-inset-top, 0);
+}
+
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}

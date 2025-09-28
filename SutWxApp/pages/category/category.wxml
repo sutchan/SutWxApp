@@ -1,0 +1,76 @@
+<!-- pages/category/category.wxml -->
+<view class="category-container">
+  <!-- 加载状态 -->
+  <view class="loading-container" wx:if="{{loading}}">
+    <view class="loading">
+      <text>加载中...</text>
+    </view>
+  </view>
+
+  <!-- 分类内容区域 -->
+  <view wx:else class="category-content">
+    <!-- 左侧主分类导航 -->
+    <view class="category-left">
+      <scroll-view scroll-y class="category-scroll">
+        <view class="category-item {{currentCategoryId === item.id ? 'active' : ''}}" 
+              wx:for="{{categories}}" 
+              wx:key="id" 
+              data-id="{{item.id}}" 
+              bindtap="switchCategory">
+          <text>{{item.name}}</text>
+        </view>
+      </scroll-view>
+    </view>
+
+    <!-- 右侧内容区域 -->
+    <view class="category-right">
+      <!-- 当前分类的子分类导航 -->
+      <view class="sub-category-container">
+        <scroll-view scroll-x class="sub-category-scroll">
+          <view class="sub-category-item {{currentSubCategoryId === item.id ? 'active' : ''}}" 
+                wx:for="{{currentCategoryId > 0 ? categories.find(cat => cat.id === currentCategoryId).children : []}}" 
+                wx:key="id" 
+                data-id="{{item.id}}" 
+                bindtap="switchSubCategory">
+            <text>{{item.name}}</text>
+          </view>
+        </scroll-view>
+      </view>
+
+      <!-- 文章列表区域 -->
+      <view class="articles-container">
+        <scroll-view scroll-y class="articles-scroll" bindscrolltolower="onReachBottom">
+          <!-- 文章列表 -->
+          <view class="article-item" 
+                wx:for="{{articles}}" 
+                wx:key="id" 
+                data-id="{{item.id}}" 
+                bindtap="goToArticleDetail">
+            <view class="article-image" wx:if="{{item.thumbnail}}">
+              <image src="{{item.thumbnail}}" mode="aspectFill"></image>
+            </view>
+            <view class="article-content">
+              <view class="article-title">{{item.title}}</view>
+              <view class="article-meta">
+                <text class="article-category">{{item.category_name}}</text>
+                <text class="article-date">{{item.date}}</text>
+                <text class="article-views">{{item.views}} 阅读</text>
+              </view>
+            </view>
+          </view>
+
+          <!-- 没有更多数据提示 -->
+          <view class="no-more" wx:if="{{!hasMore && articles.length > 0}}">
+            <text>没有更多数据了</text>
+          </view>
+
+          <!-- 空状态 -->
+          <view class="empty-state" wx:if="{{articles.length === 0 && !loading}}">
+            <image src="../../images/empty.png" mode="aspectFit"></image>
+            <text>暂无文章</text>
+          </view>
+        </scroll-view>
+      </view>
+    </view>
+  </view>
+</view>

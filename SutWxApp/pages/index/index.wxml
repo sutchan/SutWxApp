@@ -1,0 +1,97 @@
+<!-- pages/index/index.wxml -->
+<view class="container">
+  <!-- 轮播图 -->
+  <view class="banner-container">
+    <swiper class="banner-swiper" indicator-dots="true" autoplay="true" interval="3000" duration="500">
+      <block wx:for="{{bannerList}}" wx:key="id">
+        <swiper-item bindtap="onBannerClick" data-item="{{item}}">
+          <image src="{{item.image_url}}" mode="aspectFill" class="banner-image"></image>
+          <view class="banner-title">{{item.title}}</view>
+        </swiper-item>
+      </block>
+    </swiper>
+  </view>
+
+  <!-- 搜索栏 -->
+  <view class="search-container" bindtap="navigateToSearch">
+    <view class="search-bar">
+      <text class="search-icon">🔍</text>
+      <text class="search-text">搜索文章...</text>
+    </view>
+  </view>
+
+  <!-- 分类导航 -->
+  <view class="categories-container">
+    <view class="section-title">
+      <text>分类导航</text>
+      <view class="more" bindtap="navigateToCategories">
+        <text>更多</text>
+        <text class="icon">></text>
+      </view>
+    </view>
+    <view class="categories-list">
+      <block wx:for="{{categories}}" wx:key="id">
+        <view class="category-item" bindtap="navigateToCategoryPosts" data-id="{{item.id}}">
+          <view class="category-icon">
+            <text>{{item.name.charAt(0)}}</text>
+          </view>
+          <text class="category-name">{{item.name}}</text>
+          <text class="category-count">({{item.count}})</text>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <!-- 热门文章 -->
+  <view class="hot-posts-container">
+    <view class="section-title">
+      <text>热门推荐</text>
+    </view>
+    <view class="hot-posts-list">
+      <block wx:for="{{hotPosts}}" wx:key="id">
+        <view class="hot-post-item" bindtap="navigateToPostDetail" data-id="{{item.id}}">
+          <view class="hot-post-rank">{{index + 1}}</view>
+          <text class="hot-post-title">{{item.title}}</text>
+          <text class="hot-post-views">{{item.views}}阅读</text>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <!-- 最新文章 -->
+  <view class="latest-posts-container">
+    <view class="section-title">
+      <text>最新资讯</text>
+    </view>
+    <view class="latest-posts-list">
+      <block wx:for="{{latestPosts}}" wx:key="id">
+        <view class="post-item" bindtap="navigateToPostDetail" data-id="{{item.id}}">
+          <image src="{{item.featured_image}}" mode="aspectFill" class="post-image"></image>
+          <view class="post-content">
+            <text class="post-title">{{item.title}}</text>
+            <view class="post-meta">
+              <text class="post-category">{{item.category_name}}</text>
+              <text class="post-date">{{item.date}}</text>
+              <text class="post-views">{{item.views}}阅读</text>
+            </view>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <!-- 加载更多 -->
+  <view class="loading-more" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+
+  <!-- 没有更多数据 -->
+  <view class="no-more" wx:if="{{!hasMore && latestPosts.length > 0}}">
+    <text>没有更多了</text>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty" wx:if="{{!loading && latestPosts.length === 0}}">
+    <text class="empty-text">暂无文章</text>
+  </view>
+</view>

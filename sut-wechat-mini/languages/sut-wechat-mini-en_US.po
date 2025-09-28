@@ -1,0 +1,812 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: SUT 微信小程序 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/woniu336/SutWxApp/issues\n"
+"POT-Creation-Date: %Y-%m-%d %H:%M:%S+00:00\n"
+"PO-Revision-Date: %Y-%m-%d %H:%M:%S+00:00\n"
+"Last-Translator: SUT Development Team <support@example.com>\n"
+"Language-Team: English <support@example.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: SUT WeChat Mini Plugin\n"
+"Language: en_US\n"
+
+msgid "SUT 微信小程序"
+msgstr "SUT WeChat Mini Program"
+
+msgid "用于WordPress与微信小程序集成的插件，支持内容同步、用户管理、WooCommerce电商功能及微信支付集成。"
+msgstr "A plugin for integrating WordPress with WeChat Mini Program, supporting content synchronization, user management, WooCommerce e-commerce functionality, and WeChat payment integration."
+
+msgid "微信小程序设置"
+msgstr "WeChat Mini Program Settings"
+
+msgid "基本设置"
+msgstr "Basic Settings"
+
+msgid "AppID"
+msgstr "AppID"
+
+msgid "AppSecret"
+msgstr "AppSecret"
+
+msgid "Token"
+msgstr "Token"
+
+msgid "EncodingAESKey"
+msgstr "EncodingAESKey"
+
+msgid "微信支付设置"
+msgstr "WeChat Payment Settings"
+
+msgid "商户ID"
+msgstr "Merchant ID"
+
+msgid "API密钥"
+msgstr "API Key"
+
+msgid "证书路径"
+msgstr "Certificate Path"
+
+msgid "密钥路径"
+msgstr "Private Key Path"
+
+msgid "保存设置"
+msgstr "Save Settings"
+
+msgid "设置已保存"
+msgstr "Settings saved"
+
+msgid "参数错误"
+msgstr "Parameter error"
+
+msgid "登录失败"
+msgstr "Login failed"
+
+msgid "未找到内容"
+msgstr "Content not found"
+
+msgid "成功"
+msgstr "Success"
+
+msgid "失败"
+msgstr "Failed"
+
+msgid "商品"
+msgstr "Products"
+
+msgid "分类"
+msgstr "Categories"
+
+msgid "购物车"
+msgstr "Shopping Cart"
+
+msgid "订单"
+msgstr "Orders"
+
+msgid "支付"
+msgstr "Payment"
+
+msgid "我的"
+msgstr "My Account"
+
+msgid "首页"
+msgstr "Home"
+
+msgid "详情"
+msgstr "Details"
+
+msgid "价格"
+msgstr "Price"
+
+msgid "库存"
+msgstr "Stock"
+
+msgid "添加到购物车"
+msgstr "Add to Cart"
+
+msgid "立即购买"
+msgstr "Buy Now"
+
+msgid "确认订单"
+msgstr "Confirm Order"
+
+msgid "支付订单"
+msgstr "Pay for Order"
+
+msgid "订单状态"
+msgstr "Order Status"
+
+msgid "待付款"
+msgstr "Pending Payment"
+
+msgid "待发货"
+msgstr "Pending Shipment"
+
+msgid "待收货"
+msgstr "Pending Receipt"
+
+msgid "已完成"
+msgstr "Completed"
+
+msgid "已取消"
+msgstr "Cancelled"
+
+msgid "退款中"
+msgstr "Refunding"
+
+msgid "搜索"
+msgstr "Search"
+
+msgid "输入关键词搜索"
+msgstr "Enter keywords to search"
+
+msgid "加载更多"
+msgstr "Load More"
+
+msgid "没有更多了"
+msgstr "No more items"
+
+msgid "加载中..."
+msgstr "Loading..."
+
+msgid "网络错误，请重试"
+msgstr "Network error, please try again"
+
+msgid "请输入正确的手机号"
+msgstr "Please enter a valid phone number"
+
+msgid "请输入验证码"
+msgstr "Please enter verification code"
+
+msgid "发送验证码"
+msgstr "Send Verification Code"
+
+msgid "验证码已发送"
+msgstr "Verification code sent"
+
+msgid "验证码错误"
+msgstr "Invalid verification code"
+
+msgid "登录成功"
+msgstr "Login successful"
+
+msgid "请先登录"
+msgstr "Please login first"
+
+msgid "您的余额不足"
+msgstr "Insufficient balance"
+
+msgid "积分商城"
+msgstr "Points Mall"
+
+msgid "我的积分"
+msgstr "My Points"
+
+msgid "签到领积分"
+msgstr "Check in for points"
+
+msgid "已签到"
+msgstr "Checked in"
+
+msgid "签到成功"
+msgstr "Check in successful"
+
+msgid "分享给好友"
+msgstr "Share with friends"
+
+msgid "收藏"
+msgstr "Favorite"
+
+msgid "已收藏"
+msgstr "Favorited"
+
+msgid "支付设置"
+msgstr "Payment Settings"
+
+msgid "微信支付商户ID"
+msgstr "WeChat Payment Merchant ID"
+
+msgid "微信支付API密钥"
+msgstr "WeChat Payment API Key"
+
+msgid "微信支付证书路径（绝对路径）"
+msgstr "WeChat Payment Certificate Path (Absolute Path)"
+
+msgid "微信支付密钥路径（绝对路径）"
+msgstr "WeChat Payment Private Key Path (Absolute Path)"
+
+msgid "沙箱模式"
+msgstr "Sandbox Mode"
+
+msgid "开启沙箱测试模式"
+msgstr "Enable sandbox test mode"
+
+msgid "支付配置不完整"
+msgstr "Payment configuration incomplete"
+
+msgid "用户微信信息未找到"
+msgstr "User WeChat information not found"
+
+msgid "请求失败"
+msgstr "Request failed"
+
+msgid "业务处理失败"
+msgstr "Business processing failed"
+
+msgid "查询失败"
+msgstr "Query failed"
+
+msgid "关闭失败"
+msgstr "Close failed"
+
+msgid "支付配置不完整或证书不存在"
+msgstr "Payment configuration incomplete or certificate does not exist"
+
+msgid "用户申请退款"
+msgstr "User applied for refund"
+
+msgid "退款申请失败"
+msgstr "Refund application failed"
+
+msgid "%s - 订单 %s"
+msgstr "%s - Order %s"
+
+msgid "WooCommerce未激活"
+msgstr "WooCommerce not activated"
+
+msgid "产品不存在或未发布"
+msgstr "Product does not exist or not published"
+
+msgid "缺少搜索关键词"
+msgstr "Search keyword missing"
+
+msgid "分类不存在"
+msgstr "Category does not exist"
+
+msgid "缺少必要参数：product_id 或 quantity"
+msgstr "Missing required parameters: product_id or quantity"
+
+msgid "库存不足"
+msgstr "Insufficient stock"
+
+msgid "添加成功"
+msgstr "Added successfully"
+
+msgid "缺少必要参数：item_id 或 quantity"
+msgstr "Missing required parameters: item_id or quantity"
+
+msgid "购物车中没有此商品"
+msgstr "This product is not in the shopping cart"
+
+msgid "更新成功"
+msgstr "Updated successfully"
+
+msgid "缺少必要参数：item_id"
+msgstr "Missing required parameter: item_id"
+
+msgid "移除成功"
+msgstr "Removed successfully"
+
+msgid "购物车已清空"
+msgstr "Shopping cart emptied"
+
+msgid "订单不存在"
+msgstr "Order does not exist"
+
+msgid "无权访问该订单"
+msgstr "No permission to access this order"
+
+msgid "缺少必要参数：address_id 或 payment_method"
+msgstr "Missing required parameters: address_id or payment_method"
+
+msgid "购物车为空"
+msgstr "Shopping cart is empty"
+
+msgid "地址不存在或不属于该用户"
+msgstr "Address does not exist or does not belong to this user"
+
+msgid "订单创建失败"
+msgstr "Order creation failed"
+
+msgid "%s 库存不足"
+msgstr "%s insufficient stock"
+
+msgid "订单创建成功"
+msgstr "Order created successfully"
+
+msgid "该订单状态不允许取消"
+msgstr "This order status does not allow cancellation"
+
+msgid "用户取消订单"
+msgstr "User cancelled order"
+
+msgid "订单已取消"
+msgstr "Order cancelled"
+
+msgid "订单已完成"
+msgstr "Order completed"
+
+msgid "该订单状态不允许确认收货"
+msgstr "This order status does not allow confirmation of receipt"
+
+msgid "用户确认收货"
+msgstr "User confirmed receipt"
+
+msgid "确认收货成功"
+msgstr "Receipt confirmed successfully"
+
+msgid "缺少必要参数：order_id"
+msgstr "Missing required parameter: order_id"
+
+msgid "订单状态不正确"
+msgstr "Order status is incorrect"
+
+msgid "订单金额不正确"
+msgstr "Order amount is incorrect"
+
+msgid "支付参数生成成功"
+msgstr "Payment parameters generated successfully"
+
+msgid "微信支付成功"
+msgstr "WeChat payment successful"
+
+msgid "数据库错误"
+msgstr "Database error"
+
+msgid "用户不存在"
+msgstr "User does not exist"
+
+msgid "更新成功"
+msgstr "Updated successfully"
+
+msgid "缺少必要参数：%s"
+msgstr "Missing required parameter: %s"
+
+msgid "添加成功"
+msgstr "Added successfully"
+
+msgid "缺少必要参数：address_id"
+msgstr "Missing required parameter: address_id"
+
+msgid "地址不存在或不属于该用户"
+msgstr "Address does not exist or does not belong to this user"
+
+msgid "删除成功"
+msgstr "Deleted successfully"
+
+msgid "缺少必要参数：post_id"
+msgstr "Missing required parameter: post_id"
+
+msgid "文章不存在或未发布"
+msgstr "Post does not exist or not published"
+
+msgid "已经收藏过了"
+msgstr "Already favorited"
+
+msgid "收藏成功"
+msgstr "Favorited successfully"
+
+msgid "缺少必要参数：favorite_id 或 post_id"
+msgstr "Missing required parameters: favorite_id or post_id"
+
+msgid "取消收藏成功"
+msgstr "Unfavorited successfully"
+
+msgid "今天已经签到过了"
+msgstr "Already checked in today"
+
+msgid "签到成功"
+msgstr "Check in successful"
+
+msgid "商品不存在或不可购买"
+msgstr "Product does not exist or not purchasable"
+
+msgid "该商品不能用积分兑换"
+msgstr "This product cannot be exchanged with points"
+
+msgid "积分不足"
+msgstr "Insufficient points"
+
+msgid "创建订单失败"
+msgstr "Order creation failed"
+
+msgid "积分兑换"
+msgstr "Points Exchange"
+
+msgid "积分设置"
+msgstr "Points Settings"
+
+msgid "基础设置"
+msgstr "Basic Settings"
+
+msgid "启用积分系统"
+msgstr "Enable Points System"
+
+msgid "每日最大积分获取量"
+msgstr "Daily Maximum Points Acquisition"
+
+msgid "设置为0表示不限制"
+msgstr "Set to 0 for no limit"
+
+msgid "积分有效期(天)"
+msgstr "Points Validity Period (days)"
+
+msgid "设置为0表示永不过期"
+msgstr "Set to 0 for permanent validity"
+
+msgid "积分获取规则"
+msgstr "Points Acquisition Rules"
+
+msgid "订单积分比例"
+msgstr "Order Points Ratio"
+
+msgid "每消费1元获得的积分数量"
+msgstr "Points earned per 1 yuan spent"
+
+msgid "签到积分"
+msgstr "Check-in Points"
+
+msgid "每日签到获得的积分数量"
+msgstr "Points earned for daily check-in"
+
+msgid "评论积分"
+msgstr "Comment Points"
+
+msgid "发表评论获得的积分数量"
+msgstr "Points earned for publishing comments"
+
+msgid "分享积分"
+msgstr "Share Points"
+
+msgid "分享内容获得的积分数量"
+msgstr "Points earned for sharing content"
+
+msgid "每日登录积分"
+msgstr "Daily Login Points"
+
+msgid "每日首次登录获得的积分数量"
+msgstr "Points earned for first daily login"
+
+msgid "所需积分"
+msgstr "Required Points"
+
+msgid "SUT微信小程序插件需要PHP %s或更高版本。您当前的PHP版本是 %s，请升级PHP版本后再启用插件。"
+msgstr "SUT WeChat Mini Program plugin requires PHP %s or higher. Your current PHP version is %s, please upgrade your PHP version before activating the plugin."
+
+msgid "激活失败"
+msgstr "Activation failed"
+
+msgid "SUT微信小程序插件需要WordPress %s或更高版本。您当前的WordPress版本是 %s，请升级WordPress版本后再启用插件。"
+msgstr "SUT WeChat Mini Program plugin requires WordPress %s or higher. Your current WordPress version is %s, please upgrade your WordPress version before activating the plugin."
+
+msgid "模板消息功能未启用"
+msgstr "Template message function not enabled"
+
+msgid "获取access_token失败"
+msgstr "Failed to obtain access_token"
+
+msgid "您的订单已支付成功，我们将尽快为您发货"
+msgstr "Your order has been paid successfully, we will ship it as soon as possible"
+
+msgid "订单已支付"
+msgstr "Order paid"
+
+msgid "您的订单 %s 已支付成功，我们将尽快为您发货。"
+msgstr "Your order %s has been paid successfully, we will ship it as soon as possible."
+
+msgid "快递"
+msgstr "Courier"
+
+msgid "待补充"
+msgstr "To be completed"
+
+msgid "订单已发货"
+msgstr "Order shipped"
+
+msgid "您的订单 %s 已发货，请注意查收。"
+msgstr "Your order %s has been shipped, please pay attention to delivery."
+
+msgid "订单已完成"
+msgstr "Order completed"
+
+msgid "您的订单 %s 已完成，感谢您的购买！"
+msgstr "Your order %s has been completed, thank you for your purchase!"
+
+msgid "订单已取消"
+msgstr "Order cancelled"
+
+msgid "您的订单 %s 已取消，如有疑问请联系客服。"
+msgstr "Your order %s has been cancelled, please contact customer service if you have any questions."
+
+msgid "订单已退款"
+msgstr "Order refunded"
+
+msgid "您的订单 %s 已退款，退款将在1-7个工作日内原路返回您的支付账户。"
+msgstr "Your order %s has been refunded, the refund will be returned to your payment account within 1-7 business days."
+
+msgid "您的退款已处理完成，退款将在1-7个工作日内原路返回您的支付账户"
+msgstr "Your refund has been processed, the refund will be returned to your payment account within 1-7 business days"
+
+msgid "有新的评论"
+msgstr "New comment received"
+
+msgid "您的文章《%s》收到了一条新评论：%s"
+msgstr "Your article "%s" received a new comment: %s"
+
+msgid "有新文章发布"
+msgstr "New article published"
+
+msgid "您订阅的分类有新文章发布：《%s》"
+msgstr "A new article has been published in the category you subscribed to: "%s""
+
+msgid "恭喜您签到成功，获得积分奖励！"
+msgstr "Congratulations on your successful check-in and earning point rewards!"
+
+msgid "积分变动"
+msgstr "Points Change"
+
+msgid "您的账户获得了 %d 积分，来源：%s"
+msgstr "Your account earned %d points, source: %s"
+
+msgid "未知错误"
+msgstr "Unknown error"
+
+msgid "您没有足够的权限访问此页面。"
+msgstr "You do not have sufficient permissions to access this page."
+
+msgid "设置已成功保存。"
+msgstr "Settings have been saved successfully."
+
+msgid "消息设置"
+msgstr "Message Settings"
+
+msgid "缓存设置"
+msgstr "Cache Settings"
+
+msgid "微信小程序基础配置"
+msgstr "WeChat Mini Program Basic Configuration"
+
+msgid "小程序AppID"
+msgstr "Mini Program AppID"
+
+msgid "您的微信小程序的AppID"
+msgstr "Your WeChat Mini Program AppID"
+
+msgid "小程序AppSecret"
+msgstr "Mini Program AppSecret"
+
+msgid "您的微信小程序的AppSecret"
+msgstr "Your WeChat Mini Program AppSecret"
+
+msgid "用于消息验证的Token，可自定义"
+msgstr "Token for message verification, customizable"
+
+msgid "功能设置"
+msgstr "Feature Settings"
+
+msgid "调试模式"
+msgstr "Debug Mode"
+
+msgid "启用调试模式"
+msgstr "Enable Debug Mode"
+
+msgid "调试模式下将记录更多的日志信息"
+msgstr "More log information will be recorded in debug mode"
+
+msgid "用户同步"
+msgstr "User Synchronization"
+
+msgid "启用用户数据同步"
+msgstr "Enable User Data Synchronization"
+
+msgid "启用后将同步微信用户数据到WordPress"
+msgstr "Once enabled, WeChat user data will be synchronized to WordPress"
+
+msgid "内容同步"
+msgstr "Content Synchronization"
+
+msgid "启用内容数据同步"
+msgstr "Enable Content Data Synchronization"
+
+msgid "启用后将同步WordPress内容到微信小程序"
+msgstr "Once enabled, WordPress content will be synchronized to WeChat Mini Program"
+
+msgid "微信支付配置"
+msgstr "WeChat Payment Configuration"
+
+msgid "启用支付功能"
+msgstr "Enable Payment Function"
+
+msgid "开启微信支付功能"
+msgstr "Enable WeChat Payment Function"
+
+msgid "微信支付商户号"
+msgstr "WeChat Payment Merchant ID"
+
+msgid "微信支付API密钥"
+msgstr "WeChat Payment API Key"
+
+msgid "订单过期时间"
+msgstr "Order Expiration Time"
+
+msgid "分钟"
+msgstr "minutes"
+
+msgid "消息推送配置"
+msgstr "Message Push Configuration"
+
+msgid "启用消息功能"
+msgstr "Enable Message Function"
+
+msgid "开启消息推送功能"
+msgstr "Enable Message Push Function"
+
+msgid "模板消息"
+msgstr "Template Message"
+
+msgid "启用模板消息"
+msgstr "Enable Template Message"
+
+msgid "订单模板ID"
+msgstr "Order Template ID"
+
+msgid "订单状态变更的模板消息ID"
+msgstr "Template Message ID for Order Status Change"
+
+msgid "积分系统配置"
+msgstr "Points System Configuration"
+
+msgid "开启积分系统"
+msgstr "Enable Points System"
+
+msgid "积分名称"
+msgstr "Points Name"
+
+msgid "每日签到获得的积分"
+msgstr "Points Earned for Daily Check-in"
+
+msgid "缓存配置"
+msgstr "Cache Configuration"
+
+msgid "开启缓存功能"
+msgstr "Enable Cache Function"
+
+msgid "缓存过期时间"
+msgstr "Cache Expiration Time"
+
+msgid "秒"
+msgstr "seconds"
+
+msgid "缓存类型"
+msgstr "Cache Type"
+
+msgid "Transient缓存"
+msgstr "Transient Cache"
+
+msgid "文件缓存"
+msgstr "File Cache"
+
+msgid "插件信息"
+msgstr "Plugin Information"
+
+msgid "版本:"
+msgstr "Version:"
+
+msgid "作者:"
+msgstr "Author:"
+
+msgid "感谢您使用SUT微信小程序插件！"
+msgstr "Thank you for using SUT WeChat Mini Program Plugin!"
+
+msgid "%d秒前"
+msgstr "%d seconds ago"
+
+msgid "%d分钟前"
+msgstr "%d minutes ago"
+
+msgid "%d小时前"
+msgstr "%d hours ago"
+
+msgid "%d天前"
+msgstr "%d days ago"
+
+msgid "%s是必填项"
+msgstr "%s is required"
+
+msgid "请输入有效的邮箱地址"
+msgstr "Please enter a valid email address"
+
+msgid "请输入有效的URL地址"
+msgstr "Please enter a valid URL"
+
+msgid "%s长度不能少于%d个字符"
+msgstr "%s length cannot be less than %d characters"
+
+msgid "%s长度不能超过%d个字符"
+msgstr "%s length cannot exceed %d characters"
+
+msgid "%s必须是数字"
+msgstr "%s must be a number"
+
+msgid "%s必须是整数"
+msgstr "%s must be an integer"
+
+msgid "%s和%s必须相同"
+msgstr "%s and %s must be the same"
+
+msgid "%s格式不正确"
+msgstr "%s format is incorrect"
+
+msgid "SUT微信小程序插件需要PHP 5.6.0或更高版本才能运行。当前您的PHP版本是 %s。请升级您的PHP版本。"
+msgstr "SUT WeChat Mini Program plugin requires PHP 5.6.0 or higher to run. Your current PHP version is %s. Please upgrade your PHP version."
+
+msgid "SUT微信小程序插件需要WordPress 4.7或更高版本才能运行。当前您的WordPress版本是 %s。请升级您的WordPress版本。"
+msgstr "SUT WeChat Mini Program plugin requires WordPress 4.7 or higher to run. Your current WordPress version is %s. Please upgrade your WordPress version."
+
+msgid "SUT微信小程序插件已激活，但尚未配置。请前往 %s 完成配置。"
+msgstr "SUT WeChat Mini Program plugin has been activated but not yet configured. Please go to %s to complete the configuration."
+
+msgid "设置页面"
+msgstr "Settings Page"
+
+msgid "API连接成功"
+msgstr "API connection successful"
+
+msgid "小程序页面"
+msgstr "Mini Program Pages"
+
+msgid "添加新页面"
+msgstr "Add New Page"
+
+msgid "添加新小程序页面"
+msgstr "Add New Mini Program Page"
+
+msgid "编辑小程序页面"
+msgstr "Edit Mini Program Page"
+
+msgid "新小程序页面"
+msgstr "New Mini Program Page"
+
+msgid "查看小程序页面"
+msgstr "View Mini Program Page"
+
+msgid "搜索小程序页面"
+msgstr "Search Mini Program Pages"
+
+msgid "未找到小程序页面"
+msgstr "No Mini Program Pages found"
+
+msgid "回收站中未找到小程序页面"
+msgstr "No Mini Program Pages found in trash"
+
+msgid "父级页面:"
+msgstr "Parent Page:" 
+
+msgid "页面模板"
+msgstr "Page Template"
+
+msgid "搜索页面模板"
+msgstr "Search Page Templates"
+
+msgid "所有页面模板"
+msgstr "All Page Templates"
+
+msgid "父级模板"
+msgstr "Parent Template"
+
+msgid "父级模板:"
+msgstr "Parent Template:" 
+
+msgid "编辑页面模板"
+msgstr "Edit Page Template"
+
+msgid "更新页面模板"
+msgstr "Update Page Template"
+
+msgid "添加新页面模板"
+msgstr "Add New Page Template"
+
+msgid "新页面模板名称"
+msgstr "New Page Template Name"

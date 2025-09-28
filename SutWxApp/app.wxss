@@ -1,0 +1,374 @@
+/* 全局样式 */
+page {
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #333333;
+  background-color: #f8f8f8;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 重置样式 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 公共组件样式 */
+/* 按钮样式 */
+.btn {
+  display: inline-block;
+  padding: 8px 20px;
+  border-radius: 4px;
+  font-size: 14px;
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+.btn-primary {
+  background-color: #07c160;
+  color: #ffffff;
+}
+
+.btn-primary:active {
+  background-color: #06ad55;
+}
+
+.btn-default {
+  background-color: #f8f8f8;
+  color: #333333;
+  border: 1px solid #dcdcdc;
+}
+
+.btn-default:active {
+  background-color: #e8e8e8;
+}
+
+.btn-disabled {
+  background-color: #f2f2f2;
+  color: #cccccc;
+}
+
+/* 输入框样式 */
+.input {
+  width: 100%;
+  height: 44px;
+  padding: 0 15px;
+  font-size: 14px;
+  border: 1px solid #dcdcdc;
+  border-radius: 4px;
+  background-color: #ffffff;
+}
+
+.input:focus {
+  border-color: #07c160;
+  outline: none;
+}
+
+/* 列表项样式 */
+.list-item {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #f2f2f2;
+}
+
+.list-item:last-child {
+  border-bottom: none;
+}
+
+/* 卡片样式 */
+.card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+/* 标题样式 */
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333333;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  font-size: 16px;
+  font-weight: 500;
+  color: #666666;
+  margin-bottom: 8px;
+}
+
+/* 文本样式 */
+.text-primary {
+  color: #07c160;
+}
+
+.text-secondary {
+  color: #666666;
+}
+
+.text-muted {
+  color: #999999;
+}
+
+.text-success {
+  color: #07c160;
+}
+
+.text-warning {
+  color: #ff9500;
+}
+
+.text-danger {
+  color: #ff3b30;
+}
+
+/* 间距样式 */
+.mt-5 {
+  margin-top: 5px;
+}
+
+.mt-10 {
+  margin-top: 10px;
+}
+
+.mt-15 {
+  margin-top: 15px;
+}
+
+.mt-20 {
+  margin-top: 20px;
+}
+
+.mb-5 {
+  margin-bottom: 5px;
+}
+
+.mb-10 {
+  margin-bottom: 10px;
+}
+
+.mb-15 {
+  margin-bottom: 15px;
+}
+
+.mb-20 {
+  margin-bottom: 20px;
+}
+
+.ml-5 {
+  margin-left: 5px;
+}
+
+.ml-10 {
+  margin-left: 10px;
+}
+
+.ml-15 {
+  margin-left: 15px;
+}
+
+.ml-20 {
+  margin-left: 20px;
+}
+
+.mr-5 {
+  margin-right: 5px;
+}
+
+.mr-10 {
+  margin-right: 10px;
+}
+
+.mr-15 {
+  margin-right: 15px;
+}
+
+.mr-20 {
+  margin-right: 20px;
+}
+
+.p-5 {
+  padding: 5px;
+}
+
+.p-10 {
+  padding: 10px;
+}
+
+.p-15 {
+  padding: 15px;
+}
+
+.p-20 {
+  padding: 20px;
+}
+
+/* 布局样式 */
+.flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.align-stretch {
+  align-items: stretch;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+/* 加载状态 */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 0;
+}
+
+/* 空状态 */
+.empty {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.empty-icon {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 20px;
+  opacity: 0.3;
+}
+
+.empty-text {
+  font-size: 14px;
+  color: #999999;
+}
+
+/* 错误状态 */
+.error {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.error-icon {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 20px;
+  opacity: 0.3;
+}
+
+.error-text {
+  font-size: 14px;
+  color: #999999;
+  margin-bottom: 15px;
+}
+
+/* 骨架屏 */
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+/* 适配iPhone X等刘海屏 */
+/* 顶部安全区域 */
+.safe-area-top {
+  padding-top: env(safe-area-inset-top, 0);
+}
+
+/* 底部安全区域 */
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+/* 响应式设计 */
+@media screen and (min-width: 375px) {
+  page {
+    font-size: 15px;
+  }
+}
+
+@media screen and (min-width: 414px) {
+  page {
+    font-size: 16px;
+  }
+}

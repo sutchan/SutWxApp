@@ -1,0 +1,99 @@
+<!-- pages/article/detail/detail.wxml -->
+<view class="article-detail-container">
+  <!-- 加载状态 -->
+  <view class="loading-container" wx:if="{{loading}}">
+    <view class="loading">
+      <text>加载中...</text>
+    </view>
+  </view>
+
+  <!-- 文章内容区域 -->
+  <view class="article-content" wx:else>
+    <!-- 文章头部 -->
+    <view class="article-header">
+      <text class="article-title">{{article.title}}</text>
+      <view class="article-meta">
+        <text class="article-author">{{article.author_name || '管理员'}}</text>
+        <text class="article-date">{{article.date}}</text>
+        <text class="article-views">{{viewCount}} 阅读</text>
+      </view>
+      <view class="article-category" wx:if="{{article.category_name}}">
+        <text>{{article.category_name}}</text>
+      </view>
+    </view>
+
+    <!-- 文章内容 -->
+    <view class="article-body" wx:if="{{article.content}}">
+      <rich-text nodes="{{article.content}}"></rich-text>
+    </view>
+    <view class="article-empty" wx:else>
+      <text>暂无内容</text>
+    </view>
+
+    <!-- 文章底部操作栏 -->
+    <view class="article-actions">
+      <view class="action-item" bindtap="likeArticle">
+        <image src="{{isLiked ? '../../images/like-active.png' : '../../images/like.png'}}" class="action-icon"></image>
+        <text class="action-text">{{isLiked ? '已赞' : '点赞'}}</text>
+        <text class="action-count">{{likeCount}}</text>
+      </view>
+      <view class="action-item" bindtap="favoriteArticle">
+        <image src="{{isFavorite ? '../../images/favorite-active.png' : '../../images/favorite.png'}}" class="action-icon"></image>
+        <text class="action-text">{{isFavorite ? '已收藏' : '收藏'}}</text>
+        <text class="action-count">{{favoriteCount}}</text>
+      </view>
+      <view class="action-item" bindtap="showCommentBox">
+        <image src="../../images/comment.png" class="action-icon"></image>
+        <text class="action-text">评论</text>
+        <text class="action-count">{{commentList.length}}</text>
+      </view>
+      <view class="action-item" open-type="share">
+        <image src="../../images/share.png" class="action-icon"></image>
+        <text class="action-text">分享</text>
+      </view>
+    </view>
+
+    <!-- 评论区域 -->
+    <view class="comment-section" wx:if="{{commentList.length > 0}}">
+      <view class="comment-header">
+        <text class="comment-title">评论 ({{commentList.length}})</text>
+      </view>
+      <view class="comment-list">
+        <view class="comment-item" wx:for="{{commentList}}" wx:key="id">
+          <view class="comment-avatar">
+            <image src="{{item.avatar || '../../images/default-avatar.png'}}" mode="aspectFill"></image>
+          </view>
+          <view class="comment-content">
+            <view class="comment-user-info">
+              <text class="comment-username">{{item.username}}</text>
+              <text class="comment-time">{{item.time}}</text>
+            </view>
+            <text class="comment-text">{{item.content}}</text>
+          </view>
+        </view>
+        <view class="no-more" wx:if="{{!commentHasMore}}">
+          <text>没有更多评论了</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 相关推荐 -->
+    <view class="related-articles" wx:if="{{article.related_articles && article.related_articles.length > 0}}">
+      <view class="related-header">
+        <text class="related-title">相关推荐</text>
+      </view>
+      <view class="related-list">
+        <view class="related-item" wx:for="{{article.related_articles}}" wx:key="id" data-id="{{item.id}}" bindtap="goToArticleDetail">
+          <text class="related-title">{{item.title}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 评论输入框 -->
+  <view class="comment-input-container" wx:if="{{showCommentInput}}">
+    <input class="comment-input" value="{{commentContent}}" bindinput="onCommentInput" placeholder="说点什么..." confirm-type="send" bindconfirm="submitComment" focus="{{showCommentInput}}"/>
+    <button class="comment-submit" bindtap="submitComment">发送</button>
+    <button class="comment-cancel" bindtap="hideCommentBox">取消</button>
+  </view>
+</view>

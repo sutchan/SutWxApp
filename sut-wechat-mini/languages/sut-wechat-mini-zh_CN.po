@@ -5,807 +5,808 @@ msgstr ""
 "POT-Creation-Date: %Y-%m-%d %H:%M:%S+00:00\n"
 "PO-Revision-Date: %Y-%m-%d %H:%M:%S+00:00\n"
 "Last-Translator: SUT Development Team <support@example.com>\n"
-"Language-Team: SUT Development Team <support@example.com>\n"
+"Language-Team: Chinese <support@example.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: SUT WeChat Mini Plugin\n"
+"Language: zh_CN\n"
 
 msgid "SUT 微信小程序"
-msgstr ""
+msgstr "SUT 微信小程序"
 
 msgid "用于WordPress与微信小程序集成的插件，支持内容同步、用户管理、WooCommerce电商功能及微信支付集成。"
-msgstr ""
+msgstr "用于WordPress与微信小程序集成的插件，支持内容同步、用户管理、WooCommerce电商功能及微信支付集成。"
 
 msgid "微信小程序设置"
-msgstr ""
+msgstr "微信小程序设置"
 
 msgid "基本设置"
-msgstr ""
+msgstr "基本设置"
 
 msgid "AppID"
-msgstr ""
+msgstr "AppID"
 
 msgid "AppSecret"
-msgstr ""
+msgstr "AppSecret"
 
 msgid "Token"
-msgstr ""
+msgstr "Token"
 
 msgid "EncodingAESKey"
-msgstr ""
+msgstr "EncodingAESKey"
 
 msgid "微信支付设置"
-msgstr ""
+msgstr "微信支付设置"
 
 msgid "商户ID"
-msgstr ""
+msgstr "商户ID"
 
 msgid "API密钥"
-msgstr ""
+msgstr "API密钥"
 
 msgid "证书路径"
-msgstr ""
+msgstr "证书路径"
 
 msgid "密钥路径"
-msgstr ""
+msgstr "密钥路径"
 
 msgid "保存设置"
-msgstr ""
+msgstr "保存设置"
 
 msgid "设置已保存"
-msgstr ""
+msgstr "设置已保存"
 
 msgid "参数错误"
-msgstr ""
+msgstr "参数错误"
 
 msgid "登录失败"
-msgstr ""
+msgstr "登录失败"
 
 msgid "未找到内容"
-msgstr ""
+msgstr "未找到内容"
 
 msgid "成功"
-msgstr ""
+msgstr "成功"
 
 msgid "失败"
-msgstr ""
+msgstr "失败"
 
 msgid "商品"
-msgstr ""
+msgstr "商品"
 
 msgid "分类"
-msgstr ""
+msgstr "分类"
 
 msgid "购物车"
-msgstr ""
+msgstr "购物车"
 
 msgid "订单"
-msgstr ""
+msgstr "订单"
 
 msgid "支付"
-msgstr ""
+msgstr "支付"
 
 msgid "我的"
-msgstr ""
+msgstr "我的"
 
 msgid "首页"
-msgstr ""
+msgstr "首页"
 
 msgid "详情"
-msgstr ""
+msgstr "详情"
 
 msgid "价格"
-msgstr ""
+msgstr "价格"
 
 msgid "库存"
-msgstr ""
+msgstr "库存"
 
 msgid "添加到购物车"
-msgstr ""
+msgstr "添加到购物车"
 
 msgid "立即购买"
-msgstr ""
+msgstr "立即购买"
 
 msgid "确认订单"
-msgstr ""
+msgstr "确认订单"
 
 msgid "支付订单"
-msgstr ""
+msgstr "支付订单"
 
 msgid "订单状态"
-msgstr ""
+msgstr "订单状态"
 
 msgid "待付款"
-msgstr ""
+msgstr "待付款"
 
 msgid "待发货"
-msgstr ""
+msgstr "待发货"
 
 msgid "待收货"
-msgstr ""
+msgstr "待收货"
 
 msgid "已完成"
-msgstr ""
+msgstr "已完成"
 
 msgid "已取消"
-msgstr ""
+msgstr "已取消"
 
 msgid "退款中"
-msgstr ""
+msgstr "退款中"
 
 msgid "搜索"
-msgstr ""
+msgstr "搜索"
 
 msgid "输入关键词搜索"
-msgstr ""
+msgstr "输入关键词搜索"
 
 msgid "加载更多"
-msgstr ""
+msgstr "加载更多"
 
 msgid "没有更多了"
-msgstr ""
+msgstr "没有更多了"
 
 msgid "加载中..."
-msgstr ""
+msgstr "加载中..."
 
 msgid "网络错误，请重试"
-msgstr ""
+msgstr "网络错误，请重试"
 
 msgid "请输入正确的手机号"
-msgstr ""
+msgstr "请输入正确的手机号"
 
 msgid "请输入验证码"
-msgstr ""
+msgstr "请输入验证码"
 
 msgid "发送验证码"
-msgstr ""
+msgstr "发送验证码"
 
 msgid "验证码已发送"
-msgstr ""
+msgstr "验证码已发送"
 
 msgid "验证码错误"
-msgstr ""
+msgstr "验证码错误"
 
 msgid "登录成功"
-msgstr ""
+msgstr "登录成功"
 
 msgid "请先登录"
-msgstr ""
+msgstr "请先登录"
 
 msgid "您的余额不足"
-msgstr ""
+msgstr "您的余额不足"
 
 msgid "积分商城"
-msgstr ""
+msgstr "积分商城"
 
 msgid "我的积分"
-msgstr ""
+msgstr "我的积分"
 
 msgid "签到领积分"
-msgstr ""
+msgstr "签到领积分"
 
 msgid "已签到"
-msgstr ""
+msgstr "已签到"
 
 msgid "签到成功"
-msgstr ""
+msgstr "签到成功"
 
 msgid "分享给好友"
-msgstr ""
+msgstr "分享给好友"
 
 msgid "收藏"
-msgstr ""
+msgstr "收藏"
 
 msgid "已收藏"
-msgstr ""
+msgstr "已收藏"
 
 msgid "支付设置"
-msgstr ""
+msgstr "支付设置"
 
 msgid "微信支付商户ID"
-msgstr ""
+msgstr "微信支付商户ID"
 
 msgid "微信支付API密钥"
-msgstr ""
+msgstr "微信支付API密钥"
 
 msgid "微信支付证书路径（绝对路径）"
-msgstr ""
+msgstr "微信支付证书路径（绝对路径）"
 
 msgid "微信支付密钥路径（绝对路径）"
-msgstr ""
+msgstr "微信支付密钥路径（绝对路径）"
 
 msgid "沙箱模式"
-msgstr ""
+msgstr "沙箱模式"
 
 msgid "开启沙箱测试模式"
-msgstr ""
+msgstr "开启沙箱测试模式"
 
 msgid "支付配置不完整"
-msgstr ""
+msgstr "支付配置不完整"
 
 msgid "用户微信信息未找到"
-msgstr ""
+msgstr "用户微信信息未找到"
 
 msgid "请求失败"
-msgstr ""
+msgstr "请求失败"
 
 msgid "业务处理失败"
-msgstr ""
+msgstr "业务处理失败"
 
 msgid "查询失败"
-msgstr ""
+msgstr "查询失败"
 
 msgid "关闭失败"
-msgstr ""
+msgstr "关闭失败"
 
 msgid "支付配置不完整或证书不存在"
-msgstr ""
+msgstr "支付配置不完整或证书不存在"
 
 msgid "用户申请退款"
-msgstr ""
+msgstr "用户申请退款"
 
 msgid "退款申请失败"
-msgstr ""
+msgstr "退款申请失败"
 
 msgid "%s - 订单 %s"
-msgstr ""
+msgstr "%s - 订单 %s"
 
 msgid "WooCommerce未激活"
-msgstr ""
+msgstr "WooCommerce未激活"
 
 msgid "产品不存在或未发布"
-msgstr ""
+msgstr "产品不存在或未发布"
 
 msgid "缺少搜索关键词"
-msgstr ""
+msgstr "缺少搜索关键词"
 
 msgid "分类不存在"
-msgstr ""
+msgstr "分类不存在"
 
 msgid "缺少必要参数：product_id 或 quantity"
-msgstr ""
+msgstr "缺少必要参数：product_id 或 quantity"
 
 msgid "库存不足"
-msgstr ""
+msgstr "库存不足"
 
 msgid "添加成功"
-msgstr ""
+msgstr "添加成功"
 
 msgid "缺少必要参数：item_id 或 quantity"
-msgstr ""
+msgstr "缺少必要参数：item_id 或 quantity"
 
 msgid "购物车中没有此商品"
-msgstr ""
+msgstr "购物车中没有此商品"
 
 msgid "更新成功"
-msgstr ""
+msgstr "更新成功"
 
 msgid "缺少必要参数：item_id"
-msgstr ""
+msgstr "缺少必要参数：item_id"
 
 msgid "移除成功"
-msgstr ""
+msgstr "移除成功"
 
 msgid "购物车已清空"
-msgstr ""
+msgstr "购物车已清空"
 
 msgid "订单不存在"
-msgstr ""
+msgstr "订单不存在"
 
 msgid "无权访问该订单"
-msgstr ""
+msgstr "无权访问该订单"
 
 msgid "缺少必要参数：address_id 或 payment_method"
-msgstr ""
+msgstr "缺少必要参数：address_id 或 payment_method"
 
 msgid "购物车为空"
-msgstr ""
+msgstr "购物车为空"
 
 msgid "地址不存在或不属于该用户"
-msgstr ""
+msgstr "地址不存在或不属于该用户"
 
 msgid "订单创建失败"
-msgstr ""
+msgstr "订单创建失败"
 
 msgid "%s 库存不足"
-msgstr ""
+msgstr "%s 库存不足"
 
 msgid "订单创建成功"
-msgstr ""
+msgstr "订单创建成功"
 
 msgid "该订单状态不允许取消"
-msgstr ""
+msgstr "该订单状态不允许取消"
 
 msgid "用户取消订单"
-msgstr ""
+msgstr "用户取消订单"
 
 msgid "订单已取消"
-msgstr ""
+msgstr "订单已取消"
 
 msgid "订单已完成"
-msgstr ""
+msgstr "订单已完成"
 
 msgid "该订单状态不允许确认收货"
-msgstr ""
+msgstr "该订单状态不允许确认收货"
 
 msgid "用户确认收货"
-msgstr ""
+msgstr "用户确认收货"
 
 msgid "确认收货成功"
-msgstr ""
+msgstr "确认收货成功"
 
 msgid "缺少必要参数：order_id"
-msgstr ""
+msgstr "缺少必要参数：order_id"
 
 msgid "订单状态不正确"
-msgstr ""
+msgstr "订单状态不正确"
 
 msgid "订单金额不正确"
-msgstr ""
+msgstr "订单金额不正确"
 
 msgid "支付参数生成成功"
-msgstr ""
+msgstr "支付参数生成成功"
 
 msgid "微信支付成功"
-msgstr ""
+msgstr "微信支付成功"
 
 msgid "数据库错误"
-msgstr ""
+msgstr "数据库错误"
 
 msgid "用户不存在"
-msgstr ""
+msgstr "用户不存在"
 
 msgid "更新成功"
-msgstr ""
+msgstr "更新成功"
 
 msgid "缺少必要参数：%s"
-msgstr ""
+msgstr "缺少必要参数：%s"
 
 msgid "添加成功"
-msgstr ""
+msgstr "添加成功"
 
 msgid "缺少必要参数：address_id"
-msgstr ""
+msgstr "缺少必要参数：address_id"
 
 msgid "地址不存在或不属于该用户"
-msgstr ""
+msgstr "地址不存在或不属于该用户"
 
 msgid "删除成功"
-msgstr ""
+msgstr "删除成功"
 
 msgid "缺少必要参数：post_id"
-msgstr ""
+msgstr "缺少必要参数：post_id"
 
 msgid "文章不存在或未发布"
-msgstr ""
+msgstr "文章不存在或未发布"
 
 msgid "已经收藏过了"
-msgstr ""
+msgstr "已经收藏过了"
 
 msgid "收藏成功"
-msgstr ""
+msgstr "收藏成功"
 
 msgid "缺少必要参数：favorite_id 或 post_id"
-msgstr ""
+msgstr "缺少必要参数：favorite_id 或 post_id"
 
 msgid "取消收藏成功"
-msgstr ""
+msgstr "取消收藏成功"
 
 msgid "今天已经签到过了"
-msgstr ""
+msgstr "今天已经签到过了"
 
 msgid "签到成功"
-msgstr ""
+msgstr "签到成功"
 
 msgid "商品不存在或不可购买"
-msgstr ""
+msgstr "商品不存在或不可购买"
 
 msgid "该商品不能用积分兑换"
-msgstr ""
+msgstr "该商品不能用积分兑换"
 
 msgid "积分不足"
-msgstr ""
+msgstr "积分不足"
 
 msgid "创建订单失败"
-msgstr ""
+msgstr "创建订单失败"
 
 msgid "积分兑换"
-msgstr ""
+msgstr "积分兑换"
 
 msgid "积分设置"
-msgstr ""
+msgstr "积分设置"
 
 msgid "基础设置"
-msgstr ""
+msgstr "基础设置"
 
 msgid "启用积分系统"
-msgstr ""
+msgstr "启用积分系统"
 
 msgid "每日最大积分获取量"
-msgstr ""
+msgstr "每日最大积分获取量"
 
 msgid "设置为0表示不限制"
-msgstr ""
+msgstr "设置为0表示不限制"
 
 msgid "积分有效期(天)"
-msgstr ""
+msgstr "积分有效期(天)"
 
 msgid "设置为0表示永不过期"
-msgstr ""
+msgstr "设置为0表示永不过期"
 
 msgid "积分获取规则"
-msgstr ""
+msgstr "积分获取规则"
 
 msgid "订单积分比例"
-msgstr ""
+msgstr "订单积分比例"
 
 msgid "每消费1元获得的积分数量"
-msgstr ""
+msgstr "每消费1元获得的积分数量"
 
 msgid "签到积分"
-msgstr ""
+msgstr "签到积分"
 
 msgid "每日签到获得的积分数量"
-msgstr ""
+msgstr "每日签到获得的积分数量"
 
 msgid "评论积分"
-msgstr ""
+msgstr "评论积分"
 
 msgid "发表评论获得的积分数量"
-msgstr ""
+msgstr "发表评论获得的积分数量"
 
 msgid "分享积分"
-msgstr ""
+msgstr "分享积分"
 
 msgid "分享内容获得的积分数量"
-msgstr ""
+msgstr "分享内容获得的积分数量"
 
 msgid "每日登录积分"
-msgstr ""
+msgstr "每日登录积分"
 
 msgid "每日首次登录获得的积分数量"
-msgstr ""
+msgstr "每日首次登录获得的积分数量"
 
 msgid "所需积分"
-msgstr ""
+msgstr "所需积分"
 
 msgid "SUT微信小程序插件需要PHP %s或更高版本。您当前的PHP版本是 %s，请升级PHP版本后再启用插件。"
-msgstr ""
+msgstr "SUT微信小程序插件需要PHP %s或更高版本。您当前的PHP版本是 %s，请升级PHP版本后再启用插件。"
 
 msgid "激活失败"
-msgstr ""
+msgstr "激活失败"
 
 msgid "SUT微信小程序插件需要WordPress %s或更高版本。您当前的WordPress版本是 %s，请升级WordPress版本后再启用插件。"
-msgstr ""
+msgstr "SUT微信小程序插件需要WordPress %s或更高版本。您当前的WordPress版本是 %s，请升级WordPress版本后再启用插件。"
 
 msgid "模板消息功能未启用"
-msgstr ""
+msgstr "模板消息功能未启用"
 
 msgid "获取access_token失败"
-msgstr ""
+msgstr "获取access_token失败"
 
 msgid "您的订单已支付成功，我们将尽快为您发货"
-msgstr ""
+msgstr "您的订单已支付成功，我们将尽快为您发货"
 
 msgid "订单已支付"
-msgstr ""
+msgstr "订单已支付"
 
 msgid "您的订单 %s 已支付成功，我们将尽快为您发货。"
-msgstr ""
+msgstr "您的订单 %s 已支付成功，我们将尽快为您发货。"
 
 msgid "快递"
-msgstr ""
+msgstr "快递"
 
 msgid "待补充"
-msgstr ""
+msgstr "待补充"
 
 msgid "订单已发货"
-msgstr ""
+msgstr "订单已发货"
 
 msgid "您的订单 %s 已发货，请注意查收。"
-msgstr ""
+msgstr "您的订单 %s 已发货，请注意查收。"
 
 msgid "订单已完成"
-msgstr ""
+msgstr "订单已完成"
 
 msgid "您的订单 %s 已完成，感谢您的购买！"
-msgstr ""
+msgstr "您的订单 %s 已完成，感谢您的购买！"
 
 msgid "订单已取消"
-msgstr ""
+msgstr "订单已取消"
 
 msgid "您的订单 %s 已取消，如有疑问请联系客服。"
-msgstr ""
+msgstr "您的订单 %s 已取消，如有疑问请联系客服。"
 
 msgid "订单已退款"
-msgstr ""
+msgstr "订单已退款"
 
 msgid "您的订单 %s 已退款，退款将在1-7个工作日内原路返回您的支付账户。"
-msgstr ""
+msgstr "您的订单 %s 已退款，退款将在1-7个工作日内原路返回您的支付账户。"
 
 msgid "您的退款已处理完成，退款将在1-7个工作日内原路返回您的支付账户"
-msgstr ""
+msgstr "您的退款已处理完成，退款将在1-7个工作日内原路返回您的支付账户"
 
 msgid "有新的评论"
-msgstr ""
+msgstr "有新的评论"
 
 msgid "您的文章《%s》收到了一条新评论：%s"
-msgstr ""
+msgstr "您的文章《%s》收到了一条新评论：%s"
 
 msgid "有新文章发布"
-msgstr ""
+msgstr "有新文章发布"
 
 msgid "您订阅的分类有新文章发布：《%s》"
-msgstr ""
+msgstr "您订阅的分类有新文章发布：《%s》"
 
 msgid "恭喜您签到成功，获得积分奖励！"
-msgstr ""
+msgstr "恭喜您签到成功，获得积分奖励！"
 
 msgid "积分变动"
-msgstr ""
+msgstr "积分变动"
 
 msgid "您的账户获得了 %d 积分，来源：%s"
-msgstr ""
+msgstr "您的账户获得了 %d 积分，来源：%s"
 
 msgid "未知错误"
-msgstr ""
+msgstr "未知错误"
 
 msgid "您没有足够的权限访问此页面。"
-msgstr ""
+msgstr "您没有足够的权限访问此页面。"
 
 msgid "设置已成功保存。"
-msgstr ""
+msgstr "设置已成功保存。"
 
 msgid "消息设置"
-msgstr ""
+msgstr "消息设置"
 
 msgid "缓存设置"
-msgstr ""
+msgstr "缓存设置"
 
 msgid "微信小程序基础配置"
-msgstr ""
+msgstr "微信小程序基础配置"
 
 msgid "小程序AppID"
-msgstr ""
+msgstr "小程序AppID"
 
 msgid "您的微信小程序的AppID"
-msgstr ""
+msgstr "您的微信小程序的AppID"
 
 msgid "小程序AppSecret"
-msgstr ""
+msgstr "小程序AppSecret"
 
 msgid "您的微信小程序的AppSecret"
-msgstr ""
+msgstr "您的微信小程序的AppSecret"
 
 msgid "用于消息验证的Token，可自定义"
-msgstr ""
+msgstr "用于消息验证的Token，可自定义"
 
 msgid "功能设置"
-msgstr ""
+msgstr "功能设置"
 
 msgid "调试模式"
-msgstr ""
+msgstr "调试模式"
 
 msgid "启用调试模式"
-msgstr ""
+msgstr "启用调试模式"
 
 msgid "调试模式下将记录更多的日志信息"
-msgstr ""
+msgstr "调试模式下将记录更多的日志信息"
 
 msgid "用户同步"
-msgstr ""
+msgstr "用户同步"
 
 msgid "启用用户数据同步"
-msgstr ""
+msgstr "启用用户数据同步"
 
 msgid "启用后将同步微信用户数据到WordPress"
-msgstr ""
+msgstr "启用后将同步微信用户数据到WordPress"
 
 msgid "内容同步"
-msgstr ""
+msgstr "内容同步"
 
 msgid "启用内容数据同步"
-msgstr ""
+msgstr "启用内容数据同步"
 
 msgid "启用后将同步WordPress内容到微信小程序"
-msgstr ""
+msgstr "启用后将同步WordPress内容到微信小程序"
 
 msgid "微信支付配置"
-msgstr ""
+msgstr "微信支付配置"
 
 msgid "启用支付功能"
-msgstr ""
+msgstr "启用支付功能"
 
 msgid "开启微信支付功能"
-msgstr ""
+msgstr "开启微信支付功能"
 
 msgid "微信支付商户号"
-msgstr ""
+msgstr "微信支付商户号"
 
 msgid "微信支付API密钥"
-msgstr ""
+msgstr "微信支付API密钥"
 
 msgid "订单过期时间"
-msgstr ""
+msgstr "订单过期时间"
 
 msgid "分钟"
-msgstr ""
+msgstr "分钟"
 
 msgid "消息推送配置"
-msgstr ""
+msgstr "消息推送配置"
 
 msgid "启用消息功能"
-msgstr ""
+msgstr "启用消息功能"
 
 msgid "开启消息推送功能"
-msgstr ""
+msgstr "开启消息推送功能"
 
 msgid "模板消息"
-msgstr ""
+msgstr "模板消息"
 
 msgid "启用模板消息"
-msgstr ""
+msgstr "启用模板消息"
 
 msgid "订单模板ID"
-msgstr ""
+msgstr "订单模板ID"
 
 msgid "订单状态变更的模板消息ID"
-msgstr ""
+msgstr "订单状态变更的模板消息ID"
 
 msgid "积分系统配置"
-msgstr ""
+msgstr "积分系统配置"
 
 msgid "开启积分系统"
-msgstr ""
+msgstr "开启积分系统"
 
 msgid "积分名称"
-msgstr ""
+msgstr "积分名称"
 
 msgid "每日签到获得的积分"
-msgstr ""
+msgstr "每日签到获得的积分"
 
 msgid "缓存配置"
-msgstr ""
+msgstr "缓存配置"
 
 msgid "开启缓存功能"
-msgstr ""
+msgstr "开启缓存功能"
 
 msgid "缓存过期时间"
-msgstr ""
+msgstr "缓存过期时间"
 
 msgid "秒"
-msgstr ""
+msgstr "秒"
 
 msgid "缓存类型"
-msgstr ""
+msgstr "缓存类型"
 
 msgid "Transient缓存"
-msgstr ""
+msgstr "Transient缓存"
 
 msgid "文件缓存"
-msgstr ""
+msgstr "文件缓存"
 
 msgid "插件信息"
-msgstr ""
+msgstr "插件信息"
 
-msgid "版本:" 
-msgstr ""
+msgid "版本:"
+msgstr "版本:"
 
-msgid "作者:" 
-msgstr ""
+msgid "作者:"
+msgstr "作者:"
 
 msgid "感谢您使用SUT微信小程序插件！"
-msgstr ""
+msgstr "感谢您使用SUT微信小程序插件！"
 
 msgid "%d秒前"
-msgstr ""
+msgstr "%d秒前"
 
 msgid "%d分钟前"
-msgstr ""
+msgstr "%d分钟前"
 
 msgid "%d小时前"
-msgstr ""
+msgstr "%d小时前"
 
 msgid "%d天前"
-msgstr ""
+msgstr "%d天前"
 
 msgid "%s是必填项"
-msgstr ""
+msgstr "%s是必填项"
 
 msgid "请输入有效的邮箱地址"
-msgstr ""
+msgstr "请输入有效的邮箱地址"
 
 msgid "请输入有效的URL地址"
-msgstr ""
+msgstr "请输入有效的URL地址"
 
 msgid "%s长度不能少于%d个字符"
-msgstr ""
+msgstr "%s长度不能少于%d个字符"
 
 msgid "%s长度不能超过%d个字符"
-msgstr ""
+msgstr "%s长度不能超过%d个字符"
 
 msgid "%s必须是数字"
-msgstr ""
+msgstr "%s必须是数字"
 
 msgid "%s必须是整数"
-msgstr ""
+msgstr "%s必须是整数"
 
 msgid "%s和%s必须相同"
-msgstr ""
+msgstr "%s和%s必须相同"
 
 msgid "%s格式不正确"
-msgstr ""
+msgstr "%s格式不正确"
 
 msgid "SUT微信小程序插件需要PHP 5.6.0或更高版本才能运行。当前您的PHP版本是 %s。请升级您的PHP版本。"
-msgstr ""
+msgstr "SUT微信小程序插件需要PHP 5.6.0或更高版本才能运行。当前您的PHP版本是 %s。请升级您的PHP版本。"
 
 msgid "SUT微信小程序插件需要WordPress 4.7或更高版本才能运行。当前您的WordPress版本是 %s。请升级您的WordPress版本。"
-msgstr ""
+msgstr "SUT微信小程序插件需要WordPress 4.7或更高版本才能运行。当前您的WordPress版本是 %s。请升级您的WordPress版本。"
 
 msgid "SUT微信小程序插件已激活，但尚未配置。请前往 %s 完成配置。"
-msgstr ""
+msgstr "SUT微信小程序插件已激活，但尚未配置。请前往 %s 完成配置。"
 
 msgid "设置页面"
-msgstr ""
+msgstr "设置页面"
 
 msgid "API连接成功"
-msgstr ""
+msgstr "API连接成功"
 
 msgid "小程序页面"
-msgstr ""
+msgstr "小程序页面"
 
 msgid "添加新页面"
-msgstr ""
+msgstr "添加新页面"
 
 msgid "添加新小程序页面"
-msgstr ""
+msgstr "添加新小程序页面"
 
 msgid "编辑小程序页面"
-msgstr ""
+msgstr "编辑小程序页面"
 
 msgid "新小程序页面"
-msgstr ""
+msgstr "新小程序页面"
 
 msgid "查看小程序页面"
-msgstr ""
+msgstr "查看小程序页面"
 
 msgid "搜索小程序页面"
-msgstr ""
+msgstr "搜索小程序页面"
 
 msgid "未找到小程序页面"
-msgstr ""
+msgstr "未找到小程序页面"
 
 msgid "回收站中未找到小程序页面"
-msgstr ""
+msgstr "回收站中未找到小程序页面"
 
 msgid "父级页面:"
-msgstr ""
+msgstr "父级页面:" 
 
 msgid "页面模板"
-msgstr ""
+msgstr "页面模板"
 
 msgid "搜索页面模板"
-msgstr ""
+msgstr "搜索页面模板"
 
 msgid "所有页面模板"
-msgstr ""
+msgstr "所有页面模板"
 
 msgid "父级模板"
-msgstr ""
+msgstr "父级模板"
 
 msgid "父级模板:"
-msgstr ""
+msgstr "父级模板:" 
 
 msgid "编辑页面模板"
-msgstr ""
+msgstr "编辑页面模板"
 
 msgid "更新页面模板"
-msgstr ""
+msgstr "更新页面模板"
 
 msgid "添加新页面模板"
-msgstr ""
+msgstr "添加新页面模板"
 
 msgid "新页面模板名称"
-msgstr ""
+msgstr "新页面模板名称"

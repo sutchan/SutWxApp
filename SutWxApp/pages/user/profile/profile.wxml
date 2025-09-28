@@ -1,0 +1,92 @@
+<!-- pages/user/profile/profile.wxml -->
+<view class="profile-container">
+  <!-- 未登录状态 -->
+  <view class="unlogin-container" wx:if="{{!isLoggedIn}}">
+    <view class="unlogin-content">
+      <image src="/images/default-avatar.png" class="default-avatar"></image>
+      <text class="unlogin-text">请先登录</text>
+      <button class="login-btn" type="primary" bindtap="navigateToLogin">立即登录</button>
+    </view>
+  </view>
+
+  <!-- 已登录状态 -->
+  <view class="logged-container" wx:elif="{{isLoggedIn}}">
+    <!-- 用户信息头部 -->
+    <view class="user-header">
+      <image src="{{userInfo.avatar || '/images/default-avatar.png'}}" class="user-avatar"></image>
+      <view class="user-info">
+        <view class="user-name-row">
+          <text class="user-name">{{userInfo.nickname || userInfo.username || '用户'}}</text>
+          <text class="user-id">ID: {{userInfo.openid || ''}}</text>
+        </view>
+        <text class="user-level">普通用户</text>
+      </view>
+      <image src="/images/arrow-right.png" class="arrow-icon" bindtap="navigateToSettings"></image>
+    </view>
+
+    <!-- 积分信息 -->
+    <view class="points-card">
+      <view class="points-info" bindtap="navigateToPointsCenter">
+        <text class="points-label">我的积分</text>
+        <text class="points-value">{{userStats.points || 0}}</text>
+        <image src="/images/arrow-right.png" class="arrow-icon"></image>
+      </view>
+    </view>
+
+    <!-- 签到区域 -->
+    <view class="signin-card" bindtap="doSignin">
+      <view class="signin-info">
+        <image src="{{signinStatus ? '/images/signin-checked.png' : '/images/signin.png'}}" class="signin-icon"></image>
+        <text class="signin-text">{{signinStatus ? '已签到' : '每日签到'}}</text>
+        <text class="signin-days" wx:if="{{signinDays > 0}}">连续{{signinDays}}天</text>
+      </view>
+    </view>
+
+    <!-- 功能列表 -->
+    <view class="feature-list">
+      <!-- 我的收藏 -->
+      <view class="feature-item" bindtap="navigateToFavoriteList">
+        <view class="feature-left">
+          <image src="/images/favorite.png" class="feature-icon"></image>
+          <text class="feature-text">我的收藏</text>
+        </view>
+        <view class="feature-right">
+          <text class="feature-count">{{userStats.favorites || 0}}</text>
+          <image src="/images/arrow-right.png" class="arrow-icon"></image>
+        </view>
+      </view>
+
+      <!-- 我的地址 -->
+      <view class="feature-item" bindtap="navigateToAddressList">
+        <view class="feature-left">
+          <image src="/images/address.png" class="feature-icon"></image>
+          <text class="feature-text">我的地址</text>
+        </view>
+        <image src="/images/arrow-right.png" class="arrow-icon"></image>
+      </view>
+
+      <!-- 签到历史 -->
+      <view class="feature-item" bindtap="navigateToSigninHistory">
+        <view class="feature-left">
+          <image src="/images/calendar.png" class="feature-icon"></image>
+          <text class="feature-text">签到历史</text>
+        </view>
+        <image src="/images/arrow-right.png" class="arrow-icon"></image>
+      </view>
+
+      <!-- 意见反馈 -->
+      <view class="feature-item" bindtap="navigateToFeedback">
+        <view class="feature-left">
+          <image src="/images/feedback.png" class="feature-icon"></image>
+          <text class="feature-text">意见反馈</text>
+        </view>
+        <image src="/images/arrow-right.png" class="arrow-icon"></image>
+      </view>
+    </view>
+
+    <!-- 退出登录按钮 -->
+    <view class="logout-container">
+      <button class="logout-btn" bindtap="logout">退出登录</button>
+    </view>
+  </view>
+</view>
