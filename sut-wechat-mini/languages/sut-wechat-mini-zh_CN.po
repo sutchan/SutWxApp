@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: SUT 微信小程序 1.0.0\n"
-"Report-Msgid-Bugs-To: https://github.com/woniu336/SutWxApp/issues\n"
+"Report-Msgid-Bugs-To: https://github.com/sutchan/SutWxApp/issues\n"
 "POT-Creation-Date: %Y-%m-%d %H:%M:%S+00:00\n"
 "PO-Revision-Date: %Y-%m-%d %H:%M:%S+00:00\n"
 "Last-Translator: SUT Development Team <support@example.com>\n"
