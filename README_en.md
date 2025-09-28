@@ -1,7 +1,7 @@
 # SUT WeChat Mini Program Plugin
 
-[![GitHub release](https://img.shields.io/github/release/woniu336/SutWxApp.svg)](https://github.com/woniu336/SutWxApp/releases)
-[![License](https://img.shields.io/github/license/woniu336/SutWxApp.svg)](https://github.com/woniu336/SutWxApp/blob/master/LICENSE)
+[![GitHub release](https://img.shields.io/github/release/sutchan/SutWxApp.svg)](https://github.com/sutchan/SutWxApp/releases)
+[![License](https://img.shields.io/github/license/sutchan/SutWxApp.svg)](https://github.com/sutchan/SutWxApp/blob/master/LICENSE)
 
 The SUT WeChat Mini Program Plugin is a plugin that provides WeChat Mini Program integration for WordPress websites, supporting content display, e-commerce functions, user management, message push, and more.
 
@@ -39,7 +39,7 @@ The SUT WeChat Mini Program Plugin is a plugin that provides WeChat Mini Program
 
 ```bash
 cd /path/to/wordpress/wp-content/plugins
-git clone https://github.com/woniu336/SutWxApp.git sut-wechat-mini
+git clone https://github.com/sutchan/SutWxApp.git sut-wechat-mini
 ```
 
 Then activate the plugin in the WordPress backend.

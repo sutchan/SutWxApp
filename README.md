@@ -1,7 +1,7 @@
 # SUT微信小程序插件
 
-[![GitHub release](https://img.shields.io/github/release/woniu336/SutWxApp.svg)](https://github.com/woniu336/SutWxApp/releases)
-[![License](https://img.shields.io/github/license/woniu336/SutWxApp.svg)](https://github.com/woniu336/SutWxApp/blob/master/LICENSE)
+[![GitHub release](https://img.shields.io/github/release/sutchan/SutWxApp.svg)](https://github.com/sutchan/SutWxApp/releases)
+[![License](https://img.shields.io/github/license/sutchan/SutWxApp.svg)](https://github.com/sutchan/SutWxApp/blob/master/LICENSE)
 
 SUT微信小程序插件是一个为WordPress网站提供微信小程序对接功能的插件，支持内容展示、电商功能、用户管理、消息推送等功能。
 
@@ -39,7 +39,7 @@ SUT微信小程序插件是一个为WordPress网站提供微信小程序对接�
 
 ```bash
 cd /path/to/wordpress/wp-content/plugins
- git clone https://github.com/woniu336/SutWxApp.git sut-wechat-mini
+ git clone https://github.com/sutchan/SutWxApp.git sut-wechat-mini
 ```
 
 然后在WordPress后台启用插件。
@@ -247,8 +247,8 @@ SUT微信小程序插件是基于GPLv2许可证开源的软件。
 
 如果您在使用过程中遇到问题，或者有任何建议，可以通过以下方式联系我们：
 
-- GitHub: [https://github.com/woniu336/SutWxApp](https://github.com/woniu336/SutWxApp)
-- 邮箱: woniu336@example.com
+- GitHub: [https://github.com/sutchan/SutWxApp](https://github.com/sutchan/SutWxApp)
+- 邮箱: support@sutchan.com
 
 ## 更新日志
 
