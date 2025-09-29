@@ -2,6 +2,105 @@
 
 jQuery(document).ready(function($) {
     
+    // 设置页面相关功能
+    function initSettingsPage() {
+        // 设置分组的标签页切换逻辑
+        $(document).on('click', '.sut-wechat-mini-settings-tab', function() {
+            var tab = $(this);
+            var sectionId = tab.data('section');
+            var navContainer = tab.closest('.sut-wechat-mini-settings-nav');
+            var contentContainer = navContainer.siblings('.sut-wechat-mini-settings-content');
+            
+            // 移除所有活动状态
+            navContainer.find('.sut-wechat-mini-settings-tab').removeClass('active');
+            contentContainer.find('.sut-wechat-mini-settings-section').removeClass('active');
+            
+            // 添加当前活动状态
+            tab.addClass('active');
+            contentContainer.find('#sut-wechat-mini-section-' + sectionId).addClass('active');
+            
+            // 存储当前活动标签到本地存储
+            localStorage.setItem('sut-wechat-mini-active-section', sectionId);
+            
+            // 触发自定义事件
+            $(document).trigger('sut-wechat-mini-settings-tab-changed', [sectionId]);
+        });
+        
+        // 表单提交处理
+        $('#sut-wechat-mini-settings-form').on('submit', function(e) {
+            // e.preventDefault(); // 不阻止默认提交，让WordPress处理表单提交
+            
+            var form = $(this);
+            var submitButton = form.find('input[type="submit"]');
+            var saveStatus = form.find('.sut-wechat-mini-save-status');
+            
+            // 显示保存状态
+            saveStatus.text('保存中...').show();
+            
+            // 禁用提交按钮
+            submitButton.prop('disabled', true);
+            
+            // 30秒后自动启用提交按钮（以防请求超时）
+            setTimeout(function() {
+                submitButton.prop('disabled', false);
+                saveStatus.fadeOut();
+            }, 30000);
+        });
+        
+        // 颜色选择器即时预览
+        $(document).on('change', '.sut-wechat-mini-color-input', function() {
+            var colorInput = $(this);
+            var colorValue = colorInput.val();
+            var swatch = colorInput.siblings('.sut-wechat-mini-color-swatch');
+            
+            // 更新颜色预览
+            if (swatch.length) {
+                swatch.css('background-color', colorValue);
+            }
+        });
+        
+        // 添加设置字段悬停效果
+        $('.sut-wechat-mini-setting-card').hover(
+            function() {
+                $(this).find('.sut-wechat-mini-setting-description').stop(true, true).fadeIn(200);
+            },
+            function() {
+                $(this).find('.sut-wechat-mini-setting-description').stop(true, true).fadeOut(200);
+            }
+        );
+        
+        // 表单提交后的成功提示
+        $(document).ready(function() {
+            // 检查URL中是否有成功参数
+            if (window.location.search.indexOf('settings-updated=true') !== -1) {
+                // 显示成功消息
+                var saveStatus = $('#sut-wechat-mini-settings-form .sut-wechat-mini-save-status');
+                if (saveStatus.length) {
+                    saveStatus.text('保存成功！').css('color', '#28a745').show();
+                    
+                    // 3秒后隐藏成功消息
+                    setTimeout(function() {
+                        saveStatus.fadeOut();
+                    }, 3000);
+                }
+            }
+        });
+        
+        // 加载上次活动的标签页
+        var activeSection = localStorage.getItem('sut-wechat-mini-active-section');
+        if (activeSection && $('.sut-wechat-mini-settings-tab[data-section="' + activeSection + '"]').length) {
+            $('.sut-wechat-mini-settings-tab[data-section="' + activeSection + '"]').click();
+        } else {
+            // 默认激活第一个标签
+            $('.sut-wechat-mini-settings-tab:first').click();
+        }
+    }
+    
+    // 初始化设置页面功能
+    if ($('.sut-wechat-mini-settings-container').length) {
+        initSettingsPage();
+    }
+    
     // 颜色选择器初始化
     $('.sut-wechat-mini-color-picker').wpColorPicker({
         change: function(event, ui) {

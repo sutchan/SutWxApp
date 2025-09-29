@@ -1,4 +1,7 @@
 // pages/article/detail/detail.js
+/**
+ * 文章详情页面 - 展示文章内容、评论列表和互动功能
+ */
 Page({
   /**
    * 页面的初始数据
@@ -7,6 +10,7 @@ Page({
     articleId: 0, // 文章ID
     article: {}, // 文章详情
     loading: true, // 加载状态
+    error: false, // 错误状态
     likeCount: 0, // 点赞数量
     isLiked: false, // 是否已点赞
     commentList: [], // 评论列表
@@ -29,6 +33,15 @@ Page({
       });
       this.getArticleDetail();
       this.getCommentList();
+    } else {
+      this.setData({
+        loading: false,
+        error: true
+      });
+      wx.showToast({
+        title: '文章ID不存在',
+        icon: 'none'
+      });
     }
   },
 
@@ -43,12 +56,14 @@ Page({
    * 获取文章详情
    */
   getArticleDetail: function() {
-    wx.request({
-      url: getApp().globalData.apiBaseUrl + '/articles/' + this.data.articleId, 
+    const app = getApp();
+    app.request({
+      url: '/articles/' + this.data.articleId,
       method: 'GET',
+      loadingText: '加载文章中',
       success: (res) => {
-        if (res.statusCode === 200 && res.data.code === 0) {
-          const article = res.data.data;
+        if (res.code === 0) {
+          const article = res.data;
           this.setData({
             article: article,
             likeCount: article.like_count || 0,
@@ -56,7 +71,8 @@ Page({
             isFavorite: article.is_favorite || false,
             favoriteCount: article.favorite_count || 0,
             viewCount: article.view_count || 0,
-            loading: false
+            loading: false,
+            error: false
           });
           
           // 设置页面标题
@@ -65,21 +81,23 @@ Page({
           });
         } else {
           wx.showToast({
-            title: '获取文章详情失败',
+            title: res.message || '获取文章详情失败',
             icon: 'none'
           });
           this.setData({
-            loading: false
+            loading: false,
+            error: true
           });
         }
       },
       fail: () => {
         wx.showToast({
-          title: '网络错误',
+          title: '网络错误，无法加载文章',
           icon: 'none'
         });
         this.setData({
-          loading: false
+          loading: false,
+          error: true
         });
       }
     });
@@ -91,17 +109,19 @@ Page({
   getCommentList: function() {
     if (!this.data.commentHasMore) return;
 
-    wx.request({
-      url: getApp().globalData.apiBaseUrl + '/articles/' + this.data.articleId + '/comments',
+    const app = getApp();
+    app.request({
+      url: '/articles/' + this.data.articleId + '/comments',
       method: 'GET',
       data: {
         page: this.data.commentPage,
         page_size: 10
       },
+      hideLoading: this.data.commentPage > 1, // 加载更多时隐藏loading
       success: (res) => {
-        if (res.statusCode === 200 && res.data.code === 0) {
-          const comments = res.data.data.list;
-          const total = res.data.data.total;
+        if (res.code === 0) {
+          const comments = res.data.list || [];
+          const total = res.data.total || 0;
           
           // 如果是第一页，则替换评论列表；否则追加
           if (this.data.commentPage === 1) {
@@ -119,6 +139,14 @@ Page({
             commentHasMore: this.data.commentList.length < total
           });
         }
+      },
+      fail: () => {
+        if (this.data.commentPage === 1) {
+          wx.showToast({
+            title: '评论加载失败',
+            icon: 'none'
+          });
+        }
       }
     });
   },
@@ -127,94 +155,80 @@ Page({
    * 点赞文章
    */
   likeArticle: function() {
-    if (this.data.isLiked) {
-      // 取消点赞
-      wx.request({
-        url: getApp().globalData.apiBaseUrl + '/articles/' + this.data.articleId + '/unlike',
-        method: 'POST',
-        header: {
-          'content-type': 'application/json',
-          'Authorization': 'Bearer ' + wx.getStorageSync('token')
-        },
-        success: (res) => {
-          if (res.statusCode === 200 && res.data.code === 0) {
-            this.setData({
-              isLiked: false,
-              likeCount: Math.max(0, this.data.likeCount - 1)
-            });
-          }
-        }
+    const app = getApp();
+    // 检查是否登录
+    if (!app.isLoggedIn()) {
+      wx.navigateTo({
+        url: '/pages/user/login/login'
       });
-    } else {
-      // 点赞
-      wx.request({
-        url: getApp().globalData.apiBaseUrl + '/articles/' + this.data.articleId + '/like',
-        method: 'POST',
-        header: {
-          'content-type': 'application/json',
-          'Authorization': 'Bearer ' + wx.getStorageSync('token')
-        },
-        success: (res) => {
-          if (res.statusCode === 200 && res.data.code === 0) {
-            this.setData({
-              isLiked: true,
-              likeCount: this.data.likeCount + 1
-            });
-          }
-        }
-      });
+      return;
     }
+
+    const action = this.data.isLiked ? 'unlike' : 'like';
+    const successMsg = this.data.isLiked ? '取消点赞成功' : '点赞成功';
+    
+    app.request({
+      url: '/articles/' + this.data.articleId + '/' + action,
+      method: 'POST',
+      loadingText: this.data.isLiked ? '取消点赞中' : '点赞中',
+      success: (res) => {
+        if (res.code === 0) {
+          this.setData({
+            isLiked: !this.data.isLiked,
+            likeCount: this.data.isLiked ? Math.max(0, this.data.likeCount - 1) : this.data.likeCount + 1
+          });
+          wx.showToast({
+            title: successMsg,
+            icon: 'success'
+          });
+        } else {
+          wx.showToast({
+            title: res.message || '操作失败',
+            icon: 'none'
+          });
+        }
+      }
+    });
   },
 
   /**
    * 收藏文章
    */
   favoriteArticle: function() {
-    if (this.data.isFavorite) {
-      // 取消收藏
-      wx.request({
-        url: getApp().globalData.apiBaseUrl + '/articles/' + this.data.articleId + '/unfavorite',
-        method: 'POST',
-        header: {
-          'content-type': 'application/json',
-          'Authorization': 'Bearer ' + wx.getStorageSync('token')
-        },
-        success: (res) => {
-          if (res.statusCode === 200 && res.data.code === 0) {
-            this.setData({
-              isFavorite: false,
-              favoriteCount: Math.max(0, this.data.favoriteCount - 1)
-            });
-            wx.showToast({
-              title: '取消收藏成功',
-              icon: 'none'
-            });
-          }
-        }
+    const app = getApp();
+    // 检查是否登录
+    if (!app.isLoggedIn()) {
+      wx.navigateTo({
+        url: '/pages/user/login/login'
       });
-    } else {
-      // 收藏
-      wx.request({
-        url: getApp().globalData.apiBaseUrl + '/articles/' + this.data.articleId + '/favorite',
-        method: 'POST',
-        header: {
-          'content-type': 'application/json',
-          'Authorization': 'Bearer ' + wx.getStorageSync('token')
-        },
-        success: (res) => {
-          if (res.statusCode === 200 && res.data.code === 0) {
-            this.setData({
-              isFavorite: true,
-              favoriteCount: this.data.favoriteCount + 1
-            });
-            wx.showToast({
-              title: '收藏成功',
-              icon: 'success'
-            });
-          }
-        }
-      });
+      return;
     }
+
+    const action = this.data.isFavorite ? 'unfavorite' : 'favorite';
+    const successMsg = this.data.isFavorite ? '取消收藏成功' : '收藏成功';
+    
+    app.request({
+      url: '/articles/' + this.data.articleId + '/' + action,
+      method: 'POST',
+      loadingText: this.data.isFavorite ? '取消收藏中' : '收藏中',
+      success: (res) => {
+        if (res.code === 0) {
+          this.setData({
+            isFavorite: !this.data.isFavorite,
+            favoriteCount: this.data.isFavorite ? Math.max(0, this.data.favoriteCount - 1) : this.data.favoriteCount + 1
+          });
+          wx.showToast({
+            title: successMsg,
+            icon: 'success'
+          });
+        } else {
+          wx.showToast({
+            title: res.message || '操作失败',
+            icon: 'none'
+          });
+        }
+      }
+    });
   },
 
   /**
@@ -230,22 +244,20 @@ Page({
       return;
     }
 
-    wx.request({
-      url: getApp().globalData.apiBaseUrl + '/articles/' + this.data.articleId + '/comments',
+    const app = getApp();
+    app.request({
+      url: '/articles/' + this.data.articleId + '/comments',
       method: 'POST',
       data: {
         content: content
       },
-      header: {
-        'content-type': 'application/json',
-        'Authorization': 'Bearer ' + wx.getStorageSync('token')
-      },
+      loadingText: '提交评论中',
       success: (res) => {
-        if (res.statusCode === 200 && res.data.code === 0) {
+        if (res.code === 0) {
           this.setData({
             commentContent: '',
             showCommentInput: false,
-            commentList: [res.data.data, ...this.data.commentList]
+            commentList: [res.data, ...this.data.commentList]
           });
           wx.showToast({
             title: '评论成功',
@@ -253,18 +265,16 @@ Page({
           });
         } else {
           wx.showToast({
-            title: res.data.message || '评论失败',
+            title: res.message || '评论失败',
             icon: 'none'
           });
         }
       },
       fail: () => {
-        wx.showToast(
-          {
-            title: '网络错误',
-            icon: 'none'
-          }
-        );
+        wx.showToast({
+          title: '网络错误，评论失败',
+          icon: 'none'
+        });
       }
     });
   },
@@ -282,6 +292,15 @@ Page({
    * 显示评论输入框
    */
   showCommentBox: function() {
+    const app = getApp();
+    // 检查是否登录
+    if (!app.isLoggedIn()) {
+      wx.navigateTo({
+        url: '/pages/user/login/login'
+      });
+      return;
+    }
+
     this.setData({
       showCommentInput: true
     });
@@ -331,4 +350,4 @@ Page({
     this.getCommentList();
     wx.stopPullDownRefresh();
   }
-})
+});

@@ -155,9 +155,12 @@ class SUT_WeChat_Mini_Loader {
     
     /**
      * 加载文本域
+     *
+     * @return void
      */
     private function load_textdomain() {
-        load_plugin_textdomain( 'sut-wechat-mini', false, basename( SUT_WECHAT_MINI_PLUGIN_DIR ) . '/languages' );
+        // 为了解决插件激活问题，暂时禁用翻译加载功能。
+        // load_plugin_textdomain( 'sut-wechat-mini', false, basename( SUT_WECHAT_MINI_PLUGIN_DIR ) . '/languages' );
     }
     
     /**
@@ -236,9 +239,8 @@ class SUT_WeChat_Mini_Loader {
                 require_once SUT_WECHAT_MINI_PLUGIN_DIR . 'includes/woocommerce/class-sut-wechat-mini-woocommerce.php';
             }
             
-            // 初始化WooCommerce模块
-            $woocommerce = SUT_WeChat_Mini_WooCommerce::get_instance();
-            $woocommerce->init();
+            // 初始化WooCommerce模块 - get_instance()会调用构造函数，而构造函数中已经调用了init()
+            SUT_WeChat_Mini_WooCommerce::get_instance();
         }
     }
     

@@ -1,57 +1,68 @@
 // pages/user/profile/profile.js
+/**
+ * 个人中心页面 - 展示用户信息和提供用户相关功能
+ */
 Page({
   data: {
-    userInfo: {},
-    isLoggedIn: false,
-    signinStatus: false,
-    signinDays: 0,
-    userStats: {
-      favorites: 0,
-      orders: 0,
-      points: 0,
-      signins: 0
-    },
-    loading: false
+    userInfo: null, // 用户信息
+    userStats: {}, // 用户统计数据
+    signinStatus: false, // 签到状态
+    signinDays: 0, // 连续签到天数
+    isLoading: true, // 页面加载状态
+    appVersion: '1.0.0' // 应用版本
   },
 
+  /**
+   * 生命周期函数--监听页面加载
+   */
   onLoad: function() {
-    // 页面加载时初始化数据
-    this.checkLoginStatus();
+    // 页面加载时获取用户信息
+    this.loadUserInfo();
   },
 
+  /**
+   * 生命周期函数--监听页面显示
+   */
   onShow: function() {
-    // 每次页面显示时都检查登录状态和刷新数据
-    this.checkLoginStatus();
+    // 页面显示时刷新用户信息
+    this.loadUserInfo();
   },
 
+  /**
+   * 页面相关事件处理函数--监听用户下拉动作
+   */
   onPullDownRefresh: function() {
-    // 下拉刷新时重新加载数据
-    this.checkLoginStatus();
+    // 下拉刷新时重新加载用户信息
+    this.loadUserInfo();
   },
 
-  // 检查登录状态
-  checkLoginStatus: function() {
+  /**
+   * 加载用户信息
+   */
+  loadUserInfo: function() {
     const app = getApp();
-    const isLoggedIn = app.isLoggedIn();
     
-    this.setData({
-      isLoggedIn: isLoggedIn
-    });
-    
-    if (isLoggedIn) {
+    // 检查用户是否登录
+    if (app.isLoggedIn()) {
       // 已登录，获取用户信息和统计数据
       this.getUserInfo();
       this.getUserStats();
       this.getSigninStatus();
+    } else {
+      // 未登录，停止下拉刷新
+      wx.stopPullDownRefresh();
     }
   },
 
-  // 获取用户信息
+  /**
+   * 获取用户详细信息
+   */
   getUserInfo: function() {
     const app = getApp();
     
     app.request({
-      url: '/sut-wxapp-api/user/profile',
+      url: '/user/profile',
+      loadingText: '加载中',
       success: (res) => {
         if (res.code === 0) {
           // 合并全局用户信息和API返回的用户信息
@@ -64,7 +75,21 @@ Page({
           // 更新全局用户信息
           app.globalData.userInfo = userInfo;
           wx.setStorageSync('userInfo', userInfo);
+        } else {
+          wx.showToast({
+            title: res.message || '获取用户信息失败',
+            icon: 'none',
+            duration: 2000
+          });
         }
+      },
+      fail: (error) => {
+        console.error('获取用户信息失败:', error);
+        wx.showToast({
+          title: '网络错误，请重试',
+          icon: 'none',
+          duration: 2000
+        });
       },
       complete: () => {
         wx.stopPullDownRefresh();
@@ -72,138 +97,201 @@ Page({
     });
   },
 
-  // 获取用户统计数据
+  /**
+   * 获取用户统计数据
+   */
   getUserStats: function() {
     const app = getApp();
     
     app.request({
-      url: '/sut-wxapp-api/user/stats',
+      url: '/user/stats',
       success: (res) => {
         if (res.code === 0) {
           this.setData({
             userStats: res.data
           });
+        } else {
+          console.error('获取用户统计数据失败:', res);
         }
+      },
+      fail: (error) => {
+        console.error('获取用户统计数据网络失败:', error);
       }
     });
   },
 
-  // 获取签到状态
+  /**
+   * 获取用户签到状态
+   */
   getSigninStatus: function() {
     const app = getApp();
     
     app.request({
-      url: '/sut-wxapp-api/user/signin/status',
+      url: '/user/signin/status',
       success: (res) => {
         if (res.code === 0) {
           this.setData({
             signinStatus: res.data.is_signed,
             signinDays: res.data.continuous_days
           });
+        } else {
+          console.error('获取签到状态失败:', res);
         }
+      },
+      fail: (error) => {
+        console.error('获取签到状态网络失败:', error);
       }
     });
   },
 
-  // 跳转到登录页面
+  /**
+   * 跳转到登录页面
+   */
   navigateToLogin: function() {
     wx.navigateTo({
-      url: '/pages/user/login/login'
+      url: '/pages/user/login/login',
+      fail: function() {
+        wx.showToast({
+          title: '跳转登录页面失败',
+          icon: 'none'
+        });
+      }
     });
   },
 
-  // 执行签到
+  /**
+   * 执行签到操作
+   */
   doSignin: function() {
     if (this.data.signinStatus) {
       wx.showToast({
         title: '今天已经签到过了',
-        icon: 'none'
+        icon: 'none',
+        duration: 2000
       });
       return;
     }
     
     const app = getApp();
-    this.setData({ loading: true });
     
     app.request({
-      url: '/sut-wxapp-api/user/signin',
+      url: '/user/signin',
       method: 'POST',
+      loadingText: '签到中',
       success: (res) => {
         if (res.code === 0) {
-          wx.showToast({
-            title: '签到成功',
-            icon: 'success'
-          });
-          
-          // 更新签到状态和积分
           this.setData({
             signinStatus: true,
-            signinDays: res.data.continuous_days,
-            'userStats.points': this.data.userStats.points + res.data.points_reward
+            signinDays: res.data.continuous_days
           });
+          
+          wx.showToast({
+            title: '签到成功，获得' + res.data.points + '积分',
+            icon: 'success',
+            duration: 2000
+          });
+          
+          // 刷新用户统计数据
+          this.getUserStats();
         } else {
           wx.showToast({
             title: res.message || '签到失败',
-            icon: 'none'
+            icon: 'none',
+            duration: 2000
           });
         }
       },
-      complete: () => {
-        this.setData({ loading: false });
+      fail: (error) => {
+        console.error('签到失败:', error);
+        wx.showToast({
+          title: '网络错误，请重试',
+          icon: 'none',
+          duration: 2000
+        });
       }
     });
   },
 
-  // 跳转到签到历史页面
+  /**
+   * 跳转到签到历史页面
+   */
   navigateToSigninHistory: function() {
-    wx.navigateTo({
-      url: '/pages/user/signin/signin'
+    wx.showToast({
+      title: '签到历史功能尚未实现',
+      icon: 'none',
+      duration: 2000
     });
   },
 
-  // 跳转到地址管理页面
+  /**
+   * 跳转到地址管理页面
+   */
   navigateToAddressList: function() {
-    wx.navigateTo({
-      url: '/pages/user/address/list/list'
+    wx.showToast({
+      title: '地址管理功能尚未实现',
+      icon: 'none',
+      duration: 2000
     });
   },
 
-  // 跳转到收藏列表页面
+  /**
+   * 跳转到收藏列表页面
+   */
   navigateToFavoriteList: function() {
-    wx.navigateTo({
-      url: '/pages/user/favorite/list/list'
+    wx.showToast({
+      title: '收藏列表功能尚未实现',
+      icon: 'none',
+      duration: 2000
     });
   },
 
-  // 跳转到订单列表页面
+  /**
+   * 跳转到订单列表页面
+   */
   navigateToOrderList: function() {
-    wx.navigateTo({
-      url: '/pages/order/list/list'
+    wx.showToast({
+      title: '订单列表功能尚未实现',
+      icon: 'none',
+      duration: 2000
     });
   },
 
-  // 跳转到积分中心页面
+  /**
+   * 跳转到积分中心页面
+   */
   navigateToPointsCenter: function() {
-    wx.navigateTo({
-      url: '/pages/points/center/center'
+    wx.showToast({
+      title: '积分中心功能尚未实现',
+      icon: 'none',
+      duration: 2000
     });
   },
 
-  // 跳转到设置页面
+  /**
+   * 跳转到设置页面
+   */
   navigateToSettings: function() {
-    wx.navigateTo({
-      url: '/pages/settings/settings'
+    wx.showToast({
+      title: '设置页面功能尚未实现',
+      icon: 'none',
+      duration: 2000
     });
   },
 
-  // 跳转到意见反馈页面
+  /**
+   * 跳转到意见反馈页面
+   */
   navigateToFeedback: function() {
-    wx.navigateTo({
-      url: '/pages/settings/feedback/feedback'
+    wx.showToast({
+      title: '意见反馈功能尚未实现',
+      icon: 'none',
+      duration: 2000
     });
   },
 
-  // 退出登录
+  /**
+   * 退出登录
+   */
   logout: function() {
     wx.showModal({
       title: '退出登录',
@@ -217,10 +305,25 @@ Page({
     });
   },
 
-  // 刷新用户信息
+  /**
+   * 刷新用户信息（强制重新加载所有用户相关数据）
+   */
   refreshUserInfo: function() {
+    wx.showLoading({
+      title: '刷新中',
+    });
+    
     this.getUserInfo();
     this.getUserStats();
     this.getSigninStatus();
+    
+    setTimeout(() => {
+      wx.hideLoading();
+      wx.showToast({
+        title: '刷新成功',
+        icon: 'success',
+        duration: 1500
+      });
+    }, 800);
   }
 });

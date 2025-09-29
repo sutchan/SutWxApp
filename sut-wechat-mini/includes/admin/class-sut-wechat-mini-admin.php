@@ -46,9 +46,184 @@ class SUT_WeChat_Mini_Admin {
         if ( null === self::$instance ) {
             self::$instance = new self();
         }
-        
         return self::$instance;
     }
+    
+
+    
+    /**
+     * 渲染设置页面
+     */
+    public function render_settings_page() {
+        // 检查用户权限
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_die( __( '您没有足够的权限访问此页面。', 'sut-wechat-mini' ) );
+        }
+        
+        // 获取当前设置值
+        $settings = get_option( 'sut_wechat_mini_settings', array() );
+        
+        // 输出页面标题和说明
+        ?>
+        <div class="wrap">
+            <h1 class="wp-heading-inline"><?php _e( '微信小程序设置', 'sut-wechat-mini' ); ?></h1>
+            <p class="description"><?php _e( '配置您的微信小程序相关设置。', 'sut-wechat-mini' ); ?></p>
+            
+            <?php if ( isset( $_GET['settings-updated'] ) ) : ?>
+                <div class="notice notice-success is-dismissible">
+                    <p><?php _e( '设置已保存。', 'sut-wechat-mini' ); ?></p>
+                </div>
+            <?php endif; ?>
+            
+            <div class="sut-wechat-mini-content">
+                <form method="post" action="options.php">
+                    <?php settings_fields( 'sut_wechat_mini_settings_group' ); ?>
+                    <?php $this->render_settings_form( $settings ); ?>
+                    <?php submit_button(); ?>
+                </form>
+            </div>
+        </div>
+        <?php
+    }
+    
+    /**
+     * 渲染用户页面
+     */
+    public function render_users_page() {
+        // 检查用户权限
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_die( __( '您没有足够的权限访问此页面。', 'sut-wechat-mini' ) );
+        }
+        
+        // 输出页面标题和说明
+        ?>
+        <div class="wrap">
+            <h1 class="wp-heading-inline"><?php _e( '用户管理', 'sut-wechat-mini' ); ?></h1>
+            <p class="description"><?php _e( '管理微信小程序的用户。', 'sut-wechat-mini' ); ?></p>
+            
+            <div class="sut-wechat-mini-content">
+                <?php $this->render_users_table(); ?>
+            </div>
+        </div>
+        <?php
+    }
+    
+    /**
+     * 渲染订单页面
+     */
+    public function render_orders_page() {
+        // 检查用户权限
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_die( __( '您没有足够的权限访问此页面。', 'sut-wechat-mini' ) );
+        }
+        
+        // 输出页面标题和说明
+        ?>
+        <div class="wrap">
+            <h1 class="wp-heading-inline"><?php _e( '订单管理', 'sut-wechat-mini' ); ?></h1>
+            <p class="description"><?php _e( '管理微信小程序的订单。', 'sut-wechat-mini' ); ?></p>
+            
+            <div class="sut-wechat-mini-content">
+                <?php $this->render_orders_table(); ?>
+            </div>
+        </div>
+        <?php
+    }
+    
+    /**
+     * 渲染设置表单
+     *
+     * @param array $settings 当前设置值
+     */
+    private function render_settings_form( $settings ) {
+        $all_settings = $this->get_all_settings();
+        
+        // 检查是否有高优先级的必填字段
+        $has_high_priority_fields = false;
+        foreach ( $all_settings as $section ) {
+            foreach ( $section['fields'] as $field ) {
+                if ( isset( $field['priority'] ) && $field['priority'] === 'high' ) {
+                    $has_high_priority_fields = true;
+                    break 2;
+                }
+            }
+        }
+        
+        // 输出设置表单
+        foreach ( $all_settings as $section_id => $section ) {
+            ?>
+            <div class="sut-wechat-mini-section">
+                <h2 class="sut-wechat-mini-section-title"><span class="dashicons <?php echo esc_attr( $section['icon'] ); ?>"></span> <?php echo esc_html( $section['title'] ); ?></h2>
+                <p class="sut-wechat-mini-section-desc"><?php echo esc_html( $section['desc'] ); ?></p>
+                
+                <table class="form-table">
+                    <?php foreach ( $section['fields'] as $field ) : ?>
+                        <tr<?php echo isset( $field['priority'] ) && $field['priority'] === 'high' ? ' class="sut-wechat-mini-field-high-priority"' : ''; ?>>
+                            <th scope="row">
+                                <label for="<?php echo esc_attr( $field['id'] ); ?>"><?php echo esc_html( $field['title'] ); ?></label>
+                                <?php if ( isset( $field['required'] ) && $field['required'] ) : ?>
+                                    <span class="description required">*</span>
+                                <?php endif; ?>
+                            </th>
+                            <td>
+                                <?php $this->render_field( $field, isset( $settings[$field['id']] ) ? $settings[$field['id']] : ( isset( $field['default'] ) ? $field['default'] : '' ) ); ?>
+                                <?php if ( isset( $field['desc'] ) ) : ?>
+                                    <p class="description"><?php echo esc_html( $field['desc'] ); ?></p>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </table>
+            </div>
+            <?php
+        }
+        
+        // 显示必填字段说明
+        if ( $has_high_priority_fields ) {
+            ?>
+            <p class="sut-wechat-mini-required-note">
+                <span class="description required">*</span> <?php _e( '表示必填字段', 'sut-wechat-mini' ); ?>
+            </p>
+            <?php
+        }
+    }
+    
+    /**
+     * 根据字段类型渲染相应的字段
+     *
+     * @param array $field 字段配置
+     * @param mixed $value 字段值
+     */
+    private function render_field( $field, $value ) {
+        switch ( $field['type'] ) {
+            case 'text':
+                $this->render_input_field( $field, $value );
+                break;
+            case 'textarea':
+                $this->render_textarea_field( $field, $value );
+                break;
+            case 'checkbox':
+                $this->render_checkbox_field( $field, $value );
+                break;
+            case 'select':
+                $this->render_select_field( $field, $value );
+                break;
+            case 'radio':
+                $this->render_radio_field( $field, $value );
+                break;
+            case 'image':
+                $this->render_image_field( $field, $value );
+                break;
+            case 'color':
+                $this->render_color_field( $field, $value );
+                break;
+            case 'editor':
+                 $this->render_editor_field( $field, $value );
+                 break;
+             default:
+                 $this->render_input_field( $field, $value );
+         }
+     }
     
     /**
      * 初始化管理功能
@@ -65,6 +240,20 @@ class SUT_WeChat_Mini_Admin {
         
         // 加载管理脚本和样式
         add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
+    }
+    
+    /**
+     * 在插件列表页面添加额外的链接
+     *
+     * @param array $links 现有链接数组
+     * @return array 修改后的链接数组
+     */
+    public function add_plugin_links( $links ) {
+        // 添加设置链接
+        $settings_link = '<a href="admin.php?page=sut-wechat-mini">' . __( '设置', 'sut-wechat-mini' ) . '</a>';
+        array_unshift( $links, $settings_link );
+        
+        return $links;
     }
     
     /**
@@ -121,267 +310,63 @@ class SUT_WeChat_Mini_Admin {
     }
     
     /**
-     * 注册设置
-     */
-    public function register_settings() {
-        // 注册主设置组
-        register_setting(
-            'sut_wechat_mini_settings_group',
-            $this->option_name,
-            array( $this, 'sanitize_settings' )
-        );
-        
-        // 获取所有设置选项
-        $settings = $this->get_all_settings();
-        
-        // 为每个设置部分添加设置字段
-        foreach ( $settings as $section_id => $section ) {
-            // 添加设置部分
-            add_settings_section(
-                'sut_wechat_mini_section_' . $section_id,
-                $section['title'],
-                array( $this, 'render_section_callback' ),
-                'sut-wechat-mini-settings',
-                array( 'section' => $section )
-            );
-            
-            // 添加设置字段
-            foreach ( $section['fields'] as $field ) {
-                add_settings_field(
-                    'sut_wechat_mini_field_' . $field['id'],
-                    $field['title'],
-                    array( $this, 'render_field_callback' ),
-                    'sut-wechat-mini-settings',
-                    'sut_wechat_mini_section_' . $section_id,
-                    array( 'field' => $field )
-                );
-            }
-        }
-    }
-    
-    /**
-     * 添加插件设置链接
-     *
-     * @param array $links 现有链接
-     * @return array 修改后的链接
-     */
-    public function add_plugin_links( $links ) {
-        $settings_link = '<a href="admin.php?page=sut-wechat-mini">' . __( '设置', 'sut-wechat-mini' ) . '</a>';
-        array_unshift( $links, $settings_link );
-        return $links;
-    }
-    
-    /**
-     * 加载管理脚本和样式
-     *
-     * @param string $hook 当前页面钩子
-     */
-    public function enqueue_admin_scripts( $hook ) {
-        // 仅在插件页面加载脚本和样式
-        if ( strpos( $hook, 'sut-wechat-mini' ) === false ) {
-            return;
-        }
-        
-        // 加载jQuery
-        wp_enqueue_script( 'jquery' );
-        
-        // 加载WordPress媒体上传
-        wp_enqueue_media();
-        
-        // 加载自定义脚本
-        wp_enqueue_script(
-            'sut-wechat-mini-admin-js',
-            SUT_WECHAT_MINI_PLUGIN_URL . 'assets/js/admin.js',
-            array( 'jquery' ),
-            SUT_WECHAT_MINI_VERSION,
-            true
-        );
-        
-        // 加载自定义样式
-        wp_enqueue_style(
-            'sut-wechat-mini-admin-css',
-            SUT_WECHAT_MINI_PLUGIN_URL . 'assets/css/admin.css',
-            array(),
-            SUT_WECHAT_MINI_VERSION
-        );
-    }
-    
-    /**
-     * 渲染设置页面
-     */
-    public function render_settings_page() {
-        ?>
-        <div class="wrap">
-            <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
-            
-            <form method="post" action="options.php">
-                <?php
-                // 输出设置字段
-                settings_fields( 'sut_wechat_mini_settings_group' );
-                do_settings_sections( 'sut-wechat-mini-settings' );
-                submit_button();
-                ?>
-            </form>
-        </div>
-        <?php
-    }
-    
-    /**
-     * 渲染用户管理页面
-     */
-    public function render_users_page() {
-        ?>
-        <div class="wrap">
-            <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
-            
-            <div class="sut-wechat-mini-users-wrapper">
-                <?php $this->render_users_table(); ?>
-            </div>
-        </div>
-        <?php
-    }
-    
-    /**
-     * 渲染订单管理页面
-     */
-    public function render_orders_page() {
-        ?>
-        <div class="wrap">
-            <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
-            
-            <div class="sut-wechat-mini-orders-wrapper">
-                <?php $this->render_orders_table(); ?>
-            </div>
-        </div>
-        <?php
-    }
-    
-    /**
-     * 渲染数据统计页面
-     */
-    public function render_stats_page() {
-        ?>
-        <div class="wrap">
-            <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
-            
-            <div class="sut-wechat-mini-stats-wrapper">
-                <?php $this->render_stats_dashboard(); ?>
-            </div>
-        </div>
-        <?php
-    }
-    
-    /**
-     * 渲染设置部分回调
-     *
-     * @param array $args 部分参数
-     */
-    public function render_section_callback( $args ) {
-        $section = $args['section'];
-        if ( isset( $section['desc'] ) && ! empty( $section['desc'] ) ) {
-            echo '<p class="description">' . esc_html( $section['desc'] ) . '</p>';
-        }
-    }
-    
-    /**
-     * 渲染设置字段回调
-     *
-     * @param array $args 字段参数
-     */
-    public function render_field_callback( $args ) {
-        $field = $args['field'];
-        $options = get_option( $this->option_name, array() );
-        $value = isset( $options[$field['id']] ) ? $options[$field['id']] : ( isset( $field['default'] ) ? $field['default'] : '' );
-        
-        switch ( $field['type'] ) {
-            case 'text':
-            case 'password':
-            case 'number':
-            case 'email':
-            case 'url':
-                $this->render_input_field( $field, $value );
-                break;
-            case 'textarea':
-                $this->render_textarea_field( $field, $value );
-                break;
-            case 'checkbox':
-                $this->render_checkbox_field( $field, $value );
-                break;
-            case 'select':
-                $this->render_select_field( $field, $value );
-                break;
-            case 'radio':
-                $this->render_radio_field( $field, $value );
-                break;
-            case 'image':
-                $this->render_image_field( $field, $value );
-                break;
-            case 'color':
-                $this->render_color_field( $field, $value );
-                break;
-            case 'editor':
-                $this->render_editor_field( $field, $value );
-                break;
-            case 'custom':
-                if ( isset( $field['callback'] ) && is_callable( $field['callback'] ) ) {
-                    call_user_func( $field['callback'], $field, $value );
-                }
-                break;
-            default:
-                $this->render_input_field( $field, $value );
-        }
-        
-        if ( isset( $field['desc'] ) && ! empty( $field['desc'] ) ) {
-            echo '<p class="description">' . esc_html( $field['desc'] ) . '</p>';
-        }
-    }
-    
-    /**
      * 渲染输入框字段
      *
      * @param array $field 字段配置
      * @param mixed $value 字段值
      */
     private function render_input_field( $field, $value ) {
-        $atts = array(
+        // 初始化属性数组，设置默认值
+        $attrs = array(
             'type' => $field['type'],
-            'id' => 'sut_wechat_mini_field_' . $field['id'],
-            'name' => $this->option_name . '[' . $field['id'] . ']',
-            'value' => esc_attr( $value ),
             'class' => 'regular-text',
         );
         
+        // 如果存在自定义属性数组，合并它们
+        if ( isset( $field['attrs'] ) && is_array( $field['attrs'] ) ) {
+            $attrs = array_merge( $attrs, $field['attrs'] );
+        }
+        
+        // 处理特定属性
         if ( isset( $field['placeholder'] ) ) {
-            $atts['placeholder'] = $field['placeholder'];
+            $attrs['placeholder'] = $field['placeholder'];
         }
         
         if ( isset( $field['readonly'] ) && $field['readonly'] ) {
-            $atts['readonly'] = 'readonly';
+            $attrs['readonly'] = 'readonly';
         }
         
         if ( isset( $field['disabled'] ) && $field['disabled'] ) {
-            $atts['disabled'] = 'disabled';
+            $attrs['disabled'] = 'disabled';
         }
         
         if ( isset( $field['min'] ) ) {
-            $atts['min'] = $field['min'];
+            $attrs['min'] = $field['min'];
         }
         
         if ( isset( $field['max'] ) ) {
-            $atts['max'] = $field['max'];
+            $attrs['max'] = $field['max'];
         }
         
         if ( isset( $field['step'] ) ) {
-            $atts['step'] = $field['step'];
+            $attrs['step'] = $field['step'];
         }
         
-        $html = '<input ';
-        foreach ( $atts as $key => $val ) {
-            $html .= $key . '="' . $val . '" ';
+        // 构建属性字符串
+        $attr_str = '';
+        foreach ( $attrs as $attr_name => $attr_value ) {
+            $attr_str .= sprintf( ' %s="%s"', esc_attr( $attr_name ), esc_attr( $attr_value ) );
         }
-        $html .= '/>';
         
-        echo $html;
+        // 输出输入框
+        printf(
+            '<input id="sut_wechat_mini_field_%s" name="%s[%s]" value="%s"%s />',
+            esc_attr( $field['id'] ),
+            esc_attr( $this->option_name ),
+            esc_attr( $field['id'] ),
+            esc_attr( $value ),
+            $attr_str
+        );
     }
     
     /**
@@ -391,32 +376,51 @@ class SUT_WeChat_Mini_Admin {
      * @param mixed $value 字段值
      */
     private function render_textarea_field( $field, $value ) {
-        $atts = array(
-            'id' => 'sut_wechat_mini_field_' . $field['id'],
-            'name' => $this->option_name . '[' . $field['id'] . ']',
+        // 初始化属性数组，设置默认值
+        $attrs = array(
             'class' => 'large-text',
-            'rows' => isset( $field['rows'] ) ? $field['rows'] : 5,
         );
         
+        // 如果存在自定义属性数组，合并它们
+        if ( isset( $field['attrs'] ) && is_array( $field['attrs'] ) ) {
+            $attrs = array_merge( $attrs, $field['attrs'] );
+        }
+        
+        // 处理特定属性
         if ( isset( $field['placeholder'] ) ) {
-            $atts['placeholder'] = $field['placeholder'];
+            $attrs['placeholder'] = $field['placeholder'];
         }
         
         if ( isset( $field['readonly'] ) && $field['readonly'] ) {
-            $atts['readonly'] = 'readonly';
+            $attrs['readonly'] = 'readonly';
         }
         
         if ( isset( $field['disabled'] ) && $field['disabled'] ) {
-            $atts['disabled'] = 'disabled';
+            $attrs['disabled'] = 'disabled';
         }
         
-        $html = '<textarea ';
-        foreach ( $atts as $key => $val ) {
-            $html .= $key . '="' . $val . '" ';
-        }
-        $html .= '>' . esc_textarea( $value ) . '</textarea>';
+        // 处理行数和列数
+        $rows = isset( $attrs['rows'] ) ? $attrs['rows'] : ( isset( $field['rows'] ) ? $field['rows'] : 5 );
+        $cols = isset( $attrs['cols'] ) ? $attrs['cols'] : 50;
+        unset( $attrs['rows'], $attrs['cols'] );
         
-        echo $html;
+        // 构建属性字符串
+        $attr_str = '';
+        foreach ( $attrs as $attr_name => $attr_value ) {
+            $attr_str .= sprintf( ' %s="%s"', esc_attr( $attr_name ), esc_attr( $attr_value ) );
+        }
+        
+        // 输出文本域
+        printf(
+            '<textarea id="sut_wechat_mini_field_%s" name="%s[%s]" rows="%s" cols="%s"%s>%s</textarea>',
+            esc_attr( $field['id'] ),
+            esc_attr( $this->option_name ),
+            esc_attr( $field['id'] ),
+            esc_attr( $rows ),
+            esc_attr( $cols ),
+            $attr_str,
+            esc_textarea( $value )
+        );
     }
     
     /**
@@ -426,27 +430,38 @@ class SUT_WeChat_Mini_Admin {
      * @param mixed $value 字段值
      */
     private function render_checkbox_field( $field, $value ) {
-        $atts = array(
-            'type' => 'checkbox',
-            'id' => 'sut_wechat_mini_field_' . $field['id'],
-            'name' => $this->option_name . '[' . $field['id'] . ']',
-            'value' => 1,
-            'checked' => checked( $value, 1, false ),
-        );
+        // 获取基础属性
+        $id = $field['id'];
+        $checked = checked( $value, 1, false );
         
+        // 构建属性数组
+        $attrs = array();
+        
+        // 检查是否有自定义属性数组
+        if ( isset( $field['attrs'] ) && is_array( $field['attrs'] ) ) {
+            $attrs = $field['attrs'];
+        }
+        
+        // 处理禁用属性
         if ( isset( $field['disabled'] ) && $field['disabled'] ) {
-            $atts['disabled'] = 'disabled';
+            $attrs['disabled'] = 'disabled';
         }
         
-        $html = '<input ';
-        foreach ( $atts as $key => $val ) {
-            if ( $val !== false ) {
-                $html .= $key . '="' . $val . '" ';
-            }
+        // 构建属性字符串
+        $attr_str = '';
+        foreach ( $attrs as $attr_name => $attr_value ) {
+            $attr_str .= sprintf( ' %s="%s"', esc_attr( $attr_name ), esc_attr( $attr_value ) );
         }
-        $html .= '/>';
         
-        echo $html;
+        // 输出复选框
+        printf(
+            '<input type="checkbox" id="sut_wechat_mini_field_%s" name="%s[%s]" value="1" %s%s />',
+            esc_attr( $id ),
+            esc_attr( $this->option_name ),
+            esc_attr( $id ),
+            $checked,
+            $attr_str
+        );
     }
     
     /**
@@ -456,86 +471,121 @@ class SUT_WeChat_Mini_Admin {
      * @param mixed $value 字段值
      */
     private function render_select_field( $field, $value ) {
+        // 验证选项数组是否存在
         if ( ! isset( $field['options'] ) || ! is_array( $field['options'] ) ) {
             return;
         }
         
-        $atts = array(
-            'id' => 'sut_wechat_mini_field_' . $field['id'],
-            'name' => $this->option_name . '[' . $field['id'] . ']',
+        // 获取基础属性
+        $id = $field['id'];
+        $options = $field['options'];
+        
+        // 初始化属性数组，设置默认值
+        $attrs = array(
             'class' => 'regular-text',
         );
         
-        if ( isset( $field['multiple'] ) && $field['multiple'] ) {
-            $atts['multiple'] = 'multiple';
-            $atts['name'] .= '[]';
+        // 如果存在自定义属性数组，合并它们
+        if ( isset( $field['attrs'] ) && is_array( $field['attrs'] ) ) {
+            $attrs = array_merge( $attrs, $field['attrs'] );
         }
         
+        // 处理多选属性
+        $multiple = false;
+        if ( ( isset( $attrs['multiple'] ) && $attrs['multiple'] ) || 
+             ( isset( $field['multiple'] ) && $field['multiple'] ) ) {
+            $multiple = true;
+            $attrs['multiple'] = 'multiple';
+        }
+        
+        // 处理禁用属性
         if ( isset( $field['disabled'] ) && $field['disabled'] ) {
-            $atts['disabled'] = 'disabled';
+            $attrs['disabled'] = 'disabled';
         }
         
-        $html = '<select ';
-        foreach ( $atts as $key => $val ) {
-            $html .= $key . '="' . $val . '" ';
+        // 构建属性字符串
+        $attr_str = '';
+        foreach ( $attrs as $attr_name => $attr_value ) {
+            $attr_str .= sprintf( ' %s="%s"', esc_attr( $attr_name ), esc_attr( $attr_value ) );
         }
-        $html .= '>';
         
-        foreach ( $field['options'] as $option_value => $option_label ) {
-            $selected = '';
+        // 输出选择框开始标签
+        printf(
+            '<select id="sut_wechat_mini_field_%s" name="%s[%s]%s" %s>',
+            esc_attr( $id ),
+            esc_attr( $this->option_name ),
+            esc_attr( $id ),
+            $multiple ? '[]' : '',
+            $attr_str
+        );
+        
+        // 输出选项
+        foreach ( $options as $option_value => $option_label ) {
             if ( is_array( $value ) ) {
                 $selected = selected( in_array( $option_value, $value ), true, false );
             } else {
-                $selected = selected( $option_value, $value, false );
+                $selected = selected( $value, $option_value, false );
             }
             
-            $html .= '<option value="' . esc_attr( $option_value ) . '" ' . $selected . '>' . esc_html( $option_label ) . '</option>';
+            printf(
+                '<option value="%s" %s>%s</option>',
+                esc_attr( $option_value ),
+                $selected,
+                esc_html( $option_label )
+            );
         }
         
-        $html .= '</select>';
-        
-        echo $html;
+        echo '</select>';
     }
     
     /**
-     * 渲染单选按钮字段
+     * 渲染单选框字段
      *
      * @param array $field 字段配置
      * @param mixed $value 字段值
      */
     private function render_radio_field( $field, $value ) {
+        // 验证选项数组是否存在
         if ( ! isset( $field['options'] ) || ! is_array( $field['options'] ) ) {
             return;
         }
         
-        $html = '';
+        $id = $field['id'];
+        $options = $field['options'];
         $i = 0;
         
-        foreach ( $field['options'] as $option_value => $option_label ) {
+        foreach ( $options as $option_value => $option_label ) {
+            // 生成唯一的选项ID
+            $option_id = sprintf( '%s_%s', $id, $i );
+            $checked = checked( $value, $option_value, false );
+            
+            // 构建属性数组
             $atts = array(
                 'type' => 'radio',
-                'id' => 'sut_wechat_mini_field_' . $field['id'] . '_' . $i,
-                'name' => $this->option_name . '[' . $field['id'] . ']',
+                'id' => 'sut_wechat_mini_field_' . $option_id,
+                'name' => $this->option_name . '[' . $id . ']',
                 'value' => $option_value,
-                'checked' => checked( $option_value, $value, false ),
+                'checked' => $checked,
             );
             
+            // 处理禁用属性
             if ( isset( $field['disabled'] ) && $field['disabled'] ) {
                 $atts['disabled'] = 'disabled';
             }
             
-            $html .= '<label><input ';
-            foreach ( $atts as $key => $val ) {
-                if ( $val !== false ) {
-                    $html .= $key . '="' . $val . '" ';
-                }
-            }
-            $html .= '/> ' . esc_html( $option_label ) . '</label><br/>';
+            // 使用printf格式化输出单选框
+            printf(
+                '<label><input type="radio" id="%s" name="%s" value="%s" %s%s /> %s</label><br/>',
+                esc_attr( $atts['id'] ),
+                esc_attr( $atts['name'] ),
+                esc_attr( $atts['value'] ),
+                $atts['checked'],
+                isset( $atts['disabled'] ) ? ' disabled="disabled"' : '',
+                esc_html( $option_label )
+            );
             
             $i++;
         }
-        
-        echo $html;
     }
     
     /**
@@ -759,6 +809,28 @@ class SUT_WeChat_Mini_Admin {
     }
     
     /**
+     * 渲染数据统计页面
+     */
+    public function render_stats_page() {
+        // 检查用户权限
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_die( __( '您没有足够的权限访问此页面。', 'sut-wechat-mini' ) );
+        }
+        
+        // 输出页面标题和说明
+        ?>
+        <div class="wrap">
+            <h1 class="wp-heading-inline"><?php _e( '数据统计', 'sut-wechat-mini' ); ?></h1>
+            <p class="description"><?php _e( '查看您的微信小程序使用统计数据。', 'sut-wechat-mini' ); ?></p>
+            
+            <div class="sut-wechat-mini-content">
+                <?php $this->render_stats_dashboard(); ?>
+            </div>
+        </div>
+        <?php
+    }
+    
+    /**
      * 渲染数据统计仪表盘
      */
     private function render_stats_dashboard() {
@@ -834,119 +906,302 @@ class SUT_WeChat_Mini_Admin {
     }
     
     /**
-     * 获取所有设置选项
+     * 获取所有设置结构
      *
-     * @return array 设置选项
+     * @return array 设置结构数组
      */
-    public function get_all_settings() {
-        // 基本设置
-        $basic_settings = array(
-            'title' => __( '基本设置', 'sut-wechat-mini' ),
-            'fields' => array(
-                array(
-                    'id' => 'app_id',
-                    'title' => __( '小程序AppID', 'sut-wechat-mini' ),
-                    'type' => 'text',
-                    'desc' => __( '微信小程序的AppID', 'sut-wechat-mini' ),
-                    'default' => '',
-                ),
-                array(
-                    'id' => 'app_secret',
-                    'title' => __( '小程序AppSecret', 'sut-wechat-mini' ),
-                    'type' => 'text',
-                    'desc' => __( '微信小程序的AppSecret', 'sut-wechat-mini' ),
-                    'default' => '',
-                ),
-                array(
-                    'id' => 'token',
-                    'title' => __( '消息推送Token', 'sut-wechat-mini' ),
-                    'type' => 'text',
-                    'desc' => __( '用于验证消息推送的Token', 'sut-wechat-mini' ),
-                    'default' => '',
-                ),
-                array(
-                    'id' => 'encoding_aes_key',
-                    'title' => __( '消息加解密密钥', 'sut-wechat-mini' ),
-                    'type' => 'text',
-                    'desc' => __( '消息加解密密钥，43位字符', 'sut-wechat-mini' ),
-                    'default' => '',
-                ),
+    private function get_all_settings() {
+        return array(
+            'basic' => array(
+                'title' => '基础设置',
+                'desc'  => '微信小程序的基本配置信息',
+                'icon'  => 'dashicons-admin-generic',
+                'fields' => array(
+                    array(
+                        'id'      => 'appid',
+                        'title'   => '小程序AppID',
+                        'type'    => 'text',
+                        'desc'    => '微信小程序的AppID，用于身份验证',
+                        'default' => '',
+                        'attrs'   => array(
+                            'placeholder' => '请输入小程序AppID',
+                            'class'       => 'regular-text sut-wechat-mini-input-primary'
+                        ),
+                        'required' => true,
+                        'priority' => 'high'
+                    ),
+                    array(
+                        'id'      => 'appsecret',
+                        'title'   => '小程序AppSecret',
+                        'type'    => 'text',
+                        'desc'    => '微信小程序的AppSecret，用于API调用',
+                        'default' => '',
+                        'attrs'   => array(
+                            'placeholder' => '请输入小程序AppSecret',
+                            'class'       => 'regular-text'
+                        ),
+                        'required' => true,
+                        'priority' => 'high'
+                    ),
+                    array(
+                        'id'      => 'status',
+                        'title'   => '启用状态',
+                        'type'    => 'checkbox',
+                        'desc'    => '是否启用小程序功能',
+                        'default' => 1,
+                        'priority' => 'high'
+                    ),
+                    array(
+                        'id'      => 'qrcode',
+                        'title'   => '小程序二维码',
+                        'type'    => 'image',
+                        'desc'    => '小程序二维码图片，用于在前台显示',
+                        'default' => '',
+                        'attrs'   => array(
+                            'button_text' => '上传二维码'
+                        )
+                    )
+                )
             ),
-        );
-        
-        // API设置
-        $api_settings = array(
-            'title' => __( 'API设置', 'sut-wechat-mini' ),
-            'fields' => array(
-                array(
-                    'id' => 'api_prefix',
-                    'title' => __( 'API前缀', 'sut-wechat-mini' ),
-                    'type' => 'text',
-                    'desc' => __( 'API路由前缀，默认为sut-wechat-mini-api', 'sut-wechat-mini' ),
-                    'default' => 'sut-wechat-mini-api',
-                ),
-                array(
-                    'id' => 'api_rate_limit',
-                    'title' => __( 'API请求限制', 'sut-wechat-mini' ),
-                    'type' => 'number',
-                    'desc' => __( '每小时允许的最大API请求数，0表示不限制', 'sut-wechat-mini' ),
-                    'default' => 1000,
-                    'min' => 0,
-                ),
-                array(
-                    'id' => 'api_whitelist',
-                    'title' => __( 'IP白名单', 'sut-wechat-mini' ),
-                    'type' => 'textarea',
-                    'desc' => __( '允许访问API的IP地址，一行一个', 'sut-wechat-mini' ),
-                    'default' => '',
-                    'rows' => 3,
-                ),
+            'payment' => array(
+                'title' => '支付设置',
+                'desc'  => '微信支付相关配置',
+                'icon'  => 'dashicons-cart',
+                'fields' => array(
+                    array(
+                        'id'      => 'mch_id',
+                        'title'   => '微信支付商户号',
+                        'type'    => 'text',
+                        'desc'    => '微信支付商户号，用于微信支付功能',
+                        'default' => '',
+                        'attrs'   => array(
+                            'placeholder' => '请输入微信支付商户号',
+                            'class'       => 'regular-text'
+                        )
+                    ),
+                    array(
+                        'id'      => 'api_key',
+                        'title'   => '微信支付API密钥',
+                        'type'    => 'text',
+                        'desc'    => '微信支付API密钥，用于签名验证',
+                        'default' => '',
+                        'attrs'   => array(
+                            'placeholder' => '请输入微信支付API密钥',
+                            'class'       => 'regular-text'
+                        )
+                    ),
+                    array(
+                        'id'      => 'payment_status',
+                        'title'   => '启用支付功能',
+                        'type'    => 'checkbox',
+                        'desc'    => '是否启用微信支付功能',
+                        'default' => 1
+                    )
+                )
             ),
-        );
-        
-        // 内容设置
-        $content_settings = array(
-            'title' => __( '内容设置', 'sut-wechat-mini' ),
-            'fields' => array(
-                array(
-                    'id' => 'post_types',
-                    'title' => __( '启用的文章类型', 'sut-wechat-mini' ),
-                    'type' => 'select',
-                    'desc' => __( '选择在小程序中显示的文章类型', 'sut-wechat-mini' ),
-                    'default' => array( 'post', 'page' ),
-                    'multiple' => true,
-                    'options' => $this->get_post_types_options(),
-                ),
-                array(
-                    'id' => 'posts_per_page',
-                    'title' => __( '每页显示数量', 'sut-wechat-mini' ),
-                    'type' => 'number',
-                    'desc' => __( '小程序中每页显示的文章数量', 'sut-wechat-mini' ),
-                    'default' => 10,
-                    'min' => 1,
-                    'max' => 100,
-                ),
-                array(
-                    'id' => 'enable_html_parser',
-                    'title' => __( '启用HTML解析', 'sut-wechat-mini' ),
-                    'type' => 'checkbox',
-                    'desc' => __( '是否将文章HTML内容转换为小程序支持的格式', 'sut-wechat-mini' ),
-                    'default' => true,
-                ),
+            'message' => array(
+                'title' => '消息通知',
+                'desc'  => '微信小程序消息通知配置',
+                'icon'  => 'dashicons-email',
+                'fields' => array(
+                    array(
+                        'id'      => 'template_id',
+                        'title'   => '消息通知模板ID',
+                        'type'    => 'text',
+                        'desc'    => '用于订单通知等消息的模板ID',
+                        'default' => '',
+                        'attrs'   => array(
+                            'placeholder' => '请输入模板ID',
+                            'class'       => 'regular-text'
+                        )
+                    ),
+                    array(
+                        'id'      => 'message_status',
+                        'title'   => '启用消息通知',
+                        'type'    => 'checkbox',
+                        'desc'    => '是否启用消息通知功能',
+                        'default' => 1
+                    )
+                )
             ),
+            'display' => array(
+                'title' => '显示设置',
+                'desc'  => '小程序内容显示相关配置',
+                'icon'  => 'dashicons-format-image',
+                'fields' => array(
+                    array(
+                        'id'      => 'display_items_per_page',
+                        'title'   => '每页显示数量',
+                        'type'    => 'number',
+                        'desc'    => '小程序中每页显示的内容数量',
+                        'default' => 10,
+                        'attrs'   => array(
+                            'min'   => 1,
+                            'max'   => 100,
+                            'step'  => 1,
+                            'class' => 'small-text'
+                        )
+                    ),
+                    array(
+                        'id'      => 'display_cover_image',
+                        'title'   => '显示封面图',
+                        'type'    => 'checkbox',
+                        'desc'    => '是否在列表中显示内容封面图',
+                        'default' => 1
+                    ),
+                    array(
+                        'id'      => 'theme_color',
+                        'title'   => '主题颜色',
+                        'type'    => 'color',
+                        'desc'    => '小程序的主题颜色',
+                        'default' => '#1DA57A'
+                    ),
+                    array(
+                        'id'      => 'custom_css',
+                        'title'   => '自定义CSS',
+                        'type'    => 'textarea',
+                        'desc'    => '添加自定义CSS样式来自定义小程序外观',
+                        'default' => '',
+                        'attrs'   => array(
+                            'rows'  => 5,
+                            'cols'  => 50,
+                            'placeholder' => '例如：body { color: #333; }',
+                            'class' => 'code'
+                        )
+                    )
+                )
+            ),
+            'user_management' => array(
+                'title' => '用户管理',
+                'desc'  => '微信小程序用户管理相关配置',
+                'icon'  => 'dashicons-users',
+                'fields' => array(
+                    array(
+                        'id'      => 'user_sync_status',
+                        'title'   => '启用用户同步',
+                        'type'    => 'checkbox',
+                        'desc'    => '是否启用微信用户与WordPress用户的同步功能',
+                        'default' => 1
+                    ),
+                    array(
+                        'id'      => 'auto_register_users',
+                        'title'   => '自动注册用户',
+                        'type'    => 'checkbox',
+                        'desc'    => '新的微信用户首次登录时是否自动注册为WordPress用户',
+                        'default' => 1
+                    ),
+                    array(
+                        'id'      => 'default_user_role',
+                        'title'   => '默认用户角色',
+                        'type'    => 'select',
+                        'desc'    => '自动注册的用户默认角色',
+                        'default' => 'subscriber',
+                        'options' => $this->get_user_roles_options(),
+                        'attrs'   => array(
+                            'class' => 'regular-text'
+                        )
+                    ),
+                    array(
+                        'id'      => 'display_user_avatar',
+                        'title'   => '显示用户头像',
+                        'type'    => 'checkbox',
+                        'desc'    => '是否在用户列表中显示微信头像',
+                        'default' => 1
+                    ),
+                    array(
+                        'id'      => 'user_data_retention',
+                        'title'   => '用户数据保留期限',
+                        'type'    => 'number',
+                        'desc'    => '未活跃用户数据保留的天数（0表示永久保留）',
+                        'default' => 0,
+                        'attrs'   => array(
+                            'min'   => 0,
+                            'step'  => 1,
+                            'class' => 'small-text'
+                        )
+                    )
+                )
+            ),
+            'order_management' => array(
+                'title' => '订单管理',
+                'desc'  => '微信小程序订单管理相关配置',
+                'icon'  => 'dashicons-list-alt',
+                'fields' => array(
+                    array(
+                        'id'      => 'order_sync_status',
+                        'title'   => '启用订单同步',
+                        'type'    => 'checkbox',
+                        'desc'    => '是否启用小程序订单与WordPress/WooCommerce订单的同步',
+                        'default' => 1
+                    ),
+                    array(
+                        'id'      => 'auto_update_order_status',
+                        'title'   => '自动更新订单状态',
+                        'type'    => 'checkbox',
+                        'desc'    => '支付成功后是否自动更新订单状态为已完成',
+                        'default' => 1
+                    ),
+                    array(
+                        'id'      => 'order_notification_admin',
+                        'title'   => '管理员订单通知',
+                        'type'    => 'checkbox',
+                        'desc'    => '新订单创建时是否通知管理员',
+                        'default' => 1
+                    ),
+                    array(
+                        'id'      => 'order_notification_user',
+                        'title'   => '用户订单通知',
+                        'type'    => 'checkbox',
+                        'desc'    => '订单状态更新时是否通知用户',
+                        'default' => 1
+                    ),
+                    array(
+                        'id'      => 'order_cancellation_period',
+                        'title'   => '订单取消期限',
+                        'type'    => 'number',
+                        'desc'    => '未支付订单自动取消的小时数（0表示不自动取消）',
+                        'default' => 24,
+                        'attrs'   => array(
+                            'min'   => 0,
+                            'step'  => 1,
+                            'class' => 'small-text'
+                        )
+                    ),
+                    array(
+                        'id'      => 'order_export_format',
+                        'title'   => '订单导出格式',
+                        'type'    => 'select',
+                        'desc'    => '订单数据导出的默认格式',
+                        'default' => 'csv',
+                        'options' => array(
+                            'csv' => 'CSV格式',
+                            'excel' => 'Excel格式',
+                            'pdf' => 'PDF格式'
+                        ),
+                        'attrs'   => array(
+                            'class' => 'regular-text'
+                        )
+                    )
+                )
+            )
         );
+    }
+    
+    /**
+     * 获取用户角色选项
+     *
+     * @return array 用户角色选项
+     */
+    private function get_user_roles_options() {
+        global $wp_roles;
         
-        // 调用其他模块的设置
-        $settings = array(
-            'basic' => $basic_settings,
-            'api' => $api_settings,
-            'content' => $content_settings,
-        );
+        if ( ! isset( $wp_roles ) ) {
+            $wp_roles = new WP_Roles();
+        }
         
-        // 允许其他模块添加设置
-        $settings = apply_filters( 'sut_wechat_mini_settings', $settings );
+        $roles = $wp_roles->get_names();
         
-        return $settings;
+        return $roles;
     }
     
     /**
@@ -1034,6 +1289,63 @@ class SUT_WeChat_Mini_Admin {
         }
         
         return $output;
+    }
+    
+    /**
+     * 注册设置选项
+     */
+    public function register_settings() {
+        // 注册设置组和字段
+        register_setting(
+            'sut_wechat_mini_settings_group',
+            'sut_wechat_mini_settings',
+            array(
+                'type' => 'array',
+                'sanitize_callback' => array( $this, 'sanitize_settings' ),
+                'default' => array()
+            )
+        );
+    }
+    
+    /**
+     * 加载管理员脚本和样式
+     */
+    public function enqueue_admin_scripts() {
+        // 只在插件页面加载脚本
+        $screen = get_current_screen();
+        if ( $screen && $screen->id === 'toplevel_page_sut-wechat-mini' ) {
+            // 加载插件样式
+            wp_enqueue_style(
+                'sut-wechat-mini-admin',
+                SUT_WECHAT_MINI_PLUGIN_URL . 'includes/admin/assets/css/admin.css',
+                array(),
+                SUT_WECHAT_MINI_VERSION
+            );
+            
+            // 加载插件脚本
+            wp_enqueue_script(
+                'sut-wechat-mini-admin',
+                SUT_WECHAT_MINI_PLUGIN_URL . 'includes/admin/assets/js/admin.js',
+                array( 'jquery' ),
+                SUT_WECHAT_MINI_VERSION,
+                true
+            );
+            
+            // 传递必要的数据到JavaScript
+            wp_localize_script(
+                'sut-wechat-mini-admin',
+                'sutWechatMiniAdmin',
+                array(
+                    'ajax_url' => admin_url( 'admin-ajax.php' ),
+                    'nonce' => wp_create_nonce( 'sut-wechat-mini-nonce' ),
+                    'i18n' => array(
+                        'confirm_delete' => __( '确定要删除吗？', 'sut-wechat-mini' ),
+                        'delete_success' => __( '删除成功', 'sut-wechat-mini' ),
+                        'delete_failed' => __( '删除失败', 'sut-wechat-mini' )
+                    )
+                )
+            );
+        }
     }
 }
 

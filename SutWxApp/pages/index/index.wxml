@@ -1,97 +1,141 @@
 <!-- pages/index/index.wxml -->
 <view class="container">
-  <!-- 轮播图 -->
-  <view class="banner-container">
-    <swiper class="banner-swiper" indicator-dots="true" autoplay="true" interval="3000" duration="500">
-      <block wx:for="{{bannerList}}" wx:key="id">
-        <swiper-item bindtap="onBannerClick" data-item="{{item}}">
-          <image src="{{item.image_url}}" mode="aspectFill" class="banner-image"></image>
-          <view class="banner-title">{{item.title}}</view>
-        </swiper-item>
-      </block>
-    </swiper>
-  </view>
-
-  <!-- 搜索栏 -->
-  <view class="search-container" bindtap="navigateToSearch">
-    <view class="search-bar">
-      <text class="search-icon">🔍</text>
-      <text class="search-text">搜索文章...</text>
+  <!-- 加载状态 -->
+  <view class="loading-container" wx:if="{{loading && !error}}" aria-label="页面加载中">
+    <view class="loading">
+      <text>加载中...</text>
     </view>
   </view>
 
-  <!-- 分类导航 -->
-  <view class="categories-container">
-    <view class="section-title">
-      <text>分类导航</text>
-      <view class="more" bindtap="navigateToCategories">
-        <text>更多</text>
-        <text class="icon">></text>
+  <!-- 错误状态 -->
+  <view class="error-container" wx:if="{{error}}" aria-label="页面加载错误">
+    <image src="/images/error.png" class="error-icon"></image>
+    <text class="error-text">{{error}}</text>
+    <button class="retry-button" bindtap="onRetry">重试</button>
+  </view>
+
+  <!-- 主要内容区域 -->
+  <view wx:elif="{{!loading && !error}}">
+    <!-- 轮播图 -->
+    <view class="banner-container" aria-label="轮播广告">
+      <swiper class="banner-swiper" indicator-dots="true" autoplay="true" interval="3000" duration="500" circular="true" skip-hidden-item-layout="true">
+        <block wx:for="{{bannerList}}" wx:key="id">
+          <swiper-item bindtap="onBannerClick" data-item="{{item}}" aria-label="点击查看：{{item.title}}">
+            <image src="{{item.image_url}}" mode="aspectFill" class="banner-image" aria-label="轮播图片：{{item.title}}"></image>
+            <view class="banner-title">{{item.title}}</view>
+          </swiper-item>
+        </block>
+      </swiper>
+    </view>
+
+    <!-- 搜索栏 -->
+    <view class="search-container" bindtap="navigateToSearch" aria-label="搜索文章">
+      <view class="search-bar">
+        <text class="search-icon">🔍</text>
+        <text class="search-text">搜索文章...</text>
       </view>
     </view>
-    <view class="categories-list">
-      <block wx:for="{{categories}}" wx:key="id">
-        <view class="category-item" bindtap="navigateToCategoryPosts" data-id="{{item.id}}">
-          <view class="category-icon">
-            <text>{{item.name.charAt(0)}}</text>
+
+    <!-- 分类导航 -->
+    <view class="categories-container" aria-label="分类导航">
+      <view class="section-title">
+        <text>分类导航</text>
+        <view class="more" bindtap="navigateToCategories" aria-label="查看更多分类">
+          <text>更多</text>
+          <text class="icon">></text>
+        </view>
+      </view>
+      <view class="categories-list">
+        <block wx:for="{{categories}}" wx:key="id">
+          <view class="category-item" bindtap="navigateToCategoryPosts" data-id="{{item.id}}" aria-label="查看{{item.name}}分类，共{{item.count}}篇文章">
+            <view class="category-icon">
+              <text>{{item.name.charAt(0)}}</text>
+            </view>
+            <text class="category-name">{{item.name}}</text>
+            <text class="category-count">({{item.count}})</text>
           </view>
-          <text class="category-name">{{item.name}}</text>
-          <text class="category-count">({{item.count}})</text>
-        </view>
-      </block>
+        </block>
+      </view>
     </view>
-  </view>
 
-  <!-- 热门文章 -->
-  <view class="hot-posts-container">
-    <view class="section-title">
-      <text>热门推荐</text>
+    <!-- 热门文章 -->
+    <view class="hot-posts-container" aria-label="热门推荐文章">
+      <view class="section-title">
+        <text>热门推荐</text>
+      </view>
+      <view class="hot-posts-list">
+        <block wx:for="{{hotPosts}}" wx:key="id">
+          <view class="hot-post-item" bindtap="navigateToPostDetail" data-id="{{item.id}}" aria-label="热门第{{index + 1}}名：{{item.title}}，{{item.views}}阅读">
+            <view class="hot-post-rank" wx:if="{{index < 3}}" style="background-color: {{index === 0 ? '#FF6B6B' : index === 1 ? '#4ECDC4' : '#45B7D1'}}">{{index + 1}}</view>
+            <view class="hot-post-rank" wx:else>{{index + 1}}</view>
+            <text class="hot-post-title">{{item.title}}</text>
+            <text class="hot-post-views">{{item.views}}阅读</text>
+          </view>
+        </block>
+      </view>
     </view>
-    <view class="hot-posts-list">
-      <block wx:for="{{hotPosts}}" wx:key="id">
-        <view class="hot-post-item" bindtap="navigateToPostDetail" data-id="{{item.id}}">
-          <view class="hot-post-rank">{{index + 1}}</view>
-          <text class="hot-post-title">{{item.title}}</text>
-          <text class="hot-post-views">{{item.views}}阅读</text>
-        </view>
-      </block>
-    </view>
-  </view>
 
-  <!-- 最新文章 -->
-  <view class="latest-posts-container">
-    <view class="section-title">
-      <text>最新资讯</text>
-    </view>
-    <view class="latest-posts-list">
-      <block wx:for="{{latestPosts}}" wx:key="id">
-        <view class="post-item" bindtap="navigateToPostDetail" data-id="{{item.id}}">
-          <image src="{{item.featured_image}}" mode="aspectFill" class="post-image"></image>
-          <view class="post-content">
-            <text class="post-title">{{item.title}}</text>
-            <view class="post-meta">
-              <text class="post-category">{{item.category_name}}</text>
-              <text class="post-date">{{item.date}}</text>
-              <text class="post-views">{{item.views}}阅读</text>
+    <!-- 最新文章 -->
+    <view class="latest-posts-container" aria-label="最新资讯文章">
+      <view class="section-title">
+        <text>最新资讯</text>
+      </view>
+      <view class="latest-posts-list">
+        <block wx:for="{{latestPosts}}" wx:key="id">
+          <view class="post-item" bindtap="navigateToPostDetail" data-id="{{item.id}}" aria-label="查看文章：{{item.title}}">
+            <image src="{{item.featured_image || '/images/default-post.png'}}" mode="aspectFill" class="post-image" aria-label="文章缩略图"></image>
+            <view class="post-content">
+              <text class="post-title">{{item.title}}</text>
+              <view class="post-meta">
+                <text class="post-category">{{item.category_name}}</text>
+                <text class="post-date">{{item.date}}</text>
+                <text class="post-views">{{item.views}}阅读</text>
+              </view>
             </view>
           </view>
-        </view>
-      </block>
+        </block>
+      </view>
+    </view>
+
+    <!-- 加载更多 -->
+    <view class="loading-more" wx:if="{{loadingMore}}" aria-label="加载更多内容">
+      <text>加载中...</text>
+    </view>
+
+    <!-- 没有更多数据 -->
+    <view class="no-more" wx:if="{{!hasMore && latestPosts.length > 0}}">
+      <text>没有更多了</text>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty" wx:if="{{!loading && !loadingMore && latestPosts.length === 0}}">
+      <image src="/images/empty.png" mode="aspectFit" class="empty-icon"></image>
+      <text class="empty-text">暂无文章</text>
+      <button class="empty-button" bindtap="onRetry">刷新</button>
     </view>
   </view>
 
-  <!-- 加载更多 -->
-  <view class="loading-more" wx:if="{{loading}}">
-    <text>加载中...</text>
-  </view>
-
-  <!-- 没有更多数据 -->
-  <view class="no-more" wx:if="{{!hasMore && latestPosts.length > 0}}">
-    <text>没有更多了</text>
-  </view>
-
-  <!-- 空状态 -->
-  <view class="empty" wx:if="{{!loading && latestPosts.length === 0}}">
-    <text class="empty-text">暂无文章</text>
+  <!-- 骨架屏 -->
+  <view class="skeleton-container" wx:if="{{showSkeleton && loading}}">
+    <view class="skeleton-banner"></view>
+    <view class="skeleton-search"></view>
+    <view class="skeleton-section-title"></view>
+    <view class="skeleton-categories">
+      <view class="skeleton-category" wx:for="[1,2,3,4,5]" wx:key="index"></view>
+    </view>
+    <view class="skeleton-section-title"></view>
+    <view class="skeleton-hot-posts">
+      <view class="skeleton-hot-post" wx:for="[1,2,3]" wx:key="index"></view>
+    </view>
+    <view class="skeleton-section-title"></view>
+    <view class="skeleton-posts">
+      <view class="skeleton-post" wx:for="[1,2,3]" wx:key="index">
+        <view class="skeleton-post-image"></view>
+        <view class="skeleton-post-content">
+          <view class="skeleton-post-title"></view>
+          <view class="skeleton-post-meta"></view>
+        </view>
+      </view>
+    </view>
   </view>
 </view>

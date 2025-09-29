@@ -1,10 +1,17 @@
 <!-- pages/article/detail/detail.wxml -->
 <view class="article-detail-container">
   <!-- 加载状态 -->
-  <view class="loading-container" wx:if="{{loading}}">
+  <view class="loading-container" wx:if="{{loading && !error}}">
     <view class="loading">
       <text>加载中...</text>
     </view>
+  </view>
+
+  <!-- 错误状态 -->
+  <view class="error-container" wx:if="{{error}}">
+    <image src="/images/error.png" class="error-icon"></image>
+    <text class="error-text">{{error}}</text>
+    <button class="retry-button" bindtap="onRetry">重试</button>
   </view>
 
   <!-- 文章内容区域 -->
@@ -24,44 +31,45 @@
 
     <!-- 文章内容 -->
     <view class="article-body" wx:if="{{article.content}}">
-      <rich-text nodes="{{article.content}}"></rich-text>
+      <rich-text nodes="{{article.content}}" class="content-rich-text"></rich-text>
     </view>
     <view class="article-empty" wx:else>
       <text>暂无内容</text>
     </view>
 
     <!-- 文章底部操作栏 -->
-    <view class="article-actions">
-      <view class="action-item" bindtap="likeArticle">
-        <image src="{{isLiked ? '../../images/like-active.png' : '../../images/like.png'}}" class="action-icon"></image>
+    <view class="article-actions" aria-label="文章操作">
+      <view class="action-item" bindtap="likeArticle" aria-label="{{isLiked ? '取消点赞' : '点赞'}}，当前点赞数 {{likeCount}}">
+        <image src="{{isLiked ? '/images/like-active.png' : '/images/like.png'}}" class="action-icon"></image>
         <text class="action-text">{{isLiked ? '已赞' : '点赞'}}</text>
         <text class="action-count">{{likeCount}}</text>
       </view>
-      <view class="action-item" bindtap="favoriteArticle">
-        <image src="{{isFavorite ? '../../images/favorite-active.png' : '../../images/favorite.png'}}" class="action-icon"></image>
+      <view class="action-item" bindtap="favoriteArticle" aria-label="{{isFavorite ? '取消收藏' : '收藏'}}，当前收藏数 {{favoriteCount}}">
+        <image src="{{isFavorite ? '/images/favorite-active.png' : '/images/favorite.png'}}" class="action-icon"></image>
         <text class="action-text">{{isFavorite ? '已收藏' : '收藏'}}</text>
         <text class="action-count">{{favoriteCount}}</text>
       </view>
-      <view class="action-item" bindtap="showCommentBox">
-        <image src="../../images/comment.png" class="action-icon"></image>
+      <view class="action-item" bindtap="showCommentBox" aria-label="查看评论，当前评论数 {{commentList.length}}">
+        <image src="/images/comment.png" class="action-icon"></image>
         <text class="action-text">评论</text>
         <text class="action-count">{{commentList.length}}</text>
       </view>
-      <view class="action-item" open-type="share">
-        <image src="../../images/share.png" class="action-icon"></image>
+      <view class="action-item" open-type="share" aria-label="分享文章">
+        <image src="/images/share.png" class="action-icon"></image>
         <text class="action-text">分享</text>
       </view>
     </view>
 
     <!-- 评论区域 -->
-    <view class="comment-section" wx:if="{{commentList.length > 0}}">
+    <view class="comment-section" wx:if="{{commentList.length > 0}}" aria-label="评论列表">
       <view class="comment-header">
         <text class="comment-title">评论 ({{commentList.length}})</text>
+        <button class="more-comments" bindtap="loadMoreComments" wx:if="{{commentHasMore}}" size="mini">查看更多</button>
       </view>
       <view class="comment-list">
-        <view class="comment-item" wx:for="{{commentList}}" wx:key="id">
+        <view class="comment-item" wx:for="{{commentList}}" wx:key="id" aria-label="{{item.username}} 的评论">
           <view class="comment-avatar">
-            <image src="{{item.avatar || '../../images/default-avatar.png'}}" mode="aspectFill"></image>
+            <image src="{{item.avatar || '/images/default-avatar.png'}}" mode="aspectFill" aria-label="{{item.username}} 的头像"></image>
           </view>
           <view class="comment-content">
             <view class="comment-user-info">
@@ -77,23 +85,45 @@
       </view>
     </view>
 
+    <!-- 空评论提示 -->
+    <view class="empty-comments" wx:if="{{commentList.length === 0 && !loading}}" aria-label="暂无评论">
+      <image src="/images/empty-comments.png" class="empty-icon"></image>
+      <text class="empty-text">暂无评论，快来抢沙发吧~</text>
+      <button class="empty-button" bindtap="showCommentBox">发表第一条评论</button>
+    </view>
+
     <!-- 相关推荐 -->
-    <view class="related-articles" wx:if="{{article.related_articles && article.related_articles.length > 0}}">
+    <view class="related-articles" wx:if="{{article.related_articles && article.related_articles.length > 0}}" aria-label="相关推荐">
       <view class="related-header">
         <text class="related-title">相关推荐</text>
       </view>
       <view class="related-list">
-        <view class="related-item" wx:for="{{article.related_articles}}" wx:key="id" data-id="{{item.id}}" bindtap="goToArticleDetail">
+        <view class="related-item" wx:for="{{article.related_articles}}" wx:key="id" data-id="{{item.id}}" bindtap="goToArticleDetail" aria-label="查看文章 {{item.title}}">
           <text class="related-title">{{item.title}}</text>
+          <text class="related-info">{{item.date}} · {{item.view_count}}阅读</text>
         </view>
       </view>
     </view>
   </view>
 
   <!-- 评论输入框 -->
-  <view class="comment-input-container" wx:if="{{showCommentInput}}">
-    <input class="comment-input" value="{{commentContent}}" bindinput="onCommentInput" placeholder="说点什么..." confirm-type="send" bindconfirm="submitComment" focus="{{showCommentInput}}"/>
-    <button class="comment-submit" bindtap="submitComment">发送</button>
+  <view class="comment-input-container" wx:if="{{showCommentInput}}" aria-label="评论输入框">
+    <input class="comment-input" value="{{commentContent}}" bindinput="onCommentInput" placeholder="说点什么..." confirm-type="send" bindconfirm="submitComment" focus="{{showCommentInput}}" maxlength="500"/>
+    <button class="comment-submit" bindtap="submitComment" disabled="{{!commentContent.trim()}}">发送</button>
     <button class="comment-cancel" bindtap="hideCommentBox">取消</button>
+  </view>
+
+  <!-- 骨架屏 -->
+  <view class="skeleton-container" wx:if="{{showSkeleton && loading}}">
+    <view class="skeleton-title"></view>
+    <view class="skeleton-meta">
+      <view class="skeleton-author"></view>
+      <view class="skeleton-date"></view>
+    </view>
+    <view class="skeleton-content">
+      <view class="skeleton-paragraph"></view>
+      <view class="skeleton-paragraph"></view>
+      <view class="skeleton-paragraph"></view>
+    </view>
   </view>
 </view>

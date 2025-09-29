@@ -21,8 +21,8 @@ App({
       if (apiBaseUrl) {
         this.globalData.apiBaseUrl = apiBaseUrl;
       } else {
-        // 默认API地址
-        this.globalData.apiBaseUrl = 'https://your-wordpress-site.com';
+        // 默认API地址 - 已修复
+        this.globalData.apiBaseUrl = 'https://your-wordpress-site.com/wp-json/sut-wechat-mini/v1';
       }
       
       if (userInfo) {
@@ -100,9 +100,9 @@ App({
       wx.login({
         success: function(res) {
           if (res.code) {
-            // 发送code到服务器换取openid和session_key
+            // 发送code到服务器换取openid和session_key - API路径已修复
             that.request({
-              url: '/sut-wxapp-api/login',
+              url: '/login',
               method: 'POST',
               data: {
                 code: res.code
@@ -137,11 +137,21 @@ App({
     });
   },
 
-  // 封装网络请求方法
+  /**
+   * 发起网络请求 - 统一的请求处理方法
+   */
   request: function(options) {
     const that = this;
-    const { url, method = 'GET', data = {}, header = {}, success, fail, complete } = options;
+    const { url, method = 'GET', data = {}, header = {}, success, fail, complete, hideLoading, loadingText, errorMsg } = options;
     
+    // 显示加载中
+    if (!hideLoading) {
+      wx.showLoading({
+        title: loadingText || '加载中',
+        mask: true
+      });
+    }
+
     // 构建完整的请求URL
     const requestUrl = that.globalData.apiBaseUrl + url;
     
@@ -156,43 +166,21 @@ App({
       requestHeader['Authorization'] = 'Bearer ' + that.globalData.token;
     }
     
-    // 显示加载提示
-    wx.showLoading({
-      title: '加载中',
-      mask: true
-    });
-    
     // 发送请求
-    wx.request({
+    return wx.request({
       url: requestUrl,
       method: method,
       data: data,
       header: requestHeader,
       success: function(res) {
         // 隐藏加载提示
-        wx.hideLoading();
+        if (!hideLoading) {
+          wx.hideLoading();
+        }
         
         // 处理登录失效的情况
-        if (res.data.code === 101 || res.data.code === 102) {
-          // 清除本地存储的token和用户信息
-          wx.removeStorageSync('token');
-          wx.removeStorageSync('userInfo');
-          that.globalData.token = '';
-          that.globalData.userInfo = null;
-          
-          // 提示用户重新登录
-          wx.showModal({
-            title: '登录失效',
-            content: '您的登录已失效，请重新登录',
-            showCancel: false,
-            success: function() {
-              // 跳转到登录页面
-              wx.navigateTo({
-                url: '/pages/login/login'
-              });
-            }
-          });
-          
+        if (res.statusCode === 401 || res.data.code === 101 || res.data.code === 102) {
+          that.logout();
           return;
         }
         
@@ -203,11 +191,14 @@ App({
       },
       fail: function(error) {
         // 隐藏加载提示
-        wx.hideLoading();
+        if (!hideLoading) {
+          wx.hideLoading();
+        }
         
-        // 显示网络错误提示
+        // 增强错误处理
+        const msg = errorMsg || '网络请求失败，请检查网络连接';
         wx.showToast({
-          title: '网络错误，请重试',
+          title: msg,
           icon: 'none',
           duration: 2000
         });
@@ -219,7 +210,9 @@ App({
       },
       complete: function(res) {
         // 隐藏加载提示
-        wx.hideLoading();
+        if (!hideLoading) {
+          wx.hideLoading();
+        }
         
         // 调用完成回调
         if (typeof complete === 'function') {
@@ -248,7 +241,9 @@ App({
     return !!this.globalData.token;
   },
 
-  // 退出登录
+  /**
+   * 退出登录
+   */
   logout: function() {
     // 清除本地存储的token和用户信息
     wx.removeStorageSync('token');

@@ -1,22 +1,30 @@
 <!-- pages/category/category.wxml -->
 <view class="category-container">
   <!-- 加载状态 -->
-  <view class="loading-container" wx:if="{{loading}}">
+  <view class="loading-container" wx:if="{{loading && !error}}" aria-label="加载中">
     <view class="loading">
       <text>加载中...</text>
     </view>
   </view>
 
+  <!-- 错误状态 -->
+  <view class="error-container" wx:if="{{error}}" aria-label="加载错误">
+    <image src="/images/error.png" class="error-icon"></image>
+    <text class="error-text">{{error}}</text>
+    <button class="retry-button" bindtap="onRetry">重试</button>
+  </view>
+
   <!-- 分类内容区域 -->
   <view wx:else class="category-content">
     <!-- 左侧主分类导航 -->
-    <view class="category-left">
+    <view class="category-left" aria-label="主分类导航">
       <scroll-view scroll-y class="category-scroll">
         <view class="category-item {{currentCategoryId === item.id ? 'active' : ''}}" 
               wx:for="{{categories}}" 
               wx:key="id" 
               data-id="{{item.id}}" 
-              bindtap="switchCategory">
+              bindtap="switchCategory" 
+              aria-label="{{currentCategoryId === item.id ? '当前选中：' + item.name : item.name}}">
           <text>{{item.name}}</text>
         </view>
       </scroll-view>
@@ -25,13 +33,14 @@
     <!-- 右侧内容区域 -->
     <view class="category-right">
       <!-- 当前分类的子分类导航 -->
-      <view class="sub-category-container">
-        <scroll-view scroll-x class="sub-category-scroll">
+      <view class="sub-category-container" aria-label="子分类导航" wx:if="{{currentCategoryId > 0 && categories.find(cat => cat.id === currentCategoryId).children.length > 0}}">
+        <scroll-view scroll-x class="sub-category-scroll" enable-flex>
           <view class="sub-category-item {{currentSubCategoryId === item.id ? 'active' : ''}}" 
-                wx:for="{{currentCategoryId > 0 ? categories.find(cat => cat.id === currentCategoryId).children : []}}" 
+                wx:for="{{categories.find(cat => cat.id === currentCategoryId).children}}" 
                 wx:key="id" 
                 data-id="{{item.id}}" 
-                bindtap="switchSubCategory">
+                bindtap="switchSubCategory" 
+                aria-label="{{currentSubCategoryId === item.id ? '当前选中：' + item.name : item.name}}">
             <text>{{item.name}}</text>
           </view>
         </scroll-view>
@@ -39,15 +48,16 @@
 
       <!-- 文章列表区域 -->
       <view class="articles-container">
-        <scroll-view scroll-y class="articles-scroll" bindscrolltolower="onReachBottom">
+        <scroll-view scroll-y class="articles-scroll" bindscrolltolower="onReachBottom" enable-back-to-top>
           <!-- 文章列表 -->
           <view class="article-item" 
                 wx:for="{{articles}}" 
                 wx:key="id" 
                 data-id="{{item.id}}" 
-                bindtap="goToArticleDetail">
+                bindtap="goToArticleDetail" 
+                aria-label="查看文章：{{item.title}}">
             <view class="article-image" wx:if="{{item.thumbnail}}">
-              <image src="{{item.thumbnail}}" mode="aspectFill"></image>
+              <image src="{{item.thumbnail}}" mode="aspectFill" aria-label="文章缩略图"></image>
             </view>
             <view class="article-content">
               <view class="article-title">{{item.title}}</view>
@@ -59,17 +69,39 @@
             </view>
           </view>
 
+          <!-- 加载更多提示 -->
+          <view class="loading-more" wx:if="{{loadingMore}}">
+            <text>加载更多...</text>
+          </view>
+
           <!-- 没有更多数据提示 -->
           <view class="no-more" wx:if="{{!hasMore && articles.length > 0}}">
             <text>没有更多数据了</text>
           </view>
 
           <!-- 空状态 -->
-          <view class="empty-state" wx:if="{{articles.length === 0 && !loading}}">
-            <image src="../../images/empty.png" mode="aspectFit"></image>
-            <text>暂无文章</text>
+          <view class="empty-state" wx:if="{{articles.length === 0 && !loading && !loadingMore}}">
+            <image src="/images/empty.png" mode="aspectFit" class="empty-icon"></image>
+            <text class="empty-text">暂无文章</text>
           </view>
         </scroll-view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 骨架屏 -->
+  <view class="skeleton-container" wx:if="{{showSkeleton && loading}}">
+    <view class="skeleton-left">
+      <view class="skeleton-category-item" wx:for="[1,2,3,4,5]" wx:key="index"></view>
+    </view>
+    <view class="skeleton-right">
+      <view class="skeleton-sub-category" wx:if="{{showSubCategorySkeleton}}"></view>
+      <view class="skeleton-article-item" wx:for="[1,2,3]" wx:key="index">
+        <view class="skeleton-article-image"></view>
+        <view class="skeleton-article-content">
+          <view class="skeleton-article-title"></view>
+          <view class="skeleton-article-meta"></view>
+        </view>
       </view>
     </view>
   </view>

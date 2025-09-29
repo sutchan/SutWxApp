@@ -3,7 +3,7 @@
  * Plugin Name: SUT微信小程序
  * Plugin URI: https://github.com/sutchan/SutWxApp
  * Description: 为WordPress网站提供微信小程序对接功能，支持内容展示、电商功能、用户管理、消息推送等。
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: SUT
  * Author URI: https://github.com/sutchan
  * License: GPL2
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * 插件版本号
  */
-define( 'SUT_WECHAT_MINI_VERSION', '1.0.0' );
+define( 'SUT_WECHAT_MINI_VERSION', '1.0.1' );
 
 /**
  * 插件目录绝对路径

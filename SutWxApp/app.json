@@ -1,18 +1,10 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/categories/categories",
-    "pages/posts/list/list",
-    "pages/posts/detail/detail",
+    "pages/category/category",
+    "pages/article/detail/detail",
     "pages/user/login/login",
-    "pages/user/profile/profile",
-    "pages/user/address/list/list",
-    "pages/user/address/add/add",
-    "pages/user/favorite/list/list",
-    "pages/user/signin/signin",
-    "pages/settings/settings",
-    "pages/settings/about/about",
-    "pages/settings/feedback/feedback"
+    "pages/user/profile/profile"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -34,7 +26,7 @@
         "selectedIconPath": "images/tabbar/home_selected.png"
       },
       {
-        "pagePath": "pages/categories/categories",
+        "pagePath": "pages/category/category",
         "text": "分类",
         "iconPath": "images/tabbar/category.png",
         "selectedIconPath": "images/tabbar/category_selected.png"
