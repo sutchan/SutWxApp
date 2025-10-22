@@ -1,4 +1,5 @@
 # SUT WeChat Mini Program Project 6A Workflow Rules Document
+Version: 1.0.2
 
 ## 1. Overview
 
@@ -333,7 +334,14 @@ login() {
 3. Documents must be updated regularly to ensure consistency with the actual system
 4. Key documents must undergo review and confirmation
 
-## 8. Supplementary Provisions
+## 8. Update Log
+
+### Version 1.0.2
+- Added document version management
+- Optimized document format and language expression
+- Updated Git workflow specification details
+
+## 9. Supplementary Provisions
 
 1. This specification shall take effect from the date of issue
 2. This specification shall be interpreted and revised by the project team

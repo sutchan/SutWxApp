@@ -533,13 +533,13 @@ msgid "有新的评论"
 msgstr "New comment received"
 
 msgid "您的文章《%s》收到了一条新评论：%s"
-msgstr "Your article "%s" received a new comment: %s"
+msgstr "Your article \"%s\" received a new comment: %s"
 
 msgid "有新文章发布"
 msgstr "New article published"
 
 msgid "您订阅的分类有新文章发布：《%s》"
-msgstr "A new article has been published in the category you subscribed to: "%s""
+msgstr "A new article has been published in the category you subscribed to: \"%s\""
 
 msgid "恭喜您签到成功，获得积分奖励！"
 msgstr "Congratulations on your successful check-in and earning point rewards!"
