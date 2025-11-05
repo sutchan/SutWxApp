@@ -3,7 +3,9 @@
 [![GitHub release](https://img.shields.io/github/release/sutchan/SutWxApp.svg)](https://github.com/sutchan/SutWxApp/releases)
 [![License](https://img.shields.io/github/license/sutchan/SutWxApp.svg)](https://github.com/sutchan/SutWxApp/blob/master/LICENSE)
 
-SUT微信小程序插件是一个为WordPress网站提供微信小程序对接功能的插件，支持内容展示、电商功能、用户管理、消息推送等功能。
+**版本号：1.0.2**
+
+SUT微信小程序插件是一个为WordPress网站提供微信小程序对接功能的插件，支持内容展示、电商功能、用户管理、消息推送等功能。本插件为WordPress网站提供了完整的API接口，供微信小程序调用。
 
 ## 功能特性
 

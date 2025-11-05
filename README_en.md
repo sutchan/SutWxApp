@@ -3,7 +3,9 @@
 [![GitHub release](https://img.shields.io/github/release/sutchan/SutWxApp.svg)](https://github.com/sutchan/SutWxApp/releases)
 [![License](https://img.shields.io/github/license/sutchan/SutWxApp.svg)](https://github.com/sutchan/SutWxApp/blob/master/LICENSE)
 
-The SUT WeChat Mini Program Project is a complete WordPress + WeChat Mini Program solution, including a WordPress plugin and a WeChat Mini Program frontend, designed to synchronize and display WordPress website content and features in WeChat Mini Program.
+**Version: 1.0.2**
+
+The SUT WeChat Mini Program Project is a complete WordPress + WeChat Mini Program solution, including a WordPress plugin and a WeChat Mini Program frontend, designed to synchronize and display WordPress website content and features in WeChat Mini Program. This project provides rich features such as content management, user management, e-commerce functionality, WeChat payment, message push, and more.
 
 ## Project Structure
 

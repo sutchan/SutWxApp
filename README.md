@@ -3,7 +3,9 @@
 [![GitHub release](https://img.shields.io/github/release/sutchan/SutWxApp.svg)](https://github.com/sutchan/SutWxApp/releases)
 [![License](https://img.shields.io/github/license/sutchan/SutWxApp.svg)](https://github.com/sutchan/SutWxApp/blob/master/LICENSE)
 
-SUT微信小程序项目是一个完整的WordPress+微信小程序解决方案，包括WordPress插件和微信小程序前端两部分，用于将WordPress网站内容和功能同步到微信小程序中展示。
+**版本号：1.0.2**
+
+SUT微信小程序项目是一个完整的WordPress+微信小程序解决方案，包括WordPress插件和微信小程序前端两部分，用于将WordPress网站内容和功能同步到微信小程序中展示。本项目提供了内容管理、用户管理、电商功能、微信支付、消息推送等丰富功能。
 
 ## 项目结构
 
