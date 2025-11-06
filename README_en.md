@@ -3,47 +3,29 @@
 [![GitHub release](https://img.shields.io/github/release/sutchan/SutWxApp.svg)](https://github.com/sutchan/SutWxApp/releases)
 [![License](https://img.shields.io/github/license/sutchan/SutWxApp.svg)](https://github.com/sutchan/SutWxApp/blob/master/LICENSE)
 
-**Version: 1.0.2**
+**Version: 1.0.9**
+*Last Updated: November 7, 2024*
 
 The SUT WeChat Mini Program Project is a complete WordPress + WeChat Mini Program solution, including a WordPress plugin and a WeChat Mini Program frontend, designed to synchronize and display WordPress website content and features in WeChat Mini Program. This project provides rich features such as content management, user management, e-commerce functionality, WeChat payment, message push, and more.
 
-## Project Structure
+## 2. Project Structure
 
-The project consists of two main parts:
+The SUT WeChat Mini Program project consists of two main components:
 
-```
-SutWxApp/
-├── sut-wechat-mini/       # WordPress plugin providing backend API and management features
-└── SutWxApp/              # WeChat Mini Program frontend project
-```
+- **WordPress Plugin** (`sut-wechat-mini`): Responsible for content synchronization, user authentication, and data interaction
+- **Mini Program Frontend** (`SutWxApp`): Provides user interface and interaction experience
 
-### WordPress Plugin (sut-wechat-mini)
+## 3. Documentation
 
-```
-sut-wechat-mini/
-├── includes/              # Core functionality code
-├── assets/                # Static resources
-├── languages/             # Language files
-├── templates/             # Template files
-├── sut-wechat-mini.php    # Main plugin file
-└── README.md              # Plugin documentation
-```
+Project documentation is stored in the `docs` directory, including:
 
-### WeChat Mini Program Frontend (SutWxApp)
-
-```
-SutWxApp/
-├── app.js                 # Mini Program entry file
-├── app.json               # Global configuration file
-├── app.wxss               # Global style file
-├── images/                # Image resources
-├── pages/                 # Page files
-│   ├── index/             # Home page
-│   ├── category/          # Category page
-│   ├── article/           # Article related pages
-│   └── user/              # User related pages
-└── project.config.json    # Project configuration file
-```
+- **Project Overview**: Project positioning, core features, technical architecture
+- **Admin Guide**: Installation, configuration, system management
+- **Developer Guide**: Architecture design, API documentation, technical implementation
+- **User Guide**: Function usage instructions, FAQ
+- **API Documentation**: Complete interface specifications and usage examples
+- **Installation Guide**: Detailed environment configuration and installation steps
+- **Feature Module Description**: Detailed introduction and usage of each functional module
 
 ## Features
 

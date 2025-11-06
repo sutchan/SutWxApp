@@ -1,0 +1,125 @@
+<!-- 订单列表页面 -->
+<view class="container">
+  <!-- 订单状态选项卡 -->
+  <view class="status-tabs">
+    <view 
+      class="status-tab {{currentStatus === option.id ? 'active' : ''}}" 
+      wx:for="{{statusOptions}}" 
+      wx:key="id" 
+      bindtap="onStatusChange" 
+      data-status="{{option.id}}"
+    >
+      <text>{{option.name}}</text>
+    </view>
+  </view>
+
+  <!-- 加载中状态 -->
+  <view class="loading" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+
+  <!-- 错误状态 -->
+  <view class="error" wx:if="{{error}}">
+    <image src="/images/error.svg" class="error-icon"></image>
+    <text class="error-text">{{errorMsg}}</text>
+    <button class="retry-btn" bindtap="onRetry">重试</button>
+  </view>
+
+  <!-- 未登录状态 -->
+  <view class="not-logged-in" wx:if="{{!loading && !error && !wx.getApp().isLoggedIn()}}">
+    <image src="/images/empty.svg" class="empty-icon"></image>
+    <text class="empty-text">请先登录查看订单</text>
+    <button class="login-btn" bindtap="onLogin">去登录</button>
+  </view>
+
+  <!-- 空订单状态 -->
+  <view class="empty-order" wx:if="{{!loading && !error && wx.getApp().isLoggedIn() && empty}}">
+    <image src="/images/empty.svg" class="empty-icon"></image>
+    <text class="empty-text">暂无订单</text>
+    <button class="shopping-btn" bindtap="onGoShopping">去逛逛</button>
+  </view>
+
+  <!-- 订单列表 -->
+  <view class="order-list" wx:if="{{!loading && !error && !empty && orderList.length > 0}}">
+    <view class="order-item" wx:for="{{orderList}}" wx:key="id" bindtap="onOrderTap" data-id="{{item.id}}">
+      <!-- 订单头部 -->
+      <view class="order-header">
+        <view class="order-no">订单号：{{item.orderNo}}</view>
+        <view class="order-status" wx:if="{{item.status === 'pending_payment'}}" style="color: #ff6b81;">{{item.statusText}}</view>
+        <view class="order-status" wx:elif="{{item.status === 'pending_shipping'}}" style="color: #ff9500;">{{item.statusText}}</view>
+        <view class="order-status" wx:elif="{{item.status === 'pending_receipt'}}" style="color: #007aff;">{{item.statusText}}</view>
+        <view class="order-status" wx:elif="{{item.status === 'completed'}}" style="color: #4cd964;">{{item.statusText}}</view>
+        <view class="order-status" wx:else style="color: #999999;">{{item.statusText}}</view>
+      </view>
+
+      <!-- 订单商品列表 -->
+      <view class="order-products">
+        <view class="product-item" wx:for="{{item.products}}" wx:for-item="product" wx:for-index="productIndex" wx:key="id">
+          <image class="product-image" src="{{product.image}}" mode="aspectFill"></image>
+          <view class="product-info">
+            <view class="product-title">{{product.title}}</view>
+            <view class="product-bottom">
+              <view class="product-price">¥{{product.price}}</view>
+              <view class="product-quantity">x{{product.quantity}}</view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 订单底部 -->
+      <view class="order-footer">
+        <view class="order-time">{{item.createTime}}</view>
+        <view class="order-total">
+          <text>共{{item.totalCount}}件商品，合计：</text>
+          <text class="total-price">¥{{item.totalPrice}}</text>
+        </view>
+      </view>
+
+      <!-- 订单操作按钮 -->
+      <view class="order-actions">
+        <button 
+          class="action-btn secondary" 
+          wx:if="{{item.status === 'pending_payment'}}" 
+          bindtap="onCancelOrder" 
+          data-id="{{item.id}}" 
+          data-index="{{index}}"
+        >
+          取消订单
+        </button>
+        <button 
+          class="action-btn primary" 
+          wx:if="{{item.status === 'pending_payment'}}" 
+          bindtap="onPayOrder" 
+          data-id="{{item.id}}"
+        >
+          去支付
+        </button>
+        <button 
+          class="action-btn primary" 
+          wx:if="{{item.status === 'pending_receipt'}}" 
+          bindtap="onConfirmReceipt" 
+          data-id="{{item.id}}" 
+          data-index="{{index}}"
+        >
+          确认收货
+        </button>
+        <button 
+          class="action-btn secondary" 
+          wx:if="{{item.status === 'completed'}}" 
+          bindtap="onReviewOrder" 
+          data-id="{{item.id}}"
+        >
+          去评价
+        </button>
+      </view>
+    </view>
+
+    <!-- 加载更多 -->
+    <view class="load-more" wx:if="{{hasMore}}">
+      <text>上拉加载更多</text>
+    </view>
+    <view class="no-more" wx:else>
+      <text>没有更多了</text>
+    </view>
+  </view>
+</view>

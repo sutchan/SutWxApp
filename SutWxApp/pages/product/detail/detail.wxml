@@ -1,0 +1,103 @@
+<!-- 商品详情页面 -->
+<view class="container">
+  <!-- 加载中状态 -->
+  <view class="loading" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+
+  <!-- 错误状态 -->
+  <view class="error" wx:if="{{error}}">
+    <image src="/images/error.svg" class="error-icon"></image>
+    <text class="error-text">{{errorMsg}}</text>
+    <button class="retry-btn" bindtap="onRetry">重试</button>
+  </view>
+
+  <!-- 商品详情内容 -->
+  <view class="product-detail" wx:if="{{!loading && !error && product}}">
+    <!-- 商品图片轮播 -->
+    <swiper class="image-swiper" indicator-dots="true" autoplay="false" bindchange="onImageChange">
+      <block wx:for="{{images}}" wx:key="index">
+        <swiper-item>
+          <image class="product-image" src="{{item}}" mode="aspectFill"></image>
+        </swiper-item>
+      </block>
+      <view wx:if="{{images.length === 0}}">
+        <image class="product-image" src="/images/default-post.svg" mode="aspectFill"></image>
+      </view>
+    </swiper>
+
+    <!-- 商品基本信息 -->
+    <view class="product-info">
+      <view class="product-price">¥{{selectedSku.price || product.price}}</view>
+      <view class="product-title">{{product.title}}</view>
+      <view class="product-meta">
+        <text class="product-sales">销量 {{product.sales || 0}}</text>
+        <text class="product-stock" wx:if="{{selectedSku.stock || product.stock < 10}}">库存 {{selectedSku.stock || product.stock}} 件</text>
+      </view>
+    </view>
+
+    <!-- 商品规格选择 -->
+    <view class="sku-section" wx:if="{{product.skus && product.skus.length > 0}}">
+      <view class="section-title">选择规格</view>
+      <view class="sku-list">
+        <view 
+          class="sku-item {{selectedSku.id === item.id ? 'active' : ''}}" 
+          wx:for="{{product.skus}}" 
+          wx:key="id"
+          bindtap="onSkuSelect"
+          data-id="{{item.id}}"
+        >
+          <text class="sku-name">{{item.name}}</text>
+          <text class="sku-price">¥{{item.price}}</text>
+          <text class="sku-stock" wx:if="{{item.stock < 10}}">仅剩{{item.stock}}件</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 购买数量 -->
+    <view class="quantity-section">
+      <view class="section-title">购买数量</view>
+      <view class="quantity-control">
+        <button class="quantity-btn" disabled="{{quantity <= 1}}" bindtap="onDecreaseQuantity">-</button>
+        <view class="quantity-value">{{quantity}}</view>
+        <button class="quantity-btn" disabled="{{quantity >= (selectedSku.stock || product.stock || 99)}}" bindtap="onIncreaseQuantity">+</button>
+      </view>
+    </view>
+
+    <!-- 商品描述 -->
+    <view class="description-section">
+      <view class="section-title">商品详情</view>
+      <view class="product-description">
+        <rich-text nodes="{{product.description}}"></rich-text>
+      </view>
+    </view>
+
+    <!-- 相关商品 -->
+    <view class="related-section" wx:if="{{relatedProducts.length > 0}}">
+      <view class="section-title">相关推荐</view>
+      <view class="related-list">
+        <view class="related-item" wx:for="{{relatedProducts}}" wx:key="id" bindtap="onRelatedProductTap" data-id="{{item.id}}">
+          <image class="related-image" src="{{item.images[0] || '/images/default-post.svg'}}" mode="aspectFill"></image>
+          <view class="related-info">
+            <view class="related-title">{{item.title}}</view>
+            <view class="related-price">¥{{item.price}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部操作栏 -->
+  <view class="bottom-bar" wx:if="{{!loading && !error && product}}">
+    <view class="left-actions">
+      <view class="action-item" bindtap="onToggleFavorite">
+        <image class="action-icon" src="{{isFavorite ? '/images/favorite-active.png' : '/images/favorite.png'}}"></image>
+        <text>收藏</text>
+      </view>
+    </view>
+    <view class="right-actions">
+      <button class="cart-btn" bindtap="addToCart">加入购物车</button>
+      <button class="buy-btn" bindtap="buyNow">立即购买</button>
+    </view>
+  </view>
+</view>

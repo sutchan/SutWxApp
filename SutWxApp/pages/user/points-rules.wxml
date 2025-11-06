@@ -1,0 +1,68 @@
+<!-- 积分规则页面 -->
+<view class="rules-container">
+  <!-- 积分获取规则 -->
+  <view class="section" wx:if="{{!isLoading && !error}}">
+    <view class="section-header">
+      <text class="section-title">积分获取规则</text>
+    </view>
+    
+    <view class="rules-list">
+      <view 
+        wx:for="{{rules}}" 
+        wx:key="index"
+        class="rule-item"
+        aria-label="积分规则：{{item.title || ''}}，{{item.points || 0}}积分">
+        <view class="rule-content">
+          <view class="rule-title">
+            <text class="title-text">{{item.title || '未命名规则'}}</text>
+            <text class="points-text">+{{item.points || 0}}分</text>
+          </view>
+          <text class="rule-description">{{item.description || ''}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 常见问题 -->
+  <view class="section" wx:if="{{faqs.length > 0 && !isLoading && !error}}">
+    <view class="section-header">
+      <text class="section-title">常见问题</text>
+    </view>
+    
+    <view class="faq-list">
+      <view 
+        wx:for="{{faqs}}" 
+        wx:key="index"
+        class="faq-item"
+        bindtap="toggleFaq"
+        data-index="{{index}}"
+        aria-label="常见问题：{{item.question || ''}}">
+        <view class="faq-header">
+          <text class="faq-question">{{item.question || '未命名问题'}}</text>
+          <image 
+            class="faq-icon {{item.expanded ? 'expanded' : ''}}" 
+            src="/images/arrow-down.svg" 
+            mode="aspectFit">
+          </image>
+        </view>
+        <view class="faq-answer" wx:if="{{item.expanded}}">
+          <text>{{item.answer || '暂无答案'}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="loading-container" wx:if="isLoading">
+    <view class="loading"></view>
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <!-- 错误提示 -->
+  <view class="error-container" wx:if="error">
+    <image src="/images/error.svg" class="error-icon"></image>
+    <text class="error-text">{{error}}</text>
+    <button class="retry-button" bindtap="onRetry">重试</button>
+    <text class="error-note">当前显示的是默认规则，请重试获取最新规则</text>
+  </view>
+</view>

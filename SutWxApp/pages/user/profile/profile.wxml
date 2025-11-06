@@ -1,9 +1,68 @@
 <!-- pages/user/profile/profile.wxml -->
 <view class="profile-container">
   <!-- 加载状态 -->
-  <view class="loading-container" wx:if="{{loading && !error}}">
+  <view class="loading-container" wx:if="{{isLoading && !error && !showSkeleton}}">
     <view class="loading">
       <text>加载中...</text>
+    </view>
+  </view>
+
+  <!-- 骨架屏 -->
+  <view class="skeleton-container" wx:if="{{showSkeleton && !error}}">
+    <!-- 用户信息骨架屏 -->
+    <view class="skeleton-user-header">
+      <view class="skeleton-avatar"></view>
+      <view class="skeleton-user-info">
+        <view class="skeleton-name"></view>
+        <view class="skeleton-id"></view>
+      </view>
+      <view class="skeleton-arrow"></view>
+    </view>
+    
+    <!-- 积分卡片骨架屏 -->
+    <view class="skeleton-points-card">
+      <view class="skeleton-points-label"></view>
+      <view class="skeleton-points-value"></view>
+      <view class="skeleton-arrow"></view>
+    </view>
+    
+    <!-- 签到卡片骨架屏 -->
+    <view class="skeleton-signin-card">
+      <view class="skeleton-signin-info">
+        <view class="skeleton-signin-icon"></view>
+        <view class="skeleton-signin-text"></view>
+      </view>
+      <view class="skeleton-signin-reward"></view>
+    </view>
+    
+    <!-- 统计卡片骨架屏 -->
+    <view class="skeleton-stats-card">
+      <view class="skeleton-stat-item">
+        <view class="skeleton-stat-value"></view>
+        <view class="skeleton-stat-label"></view>
+      </view>
+      <view class="skeleton-stat-item">
+        <view class="skeleton-stat-value"></view>
+        <view class="skeleton-stat-label"></view>
+      </view>
+      <view class="skeleton-stat-item">
+        <view class="skeleton-stat-value"></view>
+        <view class="skeleton-stat-label"></view>
+      </view>
+    </view>
+    
+    <!-- 功能列表骨架屏 -->
+    <view class="skeleton-feature-list">
+      <view class="skeleton-feature-item" wx:for="[1,2,3,4,5,6]" wx:key="index">
+        <view class="skeleton-feature-left">
+          <view class="skeleton-feature-icon"></view>
+          <view class="skeleton-feature-text"></view>
+        </view>
+        <view class="skeleton-feature-right">
+          <view class="skeleton-feature-count"></view>
+          <view class="skeleton-arrow"></view>
+        </view>
+      </view>
     </view>
   </view>
 
@@ -15,7 +74,7 @@
   </view>
 
   <!-- 未登录状态 -->
-  <view class="unlogin-container" wx:elif="{{!isLoggedIn && !loading}}">
+  <view class="unlogin-container" wx:elif="{{!isLoggedIn && !isLoading}}">
     <view class="unlogin-content">
       <image src="/images/default-avatar.png" class="default-avatar"></image>
       <text class="unlogin-text">请先登录</text>
@@ -28,7 +87,7 @@
   <view class="logged-container" wx:else>
     <!-- 用户信息头部 -->
     <view class="user-header" aria-label="用户信息">
-      <image src="{{userInfo.avatar || '/images/default-avatar.png'}}" class="user-avatar" aria-label="用户头像"></image>
+      <image src="{{userInfo.avatar || '/images/default-avatar.png'}}" class="user-avatar" aria-label="用户头像" bindtap="onAvatarTap" mode="aspectFill"></image>
       <view class="user-info">
         <view class="user-name-row">
           <text class="user-name">{{userInfo.nickname || userInfo.username || '用户'}}</text>
@@ -111,6 +170,15 @@
         <view class="feature-left">
           <image src="/images/feedback.png" class="feature-icon"></image>
           <text class="feature-text">意见反馈</text>
+        </view>
+        <image src="/images/arrow-right.png" class="arrow-icon"></image>
+      </view>
+
+      <!-- 设置 -->
+      <view class="feature-item" bindtap="navigateToSettings" aria-label="设置">
+        <view class="feature-left">
+          <image src="/images/settings.png" class="feature-icon"></image>
+          <text class="feature-text">设置</text>
         </view>
         <image src="/images/arrow-right.png" class="arrow-icon"></image>
       </view>

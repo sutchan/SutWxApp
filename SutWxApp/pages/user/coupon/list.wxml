@@ -1,0 +1,71 @@
+<!-- 优惠券列表页面模板 -->
+<view class="coupon-list-page">
+  <!-- 标签栏 -->
+  <view class="tab-bar">
+    <view 
+      wx:for="{{tabs}}" 
+      wx:key="key"
+      class="tab-item {{activeTab === item.key ? 'active' : ''}}"
+      data-key="{{item.key}}"
+      bindtap="onTabChange"
+    >
+      {{item.name}}
+    </view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="loading-container" wx:if="{{loading}}">
+    <view class="loading-icon"></view>
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <!-- 无优惠券提示 -->
+  <view class="empty-container" wx:if="{{!loading && noCoupons}}">
+    <image class="empty-icon" src="../../../images/empty.svg" mode="aspectFit"></image>
+    <text class="empty-text">暂无优惠券</text>
+  </view>
+
+  <!-- 优惠券列表 -->
+  <view class="coupon-list" wx:if="{{!loading && !noCoupons}}">
+    <view 
+      wx:for="{{coupons}}" 
+      wx:key="id"
+      class="coupon-item"
+      bindtap="onViewCouponDetail"
+      data-id="{{item.id}}"
+    >
+      <!-- 优惠券内容 -->
+      <view class="coupon-content">
+        <view class="coupon-left">
+          <text class="coupon-value">{{formatCoupon(item).valueText}}</text>
+          <text class="coupon-type">{{formatCoupon(item).typeText}}</text>
+        </view>
+        
+        <view class="coupon-right">
+          <view class="coupon-header">
+            <text class="coupon-name">{{item.name}}</text>
+            <text class="coupon-status" wx:if="{{activeTab !== 'available'}}">
+              {{activeTab === 'used' ? '已使用' : '已过期'}}
+            </text>
+          </view>
+          
+          <text class="coupon-desc">{{item.description}}</text>
+          
+          <view class="coupon-footer">
+            <text class="coupon-condition">{{formatCoupon(item).conditionText}}</text>
+            <text class="coupon-expire">有效期至：{{formatCoupon(item).expireText}}</text>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 右侧装饰 -->
+      <view class="coupon-border"></view>
+    </view>
+  </view>
+
+  <!-- 已使用优惠券额外信息 -->
+  <view class="used-info" wx:if="{{item.status === 'used' && item.used_time}}">
+    <text class="used-time">使用时间：{{item.used_time}}</text>
+    <text class="order-id">订单号：{{item.order_id}}</text>
+  </view>
+</view>

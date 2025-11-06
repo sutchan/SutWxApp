@@ -1,0 +1,61 @@
+<!-- 用户中心页面 -->
+<view class="user-container">
+  <!-- 用户信息区域 -->
+  <view class="user-info-section">
+    <view class="user-info" bindtap="{{userInfo.isLoggedIn ? '' : 'onWechatLogin'}}">
+      <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill" aria-label="用户头像"></image>
+      <view class="user-details">
+        <text class="nickname">{{userInfo.nickName}}</text>
+        <text class="login-hint" wx:if="!userInfo.isLoggedIn">点击登录</text>
+        <text class="login-hint" wx:else>{{userInfo.isLoggedIn ? '已登录' : ''}}</text>
+      </view>
+      <image class="arrow" src="/images/arrow-right.svg" wx:if="userInfo.isLoggedIn" mode="aspectFit"></image>
+    </view>
+    
+    <!-- 绑定WordPress账号按钮 -->
+    <view class="bind-account" wx:if="userInfo.isLoggedIn">
+      <button class="bind-button" bindtap="bindWordPressAccount" type="default">
+        绑定WordPress账号
+      </button>
+    </view>
+  </view>
+
+  <!-- 菜单列表 -->
+  <view class="menu-section">
+    <view class="menu-group">
+      <view 
+        wx:for="{{menuList}}" 
+        wx:key="id" 
+        class="menu-item" 
+        bindtap="onMenuClick" 
+        data-id="{{item.id}}"
+        aria-label="{{item.title}}">
+        <view class="menu-icon">
+          <image src="{{item.icon}}" mode="aspectFit"></image>
+        </view>
+        <view class="menu-content">
+          <text class="menu-title">{{item.title}}</text>
+          <text class="menu-badge" wx:if="item.badge">{{item.badge}}</text>
+        </view>
+        <image class="menu-arrow" src="/images/arrow-right.svg" mode="aspectFit"></image>
+      </view>
+    </view>
+  </view>
+
+  <!-- 退出登录按钮 -->
+  <view class="logout-section" wx:if="userInfo.isLoggedIn">
+    <button class="logout-button" bindtap="logout" type="warn">退出登录</button>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="loading-container" wx:if="isLoading">
+    <view class="loading"></view>
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <!-- 错误提示 -->
+  <view class="error-container" wx:if="error">
+    <text class="error-text">{{error}}</text>
+    <button class="retry-button" bindtap="checkLoginStatus">重试</button>
+  </view>
+</view>

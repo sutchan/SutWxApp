@@ -1,0 +1,85 @@
+<!-- 购物车页面 -->
+<view class="container">
+  <!-- 加载中状态 -->
+  <view class="loading" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+
+  <!-- 错误状态 -->
+  <view class="error" wx:if="{{error}}">
+    <image src="/images/error.svg" class="error-icon"></image>
+    <text class="error-text">{{errorMsg}}</text>
+    <button class="retry-btn" bindtap="onRetry">重试</button>
+  </view>
+
+  <!-- 未登录状态 -->
+  <view class="not-logged-in" wx:if="{{!loading && !error && !wx.getApp().isLoggedIn()}}">
+    <image src="/images/empty.svg" class="empty-icon"></image>
+    <text class="empty-text">请先登录查看购物车</text>
+    <button class="login-btn" bindtap="onLogin">去登录</button>
+  </view>
+
+  <!-- 空购物车状态 -->
+  <view class="empty-cart" wx:if="{{!loading && !error && wx.getApp().isLoggedIn() && cartItems.length === 0}}">
+    <image src="/images/empty.svg" class="empty-icon"></image>
+    <text class="empty-text">购物车还是空的</text>
+    <button class="shopping-btn" bindtap="onGoShopping">去逛逛</button>
+  </view>
+
+  <!-- 购物车商品列表 -->
+  <view class="cart-list" wx:if="{{!loading && !error && cartItems.length > 0}}">
+    <!-- 商品项 -->
+    <view class="cart-item" wx:for="{{cartItems}}" wx:key="id">
+      <!-- 选择框 -->
+      <view class="checkbox" bindtap="onToggleSelect" data-index="{{index}}">
+        <view class="checkbox-inner {{item.selected ? 'selected' : ''}}">
+          <icon wx:if="{{item.selected}}" type="success" size="20"></icon>
+        </view>
+      </view>
+
+      <!-- 商品信息 -->
+      <view class="item-content" bindtap="onProductTap" data-id="{{item.product.id}}">
+        <image class="product-image" src="{{item.product.images[0] || '/images/default-post.svg'}}" mode="aspectFill"></image>
+        <view class="product-info">
+          <view class="product-title">{{item.product.title}}</view>
+          <view class="product-sku" wx:if="{{item.sku}}">{{item.sku.name}}</view>
+          <view class="item-bottom">
+            <view class="product-price">¥{{item.sku ? item.sku.price : item.product.price}}</view>
+            <view class="quantity-control">
+              <button class="quantity-btn" disabled="{{item.quantity <= 1}}" bindtap="onDecreaseQuantity" data-index="{{index}}">-</button>
+              <view class="quantity-value">{{item.quantity}}</view>
+              <button class="quantity-btn" disabled="{{item.quantity >= (item.sku ? item.sku.stock : item.product.stock || 99)}}" bindtap="onIncreaseQuantity" data-index="{{index}}">+</button>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 删除按钮 -->
+      <view class="delete-btn" bindtap="onDeleteItem" data-index="{{index}}">
+        <text>删除</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部操作栏 -->
+  <view class="bottom-bar" wx:if="{{!loading && !error && cartItems.length > 0}}">
+    <!-- 全选 -->
+    <view class="all-select" bindtap="onToggleAllSelect">
+      <view class="checkbox-inner {{isAllSelected ? 'selected' : ''}}">
+        <icon wx:if="{{isAllSelected}}" type="success" size="20"></icon>
+      </view>
+      <text>全选</text>
+    </view>
+
+    <!-- 合计 -->
+    <view class="total-info">
+      <text class="total-label">合计：</text>
+      <text class="total-price">¥{{totalPrice}}</text>
+    </view>
+
+    <!-- 结算按钮 -->
+    <button class="checkout-btn" bindtap="onCheckout">
+      <text>结算({{totalCount}})</text>
+    </button>
+  </view>
+</view>

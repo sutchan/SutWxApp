@@ -1,0 +1,275 @@
+/* 购物车页面样式 */
+.container {
+  background-color: #f8f8f8;
+  min-height: 100vh;
+  padding-bottom: 100rpx; /* 为底部操作栏留出空间 */
+}
+
+/* 加载状态样式 */
+.loading {
+  padding: 60rpx;
+  text-align: center;
+  font-size: 28rpx;
+  color: #999999;
+}
+
+/* 错误状态样式 */
+.error {
+  padding: 60rpx 20rpx;
+  text-align: center;
+}
+
+.error-icon {
+  width: 160rpx;
+  height: 160rpx;
+  margin-bottom: 20rpx;
+}
+
+.error-text {
+  display: block;
+  font-size: 28rpx;
+  color: #666666;
+  margin-bottom: 30rpx;
+}
+
+.retry-btn {
+  background-color: #ff6b81;
+  color: #ffffff;
+  font-size: 28rpx;
+  padding: 0 40rpx;
+  border-radius: 30rpx;
+}
+
+/* 未登录状态样式 */
+.not-logged-in,
+.empty-cart {
+  padding: 100rpx 20rpx;
+  text-align: center;
+}
+
+.empty-icon {
+  width: 200rpx;
+  height: 200rpx;
+  margin-bottom: 30rpx;
+}
+
+.empty-text {
+  display: block;
+  font-size: 28rpx;
+  color: #999999;
+  margin-bottom: 30rpx;
+}
+
+.login-btn,
+.shopping-btn {
+  background-color: #ff6b81;
+  color: #ffffff;
+  font-size: 28rpx;
+  padding: 0 40rpx;
+  border-radius: 30rpx;
+}
+
+/* 购物车商品列表样式 */
+.cart-list {
+  background-color: #ffffff;
+}
+
+.cart-item {
+  display: flex;
+  padding: 20rpx;
+  border-bottom: 1rpx solid #eeeeee;
+  position: relative;
+}
+
+/* 选择框样式 */
+.checkbox {
+  display: flex;
+  align-items: center;
+  margin-right: 20rpx;
+}
+
+.checkbox-inner {
+  width: 40rpx;
+  height: 40rpx;
+  border: 2rpx solid #dddddd;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkbox-inner.selected {
+  border-color: #ff6b81;
+  background-color: #ff6b81;
+}
+
+.checkbox-inner icon {
+  color: #ffffff;
+}
+
+/* 商品信息样式 */
+.item-content {
+  flex: 1;
+  display: flex;
+}
+
+.product-image {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 8rpx;
+  margin-right: 20rpx;
+}
+
+.product-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-title {
+  font-size: 28rpx;
+  color: #333333;
+  line-height: 40rpx;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 10rpx;
+}
+
+.product-sku {
+  font-size: 24rpx;
+  color: #999999;
+  margin-bottom: 10rpx;
+}
+
+.item-bottom {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.product-price {
+  font-size: 32rpx;
+  color: #ff6b81;
+  font-weight: bold;
+}
+
+/* 数量控制样式 */
+.quantity-control {
+  display: flex;
+  align-items: center;
+}
+
+.quantity-btn {
+  width: 50rpx;
+  height: 50rpx;
+  line-height: 50rpx;
+  padding: 0;
+  font-size: 30rpx;
+  background-color: #f5f5f5;
+  color: #333333;
+  border: 1rpx solid #eeeeee;
+  border-radius: 0;
+}
+
+.quantity-btn:first-child {
+  border-top-left-radius: 8rpx;
+  border-bottom-left-radius: 8rpx;
+}
+
+.quantity-btn:last-child {
+  border-top-right-radius: 8rpx;
+  border-bottom-right-radius: 8rpx;
+}
+
+.quantity-btn:disabled {
+  color: #cccccc;
+  background-color: #f9f9f9;
+}
+
+.quantity-value {
+  width: 80rpx;
+  height: 50rpx;
+  line-height: 50rpx;
+  text-align: center;
+  font-size: 26rpx;
+  color: #333333;
+  border-top: 1rpx solid #eeeeee;
+  border-bottom: 1rpx solid #eeeeee;
+}
+
+/* 删除按钮样式 */
+.delete-btn {
+  position: absolute;
+  top: 20rpx;
+  right: 20rpx;
+  font-size: 24rpx;
+  color: #999999;
+  padding: 10rpx;
+}
+
+/* 底部操作栏样式 */
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100rpx;
+  background-color: #ffffff;
+  border-top: 1rpx solid #eeeeee;
+  display: flex;
+  align-items: center;
+  padding: 0 20rpx;
+}
+
+/* 全选样式 */
+.all-select {
+  display: flex;
+  align-items: center;
+  margin-right: 30rpx;
+}
+
+.all-select text {
+  font-size: 28rpx;
+  color: #333333;
+  margin-left: 10rpx;
+}
+
+/* 合计样式 */
+.total-info {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-right: 20rpx;
+}
+
+.total-label {
+  font-size: 28rpx;
+  color: #333333;
+}
+
+.total-price {
+  font-size: 36rpx;
+  color: #ff6b81;
+  font-weight: bold;
+}
+
+/* 结算按钮样式 */
+.checkout-btn {
+  width: 200rpx;
+  height: 70rpx;
+  line-height: 70rpx;
+  font-size: 28rpx;
+  background-color: #ff6b81;
+  color: #ffffff;
+  border-radius: 35rpx;
+  padding: 0;
+}
+
+.checkout-btn text {
+  color: #ffffff;
+}

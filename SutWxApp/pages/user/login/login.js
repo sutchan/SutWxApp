@@ -2,18 +2,29 @@
 /**
  * 登录页面 - 处理用户授权和登录逻辑
  */
+import { showToast } from '../../../utils/global';
+
 Page({
   data: {
     canIUseGetUserProfile: false, // 是否支持getUserProfile方法
     canIUseOpenData: wx.canIUse('open-data.type.userAvatarUrl') && wx.canIUse('open-data.type.userNickName'), // 是否支持开放数据
     isLoading: false, // 加载状态
-    privacyPolicyAccepted: false // 隐私政策同意状态
+    showSkeleton: true, // 骨架屏显示状态
+    privacyPolicyAccepted: false, // 隐私政策同意状态
+    errorMessage: '', // 错误提示信息
+    appVersion: '', // 应用版本号
+    showFeatures: true // 是否显示功能说明
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function() {
+    // 初始化骨架屏
+    this.setData({
+      showSkeleton: true
+    });
+
     // 检查是否支持getUserProfile方法（微信小程序基础库2.10.4及以上版本支持）
     if (wx.getUserProfile) {
       this.setData({
@@ -27,6 +38,24 @@ Page({
       wx.switchTab({
         url: '/pages/user/profile/profile'
       });
+      return;
+    }
+    
+    // 获取应用版本号
+    try {
+      const { version } = wx.getAccountInfoSync();
+      this.setData({
+        appVersion: version
+      });
+    } catch (e) {
+      console.error('获取版本号失败:', e);
+    } finally {
+      // 页面初始化完成后隐藏骨架屏
+      setTimeout(() => {
+        this.setData({
+          showSkeleton: false
+        });
+      }, 800);
     }
   },
 
@@ -60,6 +89,10 @@ Page({
       },
       fail: (err) => {
         console.error('获取用户信息失败:', err);
+        this.setData({
+          isLoading: false,
+          errorMessage: '获取用户信息失败'
+        });
         wx.showToast({
           title: '获取用户信息失败',
           icon: 'none',
@@ -99,109 +132,58 @@ Page({
    * 执行登录操作
    * @param {Object} userInfo - 用户信息对象
    */
-  userLogin: function(userInfo) {
+  userLogin: async function(userInfo) {
     const that = this;
     const app = getApp();
     
     // 显示加载状态
     that.setData({
-      isLoading: true
+      isLoading: true,
+      errorMessage: ''
     });
     
-    // 调用微信登录接口
-    wx.login({
-      success: function(loginRes) {
-        if (loginRes.code) {
-          // 发送code到服务器换取openid和session_key - API路径已修复
-          app.request({
-            url: '/login',
-            method: 'POST',
-            data: {
-              code: loginRes.code,
-              user_info: userInfo
-            },
-            loadingText: '登录中',
-            success: function(res) {
-              if (res.code === 0) {
-                // 登录成功，保存token和用户信息
-                app.globalData.token = res.data.token;
-                app.globalData.userInfo = res.data;
-                // 移除错误的属性设置
-                // app.globalData.isLoggedIn = true;
-                
-                // 存入本地存储
-                wx.setStorageSync('token', res.data.token);
-                wx.setStorageSync('userInfo', res.data);
-                
-                // 提示登录成功
-                wx.showToast({
-                  title: '登录成功',
-                  icon: 'success'
-                });
-                
-                // 跳转到个人中心页面
-                setTimeout(() => {
-                  wx.switchTab({
-                    url: '/pages/user/profile/profile'
-                  });
-                }, 1500);
-              } else {
-                wx.showToast({
-                  title: res.message || '登录失败',
-                  icon: 'none',
-                  duration: 2000
-                });
-              }
-            },
-            fail: function(error) {
-              console.error('登录失败:', error);
-              wx.showToast({
-                title: '网络错误，请重试',
-                icon: 'none',
-                duration: 2000
-              });
-            },
-            complete: function() {
-              that.setData({
-                isLoading: false
-              });
-            }
+    try {
+      // 使用auth-service进行登录
+      const result = await app.services.auth.login(userInfo);
+      
+      if (result.success) {
+        // 提示登录成功
+        showToast('登录成功', 'success');
+        
+        // 跳转到个人中心页面
+        setTimeout(() => {
+          wx.switchTab({
+            url: '/pages/user/profile/profile'
           });
-        } else {
-          console.error('登录失败：', loginRes.errMsg);
-          wx.showToast({
-            title: '登录失败',
-            icon: 'none',
-            duration: 2000
-          });
-          that.setData({
-            isLoading: false
-          });
-        }
-      },
-      fail: function(error) {
-        console.error('wx.login失败:', error);
-        wx.showToast({
-          title: '登录失败，请重试',
-          icon: 'none',
-          duration: 2000
-        });
-        that.setData({
-          isLoading: false
-        });
+        }, 1500);
+      } else {
+        throw new Error(result.message || '登录失败');
       }
-    });
+    } catch (error) {
+      console.error('登录失败:', error);
+      const errorMsg = error.message || '登录失败，请稍后重试';
+      this.setData({
+        errorMessage: errorMsg
+      });
+      showToast(errorMsg, 'none', 2000);
+      // 5秒后清除错误消息
+      setTimeout(() => {
+        this.setData({
+          errorMessage: ''
+        });
+      }, 5000);
+    } finally {
+      that.setData({
+        isLoading: false
+      });
+    }
   },
 
   /**
    * 处理用户取消授权的情况
    */
   onAuthCancel: function() {
-    wx.showToast({
-      title: '需要授权才能使用完整功能',
-      icon: 'none',
-      duration: 2000
-    });
+    showToast('需要授权才能使用完整功能', 'none', 2000);
   },
 
   /**
@@ -211,12 +193,26 @@ Page({
     wx.makePhoneCall({
       phoneNumber: '400-123-4567', // 替换为实际的客服电话
       fail: function() {
-        wx.showToast({
-          title: '拨打失败，请稍后再试',
-          icon: 'none'
-        });
+        showToast('拨打失败，请稍后再试', 'none');
       }
     });
+  },
+
+  /**
+   * 重试登录
+   */
+  onRetry: function() {
+    this.setData({
+      errorMessage: '',
+      showSkeleton: true
+    });
+    
+    // 模拟重新加载页面
+    setTimeout(() => {
+      this.setData({
+        showSkeleton: false
+      });
+    }, 500);
   },
 
   /**
@@ -224,40 +220,10 @@ Page({
    */
   navigateToAgreement: function(e) {
     const type = e.currentTarget.dataset.type;
-    let url = '';
     
-    switch(type) {
-      case 'privacy':
-        // 隐私协议页面不存在，显示提示
-        wx.showToast({
-          title: '隐私协议页面尚未实现',
-          icon: 'none',
-          duration: 2000
-        });
-        break;
-      case 'user':
-        // 用户协议页面不存在，显示提示
-        wx.showToast({
-          title: '用户协议页面尚未实现',
-          icon: 'none',
-          duration: 2000
-        });
-        break;
-      default:
-        // 默认协议页面不存在，显示提示
-        wx.showToast({
-          title: '协议页面尚未实现',
-          icon: 'none',
-          duration: 2000
-        });
-    }
-    // 移除导航代码，防止跳转到不存在的页面
-    return;
-
-    // 以下代码已被注释，因为协议页面不存在
-    /*
+    // 跳转到已经创建的协议页面
     wx.navigateTo({
-      url: url,
+      url: `/pages/user/agreement/agreement?type=${type}`,
       fail: function() {
         wx.showToast({
           title: '跳转失败，请稍后再试',
@@ -265,7 +231,6 @@ Page({
         });
       }
     });
-    */
   },
 
   /**

@@ -1,0 +1,70 @@
+<!-- 用户积分页面 -->
+<view class="points-container">
+  <!-- 积分信息卡片 -->
+  <view class="points-card" wx:if="{{!isLoading && !error}}">
+    <view class="points-header">
+      <view class="points-total">
+        <text class="points-number">{{points || 0}}</text>
+        <text class="points-unit">积分</text>
+      </view>
+      <view class="points-actions">
+        <button class="rules-button" bindtap="navigateToPointsRules" aria-label="查看积分规则">
+          积分规则
+          <image class="arrow-icon" src="/images/arrow-right.svg" mode="aspectFit"></image>
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 积分历史记录 -->
+  <view class="history-section" wx:if="{{pointsHistory.length > 0}}">
+    <view class="history-header">
+      <text class="history-title">积分记录</text>
+    </view>
+    
+    <view class="history-list">
+      <view 
+        wx:for="{{pointsHistory}}" 
+        wx:key="id"
+        class="history-item"
+        aria-label="积分记录：{{item.description || ''}}, {{item.points > 0 ? '+' : ''}}{{item.points}}积分">
+        <view class="history-info">
+          <text class="history-description">{{item.description || '未知操作'}}</text>
+          <text class="history-time">{{item.time || ''}}</text>
+        </view>
+        <text class="history-points {{item.points > 0 ? 'points-increase' : 'points-decrease'}}">
+          {{item.points > 0 ? '+' : ''}}{{item.points}}
+        </text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载更多 -->
+  <view class="loading-more" wx:if="isLoadingMore">
+    <text class="loading-more-text">加载中...</text>
+  </view>
+
+  <!-- 没有更多数据 -->
+  <view class="no-more" wx:if="{{!isLoading && !isLoadingMore && pointsHistory.length > 0 && !hasMore}}">
+    <text class="no-more-text">没有更多记录了</text>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty" wx:if="{{!isLoading && !isLoadingMore && pointsHistory.length === 0 && !error}}">
+    <image src="/images/empty.svg" mode="aspectFit" class="empty-icon"></image>
+    <text class="empty-text">暂无积分记录</text>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="loading-container" wx:if="isLoading">
+    <view class="loading"></view>
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <!-- 错误提示 -->
+  <view class="error-container" wx:if="error">
+    <image src="/images/error.svg" class="error-icon"></image>
+    <text class="error-text">{{error}}</text>
+    <button class="retry-button" bindtap="onRetry">重试</button>
+  </view>
+</view>

@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "选择优惠券",
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black",
+  "backgroundColor": "#f7f7f7",
+  "disableScroll": false,
+  "usingComponents": {}
+}

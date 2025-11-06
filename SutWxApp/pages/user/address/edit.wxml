@@ -1,0 +1,47 @@
+<!-- 地址编辑页面结构 -->
+<view class="container">
+  <!-- 加载状态 -->
+  <view class="loading" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+  
+  <!-- 编辑表单 -->
+  <form class="address-form" wx:else bindsubmit="onSubmit">
+    <!-- 收货人姓名 -->
+    <view class="form-item">
+      <view class="label">收货人</view>
+      <input class="input" type="text" placeholder="请输入收货人姓名" value="{{name}}" bindinput="onNameInput" name="name" />
+    </view>
+    
+    <!-- 手机号码 -->
+    <view class="form-item">
+      <view class="label">手机号码</view>
+      <input class="input" type="number" placeholder="请输入手机号码" value="{{phone}}" bindinput="onPhoneInput" name="phone" maxlength="11" />
+    </view>
+    
+    <!-- 所在地区 -->
+    <view class="form-item">
+      <view class="label">所在地区</view>
+      <picker mode="region" bindchange="onRegionChange" value="{{[province, city, district]}}" custom-item="" name="region">
+        <view class="picker">
+          <text wx:if="{{province && city && district}}">{{province}} {{city}} {{district}}</text>
+          <text class="placeholder" wx:else>请选择省/市/区</text>
+        </view>
+      </picker>
+    </view>
+    
+    <!-- 详细地址 -->
+    <view class="form-item">
+      <view class="label">详细地址</view>
+      <textarea class="textarea" placeholder="请输入详细地址信息，如街道、门牌号等" value="{{detail}}" bindinput="onDetailInput" name="detail" auto-height />
+    </view>
+    
+    <!-- 是否默认地址 -->
+    <view class="form-item checkbox-item">
+      <checkbox checked="{{isDefault}}" bindchange="onDefaultChange" name="isDefault" />设为默认收货地址
+    </view>
+    
+    <!-- 提交按钮 -->
+    <button class="submit-btn" form-type="submit" loading="{{submitting}}" disabled="{{submitting}}">{{mode === 'add' ? '保存' : '保存修改'}}</button>
+  </form>
+</view>

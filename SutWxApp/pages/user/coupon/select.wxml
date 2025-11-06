@@ -1,0 +1,71 @@
+<!-- 优惠券选择页面结构 -->
+<view class="container">
+  <!-- 页面标题 -->
+  <view class="page-header">
+    <text class="page-title">选择优惠券</text>
+    <view class="close-btn" bind:tap="onNoUseCoupon">关闭</view>
+  </view>
+
+  <!-- 提示信息 -->
+  <view class="tip-section">
+    <text class="tip-text">请选择可使用的优惠券，若不使用请点击"不使用优惠券"</text>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="loading-section" wx:if="{{loading}}">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">加载优惠券中...</text>
+  </view>
+
+  <!-- 无优惠券提示 -->
+  <view class="empty-section" wx:elif="{{noCoupons}}">
+    <view class="empty-icon"></view>
+    <text class="empty-text">暂无可用优惠券</text>
+    <button class="empty-btn" bind:tap="onNoUseCoupon">不使用优惠券</button>
+  </view>
+
+  <!-- 优惠券列表 -->
+  <view class="coupon-list" wx:else>
+    <!-- 不使用优惠券选项 -->
+    <view class="no-coupon-item" bind:tap="onNoUseCoupon">
+      <view class="no-coupon-content">
+        <view class="no-coupon-icon">✕</view>
+        <view class="no-coupon-text">不使用优惠券</view>
+      </view>
+      <radio class="coupon-radio" checked="{{!selectedCoupon}}"></radio>
+    </view>
+
+    <!-- 优惠券列表 -->
+    <view class="coupon-item" 
+          wx:for="{{coupons}}" 
+          wx:key="id" 
+          bind:tap="onSelectCoupon"
+          data-id="{{item.id}}">
+      <!-- 优惠券左侧金额区域 -->
+      <view class="coupon-left">
+        <text class="coupon-value">
+          {{item.type === 'cash' ? '¥' : ''}}{{item.type === 'percent' ? (item.value/10) : item.value}}
+          {{item.type === 'percent' ? '折' : ''}}
+        </text>
+        <text class="coupon-min-amount" wx:if="{{item.min_amount > 0}}">
+          满{{item.min_amount}}元可用
+        </text>
+      </view>
+
+      <!-- 优惠券右侧信息区域 -->
+      <view class="coupon-right">
+        <view class="coupon-name">{{item.name}}</view>
+        <view class="coupon-description">{{item.description}}</view>
+        <view class="coupon-expire">有效期至：{{item.end_time ? (new Date(item.end_time).getFullYear() + '.' + (new Date(item.end_time).getMonth()+1).toString().padStart(2, '0') + '.' + new Date(item.end_time).getDate().toString().padStart(2, '0')) : ''}}</view>
+      </view>
+
+      <!-- 选中状态 -->
+      <radio class="coupon-radio" checked="{{selectedCoupon && selectedCoupon.id === item.id}}"></radio>
+    </view>
+  </view>
+
+  <!-- 底部提示 -->
+  <view class="bottom-tip" wx:if="{{coupons.length > 0}}">
+    <text class="tip-text">* 每张订单仅限使用一张优惠券</text>
+  </view>
+</view>

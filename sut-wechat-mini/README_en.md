@@ -3,7 +3,8 @@
 [![GitHub release](https://img.shields.io/github/release/sutchan/SutWxApp.svg)](https://github.com/sutchan/SutWxApp/releases)
 [![License](https://img.shields.io/github/license/sutchan/SutWxApp.svg)](https://github.com/sutchan/SutWxApp/blob/master/LICENSE)
 
-**Version: 1.0.2**
+**Version: 1.0.3**
+*Last Updated: January 15, 2024*
 
 The SUT WeChat Mini Program Plugin is a plugin that provides WeChat Mini Program integration for WordPress websites, supporting content display, e-commerce functions, user management, message push, and more. This plugin provides a complete set of API interfaces for WeChat Mini Programs to call.
 

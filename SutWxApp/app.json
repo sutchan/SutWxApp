@@ -4,7 +4,30 @@
     "pages/category/category",
     "pages/article/detail/detail",
     "pages/user/login/login",
-    "pages/user/profile/profile"
+    "pages/user/profile/profile",
+    "pages/user/user",
+    "pages/user/comments",
+    "pages/user/favorites",
+    "pages/user/points",
+    "pages/user/points-rules",
+    "pages/user/settings",
+    "pages/user/agreement/agreement",
+    "pages/user/about",
+    "pages/user/privacy-settings",
+    "pages/product/list/list",
+    "pages/product/detail/detail",
+    "pages/cart/cart",
+    "pages/order/list/list",
+    "pages/order/detail/detail",
+    "pages/user/address/list",
+    "pages/user/address/edit",
+    "pages/order/confirm",
+    "pages/order/pay",
+    "pages/user/favorite",
+    "pages/notification/list",
+    "pages/notification/detail",
+    "pages/user/coupon/list",
+    "pages/user/coupon/select"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -23,19 +46,25 @@
         "pagePath": "pages/index/index",
         "text": "首页",
         "iconPath": "images/tabbar/home.png",
-        "selectedIconPath": "images/tabbar/home_selected.png"
+        "selectedIconPath": "images/tabbar/home-active.png"
       },
       {
         "pagePath": "pages/category/category",
         "text": "分类",
         "iconPath": "images/tabbar/category.png",
-        "selectedIconPath": "images/tabbar/category_selected.png"
+        "selectedIconPath": "images/tabbar/category-active.png"
       },
       {
-        "pagePath": "pages/user/profile/profile",
+        "pagePath": "pages/cart/cart",
+        "text": "购物车",
+        "iconPath": "images/tabbar/cart.png",
+        "selectedIconPath": "images/tabbar/cart-active.png"
+      },
+      {
+        "pagePath": "pages/user/user",
         "text": "我的",
-        "iconPath": "images/tabbar/user.png",
-        "selectedIconPath": "images/tabbar/user_selected.png"
+        "iconPath": "images/user.png",
+        "selectedIconPath": "images/user-active.png"
       }
     ]
   },

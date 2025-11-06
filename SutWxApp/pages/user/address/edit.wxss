@@ -1,0 +1,96 @@
+/* 地址编辑页面样式 */
+.container {
+  background-color: #f8f8f8;
+  min-height: 100vh;
+  padding-bottom: 40rpx;
+}
+
+/* 加载状态样式 */
+.loading {
+  padding: 60rpx;
+  text-align: center;
+  font-size: 28rpx;
+  color: #999999;
+}
+
+/* 表单样式 */
+.address-form {
+  background-color: #ffffff;
+  margin-top: 20rpx;
+}
+
+/* 表单项样式 */
+.form-item {
+  display: flex;
+  align-items: center;
+  padding: 30rpx;
+  border-bottom: 2rpx solid #f0f0f0;
+}
+
+.label {
+  width: 160rpx;
+  font-size: 30rpx;
+  color: #333333;
+}
+
+.input {
+  flex: 1;
+  font-size: 30rpx;
+  color: #333333;
+  padding: 0;
+}
+
+.input::placeholder {
+  color: #cccccc;
+}
+
+/* 地区选择器样式 */
+.picker {
+  flex: 1;
+}
+
+.picker text {
+  font-size: 30rpx;
+  color: #333333;
+}
+
+.placeholder {
+  color: #cccccc;
+}
+
+/* 详细地址输入框样式 */
+.textarea {
+  flex: 1;
+  font-size: 30rpx;
+  color: #333333;
+  min-height: 120rpx;
+  line-height: 44rpx;
+  padding: 0;
+}
+
+.textarea::placeholder {
+  color: #cccccc;
+}
+
+/* 复选框样式 */
+.checkbox-item {
+  background-color: #ffffff;
+  margin-top: 20rpx;
+  border-bottom: none;
+}
+
+checkbox {
+  transform: scale(0.8);
+  margin-right: 10rpx;
+}
+
+/* 提交按钮样式 */
+.submit-btn {
+  margin: 40rpx 30rpx 0;
+  background-color: #ff6b81;
+  color: #ffffff;
+  font-size: 32rpx;
+  padding: 24rpx 0;
+  border-radius: 10rpx;
+  box-shadow: 0 4rpx 20rpx rgba(255, 107, 129, 0.3);
+}

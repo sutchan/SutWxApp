@@ -64,6 +64,43 @@
   border-radius: 50%;
   border: 3px solid rgba(255, 255, 255, 0.3);
   margin-right: 15px;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.user-avatar:active {
+  transform: scale(0.95);
+  opacity: 0.8;
+}
+
+.user-avatar::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  right: -3px;
+  width: 24px;
+  height: 24px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-avatar::before {
+  content: '+';
+  position: absolute;
+  bottom: -3px;
+  right: -3px;
+  width: 24px;
+  height: 24px;
+  color: #07c160;
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
 }
 
 .user-info {
@@ -227,6 +264,210 @@
   padding: 20px;
   font-size: 14px;
   color: #999999;
+}
+
+/* 骨架屏样式 */
+.skeleton-container {
+  background-color: #f8f8f8;
+  padding: 0 30rpx 30rpx;
+}
+
+.skeleton-user-header {
+  display: flex;
+  align-items: center;
+  padding: 30rpx 0;
+  background-color: #fff;
+  border-radius: 16rpx;
+  margin-bottom: 20rpx;
+  animation: pulse 1.5s ease-in-out infinite alternate;
+}
+
+.skeleton-avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  background-color: #f3f3f3;
+  margin-right: 30rpx;
+}
+
+.skeleton-user-info {
+  flex: 1;
+}
+
+.skeleton-name {
+  width: 200rpx;
+  height: 44rpx;
+  background-color: #f3f3f3;
+  border-radius: 8rpx;
+  margin-bottom: 16rpx;
+}
+
+.skeleton-id {
+  width: 250rpx;
+  height: 36rpx;
+  background-color: #f3f3f3;
+  border-radius: 8rpx;
+}
+
+.skeleton-arrow {
+  width: 40rpx;
+  height: 40rpx;
+  background-color: #f3f3f3;
+  border-radius: 50%;
+}
+
+.skeleton-points-card {
+  display: flex;
+  align-items: center;
+  padding: 30rpx;
+  background-color: #fff;
+  border-radius: 16rpx;
+  margin-bottom: 20rpx;
+  animation: pulse 1.5s ease-in-out infinite alternate 0.1s;
+}
+
+.skeleton-points-label {
+  width: 150rpx;
+  height: 40rpx;
+  background-color: #f3f3f3;
+  border-radius: 8rpx;
+  margin-right: 20rpx;
+}
+
+.skeleton-points-value {
+  flex: 1;
+  width: 100rpx;
+  height: 48rpx;
+  background-color: #f3f3f3;
+  border-radius: 8rpx;
+}
+
+.skeleton-signin-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30rpx;
+  background-color: #fff;
+  border-radius: 16rpx;
+  margin-bottom: 20rpx;
+  animation: pulse 1.5s ease-in-out infinite alternate 0.2s;
+}
+
+.skeleton-signin-info {
+  display: flex;
+  align-items: center;
+}
+
+.skeleton-signin-icon {
+  width: 60rpx;
+  height: 60rpx;
+  background-color: #f3f3f3;
+  border-radius: 50%;
+  margin-right: 20rpx;
+}
+
+.skeleton-signin-text {
+  width: 200rpx;
+  height: 40rpx;
+  background-color: #f3f3f3;
+  border-radius: 8rpx;
+}
+
+.skeleton-signin-reward {
+  width: 120rpx;
+  height: 40rpx;
+  background-color: #f3f3f3;
+  border-radius: 20rpx;
+}
+
+.skeleton-stats-card {
+  display: flex;
+  padding: 30rpx;
+  background-color: #fff;
+  border-radius: 16rpx;
+  margin-bottom: 20rpx;
+  animation: pulse 1.5s ease-in-out infinite alternate 0.3s;
+}
+
+.skeleton-stat-item {
+  flex: 1;
+  text-align: center;
+}
+
+.skeleton-stat-value {
+  width: 80rpx;
+  height: 48rpx;
+  background-color: #f3f3f3;
+  border-radius: 8rpx;
+  margin: 0 auto 16rpx;
+}
+
+.skeleton-stat-label {
+  width: 120rpx;
+  height: 36rpx;
+  background-color: #f3f3f3;
+  border-radius: 8rpx;
+  margin: 0 auto;
+}
+
+.skeleton-feature-list {
+  background-color: #fff;
+  border-radius: 16rpx;
+  animation: pulse 1.5s ease-in-out infinite alternate 0.4s;
+}
+
+.skeleton-feature-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.skeleton-feature-item:last-child {
+  border-bottom: none;
+}
+
+.skeleton-feature-left {
+  display: flex;
+  align-items: center;
+}
+
+.skeleton-feature-icon {
+  width: 56rpx;
+  height: 56rpx;
+  background-color: #f3f3f3;
+  border-radius: 12rpx;
+  margin-right: 20rpx;
+}
+
+.skeleton-feature-text {
+  width: 200rpx;
+  height: 40rpx;
+  background-color: #f3f3f3;
+  border-radius: 8rpx;
+}
+
+.skeleton-feature-right {
+  display: flex;
+  align-items: center;
+}
+
+.skeleton-feature-count {
+  width: 60rpx;
+  height: 36rpx;
+  background-color: #f3f3f3;
+  border-radius: 8rpx;
+  margin-right: 16rpx;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 /* 适配iPhone X等刘海屏 */

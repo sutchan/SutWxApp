@@ -1,7 +1,7 @@
 <!-- pages/article/detail/detail.wxml -->
 <view class="article-detail-container">
   <!-- 加载状态 -->
-  <view class="loading-container" wx:if="{{loading && !error}}">
+  <view class="loading-container" wx:if="{{loading && !error && !showSkeleton}}">
     <view class="loading">
       <text>加载中...</text>
     </view>
@@ -10,22 +10,40 @@
   <!-- 错误状态 -->
   <view class="error-container" wx:if="{{error}}">
     <image src="/images/error.png" class="error-icon"></image>
-    <text class="error-text">{{error}}</text>
+    <text class="error-text">加载文章失败</text>
     <button class="retry-button" bindtap="onRetry">重试</button>
+  </view>
+
+  <!-- 骨架屏 -->
+  <view class="skeleton-container" wx:if="{{showSkeleton}}">
+    <view class="skeleton-item skeleton-title"></view>
+    <view class="skeleton-meta">
+      <view class="skeleton-item skeleton-avatar"></view>
+      <view class="skeleton-item skeleton-author"></view>
+      <view class="skeleton-item skeleton-time"></view>
+    </view>
+    <view class="skeleton-item skeleton-category"></view>
+    <view class="skeleton-content">
+      <view class="skeleton-item skeleton-paragraph"></view>
+      <view class="skeleton-item skeleton-paragraph"></view>
+      <view class="skeleton-item skeleton-paragraph"></view>
+      <view class="skeleton-item skeleton-paragraph"></view>
+      <view class="skeleton-item skeleton-paragraph"></view>
+    </view>
   </view>
 
   <!-- 文章内容区域 -->
   <view class="article-content" wx:else>
     <!-- 文章头部 -->
     <view class="article-header">
-      <text class="article-title">{{article.title}}</text>
+      <text class="article-title">{{article.title || '文章标题'}}</text>
       <view class="article-meta">
         <text class="article-author">{{article.author_name || '管理员'}}</text>
-        <text class="article-date">{{article.date}}</text>
-        <text class="article-views">{{viewCount}} 阅读</text>
+        <text class="article-date">{{article.date || '未知时间'}}</text>
+        <text class="article-views">{{viewCount || 0}} 阅读</text>
       </view>
-      <view class="article-category" wx:if="{{article.category_name}}">
-        <text>{{article.category_name}}</text>
+      <view class="article-category" wx:if="{{article.category?.name || article.category_name}}">
+        <text>{{article.category?.name || article.category_name}}</text>
       </view>
     </view>
 
@@ -77,6 +95,22 @@
               <text class="comment-time">{{item.time}}</text>
             </view>
             <text class="comment-text">{{item.content}}</text>
+          <view class="comment-actions">
+            <view class="comment-action-item" bindtap="likeComment" data-id="{{item.id}}" aria-label="{{item.is_liked ? '取消点赞' : '点赞'}}评论">
+              <image src="{{item.is_liked ? '/images/like-active.png' : '/images/like.png' }}" class="comment-action-icon"></image>
+              <text class="comment-action-text">{{item.like_count || 0}}</text>
+            </view>
+            <view class="comment-action-item" bindtap="replyToComment" data-id="{{item.id}}" data-username="{{item.username}}" aria-label="回复 {{item.username}}">
+              <text class="comment-action-text">回复</text>
+            </view>
+          </view>
+          </view>
+        </view>
+        <!-- 加载更多按钮 -->
+        <view class="load-more" wx:if="{{commentHasMore}}">
+          <button wx:if="{{!loadingComments}}" bindtap="loadMoreComments" class="load-more-btn">加载更多</button>
+          <view wx:else class="loading-more">
+            <text>加载中...</text>
           </view>
         </view>
         <view class="no-more" wx:if="{{!commentHasMore}}">
@@ -93,15 +127,23 @@
     </view>
 
     <!-- 相关推荐 -->
-    <view class="related-articles" wx:if="{{article.related_articles && article.related_articles.length > 0}}" aria-label="相关推荐">
+    <view class="related-articles" wx:if="{{article.related_posts && article.related_posts.length > 0}}" aria-label="相关推荐">
       <view class="related-header">
         <text class="related-title">相关推荐</text>
       </view>
       <view class="related-list">
-        <view class="related-item" wx:for="{{article.related_articles}}" wx:key="id" data-id="{{item.id}}" bindtap="goToArticleDetail" aria-label="查看文章 {{item.title}}">
-          <text class="related-title">{{item.title}}</text>
-          <text class="related-info">{{item.date}} · {{item.view_count}}阅读</text>
+        <view class="related-item" wx:for="{{article.related_posts}}" wx:key="id" data-id="{{item.id}}" bindtap="goToArticleDetail" aria-label="查看文章 {{item.title || '文章标题'}}" data-uid="article-{{item.id}}">
+          <text class="related-title">{{item.title || '文章标题'}}</text>
+          <text class="related-info">{{item.date || '未知时间'}} · {{item.view_count || 0}}阅读</text>
         </view>
+      </view>
+    </view>
+    <view class="related-articles" wx:else>
+      <view class="related-header">
+        <text class="related-title">相关推荐</text>
+      </view>
+      <view class="no-articles">
+        暂无相关推荐
       </view>
     </view>
   </view>
@@ -114,13 +156,17 @@
   </view>
 
   <!-- 骨架屏 -->
-  <view class="skeleton-container" wx:if="{{showSkeleton && loading}}">
+  <view class="skeleton-container" wx:if="{{showSkeleton}}">
     <view class="skeleton-title"></view>
     <view class="skeleton-meta">
       <view class="skeleton-author"></view>
       <view class="skeleton-date"></view>
+      <view class="skeleton-views"></view>
     </view>
+    <view class="skeleton-category"></view>
     <view class="skeleton-content">
+      <view class="skeleton-paragraph"></view>
+      <view class="skeleton-paragraph"></view>
       <view class="skeleton-paragraph"></view>
       <view class="skeleton-paragraph"></view>
       <view class="skeleton-paragraph"></view>

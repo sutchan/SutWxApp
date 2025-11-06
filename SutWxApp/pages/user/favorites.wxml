@@ -1,0 +1,70 @@
+<!-- 用户收藏页面 -->
+<view class="favorites-container">
+  <!-- 加载状态 -->
+  <view class="loading-container" wx:if="{{loading && favorites.length === 0}}">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <!-- 错误状态 -->
+  <view class="error-container" wx:elif="{{error}}">
+    <image src="../../images/error.svg" class="error-icon"></image>
+    <text class="error-text">{{error}}</text>
+    <button class="retry-button" bindtap="retryLoad">重试</button>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-container" wx:elif="{{favorites.length === 0}}">
+    <image src="../../images/empty.svg" class="empty-icon"></image>
+    <text class="empty-text">暂无收藏</text>
+  </view>
+
+  <!-- 收藏列表 -->
+  <view class="favorites-list" wx:else>
+    <view class="favorite-item" wx:for="{{favorites}}" wx:key="id">
+      <!-- 文章信息 -->
+      <view 
+        class="article-info" 
+        bindtap="navigateToArticleDetail"
+        data-article-id="{{item.id}}"
+      >
+        <view class="article-main">
+          <text class="article-title">{{item.title}}</text>
+          <text class="article-date">{{item.date}}</text>
+        </view>
+        <image 
+          wx:if="{{item.thumbnail}}" 
+          src="{{item.thumbnail}}" 
+          class="article-cover" 
+          mode="aspectFill"
+        ></image>
+        <view wx:else class="article-cover-placeholder"></view>
+      </view>
+
+      <!-- 操作按钮 -->
+      <view class="favorite-actions">
+        <button 
+          class="cancel-favorite-button" 
+          size="mini" 
+          bindtap="cancelFavorite"
+          data-id="{{item.id}}"
+          data-index="{{index}}"
+        >
+          取消收藏
+        </button>
+      </view>
+    </view>
+
+    <!-- 加载更多 -->
+    <view class="load-more" wx:if="{{hasMore}}">
+      <view class="load-more-spinner" wx:if="{{loading}}"></view>
+      <text class="load-more-text" wx:if="{{loading}}">加载更多...</text>
+      <text class="load-more-text" wx:else bindtap="loadMore">点击加载更多</text>
+    </view>
+
+    <!-- 没有更多 -->
+    <view class="no-more" wx:elif="{{!hasMore && favorites.length > 0}}">
+      <text class="no-more-text">没有更多了</text>
+    </view>
+  </view>
+</view>

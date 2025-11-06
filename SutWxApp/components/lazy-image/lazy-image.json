@@ -1,0 +1,19 @@
+{
+  "component": true,
+  "description": "高性能图片懒加载组件，支持渐进式加载、错误处理和自定义样式",
+  "usingComponents": {},
+  "styleIsolation": "isolated",
+  "multipleSlots": false,
+  "externalClasses": [
+    "container-class",
+    "image-class",
+    "loading-class",
+    "error-class"
+  ],
+  "behaviors": [],
+  "options": {
+    "virtualHost": false,
+    "pureDataPattern": /^_/, // 以_开头的data字段将不被自动绑定到wxml
+    "multipleSlots": false
+  }
+}

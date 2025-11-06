@@ -1,0 +1,45 @@
+<!-- pages/user/about/about.wxml -->
+<view class="about-container">
+  <!-- 应用信息区域 -->
+  <view class="app-info-section">
+    <!-- 应用Logo -->
+    <view class="app-logo">
+      <image src="/images/logo.png" mode="aspectFill"></image>
+    </view>
+    
+    <!-- 应用名称和版本 -->
+    <view class="app-title">{{appName}}</view>
+    <view class="app-version">版本 {{appVersion}}</view>
+    <view class="app-description">{{appDescription}}</view>
+  </view>
+
+  <!-- 联系信息区域 -->
+  <view class="contact-section">
+    <view class="section-title">联系我们</view>
+    
+    <view class="contact-item" bindtap="copyEmail">
+      <image class="contact-icon" src="/images/icon-email.png" mode="aspectFit"></image>
+      <text class="contact-label">邮箱</text>
+      <text class="contact-value">{{contactEmail}}</text>
+      <text class="contact-arrow">›</text>
+    </view>
+    
+    <view class="contact-item" bindtap="openWebsite">
+      <image class="contact-icon" src="/images/icon-website.png" mode="aspectFit"></image>
+      <text class="contact-label">官网</text>
+      <text class="contact-value">{{website}}</text>
+      <text class="contact-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- 其他操作区域 -->
+  <view class="actions-section">
+    <button class="action-button" bindtap="checkUpdate">检查更新</button>
+  </view>
+
+  <!-- 版权信息 -->
+  <view class="copyright-section">
+    <view class="company-name">{{companyName}}</view>
+    <view class="copyright-text">{{copyright}}</view>
+  </view>
+</view>

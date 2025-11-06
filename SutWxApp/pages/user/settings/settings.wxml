@@ -1,0 +1,89 @@
+<!-- pages/user/settings/settings.wxml -->
+<view class="settings-container">
+  <!-- 设置分组：用户信息 -->
+  <view class="settings-section">
+    <view class="section-title">用户信息</view>
+    <view class="settings-item">
+      <view class="settings-label">用户名</view>
+      <view class="settings-value">{{userInfo ? userInfo.nickname : '未登录'}}</view>
+    </view>
+    <view class="settings-item">
+      <view class="settings-label">用户ID</view>
+      <view class="settings-value">{{userInfo ? userInfo.id : 'N/A'}}</view>
+    </view>
+  </view>
+
+  <!-- 设置分组：通知设置 -->
+  <view class="settings-section">
+    <view class="section-title">通知设置</view>
+    <view class="settings-item">
+      <view class="settings-label">推送通知</view>
+      <switch 
+        class="settings-switch" 
+        checked="{{notificationEnabled}}" 
+        bindchange="toggleNotification"
+        color="#2196F3"
+      />
+    </view>
+    <view class="settings-item">
+      <view class="settings-label">自动播放</view>
+      <switch 
+        class="settings-switch" 
+        checked="{{autoPlayEnabled}}" 
+        bindchange="toggleAutoPlay"
+        color="#2196F3"
+      />
+    </view>
+    <view class="settings-item">
+      <view class="settings-label">深色模式</view>
+      <switch 
+        class="settings-switch" 
+        checked="{{darkModeEnabled}}" 
+        bindchange="toggleDarkMode"
+        color="#2196F3"
+      />
+    </view>
+  </view>
+
+  <!-- 设置分组：存储管理 -->
+  <view class="settings-section">
+    <view class="section-title">存储管理</view>
+    <view class="settings-item" bindtap="clearCache">
+      <view class="settings-label">清除缓存</view>
+      <view class="settings-value-container">
+        <text class="settings-value">{{cacheSize}}</text>
+        <text class="settings-arrow">›</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 设置分组：关于 -->
+  <view class="settings-section">
+    <view class="section-title">关于</view>
+    <view class="settings-item" bindtap="viewUserAgreement">
+      <view class="settings-label">用户协议</view>
+      <text class="settings-arrow">›</text>
+    </view>
+    <view class="settings-item" bindtap="viewPrivacyPolicy">
+      <view class="settings-label">隐私政策</view>
+      <text class="settings-arrow">›</text>
+    </view>
+    <view class="settings-item" bindtap="contactService">
+      <view class="settings-label">联系客服</view>
+      <text class="settings-arrow">›</text>
+    </view>
+    <view class="settings-item" bindtap="viewAbout">
+      <view class="settings-label">关于我们</view>
+      <text class="settings-arrow">›</text>
+    </view>
+    <view class="settings-item" bindtap="checkForUpdates">
+      <view class="settings-label">检查更新</view>
+      <text class="settings-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- 版本信息 -->
+  <view class="version-info">
+    <text>版本 {{appVersion}}</text>
+  </view>
+</view>

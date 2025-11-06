@@ -1,5 +1,16 @@
 <!-- pages/user/login/login.wxml -->
 <view class="login-container">
+  <!-- 骨架屏 - 覆盖整个页面 -->
+  <view class="skeleton-container" wx:if="{{showSkeleton}}" aria-hidden="true">
+    <view class="skeleton-logo"></view>
+    <view class="skeleton-title"></view>
+    <view class="skeleton-subtitle"></view>
+    <view class="skeleton-btn"></view>
+    <view class="skeleton-feature"></view>
+    <view class="skeleton-feature"></view>
+    <view class="skeleton-feature"></view>
+  </view>
+
   <!-- 顶部Logo -->
   <view class="logo-container" aria-label="应用Logo和名称">
     <image src="/images/logo.png" class="logo" aria-label="应用Logo"></image>
@@ -18,6 +29,7 @@
     <!-- 错误状态 -->
     <view class="error-message" wx:if="{{errorMessage}}" aria-label="错误提示">
       <text>{{errorMessage}}</text>
+      <button class="retry-btn" bindtap="onRetry" aria-label="重试">重试</button>
     </view>
 
     <!-- 主要登录按钮 -->
@@ -61,10 +73,12 @@
   </view>
 
   <!-- 隐私政策同意复选框 -->
-  <view class="privacy-checkbox" wx:if="{{requirePrivacyAgreement}}">
-    <checkbox checked="{{privacyAgreed}}" bindtap="togglePrivacyAgreement" aria-label="同意隐私政策"></checkbox>
+  <view class="privacy-checkbox">
+    <checkbox checked="{{privacyPolicyAccepted}}" bindtap="togglePrivacyPolicy" aria-label="同意隐私政策和用户协议"></checkbox>
     <text>我已阅读并同意</text>
     <text class="link" bindtap="navigateToAgreement" data-type="privacy">《隐私政策》</text>
+    <text>和</text>
+    <text class="link" bindtap="navigateToAgreement" data-type="user">《用户协议》</text>
   </view>
 
   <!-- 服务条款和隐私政策 -->

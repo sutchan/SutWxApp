@@ -3,9 +3,25 @@
 [![GitHub release](https://img.shields.io/github/release/sutchan/SutWxApp.svg)](https://github.com/sutchan/SutWxApp/releases)
 [![License](https://img.shields.io/github/license/sutchan/SutWxApp.svg)](https://github.com/sutchan/SutWxApp/blob/master/LICENSE)
 
-**版本号：1.0.2**
+**版本号：1.0.9**
+*最后更新时间：2024年11月7日*
 
 SutWxApp 项目是一个完整的WordPress+微信小程序解决方案，包括WordPress插件和微信小程序前端两部分，用于将WordPress网站内容和功能同步到微信小程序中展示。本项目提供了内容管理、用户管理、电商功能、微信支付、消息推送等丰富功能。
+
+## 项目文档
+
+项目文档位于 `docs/` 目录下，按用户角色和功能模块组织，包括：
+
+- **[项目概览](docs/00-项目概览/)** - 项目简介和快速入门指南
+- **[管理员指南](docs/01-管理员指南/)** - WordPress管理员使用文档
+- **[开发者指南](docs/02-开发者指南/)** - 开发人员技术文档
+- **[用户指南](docs/03-用户指南/)** - 小程序终端用户使用文档
+- **[API文档](docs/API文档/)** - 完整的接口规范和使用示例
+- **[安装部署指南](docs/安装部署指南/)** - 详细的环境配置和安装步骤
+- **[功能模块说明](docs/功能模块说明/)** - 各功能模块的详细介绍和使用方法
+- **[目录结构设计](docs/目录结构设计.md)** - 文档组织方式说明
+
+所有文档均保持版本一致性，当前版本号：1.0.9
 
 ## 项目结构
 
@@ -202,6 +218,8 @@ App({
 
 ## 版本更新日志
 
+- v1.0.4: 优化服务模块，增强缓存策略、重试机制和数据验证
+- v1.0.3: 改进用户体验和性能优化
 - v1.0.0: 初始版本，实现基本功能
 
 ## 许可证

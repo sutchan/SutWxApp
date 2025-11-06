@@ -9,8 +9,12 @@ Page({
   data: {
     categories: [], // 分类列表
     loading: true, // 加载状态
+    loadingMore: false, // 加载更多状态
+    error: '', // 错误信息
+    showSkeleton: true, // 是否显示骨架屏
     currentCategoryId: 0, // 当前选中的分类ID
     currentSubCategoryId: 0, // 当前选中的子分类ID
+    currentCategory: null, // 当前选中的分类对象
     articles: [], // 当前分类下的文章列表
     hasMore: true, // 是否有更多数据
     page: 1, // 当前页码
@@ -22,7 +26,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    this.getCategories();
+    this.loadCategories();
   },
 
   /**
@@ -37,101 +41,153 @@ Page({
         page: 1,
         hasMore: true
       });
-      this.getArticlesByCategory(this.data.currentCategoryId, this.data.currentSubCategoryId);
+      this.loadCategoryArticles(this.data.currentCategoryId, this.data.currentSubCategoryId);
     }
   },
 
   /**
-   * 获取分类列表
+   * 加载分类列表
    */
-  getCategories: function() {
+  loadCategories: function() {
     const app = getApp();
     
     app.request({
-      url: '/categories',
+      url: '/content/categories',
       method: 'GET',
       loadingText: '加载分类中',
       success: (res) => {
-        if (res.code === 0) {
-          const categories = res.data;
+        if (res.code === 200) {
+          const categories = res.data.categories || [];
           this.setData({
             categories: categories,
-            loading: false
+            loading: false,
+            showSkeleton: false,
+            error: ''
           });
           
           // 如果有分类，默认选中第一个分类
           if (categories && categories.length > 0) {
+            const firstCategory = categories[0];
             this.setData({
-              currentCategoryId: categories[0].id
+              currentCategoryId: firstCategory.id,
+              currentCategory: firstCategory
             });
             // 如果第一个分类有子分类，默认选中第一个子分类
-            if (categories[0].children && categories[0].children.length > 0) {
+            if (firstCategory.children && firstCategory.children.length > 0) {
               this.setData({
-                currentSubCategoryId: categories[0].children[0].id
+                currentSubCategoryId: firstCategory.children[0].id
               });
-              this.getArticlesByCategory(categories[0].id, categories[0].children[0].id);
+              this.loadCategoryArticles(firstCategory.id, firstCategory.children[0].id);
             } else {
-              this.getArticlesByCategory(categories[0].id, 0);
+              this.loadCategoryArticles(firstCategory.id, 0);
             }
           }
         } else {
+          const errorMsg = res.message || '获取分类失败';
           wx.showToast({
-            title: res.message || '获取分类失败',
+            title: errorMsg,
             icon: 'none',
             duration: 2000
           });
           this.setData({
-            loading: false
+            loading: false,
+            showSkeleton: false,
+            error: errorMsg
           });
         }
       },
       fail: (error) => {
         console.error('获取分类列表失败:', error);
+        const errorMsg = '网络错误，请重试';
         wx.showToast({
-          title: '网络错误，请重试',
+          title: errorMsg,
           icon: 'none',
           duration: 2000
         });
+        
+        // 记录错误信息，包含系统环境
+        const systemInfo = this._getSystemInfo();
+        console.error('分类页面加载失败详情:', {
+          error: error,
+          system: {
+            platform: systemInfo.platform,
+            version: systemInfo.version
+          }
+        });
+        
         this.setData({
-          loading: false
+          loading: false,
+          showSkeleton: false,
+          error: errorMsg
         });
       }
     });
   },
+  
+  /**
+   * 加载分类文章
+   */
+  loadCategoryArticles: function(categoryId, subCategoryId) {
+    this.setData({
+      articles: [],
+      page: 1,
+      hasMore: true,
+      loadingMore: false
+    });
+    this.getCategoryArticles(categoryId, subCategoryId, 1);
+  },
+  
+  /**
+   * 获取系统信息，用于调试和错误跟踪
+   * @private
+   */
+  _getSystemInfo: function() {
+    try {
+      return wx.getSystemInfoSync();
+    } catch (e) {
+      console.error('获取系统信息失败:', e);
+      return {};
+    }
+  },
 
   /**
-   * 根据分类获取文章列表
+   * 获取分类文章列表
    * @param {number} categoryId - 分类ID
    * @param {number} subCategoryId - 子分类ID
+   * @param {number} page - 页码
    */
-  getArticlesByCategory: function(categoryId, subCategoryId) {
-    if (!this.data.hasMore) return;
+  getCategoryArticles: function(categoryId, subCategoryId, page) {
+    if (!this.data.hasMore && page > 1) return;
 
     const app = getApp();
     
     const params = {
-      category_id: categoryId,
-      page: this.data.page,
-      page_size: this.data.pageSize
+      category: categoryId,
+      page: page,
+      per_page: this.data.pageSize,
+      orderby: 'date',
+      order: 'desc'
     };
 
     // 如果有子分类，添加子分类参数
     if (subCategoryId && subCategoryId > 0) {
-      params.sub_category_id = subCategoryId;
+      // 注意：根据API文档，这里可能需要特殊处理子分类，可能需要调整参数名
+      params.sub_category = subCategoryId;
     }
 
     app.request({
-      url: '/articles/category',
+      url: '/content/posts',
       method: 'GET',
       data: params,
       loadingText: '加载文章中',
       success: (res) => {
-        if (res.code === 0) {
-          const articles = res.data.list || [];
+        if (res.code === 200) {
+          const articles = res.data.posts || [];
           const total = res.data.total || 0;
+          const pages = res.data.pages || 1;
           
           // 如果是第一页，则替换文章列表；否则追加
-          if (this.data.page === 1) {
+          if (page === 1) {
             this.setData({
               articles: articles
             });
@@ -143,11 +199,13 @@ Page({
           
           // 判断是否还有更多数据
           this.setData({
-            hasMore: this.data.articles.length < total
+            hasMore: page < pages,
+            page: page + 1,
+            loadingMore: false
           });
           
           // 如果没有数据，显示提示
-          if (articles.length === 0 && this.data.page === 1) {
+          if (articles.length === 0 && page === 1) {
             wx.showToast({
               title: '当前分类暂无文章',
               icon: 'none',
@@ -160,14 +218,33 @@ Page({
             icon: 'none',
             duration: 2000
           });
+          this.setData({
+            loadingMore: false
+          });
         }
       },
       fail: (error) => {
         console.error('获取文章列表失败:', error);
-        wx.showToast({
-          title: '网络错误，请重试',
-          icon: 'none',
-          duration: 2000
+        
+        // 加载更多时的错误处理不同于初始加载
+        if (page > 1) {
+          // 加载更多失败，不显示全局错误，但显示toast提示
+          wx.showToast({
+            title: '加载更多失败，请重试',
+            icon: 'none',
+            duration: 2000
+          });
+        } else {
+          // 初始加载失败，显示错误提示
+          wx.showToast({
+            title: '加载文章失败，请重试',
+            icon: 'none',
+            duration: 2000
+          });
+        }
+        
+        this.setData({
+          loadingMore: false
         });
       },
       complete: () => {
@@ -187,15 +264,18 @@ Page({
     
     const category = this.data.categories.find(cat => cat.id === categoryId);
     
-    this.setData({
-      currentCategoryId: categoryId,
-      currentSubCategoryId: category && category.children && category.children.length > 0 ? category.children[0].id : 0,
-      articles: [],
-      page: 1,
-      hasMore: true
-    });
-    
-    this.getArticlesByCategory(categoryId, this.data.currentSubCategoryId);
+    if (category) {
+      this.setData({
+        currentCategoryId: categoryId,
+        currentCategory: category,
+        currentSubCategoryId: category.children && category.children.length > 0 ? category.children[0].id : 0,
+        articles: [],
+        page: 1,
+        hasMore: true
+      });
+      
+      this.loadCategoryArticles(categoryId, this.data.currentSubCategoryId);
+    }
   },
 
   /**
@@ -213,7 +293,7 @@ Page({
       hasMore: true
     });
     
-    this.getArticlesByCategory(this.data.currentCategoryId, subCategoryId);
+    this.loadCategoryArticles(this.data.currentCategoryId, subCategoryId);
   },
 
   /**
@@ -242,32 +322,47 @@ Page({
   },
 
   /**
+   * 加载更多文章
+   */
+  loadMoreArticles: function() {
+    if (this.data.loadingMore || !this.data.hasMore) return;
+    
+    this.setData({
+      loadingMore: true
+    });
+    
+    const nextPage = this.data.page;
+    this.getCategoryArticles(this.data.currentCategoryId, this.data.currentSubCategoryId, nextPage);
+  },
+  
+  /**
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function() {
-    if (this.data.hasMore) {
-      this.setData({
-        page: this.data.page + 1
-      });
-      this.getArticlesByCategory(this.data.currentCategoryId, this.data.currentSubCategoryId);
-    } else if (this.data.articles.length > 0) {
-      wx.showToast({
-        title: '没有更多文章了',
-        icon: 'none',
-        duration: 1500
-      });
-    }
+    this.loadMoreArticles();
   },
 
   /**
-   * 页面相关事件处理函数--监听用户下拉动作
+   * 页面下拉刷新事件的处理函数
    */
   onPullDownRefresh: function() {
     this.setData({
-      articles: [],
-      page: 1,
-      hasMore: true
+      showSkeleton: true,
+      error: ''
     });
-    this.getArticlesByCategory(this.data.currentCategoryId, this.data.currentSubCategoryId);
+    this.loadCategories();
+    wx.stopPullDownRefresh();
+  },
+  
+  /**
+   * 重试加载数据
+   */
+  onRetry: function() {
+    this.setData({
+      loading: true,
+      showSkeleton: true,
+      error: ''
+    });
+    this.loadCategories();
   }
 });

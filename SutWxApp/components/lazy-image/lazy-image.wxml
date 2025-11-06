@@ -1,0 +1,30 @@
+<!-- lazy-image.wxml - 图片懒加载组件模板 -->
+<view 
+  class="lazy-image-container {{containerClass}}" 
+  style="{{containerStyle}}"
+  bindtap="onImageTap"
+>
+  <!-- 占位图或加载中的缩略图 -->
+  <view class="image-wrapper">
+    <!-- 显示的图片 -->
+    <image
+      class="lazy-image {{imageClass}}"
+      style="{{imgStyle}}"
+      src="{{displaySrc}}"
+      mode="{{mode}}"
+      alt="{{alt}}"
+      wx:if="{{displaySrc}}"
+      binderror="onImageTap"
+    ></image>
+    
+    <!-- 加载动画 -->
+    <view class="loading-indicator" wx:if="{{isLoading && showLoading}}">
+      <view class="loading-spinner"></view>
+    </view>
+    
+    <!-- 加载失败提示 - 现在使用error状态来控制 -->
+    <view class="error-indicator" wx:if="{{error}}">
+      <text class="error-text">点击重试</text>
+    </view>
+  </view>
+</view>

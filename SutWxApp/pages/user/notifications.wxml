@@ -1,0 +1,81 @@
+<!-- 通知页面 -->
+<view class="container">
+  <!-- 筛选栏 -->
+  <view class="filter-bar">
+    <view 
+      class="filter-item {{activeFilter === 'all' ? 'active' : ''}}" 
+      data-filter="all" 
+      bindtap="changeFilter"
+    >
+      全部
+    </view>
+    <view 
+      class="filter-item {{activeFilter === 'unread' ? 'active' : ''}}" 
+      data-filter="unread" 
+      bindtap="changeFilter"
+    >
+      未读
+    </view>
+    <view 
+      class="filter-item {{activeFilter === 'system' ? 'active' : ''}}" 
+      data-filter="system" 
+      bindtap="changeFilter"
+    >
+      系统
+    </view>
+    <view 
+      class="filter-item {{activeFilter === 'comment' ? 'active' : ''}}" 
+      data-filter="comment" 
+      bindtap="changeFilter"
+    >
+      评论
+    </view>
+  </view>
+
+  <!-- 通知列表 -->
+  <view class="notification-list" wx:if="{{notifications.length > 0}}">
+    <view 
+      wx:for="{{notifications}}" 
+      wx:key="id" 
+      class="notification-item {{item.is_read ? '' : 'unread'}}"
+      data-id="{{item.id}}"
+      bindtap="onNotificationClick"
+    >
+      <!-- 未读标记 -->
+      <view class="unread-dot" wx:if="{{!item.is_read}}"></view>
+      
+      <!-- 通知头部 -->
+      <view class="notification-header">
+        <text class="notification-title">{{item.title}}</text>
+        <text class="notification-time">{{item.time_ago}}</text>
+      </view>
+      
+      <!-- 通知内容 -->
+      <text class="notification-content">{{item.content}}</text>
+      
+      <!-- 通知底部 -->
+      <view class="notification-footer">
+        <view class="notification-type notification-type-{{item.type}}">{{item.type_text}}</view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 空状态 -->
+  <view class="empty-state" wx:elif="{{!loading}}">
+    <image class="empty-icon" src="/assets/images/empty-notification.png" mode="aspectFit"></image>
+    <text class="empty-text">暂无通知</text>
+  </view>
+  
+  <!-- 加载更多 -->
+  <view class="load-more" wx:if="{{hasMore && notifications.length > 0}}">
+    {{loadingMore ? '加载中...' : '上拉加载更多'}}
+  </view>
+  <view class="load-more" wx:elif="{{!hasMore && notifications.length > 0}}">
+    已加载全部通知
+  </view>
+
+  <!-- 标记全部已读按钮 -->
+  <view class="mark-all-read" wx:if="{{unreadCount > 0}}" bindtap="markAllAsRead">
+    全部已读
+  </view>
+</view>

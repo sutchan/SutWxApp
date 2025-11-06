@@ -1,0 +1,141 @@
+/* 支付页面样式 */
+.container {
+  background-color: #f8f8f8;
+  min-height: 100vh;
+  padding-bottom: 40rpx;
+}
+
+/* 加载状态样式 */
+.loading {
+  padding: 60rpx;
+  text-align: center;
+  font-size: 28rpx;
+  color: #999999;
+}
+
+/* 支付内容样式 */
+.pay-content {
+  padding: 40rpx 30rpx;
+}
+
+/* 订单金额样式 */
+.amount-section {
+  background-color: #ffffff;
+  padding: 40rpx 0;
+  text-align: center;
+  border-radius: 10rpx;
+  margin-bottom: 30rpx;
+}
+
+.amount-label {
+  display: block;
+  font-size: 30rpx;
+  color: #666666;
+  margin-bottom: 20rpx;
+}
+
+.amount {
+  font-size: 60rpx;
+  color: #ff6b81;
+  font-weight: bold;
+}
+
+/* 订单信息样式 */
+.order-info {
+  text-align: center;
+  margin-bottom: 40rpx;
+}
+
+.order-info text {
+  font-size: 28rpx;
+  color: #999999;
+}
+
+/* 支付方式区域样式 */
+.payment-section {
+  background-color: #ffffff;
+  border-radius: 10rpx;
+  margin-bottom: 40rpx;
+  overflow: hidden;
+}
+
+.section-title {
+  font-size: 30rpx;
+  color: #333333;
+  padding: 20rpx 30rpx;
+  border-bottom: 2rpx solid #f0f0f0;
+}
+
+/* 支付方式选项样式 */
+.payment-method {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx;
+  border-bottom: 2rpx solid #f0f0f0;
+}
+
+.payment-method:last-child {
+  border-bottom: none;
+}
+
+.method-left {
+  display: flex;
+  align-items: center;
+}
+
+.method-icon {
+  width: 60rpx;
+  height: 60rpx;
+  margin-right: 20rpx;
+}
+
+.method-name {
+  font-size: 32rpx;
+  color: #333333;
+}
+
+/* 单选按钮样式 */
+.radio {
+  width: 32rpx;
+  height: 32rpx;
+  border-radius: 50%;
+  border: 3rpx solid #ff6b81;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.radio-inner {
+  width: 20rpx;
+  height: 20rpx;
+  border-radius: 50%;
+  background-color: #ff6b81;
+}
+
+.radio-unselected {
+  border-color: #cccccc;
+}
+
+/* 支付按钮样式 */
+.pay-btn {
+  background-color: #ff6b81;
+  color: #ffffff;
+  font-size: 32rpx;
+  padding: 24rpx 0;
+  border-radius: 10rpx;
+  box-shadow: 0 4rpx 20rpx rgba(255, 107, 129, 0.3);
+}
+
+/* 底部操作样式 */
+.bottom-actions {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 40rpx;
+}
+
+.action-link {
+  font-size: 28rpx;
+  color: #666666;
+  text-decoration: underline;
+}

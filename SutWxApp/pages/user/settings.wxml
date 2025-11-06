@@ -1,0 +1,131 @@
+<!-- 用户设置页面 -->
+<view class="settings-container">
+  <!-- 个人信息设置 -->
+  <view class="section" wx:if="{{!isLoading && !error}}">
+    <view class="section-header">
+      <text class="section-title">个人信息</text>
+    </view>
+    
+    <view class="settings-list">
+      <view 
+        class="setting-item"
+        bindtap="navigateToEditProfile"
+        aria-label="编辑个人资料">
+        <view class="setting-content">
+          <text class="setting-label">编辑个人资料</text>
+        </view>
+        <image class="arrow-icon" src="/images/arrow-right.svg" mode="aspectFit"></image>
+      </view>
+      
+      <view 
+        class="setting-item"
+        bindtap="navigateToBindAccount"
+        aria-label="账号绑定">
+        <view class="setting-content">
+          <text class="setting-label">账号绑定</text>
+          <text class="setting-value" wx:if="{{userInfo && userInfo.bound_to_wordpress}}">已绑定</text>
+          <text class="setting-value unbound" wx:else>未绑定</text>
+        </view>
+        <image class="arrow-icon" src="/images/arrow-right.svg" mode="aspectFit"></image>
+      </view>
+    </view>
+  </view>
+
+  <!-- 通知设置 -->
+  <view class="section" wx:if="{{!isLoading && !error}}">
+    <view class="section-header">
+      <text class="section-title">通知设置</text>
+    </view>
+    
+    <view class="settings-list">
+      <view class="setting-item">
+        <view class="setting-content">
+          <text class="setting-label">推送通知</text>
+        </view>
+        <switch 
+          checked="{{notificationSettings.pushEnabled}}"
+          bindchange="updateNotificationSetting"
+          data-type="push"
+          color="#1aad19">
+        </switch>
+      </view>
+      
+      <view class="setting-item">
+        <view class="setting-content">
+          <text class="setting-label">评论提醒</text>
+        </view>
+        <switch 
+          checked="{{notificationSettings.commentEnabled}}"
+          bindchange="updateNotificationSetting"
+          data-type="comment"
+          color="#1aad19">
+        </switch>
+      </view>
+      
+      <view class="setting-item">
+        <view class="setting-content">
+          <text class="setting-label">系统消息</text>
+        </view>
+        <switch 
+          checked="{{notificationSettings.systemEnabled}}"
+          bindchange="updateNotificationSetting"
+          data-type="system"
+          color="#1aad19">
+        </switch>
+      </view>
+    </view>
+  </view>
+
+  <!-- 其他设置 -->
+  <view class="section" wx:if="{{!isLoading && !error}}">
+    <view class="settings-list">
+      <view 
+        class="setting-item"
+        bindtap="navigateToPrivacySettings"
+        aria-label="隐私设置">
+        <view class="setting-content">
+          <text class="setting-label">隐私设置</text>
+        </view>
+        <image class="arrow-icon" src="/images/arrow-right.svg" mode="aspectFit"></image>
+      </view>
+      
+      <view 
+        class="setting-item"
+        bindtap="clearCache"
+        aria-label="清除缓存">
+        <view class="setting-content">
+          <text class="setting-label">清除缓存</text>
+        </view>
+        <image class="arrow-icon" src="/images/arrow-right.svg" mode="aspectFit"></image>
+      </view>
+      
+      <view 
+        class="setting-item"
+        bindtap="navigateToAbout"
+        aria-label="关于我们">
+        <view class="setting-content">
+          <text class="setting-label">关于我们</text>
+        </view>
+        <image class="arrow-icon" src="/images/arrow-right.svg" mode="aspectFit"></image>
+      </view>
+    </view>
+  </view>
+
+  <!-- 版本信息 -->
+  <view class="version-info" wx:if="{{!isLoading && !error}}">
+    <text class="version-text">版本 1.0.3</text>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="loading-container" wx:if="isLoading">
+    <view class="loading"></view>
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <!-- 错误提示 -->
+  <view class="error-container" wx:if="error">
+    <image src="/images/error.svg" class="error-icon"></image>
+    <text class="error-text">{{error}}</text>
+    <button class="retry-button" bindtap="onRetry">重试</button>
+  </view>
+</view>

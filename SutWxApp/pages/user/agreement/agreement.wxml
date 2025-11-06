@@ -1,0 +1,31 @@
+<!-- pages/user/agreement/agreement.wxml -->
+<view class="agreement-container">
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="loading-container">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <!-- 错误状态 -->
+  <view wx:elif="{{error}}" class="error-container">
+    <text class="error-text">{{content}}</text>
+    <button class="reload-button" bindtap="reloadContent">重新加载</button>
+  </view>
+
+  <!-- 协议内容 -->
+  <view wx:else class="content-container">
+    <view class="agreement-content" wx:if="{{content}}">
+      <rich-text nodes="{{content}}"></rich-text>
+    </view>
+    
+    <!-- 当没有内容时显示默认提示 -->
+    <view wx:else class="empty-container">
+      <text class="empty-text">暂无协议内容</text>
+    </view>
+    
+    <!-- 操作按钮 -->
+    <view class="action-buttons">
+      <button class="copy-button" bindtap="copyContent">复制内容</button>
+    </view>
+  </view>
+</view>

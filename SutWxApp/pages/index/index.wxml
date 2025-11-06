@@ -9,13 +9,13 @@
 
   <!-- 错误状态 -->
   <view class="error-container" wx:if="{{error}}" aria-label="页面加载错误">
-    <image src="/images/error.png" class="error-icon"></image>
+    <image src="/images/error.svg" class="error-icon"></image>
     <text class="error-text">{{error}}</text>
     <button class="retry-button" bindtap="onRetry">重试</button>
   </view>
 
   <!-- 主要内容区域 -->
-  <view wx:elif="{{!loading && !error}}">
+  <view wx:elif="{{!loading && !error && !showSkeleton}}">
     <!-- 轮播图 -->
     <view class="banner-container" aria-label="轮播广告">
       <swiper class="banner-swiper" indicator-dots="true" autoplay="true" interval="3000" duration="500" circular="true" skip-hidden-item-layout="true">
@@ -47,12 +47,12 @@
       </view>
       <view class="categories-list">
         <block wx:for="{{categories}}" wx:key="id">
-          <view class="category-item" bindtap="navigateToCategoryPosts" data-id="{{item.id}}" aria-label="查看{{item.name}}分类，共{{item.count}}篇文章">
+          <view class="category-item" bindtap="navigateToCategoryPosts" data-id="{{item.id}}" data-name="{{item.name}}" aria-label="查看{{item.name || '未分类'}}分类，共{{item.count || 0}}篇文章">
             <view class="category-icon">
-              <text>{{item.name.charAt(0)}}</text>
+              <text>{{item.name ? item.name.charAt(0) : '分'}}</text>
             </view>
-            <text class="category-name">{{item.name}}</text>
-            <text class="category-count">({{item.count}})</text>
+            <text class="category-name">{{item.name || '未分类'}}</text>
+            <text class="category-count">({{item.count || 0}})</text>
           </view>
         </block>
       </view>
@@ -65,11 +65,11 @@
       </view>
       <view class="hot-posts-list">
         <block wx:for="{{hotPosts}}" wx:key="id">
-          <view class="hot-post-item" bindtap="navigateToPostDetail" data-id="{{item.id}}" aria-label="热门第{{index + 1}}名：{{item.title}}，{{item.views}}阅读">
+          <view class="hot-post-item" bindtap="navigateToPostDetail" data-id="{{item.id}}" aria-label="热门第{{index + 1}}名：{{item.title || ''}}，{{item.views || 0}}阅读">
             <view class="hot-post-rank" wx:if="{{index < 3}}" style="background-color: {{index === 0 ? '#FF6B6B' : index === 1 ? '#4ECDC4' : '#45B7D1'}}">{{index + 1}}</view>
             <view class="hot-post-rank" wx:else>{{index + 1}}</view>
-            <text class="hot-post-title">{{item.title}}</text>
-            <text class="hot-post-views">{{item.views}}阅读</text>
+            <text class="hot-post-title">{{item.title || '无标题文章'}}</text>
+            <text class="hot-post-views">{{item.views || 0}}阅读</text>
           </view>
         </block>
       </view>
@@ -82,14 +82,14 @@
       </view>
       <view class="latest-posts-list">
         <block wx:for="{{latestPosts}}" wx:key="id">
-          <view class="post-item" bindtap="navigateToPostDetail" data-id="{{item.id}}" aria-label="查看文章：{{item.title}}">
-            <image src="{{item.featured_image || '/images/default-post.png'}}" mode="aspectFill" class="post-image" aria-label="文章缩略图"></image>
+          <view class="post-item" bindtap="navigateToPostDetail" data-id="{{item.id}}" aria-label="查看文章：{{item.title || ''}}">
+            <image src="{{item.thumbnail || item.image || item.featured_image || '/images/default-post.svg'}}" mode="aspectFill" class="post-image" aria-label="文章缩略图"></image>
             <view class="post-content">
-              <text class="post-title">{{item.title}}</text>
+              <text class="post-title">{{item.title || '无标题文章'}}</text>
               <view class="post-meta">
-                <text class="post-category">{{item.category_name}}</text>
-                <text class="post-date">{{item.date}}</text>
-                <text class="post-views">{{item.views}}阅读</text>
+                <text class="post-category">{{item.category?.name || item.category_name || '未分类'}}</text>
+                <text class="post-date">{{item.date || item.published_at || ''}}</text>
+                <text class="post-views">{{item.views || 0}}阅读</text>
               </view>
             </view>
           </view>
@@ -109,14 +109,14 @@
 
     <!-- 空状态 -->
     <view class="empty" wx:if="{{!loading && !loadingMore && latestPosts.length === 0}}">
-      <image src="/images/empty.png" mode="aspectFit" class="empty-icon"></image>
+      <image src="/images/empty.svg" mode="aspectFit" class="empty-icon"></image>
       <text class="empty-text">暂无文章</text>
       <button class="empty-button" bindtap="onRetry">刷新</button>
     </view>
   </view>
 
   <!-- 骨架屏 -->
-  <view class="skeleton-container" wx:if="{{showSkeleton && loading}}">
+  <view class="skeleton-container" wx:if="{{showSkeleton}}">
     <view class="skeleton-banner"></view>
     <view class="skeleton-search"></view>
     <view class="skeleton-section-title"></view>

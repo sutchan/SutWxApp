@@ -1,0 +1,119 @@
+<!-- 用户隐私设置页面 -->
+<view class="privacy-settings-container">
+  <!-- 加载状态 -->
+  <view class="loading-container" wx:if="{{loading}}">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <!-- 错误状态 -->
+  <view class="error-container" wx:elif="{{error}}">
+    <image src="../../images/error.svg" class="error-icon"></image>
+    <text class="error-text">加载失败</text>
+    <button class="retry-button" bindtap="retryLoad">重试</button>
+  </view>
+
+  <!-- 内容区域 -->
+  <view class="settings-content" wx:else>
+    <!-- 社交互动设置 -->
+    <view class="settings-section">
+      <view class="section-header">
+        <text class="section-title">社交互动</text>
+      </view>
+      <view class="settings-list">
+        <view class="setting-item">
+          <text class="setting-label">允许他人评论我的内容</text>
+          <switch 
+            class="setting-switch" 
+            checked="{{privacySettings.allowComments}}" 
+            bindchange="toggleSetting" 
+            data-setting="allowComments"
+          />
+        </view>
+        <view class="setting-item">
+          <text class="setting-label">允许他人关注我</text>
+          <switch 
+            class="setting-switch" 
+            checked="{{privacySettings.allowFollow}}" 
+            bindchange="toggleSetting" 
+            data-setting="allowFollow"
+          />
+        </view>
+        <view class="setting-item">
+          <text class="setting-label">在动态中显示我的活动</text>
+          <switch 
+            class="setting-switch" 
+            checked="{{privacySettings.showActivity}}" 
+            bindchange="toggleSetting" 
+            data-setting="showActivity"
+          />
+        </view>
+      </view>
+    </view>
+
+    <!-- 通知设置 -->
+    <view class="settings-section">
+      <view class="section-header">
+        <text class="section-title">通知设置</text>
+      </view>
+      <view class="settings-list">
+        <view class="setting-item">
+          <text class="setting-label">接收系统通知</text>
+          <switch 
+            class="setting-switch" 
+            checked="{{privacySettings.receiveNotifications}}" 
+            bindchange="toggleSetting" 
+            data-setting="receiveNotifications"
+          />
+        </view>
+      </view>
+    </view>
+
+    <!-- 数据隐私设置 -->
+    <view class="settings-section">
+      <view class="section-header">
+        <text class="section-title">数据隐私</text>
+      </view>
+      <view class="settings-list">
+        <view class="setting-item">
+          <text class="setting-label">在我的内容中显示位置信息</text>
+          <switch 
+            class="setting-switch" 
+            checked="{{privacySettings.showLocation}}" 
+            bindchange="toggleSetting" 
+            data-setting="showLocation"
+          />
+        </view>
+        <view class="setting-item">
+          <text class="setting-label">与合作伙伴共享我的数据</text>
+          <switch 
+            class="setting-switch" 
+            checked="{{privacySettings.shareDataWithPartners}}" 
+            bindchange="toggleSetting" 
+            data-setting="shareDataWithPartners"
+          />
+        </view>
+      </view>
+    </view>
+
+    <!-- 保存按钮 -->
+    <view class="save-container">
+      <button 
+        class="save-button" 
+        disabled="{{saving}}" 
+        loading="{{saving}}" 
+        bindtap="savePrivacySettings"
+      >
+        {{saving ? '保存中...' : '保存设置'}}
+      </button>
+      
+      <!-- 保存成功提示 -->
+      <text class="save-success" wx:if="{{saveSuccess}}">✓ 设置已保存</text>
+    </view>
+
+    <!-- 隐私说明 -->
+    <view class="privacy-notice">
+      <text class="notice-text">注意：您的隐私设置只会影响未来的数据处理，不会删除已存在的数据。</text>
+    </view>
+  </view>
+</view>

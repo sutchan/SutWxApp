@@ -82,6 +82,7 @@ App({
 
 ## Update Log
 
+- v1.0.3: Updated and improved documentation and functions, released on January 15, 2024
 - v1.0.0: Initial version, basic functions implemented
 
 ## License

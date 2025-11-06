@@ -1,0 +1,16 @@
+{
+  "name": "sut-wx-app",
+  "version": "1.0.0",
+  "description": "Sut WeChat Mini Program",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint . --config eslint.config.js"
+  },
+  "keywords": ["wechat", "mini-program"],
+  "author": "Sut",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^8.56.0"
+  }
+}
