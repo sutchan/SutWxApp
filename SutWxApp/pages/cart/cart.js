@@ -1,345 +1,338 @@
-// 购物车页面逻辑
-const app = getApp();
-const { showToast, showConfirm, showLoading, hideLoading } = app.global;
-const cartService = app.services.cart;
+// cart.js - 购物车页面
+
+// 导入购物车服务
+import cartService from '../../utils/cart-service';
+import { showToast, showConfirm, showLoading, hideLoading } from '../../utils/global';
+import { validateId, validateCartItemQuantity } from '../../utils/validator';
 
 Page({
+  /**
+   * 页面的初始数据
+   */
   data: {
-    cartItems: [], // 购物车商品列表
-    loading: true, // 加载状态
-    error: false, // 错误状态
-    errorMsg: '', // 错误信息
-    isAllSelected: false, // 是否全选
-    totalPrice: 0, // 总价
-    totalCount: 0, // 总数量
-    refreshing: false, // 下拉刷新状态
-    updatingItems: new Set(), // 正在更新的商品ID集合，防止重复提交
-    submitting: false // 防止重复提交结算
+    cartItems: [],
+    totalPrice: 0,
+    selectedCount: 0,
+    allSelected: false,
+    loading: false,
+    refreshing: false,
+    isEditing: false,
+    checkedGoodsList: [],
+    submitting: false // 防止重复提交
   },
-    
-  finally {
-    hideLoading();
-    this.setData({ submitting: false });
-  }
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function() {
-    // 记录页面访问事件
-    if (app.analyticsService) {
-      app.analyticsService.track('page_view', {
-        page: 'cart'
-      });
-    }
+  onLoad: function (options) {
+    this.loadCartData();
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function() {
-    this.loadCartItems();
+  onShow: function () {
+    // 页面显示时重新加载购物车数据
+    this.loadCartData();
   },
 
   /**
-   * 生命周期函数--监听页面卸载
+   * 页面卸载前清理请求
    */
   onUnload: function() {
-    // 取消所有购物车相关请求，避免页面卸载后请求仍在进行
-    cartService.cancelCartRequests();
+    // 页面卸载时取消未完成的请求，避免内存泄漏
+    cartService.clearCartCache();
   },
 
   /**
-   * 监听用户下拉动作
+   * 下拉刷新
    */
   onPullDownRefresh: function() {
-    this.setData({ refreshing: true });
-    this.loadCartItems({ forceRefresh: true });
+    this.setData({
+      refreshing: true
+    });
+    // 强制刷新购物车数据
+    this.loadCartData(true);
   },
 
   /**
    * 加载购物车数据
-   * @param {Object} options - 加载选项
-   * @param {boolean} options.forceRefresh - 是否强制刷新（不使用缓存）
    */
-  async loadCartItems(options = {}) {
+  loadCartData: async function (forceRefresh = false) {
     try {
-      // 检查是否登录
-      if (!app.isLoggedIn()) {
-        this.setData({
-          loading: false,
-          refreshing: false,
-          cartItems: [],
-          isAllSelected: false,
-          totalPrice: 0,
-          totalCount: 0
-        });
-        wx.stopPullDownRefresh();
-        return;
-      }
-      
       this.setData({
-        loading: true,
-        error: false
+        loading: true
       });
-
-      // 使用cartService获取购物车数据，支持强制刷新
-      const res = await cartService.getCartItems(options.forceRefresh ? { useCache: false } : {});
-      const cartItems = res.items || [];
       
-      // 检查商品状态（库存、价格等）
-      const itemsWithStatus = await cartService.checkCartItemStatus(cartItems);
+      const cartItems = await cartService.getCartItems({ forceRefresh });
       
-      // 为每个商品添加选中状态
-      const itemsWithSelection = itemsWithStatus.map(item => ({
-        ...item,
-        selected: true,
-        // 添加商品状态标记
-        isOutOfStock: !item.available || (item.sku && item.sku.stock <= 0) || (item.product && item.product.stock <= 0),
-        hasPriceChanged: item.priceChanged
-      }));
+      // 检查商品状态（下架、库存不足等）
+      this.checkCartItemsStatus(cartItems);
       
       this.setData({
-        cartItems: itemsWithSelection,
-        isAllSelected: itemsWithSelection.length > 0,
+        cartItems: cartItems || []
+      });
+      
+      // 初始化选中状态
+      this.initSelectedState();
+      
+      // 计算总价和数量
+      this.calculateTotal();
+      
+    } catch (error) {
+      console.error('加载购物车数据失败:', error);
+      showToast('加载购物车失败，请重试', { icon: 'none' });
+    } finally {
+      this.setData({
         loading: false,
         refreshing: false
       });
-      
-      // 计算总价和总数量
-      this.calculateTotal();
-      
-      // 检查是否有商品状态异常，给出提示
-      this.checkCartStatusAlert();
-    } catch (err) {
-      console.error('加载购物车失败:', err);
-      this.setData({
-        loading: false,
-        refreshing: false,
-        error: true,
-        errorMsg: err.message || '加载失败，请重试'
-      });
-    } finally {
-      wx.stopPullDownRefresh();
     }
   },
 
   /**
-   * 检查购物车商品状态并给出提示
+   * 检查购物车商品状态
    */
-  checkCartStatusAlert() {
-    const { cartItems } = this.data;
-    const outOfStockItems = cartItems.filter(item => item.isOutOfStock);
-    const priceChangedItems = cartItems.filter(item => item.hasPriceChanged);
-    
-    if (outOfStockItems.length > 0) {
-      showToast(`有${outOfStockItems.length}件商品库存不足或已下架`, { icon: 'none' });
-    } else if (priceChangedItems.length > 0) {
-      showToast(`有${priceChangedItems.length}件商品价格已更新`, { icon: 'none' });
-    }
-  },
-
-  /**
-   * 计算总价和总数量
-   */
-  calculateTotal: function() {
-    const { cartItems } = this.data;
-    let totalPrice = 0;
-    let totalCount = 0;
-    
+  checkCartItemsStatus: function (cartItems) {
+    // 检查商品是否可用、是否下架等
     cartItems.forEach(item => {
-      if (item.selected && !item.isOutOfStock) {
-        const price = item.sku ? item.sku.price : item.product.price;
-        totalPrice += price * item.quantity;
-        totalCount += item.quantity;
+      // 重置状态标志
+      item.unavailable = false;
+      item.outOfStock = false;
+      item.overStock = false;
+      item.unavailableReason = '';
+      
+      if (!item.available || item.status !== 1) {
+        item.unavailable = true;
+        item.unavailableReason = item.statusText || '商品已下架或不可用';
+      } else if (item.stock <= 0) {
+        item.outOfStock = true;
+        item.unavailableReason = '商品库存不足';
+      } else if (item.quantity > item.stock) {
+        item.overStock = true;
+        item.availableQuantity = item.stock;
+      }
+    });
+  },
+
+  /**
+   * 初始化选中状态
+   */
+  initSelectedState: function () {
+    const cartItems = [...this.data.cartItems];
+    
+    // 默认选中可用的商品
+    cartItems.forEach(item => {
+      if (!item.unavailable && !item.outOfStock) {
+        item.selected = true;
+      } else {
+        item.selected = false;
       }
     });
     
     this.setData({
-      totalPrice: Number(totalPrice.toFixed(2)),
-      totalCount
+      cartItems
     });
+    
+    // 检查是否全选
+    this.checkAllSelected();
+  },
+
+  /**
+   * 检查是否全选
+   */
+  checkAllSelected: function () {
+    const availableItems = this.data.cartItems.filter(item => !item.unavailable && !item.outOfStock);
+    
+    if (availableItems.length === 0) {
+      this.setData({
+        allSelected: false
+      });
+      return;
+    }
+    
+    const allSelected = availableItems.every(item => item.selected);
+    
+    this.setData({
+      allSelected
+    });
+  },
+
+  /**
+   * 全选/取消全选
+   */
+  toggleAllSelected: function () {
+    const allSelected = !this.data.allSelected;
+    const cartItems = [...this.data.cartItems];
+    
+    // 更新选中状态
+    cartItems.forEach(item => {
+      if (!item.unavailable && !item.outOfStock) {
+        item.selected = allSelected;
+      }
+    });
+    
+    this.setData({
+      cartItems,
+      allSelected
+    });
+    
+    // 计算总价
+    this.calculateTotal();
   },
 
   /**
    * 切换商品选中状态
    */
-  onToggleSelect: function(e) {
+  toggleItemSelected: function (e) {
     const index = e.currentTarget.dataset.index;
     const cartItems = [...this.data.cartItems];
     
-    // 如果商品已下架或库存不足，不允许选中
-    if (cartItems[index].isOutOfStock) {
-      showToast('该商品库存不足或已下架', { icon: 'none' });
-      return;
-    }
-    
+    // 切换选中状态
     cartItems[index].selected = !cartItems[index].selected;
     
+    this.setData({
+      cartItems
+    });
+    
     // 检查是否全选
-    const isAllSelected = cartItems
-      .filter(item => !item.isOutOfStock)
-      .every(item => item.selected);
+    this.checkAllSelected();
     
-    this.setData({
-      cartItems,
-      isAllSelected
-    });
-    
-    // 重新计算总价和总数量
-    this.calculateTotal();
-  },
-
-  /**
-   * 切换全选状态
-   */
-  onToggleAllSelect: function() {
-    const isAllSelected = !this.data.isAllSelected;
-    const cartItems = this.data.cartItems.map(item => ({
-      ...item,
-      selected: isAllSelected && !item.isOutOfStock // 已下架商品不参与全选
-    }));
-    
-    this.setData({
-      cartItems,
-      isAllSelected
-    });
-    
-    // 重新计算总价和总数量
+    // 计算总价
     this.calculateTotal();
   },
 
   /**
    * 增加商品数量
    */
-  onIncreaseQuantity(e) {
-    const index = e.currentTarget.dataset.index;
-    const cartItems = [...this.data.cartItems];
-    const item = cartItems[index];
-    
-    // 检查商品状态
-    if (item.isOutOfStock) {
-      showToast('该商品库存不足或已下架', { icon: 'none' });
-      return;
-    }
-    
-    // 检查是否正在更新，防止重复提交
-    if (this.data.updatingItems.has(item.id)) {
-      return;
-    }
-    
-    const maxQuantity = item.sku ? item.sku.stock : item.product.stock || 99;
-    
-    if (item.quantity < maxQuantity) {
-      item.quantity += 1;
+  increaseQuantity: async function (e) {
+    try {
+      const index = e.currentTarget.dataset.index;
+      const item = this.data.cartItems[index];
+      
+      // 检查商品是否可用
+      if (item.unavailable || item.outOfStock) {
+        return;
+      }
+      
+      // 检查库存限制
+      if (item.quantity >= item.stock) {
+        showToast('已达到最大库存', { icon: 'none' });
+        return;
+      }
+      
+      const newQuantity = item.quantity + 1;
+      
+      // 数据验证
+      validateCartItemQuantity(newQuantity);
+      
+      // 更新UI
       this.setData({
-        cartItems
+        [`cartItems[${index}].quantity`]: newQuantity,
+        [`cartItems[${index}].loading`]: true
       });
       
-      // 更新购物车数量
-      this.updateCartItemQuantity(item.id, item.quantity);
+      // 更新购物车
+      await cartService.updateCartItem(item.id, newQuantity);
       
-      // 重新计算总价和总数量
-      if (item.selected) {
-        this.calculateTotal();
-      }
-    } else {
-      showToast('已达到最大库存', 'none');
+      // 计算总价
+      this.calculateTotal();
+      
+    } catch (error) {
+      console.error('增加商品数量失败:', error);
+      showToast(error.message || '更新失败，请重试', { icon: 'none' });
+      
+      // 恢复原数量
+      const index = e.currentTarget.dataset.index;
+      this.setData({
+        [`cartItems[${index}].loading`]: false
+      });
+      
+      // 重新加载数据以确保准确性
+      this.loadCartData();
     }
   },
 
   /**
    * 减少商品数量
    */
-  onDecreaseQuantity: function(e) {
-    const index = e.currentTarget.dataset.index;
-    const cartItems = [...this.data.cartItems];
-    const item = cartItems[index];
-    
-    // 检查是否正在更新，防止重复提交
-    if (this.data.updatingItems.has(item.id)) {
-      return;
+  decreaseQuantity: async function (e) {
+    try {
+      const index = e.currentTarget.dataset.index;
+      const item = this.data.cartItems[index];
+      
+      // 检查是否为最小值
+      if (item.quantity <= 1) {
+        return;
+      }
+      
+      const newQuantity = item.quantity - 1;
+      
+      // 数据验证
+      validateCartItemQuantity(newQuantity);
+      
+      // 更新UI
+      this.setData({
+        [`cartItems[${index}].quantity`]: newQuantity,
+        [`cartItems[${index}].loading`]: true
+      });
+      
+      // 更新购物车
+      await cartService.updateCartItem(item.id, newQuantity);
+      
+      // 计算总价
+      this.calculateTotal();
+      
+    } catch (error) {
+      console.error('减少商品数量失败:', error);
+      showToast(error.message || '更新失败，请重试', { icon: 'none' });
+      
+      // 恢复原数量
+      const index = e.currentTarget.dataset.index;
+      this.setData({
+        [`cartItems[${index}].loading`]: false
+      });
+      
+      // 重新加载数据以确保准确性
+      this.loadCartData();
     }
-    
-    if (item.quantity > 1) {
-      item.quantity -= 1;
+  },
+
+  /**
+   * 删除购物车商品
+   */
+  deleteCartItem: async function (e) {
+    try {
+      const index = e.currentTarget.dataset.index;
+      const item = this.data.cartItems[index];
+      
+      // 显示确认对话框
+      await showConfirm('确认从购物车中移除该商品吗？', '确认删除', '取消');
+      
+      showLoading('正在删除...');
+      
+      // 删除商品
+      await cartService.deleteCartItem(item.id);
+      
+      // 更新本地数据
+      const cartItems = [...this.data.cartItems];
+      cartItems.splice(index, 1);
+      
       this.setData({
         cartItems
       });
       
-      // 更新购物车数量
-      this.updateCartItemQuantity(item.id, item.quantity);
+      // 计算总价
+      this.calculateTotal();
       
-      // 重新计算总价和总数量
-      if (item.selected) {
-        this.calculateTotal();
-      }
-    }
-  },
-
-  /**
-   * 更新购物车商品数量
-   * @param {string|number} cartItemId - 购物车商品ID
-   * @param {number} quantity - 新数量
-   */
-  async updateCartItemQuantity(cartItemId, quantity) {
-    try {
-      // 添加到正在更新的商品集合
-      const updatingItems = new Set(this.data.updatingItems);
-      updatingItems.add(cartItemId);
-      this.setData({ updatingItems });
+      // 检查是否全选
+      this.checkAllSelected();
       
-      await cartService.updateCartItem(cartItemId, quantity);
-      
-      // 仅在成功后更新本地缓存，避免重复刷新整个页面
-      app.services.cart.clearCartCache();
-      
-      // 记录购物车更新事件
-      if (app.analyticsService) {
-        app.analyticsService.track('cart_update_quantity', {
-          cart_item_id: cartItemId,
-          quantity: quantity
-        });
-      }
-    } catch (error) {
-      console.error('更新购物车商品数量失败:', error);
-      showToast(error.message || '更新失败，请重试', { icon: 'none' });
-      // 失败时重新加载购物车数据以保持一致性
-      this.loadCartItems({ forceRefresh: true });
-    } finally {
-      // 从正在更新的商品集合中移除
-      const updatingItems = new Set(this.data.updatingItems);
-      updatingItems.delete(cartItemId);
-      this.setData({ updatingItems });
-    }
-  },
-
-  /**
-   * 删除单个商品
-   */
-  async onDeleteItem(e) {
-    const cartItemId = e.currentTarget.dataset.id;
-    const itemName = e.currentTarget.dataset.name || '商品';
-    
-    try {
-      // 使用统一的确认对话框
-      const confirmed = await showConfirm({
-        title: '确认删除',
-        content: `确定要删除"${itemName}"吗？`
-      });
-      
-      if (!confirmed) return;
-      
-      showLoading('删除中...');
-      await cartService.deleteCartItem(cartItemId);
       showToast('删除成功');
       
-      // 重新加载购物车
-      this.loadCartItems({ forceRefresh: true });
     } catch (error) {
       console.error('删除购物车商品失败:', error);
-      // 忽略用户取消操作的错误
-      if (error.message !== '用户取消') {
+      if (error.message !== 'cancel') {
         showToast(error.message || '删除失败，请重试', { icon: 'none' });
       }
     } finally {
@@ -348,36 +341,44 @@ Page({
   },
 
   /**
-   * 批量删除选中商品
+   * 批量删除选中的商品
    */
-  async onDeleteSelectedItems() {
-    const { cartItems } = this.data;
-    const selectedItems = cartItems.filter(item => item.selected);
-    
-    if (selectedItems.length === 0) {
-      showToast('请选择要删除的商品', { icon: 'none' });
-      return;
-    }
-    
+  deleteSelectedItems: async function () {
     try {
-      // 使用统一的确认对话框
-      const confirmed = await showConfirm({
-        title: '确认删除',
-        content: `确定要删除选中的${selectedItems.length}件商品吗？`
+      // 获取选中的商品
+      const selectedItems = this.data.cartItems.filter(item => item.selected);
+      
+      if (selectedItems.length === 0) {
+        showToast('请选择要删除的商品', { icon: 'none' });
+        return;
+      }
+      
+      // 显示确认对话框
+      await showConfirm(`确认删除选中的${selectedItems.length}件商品吗？`, '确认删除', '取消');
+      
+      showLoading('正在删除...');
+      
+      // 批量删除商品
+      const itemIds = selectedItems.map(item => item.id);
+      await cartService.deleteCartItems(itemIds);
+      
+      // 更新本地数据
+      const cartItems = this.data.cartItems.filter(item => !item.selected);
+      
+      this.setData({
+        cartItems,
+        allSelected: false,
+        isEditing: false
       });
       
-      if (!confirmed) return;
+      // 计算总价
+      this.calculateTotal();
       
-      showLoading('删除中...');
-      const selectedItemIds = selectedItems.map(item => item.id);
-      await cartService.deleteCartItems(selectedItemIds);
       showToast('删除成功');
       
-      // 重新加载购物车
-      this.loadCartItems({ forceRefresh: true });
     } catch (error) {
       console.error('批量删除购物车商品失败:', error);
-      if (error.message !== '用户取消') {
+      if (error.message !== 'cancel') {
         showToast(error.message || '删除失败，请重试', { icon: 'none' });
       }
     } finally {
@@ -388,35 +389,30 @@ Page({
   /**
    * 清空购物车
    */
-  async onClearCart() {
+  clearCart: async function () {
     try {
-      // 使用统一的确认对话框
-      const confirmed = await showConfirm({
-        title: '确认清空',
-        content: '确定要清空购物车吗？此操作不可恢复。',
-        confirmText: '确认清空',
-        confirmColor: '#FF4D4F'
-      });
+      // 显示确认对话框
+      await showConfirm('确认清空购物车吗？此操作不可恢复。', '确认清空', '取消');
       
-      if (!confirmed) return;
+      showLoading('正在清空购物车...');
       
-      showLoading('清空购物车...');
+      // 清空购物车
       await cartService.clearCart();
       
-      // 记录清空事件
-      if (app.analyticsService) {
-        app.analyticsService.track('cart_clear', {
-          item_count: this.data.cartItems.length
-        });
-      }
+      // 更新本地数据
+      this.setData({
+        cartItems: [],
+        totalPrice: 0,
+        selectedCount: 0,
+        allSelected: false,
+        checkedGoodsList: []
+      });
       
       showToast('购物车已清空');
       
-      // 重新加载购物车
-      this.loadCartItems({ forceRefresh: true });
     } catch (error) {
       console.error('清空购物车失败:', error);
-      if (error.message !== '用户取消') {
+      if (error.message !== 'cancel') {
         showToast(error.message || '清空失败，请重试', { icon: 'none' });
       }
     } finally {
@@ -425,172 +421,165 @@ Page({
   },
 
   /**
-   * 检查库存并去结算
+   * 将商品移至收藏
    */
-  async onCheckout() {
-    // 防止重复提交
-    if (this.data.submitting) {
-      return;
-    }
-    
-    this.setData({ submitting: true });
-    const { cartItems, totalCount } = this.data;
-    
-    if (totalCount === 0) {
-      showToast('请选择要结算的商品', { icon: 'none' });
-      return;
-    }
-    
-    // 检查是否登录
-    if (!app.isLoggedIn()) {
-      showToast('请先登录', { icon: 'none' });
-      wx.navigateTo({
-        url: '/pages/user/login/login'
-      });
-      return;
-    }
-    
-    // 获取选中的商品
-    const selectedItems = cartItems
-      .filter(item => item.selected)
-      .map(item => ({
-        id: item.id,
-        product_id: item.product.id,
-        sku_id: item.sku ? item.sku.id : '',
-        quantity: item.quantity,
-        price: item.sku ? item.sku.price : item.product.price
-      }));
-    
+  moveToFavorite: async function (e) {
     try {
-      showLoading('准备结算...');
+      const index = e.currentTarget.dataset.index;
+      const item = this.data.cartItems[index];
       
-      // 再次检查选中商品的库存状态
-      const stockCheckResult = await cartService.checkCartStock(selectedItems);
+      // 显示确认对话框
+      await showConfirm('确认将此商品添加到收藏夹吗？添加后会从购物车中移除。', '确认添加', '取消');
       
-      if (!stockCheckResult.available) {
-        showToast(stockCheckResult.message || '部分商品库存不足，请重新选择', { icon: 'none' });
-        // 重新加载购物车以更新状态
-        this.loadCartItems({ forceRefresh: true });
+      showLoading('正在添加到收藏夹...');
+      
+      // 移至收藏
+      await cartService.moveToFavorite(item.id);
+      
+      // 更新本地数据
+      const cartItems = [...this.data.cartItems];
+      cartItems.splice(index, 1);
+      
+      this.setData({
+        cartItems
+      });
+      
+      // 计算总价
+      this.calculateTotal();
+      
+      // 检查是否全选
+      this.checkAllSelected();
+      
+      showToast('已添加到收藏夹');
+      
+    } catch (error) {
+      console.error('移至收藏夹失败:', error);
+      if (error.message !== 'cancel') {
+        showToast(error.message || '添加失败，请重试', { icon: 'none' });
+      }
+    } finally {
+      hideLoading();
+    }
+  },
+
+  /**
+   * 计算总价和选中数量
+   */
+  calculateTotal: function () {
+    const cartItems = this.data.cartItems;
+    let totalPrice = 0;
+    let selectedCount = 0;
+    const checkedGoodsList = [];
+    
+    cartItems.forEach(item => {
+      if (item.selected && !item.unavailable && !item.outOfStock) {
+        totalPrice += item.price * item.quantity;
+        selectedCount += item.quantity;
+        checkedGoodsList.push(item);
+      }
+    });
+    
+    this.setData({
+      totalPrice: totalPrice.toFixed(2),
+      selectedCount,
+      checkedGoodsList
+    });
+  },
+
+  /**
+   * 结算
+   */
+  checkout: async function () {
+    try {
+      // 防止重复提交
+      if (this.data.submitting) {
         return;
       }
       
-      // 记录结算事件
-      if (app.analyticsService) {
-        app.analyticsService.track('cart_checkout', {
-          selected_items_count: selectedItems.length,
-          total_amount: this.data.totalPrice
-        });
+      this.setData({
+        submitting: true
+      });
+      
+      // 获取选中的商品
+      const selectedItems = this.data.cartItems.filter(item => item.selected);
+      
+      if (selectedItems.length === 0) {
+        showToast('请选择要结算的商品', { icon: 'none' });
+        return;
       }
       
-      // 保存到全局数据，用于订单确认页
-      if (!app.globalData) {
-        app.globalData = {};
+      // 检查选中商品是否可用
+      const unavailableItems = selectedItems.filter(item => item.unavailable || item.outOfStock);
+      if (unavailableItems.length > 0) {
+        showToast('选中的商品中有不可用或库存不足的商品', { icon: 'none' });
+        return;
       }
-      app.globalData.tempOrderItems = selectedItems;
       
-      // 跳转到订单确认页
-      wx.navigateTo({ 
-        url: '/pages/order/confirm/confirm',
+      // 检查库存
+      const overStockItems = selectedItems.filter(item => item.overStock);
+      if (overStockItems.length > 0) {
+        showToast('部分商品库存不足，请调整数量后再结算', { icon: 'none' });
+        return;
+      }
+      
+      showLoading('正在检查库存...');
+      
+      // 二次检查库存（实时检查）
+      const stockResult = await cartService.checkCartStock(selectedItems);
+      
+      if (stockResult.out_of_stock && stockResult.out_of_stock.length > 0) {
+        showToast('部分商品库存不足，请刷新购物车后重试', { icon: 'none' });
+        // 重新加载数据
+        this.loadCartData(true);
+        return;
+      }
+      
+      // 构建订单数据
+      const orderData = {
+        items: selectedItems.map(item => ({
+          cart_item_id: item.id,
+          product_id: item.product_id,
+          quantity: item.quantity,
+          sku_id: item.sku_id
+        }))
+      };
+      
+      // 跳转到结算页面
+      wx.navigateTo({
+        url: '/pages/checkout/checkout?orderData=' + encodeURIComponent(JSON.stringify(orderData)),
         fail: (err) => {
-          console.error('跳转到订单确认页面失败:', err);
-          showToast('跳转到订单确认页面失败，请重试', { icon: 'none' });
+          console.error('跳转到结算页面失败:', err);
+          showToast('跳转失败，请重试', { icon: 'none' });
         }
       });
+      
     } catch (error) {
-      console.error('结算前检查失败:', error);
+      console.error('结算失败:', error);
       showToast(error.message || '结算失败，请重试', { icon: 'none' });
     } finally {
       hideLoading();
+      this.setData({
+        submitting: false
+      });
     }
   },
 
   /**
-   * 前往商品详情页
+   * 编辑模式切换
    */
-  onProductTap(e) {
-    const productId = e.currentTarget.dataset.id;
-    if (!productId) {
-      showToast('商品信息有误', { icon: 'none' });
-      return;
-    }
-    
-    // 记录商品点击事件
-    if (app.analyticsService) {
-      app.analyticsService.track('cart_product_click', {
-        product_id: productId
-      });
-    }
-    
+  toggleEditMode: function() {
+    this.setData({
+      isEditing: !this.data.isEditing
+    });
+  },
+
+  /**
+   * 跳转到商品详情
+   */
+  navigateToProductDetail: function(e) {
+    const productId = e.currentTarget.dataset.productId;
     wx.navigateTo({
-      url: `/pages/product/detail/detail?id=${productId}`,
-      fail: (err) => {
-        console.error('跳转到商品详情失败:', err);
-        showToast('跳转到商品详情失败', { icon: 'none' });
-      }
+      url: `/pages/product/detail?id=${productId}`
     });
-  },
-
-  /**
-   * 去登录
-   */
-  onLogin: function() {
-    wx.navigateTo({ 
-      url: '/pages/user/login/login',
-      fail: (err) => {
-        console.error('跳转到登录页面失败:', err);
-        showToast('跳转到登录页面失败', { icon: 'none' });
-      }
-    });
-  },
-
-  /**
-   * 去逛逛
-   */
-  onGoShopping: function() {
-    wx.switchTab({ 
-      url: '/pages/index/index',
-      fail: (err) => {
-        console.error('跳转到首页失败:', err);
-        showToast('跳转到首页失败', { icon: 'none' });
-      }
-    });
-  },
-
-  /**
-   * 重试加载
-   */
-  onRetry: function() {
-    this.loadCartItems({ forceRefresh: true });
-  },
-  
-  /**
-   * 将商品移至收藏
-   */
-  async onMoveToFavorite(e) {
-    const cartItemId = e.currentTarget.dataset.id;
-    const itemName = e.currentTarget.dataset.name || '商品';
-    
-    try {
-      const confirmed = await showConfirm({
-        title: '移至收藏',
-        content: `确定要将"${itemName}"移至收藏并从购物车删除吗？`
-      });
-      
-      if (!confirmed) return;
-      
-      showLoading('操作中...');
-      await cartService.moveToFavorite(cartItemId);
-      showToast('已添加到收藏');
-      
-      // 重新加载购物车
-      this.loadCartItems({ forceRefresh: true });
-    } catch (error) {
-      console.error('移至收藏失败:', error);
-      if (error.message !== '用户取消') {
-        showToast(error.message || '操作失败，请重试', { icon: 'none' });
-      }
-    } finally {
-      hideLoading();
-    }
   }
 });
