@@ -40,8 +40,7 @@
   border-radius: 30rpx;
 }
 
-/* 未登录状态样式 */
-.not-logged-in,
+/* 空购物车状态样式 */
 .empty-cart {
   padding: 100rpx 20rpx;
   text-align: center;
@@ -60,7 +59,6 @@
   margin-bottom: 30rpx;
 }
 
-.login-btn,
 .shopping-btn {
   background-color: #ff6b81;
   color: #ffffff;
@@ -144,6 +142,33 @@
   margin-bottom: 10rpx;
 }
 
+/* 商品状态样式 */
+.product-status {
+  font-size: 24rpx;
+  margin: 10rpx 0;
+  padding: 4rpx 12rpx;
+  border-radius: 12rpx;
+  align-self: flex-start;
+}
+
+.status-unavailable {
+  background-color: #f5f5f5;
+  color: #999999;
+}
+
+.status-outofstock {
+  background-color: #fff0f0;
+  color: #ff6b81;
+}
+
+/* 库存不足警告样式 */
+.stock-warning {
+  font-size: 22rpx;
+  color: #ff9500;
+  margin-top: 5rpx;
+  align-self: flex-start;
+}
+
 .item-bottom {
   flex: 1;
   display: flex;
@@ -161,6 +186,12 @@
 .quantity-control {
   display: flex;
   align-items: center;
+}
+
+/* 不可操作的数量控制器 */
+.quantity-control.disabled {
+  opacity: 0.6;
+  pointer-events: none;
 }
 
 .quantity-btn {
@@ -201,14 +232,39 @@
   border-bottom: 1rpx solid #eeeeee;
 }
 
+/* 操作按钮区域样式 */
+.item-actions {
+  position: absolute;
+  top: 10rpx;
+  right: 10rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 /* 删除按钮样式 */
 .delete-btn {
-  position: absolute;
-  top: 20rpx;
-  right: 20rpx;
+  padding: 10rpx;
+  margin-bottom: 10rpx;
+}
+
+.delete-btn text {
   font-size: 24rpx;
   color: #999999;
+  display: inline-block;
+}
+
+/* 编辑模式下的删除按钮 */
+.delete-btn text[hidden="false"] {
+  font-size: 24rpx;
+  color: #ff6b81;
+}
+
+/* 移至收藏按钮样式 */
+.favorite-btn {
   padding: 10rpx;
+  margin-bottom: 10rpx;
+  color: #ffc107;
 }
 
 /* 底部操作栏样式 */
@@ -229,7 +285,6 @@
 .all-select {
   display: flex;
   align-items: center;
-  margin-right: 30rpx;
 }
 
 .all-select text {
@@ -238,9 +293,56 @@
   margin-left: 10rpx;
 }
 
+/* 编辑模式按钮 */
+.edit-mode {
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
+  padding-left: 20rpx;
+}
+
+.edit-btn {
+  font-size: 28rpx;
+  color: #666666;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+}
+
+/* 编辑模式操作按钮 */
+.edit-actions {
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
+  padding-left: 20rpx;
+}
+
+.delete-selected-btn {
+  font-size: 28rpx;
+  color: #ff6b81;
+  background-color: transparent;
+  border: none;
+  padding: 0 20rpx 0 0;
+}
+
+.cancel-edit-btn {
+  font-size: 28rpx;
+  color: #666666;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+}
+
+/* 合计与结算区域 */
+.total-section {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
 /* 合计样式 */
 .total-info {
-  flex: 1;
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -271,5 +373,10 @@
 }
 
 .checkout-btn text {
+  color: #ffffff;
+}
+
+.checkout-btn[disabled] {
+  background-color: #cccccc;
   color: #ffffff;
 }
