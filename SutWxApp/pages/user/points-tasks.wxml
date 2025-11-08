@@ -1,4 +1,4 @@
-﻿<!-- 绉垎浠诲姟椤甸潰 -->
+<!-- 绉垎浠诲姟椤甸潰 -->
 <view class="points-tasks-container">
   <!-- 椤甸潰鏍囬 -->
   <view class="page-header">
@@ -226,10 +226,10 @@
             <view class="task-right">
               <text class="task-points">+{{item.points}}{{t('points')}}</text>
               <view class="task-status">
-                <text wx:if="{{item.isUnclaimed}}" class="status-unclaimed">棰嗗彇濂栧姳</text>
-                <text wx:elif="{{item.isCompleted}}" class="status-completed">宸插畬鎴?/text>
-                <text wx:elif="{{item.canComplete}}" class="status-action">绔嬪嵆瀹屾垚</text>
-                <text wx:else class="status-doing">鍘诲畬鎴?/text>
+                <text wx:if="{{item.isUnclaimed}}" class="status-unclaimed">{{t('task_claim_reward')}}</text>
+                <text wx:elif="{{item.isCompleted}}" class="status-completed">{{t('task_completed')}}</text>
+                <text wx:elif="{{item.canComplete}}" class="status-action">{{t('task_complete_now')}}</text>
+                <text wx:else class="status-doing">{{t('task_go_complete')}}</text>
               </view>
             </view>
           </view>
@@ -237,7 +237,7 @@
             <view class="progress-bar">
               <view class="progress-fill" style="width: {{item.totalSteps > 1 ? (item.progress / item.totalSteps * 100) : item.progress}}%"></view>
             </view>
-            <text class="progress-text">{{item.progressText}}</text>
+            <text class="progress-text">{{t('task_progress')}}锛歿{item.progressText}}</text>
           </view>
         </view>
       </view>

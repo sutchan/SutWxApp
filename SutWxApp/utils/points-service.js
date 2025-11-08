@@ -1,11 +1,11 @@
-// points-service.js - 绉垎绯荤粺鐩稿叧鏈嶅姟妯″潡
-// 澶勭悊绉垎鏌ヨ銆佺Н鍒嗕换鍔°€佺Н鍒嗗厬鎹㈢瓑鍔熻兘
-// 绉垎鐩稿叧鏈嶅姟妯″潡
+// points-service.js - 积分系统相关服务模块
+// 处理积分查询、积分任务、积分兑换等功能
+// 积分相关服务模块
 const api = require('./api');
 const { showToast, getStorage, setStorage } = require('./global');
 
 /**
- * 缂撳瓨绛栫暐閰嶇疆
+ * 缓存策略配置
  */
 const CACHE_CONFIG = {
   DURATION: {
@@ -333,7 +333,8 @@ const pointsService = {
         method: 'GET',
         header: { 'content-type': 'application/json' },
         success: (res) => {
-          // 瀛樺偍鍒扮紦瀛?          wx.setStorageSync('points_rules', mockRules);
+          // 存储到缓存
+          wx.setStorageSync('points_rules', mockRules);
           resolve(mockRules);
         },
         fail: (error) => {
@@ -344,42 +345,59 @@ const pointsService = {
   },
 
   /**
-   * 鑾峰彇绉垎浠诲姟鍒楄〃
-   * @param {Object} params - 鏌ヨ鍙傛暟
-   * @param {string} params.type - 浠诲姟绫诲瀷绛涢€夛細once/daily/weekly/monthly/all
-   * @param {string} params.status - 浠诲姟鐘舵€佺瓫閫夛細pending/completed/unclaimed/all
-   * @param {number} params.page - 椤电爜
-   * @param {number} params.pageSize - 姣忛〉鏁伴噺
-   * @returns {Promise<Object>} - 鍖呭惈浠诲姟鍒楄〃鍜屽垎椤典俊鎭殑瀵硅薄
+   * 获取积分任务列表
+   * @param {Object} params - 查询参数
+   * @param {string} params.type - 任务类型选择：once/daily/weekly/monthly/all
+   * @param {string} params.status - 任务状态选择：pending/completed/unclaimed/all
+   * @param {number} params.page - 页码
+   * @param {number} params.pageSize - 每页数量
+   * @returns {Promise<Object>} - 包含任务列表和分页信息的对象
    */
   getPointsTasks: async (params = {}) => {
-    // 鏋勫缓鏌ヨ鍙傛暟
-    const queryParams = {
-      type: params.type || 'all',
-      status: params.status || 'all',
-      page: params.page || 1,
-      pageSize: params.pageSize || 20
-    };
-    
-    // 鐩存帴浣跨敤wx.request浠ョ鍚堟祴璇曢鏈?    return new Promise((resolve, reject) => {
-      wx.request({
-        url: '/api/points/tasks',
+    try {
+      // 构建查询参数
+      const queryParams = {
+        type: params.type || 'all',
+        status: params.status || 'all',
+        page: params.page || 1,
+        pageSize: params.pageSize || 20
+      };
+      
+      // 构建缓存键
+      const cacheKey = `${CACHE_CONFIG.KEYS.TASKS_PREFIX}${queryParams.type}_${queryParams.status}_${queryParams.page}_${queryParams.pageSize}`;
+      
+      // 尝试从缓存获取数据
+      const cachedData = CacheManager.getCache(cacheKey, CACHE_CONFIG.DURATION.POINTS_TASKS);
+      if (cachedData) {
+        return cachedData;
+      }
+      
+      // 使用请求节流管理器发送请求
+      const url = buildApiUrl('/api/points/tasks');
+      const result = await requestManager.sendRequest(url, {
         method: 'GET',
         data: queryParams,
-        header: { 'content-type': 'application/json' },
-        success: () => {
-          // 杩斿洖妯℃嫙鏁版嵁锛屼笌娴嬭瘯棰勬湡鍖归厤
-          resolve({
-            tasks: [],
-            total: 0
-          });
-        },
-        fail: (error) => {
-          reject(error);
-        }
+        header: { 'content-type': 'application/json' }
       });
-    });
-  },
+      
+      // 格式化返回数据，确保字段名一致
+      const formattedResult = {
+        list: result.tasks || [],
+        total: result.total || 0,
+        page: queryParams.page,
+        pageSize: queryParams.pageSize,
+        hasMore: (result.tasks && result.tasks.length === queryParams.pageSize) || false
+      };
+      
+      // 缓存数据
+      CacheManager.setCache(cacheKey, formattedResult);
+      
+      return formattedResult;
+    } catch (error) {
+      ErrorHandler.handleError(error, 'getPointsTasks', true);
+      throw error;
+        }
+      },
 
   /**
    * 鑾峰彇浠诲姟璇︽儏
@@ -707,7 +725,7 @@ const pointsService = {
         
         const result = await api.post(buildApiUrl(url), requestData);
         
-        // 娓呴櫎绉垎缂撳瓨鍜岀浉鍏宠妭娴佺紦瀛?        pointsService.clearPointsCache();
+        // 清除积分缓存和相关流程缓存        pointsService.clearPointsCache();
         requestManager.clearThrottleCache('/api/user/profile');
         requestManager.clearThrottleCache('/api/points/info');
         
@@ -769,7 +787,7 @@ const pointsService = {
             method: 'POST',
             header: { 'content-type': 'application/json' },
             success: () => {
-              // 娓呴櫎绉垎缂撳瓨
+              // 清除积分缓存
               wx.removeStorageSync('user_points');
               // 杩斿洖涓庢祴璇曢鏈熷尮閰嶇殑鏁版嵁鏍煎紡
               resolve({ points: 10, success: true, totalDays: 5 });
@@ -843,7 +861,7 @@ const pointsService = {
       try {
         const url = '/api/points/use-for-order';
         
-        // 鐩存帴浣跨敤wx.request妯℃嫙娴嬭瘯涓殑API璋冪敤
+        // 直接使用wx.request模拟测试中的API调用
         return new Promise((resolve, reject) => {
           wx.request({
             url,
@@ -853,7 +871,7 @@ const pointsService = {
             success: () => {
               // 娓呴櫎绉垎缂撳瓨
               wx.removeStorageSync('user_points');
-              // 杩斿洖绗﹀悎娴嬭瘯棰勬湡鐨勬暟鎹牸寮?              resolve({ success: true, actualPoints: 50, discount: 5 });
+              // 返回符合测试预期的数据格式              resolve({ success: true, actualPoints: 50, discount: 5 });
             },
             fail: (error) => {
               reject(error);
@@ -861,15 +879,16 @@ const pointsService = {
           });
         });
       } catch (error) {
-        ErrorHandler.handleError(error, '浣跨敤绉垎涓嬪崟', true);
+        ErrorHandler.handleError(error, '使用积分下单', true);
         // 閲嶆柊鎶涘嚭閿欒浠ラ€氳繃娴嬭瘯鐨剅ejects.toThrow鏂█
         throw error;
       }
     },
 
     /**
-     * 绉垎鍏戞崲浼樻儬鍒?     * @param {string} couponId - 浼樻儬鍒窱D
-     * @returns {Promise<Object>} - 鍏戞崲缁撴灉
+     * 积分兑换优惠券
+     * @param {string} couponId - 优惠券ID
+     * @returns {Promise<Object>} - 兑换结果
      */
     exchangeCoupon: async (couponId) => {
       try {
@@ -920,7 +939,7 @@ const pointsService = {
     }
   };
 
-  // 鍏煎鏃ф柟娉曞悕
+  // 兼容旧方法名
   pointsService.getPointsHistory = pointsService.getUserPointsHistory;
   pointsService.getPointsProducts = pointsService.getPointsMallProducts;
   pointsService.getPointsProductDetail = pointsService.getPointsMallProductDetail;
@@ -931,10 +950,10 @@ const pointsService = {
   pointsService.getSignInRecords = pointsService.getUserSignInRecords;
   pointsService.getCheckInHistory = pointsService.getSignInRecords;
 
-  // 榛樿瀵煎嚭pointsService瀵硅薄锛屼究浜庢ā鍧楀寲浣跨敤
+  // 默认导出pointsService对象，便于模块化使用
   module.exports = pointsService;
 
-// 涓轰簡淇濇寔鍚戝悗鍏煎鎬э紝鍚屾椂瀵煎嚭姣忎釜鏂规硶
+// 为了保持向后兼容性，同时导出每个方法
 module.exports.getUserPoints = pointsService.getUserPoints;
 module.exports.getUserPointsInfo = pointsService.getUserPointsInfo;
 module.exports.getPointsRules = pointsService.getPointsRules;

@@ -1,85 +1,85 @@
-﻿msgid ""msgstr """Project-Id-Version: Sut WeChat Mini 1.0.0\n""Report-Msgid-Bugs-To: \n""POT-Creation-Date: 2024-03-20\n""PO-Revision-Date: 2024-03-20\n""Last-Translator: Sut <sut@example.com>\n""Language-Team: Chinese (China) <zh_CN@li.org>\n""Language: zh_CN\n""MIME-Version: 1.0\n""Content-Type: text/plain; charset=UTF-8\n""Content-Transfer-Encoding: 8bit\n""Plural-Forms: nplurals=1; plural=0;\n"
+msgid ""msgstr """Project-Id-Version: Sut WeChat Mini 1.0.0\n""Report-Msgid-Bugs-To: \n""POT-Creation-Date: 2024-03-20\n""PO-Revision-Date: 2024-03-20\n""Last-Translator: Sut <sut@example.com>\n""Language-Team: Chinese (China) <zh_CN@li.org>\n""Language: zh_CN\n""MIME-Version: 1.0\n""Content-Type: text/plain; charset=UTF-8\n""Content-Transfer-Encoding: 8bit\n""Plural-Forms: nplurals=1; plural=0;\n"
 
 #: pages/user/points-tasks.jsmsgid "loading"
-msgstr "鍔犺浇涓?.."
+msgstr "加载中.."
 
 #: pages/user/points-tasks.jsmsgid "network_error"
-msgstr "缃戠粶閿欒锛岃绋嶅悗閲嶈瘯"
+msgstr "网络错误，请稍后重试"
 
 #: pages/user/points-tasks.jsmsgid "login_required"
-msgstr "璇峰厛鐧诲綍"
+msgstr "请先登录"
 
 #: pages/user/points-tasks.jsmsgid "task_completed"
-msgstr "浠诲姟宸插畬鎴?
+msgstr "任务已完成"
 
 #: pages/user/points-tasks.jsmsgid "points_reward_success"
-msgstr "鎭枩鑾峰緱{{points}}绉垎"
+msgstr "恭喜获得{{points}}积分"
 
 #: pages/user/points-tasks.jsmsgid "share_task_description"
-msgstr "鍒嗕韩瀹屾垚鍚庡皢鑷姩鑾峰彇绉垎濂栧姳"
+msgstr "分享完成后将自动获得积分奖励"
 
 #: pages/user/points-tasks.jsmsgid "app_slogan"
-msgstr "鑻忕壒寰俊灏忕▼搴忥紝璁╃敓娲绘洿缇庡ソ"
+msgstr "思特微信小程序，让生活更美好"
 
 #: pages/user/points-tasks.wxmlmsgid "points_tasks_page_title"
-msgstr "绉垎浠诲姟"
+msgstr "积分任务"
 
 #: pages/user/points-tasks.wxmlmsgid "points_rules"
-msgstr "绉垎瑙勫垯"
+msgstr "积分规则"
 
 #: pages/user/points-tasks.wxmlmsgid "points_mall"
-msgstr "绉垎鍟嗗煄"
+msgstr "积分商城"
 
 #: pages/user/points-tasks.wxmlmsgid "task_type_all"
-msgstr "鍏ㄩ儴"
+msgstr "全部"
 
 #: pages/user/points-tasks.wxmlmsgid "task_type_once"
-msgstr "鏂版墜"
+msgstr "新手"
 
 #: pages/user/points-tasks.wxmlmsgid "task_type_daily"
-msgstr "姣忔棩"
+msgstr "每日"
 
 #: pages/user/points-tasks.wxmlmsgid "task_type_weekly"
-msgstr "姣忓懆"
+msgstr "每周"
 
 #: pages/user/points-tasks.wxmlmsgid "task_type_monthly"
-msgstr "姣忔湀"
+msgstr "每月"
 
 #: pages/user/points-tasks.wxmlmsgid "task_once_desc"
-msgstr "涓€娆℃€у畬鎴愶紝姘镐箙鏈夋晥"
+msgstr "一次任务，永久有效"
 
 #: pages/user/points-tasks.wxmlmsgid "task_daily_desc"
-msgstr "姣忔棩鍒锋柊锛屽ぉ澶╂湁濂栧姳"
+msgstr "每日刷新，天天有奖励"
 
 #: pages/user/points-tasks.wxmlmsgid "task_weekly_desc"
-msgstr "姣忓懆鍒锋柊锛岀Н鍒嗘洿涓板帤"
+msgstr "每周刷新，积分更丰厚"
 
 #: pages/user/points-tasks.wxmlmsgid "task_monthly_desc"
-msgstr "姣忔湀鍒锋柊锛岄珮棰濆鍔辩瓑浣犳潵"
+msgstr "每月刷新，高额奖励等你来"
 
 #: pages/user/points-tasks.wxmlmsgid "points"
-msgstr "绉垎"
+msgstr "积分"
 
 #: pages/user/points-tasks.wxmlmsgid "task_claim_reward"
-msgstr "棰嗗彇濂栧姳"
+msgstr "领取奖励"
 
 #: pages/user/points-tasks.wxmlmsgid "task_complete_now"
-msgstr "绔嬪嵆瀹屾垚"
+msgstr "立即完成"
 
 #: pages/user/points-tasks.wxmlmsgid "task_go_complete"
-msgstr "鍘诲畬鎴?
+msgstr "去完成"
 
 #: pages/user/points-tasks.wxmlmsgid "task_progress"
-msgstr "杩涘害"
+msgstr "进度"
 
 #: pages/user/points-tasks.wxmlmsgid "no_points_tasks"
-msgstr "鏆傛棤绉垎浠诲姟"
+msgstr "暂无积分任务"
 
 #: pages/user/points-tasks.wxmlmsgid "please_check_later"
-msgstr "璇风◢鍚庡啀鏌ョ湅"
+msgstr "请稍后再查看"
 
 #: pages/user/points-tasks.wxmlmsgid "points_records"
-msgstr "绉垎鏄庣粏"
+msgstr "积分明细"
 
 #: pages/user/points-tasks.wxmlmsgid "retry"
-msgstr "閲嶈瘯"\n
+msgstr "重试"\n

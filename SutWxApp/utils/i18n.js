@@ -1,4 +1,4 @@
-﻿// i18n.js - 澶氳瑷€鏀寔妯″潡
+// i18n.js - 澶氳瑷€鏀寔妯″潡
 // 鎻愪緵鍥介檯鍖栫炕璇戝姛鑳?
 import { getStorage, setStorage } from './global';
 
@@ -35,8 +35,8 @@ export function initI18n() {
 }
 
 /**
- * 璁剧疆褰撳墠璇█
- * @param {string} langCode - 璇█浠ｇ爜锛屽 'zh_CN', 'en_US'
+ * 设置当前语言
+ * @param {string} langCode - 语言代码，如 'zh_CN', 'en_US'
  */
 export function setLanguage(langCode) {
   if (!SUPPORTED_LANGUAGES.includes(langCode)) {
@@ -49,17 +49,17 @@ export function setLanguage(langCode) {
 }
 
 /**
- * 鑾峰彇褰撳墠璇█
- * @returns {string} 褰撳墠璇█浠ｇ爜
+ * 获取当前语言
+ * @returns {string} 当前语言代码
  */
 export function getCurrentLanguage() {
   return currentLanguage;
 }
 
 /**
- * 鍔犺浇缈昏瘧璧勬簮
- * @param {string} langCode - 璇█浠ｇ爜
- * @param {Object} trans - 缈昏瘧璧勬簮瀵硅薄
+ * 加载翻译资源
+ * @param {string} langCode - 语言代码
+ * @param {Object} trans - 翻译资源对象
  */
 export function loadTranslations(langCode, trans) {
   if (SUPPORTED_LANGUAGES.includes(langCode)) {
@@ -68,9 +68,10 @@ export function loadTranslations(langCode, trans) {
 }
 
 /**
- * 缈昏瘧鏂囨湰
- * @param {string} key - 缈昏瘧閿? * @param {Object} params - 鏇挎崲鍙傛暟
- * @returns {string} 缈昏瘧鍚庣殑鏂囨湰
+ * 翻译文本
+ * @param {string} key - 翻译键
+ * @param {Object} params - 替换参数
+ * @returns {string} 翻译后的文本
  */
 export function t(key, params = {}) {
   let translation = translations[currentLanguage][key] || translations[DEFAULT_LANGUAGE][key] || key;
@@ -84,50 +85,50 @@ export function t(key, params = {}) {
 }
 
 /**
- * 鑾峰彇鏀寔鐨勮瑷€鍒楄〃
- * @returns {Array} 璇█鍒楄〃
+ * 获取支持的语言列表
+ * @returns {Array} 语言列表
  */
 export function getSupportedLanguages() {
   return [...SUPPORTED_LANGUAGES];
 }
 
-// 棰勫姞杞藉熀纭€缈昏瘧
+// 预加载基础翻译
 const baseTranslations = {
   zh_CN: {
-    // 绉垎浠诲姟鐩稿叧
-    'points_tasks': '绉垎浠诲姟',
-    'task_type_all': '鍏ㄩ儴',
-    'task_type_once': '鏂版墜',
-    'task_type_daily': '姣忔棩',
-    'task_type_weekly': '姣忓懆',
-    'task_type_monthly': '姣忔湀',
-    'task_status_completed': '宸插畬鎴?,
-    'task_status_unclaimed': '寰呴鍙?,
-    'task_status_pending': '杩涜涓?,
-    'task_claim_reward': '棰嗗彇濂栧姳',
-    'task_go_complete': '鍘诲畬鎴?,
-    'task_completed': '宸插畬鎴?,
-    'task_progress': '杩涘害',
-    'points_reward_success': '鎭枩鑾峰緱{{points}}绉垎',
-    'loading': '鍔犺浇涓?..',
-    'retry': '閲嶈瘯',
-    'no_tasks': '鏆傛棤浠诲姟',
-    'network_error': '缃戠粶閿欒锛岃绋嶅悗閲嶈瘯',
+    // 积分任务相关
+    'points_tasks': '积分任务',
+    'task_type_all': '全部',
+    'task_type_once': '新手',
+    'task_type_daily': '每日',
+    'task_type_weekly': '每周',
+    'task_type_monthly': '每月',
+    'task_status_completed': '已完成',
+    'task_status_unclaimed': '待领取',
+    'task_status_pending': '进行中',
+    'task_claim_reward': '领取奖励',
+    'task_go_complete': '去完成',
+    'task_completed': '已完成',
+    'task_progress': '进度',
+    'points_reward_success': '恭喜获得{{points}}积分',
+    'loading': '加载中..',
+    'retry': '重试',
+    'no_tasks': '暂无任务',
+    'network_error': '网络错误，请稍后重试',
     
-    // 閫氱敤鏂囨湰
-    'points': '绉垎',
-    'sign_in': '绛惧埌',
-    'my_profile': '涓汉涓績',
-    'my_orders': '鎴戠殑璁㈠崟',
-    'my_favorites': '鎴戠殑鏀惰棌',
-    'my_addresses': '鎴戠殑鍦板潃',
-    'settings': '璁剧疆',
-    'logout': '閫€鍑虹櫥褰?,
-    'confirm': '纭',
-    'cancel': '鍙栨秷',
-    'success': '鎴愬姛',
-    'error': '閿欒',
-    'ok': '纭畾'
+    // 通用文本
+    'points': '积分',
+    'sign_in': '签到',
+    'my_profile': '个人中心',
+    'my_orders': '我的订单',
+    'my_favorites': '我的收藏',
+    'my_addresses': '我的地址',
+    'settings': '设置',
+    'logout': '退出登录',
+    'confirm': '确认',
+    'cancel': '取消',
+    'success': '成功',
+    'error': '错误',
+    'ok': '确定'
   },
   en_US: {
     // Points tasks related

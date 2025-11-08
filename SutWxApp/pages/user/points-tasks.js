@@ -1,40 +1,45 @@
-﻿// 绉垎浠诲姟椤甸潰閫昏緫
+// 积分任务页面逻辑
 const app = getApp();
 const { showToast, showLoading, hideLoading } = app.global;
 import { initI18n, t } from '../../utils/i18n';
 
 Page({
   /**
-   * 椤甸潰鐨勫垵濮嬫暟鎹?   */
+   * 页面的初始数据
+   */
   data: {
-    tasks: [], // 浠诲姟鍒楄〃
-    loading: true, // 鍔犺浇鐘舵€?    error: null, // 閿欒淇℃伅
-    taskProcessing: null, // 姝ｅ湪澶勭悊鐨勪换鍔D锛岄槻姝㈤噸澶嶇偣鍑?    selectedType: 'all', // 褰撳墠閫変腑鐨勪换鍔＄被鍨嬬瓫閫?    taskGroups: { // 浠诲姟鍒嗙粍
-      once: [], // 涓€娆℃€т换鍔★紙鏂版墜浠诲姟锛?      daily: [], // 姣忔棩浠诲姟
-      weekly: [], // 姣忓懆浠诲姟
-      monthly: [] // 姣忔湀浠诲姟
+    tasks: [], // 任务列表
+    loading: true, // 加载状态
+    error: null, // 错误信息
+    taskProcessing: null, // 正在处理的任务ID，防止重复点击
+    selectedType: 'all', // 当前选中的任务类型切换
+    taskGroups: { // 任务分组
+      once: [], // 一次性任务（新手任务）
+      daily: [], // 每日任务
+      weekly: [], // 每周任务
+      monthly: [] // 每月任务
     },
     t: t // 灏嗙炕璇戝嚱鏁版寕杞藉埌data涓緵wxml浣跨敤
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
+   * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
     // 鍒濆鍖栧璇█
     initI18n();
     
-    // 璁板綍椤甸潰璁块棶浜嬩欢
+    // 记录页面访问事件
     app.analyticsService.track('page_view', {
       page: 'points_tasks'
     });
     
-    // 鍔犺浇绉垎浠诲姟鏁版嵁
+    // 加载积分任务数据
     this.loadTasks();
   },
   
   /**
-   * 鏇存柊缈昏瘧鍑芥暟寮曠敤
+   * 更新翻译函数调用
    */
   updateTranslation() {
     this.setData({
@@ -43,10 +48,11 @@ Page({
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
+   * 生命周期函数--监听页面显示
    */
   onShow: function() {
-    // 姣忔鏄剧ず椤甸潰鏃跺埛鏂颁换鍔℃暟鎹?    this.loadTasks();
+    // 每次显示页面时刷新任务数据
+    this.loadTasks();
   },
 
   /**
@@ -98,7 +104,7 @@ Page({
         loading: false
       });
     } catch (error) {
-      console.error('鍔犺浇绉垎浠诲姟澶辫触:', error);
+      console.error('加载积分任务失败:', error);
       this.setData({
         loading: false,
         error: error.message || t('network_error')
@@ -131,8 +137,8 @@ Page({
   },
 
   /**
-   * 鑾峰彇浠诲姟璇︽儏
-   * @param {string} taskId - 浠诲姟ID
+   * 获取任务详情
+   * @param {string} taskId - 任务ID
    */
   async getTaskDetail(taskId) {
     try {
@@ -140,8 +146,8 @@ Page({
       const taskDetail = await app.services.points.getTaskDetail(taskId);
       return taskDetail;
     } catch (error) {
-      console.error('鑾峰彇浠诲姟璇︽儏澶辫触:', error);
-      showToast(error.message || '鑾峰彇浠诲姟璇︽儏澶辫触');
+      console.error('获取任务详情失败:', error);
+      showToast(error.message || '获取任务详情失败');
       return null;
     } finally {
       hideLoading();
@@ -149,19 +155,19 @@ Page({
   },
 
   /**
-   * 鎻愪氦浠诲姟杩涘害
-   * @param {string} taskId - 浠诲姟ID
-   * @param {Object} progressData - 杩涘害鏁版嵁
+   * 提交任务进度
+   * @param {string} taskId - 任务ID
+   * @param {Object} progressData - 进度更新数据
    */
   async submitTaskProgress(taskId, progressData = {}) {
     try {
       showLoading(t('loading'));
       const result = await app.services.points.submitTaskProgress(taskId, progressData);
-      showToast('浠诲姟杩涘害鏇存柊鎴愬姛');
+      showToast('任务进度更新成功');
       return result;
     } catch (error) {
-      console.error('鎻愪氦浠诲姟杩涘害澶辫触:', error);
-      showToast(error.message || '鎻愪氦浠诲姟杩涘害澶辫触');
+      console.error('提交任务进度失败:', error);
+      showToast(error.message || '提交任务进度失败');
       return null;
     } finally {
       hideLoading();
@@ -239,8 +245,8 @@ Page({
   },
 
   /**
-   * 棰嗗彇浠诲姟濂栧姳
-   * @param {string} taskId - 浠诲姟ID
+   * 领取任务奖励
+   * @param {string} taskId - 任务ID
    */
   async claimTaskReward(taskId) {
     try {
@@ -288,8 +294,8 @@ Page({
       }
       
     } catch (error) {
-      console.error('棰嗗彇浠诲姟濂栧姳澶辫触:', error);
-      showToast(error.message || '棰嗗彇浠诲姟濂栧姳澶辫触锛岃绋嶅悗閲嶈瘯');
+      console.error('领取任务奖励失败:', error);
+      showToast(error.message || '领取任务奖励失败，请稍后重试');
     } finally {
       hideLoading();
       this.setData({ taskProcessing: null });
