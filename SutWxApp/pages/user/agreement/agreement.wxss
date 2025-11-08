@@ -1,13 +1,13 @@
-/* pages/user/agreement/agreement.wxss */
+﻿/* pages/user/agreement/agreement.wxss */
 
-/* 主容器 */
+/* 涓诲鍣?*/
 .agreement-container {
   padding: 20rpx;
   min-height: 100vh;
   background-color: #f5f5f5;
 }
 
-/* 加载状态 */
+/* 鍔犺浇鐘舵€?*/
 .loading-container {
   display: flex;
   flex-direction: column;
@@ -36,7 +36,7 @@
   color: #666666;
 }
 
-/* 错误状态 */
+/* 閿欒鐘舵€?*/
 .error-container {
   display: flex;
   flex-direction: column;
@@ -60,14 +60,14 @@
   font-size: 32rpx;
 }
 
-/* 内容容器 */
+/* 鍐呭瀹瑰櫒 */
 .content-container {
   background-color: #ffffff;
   border-radius: 16rpx;
   padding: 30rpx;
 }
 
-/* 协议内容 */
+/* 鍗忚鍐呭 */
 .agreement-content {
   font-size: 30rpx;
   line-height: 1.8;
@@ -75,7 +75,7 @@
   margin-bottom: 40rpx;
 }
 
-/* rich-text 内容样式 */
+/* rich-text 鍐呭鏍峰紡 */
 .agreement-content :first-child {
   margin-top: 0;
 }
@@ -110,7 +110,7 @@
   margin: 10rpx 0;
 }
 
-/* 空内容状态 */
+/* 绌哄唴瀹圭姸鎬?*/
 .empty-container {
   display: flex;
   justify-content: center;
@@ -123,7 +123,7 @@
   color: #999999;
 }
 
-/* 操作按钮 */
+/* 鎿嶄綔鎸夐挳 */
 .action-buttons {
   margin-top: 40rpx;
   display: flex;
@@ -138,7 +138,7 @@
   padding: 20rpx 80rpx;
 }
 
-/* 复制按钮按下效果 */
+/* 澶嶅埗鎸夐挳鎸変笅鏁堟灉 */
 .copy-button:active {
   background-color: #1976D2;
 }

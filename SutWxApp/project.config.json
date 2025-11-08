@@ -1,5 +1,5 @@
-{
-  "description": "SUT微信小程序",
+﻿{
+  "description": "SUT寰俊灏忕▼搴?,
   "packOptions": {
     "ignore": [],
     "include": []
@@ -35,7 +35,7 @@
   "compileType": "miniprogram",
   "libVersion": "2.19.4",
   "appid": "wx1234567890abcdef",
-  "projectname": "SUT微信小程序",
+  "projectname": "SUT寰俊灏忕▼搴?,
   "debugOptions": {
     "hidedInDevtools": []
   },
@@ -64,19 +64,19 @@
       "list": [
         {
           "id": -1,
-          "name": "首页",
+          "name": "棣栭〉",
           "pathName": "pages/index/index",
           "query": ""
         },
         {
           "id": -1,
-          "name": "分类",
+          "name": "鍒嗙被",
           "pathName": "pages/category/category",
           "query": ""
         },
         {
           "id": -1,
-          "name": "我的",
+          "name": "鎴戠殑",
           "pathName": "pages/user/profile/profile",
           "query": ""
         }

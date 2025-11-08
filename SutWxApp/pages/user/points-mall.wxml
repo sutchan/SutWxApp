@@ -1,0 +1,78 @@
+﻿<!-- 绉垎鍟嗗煄椤甸潰 -->
+<view class="mall-container">
+  <!-- 椤甸潰鏍囬 -->
+  <view class="page-header">
+    <text class="page-title">绉垎鍟嗗煄</text>
+  </view>
+
+  <!-- 鏍囩椤?-->
+  <view class="tabs">
+    <view 
+      wx:for="{{tabs}}" 
+      wx:key="key"
+      class="tab {{activeTab === item.key ? 'active' : ''}}"
+      bindtap="onTabChange"
+      data-key="{{item.key}}"
+    >
+      <text>{{item.name}}</text>
+      <view class="tab-line" wx:if="{{activeTab === item.key}}"></view>
+    </view>
+  </view>
+
+  <!-- 鍔犺浇鐘舵€?-->
+  <view class="loading-container" wx:if="{{loading && products.length === 0}}">
+    <view class="loading-icon"></view>
+    <text class="loading-text">鍔犺浇涓?..</text>
+  </view>
+
+  <!-- 閿欒鎻愮ず -->
+  <view class="error-container" wx:if="{{error && products.length === 0}}">
+    <view class="error-icon">鈿狅笍</view>
+    <text class="error-text">{{error}}</text>
+    <button class="retry-button" bindtap="onRetry">閲嶈瘯</button>
+  </view>
+
+  <!-- 鍟嗗搧鍒楄〃 -->
+  <view class="products-list" wx:if="{{products.length > 0}}">
+    <view 
+      wx:for="{{products}}" 
+      wx:key="id"
+      class="product-item"
+      bindtap="navigateToProductDetail"
+      data-id="{{item.id}}"
+    >
+      <!-- 鍟嗗搧鍥剧墖 -->
+      <view class="product-image">
+        <image src="{{item.image || '/assets/images/default-product.png'}}" mode="aspectFill"></image>
+      </view>
+      
+      <!-- 鍟嗗搧淇℃伅 -->
+      <view class="product-info">
+        <text class="product-title">{{item.title}}</text>
+        <text class="product-desc">{{item.description}}</text>
+        
+        <!-- 绉垎浠锋牸 -->
+        <view class="product-price">
+          <text class="points-icon">绉垎</text>
+          <text class="points-value">{{item.points}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 绌虹姸鎬?-->
+  <view class="empty-container" wx:if="{{!loading && !error && products.length === 0}}">
+    <view class="empty-icon">馃泹锔?/view>
+    <text class="empty-text">鏆傛棤绉垎鍟嗗搧</text>
+  </view>
+
+  <!-- 鍔犺浇鏇村 -->
+  <view class="load-more" wx:if="{{hasMore && products.length > 0}}">
+    <text>{{loading ? '鍔犺浇涓?..' : '涓婃媺鍔犺浇鏇村'}}</text>
+  </view>
+
+  <!-- 宸插姞杞藉叏閮?-->
+  <view class="load-complete" wx:if="{{!hasMore && products.length > 0}}">
+    <text>宸插姞杞藉叏閮?/text>
+  </view>
+</view>

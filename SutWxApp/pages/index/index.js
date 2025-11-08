@@ -1,66 +1,59 @@
-// pages/index/index.js
+﻿// pages/index/index.js
 /**
- * 首页页面 - 展示轮播图、分类导航和文章列表
+ * 棣栭〉椤甸潰 - 鐢靛晢搴旂敤棣栭〉锛屽睍绀鸿疆鎾浘銆佸晢鍝佸垎绫汇€佹帹鑽愬晢鍝佺瓑
  */
 import { showToast } from '../../utils/global';
 
 Page({
   /**
-   * 页面的初始数据
-   */
+   * 椤甸潰鐨勫垵濮嬫暟鎹?   */
   data: {
-    bannerList: [], // 轮播图数据
-    latestPosts: [], // 最新文章列表
-    hotPosts: [], // 热门文章列表
-    categories: [], // 分类数据
-    currentPage: 1, // 当前页码
-    hasMore: true, // 是否有更多数据
-    loading: false, // 加载状态
-    loadingMore: false, // 加载更多状态
-    refreshing: false, // 下拉刷新状态
-    error: '', // 错误信息
-    showSkeleton: true // 是否显示骨架屏
-  },
+    bannerList: [], // 杞挱鍥炬暟鎹?    categories: [], // 鍟嗗搧鍒嗙被鏁版嵁
+    recommendedProducts: [], // 鎺ㄨ崘鍟嗗搧鍒楄〃
+    hotProducts: [], // 鐑棬鍟嗗搧鍒楄〃
+    newProducts: [], // 鏂板搧涓婂競鍒楄〃
+    currentPage: 1, // 褰撳墠椤电爜
+    hasMore: true, // 鏄惁鏈夋洿澶氭暟鎹?    loading: false, // 鍔犺浇鐘舵€?    loadingMore: false, // 鍔犺浇鏇村鐘舵€?    refreshing: false, // 涓嬫媺鍒锋柊鐘舵€?    error: '', // 閿欒淇℃伅
+    showSkeleton: true // 鏄惁鏄剧ず楠ㄦ灦灞?  },
 
   /**
-   * 重试加载数据
+   * 閲嶈瘯鍔犺浇鏁版嵁
    */
   onRetry: function() {
     this.setData({
       error: '',
       currentPage: 1,
       hasMore: true,
-      latestPosts: []
+      recommendedProducts: []
     });
     this.loadAllData();
   },
 
   /**
-   * 生命周期函数--监听页面加载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
    */
   onLoad: function() {
-    // 初始化页面数据
-    this.loadAllData();
+    // 鍒濆鍖栭〉闈㈡暟鎹?    this.loadAllData();
   },
 
   /**
-   * 生命周期函数--监听页面显示
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
    */
   onShow: function() {
-    // 页面显示时，如果需要刷新数据，可以在这里添加逻辑
-    // 例如检查全局状态变化，或者定时刷新等
+    // 椤甸潰鏄剧ず鏃讹紝濡傛灉闇€瑕佸埛鏂版暟鎹紝鍙互鍦ㄨ繖閲屾坊鍔犻€昏緫
+    // 渚嬪妫€鏌ュ叏灞€鐘舵€佸彉鍖栵紝鎴栬€呭畾鏃跺埛鏂扮瓑
   },
 
   /**
-   * 页面相关事件处理函数--监听用户下拉动作
+   * 椤甸潰鐩稿叧浜嬩欢澶勭悊鍑芥暟--鐩戝惉鐢ㄦ埛涓嬫媺鍔ㄤ綔
    */
   onPullDownRefresh: function() {
-    // 下拉刷新时重置数据并重新加载
+    // 涓嬫媺鍒锋柊鏃堕噸缃暟鎹苟閲嶆柊鍔犺浇
     this.setData({
       refreshing: true,
       currentPage: 1,
       hasMore: true,
-      latestPosts: [],
+      recommendedProducts: [],
       showSkeleton: true,
       error: ''
     });
@@ -69,27 +62,24 @@ Page({
   },
 
   /**
-   * 页面上拉触底事件的处理函数
-   */
+   * 椤甸潰涓婃媺瑙﹀簳浜嬩欢鐨勫鐞嗗嚱鏁?   */
   onReachBottom: function() {
-    // 上拉触底加载更多
-    if (!this.data.loading && this.data.hasMore) {
-      this.loadMorePosts();
+    // 涓婃媺瑙﹀簳鍔犺浇鏇村鎺ㄨ崘鍟嗗搧
+    if (!this.data.loading && !this.data.loadingMore && this.data.hasMore) {
+      this.loadMoreProducts();
     }
   },
 
   /**
-   * 加载所有页面数据
-   * 根据API文档，使用/content/home接口一次性获取首页所需数据
+   * 鍔犺浇鎵€鏈夐〉闈㈡暟鎹?   * 鏍规嵁API鏂囨。锛屼娇鐢ㄧ粺涓€鎺ュ彛鑾峰彇棣栭〉鎵€闇€鏁版嵁
    */
   loadAllData: function() {
-    // 使用首页统一接口获取数据，提高性能
+    // 浣跨敤棣栭〉缁熶竴鎺ュ彛鑾峰彇鏁版嵁锛屾彁楂樻€ц兘
     this.getHomeData();
   },
 
   /**
-   * 获取首页数据（包含banner、精选文章、最新文章等）
-   */
+   * 鑾峰彇棣栭〉鏁版嵁锛堝寘鍚玝anner銆佸晢鍝佸垎绫汇€佹帹鑽愬晢鍝佺瓑锛?   */
   getHomeData: async function() {
     const app = getApp();
     if (!this.data.refreshing) {
@@ -97,32 +87,34 @@ Page({
     }
     
     try {
-      // 使用articleService获取首页数据
-      const res = await app.services.article.getHomeData();
+      // 浣跨敤productService鑾峰彇棣栭〉鏁版嵁
+      const res = await app.services.product.getHomeData();
       
-      // 处理首页数据
+      // 澶勭悊棣栭〉鏁版嵁
       this.setData({
         bannerList: res.banner || [],
-        hotPosts: res.featured_posts || [],
-        latestPosts: res.latest_posts || [],
         categories: res.categories || [],
+        hotProducts: res.hot_products || [],
+        newProducts: res.new_products || [],
+        recommendedProducts: res.recommended_products || [],
         currentPage: 2,
-        hasMore: res.pages ? res.pages > 1 : (res.latest_posts && res.latest_posts.length >= 10),
+        hasMore: res.pages ? res.pages > 1 : (res.recommended_products && res.recommended_products.length >= 10),
         error: ''
       });
       
-      // 记录页面浏览事件
+      // 璁板綍椤甸潰娴忚浜嬩欢
       app.services.analytics.trackPageView('index', {
         content_type: 'homepage',
         banner_count: res.banner ? res.banner.length : 0,
-        post_count: res.latest_posts ? res.latest_posts.length : 0
+        product_count: res.recommended_products ? res.recommended_products.length : 0,
+        category_count: res.categories ? res.categories.length : 0
       });
     } catch (err) {
-      console.error('获取首页数据失败:', err);
+      console.error('鑾峰彇棣栭〉鏁版嵁澶辫触:', err);
       this.setData({
-        error: err.message || '网络连接失败，请检查网络设置'
+        error: err.message || '缃戠粶杩炴帴澶辫触锛岃妫€鏌ョ綉缁滆缃?
       });
-      showToast(err.message || '获取首页数据失败', 'none', 2000);
+      showToast(err.message || '鑾峰彇棣栭〉鏁版嵁澶辫触', 'none', 2000);
     } finally {
       this.setData({
         loading: false,
@@ -136,125 +128,23 @@ Page({
   },
 
   /**
-   * 获取轮播图列表（备用方法，正常情况下已在getHomeData中获取）
+   * 鑾峰彇杞挱鍥惧垪琛紙澶囩敤鏂规硶锛屾甯告儏鍐典笅宸插湪getHomeData涓幏鍙栵級
    */
   getBannerList: async function() {
     const app = getApp();
     try {
-      const res = await app.services.article.getBannerList();
+      const res = await app.services.product.getBannerList();
       this.setData({
         bannerList: res || []
       });
     } catch (error) {
-      console.error('获取轮播图失败');
-      showToast('获取轮播图失败', 'none', 2000);
+      console.error('鑾峰彇杞挱鍥惧け璐?);
+      showToast('鑾峰彇杞挱鍥惧け璐?, 'none', 2000);
     }
   },
 
   /**
-   * 获取最新文章列表（备用方法，正常情况下已在getHomeData中获取）
-   */
-  getLatestPosts: async function() {
-    const app = getApp();
-    if (!this.data.refreshing) {
-      this.setData({
-        loading: true
-      });
-    }
-    
-    try {
-      const res = await app.services.article.getPosts({
-        page: 1,
-        per_page: 10,
-        order: 'desc',
-        orderby: 'date'
-      });
-      
-      this.setData({
-        latestPosts: res.posts || [],
-        currentPage: 2,
-        hasMore: res.posts && res.posts.length >= 10 && res.pages > 1
-      });
-    } catch (error) {
-      console.error('获取最新文章失败');
-      showToast('获取最新文章失败', 'none', 2000);
-    } finally {
-      this.setData({
-        loading: false,
-        refreshing: false,
-        showSkeleton: false
-      });
-      
-      wx.stopPullDownRefresh();
-    }
-  },
-
-  /**
-   * 加载更多文章
-   */
-  loadMorePosts: async function() {
-    if (this.data.loading || this.data.loadingMore || !this.data.hasMore) {
-      return;
-    }
-    
-    const app = getApp();
-    this.setData({
-      loadingMore: true
-    });
-    
-    try {
-      const res = await app.services.article.getPosts({
-        page: this.data.currentPage,
-        per_page: 10,
-        order: 'desc',
-        orderby: 'date'
-      });
-      
-      if (res.posts && res.posts.length > 0) {
-        // 合并并去重文章列表，防止重复加载
-        const existingIds = new Set(this.data.latestPosts.map(post => post.id));
-        const newPosts = res.posts.filter(post => !existingIds.has(post.id));
-        
-        this.setData({
-          latestPosts: [...this.data.latestPosts, ...newPosts],
-          currentPage: this.data.currentPage + 1,
-          hasMore: res.pages && res.pages >= this.data.currentPage
-        });
-      } else {
-        this.setData({
-          hasMore: false
-        });
-      }
-    } catch (error) {
-      console.error('加载更多文章失败:', error);
-      showToast('加载更多失败，请重试', 'none', 2000);
-    } finally {
-      this.setData({
-        loadingMore: false
-      });
-    }
-  },
-
-  /**
-   * 获取热门文章（备用方法，正常情况下已在getHomeData中获取）
-   */
-  getHotPosts: async function() {
-    const app = getApp();
-    try {
-      const res = await app.services.article.getHotPosts({
-        per_page: 5
-      });
-      
-      this.setData({
-        hotPosts: res || []
-      });
-    } catch (error) {
-      console.error('获取热门文章失败');
-    }
-  },
-
-  /**
-   * 获取分类列表（备用方法，正常情况下已在getHomeData中获取）
+   * 鑾峰彇鍟嗗搧鍒嗙被锛堝鐢ㄦ柟娉曪紝姝ｅ父鎯呭喌涓嬪凡鍦╣etHomeData涓幏鍙栵級
    */
   getCategories: async function() {
     const app = getApp();
@@ -268,37 +158,157 @@ Page({
         categories: categories || []
       });
     } catch (error) {
-      console.error('获取分类列表失败');
+      console.error('鑾峰彇鍟嗗搧鍒嗙被澶辫触');
+    }
+  },
+
+  /**
+   * 鑾峰彇鎺ㄨ崘鍟嗗搧鍒楄〃锛堝鐢ㄦ柟娉曪紝姝ｅ父鎯呭喌涓嬪凡鍦╣etHomeData涓幏鍙栵級
+   */
+  getRecommendedProducts: async function() {
+    const app = getApp();
+    if (!this.data.refreshing) {
+      this.setData({
+        loading: true
+      });
+    }
+    
+    try {
+      const res = await app.services.product.getProducts({
+        page: 1,
+        per_page: 10,
+        order: 'desc',
+        orderby: 'popularity'
+      });
+      
+      this.setData({
+        recommendedProducts: res.products || [],
+        currentPage: 2,
+        hasMore: res.products && res.products.length >= 10 && res.pages > 1
+      });
+    } catch (error) {
+      console.error('鑾峰彇鎺ㄨ崘鍟嗗搧澶辫触');
+      showToast('鑾峰彇鎺ㄨ崘鍟嗗搧澶辫触', 'none', 2000);
+    } finally {
+      this.setData({
+        loading: false,
+        refreshing: false,
+        showSkeleton: false
+      });
+      
+      wx.stopPullDownRefresh();
+    }
+  },
+
+  /**
+   * 鍔犺浇鏇村鍟嗗搧
+   */
+  loadMoreProducts: async function() {
+    if (this.data.loading || this.data.loadingMore || !this.data.hasMore) {
+      return;
+    }
+    
+    const app = getApp();
+    this.setData({
+      loadingMore: true
+    });
+    
+    try {
+      const res = await app.services.product.getProducts({
+        page: this.data.currentPage,
+        per_page: 10,
+        order: 'desc',
+        orderby: 'popularity'
+      });
+      
+      if (res.products && res.products.length > 0) {
+        // 鍚堝苟骞跺幓閲嶅晢鍝佸垪琛紝闃叉閲嶅鍔犺浇
+        const existingIds = new Set(this.data.recommendedProducts.map(product => product.id));
+        const newProducts = res.products.filter(product => !existingIds.has(product.id));
+        
+        this.setData({
+          recommendedProducts: [...this.data.recommendedProducts, ...newProducts],
+          currentPage: this.data.currentPage + 1,
+          hasMore: res.pages && res.pages >= this.data.currentPage
+        });
+      } else {
+        this.setData({
+          hasMore: false
+        });
+      }
+    } catch (error) {
+      console.error('鍔犺浇鏇村鍟嗗搧澶辫触:', error);
+      showToast('鍔犺浇鏇村澶辫触锛岃閲嶈瘯', 'none', 2000);
+    } finally {
+      this.setData({
+        loadingMore: false
+      });
+    }
+  },
+
+  /**
+   * 鑾峰彇鐑棬鍟嗗搧锛堝鐢ㄦ柟娉曪紝姝ｅ父鎯呭喌涓嬪凡鍦╣etHomeData涓幏鍙栵級
+   */
+  getHotProducts: async function() {
+    const app = getApp();
+    try {
+      const res = await app.services.product.getHotProducts({
+        per_page: 5
+      });
+      
+      this.setData({
+        hotProducts: res || []
+      });
+    } catch (error) {
+      console.error('鑾峰彇鐑棬鍟嗗搧澶辫触');
+    }
+  },
+
+  /**
+   * 鑾峰彇鏂板搧涓婂競锛堝鐢ㄦ柟娉曪紝姝ｅ父鎯呭喌涓嬪凡鍦╣etHomeData涓幏鍙栵級
+   */
+  getNewProducts: async function() {
+    const app = getApp();
+    try {
+      const res = await app.services.product.getNewProducts({
+        per_page: 5
+      });
+      
+      this.setData({
+        newProducts: res || []
+      });
+    } catch (error) {
+      console.error('鑾峰彇鏂板搧涓婂競澶辫触');
     }
   },
   
   /**
-   * 获取系统信息（用于调试）
+   * 鑾峰彇绯荤粺淇℃伅锛堢敤浜庤皟璇曪級
    * @private
    */
   _getSystemInfo: function() {
     try {
       return wx.getSystemInfoSync() || {};
     } catch (e) {
-      console.error('获取系统信息失败:', e);
+      console.error('鑾峰彇绯荤粺淇℃伅澶辫触:', e);
       return {};
     }
   },
 
   /**
-   * 跳转到文章详情页
+   * 璺宠浆鍒板晢鍝佽鎯呴〉
    */
-  navigateToPostDetail: function(e) {
-    const postId = e.currentTarget.dataset.id;
-    if (postId) {
+  navigateToProductDetail: function(e) {
+    const productId = e.currentTarget.dataset.id;
+    if (productId) {
       wx.navigateTo({
-        url: `/pages/article/detail/detail?id=${postId}`
+        url: `/pages/product/detail/detail?id=${productId}`
       });
     }
   },
 
   /**
-   * 跳转到分类页
+   * 璺宠浆鍒板垎绫婚〉
    */
   navigateToCategories: function() {
     wx.switchTab({
@@ -307,13 +317,12 @@ Page({
   },
 
   /**
-   * 跳转到分类文章列表
-   */
-  navigateToCategoryPosts: function(e) {
+   * 璺宠浆鍒板垎绫诲晢鍝佸垪琛?   */
+  navigateToCategoryProducts: function(e) {
     const categoryId = e.currentTarget.dataset.id;
     const categoryName = e.currentTarget.dataset.name;
     if (categoryId) {
-      // 跳转到分类主页并传入分类ID参数
+      // 璺宠浆鍒板垎绫讳富椤靛苟浼犲叆鍒嗙被ID鍙傛暟
       wx.switchTab({
         url: `/pages/category/category?category_id=${categoryId}&category_name=${encodeURIComponent(categoryName || '')}`
       });
@@ -321,49 +330,49 @@ Page({
   },
 
   /**
-   * 跳转到搜索页面
-   */
+   * 璺宠浆鍒版悳绱㈤〉闈?- 閲嶅畾鍚戝埌浜у搧鍒楄〃椤?   */
   navigateToSearch: function() {
-    // 搜索页面不存在，显示提示
-    showToast('搜索功能尚未实现', 'none', 2000);
+    wx.navigateTo({
+      url: '/pages/product/list/list?show_search=true'
+    });
   },
 
   /**
-   * 点击轮播图
-   */
+   * 鐐瑰嚮杞挱鍥?   */
   onBannerClick: function(e) {
     const item = e.currentTarget.dataset.item;
     if (!item) return;
     
     const app = getApp();
-    // 记录轮播图点击事件
-    app.services.analytics.trackEvent('banner_click', {
-      banner_id: item.id || item.post_id,
-      banner_type: item.type || 'post',
+    // 璁板綍杞挱鍥剧偣鍑讳簨浠?    app.services.analytics.trackEvent('banner_click', {
+      banner_id: item.id || item.product_id,
+      banner_type: item.type || 'product',
       position: e.currentTarget.dataset.index
     });
     
-    if (item.type === 'post' && item.post_id) {
+    if (item.type === 'product' && item.product_id) {
       wx.navigateTo({
-        url: `/pages/article/detail/detail?id=${item.post_id}`
+        url: `/pages/product/detail/detail?id=${item.product_id}`
       });
     } else if (item.url) {
-      // WebView页面不存在，显示提示
-      showToast('外部链接浏览功能尚未实现', 'none', 2000);
-    } else if (item.id) {
-      // 兼容其他可能的ID格式
+      // WebView椤甸潰涓嶅瓨鍦紝鏄剧ず鎻愮ず
       wx.navigateTo({
-        url: `/pages/article/detail/detail?id=${item.id}`
+        url: `/pages/webview/webview?url=${encodeURIComponent(item.url)}`
+      });
+    } else if (item.id) {
+      // 鍏煎鍏朵粬鍙兘鐨処D鏍煎紡
+      wx.navigateTo({
+        url: `/pages/product/detail/detail?id=${item.id}`
       });
     }
   },
 
   /**
-   * 分享页面
+   * 鍒嗕韩椤甸潰
    */
   onShareAppMessage: function() {
     return {
-      title: 'SUT微信小程序',
+      title: 'SUT鐢靛晢灏忕▼搴?,
       path: '/pages/index/index',
       imageUrl: this.data.bannerList && this.data.bannerList.length > 0 ? this.data.bannerList[0].image_url : ''
     };

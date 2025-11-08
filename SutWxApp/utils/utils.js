@@ -1,11 +1,11 @@
-// utils.js - 通用工具函数模块
+﻿// utils.js - 閫氱敤宸ュ叿鍑芥暟妯″潡
 
 /**
- * 节流函数
- * 限制函数在一定时间内只能执行一次，避免频繁调用影响性能
- * @param {Function} func - 需要节流的函数
- * @param {number} wait - 等待时间（毫秒）
- * @returns {Function} - 节流后的函数
+ * 鑺傛祦鍑芥暟
+ * 闄愬埗鍑芥暟鍦ㄤ竴瀹氭椂闂村唴鍙兘鎵ц涓€娆★紝閬垮厤棰戠箒璋冪敤褰卞搷鎬ц兘
+ * @param {Function} func - 闇€瑕佽妭娴佺殑鍑芥暟
+ * @param {number} wait - 绛夊緟鏃堕棿锛堟绉掞級
+ * @returns {Function} - 鑺傛祦鍚庣殑鍑芥暟
  */
 export const throttle = (func, wait) => {
   let lastCall = 0;
@@ -15,9 +15,9 @@ export const throttle = (func, wait) => {
     const now = Date.now();
     const timeSinceLastCall = now - lastCall;
     
-    // 如果距离上次调用的时间已经超过等待时间，直接执行
+    // 濡傛灉璺濈涓婃璋冪敤鐨勬椂闂村凡缁忚秴杩囩瓑寰呮椂闂达紝鐩存帴鎵ц
     if (timeSinceLastCall >= wait) {
-      // 清除之前可能存在的定时器
+      // 娓呴櫎涔嬪墠鍙兘瀛樺湪鐨勫畾鏃跺櫒
       if (timeoutId) {
         clearTimeout(timeoutId);
         timeoutId = null;
@@ -27,12 +27,11 @@ export const throttle = (func, wait) => {
       return func.apply(this, args);
     }
     
-    // 如果已经有定时器，直接返回
-    if (timeoutId) {
+    // 濡傛灉宸茬粡鏈夊畾鏃跺櫒锛岀洿鎺ヨ繑鍥?    if (timeoutId) {
       return Promise.resolve();
     }
     
-    // 设置定时器，在剩余时间后执行
+    // 璁剧疆瀹氭椂鍣紝鍦ㄥ墿浣欐椂闂村悗鎵ц
     const remainingWait = wait - timeSinceLastCall;
     return new Promise((resolve) => {
       timeoutId = setTimeout(() => {
@@ -46,17 +45,16 @@ export const throttle = (func, wait) => {
 };
 
 /**
- * 防抖函数
- * 在事件触发n秒后才执行，如果n秒内又被触发则重新计时
- * @param {Function} func - 需要防抖的函数
- * @param {number} wait - 等待时间（毫秒）
- * @returns {Function} - 防抖后的函数
+ * 闃叉姈鍑芥暟
+ * 鍦ㄤ簨浠惰Е鍙憂绉掑悗鎵嶆墽琛岋紝濡傛灉n绉掑唴鍙堣瑙﹀彂鍒欓噸鏂拌鏃? * @param {Function} func - 闇€瑕侀槻鎶栫殑鍑芥暟
+ * @param {number} wait - 绛夊緟鏃堕棿锛堟绉掞級
+ * @returns {Function} - 闃叉姈鍚庣殑鍑芥暟
  */
 export const debounce = (func, wait) => {
   let timeoutId = null;
   
   return function(...args) {
-    // 清除之前的定时器
+    // 娓呴櫎涔嬪墠鐨勫畾鏃跺櫒
     if (timeoutId) {
       clearTimeout(timeoutId);
     }
@@ -71,10 +69,9 @@ export const debounce = (func, wait) => {
 };
 
 /**
- * 格式化时间戳
- * @param {number} timestamp - 时间戳
- * @param {string} format - 格式类型：'date', 'time', 'datetime'
- * @returns {string} - 格式化后的时间字符串
+ * 鏍煎紡鍖栨椂闂存埑
+ * @param {number} timestamp - 鏃堕棿鎴? * @param {string} format - 鏍煎紡绫诲瀷锛?date', 'time', 'datetime'
+ * @returns {string} - 鏍煎紡鍖栧悗鐨勬椂闂村瓧绗︿覆
  */
 export const formatTime = (timestamp, format = 'datetime') => {
   if (!timestamp) return '';
@@ -99,9 +96,8 @@ export const formatTime = (timestamp, format = 'datetime') => {
 };
 
 /**
- * 格式化数字（添加千分位）
- * @param {number} num - 需要格式化的数字
- * @returns {string} - 格式化后的数字字符串
+ * 鏍煎紡鍖栨暟瀛楋紙娣诲姞鍗冨垎浣嶏級
+ * @param {number} num - 闇€瑕佹牸寮忓寲鐨勬暟瀛? * @returns {string} - 鏍煎紡鍖栧悗鐨勬暟瀛楀瓧绗︿覆
  */
 export const formatNumber = (num) => {
   if (num === null || num === undefined || isNaN(num)) return '0';
@@ -109,11 +105,10 @@ export const formatNumber = (num) => {
 };
 
 /**
- * 截断文本
- * @param {string} text - 原始文本
- * @param {number} maxLength - 最大长度
- * @param {string} suffix - 省略后缀，默认'...'
- * @returns {string} - 截断后的文本
+ * 鎴柇鏂囨湰
+ * @param {string} text - 鍘熷鏂囨湰
+ * @param {number} maxLength - 鏈€澶ч暱搴? * @param {string} suffix - 鐪佺暐鍚庣紑锛岄粯璁?...'
+ * @returns {string} - 鎴柇鍚庣殑鏂囨湰
  */
 export const truncateText = (text, maxLength, suffix = '...') => {
   if (!text || typeof text !== 'string') return '';
@@ -122,10 +117,8 @@ export const truncateText = (text, maxLength, suffix = '...') => {
 };
 
 /**
- * 深拷贝对象
- * @param {Object} obj - 需要拷贝的对象
- * @returns {Object} - 拷贝后的新对象
- */
+ * 娣辨嫹璐濆璞? * @param {Object} obj - 闇€瑕佹嫹璐濈殑瀵硅薄
+ * @returns {Object} - 鎷疯礉鍚庣殑鏂板璞? */
 export const deepClone = (obj) => {
   if (obj === null || typeof obj !== 'object') return obj;
   if (obj instanceof Date) return new Date(obj.getTime());
@@ -141,27 +134,26 @@ export const deepClone = (obj) => {
 };
 
 /**
- * 生成唯一ID
- * @returns {string} - 唯一ID
+ * 鐢熸垚鍞竴ID
+ * @returns {string} - 鍞竴ID
  */
 export const generateUniqueId = () => {
   return Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
 };
 
 /**
- * 检查是否为空对象
- * @param {Object} obj - 要检查的对象
- * @returns {boolean} - 是否为空对象
+ * 妫€鏌ユ槸鍚︿负绌哄璞? * @param {Object} obj - 瑕佹鏌ョ殑瀵硅薄
+ * @returns {boolean} - 鏄惁涓虹┖瀵硅薄
  */
 export const isEmptyObject = (obj) => {
   return Object.keys(obj || {}).length === 0;
 };
 
 /**
- * 数组去重
- * @param {Array} array - 要去重的数组
- * @param {string} key - 根据某个字段去重（可选）
- * @returns {Array} - 去重后的数组
+ * 鏁扮粍鍘婚噸
+ * @param {Array} array - 瑕佸幓閲嶇殑鏁扮粍
+ * @param {string} key - 鏍规嵁鏌愪釜瀛楁鍘婚噸锛堝彲閫夛級
+ * @returns {Array} - 鍘婚噸鍚庣殑鏁扮粍
  */
 export const uniqueArray = (array, key) => {
   if (!Array.isArray(array)) return [];
@@ -181,11 +173,8 @@ export const uniqueArray = (array, key) => {
 };
 
 /**
- * 计算两个日期之间的天数差
- * @param {Date|number} date1 - 第一个日期
- * @param {Date|number} date2 - 第二个日期
- * @returns {number} - 天数差
- */
+ * 璁＄畻涓や釜鏃ユ湡涔嬮棿鐨勫ぉ鏁板樊
+ * @param {Date|number} date1 - 绗竴涓棩鏈? * @param {Date|number} date2 - 绗簩涓棩鏈? * @returns {number} - 澶╂暟宸? */
 export const getDaysDiff = (date1, date2) => {
   const d1 = new Date(date1);
   const d2 = new Date(date2);
@@ -194,30 +183,29 @@ export const getDaysDiff = (date1, date2) => {
 };
 
 /**
- * 获取相对时间描述
- * @param {number|Date} time - 时间戳或日期对象
- * @returns {string} - 相对时间描述
+ * 鑾峰彇鐩稿鏃堕棿鎻忚堪
+ * @param {number|Date} time - 鏃堕棿鎴虫垨鏃ユ湡瀵硅薄
+ * @returns {string} - 鐩稿鏃堕棿鎻忚堪
  */
 export const getRelativeTime = (time) => {
   const now = Date.now();
   const diff = now - new Date(time).getTime();
   
-  if (diff < 0) return '未来';
+  if (diff < 0) return '鏈潵';
   
   const minutes = Math.floor(diff / 60000);
   const hours = Math.floor(diff / 3600000);
   const days = Math.floor(diff / 86400000);
   
-  if (minutes < 1) return '刚刚';
-  if (minutes < 60) return `${minutes}分钟前`;
-  if (hours < 24) return `${hours}小时前`;
-  if (days < 30) return `${days}天前`;
-  if (days < 365) return `${Math.floor(days / 30)}个月前`;
-  return `${Math.floor(days / 365)}年前`;
+  if (minutes < 1) return '鍒氬垰';
+  if (minutes < 60) return `${minutes}鍒嗛挓鍓峘;
+  if (hours < 24) return `${hours}灏忔椂鍓峘;
+  if (days < 30) return `${days}澶╁墠`;
+  if (days < 365) return `${Math.floor(days / 30)}涓湀鍓峘;
+  return `${Math.floor(days / 365)}骞村墠`;
 };
 
-// 导出所有工具函数
-export default {
+// 瀵煎嚭鎵€鏈夊伐鍏峰嚱鏁?export default {
   throttle,
   debounce,
   formatTime,

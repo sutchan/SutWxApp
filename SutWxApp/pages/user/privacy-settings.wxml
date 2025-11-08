@@ -1,28 +1,28 @@
-<!-- 用户隐私设置页面 -->
+﻿<!-- 鐢ㄦ埛闅愮璁剧疆椤甸潰 -->
 <view class="privacy-settings-container">
-  <!-- 加载状态 -->
+  <!-- 鍔犺浇鐘舵€?-->
   <view class="loading-container" wx:if="{{loading}}">
     <view class="loading-spinner"></view>
-    <text class="loading-text">加载中...</text>
+    <text class="loading-text">鍔犺浇涓?..</text>
   </view>
 
-  <!-- 错误状态 -->
+  <!-- 閿欒鐘舵€?-->
   <view class="error-container" wx:elif="{{error}}">
     <image src="../../images/error.svg" class="error-icon"></image>
-    <text class="error-text">加载失败</text>
-    <button class="retry-button" bindtap="retryLoad">重试</button>
+    <text class="error-text">鍔犺浇澶辫触</text>
+    <button class="retry-button" bindtap="retryLoad">閲嶈瘯</button>
   </view>
 
-  <!-- 内容区域 -->
+  <!-- 鍐呭鍖哄煙 -->
   <view class="settings-content" wx:else>
-    <!-- 社交互动设置 -->
+    <!-- 绀句氦浜掑姩璁剧疆 -->
     <view class="settings-section">
       <view class="section-header">
-        <text class="section-title">社交互动</text>
+        <text class="section-title">绀句氦浜掑姩</text>
       </view>
       <view class="settings-list">
         <view class="setting-item">
-          <text class="setting-label">允许他人评论我的内容</text>
+          <text class="setting-label">鍏佽浠栦汉璇勮鎴戠殑鍐呭</text>
           <switch 
             class="setting-switch" 
             checked="{{privacySettings.allowComments}}" 
@@ -31,7 +31,7 @@
           />
         </view>
         <view class="setting-item">
-          <text class="setting-label">允许他人关注我</text>
+          <text class="setting-label">鍏佽浠栦汉鍏虫敞鎴?/text>
           <switch 
             class="setting-switch" 
             checked="{{privacySettings.allowFollow}}" 
@@ -40,7 +40,7 @@
           />
         </view>
         <view class="setting-item">
-          <text class="setting-label">在动态中显示我的活动</text>
+          <text class="setting-label">鍦ㄥ姩鎬佷腑鏄剧ず鎴戠殑娲诲姩</text>
           <switch 
             class="setting-switch" 
             checked="{{privacySettings.showActivity}}" 
@@ -51,14 +51,14 @@
       </view>
     </view>
 
-    <!-- 通知设置 -->
+    <!-- 閫氱煡璁剧疆 -->
     <view class="settings-section">
       <view class="section-header">
-        <text class="section-title">通知设置</text>
+        <text class="section-title">閫氱煡璁剧疆</text>
       </view>
       <view class="settings-list">
         <view class="setting-item">
-          <text class="setting-label">接收系统通知</text>
+          <text class="setting-label">鎺ユ敹绯荤粺閫氱煡</text>
           <switch 
             class="setting-switch" 
             checked="{{privacySettings.receiveNotifications}}" 
@@ -69,14 +69,14 @@
       </view>
     </view>
 
-    <!-- 数据隐私设置 -->
+    <!-- 鏁版嵁闅愮璁剧疆 -->
     <view class="settings-section">
       <view class="section-header">
-        <text class="section-title">数据隐私</text>
+        <text class="section-title">鏁版嵁闅愮</text>
       </view>
       <view class="settings-list">
         <view class="setting-item">
-          <text class="setting-label">在我的内容中显示位置信息</text>
+          <text class="setting-label">鍦ㄦ垜鐨勫唴瀹逛腑鏄剧ず浣嶇疆淇℃伅</text>
           <switch 
             class="setting-switch" 
             checked="{{privacySettings.showLocation}}" 
@@ -85,7 +85,7 @@
           />
         </view>
         <view class="setting-item">
-          <text class="setting-label">与合作伙伴共享我的数据</text>
+          <text class="setting-label">涓庡悎浣滀紮浼村叡浜垜鐨勬暟鎹?/text>
           <switch 
             class="setting-switch" 
             checked="{{privacySettings.shareDataWithPartners}}" 
@@ -96,7 +96,7 @@
       </view>
     </view>
 
-    <!-- 保存按钮 -->
+    <!-- 淇濆瓨鎸夐挳 -->
     <view class="save-container">
       <button 
         class="save-button" 
@@ -104,16 +104,16 @@
         loading="{{saving}}" 
         bindtap="savePrivacySettings"
       >
-        {{saving ? '保存中...' : '保存设置'}}
+        {{saving ? '淇濆瓨涓?..' : '淇濆瓨璁剧疆'}}
       </button>
       
-      <!-- 保存成功提示 -->
-      <text class="save-success" wx:if="{{saveSuccess}}">✓ 设置已保存</text>
+      <!-- 淇濆瓨鎴愬姛鎻愮ず -->
+      <text class="save-success" wx:if="{{saveSuccess}}">鉁?璁剧疆宸蹭繚瀛?/text>
     </view>
 
-    <!-- 隐私说明 -->
+    <!-- 闅愮璇存槑 -->
     <view class="privacy-notice">
-      <text class="notice-text">注意：您的隐私设置只会影响未来的数据处理，不会删除已存在的数据。</text>
+      <text class="notice-text">娉ㄦ剰锛氭偍鐨勯殣绉佽缃彧浼氬奖鍝嶆湭鏉ョ殑鏁版嵁澶勭悊锛屼笉浼氬垹闄ゅ凡瀛樺湪鐨勬暟鎹€?/text>
     </view>
   </view>
 </view>

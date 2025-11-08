@@ -1,34 +1,29 @@
-// api.js - 统一API请求模块
-// 基于技术设计文档实现的增强版API请求模块
+﻿// api.js - 缁熶竴API璇锋眰妯″潡
+// 鍩轰簬鎶€鏈璁℃枃妗ｅ疄鐜扮殑澧炲己鐗圓PI璇锋眰妯″潡
 
-import { showToast } from './global';
-import { CACHE_KEYS, CACHE_DURATION } from './cache';
-import { setCache, getCache, removeCache, clearCacheByPrefix } from './cache';
+const { showToast } = require('./global');
+const { CACHE_KEYS, CACHE_DURATION, setCache, getCache, removeCache, clearCacheByPrefix } = require('./cache');
 
-// API基础地址，可根据环境配置
-const baseURL = 'https://您的网站域名/wp-json/sut-wechat-mini/v1';
+// API鍩虹鍦板潃锛屽彲鏍规嵁鐜閰嶇疆
+const baseURL = 'https://鎮ㄧ殑缃戠珯鍩熷悕/wp-json/sut-wechat-mini/v1';
 
-// 默认请求头
-const defaultHeaders = {
+// 榛樿璇锋眰澶?const defaultHeaders = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
 };
 
-// API缓存前缀
+// API缂撳瓨鍓嶇紑
 const API_CACHE_PREFIX = 'api_cache_';
 
-// 请求取消控制器存储
-const abortControllers = new Map();
+// 璇锋眰鍙栨秷鎺у埗鍣ㄥ瓨鍌?const abortControllers = new Map();
 
-// 默认token
+// 榛樿token
 let defaultToken = '';
 
 /**
- * 生成缓存键
- * @param {string} url - 请求URL
- * @param {Object} params - 请求参数
- * @returns {string} 缓存键
- */
+ * 鐢熸垚缂撳瓨閿? * @param {string} url - 璇锋眰URL
+ * @param {Object} params - 璇锋眰鍙傛暟
+ * @returns {string} 缂撳瓨閿? */
 const generateCacheKey = (url, params) => {
   if (!params || Object.keys(params).length === 0) {
     return `${API_CACHE_PREFIX}${url}`;
@@ -37,63 +32,55 @@ const generateCacheKey = (url, params) => {
 };
 
 /**
- * 统一API请求方法
- * @param {string} url - API接口路径
- * @param {Object} options - 请求配置项
- * @param {string} options.method - 请求方法，默认'GET'
- * @param {Object} options.data - 请求数据
- * @param {Object} options.headers - 请求头
- * @param {number} options.timeout - 请求超时时间，默认30000ms
- * @param {number} options.retryCount - 重试次数，内部使用
- * @param {boolean} options.useCache - 是否使用缓存，仅GET请求有效
- * @param {number} options.cacheDuration - 缓存持续时间（毫秒）
- * @param {string} options.abortKey - 请求取消标识
- * @returns {Promise} - 返回Promise对象
+ * 缁熶竴API璇锋眰鏂规硶
+ * @param {string} url - API鎺ュ彛璺緞
+ * @param {Object} options - 璇锋眰閰嶇疆椤? * @param {string} options.method - 璇锋眰鏂规硶锛岄粯璁?GET'
+ * @param {Object} options.data - 璇锋眰鏁版嵁
+ * @param {Object} options.headers - 璇锋眰澶? * @param {number} options.timeout - 璇锋眰瓒呮椂鏃堕棿锛岄粯璁?0000ms
+ * @param {number} options.retryCount - 閲嶈瘯娆℃暟锛屽唴閮ㄤ娇鐢? * @param {boolean} options.useCache - 鏄惁浣跨敤缂撳瓨锛屼粎GET璇锋眰鏈夋晥
+ * @param {number} options.cacheDuration - 缂撳瓨鎸佺画鏃堕棿锛堟绉掞級
+ * @param {string} options.abortKey - 璇锋眰鍙栨秷鏍囪瘑
+ * @returns {Promise} - 杩斿洖Promise瀵硅薄
  */
 const request = async (url, options = {}) => {
-  // 获取token（优先使用默认token，其次是本地存储）
-  const token = defaultToken || wx.getStorageSync('userToken') || wx.getStorageSync('jwt_token') || '';
+  // 鑾峰彇token锛堜紭鍏堜娇鐢ㄩ粯璁oken锛屽叾娆℃槸鏈湴瀛樺偍锛?  const token = defaultToken || wx.getStorageSync('userToken') || wx.getStorageSync('jwt_token') || '';
   
-  // 设置请求头
-  const headers = {
+  // 璁剧疆璇锋眰澶?  const headers = {
     ...defaultHeaders,
     ...options.headers
   };
   
-  // 如果有token，添加到请求头
-  if (token) {
+  // 濡傛灉鏈塼oken锛屾坊鍔犲埌璇锋眰澶?  if (token) {
     headers['Authorization'] = `Bearer ${token}`;
   }
   
-  // 构建完整URL
+  // 鏋勫缓瀹屾暣URL
   const fullUrl = `${baseURL}${url}`;
   
-  // 处理GET请求的缓存
-  const method = options.method || 'GET';
+  // 澶勭悊GET璇锋眰鐨勭紦瀛?  const method = options.method || 'GET';
   if (method === 'GET' && options.useCache) {
     const cacheKey = generateCacheKey(url, options.data);
     try {
       const cachedData = getCache(cacheKey);
       if (cachedData) {
-        console.log('使用缓存数据:', cacheKey);
+        console.log('浣跨敤缂撳瓨鏁版嵁:', cacheKey);
         return cachedData;
       }
     } catch (error) {
-      console.warn('获取缓存失败:', error);
+      console.warn('鑾峰彇缂撳瓨澶辫触:', error);
     }
   }
   
-  // 处理请求取消
+  // 澶勭悊璇锋眰鍙栨秷
   let abortController;
   if (options.abortKey) {
-    // 取消同一key的之前的请求
+    // 鍙栨秷鍚屼竴key鐨勪箣鍓嶇殑璇锋眰
     if (abortControllers.has(options.abortKey)) {
       abortControllers.get(options.abortKey).abort();
       abortControllers.delete(options.abortKey);
     }
     
-    // 创建新的取消控制器
-    abortController = new AbortController();
+    // 鍒涘缓鏂扮殑鍙栨秷鎺у埗鍣?    abortController = new AbortController();
     abortControllers.set(options.abortKey, abortController);
   }
   
@@ -106,22 +93,19 @@ const request = async (url, options = {}) => {
       timeout: options.timeout || 30000,
       enableHttp2: true,
       enableQuic: true,
-      enableCache: false, // 让我们自己管理缓存
-      ...(abortController ? { signal: abortController.signal } : {})
+      enableCache: false, // 璁╂垜浠嚜宸辩鐞嗙紦瀛?      ...(abortController ? { signal: abortController.signal } : {})
     });
     
-    // 清理取消控制器
-    if (options.abortKey) {
+    // 娓呯悊鍙栨秷鎺у埗鍣?    if (options.abortKey) {
       abortControllers.delete(options.abortKey);
     }
     
-    // 处理响应
+    // 澶勭悊鍝嶅簲
     if (response.statusCode >= 200 && response.statusCode < 300) {
-      // 检查响应数据格式
-      if (response.data && typeof response.data === 'object') {
-        // 统一错误处理
+      // 妫€鏌ュ搷搴旀暟鎹牸寮?      if (response.data && typeof response.data === 'object') {
+        // 缁熶竴閿欒澶勭悊
         if (response.data.code !== 200 && response.data.code) {
-          // 401表示未授权，清除token并跳转到登录
+          // 401琛ㄧず鏈巿鏉冿紝娓呴櫎token骞惰烦杞埌鐧诲綍
           if (response.data.code === 401) {
             wx.removeStorageSync('userToken');
             wx.removeStorageSync('jwt_token');
@@ -129,20 +113,19 @@ const request = async (url, options = {}) => {
             defaultToken = '';
             wx.redirectTo({ url: '/pages/user/login/login' });
           }
-          // 抛出业务错误
-          throw new Error(response.data.message || '请求失败');
+          // 鎶涘嚭涓氬姟閿欒
+          throw new Error(response.data.message || '璇锋眰澶辫触');
         }
         
-        const result = response.data.data || response.data; // 返回data部分或整个响应
-        
-        // 缓存GET请求结果
+        const result = response.data.data || response.data; // 杩斿洖data閮ㄥ垎鎴栨暣涓搷搴?        
+        // 缂撳瓨GET璇锋眰缁撴灉
         if (method === 'GET' && options.useCache) {
           const cacheKey = generateCacheKey(url, options.data);
           const duration = options.cacheDuration || CACHE_DURATION.MEDIUM;
           try {
             setCache(cacheKey, result, duration);
           } catch (error) {
-            console.warn('设置缓存失败:', error);
+            console.warn('璁剧疆缂撳瓨澶辫触:', error);
           }
         }
         
@@ -150,53 +133,49 @@ const request = async (url, options = {}) => {
       }
       return response.data;
     } else {
-      throw new Error(`请求失败: ${response.statusCode}`);
+      throw new Error(`璇锋眰澶辫触: ${response.statusCode}`);
     }
   } catch (error) {
-    // 清理取消控制器
-    if (options.abortKey) {
+    // 娓呯悊鍙栨秷鎺у埗鍣?    if (options.abortKey) {
       abortControllers.delete(options.abortKey);
     }
     
-    // 处理取消错误
+    // 澶勭悊鍙栨秷閿欒
     if (error.name === 'AbortError') {
-      throw new Error('请求已取消');
+      throw new Error('璇锋眰宸插彇娑?);
     }
     
-    // 重试逻辑
+    // 閲嶈瘯閫昏緫
     if (options.retryCount === undefined) {
       options.retryCount = 0;
     }
     
-    // 最多重试2次，仅对特定错误码重试
-    if (options.retryCount < 2 && [408, 500, 502, 503, 504].includes(error.statusCode)) {
+    // 鏈€澶氶噸璇?娆★紝浠呭鐗瑰畾閿欒鐮侀噸璇?    if (options.retryCount < 2 && [408, 500, 502, 503, 504].includes(error.statusCode)) {
       options.retryCount++;
-      // 指数退避重试
-      await new Promise(resolve => setTimeout(resolve, 1000 * Math.pow(2, options.retryCount)));
+      // 鎸囨暟閫€閬块噸璇?      await new Promise(resolve => setTimeout(resolve, 1000 * Math.pow(2, options.retryCount)));
       return request(url, options);
     }
     
-    // 显示错误提示，但避免重复显示
+    // 鏄剧ず閿欒鎻愮ず锛屼絾閬垮厤閲嶅鏄剧ず
     if (!error.silent) {
-      showToast(error.message || '网络请求失败', { icon: 'none' });
+      showToast(error.message || '缃戠粶璇锋眰澶辫触', { icon: 'none' });
     }
     throw error;
   }
 };
 
 /**
- * 设置默认token
+ * 璁剧疆榛樿token
  * @param {string} token - JWT token
  */
-export const setToken = (token) => {
+const setToken = (token) => {
   defaultToken = token;
 };
 
 /**
- * 取消指定key的请求
- * @param {string} abortKey - 请求取消标识
+ * 鍙栨秷鎸囧畾key鐨勮姹? * @param {string} abortKey - 璇锋眰鍙栨秷鏍囪瘑
  */
-export const cancelRequest = (abortKey) => {
+const cancelRequest = (abortKey) => {
   if (abortControllers.has(abortKey)) {
     abortControllers.get(abortKey).abort();
     abortControllers.delete(abortKey);
@@ -206,55 +185,52 @@ export const cancelRequest = (abortKey) => {
 };
 
 /**
- * 取消所有请求
- */
-export const cancelAllRequests = () => {
+ * 鍙栨秷鎵€鏈夎姹? */
+const cancelAllRequests = () => {
   abortControllers.forEach(controller => controller.abort());
   abortControllers.clear();
 };
 
 /**
- * 清除指定URL的缓存
- * @param {string} url - API接口路径
- * @param {Object} params - 请求参数
- * @returns {boolean} 操作是否成功
+ * 娓呴櫎鎸囧畾URL鐨勭紦瀛? * @param {string} url - API鎺ュ彛璺緞
+ * @param {Object} params - 璇锋眰鍙傛暟
+ * @returns {boolean} 鎿嶄綔鏄惁鎴愬姛
  */
-export const clearCache = (url, params) => {
+const clearCache = (url, params) => {
   const cacheKey = generateCacheKey(url, params);
   try {
     removeCache(cacheKey);
     return true;
   } catch (error) {
-    console.warn('清除缓存失败:', error);
+    console.warn('娓呴櫎缂撳瓨澶辫触:', error);
     return false;
   }
 };
 
 /**
- * 清除所有API缓存
- * @returns {boolean} 操作是否成功
+ * 娓呴櫎鎵€鏈堿PI缂撳瓨
+ * @returns {boolean} 鎿嶄綔鏄惁鎴愬姛
  */
-export const clearAllCache = () => {
+const clearAllCache = () => {
   try {
     clearCacheByPrefix(API_CACHE_PREFIX);
     return true;
   } catch (error) {
-    console.warn('清除所有缓存失败:', error);
+    console.warn('娓呴櫎鎵€鏈夌紦瀛樺け璐?', error);
     return false;
   }
 };
 
-// 导出常用请求方法
-export default {
+// 瀵煎嚭甯哥敤璇锋眰鏂规硶
+const apiModule = {
   /**
-   * GET请求
-   * @param {string} url - 请求路径
-   * @param {Object} params - 请求参数
-   * @param {Object} options - 额外配置项
-   * @param {boolean} options.useCache - 是否使用缓存
-   * @param {number} options.cacheDuration - 缓存持续时间
-   * @param {string} options.abortKey - 请求取消标识
-   * @returns {Promise} - 返回Promise对象
+   * GET璇锋眰
+   * @param {string} url - 璇锋眰璺緞
+   * @param {Object} params - 璇锋眰鍙傛暟
+   * @param {Object} options - 棰濆閰嶇疆椤?   * @param {boolean} options.useCache - 鏄惁浣跨敤缂撳瓨
+   * @param {number} options.cacheDuration - 缂撳瓨鎸佺画鏃堕棿
+   * @param {string} options.abortKey - 璇锋眰鍙栨秷鏍囪瘑
+   * @returns {Promise} - 杩斿洖Promise瀵硅薄
    */
   get: (url, params, options = {}) => request(url, { 
     method: 'GET', 
@@ -263,12 +239,11 @@ export default {
   }),
   
   /**
-   * POST请求
-   * @param {string} url - 请求路径
-   * @param {Object} data - 请求数据
-   * @param {Object} options - 额外配置项
-   * @param {string} options.abortKey - 请求取消标识
-   * @returns {Promise} - 返回Promise对象
+   * POST璇锋眰
+   * @param {string} url - 璇锋眰璺緞
+   * @param {Object} data - 璇锋眰鏁版嵁
+   * @param {Object} options - 棰濆閰嶇疆椤?   * @param {string} options.abortKey - 璇锋眰鍙栨秷鏍囪瘑
+   * @returns {Promise} - 杩斿洖Promise瀵硅薄
    */
   post: (url, data, options = {}) => request(url, { 
     method: 'POST', 
@@ -277,12 +252,11 @@ export default {
   }),
   
   /**
-   * PUT请求
-   * @param {string} url - 请求路径
-   * @param {Object} data - 请求数据
-   * @param {Object} options - 额外配置项
-   * @param {string} options.abortKey - 请求取消标识
-   * @returns {Promise} - 返回Promise对象
+   * PUT璇锋眰
+   * @param {string} url - 璇锋眰璺緞
+   * @param {Object} data - 璇锋眰鏁版嵁
+   * @param {Object} options - 棰濆閰嶇疆椤?   * @param {string} options.abortKey - 璇锋眰鍙栨秷鏍囪瘑
+   * @returns {Promise} - 杩斿洖Promise瀵硅薄
    */
   put: (url, data, options = {}) => request(url, { 
     method: 'PUT', 
@@ -291,12 +265,11 @@ export default {
   }),
   
   /**
-   * DELETE请求
-   * @param {string} url - 请求路径
-   * @param {Object} data - 请求数据
-   * @param {Object} options - 额外配置项
-   * @param {string} options.abortKey - 请求取消标识
-   * @returns {Promise} - 返回Promise对象
+   * DELETE璇锋眰
+   * @param {string} url - 璇锋眰璺緞
+   * @param {Object} data - 璇锋眰鏁版嵁
+   * @param {Object} options - 棰濆閰嶇疆椤?   * @param {string} options.abortKey - 璇锋眰鍙栨秷鏍囪瘑
+   * @returns {Promise} - 杩斿洖Promise瀵硅薄
    */
   delete: (url, data, options = {}) => request(url, { 
     method: 'DELETE', 
@@ -305,29 +278,27 @@ export default {
   }),
   
   /**
-   * 上传文件
-   * @param {string} url - 请求路径
-   * @param {Object} data - 表单数据
-   * @param {Object} file - 文件对象 {name, path}
-   * @param {Object} options - 额外配置项
-   * @param {string} options.abortKey - 请求取消标识
-   * @returns {Promise} - 返回Promise对象
+   * 涓婁紶鏂囦欢
+   * @param {string} url - 璇锋眰璺緞
+   * @param {Object} data - 琛ㄥ崟鏁版嵁
+   * @param {Object} file - 鏂囦欢瀵硅薄 {name, path}
+   * @param {Object} options - 棰濆閰嶇疆椤?   * @param {string} options.abortKey - 璇锋眰鍙栨秷鏍囪瘑
+   * @returns {Promise} - 杩斿洖Promise瀵硅薄
    */
   upload: (url, data, file, options = {}) => {
     return new Promise((resolve, reject) => {
       const token = defaultToken || wx.getStorageSync('userToken') || wx.getStorageSync('jwt_token') || '';
       
-      // 处理请求取消
+      // 澶勭悊璇锋眰鍙栨秷
       let abortController;
       if (options.abortKey) {
-        // 取消同一key的之前的请求
+        // 鍙栨秷鍚屼竴key鐨勪箣鍓嶇殑璇锋眰
         if (abortControllers.has(options.abortKey)) {
           abortControllers.get(options.abortKey).abort();
           abortControllers.delete(options.abortKey);
         }
         
-        // 创建新的取消控制器
-        abortController = new AbortController();
+        // 鍒涘缓鏂扮殑鍙栨秷鎺у埗鍣?        abortController = new AbortController();
         abortControllers.set(options.abortKey, abortController);
       }
       
@@ -340,8 +311,7 @@ export default {
           'Authorization': token ? `Bearer ${token}` : ''
         },
         success: (res) => {
-          // 清理取消控制器
-          if (options.abortKey) {
+          // 娓呯悊鍙栨秷鎺у埗鍣?          if (options.abortKey) {
             abortControllers.delete(options.abortKey);
           }
           
@@ -350,34 +320,33 @@ export default {
             if (response.code === 200) {
               resolve(response.data || response);
             } else {
-              showToast(response.message || '上传失败', { icon: 'none' });
-              reject(new Error(response.message || '上传失败'));
+              showToast(response.message || '涓婁紶澶辫触', { icon: 'none' });
+              reject(new Error(response.message || '涓婁紶澶辫触'));
             }
           } catch (error) {
-            showToast('上传失败，请重试', { icon: 'none' });
+            showToast('涓婁紶澶辫触锛岃閲嶈瘯', { icon: 'none' });
             reject(error);
           }
         },
         fail: (error) => {
-          // 清理取消控制器
-          if (options.abortKey) {
+          // 娓呯悊鍙栨秷鎺у埗鍣?          if (options.abortKey) {
             abortControllers.delete(options.abortKey);
           }
           
-          // 处理取消错误
+          // 澶勭悊鍙栨秷閿欒
           if (error.name === 'AbortError') {
-            reject(new Error('上传已取消'));
+            reject(new Error('涓婁紶宸插彇娑?));
             return;
           }
           
-          showToast('网络错误，请稍后重试', { icon: 'none' });
+          showToast('缃戠粶閿欒锛岃绋嶅悗閲嶈瘯', { icon: 'none' });
           reject(error);
         }
       });
     });
   },
   
-  // 工具方法
+  // 宸ュ叿鏂规硶
   setToken,
   cancelRequest,
   cancelAllRequests,
@@ -385,16 +354,11 @@ export default {
   clearAllCache
 };
 
-// 导出默认实例
-export const api = {
-  get: default.get,
-  post: default.post,
-  put: default.put,
-  delete: default.delete,
-  upload: default.upload,
-  setToken,
-  cancelRequest,
-  cancelAllRequests,
-  clearCache,
-  clearAllCache
-};
+// 璁剧疆module.exports涓洪粯璁ゅ鍑?module.exports = apiModule;
+
+// 瀵煎嚭api瀹炰緥鍜屽伐鍏锋柟娉?module.exports.api = apiModule;
+module.exports.setToken = setToken;
+module.exports.cancelRequest = cancelRequest;
+module.exports.cancelAllRequests = cancelAllRequests;
+module.exports.clearCache = clearCache;
+module.exports.clearAllCache = clearAllCache;

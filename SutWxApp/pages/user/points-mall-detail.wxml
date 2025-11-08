@@ -1,0 +1,89 @@
+﻿<!-- 绉垎鍟嗗煄鍟嗗搧璇︽儏椤甸潰 -->
+<view class="detail-container">
+  <!-- 鍔犺浇鐘舵€?-->
+  <view class="loading-container" wx:if="{{loading}}">
+    <view class="loading-icon"></view>
+    <text class="loading-text">鍔犺浇涓?..</text>
+  </view>
+
+  <!-- 閿欒鎻愮ず -->
+  <view class="error-container" wx:if="{{error}}">
+    <view class="error-icon">鈿狅笍</view>
+    <text class="error-text">{{error}}</text>
+    <button class="retry-button" bindtap="onRetry">閲嶈瘯</button>
+  </view>
+
+  <!-- 鍟嗗搧璇︽儏 -->
+  <view class="product-content" wx:if="{{!loading && !error && product}}">
+    <!-- 鍟嗗搧鍥剧墖 -->
+    <view class="product-image">
+      <image src="{{product.image || '/assets/images/default-product.png'}}" mode="aspectFill"></image>
+    </view>
+
+    <!-- 鍟嗗搧鍩烘湰淇℃伅 -->
+    <view class="product-info">
+      <text class="product-title">{{product.title}}</text>
+      <text class="product-description">{{product.description}}</text>
+      
+      <!-- 绉垎浠锋牸 -->
+      <view class="price-section">
+        <text class="price-label">鎵€闇€绉垎</text>
+        <view class="price-container">
+          <text class="price-value">{{product.points}}</text>
+          <text class="price-unit">绉垎</text>
+        </view>
+      </view>
+
+      <!-- 鍟嗗搧璇︽儏 -->
+      <view class="detail-section">
+        <view class="detail-item">
+          <text class="detail-label">鍟嗗搧缂栧彿</text>
+          <text class="detail-value">{{product.sku || 'N/A'}}</text>
+        </view>
+        <view class="detail-item">
+          <text class="detail-label">搴撳瓨鐘舵€?/text>
+          <text class="detail-value">{{product.stock > 0 ? '鏈夎揣' : '缂鸿揣'}}</text>
+        </view>
+        <view class="detail-item" wx:if="{{product.stock > 0}}">
+          <text class="detail-label">鍓╀綑搴撳瓨</text>
+          <text class="detail-value">{{product.stock}}</text>
+        </view>
+        <view class="detail-item">
+          <text class="detail-label">鍏戞崲闄愬埗</text>
+          <text class="detail-value">{{product.limitPerUser ? '姣忎汉闄愬厬' + product.limitPerUser + '浠? : '鏃犻檺鍒?}}</text>
+        </view>
+      </view>
+
+      <!-- 浣跨敤璇存槑 -->
+      <view class="usage-section" wx:if="{{product.usageInstructions}}">
+        <text class="section-title">浣跨敤璇存槑</text>
+        <text class="usage-text">{{product.usageInstructions}}</text>
+      </view>
+
+      <!-- 鐢ㄦ埛绉垎淇℃伅 -->
+      <view class="user-points-section">
+        <text class="user-points-label">鎴戠殑绉垎</text>
+        <text class="user-points-value">{{userPoints}}</text>
+        <view class="points-actions">
+          <text class="points-link" bindtap="navigateToPointsHistory">绉垎鏄庣粏</text>
+          <text class="points-link" bindtap="navigateToPointsRules">绉垎瑙勫垯</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 搴曢儴鎿嶄綔鏍?-->
+  <view class="bottom-bar" wx:if="{{!loading && !error && product}}">
+    <view class="points-display">
+      <text class="points-text">鍙敤绉垎: {{userPoints}}</text>
+    </view>
+    <button 
+      class="exchange-button {{userPoints < product.points || product.stock <= 0 ? 'disabled' : ''}}" 
+      bindtap="exchangeProduct"
+      loading="{{exchangeLoading}}"
+      disabled="{{userPoints < product.points || product.stock <= 0 || exchangeLoading}}"
+    >
+      {{userPoints < product.points ? '绉垎涓嶈冻' : (product.stock <= 0 ? '搴撳瓨涓嶈冻' : '绔嬪嵆鍏戞崲')}} - {{product.points}}绉垎
+    </button>
+  </view>
+</view>

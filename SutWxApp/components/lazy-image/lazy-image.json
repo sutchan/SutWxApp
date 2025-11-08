@@ -1,6 +1,6 @@
-{
+﻿{
   "component": true,
-  "description": "高性能图片懒加载组件，支持渐进式加载、错误处理和自定义样式",
+  "description": "楂樻€ц兘鍥剧墖鎳掑姞杞界粍浠讹紝鏀寔娓愯繘寮忓姞杞姐€侀敊璇鐞嗗拰鑷畾涔夋牱寮?,
   "usingComponents": {},
   "styleIsolation": "isolated",
   "multipleSlots": false,
@@ -13,7 +13,7 @@
   "behaviors": [],
   "options": {
     "virtualHost": false,
-    "pureDataPattern": /^_/, // 以_开头的data字段将不被自动绑定到wxml
+    "pureDataPattern": /^_/, // 浠寮€澶寸殑data瀛楁灏嗕笉琚嚜鍔ㄧ粦瀹氬埌wxml
     "multipleSlots": false
   }
 }

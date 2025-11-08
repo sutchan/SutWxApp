@@ -1,11 +1,11 @@
-/* pages/user/profile/profile.wxss */
+﻿/* pages/user/profile/profile.wxss */
 .profile-container {
   width: 100%;
   background-color: #f8f8f8;
   min-height: 100vh;
 }
 
-/* 未登录状态样式 */
+/* 鏈櫥褰曠姸鎬佹牱寮?*/
 .unlogin-container {
   display: flex;
   justify-content: center;
@@ -44,12 +44,12 @@
   font-size: 16px;
 }
 
-/* 已登录状态样式 */
+/* 宸茬櫥褰曠姸鎬佹牱寮?*/
 .logged-container {
   width: 100%;
 }
 
-/* 用户信息头部样式 */
+/* 鐢ㄦ埛淇℃伅澶撮儴鏍峰紡 */
 .user-header {
   display: flex;
   align-items: center;
@@ -135,7 +135,7 @@
   opacity: 0.8;
 }
 
-/* 积分信息卡片样式 */
+/* 绉垎淇℃伅鍗＄墖鏍峰紡 */
 .points-card {
   margin: 15px 15px 0;
   padding: 20px;
@@ -161,7 +161,7 @@
   color: #07c160;
 }
 
-/* 签到区域样式 */
+/* 绛惧埌鍖哄煙鏍峰紡 */
 .signin-card {
   margin: 15px;
   padding: 20px;
@@ -192,7 +192,7 @@
   color: #07c160;
 }
 
-/* 功能列表样式 */
+/* 鍔熻兘鍒楄〃鏍峰紡 */
 .feature-list {
   margin: 15px;
   background-color: #ffffff;
@@ -240,7 +240,7 @@
   margin-right: 10px;
 }
 
-/* 退出登录按钮样式 */
+/* 閫€鍑虹櫥褰曟寜閽牱寮?*/
 .logout-container {
   padding: 20px;
   margin-bottom: 30px;
@@ -256,7 +256,7 @@
   font-size: 16px;
 }
 
-/* 加载状态 */
+/* 鍔犺浇鐘舵€?*/
 .loading {
   display: flex;
   justify-content: center;
@@ -266,7 +266,7 @@
   color: #999999;
 }
 
-/* 骨架屏样式 */
+/* 楠ㄦ灦灞忔牱寮?*/
 .skeleton-container {
   background-color: #f8f8f8;
   padding: 0 30rpx 30rpx;
@@ -470,7 +470,7 @@
   }
 }
 
-/* 适配iPhone X等刘海屏 */
+/* 閫傞厤iPhone X绛夊垬娴峰睆 */
 .safe-area-top {
   padding-top: env(safe-area-inset-top, 0);
 }

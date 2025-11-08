@@ -1,0 +1,189 @@
+﻿<!-- detail.wxml - 璁㈠崟璇︽儏椤甸潰妯℃澘 -->
+
+<view class="order-detail-container">
+  <!-- 椤堕儴瀵艰埅 -->
+  <view class="nav-bar">
+    <view class="nav-back" bindtap="navigateBack">
+      <text>杩斿洖</text>
+    </view>
+    <view class="nav-title">璁㈠崟璇︽儏</view>
+    <view class="nav-placeholder"></view>
+  </view>
+
+  <!-- 鍔犺浇涓姸鎬?-->
+  <view class="loading-container" wx:if="{{loading}}">
+    <view class="loading">
+      <text>鍔犺浇涓?..</text>
+    </view>
+  </view>
+
+  <!-- 閿欒鐘舵€?-->
+  <view class="error-container" wx:if="{{error}}">
+    <view class="error-message">{{errorMessage}}</view>
+    <button class="btn-primary" bindtap="refreshOrder">閲嶆柊鍔犺浇</button>
+  </view>
+
+  <!-- 璁㈠崟璇︽儏鍐呭 -->
+  <view class="order-content" wx:if="{{!loading && !error && orderDetail}}">
+    <!-- 璁㈠崟鐘舵€?-->
+    <view class="order-status-section" style="background-color: {{statusColor}};">
+      <view class="status-text">{{statusText}}</view>
+      <view wx:if="{{countdown > 0}}" class="countdown-text">
+        璇峰湪 {{formatCountdown(countdown)}} 鍐呭畬鎴愭敮浠?      </view>
+    </view>
+
+    <!-- 鏀惰揣鍦板潃 -->
+    <view class="section address-section">
+      <view class="section-header">鏀惰揣淇℃伅</view>
+      <view class="address-content" wx:if="{{addressInfo}}">
+        <view class="address-name-phone">
+          <text class="address-name">{{addressInfo.receiver_name}}</text>
+          <text class="address-phone">{{addressInfo.receiver_phone}}</text>
+        </view>
+        <view class="address-detail">{{addressInfo.province}}{{addressInfo.city}}{{addressInfo.district}}{{addressInfo.detail_address}}</view>
+      </view>
+    </view>
+
+    <!-- 璁㈠崟鍟嗗搧 -->
+    <view class="section goods-section">
+      <view class="section-header">鍟嗗搧淇℃伅</view>
+      <view class="goods-list">
+        <view 
+          wx:for="{{orderItems}}" 
+          wx:key="index" 
+          class="goods-item" 
+          bindtap="goToProductDetail" 
+          data-id="{{item.product_id}}"
+        >
+          <view class="goods-image">
+            <image src="{{item.product_image}}" mode="aspectFit"></image>
+          </view>
+          <view class="goods-info">
+            <view class="goods-name">{{item.product_name}}</view>
+            <view wx:if="{{item.specs}}" class="goods-specs">{{item.specs}}</view>
+            <view class="goods-price-quantity">
+              <view class="goods-price">楼{{item.price}}</view>
+              <view class="goods-quantity">x{{item.quantity}}</view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 璁㈠崟淇℃伅 -->
+    <view class="section order-info-section">
+      <view class="section-header">璁㈠崟淇℃伅</view>
+      <view class="info-item">
+        <view class="info-label">璁㈠崟缂栧彿</view>
+        <view class="info-value">{{orderDetail.order_no}}</view>
+      </view>
+      <view class="info-item">
+        <view class="info-label">涓嬪崟鏃堕棿</view>
+        <view class="info-value">{{orderDetail.formatted_created_at}}</view>
+      </view>
+      <view class="info-item" wx:if="{{orderDetail.payment_method}}">
+        <view class="info-label">鏀粯鏂瑰紡</view>
+        <view class="info-value">{{orderDetail.payment_method === 'wechat' ? '寰俊鏀粯' : orderDetail.payment_method === 'alipay' ? '鏀粯瀹? : '鍏朵粬鏂瑰紡'}}</view>
+      </view>
+      <view class="info-item" wx:if="{{orderDetail.payment_time}}">
+        <view class="info-label">鏀粯鏃堕棿</view>
+        <view class="info-value">{{orderDetail.payment_time}}</view>
+      </view>
+      <view class="info-item" wx:if="{{orderDetail.shipping_no}}">
+        <view class="info-label">鐗╂祦鍗曞彿</view>
+        <view class="info-value">{{orderDetail.shipping_no}}</view>
+      </view>
+      <view class="info-item" wx:if="{{orderDetail.remark}}">
+        <view class="info-label">璁㈠崟澶囨敞</view>
+        <view class="info-value remark">{{orderDetail.remark}}</view>
+      </view>
+    </view>
+
+    <!-- 璐圭敤鏄庣粏 -->
+    <view class="section cost-section">
+      <view class="section-header">璐圭敤鏄庣粏</view>
+      <view class="cost-item">
+        <view class="cost-label">鍟嗗搧鎬婚</view>
+        <view class="cost-value">楼{{orderDetail.total_amount - orderDetail.shipping_fee}}</view>
+      </view>
+      <view class="cost-item">
+        <view class="cost-label">杩愯垂</view>
+        <view class="cost-value">楼{{orderDetail.shipping_fee}}</view>
+      </view>
+      <view class="cost-item" wx:if="{{orderDetail.coupon_amount > 0}}">
+        <view class="cost-label">浼樻儬鍒?/view>
+        <view class="cost-value">-楼{{orderDetail.coupon_amount}}</view>
+      </view>
+      <view class="cost-item total">
+        <view class="cost-label">瀹炰粯閲戦</view>
+        <view class="cost-value total-price">楼{{orderDetail.total_amount}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 鎿嶄綔鎸夐挳 -->
+  <view class="action-bar" wx:if="{{!loading && !error && orderDetail && availableActions.length > 0}}">
+    <view class="actions">
+      <block wx:if="{{availableActions.indexOf('cancelOrder') !== -1}}">
+        <button class="btn-secondary" bindtap="cancelOrder">鍙栨秷璁㈠崟</button>
+      </block>
+      <block wx:if="{{availableActions.indexOf('goToPay') !== -1}}">
+        <button class="btn-primary" bindtap="goToPay">鍘绘敮浠?/button>
+      </block>
+      <block wx:if="{{availableActions.indexOf('viewLogistics') !== -1}}">
+        <button class="btn-secondary" bindtap="viewLogistics">鏌ョ湅鐗╂祦</button>
+      </block>
+      <block wx:if="{{availableActions.indexOf('confirmReceipt') !== -1}}">
+        <button class="btn-primary" bindtap="confirmReceipt">纭鏀惰揣</button>
+      </block>
+      <block wx:if="{{availableActions.indexOf('buyAgain') !== -1}}">
+        <button class="btn-secondary" bindtap="buyAgain">鍐嶆璐拱</button>
+      </block>
+      <block wx:if="{{availableActions.indexOf('reviewOrder') !== -1}}">
+        <button class="btn-primary" bindtap="reviewOrder">璇勪环璁㈠崟</button>
+      </block>
+      <block wx:if="{{availableActions.indexOf('applyInvoice') !== -1}}">
+        <button class="btn-secondary" bindtap="applyInvoice">鐢宠鍙戠エ</button>
+      </block>
+      <block wx:if="{{availableActions.indexOf('deleteOrder') !== -1}}">
+        <button class="btn-secondary" bindtap="deleteOrder">鍒犻櫎璁㈠崟</button>
+      </block>
+      <block wx:if="{{availableActions.indexOf('contactService') !== -1}}">
+        <button class="btn-secondary" bindtap="contactService">鑱旂郴瀹㈡湇</button>
+      </block>
+    </view>
+  </view>
+
+  <!-- 鐗╂祦淇℃伅寮圭獥 -->
+  <view class="logistics-popup" wx:if="{{logisticsVisible}}">
+    <view class="popup-header">
+      <view class="popup-title">鐗╂祦淇℃伅</view>
+      <view class="popup-close" bindtap="closeLogistics">鍏抽棴</view>
+    </view>
+    <view class="popup-content">
+      <view class="logistics-company" wx:if="{{logisticsInfo}}">
+        <text>{{logisticsInfo.company_name}} {{logisticsInfo.tracking_number}}</text>
+      </view>
+      <view class="logistics-timeline">
+        <view 
+          wx:for="{{logisticsInfo && logisticsInfo.timeline ? logisticsInfo.timeline : []}}" 
+          wx:key="index" 
+          class="timeline-item {{index === 0 ? 'active' : ''}}"
+        >
+          <view class="timeline-dot"></view>
+          <view class="timeline-line"></view>
+          <view class="timeline-content">
+            <view class="timeline-text">{{item.content}}</view>
+            <view class="timeline-time">{{item.time}}</view>
+          </view>
+        </view>
+      </view>
+      <view class="empty-logistics" wx:if="{{(!logisticsInfo || !logisticsInfo.timeline || logisticsInfo.timeline.length === 0)}}">
+        <text>鏆傛棤鐗╂祦淇℃伅</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 閬僵灞?-->
+  <view class="overlay" wx:if="{{logisticsVisible}}" bindtap="closeLogistics"></view>
+</view>

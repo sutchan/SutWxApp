@@ -1,80 +1,77 @@
-// validator.js - 数据验证工具类
-// 基于技术设计文档实现的数据验证体系
+﻿// validator.js - 鏁版嵁楠岃瘉宸ュ叿绫?// 鍩轰簬鎶€鏈璁℃枃妗ｅ疄鐜扮殑鏁版嵁楠岃瘉浣撶郴
 
 /**
- * 验证工具对象，统一管理各种数据验证函数
+ * 楠岃瘉宸ュ叿瀵硅薄锛岀粺涓€绠＄悊鍚勭鏁版嵁楠岃瘉鍑芥暟
  */
 const validator = {
   /**
-   * 验证是否为有效的数字ID
-   * @param {*} id - 要验证的ID
-   * @returns {boolean} 是否为有效的ID
+   * 楠岃瘉鏄惁涓烘湁鏁堢殑鏁板瓧ID
+   * @param {*} id - 瑕侀獙璇佺殑ID
+   * @returns {boolean} 鏄惁涓烘湁鏁堢殑ID
    */
   isValidId(id) {
     return id !== undefined && id !== null && /^\d+$/.test(id.toString());
   },
   
   /**
-   * 验证是否为有效的文章ID
-   * @param {*} articleId - 文章ID
-   * @returns {boolean} 是否为有效的文章ID
+   * 楠岃瘉鏄惁涓烘湁鏁堢殑鏂囩珷ID
+   * @param {*} articleId - 鏂囩珷ID
+   * @returns {boolean} 鏄惁涓烘湁鏁堢殑鏂囩珷ID
    */
   isValidArticleId(articleId) {
     return this.isValidId(articleId);
   },
   
   /**
-   * 验证是否为有效的商品ID
-   * @param {*} productId - 商品ID
-   * @returns {boolean} 是否为有效的商品ID
+   * 楠岃瘉鏄惁涓烘湁鏁堢殑鍟嗗搧ID
+   * @param {*} productId - 鍟嗗搧ID
+   * @returns {boolean} 鏄惁涓烘湁鏁堢殑鍟嗗搧ID
    */
   isValidProductId(productId) {
     return this.isValidId(productId);
   },
   
   /**
-   * 验证是否为有效的优惠券ID
-   * @param {*} couponId - 优惠券ID
-   * @returns {boolean} 是否为有效的优惠券ID
+   * 楠岃瘉鏄惁涓烘湁鏁堢殑浼樻儬鍒窱D
+   * @param {*} couponId - 浼樻儬鍒窱D
+   * @returns {boolean} 鏄惁涓烘湁鏁堢殑浼樻儬鍒窱D
    */
   isValidCouponId(couponId) {
     return this.isValidId(couponId);
   },
   
   /**
-   * 验证是否为有效的分类ID
-   * @param {*} categoryId - 分类ID
-   * @returns {boolean} 是否为有效的分类ID
+   * 楠岃瘉鏄惁涓烘湁鏁堢殑鍒嗙被ID
+   * @param {*} categoryId - 鍒嗙被ID
+   * @returns {boolean} 鏄惁涓烘湁鏁堢殑鍒嗙被ID
    */
   isValidCategoryId(categoryId) {
     return this.isValidId(categoryId);
   },
   
   /**
-   * 验证是否为有效的订单ID
-   * @param {*} orderId - 订单ID
-   * @returns {boolean} 是否为有效的订单ID
+   * 楠岃瘉鏄惁涓烘湁鏁堢殑璁㈠崟ID
+   * @param {*} orderId - 璁㈠崟ID
+   * @returns {boolean} 鏄惁涓烘湁鏁堢殑璁㈠崟ID
    */
   isValidOrderId(orderId) {
     return this.isValidId(orderId);
   },
   
   /**
-   * 验证是否为有效的评论ID
-   * @param {*} commentId - 评论ID
-   * @returns {boolean} 是否为有效的评论ID
+   * 楠岃瘉鏄惁涓烘湁鏁堢殑璇勮ID
+   * @param {*} commentId - 璇勮ID
+   * @returns {boolean} 鏄惁涓烘湁鏁堢殑璇勮ID
    */
   isValidCommentId(commentId) {
     return this.isValidId(commentId);
   },
   
   /**
-   * 验证数量是否有效
-   * @param {*} quantity - 数量
-   * @param {Object} options - 验证选项
-   * @param {number} options.min - 最小值
-   * @param {number} options.max - 最大值
-   * @returns {boolean} 是否为有效的数量
+   * 楠岃瘉鏁伴噺鏄惁鏈夋晥
+   * @param {*} quantity - 鏁伴噺
+   * @param {Object} options - 楠岃瘉閫夐」
+   * @param {number} options.min - 鏈€灏忓€?   * @param {number} options.max - 鏈€澶у€?   * @returns {boolean} 鏄惁涓烘湁鏁堢殑鏁伴噺
    */
   isValidQuantity(quantity, options = {}) {
     const num = Number(quantity);
@@ -84,12 +81,10 @@ const validator = {
   },
   
   /**
-   * 验证价格是否有效
-   * @param {*} price - 价格
-   * @param {Object} options - 验证选项
-   * @param {number} options.min - 最小值
-   * @param {number} options.max - 最大值
-   * @returns {boolean} 是否为有效的价格
+   * 楠岃瘉浠锋牸鏄惁鏈夋晥
+   * @param {*} price - 浠锋牸
+   * @param {Object} options - 楠岃瘉閫夐」
+   * @param {number} options.min - 鏈€灏忓€?   * @param {number} options.max - 鏈€澶у€?   * @returns {boolean} 鏄惁涓烘湁鏁堢殑浠锋牸
    */
   isValidPrice(price, options = {}) {
     const num = Number(price);
@@ -99,22 +94,14 @@ const validator = {
   },
   
   /**
-   * 验证字符串是否为空
-   * @param {*} str - 字符串
-   * @returns {boolean} 是否为空字符串
-   */
+   * 楠岃瘉瀛楃涓叉槸鍚︿负绌?   * @param {*} str - 瀛楃涓?   * @returns {boolean} 鏄惁涓虹┖瀛楃涓?   */
   isEmptyString(str) {
     return str === undefined || str === null || str.trim() === '';
   },
   
   /**
-   * 验证是否为有效的字符串
-   * @param {*} str - 字符串
-   * @param {Object} options - 验证选项
-   * @param {number} options.minLength - 最小长度
-   * @param {number} options.maxLength - 最大长度
-   * @returns {boolean} 是否为有效的字符串
-   */
+   * 楠岃瘉鏄惁涓烘湁鏁堢殑瀛楃涓?   * @param {*} str - 瀛楃涓?   * @param {Object} options - 楠岃瘉閫夐」
+   * @param {number} options.minLength - 鏈€灏忛暱搴?   * @param {number} options.maxLength - 鏈€澶ч暱搴?   * @returns {boolean} 鏄惁涓烘湁鏁堢殑瀛楃涓?   */
   isValidString(str, options = {}) {
     const { minLength = 1, maxLength = Infinity } = options;
     
@@ -125,36 +112,30 @@ const validator = {
   },
   
   /**
-   * 验证是否为有效的用户名
-   * @param {string} username - 用户名
-   * @returns {boolean} 是否为有效的用户名
-   */
+   * 楠岃瘉鏄惁涓烘湁鏁堢殑鐢ㄦ埛鍚?   * @param {string} username - 鐢ㄦ埛鍚?   * @returns {boolean} 鏄惁涓烘湁鏁堢殑鐢ㄦ埛鍚?   */
   isValidUsername(username) {
     return this.isValidString(username, { minLength: 3, maxLength: 50 });
   },
   
   /**
-   * 验证是否为有效的手机号
-   * @param {string} phone - 手机号
-   * @returns {boolean} 是否为有效的手机号
-   */
+   * 楠岃瘉鏄惁涓烘湁鏁堢殑鎵嬫満鍙?   * @param {string} phone - 鎵嬫満鍙?   * @returns {boolean} 鏄惁涓烘湁鏁堢殑鎵嬫満鍙?   */
   isValidPhone(phone) {
     return /^1[3-9]\d{9}$/.test(phone);
   },
   
   /**
-   * 验证是否为有效的邮箱
-   * @param {string} email - 邮箱
-   * @returns {boolean} 是否为有效的邮箱
+   * 楠岃瘉鏄惁涓烘湁鏁堢殑閭
+   * @param {string} email - 閭
+   * @returns {boolean} 鏄惁涓烘湁鏁堢殑閭
    */
   isValidEmail(email) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   },
   
   /**
-   * 验证是否为有效的URL
+   * 楠岃瘉鏄惁涓烘湁鏁堢殑URL
    * @param {string} url - URL
-   * @returns {boolean} 是否为有效的URL
+   * @returns {boolean} 鏄惁涓烘湁鏁堢殑URL
    */
   isValidUrl(url) {
     try {
@@ -166,9 +147,9 @@ const validator = {
   },
   
   /**
-   * 验证是否为有效的图片URL
-   * @param {string} url - 图片URL
-   * @returns {boolean} 是否为有效的图片URL
+   * 楠岃瘉鏄惁涓烘湁鏁堢殑鍥剧墖URL
+   * @param {string} url - 鍥剧墖URL
+   * @returns {boolean} 鏄惁涓烘湁鏁堢殑鍥剧墖URL
    */
   isValidImageUrl(url) {
     if (!this.isValidUrl(url)) return false;
@@ -178,39 +159,30 @@ const validator = {
   },
   
   /**
-   * 验证是否为有效的优惠券状态
-   * @param {string} status - 优惠券状态
-   * @returns {boolean} 是否为有效的优惠券状态
-   */
+   * 楠岃瘉鏄惁涓烘湁鏁堢殑浼樻儬鍒哥姸鎬?   * @param {string} status - 浼樻儬鍒哥姸鎬?   * @returns {boolean} 鏄惁涓烘湁鏁堢殑浼樻儬鍒哥姸鎬?   */
   isValidCouponStatus(status) {
     const validStatuses = ['available', 'used', 'expired'];
     return validStatuses.includes(status);
   },
   
   /**
-   * 验证是否为有效的订单状态
-   * @param {string} status - 订单状态
-   * @returns {boolean} 是否为有效的订单状态
-   */
+   * 楠岃瘉鏄惁涓烘湁鏁堢殑璁㈠崟鐘舵€?   * @param {string} status - 璁㈠崟鐘舵€?   * @returns {boolean} 鏄惁涓烘湁鏁堢殑璁㈠崟鐘舵€?   */
   isValidOrderStatus(status) {
     const validStatuses = ['pending', 'processing', 'completed', 'cancelled', 'refunded'];
     return validStatuses.includes(status);
   },
   
   /**
-   * 验证是否为有效的日期
-   * @param {*} date - 日期
-   * @returns {boolean} 是否为有效的日期
+   * 楠岃瘉鏄惁涓烘湁鏁堢殑鏃ユ湡
+   * @param {*} date - 鏃ユ湡
+   * @returns {boolean} 鏄惁涓烘湁鏁堢殑鏃ユ湡
    */
   isValidDate(date) {
     return date instanceof Date && !isNaN(date);
   },
   
   /**
-   * 验证是否为有效的日期字符串（YYYY-MM-DD格式）
-   * @param {string} dateStr - 日期字符串
-   * @returns {boolean} 是否为有效的日期字符串
-   */
+   * 楠岃瘉鏄惁涓烘湁鏁堢殑鏃ユ湡瀛楃涓诧紙YYYY-MM-DD鏍煎紡锛?   * @param {string} dateStr - 鏃ユ湡瀛楃涓?   * @returns {boolean} 鏄惁涓烘湁鏁堢殑鏃ユ湡瀛楃涓?   */
   isValidDateString(dateStr) {
     if (typeof dateStr !== 'string') return false;
     
@@ -222,9 +194,9 @@ const validator = {
   },
   
   /**
-   * 验证对象是否为空
-   * @param {*} obj - 对象
-   * @returns {boolean} 是否为空对象
+   * 楠岃瘉瀵硅薄鏄惁涓虹┖
+   * @param {*} obj - 瀵硅薄
+   * @returns {boolean} 鏄惁涓虹┖瀵硅薄
    */
   isEmptyObject(obj) {
     return obj === undefined || obj === null || 
@@ -232,9 +204,9 @@ const validator = {
   },
   
   /**
-   * 验证数组是否为空
-   * @param {*} arr - 数组
-   * @returns {boolean} 是否为空数组
+   * 楠岃瘉鏁扮粍鏄惁涓虹┖
+   * @param {*} arr - 鏁扮粍
+   * @returns {boolean} 鏄惁涓虹┖鏁扮粍
    */
   isEmptyArray(arr) {
     return arr === undefined || arr === null || 
@@ -242,9 +214,9 @@ const validator = {
   },
   
   /**
-   * 验证是否为有效的评分（1-5分）
-   * @param {*} rating - 评分
-   * @returns {boolean} 是否为有效的评分
+   * 楠岃瘉鏄惁涓烘湁鏁堢殑璇勫垎锛?-5鍒嗭級
+   * @param {*} rating - 璇勫垎
+   * @returns {boolean} 鏄惁涓烘湁鏁堢殑璇勫垎
    */
   isValidRating(rating) {
     const num = Number(rating);
@@ -252,10 +224,10 @@ const validator = {
   },
   
   /**
-   * 验证分页参数
-   * @param {*} page - 页码
-   * @param {*} pageSize - 每页数量
-   * @returns {boolean} 是否为有效的分页参数
+   * 楠岃瘉鍒嗛〉鍙傛暟
+   * @param {*} page - 椤电爜
+   * @param {*} pageSize - 姣忛〉鏁伴噺
+   * @returns {boolean} 鏄惁涓烘湁鏁堢殑鍒嗛〉鍙傛暟
    */
   isValidPagination(page, pageSize) {
     return this.isValidQuantity(page, { min: 1 }) && 
@@ -263,10 +235,9 @@ const validator = {
   },
   
   /**
-   * 生成验证错误信息
-   * @param {string} field - 字段名
-   * @param {string} message - 错误信息
-   * @returns {Object} 错误对象
+   * 鐢熸垚楠岃瘉閿欒淇℃伅
+   * @param {string} field - 瀛楁鍚?   * @param {string} message - 閿欒淇℃伅
+   * @returns {Object} 閿欒瀵硅薄
    */
   createValidationError(field, message) {
     return {

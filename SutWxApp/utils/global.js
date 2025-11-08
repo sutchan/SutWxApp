@@ -1,13 +1,11 @@
-// 全局工具类
-// 提供小程序中常用的工具方法
-
+﻿// 鍏ㄥ眬宸ュ叿绫?// 鎻愪緵灏忕▼搴忎腑甯哥敤鐨勫伐鍏锋柟娉?
 /**
- * 显示提示信息
- * @param {string} title - 提示内容
- * @param {object} options - 选项
- * @param {string} options.icon - 图标类型，可选'none'|'success'|'loading'|'error'
- * @param {number} options.duration - 提示时间，默认2000ms
- * @param {boolean} options.mask - 是否显示透明蒙层，默认false
+ * 鏄剧ず鎻愮ず淇℃伅
+ * @param {string} title - 鎻愮ず鍐呭
+ * @param {object} options - 閫夐」
+ * @param {string} options.icon - 鍥炬爣绫诲瀷锛屽彲閫?none'|'success'|'loading'|'error'
+ * @param {number} options.duration - 鎻愮ず鏃堕棿锛岄粯璁?000ms
+ * @param {boolean} options.mask - 鏄惁鏄剧ず閫忔槑钂欏眰锛岄粯璁alse
  */
 export function showToast(title, options = {}) {
   const {
@@ -25,11 +23,11 @@ export function showToast(title, options = {}) {
 }
 
 /**
- * 显示加载提示
- * @param {string} title - 提示内容，默认'加载中'
- * @param {boolean} mask - 是否显示透明蒙层，默认true
+ * 鏄剧ず鍔犺浇鎻愮ず
+ * @param {string} title - 鎻愮ず鍐呭锛岄粯璁?鍔犺浇涓?
+ * @param {boolean} mask - 鏄惁鏄剧ず閫忔槑钂欏眰锛岄粯璁rue
  */
-export function showLoading(title = '加载中', mask = true) {
+export function showLoading(title = '鍔犺浇涓?, mask = true) {
   wx.showLoading({
     title,
     mask
@@ -37,21 +35,20 @@ export function showLoading(title = '加载中', mask = true) {
 }
 
 /**
- * 隐藏加载提示
+ * 闅愯棌鍔犺浇鎻愮ず
  */
 export function hideLoading() {
   wx.hideLoading();
 }
 
 /**
- * 显示确认对话框
- * @param {string} title - 标题
- * @param {string} content - 内容
- * @param {object} options - 选项
- * @param {Function} options.success - 确认回调
- * @param {Function} options.fail - 失败回调
- * @param {Function} options.complete - 完成回调
- * @returns {Promise} 返回Promise对象
+ * 鏄剧ず纭瀵硅瘽妗? * @param {string} title - 鏍囬
+ * @param {string} content - 鍐呭
+ * @param {object} options - 閫夐」
+ * @param {Function} options.success - 纭鍥炶皟
+ * @param {Function} options.fail - 澶辫触鍥炶皟
+ * @param {Function} options.complete - 瀹屾垚鍥炶皟
+ * @returns {Promise} 杩斿洖Promise瀵硅薄
  */
 export function showConfirm(title, content, options = {}) {
   const { success, fail, complete } = options;
@@ -65,7 +62,7 @@ export function showConfirm(title, content, options = {}) {
         if (res.confirm) {
           resolve(res);
         } else {
-          reject(new Error('用户取消操作'));
+          reject(new Error('鐢ㄦ埛鍙栨秷鎿嶄綔'));
         }
       },
       fail: (error) => {
@@ -80,69 +77,63 @@ export function showConfirm(title, content, options = {}) {
 }
 
 /**
- * 本地存储 - 存数据
- * @param {string} key - 存储键名
- * @param {*} value - 存储值
- * @returns {boolean} 是否存储成功
+ * 鏈湴瀛樺偍 - 瀛樻暟鎹? * @param {string} key - 瀛樺偍閿悕
+ * @param {*} value - 瀛樺偍鍊? * @returns {boolean} 鏄惁瀛樺偍鎴愬姛
  */
 export function setStorage(key, value) {
   try {
     wx.setStorageSync(key, value);
     return true;
   } catch (e) {
-    console.error('存储数据失败:', e);
+    console.error('瀛樺偍鏁版嵁澶辫触:', e);
     return false;
   }
 }
 
 /**
- * 本地存储 - 取数据
- * @param {string} key - 存储键名
- * @returns {*} 存储的值
- */
+ * 鏈湴瀛樺偍 - 鍙栨暟鎹? * @param {string} key - 瀛樺偍閿悕
+ * @returns {*} 瀛樺偍鐨勫€? */
 export function getStorage(key) {
   try {
     return wx.getStorageSync(key);
   } catch (e) {
-    console.error('获取数据失败:', e);
+    console.error('鑾峰彇鏁版嵁澶辫触:', e);
     return null;
   }
 }
 
 /**
- * 本地存储 - 删除数据
- * @param {string} key - 存储键名
- * @returns {boolean} 是否删除成功
+ * 鏈湴瀛樺偍 - 鍒犻櫎鏁版嵁
+ * @param {string} key - 瀛樺偍閿悕
+ * @returns {boolean} 鏄惁鍒犻櫎鎴愬姛
  */
 export function removeStorage(key) {
   try {
     wx.removeStorageSync(key);
     return true;
   } catch (e) {
-    console.error('删除数据失败:', e);
+    console.error('鍒犻櫎鏁版嵁澶辫触:', e);
     return false;
   }
 }
 
 /**
- * 本地存储 - 清空所有数据
- * @returns {boolean} 是否清空成功
+ * 鏈湴瀛樺偍 - 娓呯┖鎵€鏈夋暟鎹? * @returns {boolean} 鏄惁娓呯┖鎴愬姛
  */
 export function clearStorage() {
   try {
     wx.clearStorageSync();
     return true;
   } catch (e) {
-    console.error('清空数据失败:', e);
+    console.error('娓呯┖鏁版嵁澶辫触:', e);
     return false;
   }
 }
 
 /**
- * 格式化时间
- * @param {string|number|Date} date - 时间对象或时间戳
- * @param {string} format - 格式化模板，默认'YYYY-MM-DD HH:mm:ss'
- * @returns {string} 格式化后的时间字符串
+ * 鏍煎紡鍖栨椂闂? * @param {string|number|Date} date - 鏃堕棿瀵硅薄鎴栨椂闂存埑
+ * @param {string} format - 鏍煎紡鍖栨ā鏉匡紝榛樿'YYYY-MM-DD HH:mm:ss'
+ * @returns {string} 鏍煎紡鍖栧悗鐨勬椂闂村瓧绗︿覆
  */
 export function formatTime(date, format = 'YYYY-MM-DD HH:mm:ss') {
   if (!date) return '';
@@ -165,11 +156,9 @@ export function formatTime(date, format = 'YYYY-MM-DD HH:mm:ss') {
 }
 
 /**
- * 格式化数字
- * @param {number} num - 数字
- * @param {number} decimals - 小数位数，默认2
- * @returns {string} 格式化后的数字
- */
+ * 鏍煎紡鍖栨暟瀛? * @param {number} num - 鏁板瓧
+ * @param {number} decimals - 灏忔暟浣嶆暟锛岄粯璁?
+ * @returns {string} 鏍煎紡鍖栧悗鐨勬暟瀛? */
 export function formatNumber(num, decimals = 2) {
   if (typeof num !== 'number') {
     return '0';
@@ -179,18 +168,16 @@ export function formatNumber(num, decimals = 2) {
 }
 
 /**
- * 检查是否为空对象
- * @param {object} obj - 要检查的对象
- * @returns {boolean} 是否为空对象
+ * 妫€鏌ユ槸鍚︿负绌哄璞? * @param {object} obj - 瑕佹鏌ョ殑瀵硅薄
+ * @returns {boolean} 鏄惁涓虹┖瀵硅薄
  */
 export function isEmptyObject(obj) {
   return Object.keys(obj).length === 0 && obj.constructor === Object;
 }
 
 /**
- * 深拷贝对象
- * @param {*} obj - 要拷贝的对象
- * @returns {*} 拷贝后的对象
+ * 娣辨嫹璐濆璞? * @param {*} obj - 瑕佹嫹璐濈殑瀵硅薄
+ * @returns {*} 鎷疯礉鍚庣殑瀵硅薄
  */
 export function deepClone(obj) {
   if (obj === null || typeof obj !== 'object') {
@@ -217,10 +204,10 @@ export function deepClone(obj) {
 }
 
 /**
- * 防抖函数
- * @param {Function} func - 要执行的函数
- * @param {number} wait - 等待时间，默认300ms
- * @returns {Function} 防抖后的函数
+ * 闃叉姈鍑芥暟
+ * @param {Function} func - 瑕佹墽琛岀殑鍑芥暟
+ * @param {number} wait - 绛夊緟鏃堕棿锛岄粯璁?00ms
+ * @returns {Function} 闃叉姈鍚庣殑鍑芥暟
  */
 export function debounce(func, wait = 300) {
   let timeout;
@@ -231,10 +218,10 @@ export function debounce(func, wait = 300) {
 }
 
 /**
- * 节流函数
- * @param {Function} func - 要执行的函数
- * @param {number} limit - 限制时间，默认300ms
- * @returns {Function} 节流后的函数
+ * 鑺傛祦鍑芥暟
+ * @param {Function} func - 瑕佹墽琛岀殑鍑芥暟
+ * @param {number} limit - 闄愬埗鏃堕棿锛岄粯璁?00ms
+ * @returns {Function} 鑺傛祦鍚庣殑鍑芥暟
  */
 export function throttle(func, limit = 300) {
   let inThrottle;
@@ -248,8 +235,8 @@ export function throttle(func, limit = 300) {
 }
 
 /**
- * 获取页面路由参数
- * @returns {object} 路由参数对象
+ * 鑾峰彇椤甸潰璺敱鍙傛暟
+ * @returns {object} 璺敱鍙傛暟瀵硅薄
  */
 export function getPageParams() {
   const pages = getCurrentPages();
@@ -257,8 +244,7 @@ export function getPageParams() {
   return currentPage ? currentPage.options : {};
 }
 
-// 导出所有函数
-export default {
+// 瀵煎嚭鎵€鏈夊嚱鏁?export default {
   showToast,
   showLoading,
   hideLoading,

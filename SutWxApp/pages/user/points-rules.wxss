@@ -1,36 +1,39 @@
-/* 积分规则页面样式 */
+﻿/* 绉垎瑙勫垯椤甸潰鏍峰紡 */
 .rules-container {
-  min-height: 100vh;
+  padding: 20rpx;
   background-color: #f5f5f5;
+  min-height: 100vh;
+  box-sizing: border-box;
 }
 
-/* 通用区块样式 */
+/* 閫氱敤鍖哄潡鏍峰紡 */
 .section {
-  margin-bottom: 30rpx;
+  margin-bottom: 20rpx;
   background-color: #fff;
-  border-radius: 10rpx;
+  border-radius: 16rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
   overflow: hidden;
 }
 
 .section-header {
-  padding: 30rpx;
-  border-bottom: 1rpx solid #eee;
+  padding: 24rpx 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
 }
 
 .section-title {
   font-size: 32rpx;
-  font-weight: 500;
+  font-weight: bold;
   color: #333;
 }
 
-/* 规则列表 */
+/* 瑙勫垯鍒楄〃 */
 .rules-list {
-  /* 规则列表容器 */
+  /* 瑙勫垯鍒楄〃瀹瑰櫒 */
 }
 
 .rule-item {
-  padding: 30rpx;
-  border-bottom: 1rpx solid #f0f0f0;
+  padding: 24rpx 30rpx;
+  border-bottom: 1rpx solid #f5f5f5;
 }
 
 .rule-item:last-child {
@@ -38,26 +41,14 @@
 }
 
 .rule-content {
-  /* 规则内容 */
+  /* 瑙勫垯鍐呭 */
 }
 
-.rule-title {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10rpx;
-}
-
-.title-text {
-  font-size: 30rpx;
-  color: #333;
-  font-weight: 500;
-}
-
-.points-text {
-  font-size: 32rpx;
-  color: #1aad19;
-  font-weight: bold;
+.rule-limit {
+  font-size: 24rpx;
+  color: #666;
+  margin-top: 6rpx;
+  display: block;
 }
 
 .rule-description {
@@ -66,13 +57,13 @@
   line-height: 1.5;
 }
 
-/* 常见问题 */
+/* 甯歌闂 */
 .faq-list {
-  /* 常见问题列表容器 */
+  /* 甯歌闂鍒楄〃瀹瑰櫒 */
 }
 
 .faq-item {
-  border-bottom: 1rpx solid #f0f0f0;
+  border-bottom: 1rpx solid #f5f5f5;
   overflow: hidden;
 }
 
@@ -84,19 +75,19 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 30rpx;
+  padding: 24rpx 30rpx;
 }
 
 .faq-question {
-  font-size: 30rpx;
+  font-size: 28rpx;
   color: #333;
   flex: 1;
   margin-right: 20rpx;
 }
 
 .faq-icon {
-  width: 30rpx;
-  height: 30rpx;
+  width: 24rpx;
+  height: 24rpx;
   transition: transform 0.3s;
 }
 
@@ -105,7 +96,7 @@
 }
 
 .faq-answer {
-  padding: 0 30rpx 30rpx;
+  padding: 0 30rpx 24rpx;
 }
 
 .faq-answer text {
@@ -114,27 +105,21 @@
   line-height: 1.6;
 }
 
-/* 加载状态 */
+/* 鍔犺浇鐘舵€?*/
 .loading-container {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: rgba(0, 0, 0, 0.7);
-  padding: 30rpx 50rpx;
-  border-radius: 10rpx;
-  color: #fff;
   display: flex;
   flex-direction: column;
   align-items: center;
-  z-index: 9999;
+  justify-content: center;
+  padding: 100rpx 0;
+  color: #999;
 }
 
 .loading {
-  width: 44rpx;
-  height: 44rpx;
-  border: 4rpx solid rgba(255, 255, 255, 0.3);
-  border-top: 4rpx solid #fff;
+  width: 40rpx;
+  height: 40rpx;
+  border: 4rpx solid #f3f3f3;
+  border-top: 4rpx solid #ff6600;
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin-bottom: 20rpx;
@@ -146,35 +131,39 @@
 }
 
 .loading-text {
-  font-size: 28rpx;
+  font-size: 24rpx;
 }
 
-/* 错误提示 */
+/* 閿欒鎻愮ず */
 .error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   padding: 100rpx 0;
-  text-align: center;
-  background-color: #f5f5f5;
+  color: #999;
 }
 
 .error-icon {
-  width: 60rpx;
-  height: 60rpx;
-  margin-bottom: 30rpx;
+  width: 80rpx;
+  height: 80rpx;
+  margin-bottom: 20rpx;
 }
 
 .error-text {
   font-size: 28rpx;
   color: #ff4757;
-  margin-bottom: 30rpx;
+  margin-bottom: 20rpx;
   display: block;
 }
 
 .retry-button {
-  font-size: 28rpx;
-  padding: 10rpx 40rpx;
-  background-color: #fff;
-  color: #1aad19;
-  border-color: #1aad19;
+  background: #ff6600;
+  color: white;
+  border: none;
+  padding: 12rpx 40rpx;
+  border-radius: 20rpx;
+  font-size: 24rpx;
   margin-bottom: 20rpx;
 }
 
@@ -182,4 +171,5 @@
   font-size: 26rpx;
   color: #999;
   padding: 0 60rpx;
+  text-align: center;
 }

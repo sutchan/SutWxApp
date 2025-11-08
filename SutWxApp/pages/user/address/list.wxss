@@ -1,11 +1,11 @@
-/* 地址列表页面样式 */
+﻿/* 鍦板潃鍒楄〃椤甸潰鏍峰紡 */
 .container {
   background-color: #f8f8f8;
   min-height: 100vh;
   padding-bottom: 30rpx;
 }
 
-/* 加载状态样式 */
+/* 鍔犺浇鐘舵€佹牱寮?*/
 .loading {
   padding: 60rpx;
   text-align: center;
@@ -13,7 +13,7 @@
   color: #999999;
 }
 
-/* 错误状态样式 */
+/* 閿欒鐘舵€佹牱寮?*/
 .error {
   padding: 60rpx 20rpx;
   text-align: center;
@@ -44,12 +44,12 @@
   display: block;
 }
 
-/* 地址列表样式 */
+/* 鍦板潃鍒楄〃鏍峰紡 */
 .address-list {
   padding: 20rpx 0;
 }
 
-/* 空状态样式 */
+/* 绌虹姸鎬佹牱寮?*/
 .empty {
   text-align: center;
   padding: 80rpx 0;
@@ -62,7 +62,7 @@
   margin-bottom: 30rpx;
 }
 
-/* 地址项样式 */
+/* 鍦板潃椤规牱寮?*/
 .address-item {
   background-color: #ffffff;
   margin: 0 20rpx 20rpx;
@@ -109,7 +109,7 @@
   padding-left: 2rpx;
 }
 
-/* 地址操作按钮样式 */
+/* 鍦板潃鎿嶄綔鎸夐挳鏍峰紡 */
 .address-actions {
   display: flex;
   border-top: 2rpx solid #f0f0f0;
@@ -134,7 +134,7 @@
   color: #ff6b81;
 }
 
-/* 添加地址按钮样式 */
+/* 娣诲姞鍦板潃鎸夐挳鏍峰紡 */
 .add-address-btn {
   position: fixed;
   bottom: 40rpx;
@@ -149,7 +149,7 @@
   box-shadow: 0 4rpx 20rpx rgba(255, 107, 129, 0.3);
 }
 
-/* 选择模式下的样式 */
+/* 閫夋嫨妯″紡涓嬬殑鏍峰紡 */
 .address-content:active {
   background-color: rgba(0, 0, 0, 0.02);
 }

@@ -1,0 +1,270 @@
+﻿<!-- 绉垎浠诲姟椤甸潰 -->
+<view class="points-tasks-container">
+  <!-- 椤甸潰鏍囬 -->
+  <view class="page-header">
+    <text class="page-title">{{t('points_tasks_page_title')}}</text>
+    <view class="header-actions">
+      <text class="header-link" bindtap="navigateToPointsRules">{{t('points_rules')}}</text>
+      <text class="header-link" bindtap="navigateToPointsMall">{{t('points_mall')}}</text>
+    </view>
+  </view>
+
+  <!-- 浠诲姟绫诲瀷绛涢€?-->
+  <view class="task-filter" wx:if="{{!loading && !error}}">
+    <view 
+      class="filter-item {{selectedType === 'all' ? 'active' : ''}}"
+      data-type="all"
+      bindtap="switchTaskType"
+    >
+      {{t('task_type_all')}}
+    </view>
+    <view 
+      class="filter-item {{selectedType === 'once' ? 'active' : ''}}"
+      data-type="once"
+      bindtap="switchTaskType"
+    >
+      {{t('task_type_once')}}
+    </view>
+    <view 
+      class="filter-item {{selectedType === 'daily' ? 'active' : ''}}"
+      data-type="daily"
+      bindtap="switchTaskType"
+    >
+      {{t('task_type_daily')}}
+    </view>
+    <view 
+      class="filter-item {{selectedType === 'weekly' ? 'active' : ''}}"
+      data-type="weekly"
+      bindtap="switchTaskType"
+    >
+      {{t('task_type_weekly')}}
+    </view>
+    <view 
+      class="filter-item {{selectedType === 'monthly' ? 'active' : ''}}"
+      data-type="monthly"
+      bindtap="switchTaskType"
+    >
+      {{t('task_type_monthly')}}
+    </view>
+  </view>
+
+  <!-- 鍔犺浇鐘舵€?-->
+  <view class="loading-container" wx:if="{{loading}}">
+    <view class="loading-icon"></view>
+    <text class="loading-text">{{t('loading')}}</text>
+  </view>
+
+  <!-- 閿欒鎻愮ず -->
+  <view class="error-container" wx:if="{{error}}">
+    <view class="error-icon">鈿狅笍</view>
+    <text class="error-text">{{error}}</text>
+    <button class="retry-button" bindtap="onRetry">{{t('retry')}}</button>
+  </view>
+
+  <!-- 浠诲姟鍒楄〃 -->
+  <view class="tasks-list" wx:if="{{!loading && !error}}">
+    <!-- 鏂版墜浠诲姟缁?-->
+    <view class="task-group" wx:if="{{taskGroups.once.length > 0}}">
+      <view class="group-header">
+        <text class="group-title">{{t('task_type_once')}}</text>
+        <text class="group-desc">{{t('task_once_desc')}}</text>
+      </view>
+      
+      <view class="task-items">
+        <view 
+          class="task-item {{item.isCompleted ? 'completed' : ''}} {{item.isUnclaimed ? 'unclaimed' : ''}}" 
+          wx:for="{{taskGroups.once}}" 
+          wx:key="id"
+          data-id="{{item.id}}"
+          bindtap="handleTask"
+        >
+          <view class="task-info">
+            <view class="task-left">
+              <view class="task-icon {{item.type}}">
+                {{item.icon || '鉁?}}
+              </view>
+              <view class="task-details">
+                <text class="task-title">{{item.title}}</text>
+                <text class="task-desc">{{item.description}}</text>
+              </view>
+            </view>
+            <view class="task-right">
+              <text class="task-points">+{{item.points}}{{t('points')}}</text>
+              <view class="task-status">
+                <text wx:if="{{item.isUnclaimed}}" class="status-unclaimed">{{t('task_claim_reward')}}</text>
+                <text wx:elif="{{item.isCompleted}}" class="status-completed">{{t('task_completed')}}</text>
+                <text wx:elif="{{item.canComplete}}" class="status-action">{{t('task_complete_now')}}</text>
+                <text wx:else class="status-doing">{{t('task_go_complete')}}</text>
+              </view>
+            </view>
+          </view>
+          <view class="task-progress" wx:if="{{item.progress > 0 && !item.isCompleted && !item.isUnclaimed}}">
+            <view class="progress-bar">
+              <view class="progress-fill" style="width: {{item.totalSteps > 1 ? (item.progress / item.totalSteps * 100) : item.progress}}%"></view>
+            </view>
+            <text class="progress-text">{{t('task_progress')}}锛歿{item.progressText}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 姣忔棩浠诲姟缁?-->
+    <view class="task-group" wx:if="{{taskGroups.daily.length > 0}}">
+      <view class="group-header">
+        <text class="group-title">{{t('task_type_daily')}}</text>
+        <text class="group-desc">{{t('task_daily_desc')}}</text>
+      </view>
+      
+      <view class="task-items">
+        <view 
+          class="task-item {{item.isCompleted ? 'completed' : ''}} {{item.isUnclaimed ? 'unclaimed' : ''}}" 
+          wx:for="{{taskGroups.daily}}" 
+          wx:key="id"
+          data-id="{{item.id}}"
+          bindtap="handleTask"
+        >
+          <view class="task-info">
+            <view class="task-left">
+              <view class="task-icon {{item.type}}">
+                {{item.icon || '鉁?}}
+              </view>
+              <view class="task-details">
+                <text class="task-title">{{item.title}}</text>
+                <text class="task-desc">{{item.description}}</text>
+              </view>
+            </view>
+            <view class="task-right">
+              <text class="task-points">+{{item.points}}{{t('points')}}</text>
+              <view class="task-status">
+                <text wx:if="{{item.isUnclaimed}}" class="status-unclaimed">{{t('task_claim_reward')}}</text>
+                <text wx:elif="{{item.isCompleted}}" class="status-completed">{{t('task_completed')}}</text>
+                <text wx:elif="{{item.canComplete}}" class="status-action">{{t('task_complete_now')}}</text>
+                <text wx:else class="status-doing">{{t('task_go_complete')}}</text>
+              </view>
+            </view>
+          </view>
+          <view class="task-progress" wx:if="{{item.progress > 0 && !item.isCompleted && !item.isUnclaimed}}">
+            <view class="progress-bar">
+              <view class="progress-fill" style="width: {{item.totalSteps > 1 ? (item.progress / item.totalSteps * 100) : item.progress}}%"></view>
+            </view>
+            <text class="progress-text">{{t('task_progress')}}锛歿{item.progressText}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 姣忓懆浠诲姟缁?-->
+    <view class="task-group" wx:if="{{taskGroups.weekly.length > 0}}">
+      <view class="group-header">
+        <text class="group-title">{{t('task_type_weekly')}}</text>
+        <text class="group-desc">{{t('task_weekly_desc')}}</text>
+      </view>
+      
+      <view class="task-items">
+        <view 
+          class="task-item {{item.isCompleted ? 'completed' : ''}} {{item.isUnclaimed ? 'unclaimed' : ''}}" 
+          wx:for="{{taskGroups.weekly}}" 
+          wx:key="id"
+          data-id="{{item.id}}"
+          bindtap="handleTask"
+        >
+          <view class="task-info">
+            <view class="task-left">
+              <view class="task-icon {{item.type}}">
+                {{item.icon || '鉁?}}
+              </view>
+              <view class="task-details">
+                <text class="task-title">{{item.title}}</text>
+                <text class="task-desc">{{item.description}}</text>
+              </view>
+            </view>
+            <view class="task-right">
+              <text class="task-points">+{{item.points}}{{t('points')}}</text>
+              <view class="task-status">
+                <text wx:if="{{item.isUnclaimed}}" class="status-unclaimed">{{t('task_claim_reward')}}</text>
+                <text wx:elif="{{item.isCompleted}}" class="status-completed">{{t('task_completed')}}</text>
+                <text wx:elif="{{item.canComplete}}" class="status-action">{{t('task_complete_now')}}</text>
+                <text wx:else class="status-doing">{{t('task_go_complete')}}</text>
+              </view>
+            </view>
+          </view>
+          <view class="task-progress" wx:if="{{item.progress > 0 && !item.isCompleted && !item.isUnclaimed}}">
+            <view class="progress-bar">
+              <view class="progress-fill" style="width: {{item.totalSteps > 1 ? (item.progress / item.totalSteps * 100) : item.progress}}%"></view>
+            </view>
+            <text class="progress-text">{{t('task_progress')}}锛歿{item.progressText}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 姣忔湀浠诲姟缁?-->
+    <view class="task-group" wx:if="{{taskGroups.monthly.length > 0}}">
+      <view class="group-header">
+        <text class="group-title">{{t('task_type_monthly')}}</text>
+        <text class="group-desc">{{t('task_monthly_desc')}}</text>
+      </view>
+      
+      <view class="task-items">
+        <view 
+          class="task-item {{item.isCompleted ? 'completed' : ''}} {{item.isUnclaimed ? 'unclaimed' : ''}}" 
+          wx:for="{{taskGroups.monthly}}" 
+          wx:key="id"
+          data-id="{{item.id}}"
+          bindtap="handleTask"
+        >
+          <view class="task-info">
+            <view class="task-left">
+              <view class="task-icon {{item.type}}">
+                {{item.icon || '鉁?}}
+              </view>
+              <view class="task-details">
+                <text class="task-title">{{item.title}}</text>
+                <text class="task-desc">{{item.description}}</text>
+              </view>
+            </view>
+            <view class="task-right">
+              <text class="task-points">+{{item.points}}{{t('points')}}</text>
+              <view class="task-status">
+                <text wx:if="{{item.isUnclaimed}}" class="status-unclaimed">棰嗗彇濂栧姳</text>
+                <text wx:elif="{{item.isCompleted}}" class="status-completed">宸插畬鎴?/text>
+                <text wx:elif="{{item.canComplete}}" class="status-action">绔嬪嵆瀹屾垚</text>
+                <text wx:else class="status-doing">鍘诲畬鎴?/text>
+              </view>
+            </view>
+          </view>
+          <view class="task-progress" wx:if="{{item.progress > 0 && !item.isCompleted && !item.isUnclaimed}}">
+            <view class="progress-bar">
+              <view class="progress-fill" style="width: {{item.totalSteps > 1 ? (item.progress / item.totalSteps * 100) : item.progress}}%"></view>
+            </view>
+            <text class="progress-text">{{item.progressText}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+
+
+    <!-- 绌虹姸鎬?-->
+    <view class="empty-container" wx:if="{{tasks.length === 0}}">
+      <view class="empty-icon">馃搵</view>
+      <text class="empty-text">{{t('no_points_tasks')}}</text>
+      <text class="empty-subtext">{{t('please_check_later')}}</text>
+    </view>
+      <!-- 搴曢儴瀵艰埅 -->
+    <view class="footer-nav">
+      <view class="nav-item" bindtap="navigateToPointsRecords">
+        <image src="/images/icon-points.png" class="nav-icon"></image>
+        <text class="nav-text">{{t('points_records')}}</text>
+      </view>
+      <view class="nav-item" bindtap="navigateToPointsMall">
+        <image src="/images/icon-mall.png" class="nav-icon"></image>
+        <text class="nav-text">{{t('points_mall')}}</text>
+      </view>
+      <view class="nav-item" bindtap="navigateToPointsRules">
+        <image src="/images/icon-rule.png" class="nav-icon"></image>
+        <text class="nav-text">{{t('points_rules')}}</text>
+      </view>
+    </view>
+  </view>
+</view>

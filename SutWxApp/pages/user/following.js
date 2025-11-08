@@ -1,56 +1,48 @@
-// 用户关注页面
+﻿// 鐢ㄦ埛鍏虫敞椤甸潰
 import { showToast } from '../../utils/global';
 
 Page({
   /**
-   * 页面的初始数据
-   */
+   * 椤甸潰鐨勫垵濮嬫暟鎹?   */
   data: {
-    followingList: [], // 关注列表
-    loading: false, // 加载状态
-    refreshing: false, // 下拉刷新状态
-    error: '', // 错误信息
-    hasMore: true, // 是否有更多数据
-    page: 1, // 当前页码
-    pageSize: 10 // 每页数据量
-  },
+    followingList: [], // 鍏虫敞鍒楄〃
+    loading: false, // 鍔犺浇鐘舵€?    refreshing: false, // 涓嬫媺鍒锋柊鐘舵€?    error: '', // 閿欒淇℃伅
+    hasMore: true, // 鏄惁鏈夋洿澶氭暟鎹?    page: 1, // 褰撳墠椤电爜
+    pageSize: 10 // 姣忛〉鏁版嵁閲?  },
 
   /**
-   * 生命周期函数--监听页面加载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
    */
   onLoad: function(options) {
     const app = getApp();
     
-    // 检查登录状态
-    if (!app.isLoggedIn()) {
+    // 妫€鏌ョ櫥褰曠姸鎬?    if (!app.isLoggedIn()) {
       wx.navigateTo({
         url: '/pages/user/login/login'
       });
       return;
     }
     
-    // 加载关注数据
+    // 鍔犺浇鍏虫敞鏁版嵁
     this.loadFollowingData();
     
-    // 记录页面访问事件
+    // 璁板綍椤甸潰璁块棶浜嬩欢
     if (app.services && app.services.analytics) {
       app.services.analytics.trackPageView('user_following');
     }
   },
 
   /**
-   * 生命周期函数--监听页面显示
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
    */
   onShow: function() {
     const app = getApp();
     
-    // 检查登录状态
-    if (!app.isLoggedIn()) {
+    // 妫€鏌ョ櫥褰曠姸鎬?    if (!app.isLoggedIn()) {
       return;
     }
     
-    // 页面显示时刷新数据
-    this.setData({
+    // 椤甸潰鏄剧ず鏃跺埛鏂版暟鎹?    this.setData({
       page: 1,
       followingList: [],
       hasMore: true
@@ -59,31 +51,27 @@ Page({
   },
 
   /**
-   * 加载关注数据
-   * @param {boolean} refresh - 是否为刷新操作
-   */
+   * 鍔犺浇鍏虫敞鏁版嵁
+   * @param {boolean} refresh - 鏄惁涓哄埛鏂版搷浣?   */
   loadFollowingData: async function(refresh = false) {
     const app = getApp();
     
-    // 如果正在加载，直接返回
-    if (this.data.loading) return;
+    // 濡傛灉姝ｅ湪鍔犺浇锛岀洿鎺ヨ繑鍥?    if (this.data.loading) return;
 
-    // 显示加载状态
-    this.setData({
+    // 鏄剧ず鍔犺浇鐘舵€?    this.setData({
       loading: true,
       error: ''
     });
 
     try {
-      // 检查关注服务是否存在
-      if (!app.services || !app.services.following) {
-        throw new Error('关注服务暂不可用');
+      // 妫€鏌ュ叧娉ㄦ湇鍔℃槸鍚﹀瓨鍦?      if (!app.services || !app.services.following) {
+        throw new Error('鍏虫敞鏈嶅姟鏆備笉鍙敤');
       }
       
-      // 构建请求参数
+      // 鏋勫缓璇锋眰鍙傛暟
       const page = refresh ? 1 : this.data.page;
       
-      // 使用关注服务获取关注列表
+      // 浣跨敤鍏虫敞鏈嶅姟鑾峰彇鍏虫敞鍒楄〃
       const result = await app.services.following.getUserFollowing({
         page: page,
         per_page: this.data.pageSize
@@ -92,7 +80,7 @@ Page({
       const newList = result.list || [];
       const newFollowingList = refresh ? newList : [...this.data.followingList, ...newList];
       
-      // 判断是否还有更多数据
+      // 鍒ゆ柇鏄惁杩樻湁鏇村鏁版嵁
       const hasMore = newList.length === this.data.pageSize;
       const nextPage = refresh ? 2 : this.data.page + 1;
 
@@ -103,11 +91,11 @@ Page({
         error: ''
       });
     } catch (error) {
-      console.error('获取关注列表失败:', error);
+      console.error('鑾峰彇鍏虫敞鍒楄〃澶辫触:', error);
       this.setData({
-        error: error.message || '加载失败，请重试'
+        error: error.message || '鍔犺浇澶辫触锛岃閲嶈瘯'
       });
-      showToast('获取关注失败', 'none');
+      showToast('鑾峰彇鍏虫敞澶辫触', 'none');
     } finally {
       this.setData({
         loading: false,
@@ -118,15 +106,14 @@ Page({
   },
 
   /**
-   * 处理请求成功
-   * @param {Object} result - 响应数据
-   * @param {boolean} refresh - 是否为刷新操作
-   */
+   * 澶勭悊璇锋眰鎴愬姛
+   * @param {Object} result - 鍝嶅簲鏁版嵁
+   * @param {boolean} refresh - 鏄惁涓哄埛鏂版搷浣?   */
   handleRequestSuccess: function(result, refresh) {
     const newList = result.list || [];
     const newFollowingList = refresh ? newList : [...this.data.followingList, ...newList];
     
-    // 判断是否还有更多数据
+    // 鍒ゆ柇鏄惁杩樻湁鏇村鏁版嵁
     const hasMore = newList.length === this.data.pageSize;
     const nextPage = refresh ? 2 : this.data.page + 1;
 
@@ -139,19 +126,19 @@ Page({
   },
 
   /**
-   * 处理请求错误
-   * @param {Object} error - 错误信息
+   * 澶勭悊璇锋眰閿欒
+   * @param {Object} error - 閿欒淇℃伅
    */
   handleRequestError: function(error) {
-    console.error('获取关注列表失败:', error);
+    console.error('鑾峰彇鍏虫敞鍒楄〃澶辫触:', error);
     this.setData({
-      error: error.message || '网络异常，请检查网络连接后重试'
+      error: error.message || '缃戠粶寮傚父锛岃妫€鏌ョ綉缁滆繛鎺ュ悗閲嶈瘯'
     });
-    showToast('获取关注失败', 'none');
+    showToast('鑾峰彇鍏虫敞澶辫触', 'none');
   },
 
   /**
-   * 重试加载
+   * 閲嶈瘯鍔犺浇
    */
   retryLoad: function() {
     this.setData({
@@ -163,7 +150,7 @@ Page({
   },
 
   /**
-   * 加载更多
+   * 鍔犺浇鏇村
    */
   loadMore: function() {
     if (!this.data.hasMore || this.data.loading) return;
@@ -171,8 +158,8 @@ Page({
   },
 
   /**
-   * 取消关注
-   * @param {Object} e - 事件对象
+   * 鍙栨秷鍏虫敞
+   * @param {Object} e - 浜嬩欢瀵硅薄
    */
   unfollow: function(e) {
     const id = e.currentTarget.dataset.id;
@@ -180,8 +167,8 @@ Page({
     const userId = e.currentTarget.dataset.userId;
 
     wx.showModal({
-      title: '确认操作',
-      content: '确定要取消关注吗？',
+      title: '纭鎿嶄綔',
+      content: '纭畾瑕佸彇娑堝叧娉ㄥ悧锛?,
       success: (res) => {
         if (res.confirm) {
           this.executeUnfollow(id, index, userId);
@@ -191,26 +178,25 @@ Page({
   },
 
   /**
-   * 执行取消关注操作
-   * @param {number} id - 关注ID
-   * @param {number} index - 列表索引
-   * @param {number} userId - 用户ID
+   * 鎵ц鍙栨秷鍏虫敞鎿嶄綔
+   * @param {number} id - 鍏虫敞ID
+   * @param {number} index - 鍒楄〃绱㈠紩
+   * @param {number} userId - 鐢ㄦ埛ID
    */
   executeUnfollow: async function(id, index, userId) {
     const app = getApp();
     
     try {
-      // 检查关注服务是否存在
-      if (!app.services || !app.services.following) {
-        throw new Error('关注服务暂不可用');
+      // 妫€鏌ュ叧娉ㄦ湇鍔℃槸鍚﹀瓨鍦?      if (!app.services || !app.services.following) {
+        throw new Error('鍏虫敞鏈嶅姟鏆備笉鍙敤');
       }
       
-      // 使用关注服务取消关注
+      // 浣跨敤鍏虫敞鏈嶅姟鍙栨秷鍏虫敞
       await app.services.following.unfollowUser({
         id: id
       });
       
-      // 从列表中移除该关注项
+      // 浠庡垪琛ㄤ腑绉婚櫎璇ュ叧娉ㄩ」
       const newFollowingList = [...this.data.followingList];
       newFollowingList.splice(index, 1);
       
@@ -218,9 +204,9 @@ Page({
         followingList: newFollowingList
       });
       
-      showToast('取消关注成功', 'success');
+      showToast('鍙栨秷鍏虫敞鎴愬姛', 'success');
       
-      // 记录取消关注事件
+      // 璁板綍鍙栨秷鍏虫敞浜嬩欢
       if (app.services && app.services.analytics) {
         app.services.analytics.trackEvent('user_unfollow', {
           following_id: id,
@@ -228,20 +214,20 @@ Page({
         });
       }
     } catch (error) {
-      console.error('取消关注失败:', error);
-      showToast(error.message || '取消关注失败', 'none');
+      console.error('鍙栨秷鍏虫敞澶辫触:', error);
+      showToast(error.message || '鍙栨秷鍏虫敞澶辫触', 'none');
     }
   },
 
   /**
-   * 跳转到用户详情页
-   * @param {Object} e - 事件对象
+   * 璺宠浆鍒扮敤鎴疯鎯呴〉
+   * @param {Object} e - 浜嬩欢瀵硅薄
    */
   navigateToUserProfile: function(e) {
     const userId = e.currentTarget.dataset.userId;
     const app = getApp();
     
-    // 记录跳转事件
+    // 璁板綍璺宠浆浜嬩欢
     if (app.services && app.services.analytics) {
       app.services.analytics.trackEvent('user_following_profile_click', {
         user_id: userId
@@ -254,7 +240,7 @@ Page({
   },
 
   /**
-   * 下拉刷新
+   * 涓嬫媺鍒锋柊
    */
   onPullDownRefresh: function() {
     this.setData({
@@ -266,7 +252,7 @@ Page({
   },
 
   /**
-   * 上拉触底加载更多
+   * 涓婃媺瑙﹀簳鍔犺浇鏇村
    */
   onReachBottom: function() {
     this.loadMore();

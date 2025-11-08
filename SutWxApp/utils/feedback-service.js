@@ -1,33 +1,30 @@
-// feedback-service.js - 用户反馈服务模块
-// 基于技术设计文档实现的用户反馈收集和管理服务
-
+﻿// feedback-service.js - 鐢ㄦ埛鍙嶉鏈嶅姟妯″潡
+// 鍩轰簬鎶€鏈璁℃枃妗ｅ疄鐜扮殑鐢ㄦ埛鍙嶉鏀堕泦鍜岀鐞嗘湇鍔?
 import { request } from './api';
 import { showToast, showLoading, hideLoading } from './global';
 import { validateRequired, validateStringLength, validateEmail } from './validator';
 
 /**
- * 用户反馈服务类
- * 提供用户反馈提交、查询等功能
+ * 鐢ㄦ埛鍙嶉鏈嶅姟绫? * 鎻愪緵鐢ㄦ埛鍙嶉鎻愪氦銆佹煡璇㈢瓑鍔熻兘
  */
 class FeedbackService {
   /**
-   * 提交用户反馈
-   * @param {Object} feedbackData - 反馈数据
-   * @param {string} feedbackData.type - 反馈类型（bug, suggestion, question, other）
-   * @param {string} feedbackData.content - 反馈内容
-   * @param {string} [feedbackData.contactInfo] - 联系方式（邮箱或手机号）
-   * @param {string} [feedbackData.images] - 反馈截图（base64或文件路径数组）
-   * @param {Object} [feedbackData.meta] - 元数据（设备信息、版本号等）
-   * @returns {Promise<Object>} 提交结果
+   * 鎻愪氦鐢ㄦ埛鍙嶉
+   * @param {Object} feedbackData - 鍙嶉鏁版嵁
+   * @param {string} feedbackData.type - 鍙嶉绫诲瀷锛坆ug, suggestion, question, other锛?   * @param {string} feedbackData.content - 鍙嶉鍐呭
+   * @param {string} [feedbackData.contactInfo] - 鑱旂郴鏂瑰紡锛堥偖绠辨垨鎵嬫満鍙凤級
+   * @param {string} [feedbackData.images] - 鍙嶉鎴浘锛坆ase64鎴栨枃浠惰矾寰勬暟缁勶級
+   * @param {Object} [feedbackData.meta] - 鍏冩暟鎹紙璁惧淇℃伅銆佺増鏈彿绛夛級
+   * @returns {Promise<Object>} 鎻愪氦缁撴灉
    */
   async submitFeedback(feedbackData) {
     try {
-      // 数据验证
+      // 鏁版嵁楠岃瘉
       this._validateFeedbackData(feedbackData);
 
-      showLoading('提交反馈中...');
+      showLoading('鎻愪氦鍙嶉涓?..');
 
-      // 准备提交数据
+      // 鍑嗗鎻愪氦鏁版嵁
       const submitData = {
         type: feedbackData.type,
         content: feedbackData.content,
@@ -36,12 +33,12 @@ class FeedbackService {
         createTime: new Date().getTime()
       };
 
-      // 如果有图片，处理图片数据
+      // 濡傛灉鏈夊浘鐗囷紝澶勭悊鍥剧墖鏁版嵁
       if (feedbackData.images && feedbackData.images.length > 0) {
         submitData.images = await this._processFeedbackImages(feedbackData.images);
       }
 
-      // 调用API提交反馈
+      // 璋冪敤API鎻愪氦鍙嶉
       const result = await request({
         url: '/api/feedback/submit',
         method: 'POST',
@@ -49,31 +46,28 @@ class FeedbackService {
       });
 
       hideLoading();
-      showToast('反馈提交成功，感谢您的宝贵意见！');
+      showToast('鍙嶉鎻愪氦鎴愬姛锛屾劅璋㈡偍鐨勫疂璐垫剰瑙侊紒');
 
       return result.data;
     } catch (error) {
       hideLoading();
-      console.error('提交反馈失败:', error);
-      showToast(error.message || '反馈提交失败，请稍后重试');
+      console.error('鎻愪氦鍙嶉澶辫触:', error);
+      showToast(error.message || '鍙嶉鎻愪氦澶辫触锛岃绋嶅悗閲嶈瘯');
       throw error;
     }
   }
 
   /**
-   * 获取用户反馈列表
-   * @param {Object} params - 查询参数
-   * @param {number} [params.page=1] - 页码
-   * @param {number} [params.pageSize=10] - 每页数量
-   * @param {string} [params.type] - 反馈类型筛选
-   * @param {string} [params.status] - 反馈状态筛选
-   * @returns {Promise<Object>} 反馈列表和分页信息
-   */
+   * 鑾峰彇鐢ㄦ埛鍙嶉鍒楄〃
+   * @param {Object} params - 鏌ヨ鍙傛暟
+   * @param {number} [params.page=1] - 椤电爜
+   * @param {number} [params.pageSize=10] - 姣忛〉鏁伴噺
+   * @param {string} [params.type] - 鍙嶉绫诲瀷绛涢€?   * @param {string} [params.status] - 鍙嶉鐘舵€佺瓫閫?   * @returns {Promise<Object>} 鍙嶉鍒楄〃鍜屽垎椤典俊鎭?   */
   async getFeedbackList(params = {}) {
     try {
       const { page = 1, pageSize = 10, type, status } = params;
 
-      showLoading('加载反馈列表...');
+      showLoading('鍔犺浇鍙嶉鍒楄〃...');
 
       const result = await request({
         url: '/api/feedback/list',
@@ -90,21 +84,21 @@ class FeedbackService {
       return result.data;
     } catch (error) {
       hideLoading();
-      console.error('获取反馈列表失败:', error);
-      showToast('获取反馈列表失败');
+      console.error('鑾峰彇鍙嶉鍒楄〃澶辫触:', error);
+      showToast('鑾峰彇鍙嶉鍒楄〃澶辫触');
       throw error;
     }
   }
 
   /**
-   * 获取反馈详情
-   * @param {string} feedbackId - 反馈ID
-   * @returns {Promise<Object>} 反馈详情
+   * 鑾峰彇鍙嶉璇︽儏
+   * @param {string} feedbackId - 鍙嶉ID
+   * @returns {Promise<Object>} 鍙嶉璇︽儏
    */
   async getFeedbackDetail(feedbackId) {
     try {
       if (!feedbackId) {
-        throw new Error('反馈ID不能为空');
+        throw new Error('鍙嶉ID涓嶈兘涓虹┖');
       }
 
       const result = await request({
@@ -114,28 +108,28 @@ class FeedbackService {
 
       return result.data;
     } catch (error) {
-      console.error('获取反馈详情失败:', error);
-      showToast('获取反馈详情失败');
+      console.error('鑾峰彇鍙嶉璇︽儏澶辫触:', error);
+      showToast('鑾峰彇鍙嶉璇︽儏澶辫触');
       throw error;
     }
   }
 
   /**
-   * 回复反馈
-   * @param {string} feedbackId - 反馈ID
-   * @param {string} replyContent - 回复内容
-   * @returns {Promise<Object>} 回复结果
+   * 鍥炲鍙嶉
+   * @param {string} feedbackId - 鍙嶉ID
+   * @param {string} replyContent - 鍥炲鍐呭
+   * @returns {Promise<Object>} 鍥炲缁撴灉
    */
   async replyFeedback(feedbackId, replyContent) {
     try {
       if (!feedbackId) {
-        throw new Error('反馈ID不能为空');
+        throw new Error('鍙嶉ID涓嶈兘涓虹┖');
       }
       if (!replyContent || replyContent.trim() === '') {
-        throw new Error('回复内容不能为空');
+        throw new Error('鍥炲鍐呭涓嶈兘涓虹┖');
       }
 
-      showLoading('提交回复中...');
+      showLoading('鎻愪氦鍥炲涓?..');
 
       const result = await request({
         url: `/api/feedback/reply/${feedbackId}`,
@@ -147,34 +141,32 @@ class FeedbackService {
       });
 
       hideLoading();
-      showToast('回复成功');
+      showToast('鍥炲鎴愬姛');
       return result.data;
     } catch (error) {
       hideLoading();
-      console.error('回复反馈失败:', error);
-      showToast('回复失败，请稍后重试');
+      console.error('鍥炲鍙嶉澶辫触:', error);
+      showToast('鍥炲澶辫触锛岃绋嶅悗閲嶈瘯');
       throw error;
     }
   }
 
   /**
-   * 更新反馈状态
-   * @param {string} feedbackId - 反馈ID
-   * @param {string} status - 新状态（pending, processing, resolved, closed）
-   * @returns {Promise<Object>} 更新结果
+   * 鏇存柊鍙嶉鐘舵€?   * @param {string} feedbackId - 鍙嶉ID
+   * @param {string} status - 鏂扮姸鎬侊紙pending, processing, resolved, closed锛?   * @returns {Promise<Object>} 鏇存柊缁撴灉
    */
   async updateFeedbackStatus(feedbackId, status) {
     try {
       if (!feedbackId) {
-        throw new Error('反馈ID不能为空');
+        throw new Error('鍙嶉ID涓嶈兘涓虹┖');
       }
       if (!status) {
-        throw new Error('反馈状态不能为空');
+        throw new Error('鍙嶉鐘舵€佷笉鑳戒负绌?);
       }
 
       const validStatuses = ['pending', 'processing', 'resolved', 'closed'];
       if (!validStatuses.includes(status)) {
-        throw new Error(`无效的反馈状态，必须是以下之一: ${validStatuses.join(', ')}`);
+        throw new Error(`鏃犳晥鐨勫弽棣堢姸鎬侊紝蹇呴』鏄互涓嬩箣涓€: ${validStatuses.join(', ')}`);
       }
 
       const result = await request({
@@ -188,15 +180,15 @@ class FeedbackService {
 
       return result.data;
     } catch (error) {
-      console.error('更新反馈状态失败:', error);
-      showToast('更新状态失败');
+      console.error('鏇存柊鍙嶉鐘舵€佸け璐?', error);
+      showToast('鏇存柊鐘舵€佸け璐?);
       throw error;
     }
   }
 
   /**
-   * 获取反馈统计数据
-   * @returns {Promise<Object>} 统计数据
+   * 鑾峰彇鍙嶉缁熻鏁版嵁
+   * @returns {Promise<Object>} 缁熻鏁版嵁
    */
   async getFeedbackStats() {
     try {
@@ -207,7 +199,7 @@ class FeedbackService {
 
       return result.data;
     } catch (error) {
-      console.error('获取反馈统计失败:', error);
+      console.error('鑾峰彇鍙嶉缁熻澶辫触:', error);
       return {
         total: 0,
         pending: 0,
@@ -220,50 +212,47 @@ class FeedbackService {
   }
 
   /**
-   * 验证反馈数据
+   * 楠岃瘉鍙嶉鏁版嵁
    * @private
-   * @param {Object} feedbackData - 反馈数据
+   * @param {Object} feedbackData - 鍙嶉鏁版嵁
    */
   _validateFeedbackData(feedbackData) {
-    // 验证必填字段
-    validateRequired(feedbackData, '反馈数据');
-    validateRequired(feedbackData.type, '反馈类型');
-    validateRequired(feedbackData.content, '反馈内容');
+    // 楠岃瘉蹇呭～瀛楁
+    validateRequired(feedbackData, '鍙嶉鏁版嵁');
+    validateRequired(feedbackData.type, '鍙嶉绫诲瀷');
+    validateRequired(feedbackData.content, '鍙嶉鍐呭');
 
-    // 验证反馈类型
+    // 楠岃瘉鍙嶉绫诲瀷
     const validTypes = ['bug', 'suggestion', 'question', 'other'];
     if (!validTypes.includes(feedbackData.type)) {
-      throw new Error(`无效的反馈类型，必须是以下之一: ${validTypes.join(', ')}`);
+      throw new Error(`鏃犳晥鐨勫弽棣堢被鍨嬶紝蹇呴』鏄互涓嬩箣涓€: ${validTypes.join(', ')}`);
     }
 
-    // 验证反馈内容长度
-    validateStringLength(feedbackData.content, 5, 2000, '反馈内容');
+    // 楠岃瘉鍙嶉鍐呭闀垮害
+    validateStringLength(feedbackData.content, 5, 2000, '鍙嶉鍐呭');
 
-    // 验证联系方式（如果提供）
+    // 楠岃瘉鑱旂郴鏂瑰紡锛堝鏋滄彁渚涳級
     if (feedbackData.contactInfo) {
       const isEmail = feedbackData.contactInfo.includes('@');
       if (isEmail) {
-        validateEmail(feedbackData.contactInfo, '联系方式');
+        validateEmail(feedbackData.contactInfo, '鑱旂郴鏂瑰紡');
       } else {
-        // 简单的手机号验证
-        const phoneRegex = /^1[3-9]\d{9}$/;
+        // 绠€鍗曠殑鎵嬫満鍙烽獙璇?        const phoneRegex = /^1[3-9]\d{9}$/;
         if (!phoneRegex.test(feedbackData.contactInfo)) {
-          throw new Error('请提供有效的手机号或邮箱作为联系方式');
+          throw new Error('璇锋彁渚涙湁鏁堢殑鎵嬫満鍙锋垨閭浣滀负鑱旂郴鏂瑰紡');
         }
       }
     }
 
-    // 验证图片数量
+    // 楠岃瘉鍥剧墖鏁伴噺
     if (feedbackData.images && feedbackData.images.length > 9) {
-      throw new Error('最多只能上传9张图片');
+      throw new Error('鏈€澶氬彧鑳戒笂浼?寮犲浘鐗?);
     }
   }
 
   /**
-   * 获取默认元数据
-   * @private
-   * @returns {Object} 默认元数据
-   */
+   * 鑾峰彇榛樿鍏冩暟鎹?   * @private
+   * @returns {Object} 榛樿鍏冩暟鎹?   */
   _getDefaultMeta() {
     try {
       const systemInfo = wx.getSystemInfoSync();
@@ -283,7 +272,7 @@ class FeedbackService {
         networkType: wx.getNetworkTypeSync?.() || ''
       };
     } catch (error) {
-      console.warn('获取元数据失败:', error);
+      console.warn('鑾峰彇鍏冩暟鎹け璐?', error);
       return {
         timestamp: new Date().getTime()
       };
@@ -291,16 +280,15 @@ class FeedbackService {
   }
 
   /**
-   * 处理反馈图片
+   * 澶勭悊鍙嶉鍥剧墖
    * @private
-   * @param {Array} images - 图片数组
-   * @returns {Promise<Array>} 处理后的图片数据
+   * @param {Array} images - 鍥剧墖鏁扮粍
+   * @returns {Promise<Array>} 澶勭悊鍚庣殑鍥剧墖鏁版嵁
    */
   async _processFeedbackImages(images) {
-    // 实际项目中，这里应该上传图片到服务器并返回URL
-    // 这里简化处理，直接返回原数据
-    try {
-      // 对于文件路径，我们可以选择上传图片
+    // 瀹為檯椤圭洰涓紝杩欓噷搴旇涓婁紶鍥剧墖鍒版湇鍔″櫒骞惰繑鍥濽RL
+    // 杩欓噷绠€鍖栧鐞嗭紝鐩存帴杩斿洖鍘熸暟鎹?    try {
+      // 瀵逛簬鏂囦欢璺緞锛屾垜浠彲浠ラ€夋嫨涓婁紶鍥剧墖
       // const uploadedImages = await Promise.all(
       //   images.map(async (imagePath) => {
       //     const uploadResult = await wx.uploadFile({
@@ -313,28 +301,25 @@ class FeedbackService {
       // );
       // return uploadedImages;
       
-      // 简化处理，返回原数据
-      return images;
+      // 绠€鍖栧鐞嗭紝杩斿洖鍘熸暟鎹?      return images;
     } catch (error) {
-      console.error('处理反馈图片失败:', error);
-      // 即使图片处理失败，也不影响反馈提交，只记录错误
-      return [];
+      console.error('澶勭悊鍙嶉鍥剧墖澶辫触:', error);
+      // 鍗充娇鍥剧墖澶勭悊澶辫触锛屼篃涓嶅奖鍝嶅弽棣堟彁浜わ紝鍙褰曢敊璇?      return [];
     }
   }
 
   /**
-   * 提交评分反馈
-   * @param {Object} ratingData - 评分数据
-   * @param {number} ratingData.score - 评分（1-5）
-   * @param {string} [ratingData.comment] - 评价内容
-   * @returns {Promise<Object>} 提交结果
+   * 鎻愪氦璇勫垎鍙嶉
+   * @param {Object} ratingData - 璇勫垎鏁版嵁
+   * @param {number} ratingData.score - 璇勫垎锛?-5锛?   * @param {string} [ratingData.comment] - 璇勪环鍐呭
+   * @returns {Promise<Object>} 鎻愪氦缁撴灉
    */
   async submitRating(ratingData) {
     try {
-      validateRequired(ratingData, '评分数据');
+      validateRequired(ratingData, '璇勫垎鏁版嵁');
       
       if (!ratingData.score || ratingData.score < 1 || ratingData.score > 5) {
-        throw new Error('评分必须在1到5之间');
+        throw new Error('璇勫垎蹇呴』鍦?鍒?涔嬮棿');
       }
 
       const result = await request({
@@ -348,21 +333,20 @@ class FeedbackService {
         }
       });
 
-      showToast('感谢您的评价！');
+      showToast('鎰熻阿鎮ㄧ殑璇勪环锛?);
       return result.data;
     } catch (error) {
-      console.error('提交评分失败:', error);
-      showToast('评分提交失败');
+      console.error('鎻愪氦璇勫垎澶辫触:', error);
+      showToast('璇勫垎鎻愪氦澶辫触');
       throw error;
     }
   }
 }
 
-// 导出反馈服务实例
+// 瀵煎嚭鍙嶉鏈嶅姟瀹炰緥
 const feedbackService = new FeedbackService();
 
-// 导出反馈服务的常用方法
-export const {
+// 瀵煎嚭鍙嶉鏈嶅姟鐨勫父鐢ㄦ柟娉?export const {
   submitFeedback,
   getFeedbackList,
   getFeedbackDetail,
@@ -372,5 +356,5 @@ export const {
   submitRating
 } = feedbackService;
 
-// 默认导出反馈服务实例
+// 榛樿瀵煎嚭鍙嶉鏈嶅姟瀹炰緥
 export default feedbackService;

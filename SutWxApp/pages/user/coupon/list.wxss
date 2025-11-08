@@ -1,11 +1,11 @@
-/* 优惠券列表页面样式 */
+﻿/* 浼樻儬鍒稿垪琛ㄩ〉闈㈡牱寮?*/
 .coupon-list-page {
   padding-bottom: 30rpx;
   background-color: #f5f5f5;
   min-height: 100vh;
 }
 
-/* 标签栏样式 */
+/* 鏍囩鏍忔牱寮?*/
 .tab-bar {
   display: flex;
   background-color: #fff;
@@ -41,7 +41,7 @@
   border-radius: 3rpx;
 }
 
-/* 加载状态样式 */
+/* 鍔犺浇鐘舵€佹牱寮?*/
 .loading-container {
   display: flex;
   flex-direction: column;
@@ -70,7 +70,7 @@
   color: #999;
 }
 
-/* 无优惠券提示样式 */
+/* 鏃犱紭鎯犲埜鎻愮ず鏍峰紡 */
 .empty-container {
   display: flex;
   flex-direction: column;
@@ -90,7 +90,7 @@
   color: #999;
 }
 
-/* 优惠券列表样式 */
+/* 浼樻儬鍒稿垪琛ㄦ牱寮?*/
 .coupon-list {
   padding: 20rpx;
 }
@@ -112,7 +112,7 @@
   position: relative;
 }
 
-/* 优惠券左侧金额区域 */
+/* 浼樻儬鍒稿乏渚ч噾棰濆尯鍩?*/
 .coupon-left {
   width: 180rpx;
   text-align: center;
@@ -135,7 +135,7 @@
   color: #999;
 }
 
-/* 优惠券右侧信息区域 */
+/* 浼樻儬鍒稿彸渚т俊鎭尯鍩?*/
 .coupon-right {
   flex: 1;
   padding-left: 20rpx;
@@ -194,14 +194,14 @@
   display: block;
 }
 
-/* 右侧装饰边框 */
+/* 鍙充晶瑁呴グ杈规 */
 .coupon-border {
   width: 20rpx;
   background: linear-gradient(to right, #fff 0%, #e5e5e5 100%);
   position: relative;
 }
 
-/* 优惠券左侧半圆形孔洞 */
+/* 浼樻儬鍒稿乏渚у崐鍦嗗舰瀛旀礊 */
 .coupon-content::before,
 .coupon-content::after {
   content: '';
@@ -221,7 +221,7 @@
   bottom: -15rpx;
 }
 
-/* 已使用优惠券额外信息样式 */
+/* 宸蹭娇鐢ㄤ紭鎯犲埜棰濆淇℃伅鏍峰紡 */
 .used-info {
   padding: 10rpx 20rpx 20rpx;
   font-size: 22rpx;
@@ -236,7 +236,7 @@
   margin-bottom: 4rpx;
 }
 
-/* 不同状态的优惠券样式调整 */
+/* 涓嶅悓鐘舵€佺殑浼樻儬鍒告牱寮忚皟鏁?*/
 .coupon-item {
   opacity: 1;
 }

@@ -1,0 +1,85 @@
+﻿msgid ""msgstr """Project-Id-Version: Sut WeChat Mini 1.0.0\n""Report-Msgid-Bugs-To: \n""POT-Creation-Date: 2024-03-20\n""PO-Revision-Date: 2024-03-20\n""Last-Translator: Sut <sut@example.com>\n""Language-Team: English (United States) <en_US@li.org>\n""Language: en_US\n""MIME-Version: 1.0\n""Content-Type: text/plain; charset=UTF-8\n""Content-Transfer-Encoding: 8bit\n""Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: pages/user/points-tasks.jsmsgid "loading"
+msgstr "Loading..."
+
+#: pages/user/points-tasks.jsmsgid "network_error"
+msgstr "Network error, please try again later"
+
+#: pages/user/points-tasks.jsmsgid "login_required"
+msgstr "Please login first"
+
+#: pages/user/points-tasks.jsmsgid "task_completed"
+msgstr "Task completed"
+
+#: pages/user/points-tasks.jsmsgid "points_reward_success"
+msgstr "Congratulations! You've earned {{points}} points"
+
+#: pages/user/points-tasks.jsmsgid "share_task_description"
+msgstr "Points reward will be automatically given after sharing"
+
+#: pages/user/points-tasks.jsmsgid "app_slogan"
+msgstr "Sut WeChat Mini, making life better"
+
+#: pages/user/points-tasks.wxmlmsgid "points_tasks_page_title"
+msgstr "Points Tasks"
+
+#: pages/user/points-tasks.wxmlmsgid "points_rules"
+msgstr "Points Rules"
+
+#: pages/user/points-tasks.wxmlmsgid "points_mall"
+msgstr "Points Mall"
+
+#: pages/user/points-tasks.wxmlmsgid "task_type_all"
+msgstr "All"
+
+#: pages/user/points-tasks.wxmlmsgid "task_type_once"
+msgstr "Newcomer"
+
+#: pages/user/points-tasks.wxmlmsgid "task_type_daily"
+msgstr "Daily"
+
+#: pages/user/points-tasks.wxmlmsgid "task_type_weekly"
+msgstr "Weekly"
+
+#: pages/user/points-tasks.wxmlmsgid "task_type_monthly"
+msgstr "Monthly"
+
+#: pages/user/points-tasks.wxmlmsgid "task_once_desc"
+msgstr "One-time completion, permanently effective"
+
+#: pages/user/points-tasks.wxmlmsgid "task_daily_desc"
+msgstr "Refreshes daily, rewards every day"
+
+#: pages/user/points-tasks.wxmlmsgid "task_weekly_desc"
+msgstr "Refreshes weekly, more generous points"
+
+#: pages/user/points-tasks.wxmlmsgid "task_monthly_desc"
+msgstr "Refreshes monthly, high rewards waiting for you"
+
+#: pages/user/points-tasks.wxmlmsgid "points"
+msgstr "points"
+
+#: pages/user/points-tasks.wxmlmsgid "task_claim_reward"
+msgstr "Claim Reward"
+
+#: pages/user/points-tasks.wxmlmsgid "task_complete_now"
+msgstr "Complete Now"
+
+#: pages/user/points-tasks.wxmlmsgid "task_go_complete"
+msgstr "Go Complete"
+
+#: pages/user/points-tasks.wxmlmsgid "task_progress"
+msgstr "Progress"
+
+#: pages/user/points-tasks.wxmlmsgid "no_points_tasks"
+msgstr "No points tasks available"
+
+#: pages/user/points-tasks.wxmlmsgid "please_check_later"
+msgstr "Please check again later"
+
+#: pages/user/points-tasks.wxmlmsgid "points_records"
+msgstr "Points Records"
+
+#: pages/user/points-tasks.wxmlmsgid "retry"
+msgstr "Retry"

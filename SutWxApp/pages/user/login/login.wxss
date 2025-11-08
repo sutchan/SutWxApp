@@ -1,4 +1,4 @@
-/* pages/user/login/login.wxss */
+﻿/* pages/user/login/login.wxss */
 .login-container {
   display: flex;
   flex-direction: column;
@@ -10,7 +10,7 @@
   box-sizing: border-box;
 }
 
-/* Logo区域样式 */
+/* Logo鍖哄煙鏍峰紡 */
 .logo-container {
   display: flex;
   flex-direction: column;
@@ -38,7 +38,7 @@
   color: #999999;
 }
 
-/* 登录按钮样式 */
+/* 鐧诲綍鎸夐挳鏍峰紡 */
 .login-btn-container {
   width: 100%;
   margin-bottom: 30px;
@@ -60,7 +60,7 @@
   background-color: #06ad55;
 }
 
-/* 加载状态样式 */
+/* 鍔犺浇鐘舵€佹牱寮?*/
 .loading {
   display: flex;
   flex-direction: column;
@@ -89,7 +89,7 @@
   color: #999999;
 }
 
-/* 授权提示样式 */
+/* 鎺堟潈鎻愮ず鏍峰紡 */
 .auth-tips {
   margin-bottom: 40px;
 }
@@ -99,7 +99,7 @@
   color: #999999;
 }
 
-/* 用户信息展示区域样式 */
+/* 鐢ㄦ埛淇℃伅灞曠ず鍖哄煙鏍峰紡 */
 .user-info-container {
   margin-bottom: 40px;
 }
@@ -126,7 +126,7 @@
   color: #333333;
 }
 
-/* 协议样式 */
+/* 鍗忚鏍峰紡 */
 .agreement-container {
   display: flex;
   flex-wrap: wrap;
@@ -142,7 +142,7 @@
   margin: 0 4px;
 }
 
-/* 客服联系方式样式 */
+/* 瀹㈡湇鑱旂郴鏂瑰紡鏍峰紡 */
 .customer-service {
   position: absolute;
   bottom: 40px;
@@ -158,7 +158,7 @@
   text-decoration: underline;
 }
 
-/* 重试按钮样式 */
+/* 閲嶈瘯鎸夐挳鏍峰紡 */
 .retry-btn {
   margin-top: 10px;
   padding: 6px 20px;
@@ -175,7 +175,7 @@
   background-color: #f0f9f4;
 }
 
-/* 骨架屏样式 */
+/* 楠ㄦ灦灞忔牱寮?*/
 .skeleton-container {
   position: absolute;
   top: 0;
@@ -249,7 +249,7 @@
   }
 }
 
-/* 适配iPhone X等刘海屏 */
+/* 閫傞厤iPhone X绛夊垬娴峰睆 */
 .safe-area-top {
   padding-top: env(safe-area-inset-top, 0);
 }

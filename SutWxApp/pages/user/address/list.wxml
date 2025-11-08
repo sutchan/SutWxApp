@@ -1,33 +1,33 @@
-<!-- 地址列表页面结构 -->
+﻿<!-- 鍦板潃鍒楄〃椤甸潰缁撴瀯 -->
 <view class="container">
-  <!-- 加载状态 -->
+  <!-- 鍔犺浇鐘舵€?-->
   <view class="loading" wx:if="{{loading}}">
-    <text>加载中...</text>
+    <text>鍔犺浇涓?..</text>
   </view>
   
-  <!-- 错误状态 -->
+  <!-- 閿欒鐘舵€?-->
   <view class="error" wx:elif="{{error}}">
     <image class="error-icon" src="/images/error.svg" mode="aspectFit"></image>
-    <text class="error-text">{{errorMsg || '加载失败'}}</text>
-    <button class="retry-btn" bind:tap="onRetry" wx:if="{{errorMsg !== '请先登录'}}">重试</button>
-    <button class="login-btn" bind:tap="onLogin" wx:else>去登录</button>
+    <text class="error-text">{{errorMsg || '鍔犺浇澶辫触'}}</text>
+    <button class="retry-btn" bind:tap="onRetry" wx:if="{{errorMsg !== '璇峰厛鐧诲綍'}}">閲嶈瘯</button>
+    <button class="login-btn" bind:tap="onLogin" wx:else>鍘荤櫥褰?/button>
   </view>
   
-  <!-- 地址列表 -->
+  <!-- 鍦板潃鍒楄〃 -->
   <view class="address-list" wx:else>
-    <!-- 地址为空状态 -->
+    <!-- 鍦板潃涓虹┖鐘舵€?-->
     <view class="empty" wx:if="{{addressList.length === 0}}">
-      <text>暂无收货地址</text>
-      <button class="add-btn" bind:tap="onAddAddress">添加地址</button>
+      <text>鏆傛棤鏀惰揣鍦板潃</text>
+      <button class="add-btn" bind:tap="onAddAddress">娣诲姞鍦板潃</button>
     </view>
     
-    <!-- 地址列表项 -->
+    <!-- 鍦板潃鍒楄〃椤?-->
     <view class="address-item" wx:for="{{addressList}}" wx:key="id" wx:for-item="address">
       <view class="address-content" bind:tap="{{selectMode ? 'onSelectAddress' : ''}}" data-id="{{address.id}}">
         <view class="address-header">
           <text class="name">{{address.name}}</text>
           <text class="phone">{{address.phone}}</text>
-          <text class="default-tag" wx:if="{{address.isDefault}}">默认</text>
+          <text class="default-tag" wx:if="{{address.isDefault}}">榛樿</text>
         </view>
         <view class="address-detail">
           <text>{{address.province}}{{address.city}}{{address.district}}{{address.detail}}</text>
@@ -36,18 +36,18 @@
       
       <view class="address-actions" wx:if="{{!selectMode}}">
         <view class="action-btn edit-btn" bind:tap="onEditAddress" data-id="{{address.id}}">
-          <text>编辑</text>
+          <text>缂栬緫</text>
         </view>
         <view class="action-btn delete-btn" bind:tap="onDeleteAddress" data-id="{{address.id}}">
-          <text>删除</text>
+          <text>鍒犻櫎</text>
         </view>
         <view class="action-btn default-btn" bind:tap="onSetDefault" data-id="{{address.id}}" wx:if="{{!address.isDefault}}">
-          <text>设为默认</text>
+          <text>璁句负榛樿</text>
         </view>
       </view>
     </view>
     
-    <!-- 添加地址按钮 -->
-    <button class="add-address-btn" bind:tap="onAddAddress" wx:if="{{addressList.length > 0 && !selectMode}}">+ 添加新地址</button>
+    <!-- 娣诲姞鍦板潃鎸夐挳 -->
+    <button class="add-address-btn" bind:tap="onAddAddress" wx:if="{{addressList.length > 0 && !selectMode}}">+ 娣诲姞鏂板湴鍧€</button>
   </view>
 </view>

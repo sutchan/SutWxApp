@@ -1,22 +1,17 @@
-// 商品详情页面逻辑
+﻿// 鍟嗗搧璇︽儏椤甸潰閫昏緫
 import { showToast } from '../../../utils/global';
 
 Page({
   data: {
-    product: null, // 商品详情数据
-    loading: true, // 加载状态
-    error: false, // 错误状态
-    errorMsg: '', // 错误信息
-    selectedSku: {}, // 选中的商品规格
-    quantity: 1, // 购买数量
-    images: [], // 商品图片列表
-    currentImageIndex: 0, // 当前显示的图片索引
-    isFavorite: false, // 是否已收藏
-    relatedProducts: [] // 相关商品
+    product: null, // 鍟嗗搧璇︽儏鏁版嵁
+    loading: true, // 鍔犺浇鐘舵€?    error: false, // 閿欒鐘舵€?    errorMsg: '', // 閿欒淇℃伅
+    selectedSku: {}, // 閫変腑鐨勫晢鍝佽鏍?    quantity: 1, // 璐拱鏁伴噺
+    images: [], // 鍟嗗搧鍥剧墖鍒楄〃
+    currentImageIndex: 0, // 褰撳墠鏄剧ず鐨勫浘鐗囩储寮?    isFavorite: false, // 鏄惁宸叉敹钘?    relatedProducts: [] // 鐩稿叧鍟嗗搧
   },
 
   /**
-   * 生命周期函数--监听页面加载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
    */
   onLoad: function(options) {
     const app = getApp();
@@ -25,7 +20,7 @@ Page({
       this.productId = options.id;
       this.loadProductDetail();
       
-      // 记录页面访问事件
+      // 璁板綍椤甸潰璁块棶浜嬩欢
       app.services.analytics.trackPageView('product_detail', {
         product_id: options.id
       });
@@ -33,27 +28,27 @@ Page({
       this.setData({
         loading: false,
         error: true,
-        errorMsg: '商品ID不存在'
+        errorMsg: '鍟嗗搧ID涓嶅瓨鍦?
       });
     }
   },
 
   /**
-   * 生命周期函数--监听页面显示
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
    */
   onShow: function() {
-    // 页面显示时的处理
+    // 椤甸潰鏄剧ず鏃剁殑澶勭悊
   },
 
   /**
-   * 监听用户下拉动作
+   * 鐩戝惉鐢ㄦ埛涓嬫媺鍔ㄤ綔
    */
   onPullDownRefresh: function() {
     this.loadProductDetail();
   },
 
   /**
-   * 加载商品详情数据
+   * 鍔犺浇鍟嗗搧璇︽儏鏁版嵁
    */
   loadProductDetail: async function() {
     const app = getApp();
@@ -63,7 +58,7 @@ Page({
     });
 
     try {
-      // 使用productService获取商品详情
+      // 浣跨敤productService鑾峰彇鍟嗗搧璇︽儏
       const product = await app.services.product.getProductDetail(this.productId);
       
       this.setData({
@@ -73,31 +68,31 @@ Page({
         loading: false
       });
       
-      // 检查商品是否已收藏
+      // 妫€鏌ュ晢鍝佹槸鍚﹀凡鏀惰棌
       this.checkFavoriteStatus();
-      // 加载相关商品
+      // 鍔犺浇鐩稿叧鍟嗗搧
       this.loadRelatedProducts();
     } catch (error) {
-      console.error('获取商品详情失败:', error);
+      console.error('鑾峰彇鍟嗗搧璇︽儏澶辫触:', error);
       this.setData({
         loading: false,
         error: true,
-        errorMsg: error.message || '加载失败，请重试'
+        errorMsg: error.message || '鍔犺浇澶辫触锛岃閲嶈瘯'
       });
-      showToast('获取商品详情失败', 'none');
+      showToast('鑾峰彇鍟嗗搧璇︽儏澶辫触', 'none');
     } finally {
       wx.stopPullDownRefresh();
     }
   },
 
   /**
-   * 加载相关商品
+   * 鍔犺浇鐩稿叧鍟嗗搧
    */
   loadRelatedProducts: async function() {
     const app = getApp();
     
     try {
-      // 使用productService获取相关商品
+      // 浣跨敤productService鑾峰彇鐩稿叧鍟嗗搧
       const result = await app.services.product.getRelatedProducts({
         product_id: this.productId,
         limit: 6
@@ -107,21 +102,18 @@ Page({
         relatedProducts: result.products || []
       });
     } catch (error) {
-      console.error('获取相关商品失败:', error);
+      console.error('鑾峰彇鐩稿叧鍟嗗搧澶辫触:', error);
     }
   },
 
   /**
-   * 检查商品收藏状态
-   */
+   * 妫€鏌ュ晢鍝佹敹钘忕姸鎬?   */
   checkFavoriteStatus: async function() {
     const app = getApp();
     
     try {
-      // 检查用户是否登录
-      if (app.isLoggedIn()) {
-        // 使用favoriteService检查收藏状态
-        const result = await app.services.favorite.checkFavorite({
+      // 妫€鏌ョ敤鎴锋槸鍚︾櫥褰?      if (app.isLoggedIn()) {
+        // 浣跨敤favoriteService妫€鏌ユ敹钘忕姸鎬?        const result = await app.services.favorite.checkFavorite({
           product_id: this.productId
         });
         
@@ -130,12 +122,12 @@ Page({
         });
       }
     } catch (error) {
-      console.error('检查收藏状态失败:', error);
+      console.error('妫€鏌ユ敹钘忕姸鎬佸け璐?', error);
     }
   },
 
   /**
-   * 切换图片
+   * 鍒囨崲鍥剧墖
    */
   onImageChange: function(e) {
     this.setData({
@@ -144,7 +136,7 @@ Page({
   },
 
   /**
-   * 切换商品规格
+   * 鍒囨崲鍟嗗搧瑙勬牸
    */
   onSkuSelect: function(e) {
     const skuId = e.currentTarget.dataset.id;
@@ -157,7 +149,7 @@ Page({
   },
 
   /**
-   * 增加购买数量
+   * 澧炲姞璐拱鏁伴噺
    */
   onIncreaseQuantity: function() {
     const maxQuantity = this.data.selectedSku.stock || this.data.product.stock || 99;
@@ -166,12 +158,12 @@ Page({
         quantity: this.data.quantity + 1
       });
     } else {
-      showToast('已达到最大库存', 'none');
+      showToast('宸茶揪鍒版渶澶у簱瀛?, 'none');
     }
   },
 
   /**
-   * 减少购买数量
+   * 鍑忓皯璐拱鏁伴噺
    */
   onDecreaseQuantity: function() {
     if (this.data.quantity > 1) {
@@ -182,14 +174,13 @@ Page({
   },
 
   /**
-   * 添加到购物车
+   * 娣诲姞鍒拌喘鐗╄溅
    */
   addToCart: async function() {
     const app = getApp();
     
-    // 检查是否登录
-    if (!app.isLoggedIn()) {
-      showToast('请先登录', 'none');
+    // 妫€鏌ユ槸鍚︾櫥褰?    if (!app.isLoggedIn()) {
+      showToast('璇峰厛鐧诲綍', 'none');
       wx.navigateTo({
         url: '/pages/user/login/login'
       });
@@ -197,51 +188,48 @@ Page({
     }
     
     try {
-      // 使用cartService添加到购物车
+      // 浣跨敤cartService娣诲姞鍒拌喘鐗╄溅
       await app.services.cart.addToCart({
         product_id: this.productId,
         sku_id: this.data.selectedSku.id || '',
         quantity: this.data.quantity
       });
       
-      // 记录添加购物车事件
-      app.services.analytics.trackEvent('add_to_cart', {
+      // 璁板綍娣诲姞璐墿杞︿簨浠?      app.services.analytics.trackEvent('add_to_cart', {
         product_id: this.productId,
         quantity: this.data.quantity,
         sku_id: this.data.selectedSku.id || ''
       });
       
-      showToast('添加成功', 'success');
+      showToast('娣诲姞鎴愬姛', 'success');
     } catch (error) {
-      console.error('添加到购物车失败:', error);
-      showToast(error.message || '添加失败，请重试', 'none');
+      console.error('娣诲姞鍒拌喘鐗╄溅澶辫触:', error);
+      showToast(error.message || '娣诲姞澶辫触锛岃閲嶈瘯', 'none');
     }
   },
 
   /**
-   * 立即购买
+   * 绔嬪嵆璐拱
    */
   buyNow: function() {
     const app = getApp();
     
-    // 检查是否登录
-    if (!app.isLoggedIn()) {
-      showToast('请先登录', 'none');
+    // 妫€鏌ユ槸鍚︾櫥褰?    if (!app.isLoggedIn()) {
+      showToast('璇峰厛鐧诲綍', 'none');
       wx.navigateTo({
         url: '/pages/user/login/login'
       });
       return;
     }
     
-    // 记录立即购买事件
+    // 璁板綍绔嬪嵆璐拱浜嬩欢
     app.services.analytics.trackEvent('buy_now', {
       product_id: this.productId,
       quantity: this.data.quantity,
       sku_id: this.data.selectedSku.id || ''
     });
     
-    // 构造订单参数
-    const orderItem = {
+    // 鏋勯€犺鍗曞弬鏁?    const orderItem = {
       product_id: this.productId,
       sku_id: this.data.selectedSku.id || '',
       quantity: this.data.quantity,
@@ -249,24 +237,23 @@ Page({
       selectedSku: this.data.selectedSku
     };
     
-    // 保存到全局数据，用于订单确认页
+    // 淇濆瓨鍒板叏灞€鏁版嵁锛岀敤浜庤鍗曠‘璁ら〉
     app.globalData.tempOrderItems = [orderItem];
     
-    // 跳转到订单确认页
+    // 璺宠浆鍒拌鍗曠‘璁ら〉
     wx.navigateTo({
       url: '/pages/order/confirm/confirm'
     });
   },
 
   /**
-   * 收藏/取消收藏商品
+   * 鏀惰棌/鍙栨秷鏀惰棌鍟嗗搧
    */
   onToggleFavorite: async function() {
     const app = getApp();
     
-    // 检查是否登录
-    if (!app.isLoggedIn()) {
-      showToast('请先登录', 'none');
+    // 妫€鏌ユ槸鍚︾櫥褰?    if (!app.isLoggedIn()) {
+      showToast('璇峰厛鐧诲綍', 'none');
       wx.navigateTo({
         url: '/pages/user/login/login'
       });
@@ -277,12 +264,12 @@ Page({
     const action = isFavorite ? 'remove' : 'add';
     
     try {
-      // 乐观更新UI
+      // 涔愯鏇存柊UI
       this.setData({
         isFavorite: !isFavorite
       });
       
-      // 使用favoriteService操作收藏
+      // 浣跨敤favoriteService鎿嶄綔鏀惰棌
       if (isFavorite) {
         await app.services.favorite.removeFavorite({
           product_id: this.productId
@@ -293,30 +280,30 @@ Page({
         });
       }
       
-      // 记录收藏事件
+      // 璁板綍鏀惰棌浜嬩欢
       app.services.analytics.trackEvent(action === 'add' ? 'favorite_add' : 'favorite_remove', {
         product_id: this.productId
       });
       
-      showToast(isFavorite ? '取消收藏成功' : '收藏成功', 'success');
+      showToast(isFavorite ? '鍙栨秷鏀惰棌鎴愬姛' : '鏀惰棌鎴愬姛', 'success');
     } catch (error) {
-      console.error('操作收藏失败:', error);
-      // 失败时回滚UI
+      console.error('鎿嶄綔鏀惰棌澶辫触:', error);
+      // 澶辫触鏃跺洖婊歎I
       this.setData({
         isFavorite: isFavorite
       });
-      showToast(error.message || '操作失败，请重试', 'none');
+      showToast(error.message || '鎿嶄綔澶辫触锛岃閲嶈瘯', 'none');
     }
   },
 
   /**
-   * 查看相关商品
+   * 鏌ョ湅鐩稿叧鍟嗗搧
    */
   onRelatedProductTap: function(e) {
     const productId = e.currentTarget.dataset.id;
     const app = getApp();
     
-    // 记录点击相关商品事件
+    // 璁板綍鐐瑰嚮鐩稿叧鍟嗗搧浜嬩欢
     app.services.analytics.trackEvent('related_product_click', {
       product_id: productId,
       from_product_id: this.productId
@@ -328,25 +315,25 @@ Page({
   },
 
   /**
-   * 重试加载
+   * 閲嶈瘯鍔犺浇
    */
   onRetry: function() {
     this.loadProductDetail();
   },
 
   /**
-   * 分享功能
+   * 鍒嗕韩鍔熻兘
    */
   onShareAppMessage: function() {
     const app = getApp();
     
-    // 记录分享事件
+    // 璁板綍鍒嗕韩浜嬩欢
     app.services.analytics.trackEvent('product_share', {
       product_id: this.productId
     });
     
     return {
-      title: this.data.product ? this.data.product.title : '商品详情',
+      title: this.data.product ? this.data.product.title : '鍟嗗搧璇︽儏',
       path: '/pages/product/detail/detail?id=' + this.productId,
       imageUrl: this.data.images[0] || ''
     };

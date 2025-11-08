@@ -1,21 +1,21 @@
-<!-- 订单详情页面 -->
+﻿<!-- 璁㈠崟璇︽儏椤甸潰 -->
 <view class="container">
-  <!-- 加载中状态 -->
+  <!-- 鍔犺浇涓姸鎬?-->
   <view class="loading" wx:if="{{loading}}">
-    <text>加载中...</text>
+    <text>鍔犺浇涓?..</text>
   </view>
 
-  <!-- 错误状态 -->
+  <!-- 閿欒鐘舵€?-->
   <view class="error" wx:if="{{error}}">
     <image src="/images/error.svg" class="error-icon"></image>
     <text class="error-text">{{errorMsg}}</text>
-    <button class="retry-btn" bindtap="onRetry">重试</button>
-    <button wx:if="{{errorMsg === '请先登录'}}" class="login-btn" bindtap="onLogin">去登录</button>
+    <button class="retry-btn" bindtap="onRetry">閲嶈瘯</button>
+    <button wx:if="{{errorMsg === '璇峰厛鐧诲綍'}}" class="login-btn" bindtap="onLogin">鍘荤櫥褰?/button>
   </view>
 
-  <!-- 订单详情内容 -->
+  <!-- 璁㈠崟璇︽儏鍐呭 -->
   <view class="order-content" wx:if="{{!loading && !error && orderDetail}}">
-    <!-- 订单状态卡片 -->
+    <!-- 璁㈠崟鐘舵€佸崱鐗?-->
     <view class="status-card">
       <view class="status-text" wx:if="{{orderDetail.status === 'pending_payment'}}" style="color: #ff6b81;">{{orderDetail.statusText}}</view>
       <view class="status-text" wx:elif="{{orderDetail.status === 'pending_shipping'}}" style="color: #ff9500;">{{orderDetail.statusText}}</view>
@@ -24,25 +24,25 @@
       <view class="status-text" wx:else style="color: #999999;">{{orderDetail.statusText}}</view>
     </view>
 
-    <!-- 收货地址信息 -->
+    <!-- 鏀惰揣鍦板潃淇℃伅 -->
     <view class="address-card" wx:if="{{address}}">
-      <view class="address-title">收货信息</view>
+      <view class="address-title">鏀惰揣淇℃伅</view>
       <view class="address-info">
         <view class="address-user">{{address.receiver}} {{address.phone}}</view>
         <view class="address-detail">{{address.province}}{{address.city}}{{address.district}}{{address.detail}}</view>
       </view>
     </view>
 
-    <!-- 订单商品信息 -->
+    <!-- 璁㈠崟鍟嗗搧淇℃伅 -->
     <view class="products-card">
-      <view class="section-title">商品信息</view>
+      <view class="section-title">鍟嗗搧淇℃伅</view>
       <view class="product-list">
         <view class="product-item" wx:for="{{orderDetail.products}}" wx:key="id" bindtap="onProductTap" data-id="{{item.id}}">
           <image class="product-image" src="{{item.image}}" mode="aspectFill"></image>
           <view class="product-info">
             <view class="product-title">{{item.title}}</view>
             <view class="product-bottom">
-              <view class="product-price">¥{{item.price}}</view>
+              <view class="product-price">楼{{item.price}}</view>
               <view class="product-quantity">x{{item.quantity}}</view>
             </view>
           </view>
@@ -50,70 +50,70 @@
       </view>
     </view>
 
-    <!-- 订单信息 -->
+    <!-- 璁㈠崟淇℃伅 -->
     <view class="order-info-card">
-      <view class="section-title">订单信息</view>
+      <view class="section-title">璁㈠崟淇℃伅</view>
       <view class="info-item">
-        <view class="info-label">订单编号：</view>
+        <view class="info-label">璁㈠崟缂栧彿锛?/view>
         <view class="info-value">{{orderDetail.orderNo}}</view>
       </view>
       <view class="info-item">
-        <view class="info-label">下单时间：</view>
+        <view class="info-label">涓嬪崟鏃堕棿锛?/view>
         <view class="info-value">{{orderDetail.createTime}}</view>
       </view>
       <view class="info-item" wx:if="{{orderDetail.paymentTime}}">
-        <view class="info-label">支付时间：</view>
+        <view class="info-label">鏀粯鏃堕棿锛?/view>
         <view class="info-value">{{orderDetail.paymentTime}}</view>
       </view>
       <view class="info-item" wx:if="{{orderDetail.shippingTime}}">
-        <view class="info-label">发货时间：</view>
+        <view class="info-label">鍙戣揣鏃堕棿锛?/view>
         <view class="info-value">{{orderDetail.shippingTime}}</view>
       </view>
       <view class="info-item" wx:if="{{orderDetail.completeTime}}">
-        <view class="info-label">完成时间：</view>
+        <view class="info-label">瀹屾垚鏃堕棿锛?/view>
         <view class="info-value">{{orderDetail.completeTime}}</view>
       </view>
       <view class="info-item" wx:if="{{orderDetail.trackingNo}}">
-        <view class="info-label">物流单号：</view>
+        <view class="info-label">鐗╂祦鍗曞彿锛?/view>
         <view class="info-value">{{orderDetail.trackingNo}}</view>
       </view>
       <view class="info-item" wx:if="{{orderDetail.paymentMethod}}">
-        <view class="info-label">支付方式：</view>
+        <view class="info-label">鏀粯鏂瑰紡锛?/view>
         <view class="info-value">{{orderDetail.paymentMethod}}</view>
       </view>
       <view class="info-item" wx:if="{{orderDetail.orderRemark}}">
-        <view class="info-label">订单备注：</view>
+        <view class="info-label">璁㈠崟澶囨敞锛?/view>
         <view class="info-value">{{orderDetail.orderRemark}}</view>
       </view>
     </view>
 
-    <!-- 订单金额 -->
+    <!-- 璁㈠崟閲戦 -->
     <view class="price-card">
       <view class="price-item">
-        <view class="price-label">商品总价：</view>
-        <view class="price-value">¥{{orderDetail.totalPrice}}</view>
+        <view class="price-label">鍟嗗搧鎬讳环锛?/view>
+        <view class="price-value">楼{{orderDetail.totalPrice}}</view>
       </view>
       <view class="price-item">
-        <view class="price-label">运费：</view>
-        <view class="price-value">¥{{orderDetail.freight}}</view>
+        <view class="price-label">杩愯垂锛?/view>
+        <view class="price-value">楼{{orderDetail.freight}}</view>
       </view>
       <view class="price-item" wx:if="{{orderDetail.couponDiscount > 0}}">
-        <view class="price-label">优惠券：</view>
-        <view class="price-value" style="color: #ff4757;">-¥{{orderDetail.couponDiscount}}
+        <view class="price-label">浼樻儬鍒革細</view>
+        <view class="price-value" style="color: #ff4757;">-楼{{orderDetail.couponDiscount}}
           <text class="coupon-name" wx:if="{{orderDetail.couponInfo && orderDetail.couponInfo.name}}">({{orderDetail.couponInfo.name}})</text>
         </view>
       </view>
       <view class="price-item total">
-        <view class="price-label">实付款：</view>
-        <view class="price-value total-price">¥{{orderDetail.finalTotal}}</view>
+        <view class="price-label">瀹炰粯娆撅細</view>
+        <view class="price-value total-price">楼{{orderDetail.finalTotal}}</view>
       </view>
     </view>
   </view>
 
-  <!-- 底部操作栏 -->
+  <!-- 搴曢儴鎿嶄綔鏍?-->
   <view class="bottom-bar" wx:if="{{!loading && !error && orderDetail}}">
     <view class="bottom-left">
-      <button class="service-btn" bindtap="onContactService">联系客服</button>
+      <button class="service-btn" bindtap="onContactService">鑱旂郴瀹㈡湇</button>
     </view>
     <view class="bottom-right">
       <button 
@@ -121,29 +121,27 @@
         wx:if="{{orderDetail.status === 'pending_payment'}}" 
         bindtap="onCancelOrder"
       >
-        取消订单
+        鍙栨秷璁㈠崟
       </button>
       <button 
         class="action-btn primary" 
         wx:if="{{orderDetail.status === 'pending_payment'}}" 
         bindtap="onPayOrder"
       >
-        去支付
-      </button>
+        鍘绘敮浠?      </button>
       <button 
         class="action-btn primary" 
         wx:if="{{orderDetail.status === 'pending_receipt'}}" 
         bindtap="onConfirmReceipt"
       >
-        确认收货
+        纭鏀惰揣
       </button>
       <button 
         class="action-btn secondary" 
         wx:if="{{orderDetail.status === 'completed'}}" 
         bindtap="onReviewOrder"
       >
-        去评价
-      </button>
+        鍘昏瘎浠?      </button>
     </view>
   </view>
 </view>

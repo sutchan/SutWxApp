@@ -1,11 +1,11 @@
-/* 订单确认页面样式 */
+﻿/* 璁㈠崟纭椤甸潰鏍峰紡 */
 .container {
   background-color: #f8f8f8;
   min-height: 100vh;
-  padding-bottom: 120rpx; /* 为底部结算栏留出空间 */
+  padding-bottom: 120rpx; /* 涓哄簳閮ㄧ粨绠楁爮鐣欏嚭绌洪棿 */
 }
 
-/* 地址模块样式 */
+/* 鍦板潃妯″潡鏍峰紡 */
 .address-section {
   background-color: #ffffff;
   padding: 30rpx;
@@ -62,7 +62,7 @@
   margin-left: 20rpx;
 }
 
-/* 商品列表模块样式 */
+/* 鍟嗗搧鍒楄〃妯″潡鏍峰紡 */
 .product-section {
   background-color: #ffffff;
   margin-bottom: 20rpx;
@@ -130,7 +130,7 @@
   color: #666666;
 }
 
-/* 优惠券模块样式 */
+/* 浼樻儬鍒告ā鍧楁牱寮?*/
 .coupon-section {
   background-color: #ffffff;
   padding: 30rpx;
@@ -159,7 +159,7 @@
   color: #999999;
 }
 
-/* 订单备注模块样式 */
+/* 璁㈠崟澶囨敞妯″潡鏍峰紡 */
 .remark-section {
   background-color: #ffffff;
   padding: 30rpx;
@@ -185,7 +185,7 @@
   color: #cccccc;
 }
 
-/* 价格明细模块样式 */
+/* 浠锋牸鏄庣粏妯″潡鏍峰紡 */
 .price-section {
   background-color: #ffffff;
   padding: 20rpx 30rpx;
@@ -217,7 +217,7 @@
   color: #ff6b81;
 }
 
-/* 底部结算栏样式 */
+/* 搴曢儴缁撶畻鏍忔牱寮?*/
 .bottom-bar {
   position: fixed;
   bottom: 0;

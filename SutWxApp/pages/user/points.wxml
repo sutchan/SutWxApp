@@ -1,25 +1,64 @@
-<!-- 用户积分页面 -->
+﻿<!-- 鐢ㄦ埛绉垎椤甸潰 -->
 <view class="points-container">
-  <!-- 积分信息卡片 -->
-  <view class="points-card" wx:if="{{!isLoading && !error}}">
+  <!-- 绉垎淇℃伅鍗＄墖 -->
+  <view class="points-card" wx:if="{{!loading && !error}}">
     <view class="points-header">
       <view class="points-total">
-        <text class="points-number">{{points || 0}}</text>
-        <text class="points-unit">积分</text>
+        <text class="points-number">{{totalPoints || 0}}</text>
+        <text class="points-unit">绉垎</text>
       </view>
       <view class="points-actions">
-        <button class="rules-button" bindtap="navigateToPointsRules" aria-label="查看积分规则">
-          积分规则
+        <button class="rules-button" bindtap="navigateToPointsRules" aria-label="鏌ョ湅绉垎瑙勫垯">
+          绉垎瑙勫垯
           <image class="arrow-icon" src="/images/arrow-right.svg" mode="aspectFit"></image>
         </button>
       </view>
     </view>
+    
+    <!-- 绉垎璇︽儏淇℃伅 -->
+    <view class="points-details">
+      <view class="point-detail-item">
+        <text class="point-detail-label">鍙敤绉垎</text>
+        <text class="point-detail-value">{{availablePoints || 0}}</text>
+      </view>
+      <view class="point-detail-item">
+        <text class="point-detail-label">寰呯敓鏁堢Н鍒?/text>
+        <text class="point-detail-value">{{pendingPoints || 0}}</text>
+      </view>
+      <view class="point-detail-item">
+        <text class="point-detail-label">鍗冲皢杩囨湡</text>
+        <text class="point-detail-value">{{expiringPoints || 0}}</text>
+      </view>
+    </view>
+    
+    <!-- 绉垎鎿嶄綔鎸夐挳缁?-->
+    <view class="points-operations">
+      <button class="operation-button" bindtap="navigateToSignIn" aria-label="姣忔棩绛惧埌">
+        <image class="operation-icon" src="/images/check-in.svg" mode="aspectFit"></image>
+        <text class="operation-text">姣忔棩绛惧埌</text>
+      </button>
+      <button class="operation-button" bindtap="navigateToPointsMall" aria-label="绉垎鍟嗗煄">
+        <image class="operation-icon" src="/images/shopping.svg" mode="aspectFit"></image>
+        <text class="operation-text">绉垎鍟嗗煄</text>
+      </button>
+      <button class="operation-button" bindtap="navigateToPointsTasks" aria-label="绉垎浠诲姟">
+        <image class="operation-icon" src="/images/tasks.svg" mode="aspectFit"></image>
+        <text class="operation-text">绉垎浠诲姟</text>
+      </button>
+      <button class="operation-button" bindtap="navigateToExchangeRecords" aria-label="鍏戞崲璁板綍">
+        <image class="operation-icon" src="/images/exchange.svg" mode="aspectFit"></image>
+        <text class="operation-text">鍏戞崲璁板綍</text>
+      </button>
+    </view>
   </view>
 
-  <!-- 积分历史记录 -->
+  <!-- 绉垎鍘嗗彶璁板綍 -->
   <view class="history-section" wx:if="{{pointsHistory.length > 0}}">
     <view class="history-header">
-      <text class="history-title">积分记录</text>
+      <text class="history-title">绉垎璁板綍</text>
+      <button class="filter-button" bindtap="showFilterOptions" aria-label="绛涢€?>
+        绛涢€?        <image class="filter-icon" src="/images/filter.svg" mode="aspectFit"></image>
+      </button>
     </view>
     
     <view class="history-list">
@@ -27,10 +66,11 @@
         wx:for="{{pointsHistory}}" 
         wx:key="id"
         class="history-item"
-        aria-label="积分记录：{{item.description || ''}}, {{item.points > 0 ? '+' : ''}}{{item.points}}积分">
+        aria-label="绉垎璁板綍锛歿{item.description || ''}}, {{item.points > 0 ? '+' : ''}}{{item.points}}绉垎">
         <view class="history-info">
-          <text class="history-description">{{item.description || '未知操作'}}</text>
-          <text class="history-time">{{item.time || ''}}</text>
+          <text class="history-description">{{item.description || '鏈煡鎿嶄綔'}}</text>
+          <text class="history-source">{{item.source || ''}}</text>
+          <text class="history-time">{{formatTime(item.createdAt) || ''}}</text>
         </view>
         <text class="history-points {{item.points > 0 ? 'points-increase' : 'points-decrease'}}">
           {{item.points > 0 ? '+' : ''}}{{item.points}}
@@ -39,32 +79,64 @@
     </view>
   </view>
 
-  <!-- 加载更多 -->
-  <view class="loading-more" wx:if="isLoadingMore">
-    <text class="loading-more-text">加载中...</text>
+  <!-- 鍔犺浇鏇村 -->
+  <view class="loading-more" wx:if="{{loading && pointsHistory.length > 0}}">
+    <text class="loading-more-text">鍔犺浇涓?..</text>
   </view>
 
-  <!-- 没有更多数据 -->
-  <view class="no-more" wx:if="{{!isLoading && !isLoadingMore && pointsHistory.length > 0 && !hasMore}}">
-    <text class="no-more-text">没有更多记录了</text>
+  <!-- 娌℃湁鏇村鏁版嵁 -->
+  <view class="no-more" wx:if="{{!loading && pointsHistory.length > 0 && !hasMore}}">
+    <text class="no-more-text">娌℃湁鏇村璁板綍浜?/text>
   </view>
 
-  <!-- 空状态 -->
-  <view class="empty" wx:if="{{!isLoading && !isLoadingMore && pointsHistory.length === 0 && !error}}">
+  <!-- 绌虹姸鎬?-->
+  <view class="empty" wx:if="{{!loading && pointsHistory.length === 0 && !error}}">
     <image src="/images/empty.svg" mode="aspectFit" class="empty-icon"></image>
-    <text class="empty-text">暂无积分记录</text>
+    <text class="empty-text">鏆傛棤绉垎璁板綍</text>
   </view>
 
-  <!-- 加载状态 -->
-  <view class="loading-container" wx:if="isLoading">
+  <!-- 鍔犺浇鐘舵€?-->
+  <view class="loading-container" wx:if="{{loading && pointsHistory.length === 0}}">
     <view class="loading"></view>
-    <text class="loading-text">加载中...</text>
+    <text class="loading-text">鍔犺浇涓?..</text>
   </view>
 
-  <!-- 错误提示 -->
-  <view class="error-container" wx:if="error">
+  <!-- 閿欒鎻愮ず -->
+  <view class="error-container" wx:if="{{error}}">
     <image src="/images/error.svg" class="error-icon"></image>
-    <text class="error-text">{{error}}</text>
-    <button class="retry-button" bindtap="onRetry">重试</button>
+    <text class="error-text">鍔犺浇澶辫触锛岃閲嶈瘯</text>
+    <button class="retry-button" bindtap="retryLoad">閲嶈瘯</button>
+  </view>
+  
+  <!-- 绛涢€夊脊绐?-->
+  <view class="filter-modal" wx:if="{{showFilterModal}}">
+    <view class="filter-content">
+      <view class="filter-header">
+        <text class="filter-title">绛涢€夌Н鍒嗚褰?/text>
+        <button class="close-button" bindtap="hideFilterOptions">鍏抽棴</button>
+      </view>
+      <view class="filter-body">
+        <view class="filter-item">
+          <text class="filter-label">璁板綍绫诲瀷</text>
+          <radio-group class="radio-group" bindchange="onFilterTypeChange">
+            <label class="radio-item">
+              <radio value="all" checked="{{filterType === 'all'}}"></radio>
+              <text>鍏ㄩ儴</text>
+            </label>
+            <label class="radio-item">
+              <radio value="gain" checked="{{filterType === 'gain'}}"></radio>
+              <text>绉垎鑾峰緱</text>
+            </label>
+            <label class="radio-item">
+              <radio value="use" checked="{{filterType === 'use'}}"></radio>
+              <text>绉垎浣跨敤</text>
+            </label>
+          </radio-group>
+        </view>
+      </view>
+      <view class="filter-footer">
+        <button class="apply-filter-button" bindtap="applyFilter">搴旂敤绛涢€?/button>
+      </view>
+    </view>
   </view>
 </view>

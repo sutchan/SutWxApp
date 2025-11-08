@@ -1,11 +1,11 @@
-/* 地址编辑页面样式 */
+﻿/* 鍦板潃缂栬緫椤甸潰鏍峰紡 */
 .container {
   background-color: #f8f8f8;
   min-height: 100vh;
   padding-bottom: 40rpx;
 }
 
-/* 加载状态样式 */
+/* 鍔犺浇鐘舵€佹牱寮?*/
 .loading {
   padding: 60rpx;
   text-align: center;
@@ -13,13 +13,13 @@
   color: #999999;
 }
 
-/* 表单样式 */
+/* 琛ㄥ崟鏍峰紡 */
 .address-form {
   background-color: #ffffff;
   margin-top: 20rpx;
 }
 
-/* 表单项样式 */
+/* 琛ㄥ崟椤规牱寮?*/
 .form-item {
   display: flex;
   align-items: center;
@@ -44,7 +44,7 @@
   color: #cccccc;
 }
 
-/* 地区选择器样式 */
+/* 鍦板尯閫夋嫨鍣ㄦ牱寮?*/
 .picker {
   flex: 1;
 }
@@ -58,7 +58,7 @@
   color: #cccccc;
 }
 
-/* 详细地址输入框样式 */
+/* 璇︾粏鍦板潃杈撳叆妗嗘牱寮?*/
 .textarea {
   flex: 1;
   font-size: 30rpx;
@@ -72,7 +72,7 @@
   color: #cccccc;
 }
 
-/* 复选框样式 */
+/* 澶嶉€夋鏍峰紡 */
 .checkbox-item {
   background-color: #ffffff;
   margin-top: 20rpx;
@@ -84,7 +84,7 @@ checkbox {
   margin-right: 10rpx;
 }
 
-/* 提交按钮样式 */
+/* 鎻愪氦鎸夐挳鏍峰紡 */
 .submit-btn {
   margin: 40rpx 30rpx 0;
   background-color: #ff6b81;

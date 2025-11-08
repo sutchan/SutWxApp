@@ -1,6 +1,6 @@
-<!-- 订单确认页面结构 -->
+﻿<!-- 璁㈠崟纭椤甸潰缁撴瀯 -->
 <view class="container">
-  <!-- 地址模块 -->
+  <!-- 鍦板潃妯″潡 -->
   <view class="address-section" bind:tap="onSelectAddress">
     <view class="address-content" wx:if="{{selectedAddress}}">
       <view class="address-header">
@@ -12,81 +12,81 @@
       </view>
     </view>
     <view class="no-address" wx:else>
-      <text>请选择收货地址</text>
+      <text>璇烽€夋嫨鏀惰揣鍦板潃</text>
     </view>
     <view class="arrow-right"></view>
   </view>
   
-  <!-- 商品列表模块 -->
+  <!-- 鍟嗗搧鍒楄〃妯″潡 -->
   <view class="product-section">
-    <view class="section-title">商品信息</view>
+    <view class="section-title">鍟嗗搧淇℃伅</view>
     
-    <!-- 购物车商品 -->
+    <!-- 璐墿杞﹀晢鍝?-->
     <view class="product-item" wx:for="{{cartItems}}" wx:key="id" wx:for-item="item">
       <image class="product-image" src="{{item.image || '/images/default-post.svg'}}" mode="aspectFit"></image>
       <view class="product-info">
         <view class="product-title">{{item.title}}</view>
         <view class="product-sku" wx:if="{{item.skuName}}">{{item.skuName}}</view>
         <view class="product-price-quantity">
-          <view class="product-price">¥{{item.price.toFixed(2)}}</view>
+          <view class="product-price">楼{{item.price.toFixed(2)}}</view>
           <view class="product-quantity">x{{item.quantity}}</view>
         </view>
       </view>
     </view>
     
-    <!-- 直接购买的商品 -->
+    <!-- 鐩存帴璐拱鐨勫晢鍝?-->
     <view class="product-item" wx:for="{{products}}" wx:key="id" wx:for-item="item">
       <image class="product-image" src="{{item.image || '/images/default-post.svg'}}" mode="aspectFit"></image>
       <view class="product-info">
         <view class="product-title">{{item.title}}</view>
         <view class="product-sku" wx:if="{{item.selectedSkuName}}">{{item.selectedSkuName}}</view>
         <view class="product-price-quantity">
-          <view class="product-price">¥{{item.price.toFixed(2)}}</view>
+          <view class="product-price">楼{{item.price.toFixed(2)}}</view>
           <view class="product-quantity">x{{item.quantity}}</view>
         </view>
       </view>
     </view>
   </view>
   
-  <!-- 优惠券模块 -->
+  <!-- 浼樻儬鍒告ā鍧?-->
   <view class="coupon-section" bind:tap="onSelectCoupon">
-    <view class="coupon-label">优惠券</view>
+    <view class="coupon-label">浼樻儬鍒?/view>
     <view class="coupon-value">
       <text wx:if="{{coupon}}">{{coupon.name}}</text>
-      <text class="placeholder" wx:else>请选择优惠券</text>
+      <text class="placeholder" wx:else>璇烽€夋嫨浼樻儬鍒?/text>
     </view>
     <view class="arrow-right"></view>
   </view>
   
-  <!-- 订单备注模块 -->
+  <!-- 璁㈠崟澶囨敞妯″潡 -->
   <view class="remark-section">
-    <view class="remark-label">订单备注</view>
-    <input class="remark-input" placeholder="选填，请输入订单备注信息" value="{{remark}}" bindinput="onRemarkInput" />
+    <view class="remark-label">璁㈠崟澶囨敞</view>
+    <input class="remark-input" placeholder="閫夊～锛岃杈撳叆璁㈠崟澶囨敞淇℃伅" value="{{remark}}" bindinput="onRemarkInput" />
   </view>
   
-  <!-- 价格明细模块 -->
+  <!-- 浠锋牸鏄庣粏妯″潡 -->
   <view class="price-section">
     <view class="price-item">
-      <view class="price-label">商品总价</view>
-      <view class="price-value">¥{{totalPrice.toFixed(2)}}</view>
+      <view class="price-label">鍟嗗搧鎬讳环</view>
+      <view class="price-value">楼{{totalPrice.toFixed(2)}}</view>
     </view>
     <view class="price-item">
-      <view class="price-label">运费</view>
-      <view class="price-value" wx:if="{{shippingFee > 0}}">¥{{shippingFee.toFixed(2)}}</view>
-      <view class="price-value free" wx:else>免运费</view>
+      <view class="price-label">杩愯垂</view>
+      <view class="price-value" wx:if="{{shippingFee > 0}}">楼{{shippingFee.toFixed(2)}}</view>
+      <view class="price-value free" wx:else>鍏嶈繍璐?/view>
     </view>
     <view class="price-item" wx:if="{{discount > 0}}">
-      <view class="price-label">优惠</view>
-      <view class="price-value discount">-¥{{discount.toFixed(2)}}</view>
+      <view class="price-label">浼樻儬</view>
+      <view class="price-value discount">-楼{{discount.toFixed(2)}}</view>
     </view>
   </view>
   
-  <!-- 底部结算栏 -->
+  <!-- 搴曢儴缁撶畻鏍?-->
   <view class="bottom-bar">
     <view class="total-price">
-      <text class="price-label">合计：</text>
-      <text class="price-value">¥{{finalPrice.toFixed(2)}}</text>
+      <text class="price-label">鍚堣锛?/text>
+      <text class="price-value">楼{{finalPrice.toFixed(2)}}</text>
     </view>
-    <button class="submit-btn" bind:tap="onSubmitOrder" loading="{{submitting}}" disabled="{{submitting}}">提交订单</button>
+    <button class="submit-btn" bind:tap="onSubmitOrder" loading="{{submitting}}" disabled="{{submitting}}">鎻愪氦璁㈠崟</button>
   </view>
 </view>

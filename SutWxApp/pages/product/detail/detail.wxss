@@ -1,11 +1,11 @@
-/* 商品详情页面样式 */
+﻿/* 鍟嗗搧璇︽儏椤甸潰鏍峰紡 */
 .container {
   background-color: #f8f8f8;
   min-height: 100vh;
-  padding-bottom: 100rpx; /* 为底部操作栏留出空间 */
+  padding-bottom: 100rpx; /* 涓哄簳閮ㄦ搷浣滄爮鐣欏嚭绌洪棿 */
 }
 
-/* 加载状态样式 */
+/* 鍔犺浇鐘舵€佹牱寮?*/
 .loading {
   padding: 60rpx;
   text-align: center;
@@ -13,7 +13,7 @@
   color: #999999;
 }
 
-/* 错误状态样式 */
+/* 閿欒鐘舵€佹牱寮?*/
 .error {
   padding: 60rpx 20rpx;
   text-align: center;
@@ -40,7 +40,7 @@
   border-radius: 30rpx;
 }
 
-/* 商品图片轮播样式 */
+/* 鍟嗗搧鍥剧墖杞挱鏍峰紡 */
 .image-swiper {
   width: 100%;
   height: 600rpx;
@@ -51,7 +51,7 @@
   height: 100%;
 }
 
-/* 商品基本信息样式 */
+/* 鍟嗗搧鍩烘湰淇℃伅鏍峰紡 */
 .product-info {
   background-color: #ffffff;
   padding: 30rpx;
@@ -86,7 +86,7 @@
   color: #ff6b81;
 }
 
-/* 商品规格样式 */
+/* 鍟嗗搧瑙勬牸鏍峰紡 */
 .sku-section,
 .quantity-section,
 .description-section,
@@ -137,7 +137,7 @@
   color: #ff6b81;
 }
 
-/* 数量控制样式 */
+/* 鏁伴噺鎺у埗鏍峰紡 */
 .quantity-control {
   display: flex;
   align-items: center;
@@ -181,7 +181,7 @@
   border-bottom: 1rpx solid #eeeeee;
 }
 
-/* 商品描述样式 */
+/* 鍟嗗搧鎻忚堪鏍峰紡 */
 .product-description {
   font-size: 28rpx;
   color: #666666;
@@ -193,7 +193,7 @@
   height: auto !important;
 }
 
-/* 相关商品样式 */
+/* 鐩稿叧鍟嗗搧鏍峰紡 */
 .related-list {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -236,7 +236,7 @@
   font-weight: bold;
 }
 
-/* 底部操作栏样式 */
+/* 搴曢儴鎿嶄綔鏍忔牱寮?*/
 .bottom-bar {
   position: fixed;
   bottom: 0;

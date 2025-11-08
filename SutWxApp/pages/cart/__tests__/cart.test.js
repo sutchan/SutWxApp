@@ -1,8 +1,7 @@
-// 购物车页面单元测试
-import { render } from '@testing-library/react-native';
+﻿// 璐墿杞﹂〉闈㈠崟鍏冩祴璇?import { render } from '@testing-library/react-native';
 import cartPage from '../cart';
 
-// 模拟依赖
+// 妯℃嫙渚濊禆
 jest.mock('../../utils/cart-service', () => ({
   getCartItems: jest.fn(),
   updateCartItem: jest.fn(),
@@ -26,16 +25,16 @@ jest.mock('../../utils/validator', () => ({
   validateCartItemQuantity: jest.fn()
 }));
 
-// 模拟小程序API
+// 妯℃嫙灏忕▼搴廇PI
 const mockSetData = jest.fn();
 const mockNavigateTo = jest.fn();
 
-// 准备测试数据
+// 鍑嗗娴嬭瘯鏁版嵁
 const mockCartItems = [
   {
     id: 1,
     product_id: 'prod001',
-    name: '测试商品1',
+    name: '娴嬭瘯鍟嗗搧1',
     price: 99.99,
     quantity: 2,
     stock: 10,
@@ -46,7 +45,7 @@ const mockCartItems = [
   {
     id: 2,
     product_id: 'prod002',
-    name: '测试商品2',
+    name: '娴嬭瘯鍟嗗搧2',
     price: 199.99,
     quantity: 1,
     stock: 0,
@@ -56,20 +55,17 @@ const mockCartItems = [
   }
 ];
 
-describe('购物车页面测试', () => {
+describe('璐墿杞﹂〉闈㈡祴璇?, () => {
   beforeEach(() => {
-    // 重置所有模拟
-    jest.clearAllMocks();
+    // 閲嶇疆鎵€鏈夋ā鎷?    jest.clearAllMocks();
     
-    // 模拟Page构造函数
-    global.Page = jest.fn().mockImplementation((options) => {
-      // 模拟小程序页面实例
-      const page = {
+    // 妯℃嫙Page鏋勯€犲嚱鏁?    global.Page = jest.fn().mockImplementation((options) => {
+      // 妯℃嫙灏忕▼搴忛〉闈㈠疄渚?      const page = {
         data: options.data,
         setData: mockSetData
       };
       
-      // 复制所有方法到实例
+      // 澶嶅埗鎵€鏈夋柟娉曞埌瀹炰緥
       Object.keys(options).forEach(key => {
         if (typeof options[key] === 'function' && key !== 'data') {
           page[key] = options[key].bind(page);
@@ -79,7 +75,7 @@ describe('购物车页面测试', () => {
       return page;
     });
     
-    // 模拟小程序全局API
+    // 妯℃嫙灏忕▼搴忓叏灞€API
     global.wx = {
       navigateTo: mockNavigateTo,
       showToast: jest.fn(),
@@ -89,24 +85,24 @@ describe('购物车页面测试', () => {
     };
   });
 
-  test('加载购物车数据', async () => {
+  test('鍔犺浇璐墿杞︽暟鎹?, async () => {
     const cartService = require('../../utils/cart-service');
     cartService.getCartItems.mockResolvedValue(mockCartItems);
     
-    // 创建页面实例
+    // 鍒涘缓椤甸潰瀹炰緥
     const page = cartPage;
     
-    // 调用加载数据方法
+    // 璋冪敤鍔犺浇鏁版嵁鏂规硶
     await page.loadCartData();
     
-    // 验证调用
+    // 楠岃瘉璋冪敤
     expect(cartService.getCartItems).toHaveBeenCalledWith({ forceRefresh: false });
     
-    // 验证数据更新
+    // 楠岃瘉鏁版嵁鏇存柊
     expect(mockSetData).toHaveBeenCalled();
   });
 
-  test('增加商品数量', async () => {
+  test('澧炲姞鍟嗗搧鏁伴噺', async () => {
     const cartService = require('../../utils/cart-service');
     cartService.getCartItems.mockResolvedValue(mockCartItems);
     cartService.updateCartItem.mockResolvedValue({ success: true });
@@ -114,7 +110,7 @@ describe('购物车页面测试', () => {
     const page = cartPage;
     await page.loadCartData();
     
-    // 准备模拟事件对象
+    // 鍑嗗妯℃嫙浜嬩欢瀵硅薄
     const mockEvent = {
       currentTarget: {
         dataset: {
@@ -123,14 +119,14 @@ describe('购物车页面测试', () => {
       }
     };
     
-    // 调用增加数量方法
+    // 璋冪敤澧炲姞鏁伴噺鏂规硶
     await page.increaseQuantity(mockEvent);
     
-    // 验证调用
+    // 楠岃瘉璋冪敤
     expect(cartService.updateCartItem).toHaveBeenCalledWith(1, 3);
   });
 
-  test('减少商品数量', async () => {
+  test('鍑忓皯鍟嗗搧鏁伴噺', async () => {
     const cartService = require('../../utils/cart-service');
     cartService.getCartItems.mockResolvedValue(mockCartItems);
     cartService.updateCartItem.mockResolvedValue({ success: true });
@@ -138,7 +134,7 @@ describe('购物车页面测试', () => {
     const page = cartPage;
     await page.loadCartData();
     
-    // 准备模拟事件对象
+    // 鍑嗗妯℃嫙浜嬩欢瀵硅薄
     const mockEvent = {
       currentTarget: {
         dataset: {
@@ -147,25 +143,25 @@ describe('购物车页面测试', () => {
       }
     };
     
-    // 调用减少数量方法
+    // 璋冪敤鍑忓皯鏁伴噺鏂规硶
     await page.decreaseQuantity(mockEvent);
     
-    // 验证调用
+    // 楠岃瘉璋冪敤
     expect(cartService.updateCartItem).toHaveBeenCalledWith(1, 1);
   });
 
-  test('删除单个商品', async () => {
+  test('鍒犻櫎鍗曚釜鍟嗗搧', async () => {
     const cartService = require('../../utils/cart-service');
     const { showConfirm } = require('../../utils/global');
     
     cartService.getCartItems.mockResolvedValue(mockCartItems);
     cartService.deleteCartItem.mockResolvedValue({ success: true });
-    showConfirm.mockResolvedValue(true); // 模拟用户确认删除
+    showConfirm.mockResolvedValue(true); // 妯℃嫙鐢ㄦ埛纭鍒犻櫎
     
     const page = cartPage;
     await page.loadCartData();
     
-    // 准备模拟事件对象
+    // 鍑嗗妯℃嫙浜嬩欢瀵硅薄
     const mockEvent = {
       currentTarget: {
         dataset: {
@@ -174,43 +170,43 @@ describe('购物车页面测试', () => {
       }
     };
     
-    // 调用删除方法
+    // 璋冪敤鍒犻櫎鏂规硶
     await page.deleteCartItem(mockEvent);
     
-    // 验证调用
+    // 楠岃瘉璋冪敤
     expect(cartService.deleteCartItem).toHaveBeenCalledWith(1);
   });
 
-  test('批量删除选中商品', async () => {
+  test('鎵归噺鍒犻櫎閫変腑鍟嗗搧', async () => {
     const cartService = require('../../utils/cart-service');
     const { showConfirm } = require('../../utils/global');
     
     cartService.getCartItems.mockResolvedValue(mockCartItems);
     cartService.deleteCartItems.mockResolvedValue({ success: true });
-    showConfirm.mockResolvedValue(true); // 模拟用户确认删除
+    showConfirm.mockResolvedValue(true); // 妯℃嫙鐢ㄦ埛纭鍒犻櫎
     
     const page = cartPage;
     await page.loadCartData();
     
-    // 调用批量删除方法
+    // 璋冪敤鎵归噺鍒犻櫎鏂规硶
     await page.deleteSelectedItems();
     
-    // 验证调用
+    // 楠岃瘉璋冪敤
     expect(cartService.deleteCartItems).toHaveBeenCalledWith([1]);
   });
 
-  test('计算总价', () => {
+  test('璁＄畻鎬讳环', () => {
     const page = cartPage;
     
-    // 手动设置数据
+    // 鎵嬪姩璁剧疆鏁版嵁
     page.setData({
       cartItems: mockCartItems
     });
     
-    // 调用计算总价方法
+    // 璋冪敤璁＄畻鎬讳环鏂规硶
     page.calculateTotal();
     
-    // 验证结果 (99.99 * 2 = 199.98)
+    // 楠岃瘉缁撴灉 (99.99 * 2 = 199.98)
     expect(mockSetData).toHaveBeenCalledWith({
       totalPrice: '199.98',
       selectedCount: 2,
@@ -218,22 +214,21 @@ describe('购物车页面测试', () => {
     });
   });
 
-  test('检查全选状态', () => {
+  test('妫€鏌ュ叏閫夌姸鎬?, () => {
     const page = cartPage;
     
-    // 手动设置数据
+    // 鎵嬪姩璁剧疆鏁版嵁
     page.setData({
       cartItems: mockCartItems
     });
     
-    // 调用检查全选状态方法
-    page.checkAllSelected();
+    // 璋冪敤妫€鏌ュ叏閫夌姸鎬佹柟娉?    page.checkAllSelected();
     
-    // 验证结果 (只有一个可用商品且已选中，所以应该是全选状态)
+    // 楠岃瘉缁撴灉 (鍙湁涓€涓彲鐢ㄥ晢鍝佷笖宸查€変腑锛屾墍浠ュ簲璇ユ槸鍏ㄩ€夌姸鎬?
     expect(mockSetData).toHaveBeenCalledWith({ allSelected: true });
   });
 
-  test('结算功能', async () => {
+  test('缁撶畻鍔熻兘', async () => {
     const cartService = require('../../utils/cart-service');
     cartService.getCartItems.mockResolvedValue(mockCartItems);
     cartService.checkCartStock.mockResolvedValue({ out_of_stock: [] });
@@ -241,10 +236,10 @@ describe('购物车页面测试', () => {
     const page = cartPage;
     await page.loadCartData();
     
-    // 调用结算方法
+    // 璋冪敤缁撶畻鏂规硶
     await page.checkout();
     
-    // 验证调用
+    // 楠岃瘉璋冪敤
     expect(cartService.checkCartStock).toHaveBeenCalledWith([mockCartItems[0]]);
     expect(mockNavigateTo).toHaveBeenCalled();
   });

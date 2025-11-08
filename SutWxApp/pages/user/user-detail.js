@@ -1,34 +1,26 @@
-// 用户详情页面 - 用于查看其他用户的信息
-import { showToast } from '../../utils/global';
+﻿// 鐢ㄦ埛璇︽儏椤甸潰 - 鐢ㄤ簬鏌ョ湅鍏朵粬鐢ㄦ埛鐨勪俊鎭?import { showToast } from '../../utils/global';
 
 Page({
   /**
-   * 页面的初始数据
-   */
+   * 椤甸潰鐨勫垵濮嬫暟鎹?   */
   data: {
-    userId: '', // 用户ID
-    userInfo: null, // 用户信息
-    loading: true, // 加载状态
-    error: '', // 错误信息
-    isFollowing: false, // 是否已关注
-    followingCount: 0, // 关注数
-    followersCount: 0, // 粉丝数
-    articlesCount: 0, // 文章数
-    isCurrentUser: false // 是否为当前用户
-  },
+    userId: '', // 鐢ㄦ埛ID
+    userInfo: null, // 鐢ㄦ埛淇℃伅
+    loading: true, // 鍔犺浇鐘舵€?    error: '', // 閿欒淇℃伅
+    isFollowing: false, // 鏄惁宸插叧娉?    followingCount: 0, // 鍏虫敞鏁?    followersCount: 0, // 绮変笣鏁?    articlesCount: 0, // 鏂囩珷鏁?    isCurrentUser: false // 鏄惁涓哄綋鍓嶇敤鎴?  },
 
   /**
-   * 生命周期函数--监听页面加载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
    */
   onLoad: function(options) {
     const app = getApp();
     
-    // 获取传入的用户ID
+    // 鑾峰彇浼犲叆鐨勭敤鎴稩D
     const userId = options.id || '';
     
     if (!userId) {
       this.setData({
-        error: '用户ID不存在',
+        error: '鐢ㄦ埛ID涓嶅瓨鍦?,
         loading: false
       });
       return;
@@ -36,41 +28,39 @@ Page({
     
     this.setData({
       userId: userId,
-      // 检查是否为当前登录用户
+      // 妫€鏌ユ槸鍚︿负褰撳墠鐧诲綍鐢ㄦ埛
       isCurrentUser: app.globalData.userInfo && app.globalData.userInfo.id === userId
     });
     
-    // 加载用户信息
+    // 鍔犺浇鐢ㄦ埛淇℃伅
     this.loadUserInfo();
     
-    // 记录页面访问事件
+    // 璁板綍椤甸潰璁块棶浜嬩欢
     if (app.services && app.services.analytics) {
       app.services.analytics.trackPageView('user_profile_detail', { userId: userId });
     }
   },
 
   /**
-   * 生命周期函数--监听页面显示
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
    */
   onShow: function() {
-    // 页面显示时刷新数据
-    this.loadUserInfo();
+    // 椤甸潰鏄剧ず鏃跺埛鏂版暟鎹?    this.loadUserInfo();
   },
 
   /**
-   * 加载用户信息
+   * 鍔犺浇鐢ㄦ埛淇℃伅
    */
   loadUserInfo: async function() {
     const app = getApp();
     
-    // 显示加载状态
-    this.setData({
+    // 鏄剧ず鍔犺浇鐘舵€?    this.setData({
       loading: true,
       error: ''
     });
 
     try {
-      // 使用用户服务获取用户信息
+      // 浣跨敤鐢ㄦ埛鏈嶅姟鑾峰彇鐢ㄦ埛淇℃伅
       const result = await app.services.api.request({
         url: `/users/${this.data.userId}`,
         method: 'GET'
@@ -85,17 +75,16 @@ Page({
         articlesCount: userInfo.articles_count || 0
       });
       
-      // 如果不是当前用户，检查关注状态
-      if (!this.data.isCurrentUser) {
+      // 濡傛灉涓嶆槸褰撳墠鐢ㄦ埛锛屾鏌ュ叧娉ㄧ姸鎬?      if (!this.data.isCurrentUser) {
         await this.checkFollowingStatus();
       }
     } catch (error) {
-      console.error('获取用户信息失败:', error);
+      console.error('鑾峰彇鐢ㄦ埛淇℃伅澶辫触:', error);
       this.setData({
-        error: error.message || '加载用户信息失败',
+        error: error.message || '鍔犺浇鐢ㄦ埛淇℃伅澶辫触',
         loading: false
       });
-      showToast('获取用户信息失败', 'none');
+      showToast('鑾峰彇鐢ㄦ埛淇℃伅澶辫触', 'none');
     } finally {
       this.setData({
         loading: false
@@ -104,20 +93,17 @@ Page({
   },
 
   /**
-   * 检查关注状态
-   */
+   * 妫€鏌ュ叧娉ㄧ姸鎬?   */
   checkFollowingStatus: async function() {
     const app = getApp();
     
     try {
-      // 检查登录状态
-      if (!app.isLoggedIn()) {
+      // 妫€鏌ョ櫥褰曠姸鎬?      if (!app.isLoggedIn()) {
         this.setData({ isFollowing: false });
         return;
       }
       
-      // 使用关注服务检查关注状态
-      if (app.services && app.services.following) {
+      // 浣跨敤鍏虫敞鏈嶅姟妫€鏌ュ叧娉ㄧ姸鎬?      if (app.services && app.services.following) {
         const result = await app.services.following.checkFollowingStatus({
           user_id: this.data.userId
         });
@@ -127,19 +113,18 @@ Page({
         });
       }
     } catch (error) {
-      console.error('检查关注状态失败:', error);
+      console.error('妫€鏌ュ叧娉ㄧ姸鎬佸け璐?', error);
       this.setData({ isFollowing: false });
     }
   },
 
   /**
-   * 关注/取消关注用户
+   * 鍏虫敞/鍙栨秷鍏虫敞鐢ㄦ埛
    */
   toggleFollow: async function() {
     const app = getApp();
     
-    // 检查登录状态
-    if (!app.isLoggedIn()) {
+    // 妫€鏌ョ櫥褰曠姸鎬?    if (!app.isLoggedIn()) {
       wx.navigateTo({
         url: '/pages/user/login/login'
       });
@@ -148,30 +133,30 @@ Page({
     
     try {
       if (this.data.isFollowing) {
-        // 取消关注
+        // 鍙栨秷鍏虫敞
         await app.services.following.unfollowUser({
           id: this.data.userId
         });
         
-        showToast('取消关注成功', 'success');
+        showToast('鍙栨秷鍏虫敞鎴愬姛', 'success');
         this.setData({
           isFollowing: false,
           followersCount: Math.max(0, this.data.followersCount - 1)
         });
       } else {
-        // 关注用户
+        // 鍏虫敞鐢ㄦ埛
         await app.services.following.followUser({
           user_id: this.data.userId
         });
         
-        showToast('关注成功', 'success');
+        showToast('鍏虫敞鎴愬姛', 'success');
         this.setData({
           isFollowing: true,
           followersCount: this.data.followersCount + 1
         });
       }
       
-      // 记录事件
+      // 璁板綍浜嬩欢
       if (app.services && app.services.analytics) {
         app.services.analytics.trackEvent(
           this.data.isFollowing ? 'user_follow' : 'user_unfollow',
@@ -179,14 +164,13 @@ Page({
         );
       }
     } catch (error) {
-      console.error('操作失败:', error);
-      showToast(error.message || '操作失败', 'none');
+      console.error('鎿嶄綔澶辫触:', error);
+      showToast(error.message || '鎿嶄綔澶辫触', 'none');
     }
   },
 
   /**
-   * 跳转到用户文章列表
-   */
+   * 璺宠浆鍒扮敤鎴锋枃绔犲垪琛?   */
   navigateToUserArticles: function() {
     wx.navigateTo({
       url: `/pages/user/profile/articles?id=${this.data.userId}&name=${encodeURIComponent(this.data.userInfo?.nickname || '')}`
@@ -194,8 +178,7 @@ Page({
   },
 
   /**
-   * 跳转到用户关注列表
-   */
+   * 璺宠浆鍒扮敤鎴峰叧娉ㄥ垪琛?   */
   navigateToUserFollowing: function() {
     wx.navigateTo({
       url: `/pages/user/profile/following?id=${this.data.userId}&name=${encodeURIComponent(this.data.userInfo?.nickname || '')}`
@@ -203,8 +186,7 @@ Page({
   },
 
   /**
-   * 跳转到用户粉丝列表
-   */
+   * 璺宠浆鍒扮敤鎴风矇涓濆垪琛?   */
   navigateToUserFollowers: function() {
     wx.navigateTo({
       url: `/pages/user/profile/followers?id=${this.data.userId}&name=${encodeURIComponent(this.data.userInfo?.nickname || '')}`
@@ -212,15 +194,14 @@ Page({
   },
 
   /**
-   * 重试加载
+   * 閲嶈瘯鍔犺浇
    */
   retryLoad: function() {
     this.loadUserInfo();
   },
 
   /**
-   * 跳转到我的个人中心
-   */
+   * 璺宠浆鍒版垜鐨勪釜浜轰腑蹇?   */
   navigateToMyProfile: function() {
     wx.navigateTo({
       url: '/pages/user/profile/profile'

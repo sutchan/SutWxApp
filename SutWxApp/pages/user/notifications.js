@@ -1,33 +1,31 @@
-// 通知页面逻辑 - 重定向到统一的通知中心页面
+﻿// 閫氱煡椤甸潰閫昏緫 - 閲嶅畾鍚戝埌缁熶竴鐨勯€氱煡涓績椤甸潰
 const app = getApp();
 
 Page({
   /**
-   * 生命周期函数--监听页面加载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
    */
   onLoad: function () {
-    // 重定向到统一的通知中心页面
+    // 閲嶅畾鍚戝埌缁熶竴鐨勯€氱煡涓績椤甸潰
     wx.redirectTo({
       url: '/pages/notification/list'
     });
   },
 
   /**
-   * 生命周期函数--监听页面显示
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
    */
   onShow: function () {
-    // 每次页面显示时重新加载数据
-    this.loadNotifications(true);
+    // 姣忔椤甸潰鏄剧ず鏃堕噸鏂板姞杞芥暟鎹?    this.loadNotifications(true);
     this.loadUnreadCount();
   },
 
   /**
-   * 检查用户登录状态
-   */
+   * 妫€鏌ョ敤鎴风櫥褰曠姸鎬?   */
   checkLogin: function () {
     if (!app.globalData.isLoggedIn) {
       wx.showToast({
-        title: '请先登录',
+        title: '璇峰厛鐧诲綍',
         icon: 'none',
         duration: 2000
       });
@@ -40,8 +38,8 @@ Page({
   },
 
   /**
-   * 加载通知列表
-   * @param {boolean} refresh - 是否刷新数据
+   * 鍔犺浇閫氱煡鍒楄〃
+   * @param {boolean} refresh - 鏄惁鍒锋柊鏁版嵁
    */
   loadNotifications: function (refresh = false) {
     if (this.data.loading || (this.data.loadingMore && !refresh)) {
@@ -66,8 +64,7 @@ Page({
       per_page: this.data.perPage
     };
 
-    // 根据筛选条件设置参数
-    if (this.data.activeFilter === 'unread') {
+    // 鏍规嵁绛涢€夋潯浠惰缃弬鏁?    if (this.data.activeFilter === 'unread') {
       params.unread_only = true;
     } else if (this.data.activeFilter !== 'all') {
       params.type = this.data.activeFilter;
@@ -75,8 +72,7 @@ Page({
 
     app.services.notification.getNotifications(params)
       .then(res => {
-        // 格式化时间
-        const formattedNotifications = res.notifications.map(item => ({
+        // 鏍煎紡鍖栨椂闂?        const formattedNotifications = res.notifications.map(item => ({
           ...item,
           time_ago: this.formatTimeAgo(item.created_at),
           type_text: this.getNotificationTypeText(item.type)
@@ -90,26 +86,26 @@ Page({
           hasMore: res.notifications.length === this.data.perPage
         });
 
-        // 更新未读数量
+        // 鏇存柊鏈鏁伴噺
         if (refresh) {
           this.loadUnreadCount();
         }
       })
       .catch(err => {
-        console.error('加载通知失败:', err);
+        console.error('鍔犺浇閫氱煡澶辫触:', err);
         this.setData({
           loading: false,
           loadingMore: false
         });
         wx.showToast({
-          title: '加载失败，请重试',
+          title: '鍔犺浇澶辫触锛岃閲嶈瘯',
           icon: 'none'
         });
       });
   },
 
   /**
-   * 加载未读通知数量
+   * 鍔犺浇鏈閫氱煡鏁伴噺
    */
   loadUnreadCount: function () {
     app.services.notification.getUnreadNotificationCount()
@@ -117,8 +113,7 @@ Page({
         this.setData({
           unreadCount: count
         });
-        // 更新tabBar的角标
-        if (count > 0) {
+        // 鏇存柊tabBar鐨勮鏍?        if (count > 0) {
           wx.setTabBarBadge({
             index: 3,
             text: count > 99 ? '99+' : count.toString()
@@ -130,13 +125,12 @@ Page({
         }
       })
       .catch(err => {
-        console.error('获取未读数量失败:', err);
+        console.error('鑾峰彇鏈鏁伴噺澶辫触:', err);
       });
   },
 
   /**
-   * 更改筛选条件
-   */
+   * 鏇存敼绛涢€夋潯浠?   */
   changeFilter: function (e) {
     const filter = e.currentTarget.dataset.filter;
     this.setData({
@@ -146,71 +140,68 @@ Page({
   },
 
   /**
-   * 点击通知项
-   */
+   * 鐐瑰嚮閫氱煡椤?   */
   onNotificationClick: function (e) {
     const notificationId = e.currentTarget.dataset.id;
     const notification = this.data.notifications.find(item => item.id === notificationId);
     
-    // 如果是未读通知，先标记为已读
-    if (!notification.is_read) {
+    // 濡傛灉鏄湭璇婚€氱煡锛屽厛鏍囪涓哄凡璇?    if (!notification.is_read) {
       this.markAsRead(notificationId);
     }
     
-    // 处理通知点击跳转
+    // 澶勭悊閫氱煡鐐瑰嚮璺宠浆
     app.services.notification.handleNotificationClick(notification);
   },
 
   /**
-   * 标记通知为已读
-   * @param {string} notificationId - 通知ID
+   * 鏍囪閫氱煡涓哄凡璇?   * @param {string} notificationId - 閫氱煡ID
    */
   markAsRead: function (notificationId) {
     app.services.notification.markAsRead(notificationId)
       .then(() => {
-        // 更新本地数据
+        // 鏇存柊鏈湴鏁版嵁
         this.setData({
           notifications: this.data.notifications.map(item => 
             item.id === notificationId ? { ...item, is_read: true } : item
           )
         });
-        // 更新未读数量
+        // 鏇存柊鏈鏁伴噺
         this.loadUnreadCount();
       })
       .catch(err => {
-        console.error('标记已读失败:', err);
+        console.error('鏍囪宸茶澶辫触:', err);
       });
   },
 
   /**
-   * 标记全部已读
+   * 鏍囪鍏ㄩ儴宸茶
    */
   markAllAsRead: function () {
     wx.showModal({
-      title: '确认操作',
-      content: '确定将所有通知标记为已读吗？',
+      title: '纭鎿嶄綔',
+      content: '纭畾灏嗘墍鏈夐€氱煡鏍囪涓哄凡璇诲悧锛?,
       success: (res) => {
         if (res.confirm) {
           app.services.notification.markAllAsRead()
             .then(() => {
-              // 更新本地数据
+              // 鏇存柊鏈湴鏁版嵁
               this.setData({
                 notifications: this.data.notifications.map(item => ({ ...item, is_read: true })),
                 unreadCount: 0
               });
-              // 移除tabBar角标
+              // 绉婚櫎tabBar瑙掓爣
               wx.removeTabBarBadge({
                 index: 3
               });
               wx.showToast({
-                title: '已全部标记为已读',
+                title: '宸插叏閮ㄦ爣璁颁负宸茶',
                 icon: 'success'
               });
             })
             .catch(err => {
-              console.error('标记全部已读失败:', err);
+              console.error('鏍囪鍏ㄩ儴宸茶澶辫触:', err);
               wx.showToast({
-                title: '操作失败，请重试',
+                title: '鎿嶄綔澶辫触锛岃閲嶈瘯',
                 icon: 'none'
               });
             });
@@ -220,9 +211,8 @@ Page({
   },
 
   /**
-   * 格式化时间为相对时间
-   * @param {string} time - 时间字符串
-   * @returns {string} 相对时间文本
+   * 鏍煎紡鍖栨椂闂翠负鐩稿鏃堕棿
+   * @param {string} time - 鏃堕棿瀛楃涓?   * @returns {string} 鐩稿鏃堕棿鏂囨湰
    */
   formatTimeAgo: function (time) {
     const now = new Date();
@@ -234,36 +224,36 @@ Page({
     const diffDays = Math.floor(diffHours / 24);
 
     if (diffSecs < 60) {
-      return '刚刚';
+      return '鍒氬垰';
     } else if (diffMins < 60) {
-      return `${diffMins}分钟前`;
+      return `${diffMins}鍒嗛挓鍓峘;
     } else if (diffHours < 24) {
-      return `${diffHours}小时前`;
+      return `${diffHours}灏忔椂鍓峘;
     } else if (diffDays < 7) {
-      return `${diffDays}天前`;
+      return `${diffDays}澶╁墠`;
     } else {
       return past.toLocaleDateString();
     }
   },
 
   /**
-   * 获取通知类型文本
-   * @param {string} type - 通知类型
-   * @returns {string} 类型文本
+   * 鑾峰彇閫氱煡绫诲瀷鏂囨湰
+   * @param {string} type - 閫氱煡绫诲瀷
+   * @returns {string} 绫诲瀷鏂囨湰
    */
   getNotificationTypeText: function (type) {
     const typeMap = {
-      system: '系统通知',
-      comment: '评论通知',
-      follow: '关注通知',
-      point: '积分通知',
-      order: '订单通知'
+      system: '绯荤粺閫氱煡',
+      comment: '璇勮閫氱煡',
+      follow: '鍏虫敞閫氱煡',
+      point: '绉垎閫氱煡',
+      order: '璁㈠崟閫氱煡'
     };
-    return typeMap[type] || '其他';
+    return typeMap[type] || '鍏朵粬';
   },
 
   /**
-   * 下拉刷新
+   * 涓嬫媺鍒锋柊
    */
   onPullDownRefresh: function () {
     this.loadNotifications(true).then(() => {
@@ -272,7 +262,7 @@ Page({
   },
 
   /**
-   * 上拉加载更多
+   * 涓婃媺鍔犺浇鏇村
    */
   onReachBottom: function () {
     if (this.data.hasMore && !this.data.loadingMore) {

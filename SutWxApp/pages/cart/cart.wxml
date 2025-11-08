@@ -1,56 +1,56 @@
-<!-- 购物车页面 -->
+﻿<!-- 璐墿杞﹂〉闈?-->
 <view class="container">
-  <!-- 加载中状态 -->
+  <!-- 鍔犺浇涓姸鎬?-->
   <view class="loading" wx:if="{{loading}}">
-    <text>加载中...</text>
+    <text>鍔犺浇涓?..</text>
   </view>
 
-  <!-- 空购物车状态 -->
+  <!-- 绌鸿喘鐗╄溅鐘舵€?-->
   <view class="empty-cart" wx:if="{{!loading && cartItems.length === 0}}">
     <image src="/images/empty.svg" class="empty-icon"></image>
-    <text class="empty-text">购物车还是空的</text>
-    <button class="shopping-btn" bindtap="navigateToHome">去逛逛</button>
+    <text class="empty-text">璐墿杞﹁繕鏄┖鐨?/text>
+    <button class="shopping-btn" bindtap="navigateToHome">鍘婚€涢€?/button>
   </view>
 
-  <!-- 购物车商品列表 -->
+  <!-- 璐墿杞﹀晢鍝佸垪琛?-->
   <view class="cart-list" wx:if="{{!loading && cartItems.length > 0}}">
-    <!-- 商品项 -->
+    <!-- 鍟嗗搧椤?-->
     <view class="cart-item" wx:for="{{cartItems}}" wx:key="id">
-      <!-- 选择框 -->
+      <!-- 閫夋嫨妗?-->
       <view class="checkbox" bindtap="toggleItemSelected" data-index="{{index}}" wx:if="{{!item.unavailable && !item.outOfStock}}">
         <view class="checkbox-inner {{item.selected ? 'selected' : ''}}">
           <icon wx:if="{{item.selected}}" type="success" size="20"></icon>
         </view>
       </view>
 
-      <!-- 商品信息 -->
+      <!-- 鍟嗗搧淇℃伅 -->
       <view class="item-content" bindtap="navigateToProductDetail" data-product-id="{{item.product_id}}">
         <image class="product-image" src="{{item.images[0] || '/images/default-post.svg'}}" mode="aspectFill"></image>
         <view class="product-info">
           <view class="product-title">{{item.name}}</view>
           <view class="product-sku" wx:if="{{item.sku_name}}">{{item.sku_name}}</view>
           
-          <!-- 商品状态提示 -->
+          <!-- 鍟嗗搧鐘舵€佹彁绀?-->
           <view class="product-status" wx:if="{{item.unavailable || item.outOfStock}}" wx:class="{{item.unavailable ? 'status-unavailable' : 'status-outofstock'}}">
             {{item.unavailableReason}}
           </view>
           
-          <!-- 库存不足提示 -->
+          <!-- 搴撳瓨涓嶈冻鎻愮ず -->
           <view class="stock-warning" wx:if="{{item.overStock}}">
-            <text>库存仅剩{{item.availableQuantity}}件</text>
+            <text>搴撳瓨浠呭墿{{item.availableQuantity}}浠?/text>
           </view>
           
           <view class="item-bottom">
-            <view class="product-price">¥{{item.price}}</view>
+            <view class="product-price">楼{{item.price}}</view>
             
-            <!-- 数量控制 -->
+            <!-- 鏁伴噺鎺у埗 -->
             <view class="quantity-control" wx:if="{{!item.unavailable && !item.outOfStock}}">
               <button class="quantity-btn" disabled="{{item.quantity <= 1}}" bindtap="decreaseQuantity" data-index="{{index}}">-</button>
               <view class="quantity-value">{{item.quantity}}</view>
               <button class="quantity-btn" disabled="{{item.quantity >= item.stock}}" bindtap="increaseQuantity" data-index="{{index}}">+</button>
             </view>
             
-            <!-- 不可选状态 -->
+            <!-- 涓嶅彲閫夌姸鎬?-->
             <view class="quantity-control disabled" wx:if="{{item.unavailable || item.outOfStock}}">
               <view class="quantity-value">{{item.quantity}}</view>
             </view>
@@ -58,14 +58,14 @@
         </view>
       </view>
 
-      <!-- 操作按钮区域 -->
+      <!-- 鎿嶄綔鎸夐挳鍖哄煙 -->
       <view class="item-actions">
-        <!-- 删除按钮 -->
+        <!-- 鍒犻櫎鎸夐挳 -->
         <view class="delete-btn" bindtap="deleteCartItem" data-index="{{index}}">
-          <text>{{isEditing ? '删除' : '×'}}</text>
+          <text>{{isEditing ? '鍒犻櫎' : '脳'}}</text>
         </view>
         
-        <!-- 移至收藏按钮 (非编辑模式) -->
+        <!-- 绉昏嚦鏀惰棌鎸夐挳 (闈炵紪杈戞ā寮? -->
         <view class="favorite-btn" bindtap="moveToFavorite" data-index="{{index}}" wx:if="{{!isEditing && !item.unavailable && !item.outOfStock}}">
           <icon type="star" size="20"></icon>
         </view>
@@ -73,37 +73,37 @@
     </view>
   </view>
 
-  <!-- 底部操作栏 -->
+  <!-- 搴曢儴鎿嶄綔鏍?-->
   <view class="bottom-bar" wx:if="{{!loading && cartItems.length > 0}}">
-    <!-- 全选 -->
+    <!-- 鍏ㄩ€?-->
     <view class="all-select" bindtap="toggleAllSelected">
       <view class="checkbox-inner {{allSelected ? 'selected' : ''}}">
         <icon wx:if="{{allSelected}}" type="success" size="20"></icon>
       </view>
-      <text>全选</text>
+      <text>鍏ㄩ€?/text>
     </view>
 
-    <!-- 编辑模式 -->
+    <!-- 缂栬緫妯″紡 -->
     <view class="edit-mode" wx:if="{{!isEditing}}">
-      <button class="edit-btn" bindtap="toggleEditMode">编辑</button>
+      <button class="edit-btn" bindtap="toggleEditMode">缂栬緫</button>
     </view>
     
-    <!-- 编辑模式操作 -->
+    <!-- 缂栬緫妯″紡鎿嶄綔 -->
     <view class="edit-actions" wx:if="{{isEditing}}">
-      <button class="delete-selected-btn" bindtap="deleteSelectedItems">删除选中</button>
-      <button class="cancel-edit-btn" bindtap="toggleEditMode">取消</button>
+      <button class="delete-selected-btn" bindtap="deleteSelectedItems">鍒犻櫎閫変腑</button>
+      <button class="cancel-edit-btn" bindtap="toggleEditMode">鍙栨秷</button>
     </view>
 
-    <!-- 合计与结算 -->
+    <!-- 鍚堣涓庣粨绠?-->
     <view class="total-section" wx:if="{{!isEditing}}">
       <view class="total-info">
-        <text class="total-label">合计：</text>
-        <text class="total-price">¥{{totalPrice}}</text>
+        <text class="total-label">鍚堣锛?/text>
+        <text class="total-price">楼{{totalPrice}}</text>
       </view>
 
-      <!-- 结算按钮 -->
+      <!-- 缁撶畻鎸夐挳 -->
       <button class="checkout-btn" bindtap="checkout" disabled="{{selectedCount === 0 || submitting}}">
-        <text>结算({{selectedCount}})</text>
+        <text>缁撶畻({{selectedCount}})</text>
       </button>
     </view>
   </view>

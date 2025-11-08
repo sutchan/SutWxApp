@@ -1,11 +1,11 @@
-/* 通知页面样式 */
+﻿/* 閫氱煡椤甸潰鏍峰紡 */
 .container {
   padding: 0;
   background-color: #f8f8f8;
   min-height: 100vh;
 }
 
-/* 顶部筛选栏 */
+/* 椤堕儴绛涢€夋爮 */
 .filter-bar {
   background-color: #ffffff;
   padding: 10rpx 0;
@@ -40,7 +40,7 @@
   border-radius: 2rpx;
 }
 
-/* 通知列表 */
+/* 閫氱煡鍒楄〃 */
 .notification-list {
   width: 100%;
 }
@@ -68,7 +68,7 @@
   background-color: #ff6b6b;
 }
 
-/* 通知头部 */
+/* 閫氱煡澶撮儴 */
 .notification-header {
   display: flex;
   flex-direction: row;
@@ -93,7 +93,7 @@
   margin-left: 20rpx;
 }
 
-/* 通知内容 */
+/* 閫氱煡鍐呭 */
 .notification-content {
   font-size: 28rpx;
   color: #666666;
@@ -106,7 +106,7 @@
   margin-bottom: 15rpx;
 }
 
-/* 通知底部 */
+/* 閫氱煡搴曢儴 */
 .notification-footer {
   display: flex;
   flex-direction: row;
@@ -122,7 +122,7 @@
   border-radius: 16rpx;
 }
 
-/* 空状态 */
+/* 绌虹姸鎬?*/
 .empty-state {
   display: flex;
   flex-direction: column;
@@ -142,7 +142,7 @@
   font-size: 28rpx;
 }
 
-/* 加载更多 */
+/* 鍔犺浇鏇村 */
 .load-more {
   text-align: center;
   padding: 30rpx 0;
@@ -150,7 +150,7 @@
   font-size: 24rpx;
 }
 
-/* 标记已读按钮 */
+/* 鏍囪宸茶鎸夐挳 */
 .mark-all-read {
   position: fixed;
   bottom: 40rpx;
@@ -167,7 +167,7 @@
   box-shadow: 0 4rpx 20rpx rgba(255, 107, 107, 0.5);
 }
 
-/* 不同类型通知的样式 */
+/* 涓嶅悓绫诲瀷閫氱煡鐨勬牱寮?*/
 .notification-type-system {
   background-color: #e0f7fa;
   color: #006064;

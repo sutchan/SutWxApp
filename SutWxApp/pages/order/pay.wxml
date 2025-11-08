@@ -1,26 +1,26 @@
-<!-- 支付页面结构 -->
+﻿<!-- 鏀粯椤甸潰缁撴瀯 -->
 <view class="container">
-  <!-- 加载状态 -->
+  <!-- 鍔犺浇鐘舵€?-->
   <view class="loading" wx:if="{{loading}}">
-    <text>加载中...</text>
+    <text>鍔犺浇涓?..</text>
   </view>
   
-  <!-- 支付信息 -->
+  <!-- 鏀粯淇℃伅 -->
   <view class="pay-content" wx:else>
-    <!-- 订单金额 -->
+    <!-- 璁㈠崟閲戦 -->
     <view class="amount-section">
-      <text class="amount-label">支付金额</text>
-      <text class="amount">¥{{orderInfo ? orderInfo.totalAmount.toFixed(2) : '0.00'}}</text>
+      <text class="amount-label">鏀粯閲戦</text>
+      <text class="amount">楼{{orderInfo ? orderInfo.totalAmount.toFixed(2) : '0.00'}}</text>
     </view>
     
-    <!-- 订单编号 -->
+    <!-- 璁㈠崟缂栧彿 -->
     <view class="order-info">
-      <text>订单编号：{{orderInfo ? orderInfo.orderNo : ''}}</text>
+      <text>璁㈠崟缂栧彿锛歿{orderInfo ? orderInfo.orderNo : ''}}</text>
     </view>
     
-    <!-- 支付方式 -->
+    <!-- 鏀粯鏂瑰紡 -->
     <view class="payment-section">
-      <view class="section-title">选择支付方式</view>
+      <view class="section-title">閫夋嫨鏀粯鏂瑰紡</view>
       
       <view class="payment-method" wx:for="{{paymentMethods}}" wx:key="id" wx:for-item="method" 
             bind:tap="onSelectPaymentMethod" data-id="{{method.id}}">
@@ -37,13 +37,13 @@
       </view>
     </view>
     
-    <!-- 支付按钮 -->
-    <button class="pay-btn" bind:tap="onPay" loading="{{paying}}" disabled="{{paying}}">确认支付</button>
+    <!-- 鏀粯鎸夐挳 -->
+    <button class="pay-btn" bind:tap="onPay" loading="{{paying}}" disabled="{{paying}}">纭鏀粯</button>
     
-    <!-- 底部操作 -->
+    <!-- 搴曢儴鎿嶄綔 -->
     <view class="bottom-actions">
-      <text class="action-link" bind:tap="onViewOrderDetail">查看订单详情</text>
-      <text class="action-link" bind:tap="onBackToOrderList">返回订单列表</text>
+      <text class="action-link" bind:tap="onViewOrderDetail">鏌ョ湅璁㈠崟璇︽儏</text>
+      <text class="action-link" bind:tap="onBackToOrderList">杩斿洖璁㈠崟鍒楄〃</text>
     </view>
   </view>
 </view>

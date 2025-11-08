@@ -1,10 +1,10 @@
-/* 优惠券选择页面样式 */
+﻿/* 浼樻儬鍒搁€夋嫨椤甸潰鏍峰紡 */
 .container {
   padding-bottom: 60rpx;
   background-color: #f7f7f7;
 }
 
-/* 页面头部 */
+/* 椤甸潰澶撮儴 */
 .page-header {
   display: flex;
   justify-content: space-between;
@@ -29,7 +29,7 @@
   padding: 10rpx 20rpx;
 }
 
-/* 提示信息 */
+/* 鎻愮ず淇℃伅 */
 .tip-section {
   padding: 20rpx 30rpx;
   background-color: #fff;
@@ -41,7 +41,7 @@
   color: #999;
 }
 
-/* 加载状态 */
+/* 鍔犺浇鐘舵€?*/
 .loading-section {
   display: flex;
   flex-direction: column;
@@ -70,7 +70,7 @@
   color: #999;
 }
 
-/* 无优惠券提示 */
+/* 鏃犱紭鎯犲埜鎻愮ず */
 .empty-section {
   display: flex;
   flex-direction: column;
@@ -103,12 +103,12 @@
   font-size: 28rpx;
 }
 
-/* 优惠券列表 */
+/* 浼樻儬鍒稿垪琛?*/
 .coupon-list {
   background-color: #fff;
 }
 
-/* 不使用优惠券选项 */
+/* 涓嶄娇鐢ㄤ紭鎯犲埜閫夐」 */
 .no-coupon-item {
   display: flex;
   justify-content: space-between;
@@ -140,7 +140,7 @@
   color: #333;
 }
 
-/* 优惠券项 */
+/* 浼樻儬鍒搁」 */
 .coupon-item {
   display: flex;
   padding: 30rpx;
@@ -152,7 +152,7 @@
   background-color: #f5f5f5;
 }
 
-/* 优惠券左侧金额区域 */
+/* 浼樻儬鍒稿乏渚ч噾棰濆尯鍩?*/
 .coupon-left {
   width: 200rpx;
   display: flex;
@@ -178,7 +178,7 @@
   opacity: 0.9;
 }
 
-/* 优惠券右侧信息区域 */
+/* 浼樻儬鍒稿彸渚т俊鎭尯鍩?*/
 .coupon-right {
   flex: 1;
   display: flex;
@@ -209,13 +209,13 @@
   color: #999;
 }
 
-/* 选中状态 */
+/* 閫変腑鐘舵€?*/
 .coupon-radio {
   margin-left: 20rpx;
   transform: scale(1.2);
 }
 
-/* 底部提示 */
+/* 搴曢儴鎻愮ず */
 .bottom-tip {
   padding: 20rpx 30rpx;
   margin-top: 20rpx;

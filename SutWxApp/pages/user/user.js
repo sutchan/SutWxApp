@@ -1,63 +1,62 @@
-// 用户中心页面逻辑
+﻿// 鐢ㄦ埛涓績椤甸潰閫昏緫
 import { showToast } from '../../utils/global';
 
 Page({
   /**
-   * 页面的初始数据
-   */
+   * 椤甸潰鐨勫垵濮嬫暟鎹?   */
   data: {
     userInfo: {
       avatarUrl: '/images/default-avatar.png',
-      nickName: '未登录',
+      nickName: '鏈櫥褰?,
       isLoggedIn: false
     },
     menuList: [
       {
         id: 'notifications',
         icon: '/images/notification.svg',
-        title: '通知中心',
+        title: '閫氱煡涓績',
         badge: null
       },
       {
         id: 'comments',
         icon: '/images/comment.png',
-        title: '我的评论',
+        title: '鎴戠殑璇勮',
         badge: null
       },
       {
         id: 'favorites',
         icon: '/images/favorite.png',
-        title: '我的收藏',
+        title: '鎴戠殑鏀惰棌',
         badge: null
       },
       {
         id: 'coupon',
         icon: '/images/coupon.svg',
-        title: '我的优惠券',
+        title: '鎴戠殑浼樻儬鍒?,
         badge: null
       },
       {
         id: 'following',
         icon: '/images/following.png',
-        title: '我的关注',
+        title: '鎴戠殑鍏虫敞',
         badge: null
       },
       {
         id: 'followers',
         icon: '/images/followers.svg',
-        title: '我的粉丝',
+        title: '鎴戠殑绮変笣',
         badge: null
       },
       {
         id: 'points',
         icon: '/images/points.png',
-        title: '我的积分',
+        title: '鎴戠殑绉垎',
         badge: null
       },
       {
         id: 'settings',
         icon: '/images/settings.png',
-        title: '设置',
+        title: '璁剧疆',
         badge: null
       }
     ],
@@ -66,22 +65,21 @@ Page({
   },
 
   /**
-   * 生命周期函数--监听页面加载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
    */
   onLoad: function(options) {
     this.checkLoginStatus();
   },
 
   /**
-   * 生命周期函数--监听页面显示
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
    */
   onShow: function() {
     this.checkLoginStatus();
   },
 
   /**
-   * 检查登录状态
-   */
+   * 妫€鏌ョ櫥褰曠姸鎬?   */
   checkLoginStatus: function() {
     const app = getApp();
     
@@ -98,14 +96,14 @@ Page({
   },
 
   /**
-   * 加载用户数据
+   * 鍔犺浇鐢ㄦ埛鏁版嵁
    */
   loadUserData: async function() {
     this.setData({ isLoading: true, error: null });
     
     const app = getApp();
     try {
-      // 使用userService获取用户资料
+      // 浣跨敤userService鑾峰彇鐢ㄦ埛璧勬枡
       const userData = await app.services.user.getUserProfile();
       
       this.setData({
@@ -118,39 +116,39 @@ Page({
         'menuList[5].badge': userData.points || null
       });
       
-      // 获取未读通知数量
+      // 鑾峰彇鏈閫氱煡鏁伴噺
       try {
         const unreadCount = await app.services.notification.getUnreadNotificationCount();
         this.setData({
           'menuList[0].badge': unreadCount > 0 ? (unreadCount > 99 ? '99+' : unreadCount) : null
         });
       } catch (notificationError) {
-        console.error('获取未读通知数量失败:', notificationError);
+        console.error('鑾峰彇鏈閫氱煡鏁伴噺澶辫触:', notificationError);
       }","},{
       
-      // 更新全局用户信息
+      // 鏇存柊鍏ㄥ眬鐢ㄦ埛淇℃伅
       app.globalData.userInfo = {
         ...app.globalData.userInfo,
         nickName: userData.nickname || app.globalData.userInfo.nickName,
         avatarUrl: userData.avatar_url || app.globalData.userInfo.avatarUrl
       };
     } catch (error) {
-      console.error('获取用户数据失败:', error);
-      this.setData({ error: error.message || '获取用户数据失败' });
+      console.error('鑾峰彇鐢ㄦ埛鏁版嵁澶辫触:', error);
+      this.setData({ error: error.message || '鑾峰彇鐢ㄦ埛鏁版嵁澶辫触' });
     } finally {
       this.setData({ isLoading: false });
     }
   },
 
   /**
-   * 微信登录
+   * 寰俊鐧诲綍
    */
   onWechatLogin: async function() {
     const app = getApp();
     this.setData({ isLoading: true, error: null });
     
     try {
-      // 使用authService进行登录
+      // 浣跨敤authService杩涜鐧诲綍
       const userInfo = await app.services.auth.loginWithWechat();
       
       this.setData({
@@ -160,24 +158,24 @@ Page({
         }
       });
       
-      showToast('登录成功', 'success');
+      showToast('鐧诲綍鎴愬姛', 'success');
       this.loadUserData();
       
-      // 记录登录事件
+      // 璁板綍鐧诲綍浜嬩欢
       app.services.analytics.trackEvent('user_login', {
         login_method: 'wechat'
       });
     } catch (error) {
-      console.error('登录失败:', error);
-      this.setData({ error: error.message || '登录失败' });
-      showToast(error.message || '登录失败', 'none');
+      console.error('鐧诲綍澶辫触:', error);
+      this.setData({ error: error.message || '鐧诲綍澶辫触' });
+      showToast(error.message || '鐧诲綍澶辫触', 'none');
     } finally {
       this.setData({ isLoading: false });
     }
   },
 
   /**
-   * 菜单点击处理
+   * 鑿滃崟鐐瑰嚮澶勭悊
    */
   onMenuClick: function(e) {
     const id = e.currentTarget.dataset.id;
@@ -188,8 +186,7 @@ Page({
       return;
     }
     
-    // 记录菜单项点击事件
-    app.services.analytics.trackEvent('user_menu_click', {
+    // 璁板綍鑿滃崟椤圭偣鍑讳簨浠?    app.services.analytics.trackEvent('user_menu_click', {
       menu_id: id
     });
     
@@ -222,42 +219,40 @@ Page({
   },
 
   /**
-   * 绑定WordPress账号
+   * 缁戝畾WordPress璐﹀彿
    */
   bindWordPressAccount: function() {
     wx.navigateTo({ url: '/pages/user/bind-account' });
   },
 
   /**
-   * 退出登录
-   */
+   * 閫€鍑虹櫥褰?   */
   logout: function() {
     const app = getApp();
     
     wx.showModal({
-      title: '确认退出',
-      content: '确定要退出登录吗？',
+      title: '纭閫€鍑?,
+      content: '纭畾瑕侀€€鍑虹櫥褰曞悧锛?,
       success: (res) => {
         if (res.confirm) {
           try {
-            // 使用app提供的logout方法
+            // 浣跨敤app鎻愪緵鐨刲ogout鏂规硶
             app.logout();
             
             this.setData({
               userInfo: {
                 avatarUrl: '/images/default-avatar.png',
-                nickName: '未登录',
+                nickName: '鏈櫥褰?,
                 isLoggedIn: false
               }
             });
             
-            showToast('已退出登录', 'success');
+            showToast('宸查€€鍑虹櫥褰?, 'success');
             
-            // 记录退出登录事件
-            app.services.analytics.trackEvent('user_logout');
+            // 璁板綍閫€鍑虹櫥褰曚簨浠?            app.services.analytics.trackEvent('user_logout');
           } catch (error) {
-            console.error('退出登录失败:', error);
-            showToast('退出失败，请重试', 'none');
+            console.error('閫€鍑虹櫥褰曞け璐?', error);
+            showToast('閫€鍑哄け璐ワ紝璇烽噸璇?, 'none');
           }
         }
       }

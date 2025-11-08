@@ -1,6 +1,6 @@
-<!-- 用户详情页面 -->
+﻿<!-- 鐢ㄦ埛璇︽儏椤甸潰 -->
 <view class="user-detail-container">
-  <!-- 加载状态 -->
+  <!-- 鍔犺浇鐘舵€?-->
   <view wx:if="{{loading}}" class="loading-container">
     <view class="skeleton">
       <view class="skeleton-avatar"></view>
@@ -9,44 +9,44 @@
     </view>
   </view>
 
-  <!-- 错误状态 -->
+  <!-- 閿欒鐘舵€?-->
   <view wx:elif="{{error}}" class="error-container">
     <image class="error-icon" src="/assets/images/error.png" mode="aspectFit"></image>
     <text class="error-text">{{error}}</text>
-    <button class="retry-button" bindtap="retryLoad">重试</button>
+    <button class="retry-button" bindtap="retryLoad">閲嶈瘯</button>
   </view>
 
-  <!-- 用户信息 -->
+  <!-- 鐢ㄦ埛淇℃伅 -->
   <view wx:elif="{{userInfo}}" class="user-info-container">
-    <!-- 用户基本信息 -->
+    <!-- 鐢ㄦ埛鍩烘湰淇℃伅 -->
     <view class="user-header">
       <image class="user-avatar" src="{{userInfo.avatar_url || '/assets/images/default-avatar.png'}}" mode="aspectFill"></image>
       <view class="user-basic-info">
         <view class="user-name-row">
-          <text class="user-nickname">{{userInfo.nickname || '未知用户'}}</text>
-          <text wx:if="{{userInfo.is_verified}}" class="verified-badge">✓</text>
+          <text class="user-nickname">{{userInfo.nickname || '鏈煡鐢ㄦ埛'}}</text>
+          <text wx:if="{{userInfo.is_verified}}" class="verified-badge">鉁?/text>
         </view>
-        <text class="user-bio">{{userInfo.bio || '暂无简介'}}</text>
+        <text class="user-bio">{{userInfo.bio || '鏆傛棤绠€浠?}}</text>
         <view class="user-stats">
           <view class="stat-item" bindtap="navigateToUserArticles">
             <text class="stat-count">{{articlesCount}}</text>
-            <text class="stat-label">文章</text>
+            <text class="stat-label">鏂囩珷</text>
           </view>
           <view class="stat-divider"></view>
           <view class="stat-item" bindtap="navigateToUserFollowing">
             <text class="stat-count">{{followingCount}}</text>
-            <text class="stat-label">关注</text>
+            <text class="stat-label">鍏虫敞</text>
           </view>
           <view class="stat-divider"></view>
           <view class="stat-item" bindtap="navigateToUserFollowers">
             <text class="stat-count">{{followersCount}}</text>
-            <text class="stat-label">粉丝</text>
+            <text class="stat-label">绮変笣</text>
           </view>
         </view>
       </view>
     </view>
 
-    <!-- 操作按钮 -->
+    <!-- 鎿嶄綔鎸夐挳 -->
     <view class="action-buttons">
       <button 
         wx:if="{{!isCurrentUser}}" 
@@ -54,7 +54,7 @@
         bindtap="toggleFollow"
         open-type="default"
       >
-        {{isFollowing ? '已关注' : '关注'}}
+        {{isFollowing ? '宸插叧娉? : '鍏虫敞'}}
       </button>
       <button 
         wx:else 
@@ -62,30 +62,30 @@
         bindtap="navigateToMyProfile"
         open-type="default"
       >
-        查看我的个人中心
+        鏌ョ湅鎴戠殑涓汉涓績
       </button>
     </view>
 
-    <!-- 用户其他信息 -->
+    <!-- 鐢ㄦ埛鍏朵粬淇℃伅 -->
     <view class="user-other-info">
       <view wx:if="{{userInfo.location}}" class="info-item">
-        <text class="info-label">所在地：</text>
+        <text class="info-label">鎵€鍦ㄥ湴锛?/text>
         <text class="info-value">{{userInfo.location}}</text>
       </view>
       <view wx:if="{{userInfo.website}}" class="info-item">
-        <text class="info-label">网站：</text>
+        <text class="info-label">缃戠珯锛?/text>
         <text class="info-value">{{userInfo.website}}</text>
       </view>
       <view wx:if="{{userInfo.join_time}}" class="info-item">
-        <text class="info-label">加入时间：</text>
+        <text class="info-label">鍔犲叆鏃堕棿锛?/text>
         <text class="info-value">{{userInfo.join_time}}</text>
       </view>
     </view>
   </view>
 
-  <!-- 空状态 -->
+  <!-- 绌虹姸鎬?-->
   <view wx:else class="empty-container">
     <image class="empty-icon" src="/assets/images/empty.png" mode="aspectFit"></image>
-    <text class="empty-text">用户信息不存在</text>
+    <text class="empty-text">鐢ㄦ埛淇℃伅涓嶅瓨鍦?/text>
   </view>
 </view>

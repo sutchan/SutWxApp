@@ -1,0 +1,92 @@
+﻿<!-- 绉垎鍏戞崲璁板綍椤甸潰 -->
+<view class="records-container">
+  <!-- 椤甸潰鏍囬 -->
+  <view class="page-header">
+    <text class="page-title">鍏戞崲璁板綍</text>
+  </view>
+
+  <!-- 鏍囩椤?-->
+  <view class="tabs">
+    <view 
+      wx:for="{{tabs}}" 
+      wx:key="key"
+      class="tab {{tab === item.key ? 'active' : ''}}"
+      bindtap="onTabChange"
+      data-tab="{{item.key}}"
+    >
+      <text>{{item.name}}</text>
+      <view class="tab-line" wx:if="{{tab === item.key}}"></view>
+    </view>
+  </view>
+
+  <!-- 鍔犺浇鐘舵€?-->
+  <view class="loading-container" wx:if="{{loading && records.length === 0}}">
+    <view class="loading-icon"></view>
+    <text class="loading-text">鍔犺浇涓?..</text>
+  </view>
+
+  <!-- 閿欒鎻愮ず -->
+  <view class="error-container" wx:if="{{error && records.length === 0}}">
+    <view class="error-icon">鈿狅笍</view>
+    <text class="error-text">{{error}}</text>
+    <button class="retry-button" bindtap="onRetry">閲嶈瘯</button>
+  </view>
+
+  <!-- 鍏戞崲璁板綍鍒楄〃 -->
+  <view class="records-list" wx:if="{{records.length > 0}}">
+    <view class="record-item" wx:for="{{records}}" wx:key="id">
+      <!-- 鍟嗗搧淇℃伅 -->
+      <view class="record-header">
+        <view class="product-info">
+          <image class="product-image" src="{{item.productImage || '/assets/images/default-product.png'}}" mode="aspectFill"></image>
+          <view class="product-details">
+            <text class="product-title">{{item.productTitle}}</text>
+            <text class="exchange-date">{{item.createdAt}}</text>
+          </view>
+        </view>
+        <view class="status {{getStatusClass(item.status)}}">
+          {{getStatusText(item.status)}}
+        </view>
+      </view>
+
+      <!-- 璁㈠崟淇℃伅 -->
+      <view class="record-body">
+        <view class="order-info">
+          <text class="info-label">璁㈠崟缂栧彿</text>
+          <text class="info-value">{{item.orderId}}</text>
+        </view>
+        <view class="points-info">
+          <text class="info-label">娑堣€楃Н鍒?/text>
+          <text class="info-value points-value">{{item.points}}</text>
+        </view>
+        <view class="address-info" wx:if="{{item.shippingAddress}}">
+          <text class="info-label">鏀惰揣鍦板潃</text>
+          <text class="info-value address-text">{{item.shippingAddress}}</text>
+        </view>
+      </view>
+
+      <!-- 鎿嶄綔鎸夐挳 -->
+      <view class="record-footer" wx:if="{{item.status === 'processing'}}">
+        <button class="action-button">鏌ョ湅璇︽儏</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 绌虹姸鎬?-->
+  <view class="empty-container" wx:if="{{!loading && !error && records.length === 0}}">
+    <view class="empty-icon">馃搵</view>
+    <text class="empty-text">鏆傛棤鍏戞崲璁板綍</text>
+    <text class="empty-hint">蹇幓绉垎鍟嗗煄鍏戞崲蹇冧华鐨勫晢鍝佸惂~</text>
+    <button class="mall-button" bindtap="navigateToMall">鍓嶅線绉垎鍟嗗煄</button>
+  </view>
+
+  <!-- 鍔犺浇鏇村 -->
+  <view class="load-more" wx:if="{{hasMore && records.length > 0}}">
+    <text>{{loading ? '鍔犺浇涓?..' : '涓婃媺鍔犺浇鏇村'}}</text>
+  </view>
+
+  <!-- 宸插姞杞藉叏閮?-->
+  <view class="load-complete" wx:if="{{!hasMore && records.length > 0}}">
+    <text>宸插姞杞藉叏閮?/text>
+  </view>
+</view>

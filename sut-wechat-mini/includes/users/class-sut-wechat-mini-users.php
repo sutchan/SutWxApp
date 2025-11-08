@@ -1,8 +1,8 @@
-<?php
+﻿<?php
 /**
- * SUT微信小程序用户管理类
+ * SUT寰俊灏忕▼搴忕敤鎴风鐞嗙被
  *
- * 处理微信小程序用户的登录、信息管理、权限控制等功能
+ * 澶勭悊寰俊灏忕▼搴忕敤鎴风殑鐧诲綍銆佷俊鎭鐞嗐€佹潈闄愭帶鍒剁瓑鍔熻兘
  *
  * @package SUT_WeChat_Mini
  */
@@ -12,26 +12,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * SUT_WeChat_Mini_Users 类
- */
+ * SUT_WeChat_Mini_Users 绫? */
 class SUT_WeChat_Mini_Users {
     
     /**
-     * 用户管理实例
+     * 鐢ㄦ埛绠＄悊瀹炰緥
      *
      * @var SUT_WeChat_Mini_Users
      */
     private static $instance = null;
     
     /**
-     * 构造函数
-     */
+     * 鏋勯€犲嚱鏁?     */
     public function __construct() {
         $this->init();
     }
     
     /**
-     * 获取单例实例
+     * 鑾峰彇鍗曚緥瀹炰緥
      *
      * @return SUT_WeChat_Mini_Users
      */
@@ -44,18 +42,16 @@ class SUT_WeChat_Mini_Users {
     }
     
     /**
-     * 初始化用户管理
-     */
+     * 鍒濆鍖栫敤鎴风鐞?     */
     private function init() {
-        // 注册用户相关的钩子
-        add_filter( 'sut_wechat_mini_api_routes', array( $this, 'add_user_routes' ) );
+        // 娉ㄥ唽鐢ㄦ埛鐩稿叧鐨勯挬瀛?        add_filter( 'sut_wechat_mini_api_routes', array( $this, 'add_user_routes' ) );
     }
     
     /**
-     * 添加用户相关的API路由
+     * 娣诲姞鐢ㄦ埛鐩稿叧鐨凙PI璺敱
      *
-     * @param array $routes 现有路由
-     * @return array 修改后的路由
+     * @param array $routes 鐜版湁璺敱
+     * @return array 淇敼鍚庣殑璺敱
      */
     public function add_user_routes( $routes ) {
         $routes['user/address/list'] = array( 'callback' => array( $this, 'api_get_address_list' ), 'auth' => true );
@@ -72,11 +68,10 @@ class SUT_WeChat_Mini_Users {
     }
     
     /**
-     * 用户登录处理
+     * 鐢ㄦ埛鐧诲綍澶勭悊
      *
-     * @param array $wx_user 微信用户信息
-     * @param array $user_info 用户提交的信息
-     * @return array 登录结果
+     * @param array $wx_user 寰俊鐢ㄦ埛淇℃伅
+     * @param array $user_info 鐢ㄦ埛鎻愪氦鐨勪俊鎭?     * @return array 鐧诲綍缁撴灉
      */
     public function login_user( $wx_user, $user_info ) {
         global $wpdb;
@@ -84,21 +79,20 @@ class SUT_WeChat_Mini_Users {
         $openid = $wx_user['openid'];
         $unionid = isset( $wx_user['unionid'] ) ? $wx_user['unionid'] : '';
         
-        // 检查是否存在该用户
+        // 妫€鏌ユ槸鍚﹀瓨鍦ㄨ鐢ㄦ埛
         $existing_user = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table_name WHERE openid = %s", $openid ) );
         
-        // 生成用户Token
+        // 鐢熸垚鐢ㄦ埛Token
         $token = $this->generate_token();
         
-        // 更新或插入用户信息
-        if ( $existing_user ) {
-            // 更新现有用户
+        // 鏇存柊鎴栨彃鍏ョ敤鎴蜂俊鎭?        if ( $existing_user ) {
+            // 鏇存柊鐜版湁鐢ㄦ埛
             $data = array(
                 'token' => $token,
                 'updated_at' => current_time( 'mysql' ),
             );
             
-            // 如果有用户信息，更新用户信息
+            // 濡傛灉鏈夌敤鎴蜂俊鎭紝鏇存柊鐢ㄦ埛淇℃伅
             if ( ! empty( $user_info ) ) {
                 $data = array_merge( $data, $this->prepare_user_info( $user_info ) );
             }
@@ -109,15 +103,14 @@ class SUT_WeChat_Mini_Users {
             if ( false === $result ) {
                 return array(
                     'code' => 109,
-                    'message' => __( '数据库错误', 'sut-wechat-mini' ),
+                    'message' => __( '鏁版嵁搴撻敊璇?, 'sut-wechat-mini' ),
                     'data' => array()
                 );
             }
             
             $user_id = $existing_user->user_id;
         } else {
-            // 插入新用户
-            $data = array(
+            // 鎻掑叆鏂扮敤鎴?            $data = array(
                 'openid' => $openid,
                 'unionid' => $unionid,
                 'token' => $token,
@@ -125,7 +118,7 @@ class SUT_WeChat_Mini_Users {
                 'updated_at' => current_time( 'mysql' ),
             );
             
-            // 如果有用户信息，添加用户信息
+            // 濡傛灉鏈夌敤鎴蜂俊鎭紝娣诲姞鐢ㄦ埛淇℃伅
             if ( ! empty( $user_info ) ) {
                 $data = array_merge( $data, $this->prepare_user_info( $user_info ) );
             }
@@ -135,7 +128,7 @@ class SUT_WeChat_Mini_Users {
             if ( false === $result ) {
                 return array(
                     'code' => 109,
-                    'message' => __( '数据库错误', 'sut-wechat-mini' ),
+                    'message' => __( '鏁版嵁搴撻敊璇?, 'sut-wechat-mini' ),
                     'data' => array()
                 );
             }
@@ -143,7 +136,7 @@ class SUT_WeChat_Mini_Users {
             $user_id = null;
         }
         
-        // 构建返回数据
+        // 鏋勫缓杩斿洖鏁版嵁
         $return_data = array(
             'token' => $token,
             'openid' => $openid,
@@ -161,16 +154,16 @@ class SUT_WeChat_Mini_Users {
         
         return array(
             'code' => 0,
-            'message' => __( '登录成功', 'sut-wechat-mini' ),
+            'message' => __( '鐧诲綍鎴愬姛', 'sut-wechat-mini' ),
             'data' => $return_data
         );
     }
     
     /**
-     * 准备用户信息数据
+     * 鍑嗗鐢ㄦ埛淇℃伅鏁版嵁
      *
-     * @param array $user_info 用户信息
-     * @return array 准备好的用户信息
+     * @param array $user_info 鐢ㄦ埛淇℃伅
+     * @return array 鍑嗗濂界殑鐢ㄦ埛淇℃伅
      */
     private function prepare_user_info( $user_info ) {
         $data = array();
@@ -203,39 +196,38 @@ class SUT_WeChat_Mini_Users {
     }
     
     /**
-     * 生成用户Token
+     * 鐢熸垚鐢ㄦ埛Token
      *
-     * @return string Token值
-     */
+     * @return string Token鍊?     */
     private function generate_token() {
         return md5( uniqid( 'sut_wxa_', true ) . time() . mt_rand( 1000, 9999 ) );
     }
     
     /**
-     * 获取用户信息
+     * 鑾峰彇鐢ㄦ埛淇℃伅
      *
-     * @param int $user_id 用户ID
-     * @return array 用户信息
+     * @param int $user_id 鐢ㄦ埛ID
+     * @return array 鐢ㄦ埛淇℃伅
      */
     public function get_user_profile( $user_id ) {
         global $wpdb;
         $table_name = $wpdb->prefix . 'sut_wechat_mini_users';
         
-        // 查询用户信息
+        // 鏌ヨ鐢ㄦ埛淇℃伅
         $user = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table_name WHERE user_id = %d", $user_id ) );
         
         if ( ! $user ) {
             return array(
                 'code' => 104,
-                'message' => __( '用户不存在', 'sut-wechat-mini' ),
+                'message' => __( '鐢ㄦ埛涓嶅瓨鍦?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 获取WordPress用户信息
+        // 鑾峰彇WordPress鐢ㄦ埛淇℃伅
         $wp_user = get_user_by( 'id', $user_id );
         
-        // 构建用户信息
+        // 鏋勫缓鐢ㄦ埛淇℃伅
         $profile = array(
             'nickname' => $user->nickname,
             'avatar' => $user->avatar,
@@ -255,84 +247,81 @@ class SUT_WeChat_Mini_Users {
         
         return array(
             'code' => 0,
-            'message' => __( '成功', 'sut-wechat-mini' ),
+            'message' => __( '鎴愬姛', 'sut-wechat-mini' ),
             'data' => $profile
         );
     }
     
     /**
-     * 更新用户信息
+     * 鏇存柊鐢ㄦ埛淇℃伅
      *
-     * @param int $user_id 用户ID
-     * @param array $data 更新数据
-     * @return array 更新结果
+     * @param int $user_id 鐢ㄦ埛ID
+     * @param array $data 鏇存柊鏁版嵁
+     * @return array 鏇存柊缁撴灉
      */
     public function update_user_profile( $user_id, $data ) {
         global $wpdb;
         $table_name = $wpdb->prefix . 'sut_wechat_mini_users';
         
-        // 检查用户是否存在
-        $user = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table_name WHERE user_id = %d", $user_id ) );
+        // 妫€鏌ョ敤鎴锋槸鍚﹀瓨鍦?        $user = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table_name WHERE user_id = %d", $user_id ) );
         
         if ( ! $user ) {
             return array(
                 'code' => 104,
-                'message' => __( '用户不存在', 'sut-wechat-mini' ),
+                'message' => __( '鐢ㄦ埛涓嶅瓨鍦?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 准备更新数据
+        // 鍑嗗鏇存柊鏁版嵁
         $update_data = array(
             'updated_at' => current_time( 'mysql' ),
         );
         
-        // 过滤可以更新的字段
-        $allowed_fields = array( 'nickname', 'avatar', 'gender', 'country', 'province', 'city' );
+        // 杩囨护鍙互鏇存柊鐨勫瓧娈?        $allowed_fields = array( 'nickname', 'avatar', 'gender', 'country', 'province', 'city' );
         foreach ( $allowed_fields as $field ) {
             if ( isset( $data[$field] ) ) {
                 $update_data[$field] = $data[$field];
             }
         }
         
-        // 更新用户信息
+        // 鏇存柊鐢ㄦ埛淇℃伅
         $where = array( 'id' => $user->id );
         $result = $wpdb->update( $table_name, $update_data, $where );
         
         if ( false === $result ) {
             return array(
                 'code' => 109,
-                'message' => __( '数据库错误', 'sut-wechat-mini' ),
+                'message' => __( '鏁版嵁搴撻敊璇?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
         return array(
             'code' => 0,
-            'message' => __( '更新成功', 'sut-wechat-mini' ),
+            'message' => __( '鏇存柊鎴愬姛', 'sut-wechat-mini' ),
             'data' => array()
         );
     }
     
     /**
-     * 获取用户地址列表
+     * 鑾峰彇鐢ㄦ埛鍦板潃鍒楄〃
      *
-     * @param array $data 请求数据
-     * @param array $matches 路由匹配结果
-     * @return array 地址列表
+     * @param array $data 璇锋眰鏁版嵁
+     * @param array $matches 璺敱鍖归厤缁撴灉
+     * @return array 鍦板潃鍒楄〃
      */
     public function api_get_address_list( $data, $matches ) {
         global $wpdb;
         $user_id = $data['user_id'];
         $table_name = $wpdb->prefix . 'sut_wechat_mini_user_address';
         
-        // 确保表存在
-        $this->ensure_address_table_exists();
+        // 纭繚琛ㄥ瓨鍦?        $this->ensure_address_table_exists();
         
-        // 查询地址列表
+        // 鏌ヨ鍦板潃鍒楄〃
         $addresses = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $table_name WHERE user_id = %d ORDER BY is_default DESC, updated_at DESC", $user_id ) );
         
-        // 格式化地址数据
+        // 鏍煎紡鍖栧湴鍧€鏁版嵁
         $formatted_addresses = array();
         foreach ( $addresses as $address ) {
             $formatted_addresses[] = array(
@@ -351,40 +340,37 @@ class SUT_WeChat_Mini_Users {
         
         return array(
             'code' => 0,
-            'message' => __( '成功', 'sut-wechat-mini' ),
+            'message' => __( '鎴愬姛', 'sut-wechat-mini' ),
             'data' => $formatted_addresses
         );
     }
     
     /**
-     * 添加用户地址
+     * 娣诲姞鐢ㄦ埛鍦板潃
      *
-     * @param array $data 请求数据
-     * @param array $matches 路由匹配结果
-     * @return array 添加结果
+     * @param array $data 璇锋眰鏁版嵁
+     * @param array $matches 璺敱鍖归厤缁撴灉
+     * @return array 娣诲姞缁撴灉
      */
     public function api_add_address( $data, $matches ) {
         global $wpdb;
         $user_id = $data['user_id'];
         $table_name = $wpdb->prefix . 'sut_wechat_mini_user_address';
         
-        // 确保表存在
-        $this->ensure_address_table_exists();
+        // 纭繚琛ㄥ瓨鍦?        $this->ensure_address_table_exists();
         
-        // 检查必要参数
-        $required_fields = array( 'consignee', 'phone', 'province', 'city', 'district', 'detail_address' );
+        // 妫€鏌ュ繀瑕佸弬鏁?        $required_fields = array( 'consignee', 'phone', 'province', 'city', 'district', 'detail_address' );
         foreach ( $required_fields as $field ) {
             if ( ! isset( $data[$field] ) || empty( $data[$field] ) ) {
                 return array(
                     'code' => 100,
-                    'message' => sprintf( __( '缺少必要参数：%s', 'sut-wechat-mini' ), $field ),
+                    'message' => sprintf( __( '缂哄皯蹇呰鍙傛暟锛?s', 'sut-wechat-mini' ), $field ),
                     'data' => array()
                 );
             }
         }
         
-        // 如果设置为默认地址，取消其他地址的默认状态
-        if ( isset( $data['is_default'] ) && $data['is_default'] ) {
+        // 濡傛灉璁剧疆涓洪粯璁ゅ湴鍧€锛屽彇娑堝叾浠栧湴鍧€鐨勯粯璁ょ姸鎬?        if ( isset( $data['is_default'] ) && $data['is_default'] ) {
             $wpdb->update( 
                 $table_name,
                 array( 'is_default' => 0 ),
@@ -392,7 +378,7 @@ class SUT_WeChat_Mini_Users {
             );
         }
         
-        // 插入地址
+        // 鎻掑叆鍦板潃
         $result = $wpdb->insert( $table_name, array(
             'user_id' => $user_id,
             'consignee' => $data['consignee'],
@@ -409,46 +395,43 @@ class SUT_WeChat_Mini_Users {
         if ( false === $result ) {
             return array(
                 'code' => 109,
-                'message' => __( '数据库错误', 'sut-wechat-mini' ),
+                'message' => __( '鏁版嵁搴撻敊璇?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
         return array(
             'code' => 0,
-            'message' => __( '添加成功', 'sut-wechat-mini' ),
+            'message' => __( '娣诲姞鎴愬姛', 'sut-wechat-mini' ),
             'data' => array( 'address_id' => $wpdb->insert_id )
         );
     }
     
     /**
-     * 更新用户地址
+     * 鏇存柊鐢ㄦ埛鍦板潃
      *
-     * @param array $data 请求数据
-     * @param array $matches 路由匹配结果
-     * @return array 更新结果
+     * @param array $data 璇锋眰鏁版嵁
+     * @param array $matches 璺敱鍖归厤缁撴灉
+     * @return array 鏇存柊缁撴灉
      */
     public function api_update_address( $data, $matches ) {
         global $wpdb;
         $user_id = $data['user_id'];
         $table_name = $wpdb->prefix . 'sut_wechat_mini_user_address';
         
-        // 确保表存在
-        $this->ensure_address_table_exists();
+        // 纭繚琛ㄥ瓨鍦?        $this->ensure_address_table_exists();
         
-        // 检查必要参数
-        if ( ! isset( $data['address_id'] ) || empty( $data['address_id'] ) ) {
+        // 妫€鏌ュ繀瑕佸弬鏁?        if ( ! isset( $data['address_id'] ) || empty( $data['address_id'] ) ) {
             return array(
                 'code' => 100,
-                'message' => __( '缺少必要参数：address_id', 'sut-wechat-mini' ),
+                'message' => __( '缂哄皯蹇呰鍙傛暟锛歛ddress_id', 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
         $address_id = $data['address_id'];
         
-        // 检查地址是否属于该用户
-        $address = $wpdb->get_row( $wpdb->prepare( 
+        // 妫€鏌ュ湴鍧€鏄惁灞炰簬璇ョ敤鎴?        $address = $wpdb->get_row( $wpdb->prepare( 
             "SELECT id FROM $table_name WHERE id = %d AND user_id = %d", 
             $address_id, $user_id
         ) );
@@ -456,26 +439,24 @@ class SUT_WeChat_Mini_Users {
         if ( ! $address ) {
             return array(
                 'code' => 104,
-                'message' => __( '地址不存在或不属于该用户', 'sut-wechat-mini' ),
+                'message' => __( '鍦板潃涓嶅瓨鍦ㄦ垨涓嶅睘浜庤鐢ㄦ埛', 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 准备更新数据
+        // 鍑嗗鏇存柊鏁版嵁
         $update_data = array(
             'updated_at' => current_time( 'mysql' ),
         );
         
-        // 允许更新的字段
-        $allowed_fields = array( 'consignee', 'phone', 'province', 'city', 'district', 'detail_address', 'is_default' );
+        // 鍏佽鏇存柊鐨勫瓧娈?        $allowed_fields = array( 'consignee', 'phone', 'province', 'city', 'district', 'detail_address', 'is_default' );
         foreach ( $allowed_fields as $field ) {
             if ( isset( $data[$field] ) ) {
                 $update_data[$field] = $data[$field];
             }
         }
         
-        // 如果设置为默认地址，取消其他地址的默认状态
-        if ( isset( $update_data['is_default'] ) && $update_data['is_default'] ) {
+        // 濡傛灉璁剧疆涓洪粯璁ゅ湴鍧€锛屽彇娑堝叾浠栧湴鍧€鐨勯粯璁ょ姸鎬?        if ( isset( $update_data['is_default'] ) && $update_data['is_default'] ) {
             $wpdb->update( 
                 $table_name,
                 array( 'is_default' => 0 ),
@@ -483,52 +464,49 @@ class SUT_WeChat_Mini_Users {
             );
         }
         
-        // 更新地址
+        // 鏇存柊鍦板潃
         $result = $wpdb->update( $table_name, $update_data, array( 'id' => $address_id ) );
         
         if ( false === $result ) {
             return array(
                 'code' => 109,
-                'message' => __( '数据库错误', 'sut-wechat-mini' ),
+                'message' => __( '鏁版嵁搴撻敊璇?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
         return array(
             'code' => 0,
-            'message' => __( '更新成功', 'sut-wechat-mini' ),
+            'message' => __( '鏇存柊鎴愬姛', 'sut-wechat-mini' ),
             'data' => array()
         );
     }
     
     /**
-     * 删除用户地址
+     * 鍒犻櫎鐢ㄦ埛鍦板潃
      *
-     * @param array $data 请求数据
-     * @param array $matches 路由匹配结果
-     * @return array 删除结果
+     * @param array $data 璇锋眰鏁版嵁
+     * @param array $matches 璺敱鍖归厤缁撴灉
+     * @return array 鍒犻櫎缁撴灉
      */
     public function api_delete_address( $data, $matches ) {
         global $wpdb;
         $user_id = $data['user_id'];
         $table_name = $wpdb->prefix . 'sut_wechat_mini_user_address';
         
-        // 确保表存在
-        $this->ensure_address_table_exists();
+        // 纭繚琛ㄥ瓨鍦?        $this->ensure_address_table_exists();
         
-        // 检查必要参数
-        if ( ! isset( $data['address_id'] ) || empty( $data['address_id'] ) ) {
+        // 妫€鏌ュ繀瑕佸弬鏁?        if ( ! isset( $data['address_id'] ) || empty( $data['address_id'] ) ) {
             return array(
                 'code' => 100,
-                'message' => __( '缺少必要参数：address_id', 'sut-wechat-mini' ),
+                'message' => __( '缂哄皯蹇呰鍙傛暟锛歛ddress_id', 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
         $address_id = $data['address_id'];
         
-        // 检查地址是否属于该用户
-        $address = $wpdb->get_row( $wpdb->prepare( 
+        // 妫€鏌ュ湴鍧€鏄惁灞炰簬璇ョ敤鎴?        $address = $wpdb->get_row( $wpdb->prepare( 
             "SELECT id FROM $table_name WHERE id = %d AND user_id = %d", 
             $address_id, $user_id
         ) );
@@ -536,50 +514,49 @@ class SUT_WeChat_Mini_Users {
         if ( ! $address ) {
             return array(
                 'code' => 104,
-                'message' => __( '地址不存在或不属于该用户', 'sut-wechat-mini' ),
+                'message' => __( '鍦板潃涓嶅瓨鍦ㄦ垨涓嶅睘浜庤鐢ㄦ埛', 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 删除地址
+        // 鍒犻櫎鍦板潃
         $result = $wpdb->delete( $table_name, array( 'id' => $address_id ) );
         
         if ( false === $result ) {
             return array(
                 'code' => 109,
-                'message' => __( '数据库错误', 'sut-wechat-mini' ),
+                'message' => __( '鏁版嵁搴撻敊璇?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
         return array(
             'code' => 0,
-            'message' => __( '删除成功', 'sut-wechat-mini' ),
+            'message' => __( '鍒犻櫎鎴愬姛', 'sut-wechat-mini' ),
             'data' => array()
         );
     }
     
     /**
-     * 获取收藏列表
+     * 鑾峰彇鏀惰棌鍒楄〃
      *
-     * @param array $data 请求数据
-     * @param array $matches 路由匹配结果
-     * @return array 收藏列表
+     * @param array $data 璇锋眰鏁版嵁
+     * @param array $matches 璺敱鍖归厤缁撴灉
+     * @return array 鏀惰棌鍒楄〃
      */
     public function api_get_favorite_list( $data, $matches ) {
         global $wpdb;
         $user_id = $data['user_id'];
         $table_name = $wpdb->prefix . 'sut_wechat_mini_user_favorites';
         
-        // 确保表存在
-        $this->ensure_favorite_table_exists();
+        // 纭繚琛ㄥ瓨鍦?        $this->ensure_favorite_table_exists();
         
-        // 获取分页参数
+        // 鑾峰彇鍒嗛〉鍙傛暟
         $page = isset( $data['page'] ) ? intval( $data['page'] ) : 1;
         $per_page = isset( $data['per_page'] ) ? intval( $data['per_page'] ) : 10;
         $offset = ( $page - 1 ) * $per_page;
         
-        // 查询收藏列表
+        // 鏌ヨ鏀惰棌鍒楄〃
         $favorites = $wpdb->get_results( $wpdb->prepare( "
             SELECT f.*, p.ID as post_id, p.post_title, p.post_excerpt, 
                    (SELECT meta_value FROM {$wpdb->prefix}postmeta WHERE post_id = p.ID AND meta_key = '_thumbnail_id') as thumbnail_id
@@ -590,16 +567,14 @@ class SUT_WeChat_Mini_Users {
             LIMIT %d, %d
         ", $user_id, $offset, $per_page ) );
         
-        // 获取总条数
-        $total = $wpdb->get_var( $wpdb->prepare( "
+        // 鑾峰彇鎬绘潯鏁?        $total = $wpdb->get_var( $wpdb->prepare( "
             SELECT COUNT(*) 
             FROM $table_name f
             LEFT JOIN {$wpdb->prefix}posts p ON f.post_id = p.ID
             WHERE f.user_id = %d AND p.post_status = 'publish'
         ", $user_id ) );
         
-        // 格式化收藏数据
-        $formatted_favorites = array();
+        // 鏍煎紡鍖栨敹钘忔暟鎹?        $formatted_favorites = array();
         foreach ( $favorites as $favorite ) {
             $thumbnail_url = '';
             if ( $favorite->thumbnail_id ) {
@@ -618,7 +593,7 @@ class SUT_WeChat_Mini_Users {
         
         return array(
             'code' => 0,
-            'message' => __( '成功', 'sut-wechat-mini' ),
+            'message' => __( '鎴愬姛', 'sut-wechat-mini' ),
             'data' => array(
                 'list' => $formatted_favorites,
                 'total' => intval( $total ),
@@ -630,43 +605,39 @@ class SUT_WeChat_Mini_Users {
     }
     
     /**
-     * 添加收藏
+     * 娣诲姞鏀惰棌
      *
-     * @param array $data 请求数据
-     * @param array $matches 路由匹配结果
-     * @return array 添加结果
+     * @param array $data 璇锋眰鏁版嵁
+     * @param array $matches 璺敱鍖归厤缁撴灉
+     * @return array 娣诲姞缁撴灉
      */
     public function api_add_favorite( $data, $matches ) {
         global $wpdb;
         $user_id = $data['user_id'];
         $table_name = $wpdb->prefix . 'sut_wechat_mini_user_favorites';
         
-        // 确保表存在
-        $this->ensure_favorite_table_exists();
+        // 纭繚琛ㄥ瓨鍦?        $this->ensure_favorite_table_exists();
         
-        // 检查必要参数
-        if ( ! isset( $data['post_id'] ) || empty( $data['post_id'] ) ) {
+        // 妫€鏌ュ繀瑕佸弬鏁?        if ( ! isset( $data['post_id'] ) || empty( $data['post_id'] ) ) {
             return array(
                 'code' => 100,
-                'message' => __( '缺少必要参数：post_id', 'sut-wechat-mini' ),
+                'message' => __( '缂哄皯蹇呰鍙傛暟锛歱ost_id', 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
         $post_id = $data['post_id'];
         
-        // 检查文章是否存在
-        $post = get_post( $post_id );
+        // 妫€鏌ユ枃绔犳槸鍚﹀瓨鍦?        $post = get_post( $post_id );
         if ( ! $post || 'publish' !== $post->post_status ) {
             return array(
                 'code' => 104,
-                'message' => __( '文章不存在或未发布', 'sut-wechat-mini' ),
+                'message' => __( '鏂囩珷涓嶅瓨鍦ㄦ垨鏈彂甯?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 检查是否已经收藏
-        $existing = $wpdb->get_row( $wpdb->prepare( 
+        // 妫€鏌ユ槸鍚﹀凡缁忔敹钘?        $existing = $wpdb->get_row( $wpdb->prepare( 
             "SELECT id FROM $table_name WHERE user_id = %d AND post_id = %d", 
             $user_id, $post_id
         ) );
@@ -674,12 +645,12 @@ class SUT_WeChat_Mini_Users {
         if ( $existing ) {
             return array(
                 'code' => 103,
-                'message' => __( '已经收藏过了', 'sut-wechat-mini' ),
+                'message' => __( '宸茬粡鏀惰棌杩囦簡', 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 添加收藏
+        // 娣诲姞鏀惰棌
         $result = $wpdb->insert( $table_name, array(
             'user_id' => $user_id,
             'post_id' => $post_id,
@@ -689,43 +660,41 @@ class SUT_WeChat_Mini_Users {
         if ( false === $result ) {
             return array(
                 'code' => 109,
-                'message' => __( '数据库错误', 'sut-wechat-mini' ),
+                'message' => __( '鏁版嵁搴撻敊璇?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
         return array(
             'code' => 0,
-            'message' => __( '收藏成功', 'sut-wechat-mini' ),
+            'message' => __( '鏀惰棌鎴愬姛', 'sut-wechat-mini' ),
             'data' => array()
         );
     }
     
     /**
-     * 删除收藏
+     * 鍒犻櫎鏀惰棌
      *
-     * @param array $data 请求数据
-     * @param array $matches 路由匹配结果
-     * @return array 删除结果
+     * @param array $data 璇锋眰鏁版嵁
+     * @param array $matches 璺敱鍖归厤缁撴灉
+     * @return array 鍒犻櫎缁撴灉
      */
     public function api_delete_favorite( $data, $matches ) {
         global $wpdb;
         $user_id = $data['user_id'];
         $table_name = $wpdb->prefix . 'sut_wechat_mini_user_favorites';
         
-        // 确保表存在
-        $this->ensure_favorite_table_exists();
+        // 纭繚琛ㄥ瓨鍦?        $this->ensure_favorite_table_exists();
         
-        // 检查必要参数
-        if ( ! isset( $data['favorite_id'] ) && ! isset( $data['post_id'] ) ) {
+        // 妫€鏌ュ繀瑕佸弬鏁?        if ( ! isset( $data['favorite_id'] ) && ! isset( $data['post_id'] ) ) {
             return array(
                 'code' => 100,
-                'message' => __( '缺少必要参数：favorite_id 或 post_id', 'sut-wechat-mini' ),
+                'message' => __( '缂哄皯蹇呰鍙傛暟锛歠avorite_id 鎴?post_id', 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 构建查询条件
+        // 鏋勫缓鏌ヨ鏉′欢
         if ( isset( $data['favorite_id'] ) ) {
             $where = array(
                 'id' => $data['favorite_id'],
@@ -738,41 +707,39 @@ class SUT_WeChat_Mini_Users {
             );
         }
         
-        // 删除收藏
+        // 鍒犻櫎鏀惰棌
         $result = $wpdb->delete( $table_name, $where );
         
         if ( false === $result ) {
             return array(
                 'code' => 109,
-                'message' => __( '数据库错误', 'sut-wechat-mini' ),
+                'message' => __( '鏁版嵁搴撻敊璇?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
         return array(
             'code' => 0,
-            'message' => __( '取消收藏成功', 'sut-wechat-mini' ),
+            'message' => __( '鍙栨秷鏀惰棌鎴愬姛', 'sut-wechat-mini' ),
             'data' => array()
         );
     }
     
     /**
-     * 用户签到
+     * 鐢ㄦ埛绛惧埌
      *
-     * @param array $data 请求数据
-     * @param array $matches 路由匹配结果
-     * @return array 签到结果
+     * @param array $data 璇锋眰鏁版嵁
+     * @param array $matches 璺敱鍖归厤缁撴灉
+     * @return array 绛惧埌缁撴灉
      */
     public function api_signin( $data, $matches ) {
         global $wpdb;
         $user_id = $data['user_id'];
         $table_name = $wpdb->prefix . 'sut_wechat_mini_user_signin';
         
-        // 确保表存在
-        $this->ensure_signin_table_exists();
+        // 纭繚琛ㄥ瓨鍦?        $this->ensure_signin_table_exists();
         
-        // 检查今天是否已经签到
-        $today = date( 'Y-m-d' );
+        // 妫€鏌ヤ粖澶╂槸鍚﹀凡缁忕鍒?        $today = date( 'Y-m-d' );
         $existing = $wpdb->get_row( $wpdb->prepare( 
             "SELECT id FROM $table_name WHERE user_id = %d AND signin_date = %s", 
             $user_id, $today
@@ -781,12 +748,12 @@ class SUT_WeChat_Mini_Users {
         if ( $existing ) {
             return array(
                 'code' => 103,
-                'message' => __( '今天已经签到过了', 'sut-wechat-mini' ),
+                'message' => __( '浠婂ぉ宸茬粡绛惧埌杩囦簡', 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 获取连续签到天数
+        // 鑾峰彇杩炵画绛惧埌澶╂暟
         $last_signin = $wpdb->get_row( $wpdb->prepare( 
             "SELECT signin_date FROM $table_name WHERE user_id = %d ORDER BY signin_date DESC LIMIT 1", 
             $user_id
@@ -798,7 +765,7 @@ class SUT_WeChat_Mini_Users {
             $yesterday = strtotime( '-1 day', strtotime( $today ) );
             
             if ( $last_date == $yesterday ) {
-                // 获取连续签到天数
+                // 鑾峰彇杩炵画绛惧埌澶╂暟
                 $continuous_days = $wpdb->get_var( $wpdb->prepare( "
                     SELECT COUNT(*) 
                     FROM $table_name 
@@ -809,7 +776,7 @@ class SUT_WeChat_Mini_Users {
             }
         }
         
-        // 添加签到记录
+        // 娣诲姞绛惧埌璁板綍
         $result = $wpdb->insert( $table_name, array(
             'user_id' => $user_id,
             'signin_date' => $today,
@@ -820,17 +787,16 @@ class SUT_WeChat_Mini_Users {
         if ( false === $result ) {
             return array(
                 'code' => 109,
-                'message' => __( '数据库错误', 'sut-wechat-mini' ),
+                'message' => __( '鏁版嵁搴撻敊璇?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 签到奖励积分（如果有积分系统）
-        $this->award_signin_points( $user_id, $continuous_days );
+        // 绛惧埌濂栧姳绉垎锛堝鏋滄湁绉垎绯荤粺锛?        $this->award_signin_points( $user_id, $continuous_days );
         
         return array(
             'code' => 0,
-            'message' => __( '签到成功', 'sut-wechat-mini' ),
+            'message' => __( '绛惧埌鎴愬姛', 'sut-wechat-mini' ),
             'data' => array(
                 'continuous_days' => $continuous_days,
                 'signin_date' => $today
@@ -839,31 +805,29 @@ class SUT_WeChat_Mini_Users {
     }
     
     /**
-     * 获取签到历史
+     * 鑾峰彇绛惧埌鍘嗗彶
      *
-     * @param array $data 请求数据
-     * @param array $matches 路由匹配结果
-     * @return array 签到历史
+     * @param array $data 璇锋眰鏁版嵁
+     * @param array $matches 璺敱鍖归厤缁撴灉
+     * @return array 绛惧埌鍘嗗彶
      */
     public function api_get_signin_history( $data, $matches ) {
         global $wpdb;
         $user_id = $data['user_id'];
         $table_name = $wpdb->prefix . 'sut_wechat_mini_user_signin';
         
-        // 确保表存在
-        $this->ensure_signin_table_exists();
+        // 纭繚琛ㄥ瓨鍦?        $this->ensure_signin_table_exists();
         
-        // 获取参数
+        // 鑾峰彇鍙傛暟
         $month = isset( $data['month'] ) ? $data['month'] : date( 'Y-m' );
         
-        // 查询签到记录
+        // 鏌ヨ绛惧埌璁板綍
         $signin_records = $wpdb->get_results( $wpdb->prepare( 
             "SELECT signin_date, continuous_days FROM $table_name WHERE user_id = %d AND signin_date LIKE %s ORDER BY signin_date ASC", 
             $user_id, $month . '%'
         ) );
         
-        // 格式化签到数据
-        $formatted_records = array();
+        // 鏍煎紡鍖栫鍒版暟鎹?        $formatted_records = array();
         foreach ( $signin_records as $record ) {
             $formatted_records[] = array(
                 'signin_date' => $record->signin_date,
@@ -873,24 +837,22 @@ class SUT_WeChat_Mini_Users {
         
         return array(
             'code' => 0,
-            'message' => __( '成功', 'sut-wechat-mini' ),
+            'message' => __( '鎴愬姛', 'sut-wechat-mini' ),
             'data' => $formatted_records
         );
     }
     
     /**
-     * 确保地址表存在
-     */
+     * 纭繚鍦板潃琛ㄥ瓨鍦?     */
     private function ensure_address_table_exists() {
         global $wpdb;
         $table_name = $wpdb->prefix . 'sut_wechat_mini_user_address';
         
-        // 检查表是否存在
+        // 妫€鏌ヨ〃鏄惁瀛樺湪
         if ( $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $table_name ) ) !== $table_name ) {
             $charset_collate = $wpdb->get_charset_collate();
             
-            // 创建地址表
-            $sql = "CREATE TABLE $table_name (
+            // 鍒涘缓鍦板潃琛?            $sql = "CREATE TABLE $table_name (
                 id mediumint(9) NOT NULL AUTO_INCREMENT,
                 user_id mediumint(9) NOT NULL,
                 consignee varchar(50) NOT NULL,
@@ -912,18 +874,16 @@ class SUT_WeChat_Mini_Users {
     }
     
     /**
-     * 确保收藏表存在
-     */
+     * 纭繚鏀惰棌琛ㄥ瓨鍦?     */
     private function ensure_favorite_table_exists() {
         global $wpdb;
         $table_name = $wpdb->prefix . 'sut_wechat_mini_user_favorites';
         
-        // 检查表是否存在
+        // 妫€鏌ヨ〃鏄惁瀛樺湪
         if ( $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $table_name ) ) !== $table_name ) {
             $charset_collate = $wpdb->get_charset_collate();
             
-            // 创建收藏表
-            $sql = "CREATE TABLE $table_name (
+            // 鍒涘缓鏀惰棌琛?            $sql = "CREATE TABLE $table_name (
                 id mediumint(9) NOT NULL AUTO_INCREMENT,
                 user_id mediumint(9) NOT NULL,
                 post_id mediumint(9) NOT NULL,
@@ -939,18 +899,16 @@ class SUT_WeChat_Mini_Users {
     }
     
     /**
-     * 确保签到表存在
-     */
+     * 纭繚绛惧埌琛ㄥ瓨鍦?     */
     private function ensure_signin_table_exists() {
         global $wpdb;
         $table_name = $wpdb->prefix . 'sut_wechat_mini_user_signin';
         
-        // 检查表是否存在
+        // 妫€鏌ヨ〃鏄惁瀛樺湪
         if ( $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $table_name ) ) !== $table_name ) {
             $charset_collate = $wpdb->get_charset_collate();
             
-            // 创建签到表
-            $sql = "CREATE TABLE $table_name (
+            // 鍒涘缓绛惧埌琛?            $sql = "CREATE TABLE $table_name (
                 id mediumint(9) NOT NULL AUTO_INCREMENT,
                 user_id mediumint(9) NOT NULL,
                 signin_date date NOT NULL,
@@ -966,14 +924,11 @@ class SUT_WeChat_Mini_Users {
     }
     
     /**
-     * 签到奖励积分
+     * 绛惧埌濂栧姳绉垎
      *
-     * @param int $user_id 用户ID
-     * @param int $continuous_days 连续签到天数
+     * @param int $user_id 鐢ㄦ埛ID
+     * @param int $continuous_days 杩炵画绛惧埌澶╂暟
      */
     private function award_signin_points( $user_id, $continuous_days ) {
-        // 这里可以根据连续签到天数设置不同的积分奖励
-        // 例如：连续1天奖励5积分，连续3天奖励10积分，连续7天奖励20积分等
-        // 这个功能需要积分系统支持，可以根据实际需求实现
-    }
+        // 杩欓噷鍙互鏍规嵁杩炵画绛惧埌澶╂暟璁剧疆涓嶅悓鐨勭Н鍒嗗鍔?        // 渚嬪锛氳繛缁?澶╁鍔?绉垎锛岃繛缁?澶╁鍔?0绉垎锛岃繛缁?澶╁鍔?0绉垎绛?        // 杩欎釜鍔熻兘闇€瑕佺Н鍒嗙郴缁熸敮鎸侊紝鍙互鏍规嵁瀹為檯闇€姹傚疄鐜?    }
 }

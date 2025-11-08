@@ -1,24 +1,20 @@
-// 通知详情页面逻辑
+﻿// 閫氱煡璇︽儏椤甸潰閫昏緫
 const app = getApp();
 
 Page({
   /**
-   * 页面的初始数据
-   */
+   * 椤甸潰鐨勫垵濮嬫暟鎹?   */
   data: {
-    notification: {}, // 通知详情
-    loading: true, // 加载状态
-    error: '', // 错误信息
-    relatedContent: [], // 相关内容
-    showActions: false, // 是否显示操作按钮
-    primaryActionName: '', // 主要操作方法名
-    primaryActionText: '', // 主要操作文本
-    secondaryActionName: '', // 次要操作方法名
-    secondaryActionText: '' // 次要操作文本
+    notification: {}, // 閫氱煡璇︽儏
+    loading: true, // 鍔犺浇鐘舵€?    error: '', // 閿欒淇℃伅
+    relatedContent: [], // 鐩稿叧鍐呭
+    showActions: false, // 鏄惁鏄剧ず鎿嶄綔鎸夐挳
+    primaryActionName: '', // 涓昏鎿嶄綔鏂规硶鍚?    primaryActionText: '', // 涓昏鎿嶄綔鏂囨湰
+    secondaryActionName: '', // 娆¤鎿嶄綔鏂规硶鍚?    secondaryActionText: '' // 娆¤鎿嶄綔鏂囨湰
   },
 
   /**
-   * 生命周期函数--监听页面加载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
    */
   onLoad: function (options) {
     if (options.id) {
@@ -27,13 +23,13 @@ Page({
     } else {
       this.setData({
         loading: false,
-        error: '通知ID不存在'
+        error: '閫氱煡ID涓嶅瓨鍦?
       });
     }
   },
 
   /**
-   * 加载通知详情
+   * 鍔犺浇閫氱煡璇︽儏
    */
   loadNotificationDetail: function () {
     this.setData({
@@ -43,31 +39,29 @@ Page({
 
     app.services.notification.getNotificationDetail(this.notificationId)
       .then(notification => {
-        // 标记为已读
-        if (!notification.is_read) {
+        // 鏍囪涓哄凡璇?        if (!notification.is_read) {
           app.services.notification.markAsRead(this.notificationId)
             .then(() => {
-              // 更新通知状态
-              notification.is_read = true;
+              // 鏇存柊閫氱煡鐘舵€?              notification.is_read = true;
               
-              // 更新本地存储中的未读数量
+              // 鏇存柊鏈湴瀛樺偍涓殑鏈鏁伴噺
               const unreadCount = wx.getStorageSync('unreadNotificationCount') || 0;
               if (unreadCount > 0) {
                 wx.setStorageSync('unreadNotificationCount', unreadCount - 1);
               }
             })
             .catch(err => {
-              console.error('标记已读失败:', err);
+              console.error('鏍囪宸茶澶辫触:', err);
             });
         }
         
-        // 格式化通知数据
+        // 鏍煎紡鍖栭€氱煡鏁版嵁
         const formattedNotification = this.formatNotification(notification);
         
-        // 根据通知类型加载相关内容
+        // 鏍规嵁閫氱煡绫诲瀷鍔犺浇鐩稿叧鍐呭
         this.loadRelatedContent(notification);
         
-        // 设置操作按钮
+        // 璁剧疆鎿嶄綔鎸夐挳
         this.setupActions(notification);
         
         this.setData({
@@ -76,24 +70,23 @@ Page({
         });
       })
       .catch(err => {
-        console.error('获取通知详情失败:', err);
+        console.error('鑾峰彇閫氱煡璇︽儏澶辫触:', err);
         this.setData({
           loading: false,
-          error: '获取通知详情失败，请重试'
+          error: '鑾峰彇閫氱煡璇︽儏澶辫触锛岃閲嶈瘯'
         });
       });
   },
 
   /**
-   * 格式化通知数据
-   * @param {Object} notification - 原始通知数据
-   * @returns {Object} 格式化后的通知数据
+   * 鏍煎紡鍖栭€氱煡鏁版嵁
+   * @param {Object} notification - 鍘熷閫氱煡鏁版嵁
+   * @returns {Object} 鏍煎紡鍖栧悗鐨勯€氱煡鏁版嵁
    */
   formatNotification: function (notification) {
-    // 格式化时间
-    const timeAgo = this.formatTimeAgo(notification.created_at);
+    // 鏍煎紡鍖栨椂闂?    const timeAgo = this.formatTimeAgo(notification.created_at);
     
-    // 获取通知类型文本
+    // 鑾峰彇閫氱煡绫诲瀷鏂囨湰
     const typeText = this.getNotificationTypeText(notification.type);
     
     return {
@@ -104,9 +97,8 @@ Page({
   },
 
   /**
-   * 格式化时间为相对时间
-   * @param {string} time - 时间字符串
-   * @returns {string} 相对时间文本
+   * 鏍煎紡鍖栨椂闂翠负鐩稿鏃堕棿
+   * @param {string} time - 鏃堕棿瀛楃涓?   * @returns {string} 鐩稿鏃堕棿鏂囨湰
    */
   formatTimeAgo: function (time) {
     const now = new Date();
@@ -118,96 +110,94 @@ Page({
     const diffDays = Math.floor(diffHours / 24);
 
     if (diffSecs < 60) {
-      return '刚刚';
+      return '鍒氬垰';
     } else if (diffMins < 60) {
-      return `${diffMins}分钟前`;
+      return `${diffMins}鍒嗛挓鍓峘;
     } else if (diffHours < 24) {
-      return `${diffHours}小时前`;
+      return `${diffHours}灏忔椂鍓峘;
     } else if (diffDays < 7) {
-      return `${diffDays}天前`;
+      return `${diffDays}澶╁墠`;
     } else {
       return past.toLocaleDateString();
     }
   },
 
   /**
-   * 获取通知类型文本
-   * @param {string} type - 通知类型
-   * @returns {string} 类型文本
+   * 鑾峰彇閫氱煡绫诲瀷鏂囨湰
+   * @param {string} type - 閫氱煡绫诲瀷
+   * @returns {string} 绫诲瀷鏂囨湰
    */
   getNotificationTypeText: function (type) {
     const typeMap = {
-      system: '系统通知',
-      comment: '评论通知',
-      follow: '关注通知',
-      like: '点赞通知',
-      point: '积分通知',
-      order: '订单通知'
+      system: '绯荤粺閫氱煡',
+      comment: '璇勮閫氱煡',
+      follow: '鍏虫敞閫氱煡',
+      like: '鐐硅禐閫氱煡',
+      point: '绉垎閫氱煡',
+      order: '璁㈠崟閫氱煡'
     };
-    return typeMap[type] || '其他';
+    return typeMap[type] || '鍏朵粬';
   },
 
   /**
-   * 加载相关内容
-   * @param {Object} notification - 通知数据
+   * 鍔犺浇鐩稿叧鍐呭
+   * @param {Object} notification - 閫氱煡鏁版嵁
    */
   loadRelatedContent: function (notification) {
     const relatedContent = [];
     
-    // 根据通知类型加载相关内容
+    // 鏍规嵁閫氱煡绫诲瀷鍔犺浇鐩稿叧鍐呭
     switch (notification.type) {
       case 'comment':
-        // 添加相关文章
+        // 娣诲姞鐩稿叧鏂囩珷
         if (notification.post_id) {
           relatedContent.push({
             id: notification.post_id,
             type: 'article',
-            title: '查看相关文章',
+            title: '鏌ョ湅鐩稿叧鏂囩珷',
             time_ago: this.formatTimeAgo(notification.created_at)
           });
         }
-        // 添加评论者信息
-        if (notification.user_id) {
+        // 娣诲姞璇勮鑰呬俊鎭?        if (notification.user_id) {
           relatedContent.push({
             id: notification.user_id,
             type: 'user',
-            title: '查看评论者信息',
+            title: '鏌ョ湅璇勮鑰呬俊鎭?,
             time_ago: this.formatTimeAgo(notification.created_at)
           });
         }
         break;
       
       case 'follow':
-        // 添加关注者信息
-        if (notification.follower_id) {
+        // 娣诲姞鍏虫敞鑰呬俊鎭?        if (notification.follower_id) {
           relatedContent.push({
             id: notification.follower_id,
             type: 'user',
-            title: '查看关注者主页',
+            title: '鏌ョ湅鍏虫敞鑰呬富椤?,
             time_ago: this.formatTimeAgo(notification.created_at)
           });
         }
         break;
       
       case 'like':
-        // 添加相关内容
+        // 娣诲姞鐩稿叧鍐呭
         if (notification.post_id) {
           relatedContent.push({
             id: notification.post_id,
             type: 'article',
-            title: '查看被点赞内容',
+            title: '鏌ョ湅琚偣璧炲唴瀹?,
             time_ago: this.formatTimeAgo(notification.created_at)
           });
         }
         break;
       
       case 'order':
-        // 添加订单信息
+        // 娣诲姞璁㈠崟淇℃伅
         if (notification.order_id) {
           relatedContent.push({
             id: notification.order_id,
             type: 'order',
-            title: '查看订单详情',
+            title: '鏌ョ湅璁㈠崟璇︽儏',
             time_ago: this.formatTimeAgo(notification.created_at)
           });
         }
@@ -220,19 +210,18 @@ Page({
   },
 
   /**
-   * 设置操作按钮
-   * @param {Object} notification - 通知数据
+   * 璁剧疆鎿嶄綔鎸夐挳
+   * @param {Object} notification - 閫氱煡鏁版嵁
    */
   setupActions: function (notification) {
-    // 根据通知类型设置不同的操作按钮
-    switch (notification.type) {
+    // 鏍规嵁閫氱煡绫诲瀷璁剧疆涓嶅悓鐨勬搷浣滄寜閽?    switch (notification.type) {
       case 'follow':
         this.setData({
           showActions: true,
           primaryActionName: 'followBack',
-          primaryActionText: '回关',
+          primaryActionText: '鍥炲叧',
           secondaryActionName: 'ignoreFollow',
-          secondaryActionText: '忽略'
+          secondaryActionText: '蹇界暐'
         });
         break;
       
@@ -240,19 +229,18 @@ Page({
         this.setData({
           showActions: true,
           primaryActionName: 'replyComment',
-          primaryActionText: '回复',
+          primaryActionText: '鍥炲',
           secondaryActionName: '',
           secondaryActionText: ''
         });
         break;
       
       case 'point':
-        // 积分变动通知可能有相关操作
-        if (notification.action && notification.action.link) {
+        // 绉垎鍙樺姩閫氱煡鍙兘鏈夌浉鍏虫搷浣?        if (notification.action && notification.action.link) {
           this.setData({
             showActions: true,
             primaryActionName: 'goToAction',
-            primaryActionText: notification.action.text || '查看详情',
+            primaryActionText: notification.action.text || '鏌ョ湅璇︽儏',
             secondaryActionName: '',
             secondaryActionText: ''
           });
@@ -267,27 +255,26 @@ Page({
   },
 
   /**
-   * 回关用户
+   * 鍥炲叧鐢ㄦ埛
    */
   followBack: function () {
     if (this.data.notification.follower_id) {
-      // 调用关注服务
+      // 璋冪敤鍏虫敞鏈嶅姟
       app.services.following.followUser(this.data.notification.follower_id)
         .then(() => {
           wx.showToast({
-            title: '回关成功',
+            title: '鍥炲叧鎴愬姛',
             icon: 'success'
           });
           
-          // 更新操作按钮状态
-          this.setData({
+          // 鏇存柊鎿嶄綔鎸夐挳鐘舵€?          this.setData({
             showActions: false
           });
         })
         .catch(err => {
-          console.error('回关失败:', err);
+          console.error('鍥炲叧澶辫触:', err);
           wx.showToast({
-            title: '回关失败，请重试',
+            title: '鍥炲叧澶辫触锛岃閲嶈瘯',
             icon: 'none'
           });
         });
@@ -295,19 +282,19 @@ Page({
   },
 
   /**
-   * 忽略关注请求
+   * 蹇界暐鍏虫敞璇锋眰
    */
   ignoreFollow: function () {
     wx.showModal({
-      title: '确认忽略',
-      content: '确定要忽略这个关注请求吗？',
+      title: '纭蹇界暐',
+      content: '纭畾瑕佸拷鐣ヨ繖涓叧娉ㄨ姹傚悧锛?,
       success: (res) => {
         if (res.confirm) {
           this.setData({
             showActions: false
           });
           wx.showToast({
-            title: '已忽略',
+            title: '宸插拷鐣?,
             icon: 'success'
           });
         }
@@ -316,7 +303,7 @@ Page({
   },
 
   /**
-   * 回复评论
+   * 鍥炲璇勮
    */
   replyComment: function () {
     if (this.data.notification.post_id && this.data.notification.comment_id) {
@@ -327,8 +314,7 @@ Page({
   },
 
   /**
-   * 跳转到相关操作页面
-   */
+   * 璺宠浆鍒扮浉鍏虫搷浣滈〉闈?   */
   goToAction: function () {
     if (this.data.notification.action && this.data.notification.action.link) {
       wx.navigateTo({
@@ -338,7 +324,7 @@ Page({
   },
 
   /**
-   * 点击相关内容
+   * 鐐瑰嚮鐩稿叧鍐呭
    */
   onRelatedItemClick: function (e) {
     const { id, type } = e.currentTarget.dataset;
@@ -365,8 +351,7 @@ Page({
   },
 
   /**
-   * 返回上一页
-   */
+   * 杩斿洖涓婁竴椤?   */
   onBackPress: function () {
     wx.navigateBack();
     return true;

@@ -1,64 +1,60 @@
-// 用户隐私设置页面逻辑
+﻿// 鐢ㄦ埛闅愮璁剧疆椤甸潰閫昏緫
 const app = getApp();
 const { showToast } = app.global;
 
 Page({
   /**
-   * 页面的初始数据
-   */
+   * 椤甸潰鐨勫垵濮嬫暟鎹?   */
   data: {
     privacySettings: {
-      allowComments: true, // 允许评论
-      allowFollow: true, // 允许关注
-      showActivity: true, // 显示活动
-      receiveNotifications: true, // 接收通知
-      showLocation: false, // 显示位置信息
-      shareDataWithPartners: false // 与合作伙伴共享数据
-    },
-    loading: true, // 是否正在加载
-    saving: false, // 是否正在保存
-    error: false, // 是否加载失败
-    saveSuccess: false // 保存是否成功
+      allowComments: true, // 鍏佽璇勮
+      allowFollow: true, // 鍏佽鍏虫敞
+      showActivity: true, // 鏄剧ず娲诲姩
+      receiveNotifications: true, // 鎺ユ敹閫氱煡
+      showLocation: false, // 鏄剧ず浣嶇疆淇℃伅
+      shareDataWithPartners: false // 涓庡悎浣滀紮浼村叡浜暟鎹?    },
+    loading: true, // 鏄惁姝ｅ湪鍔犺浇
+    saving: false, // 鏄惁姝ｅ湪淇濆瓨
+    error: false, // 鏄惁鍔犺浇澶辫触
+    saveSuccess: false // 淇濆瓨鏄惁鎴愬姛
   },
 
   /**
-   * 生命周期函数--监听页面加载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
    */
   onLoad: function(options) {
-    // 记录页面访问事件
+    // 璁板綍椤甸潰璁块棶浜嬩欢
     app.analyticsService.track('page_view', {
       page: 'privacy_settings'
     });
     
-    // 加载隐私设置
+    // 鍔犺浇闅愮璁剧疆
     this.loadPrivacySettings();
   },
 
   /**
-   * 加载隐私设置
+   * 鍔犺浇闅愮璁剧疆
    */
   async loadPrivacySettings() {
     try {
-      // 显示加载状态
-      this.setData({
+      // 鏄剧ず鍔犺浇鐘舵€?      this.setData({
         loading: true,
         error: false
       });
 
-      // 检查登录状态
-      if (!app.isLoggedIn()) {
+      // 妫€鏌ョ櫥褰曠姸鎬?      if (!app.isLoggedIn()) {
         this.setData({
           loading: false,
           error: true
         });
-        showToast('请先登录', 'none');
+        showToast('璇峰厛鐧诲綍', 'none');
         return;
       }
 
-      // 使用userService获取隐私设置
+      // 浣跨敤userService鑾峰彇闅愮璁剧疆
       const result = await app.services.user.getUserPrivacySettings();
       
-      // 更新隐私设置数据
+      // 鏇存柊闅愮璁剧疆鏁版嵁
       this.setData({
         privacySettings: result || this.data.privacySettings,
         loading: false,
@@ -69,16 +65,16 @@ Page({
         loading: false,
         error: true
       });
-      console.error('加载隐私设置失败:', err);
+      console.error('鍔犺浇闅愮璁剧疆澶辫触:', err);
     }
   },
 
   /**
-   * 处理请求错误
-   * @param {Object} err 错误对象
+   * 澶勭悊璇锋眰閿欒
+   * @param {Object} err 閿欒瀵硅薄
    */
   handleRequestError(err) {
-    let errorMsg = '请求失败';
+    let errorMsg = '璇锋眰澶辫触';
     
     if (err.message) {
       errorMsg = err.message;
@@ -96,23 +92,20 @@ Page({
   },
 
   /**
-   * 切换设置项
-   * @param {Object} e 事件对象
+   * 鍒囨崲璁剧疆椤?   * @param {Object} e 浜嬩欢瀵硅薄
    */
   toggleSetting(e) {
     const { setting } = e.currentTarget.dataset;
     const { privacySettings } = this.data;
     const previousValue = privacySettings[setting];
     
-    // 更新设置值
-    privacySettings[setting] = !previousValue;
+    // 鏇存柊璁剧疆鍊?    privacySettings[setting] = !previousValue;
     
     this.setData({
       privacySettings,
-      saveSuccess: false // 重置保存成功状态
-    });
+      saveSuccess: false // 閲嶇疆淇濆瓨鎴愬姛鐘舵€?    });
     
-    // 记录设置变更事件
+    // 璁板綍璁剧疆鍙樻洿浜嬩欢
     app.analyticsService.track('privacy_setting_toggled', {
       setting: setting,
       value: privacySettings[setting]
@@ -120,31 +113,29 @@ Page({
   },
 
   /**
-   * 保存隐私设置
+   * 淇濆瓨闅愮璁剧疆
    */
   async savePrivacySettings() {
     try {
-      // 显示保存状态
-      this.setData({
+      // 鏄剧ず淇濆瓨鐘舵€?      this.setData({
         saving: true,
         saveSuccess: false
       });
 
-      // 检查登录状态
-      if (!app.isLoggedIn()) {
+      // 妫€鏌ョ櫥褰曠姸鎬?      if (!app.isLoggedIn()) {
         this.setData({
           saving: false
         });
-        showToast('请先登录', 'none');
+        showToast('璇峰厛鐧诲綍', 'none');
         return;
       }
 
-      // 记录保存设置事件
+      // 璁板綍淇濆瓨璁剧疆浜嬩欢
       app.analyticsService.track('privacy_settings_saved', {
         settings: this.data.privacySettings
       });
       
-      // 使用userService保存隐私设置
+      // 浣跨敤userService淇濆瓨闅愮璁剧疆
       await app.services.user.updateUserPrivacySettings(this.data.privacySettings);
       
       this.setData({
@@ -152,21 +143,21 @@ Page({
         saveSuccess: true
       });
       
-      // 显示保存成功提示
-      showToast('设置保存成功', 'success');
+      // 鏄剧ず淇濆瓨鎴愬姛鎻愮ず
+      showToast('璁剧疆淇濆瓨鎴愬姛', 'success');
     } catch (err) {
       this.setData({
         saving: false
       });
-      showToast(err.message || '保存失败，请重试', 'none');
+      showToast(err.message || '淇濆瓨澶辫触锛岃閲嶈瘯', 'none');
     }
   },
 
   /**
-   * 重试加载
+   * 閲嶈瘯鍔犺浇
    */
   retryLoad: function() {
-    // 记录重试加载事件
+    // 璁板綍閲嶈瘯鍔犺浇浜嬩欢
     app.analyticsService.track('retry_loading', {
       page: 'privacy_settings'
     });

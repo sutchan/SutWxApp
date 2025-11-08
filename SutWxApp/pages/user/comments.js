@@ -1,61 +1,55 @@
-// 用户评论页面逻辑
+﻿// 鐢ㄦ埛璇勮椤甸潰閫昏緫
 import { showToast } from '../../utils/global';
 
 Page({
   /**
-   * 页面的初始数据
-   */
+   * 椤甸潰鐨勫垵濮嬫暟鎹?   */
   data: {
-    commentsList: [], // 评论列表
-    loading: true, // 是否正在加载
-    error: false, // 是否加载失败
-    hasMore: true, // 是否有更多数据
-    page: 1, // 当前页码
-    pageSize: 10, // 每页数据量
-    refreshing: false // 是否正在刷新
+    commentsList: [], // 璇勮鍒楄〃
+    loading: true, // 鏄惁姝ｅ湪鍔犺浇
+    error: false, // 鏄惁鍔犺浇澶辫触
+    hasMore: true, // 鏄惁鏈夋洿澶氭暟鎹?    page: 1, // 褰撳墠椤电爜
+    pageSize: 10, // 姣忛〉鏁版嵁閲?    refreshing: false // 鏄惁姝ｅ湪鍒锋柊
   },
 
   /**
-   * 生命周期函数--监听页面加载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
    */
   onLoad: function(options) {
     const app = getApp();
     
-    // 检查登录状态
-    if (!app.isLoggedIn()) {
+    // 妫€鏌ョ櫥褰曠姸鎬?    if (!app.isLoggedIn()) {
       wx.navigateTo({
         url: '/pages/user/login/login'
       });
       return;
     }
     
-    // 加载评论数据
+    // 鍔犺浇璇勮鏁版嵁
     this.loadCommentsData();
     
-    // 记录页面访问事件
+    // 璁板綍椤甸潰璁块棶浜嬩欢
     app.services.analytics.trackPageView('user_comments');
   },
 
   /**
-   * 生命周期函数--监听页面显示
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
    */
   onShow: function() {
-    // 每次显示页面时可以刷新数据，特别是从其他页面返回时
-    if (!this.data.loading && !this.data.refreshing) {
+    // 姣忔鏄剧ず椤甸潰鏃跺彲浠ュ埛鏂版暟鎹紝鐗瑰埆鏄粠鍏朵粬椤甸潰杩斿洖鏃?    if (!this.data.loading && !this.data.refreshing) {
       this.loadCommentsData(true);
     }
   },
 
   /**
-   * 加载评论数据
-   * @param {boolean} refresh 是否刷新数据（重置页码）
+   * 鍔犺浇璇勮鏁版嵁
+   * @param {boolean} refresh 鏄惁鍒锋柊鏁版嵁锛堥噸缃〉鐮侊級
    */
   loadCommentsData: async function(refresh = false) {
     const app = getApp();
     
     if (refresh) {
-      // 重置状态
-      this.setData({
+      // 閲嶇疆鐘舵€?      this.setData({
         page: 1,
         commentsList: [],
         hasMore: true
@@ -66,14 +60,13 @@ Page({
       return;
     }
 
-    // 显示加载状态
-    this.setData({
+    // 鏄剧ず鍔犺浇鐘舵€?    this.setData({
       loading: true,
       error: false
     });
 
     try {
-      // 使用commentService获取用户评论
+      // 浣跨敤commentService鑾峰彇鐢ㄦ埛璇勮
       const result = await app.services.comment.getUserComments({
         page: this.data.page,
         per_page: this.data.pageSize
@@ -91,24 +84,24 @@ Page({
         refreshing: false
       });
     } catch (error) {
-      console.error('获取用户评论失败:', error);
+      console.error('鑾峰彇鐢ㄦ埛璇勮澶辫触:', error);
       this.setData({
         loading: false,
         error: true,
         refreshing: false
       });
-      showToast(error.message || '获取评论失败', 'none');
+      showToast(error.message || '鑾峰彇璇勮澶辫触', 'none');
     } finally {
       wx.stopPullDownRefresh();
     }
   },
 
   /**
-   * 处理请求错误
-   * @param {Object} error 错误对象
+   * 澶勭悊璇锋眰閿欒
+   * @param {Object} error 閿欒瀵硅薄
    */
   handleRequestError: function(error) {
-    const errorMsg = error.message || '获取评论数据失败';
+    const errorMsg = error.message || '鑾峰彇璇勮鏁版嵁澶辫触';
     
     showToast(errorMsg, 'none');
     
@@ -120,14 +113,14 @@ Page({
   },
 
   /**
-   * 跳转到文章详情页
-   * @param {Object} e 事件对象
+   * 璺宠浆鍒版枃绔犺鎯呴〉
+   * @param {Object} e 浜嬩欢瀵硅薄
    */
   navigateToArticleDetail: function(e) {
     const { articleId } = e.currentTarget.dataset;
     const app = getApp();
     
-    // 记录跳转事件
+    // 璁板綍璺宠浆浜嬩欢
     app.services.analytics.trackEvent('user_comment_article_click', {
       article_id: articleId
     });
@@ -138,37 +131,37 @@ Page({
   },
 
   /**
-   * 删除评论
-   * @param {Object} e 事件对象
+   * 鍒犻櫎璇勮
+   * @param {Object} e 浜嬩欢瀵硅薄
    */
   deleteComment: async function(e) {
     const { commentId, index } = e.currentTarget.dataset;
     const app = getApp();
     
     wx.showModal({
-      title: '确认删除',
-      content: '确定要删除这条评论吗？',
+      title: '纭鍒犻櫎',
+      content: '纭畾瑕佸垹闄よ繖鏉¤瘎璁哄悧锛?,
       success: async (res) => {
         if (res.confirm) {
           try {
-            // 使用commentService删除评论
+            // 浣跨敤commentService鍒犻櫎璇勮
             await app.services.comment.deleteComment(commentId);
             
-            // 从列表中移除评论
+            // 浠庡垪琛ㄤ腑绉婚櫎璇勮
             const updatedList = this.data.commentsList.filter((item, i) => i !== index);
             this.setData({
               commentsList: updatedList
             });
             
-            showToast('删除成功', 'success');
+            showToast('鍒犻櫎鎴愬姛', 'success');
             
-            // 记录删除评论事件
+            // 璁板綍鍒犻櫎璇勮浜嬩欢
             app.services.analytics.trackEvent('user_comment_delete', {
               comment_id: commentId
             });
           } catch (error) {
-            console.error('删除评论失败:', error);
-            showToast(error.message || '删除失败', 'none');
+            console.error('鍒犻櫎璇勮澶辫触:', error);
+            showToast(error.message || '鍒犻櫎澶辫触', 'none');
           }
         }
       }
@@ -176,7 +169,7 @@ Page({
   }
 
   /**
-   * 加载更多数据
+   * 鍔犺浇鏇村鏁版嵁
    */
   loadMore: function() {
     if (!this.data.loading && this.data.hasMore && !this.data.error) {
@@ -185,7 +178,7 @@ Page({
   },
 
   /**
-   * 下拉刷新
+   * 涓嬫媺鍒锋柊
    */
   onPullDownRefresh: function() {
     this.setData({
@@ -195,14 +188,14 @@ Page({
   },
 
   /**
-   * 上拉触底
+   * 涓婃媺瑙﹀簳
    */
   onReachBottom: function() {
     this.loadMore();
   },
 
   /**
-   * 重试加载
+   * 閲嶈瘯鍔犺浇
    */
   retryLoad: function() {
     this.loadCommentsData(true);

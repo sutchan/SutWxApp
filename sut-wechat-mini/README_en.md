@@ -1,4 +1,4 @@
-# SUT WeChat Mini Program Plugin
+﻿# SUT WeChat Mini Program Plugin
 
 [![GitHub release](https://img.shields.io/github/release/sutchan/SutWxApp.svg)](https://github.com/sutchan/SutWxApp/releases)
 [![License](https://img.shields.io/github/license/sutchan/SutWxApp.svg)](https://github.com/sutchan/SutWxApp/blob/master/LICENSE)
@@ -15,7 +15,7 @@ The SUT WeChat Mini Program Plugin is a plugin that provides WeChat Mini Program
 - **E-commerce Functions**: Integration with WooCommerce, supporting product display, shopping cart, order management, etc.
 - **WeChat Payment**: Integration with WeChat Payment, supporting in-Mini Program payments
 - **Message Push**: Support multiple message push methods including template messages, subscription messages, customer service messages, etc.
-- **Points System**: Built-in points system, supporting签到, commenting, sharing and other behaviors to earn points
+- **Points System**: Built-in points system, supporting绛惧埌, commenting, sharing and other behaviors to earn points
 - **Cache Management**: Built-in cache system to improve Mini Program access speed
 - **Data Statistics**: Provide user growth, sales and other data statistics functions
 - **Multi-language Support**: Support Chinese and other languages

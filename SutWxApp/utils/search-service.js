@@ -1,28 +1,26 @@
-// search-service.js - 搜索相关服务模块
-// 处理文章搜索、用户搜索等功能
+﻿// search-service.js - 鎼滅储鐩稿叧鏈嶅姟妯″潡
+// 澶勭悊鏂囩珷鎼滅储銆佺敤鎴锋悳绱㈢瓑鍔熻兘
 
 import api from './api';
 import { getStorage, setStorage } from './global';
 
-// 搜索历史配置
+// 鎼滅储鍘嗗彶閰嶇疆
 const SEARCH_HISTORY_MAX_SIZE = 10;
 const SEARCH_HISTORY_KEY = 'search_history';
 
 /**
- * 搜索文章
- * @param {string} keyword - 搜索关键词
- * @param {Object} params - 搜索参数
- * @param {number} params.page - 页码，默认1
- * @param {number} params.per_page - 每页数量，默认10
- * @param {string} params.orderby - 排序字段，默认'relevance'
- * @param {string} params.order - 排序方向，默认'desc'
- * @param {string} params.category - 分类过滤
- * @param {number} params.year - 年份过滤
- * @returns {Promise<Object>} - 包含文章列表和总数的对象
- */
+ * 鎼滅储鏂囩珷
+ * @param {string} keyword - 鎼滅储鍏抽敭璇? * @param {Object} params - 鎼滅储鍙傛暟
+ * @param {number} params.page - 椤电爜锛岄粯璁?
+ * @param {number} params.per_page - 姣忛〉鏁伴噺锛岄粯璁?0
+ * @param {string} params.orderby - 鎺掑簭瀛楁锛岄粯璁?relevance'
+ * @param {string} params.order - 鎺掑簭鏂瑰悜锛岄粯璁?desc'
+ * @param {string} params.category - 鍒嗙被杩囨护
+ * @param {number} params.year - 骞翠唤杩囨护
+ * @returns {Promise<Object>} - 鍖呭惈鏂囩珷鍒楄〃鍜屾€绘暟鐨勫璞? */
 export const searchArticles = async (keyword, params = {}) => {
   try {
-    // 构建查询参数
+    // 鏋勫缓鏌ヨ鍙傛暟
     const queryParams = {
       s: keyword,
       page: params.page || 1,
@@ -31,8 +29,7 @@ export const searchArticles = async (keyword, params = {}) => {
       order: params.order || 'desc'
     };
     
-    // 添加可选过滤参数
-    if (params.category) {
+    // 娣诲姞鍙€夎繃婊ゅ弬鏁?    if (params.category) {
       queryParams.category = params.category;
     }
     
@@ -40,62 +37,55 @@ export const searchArticles = async (keyword, params = {}) => {
       queryParams.year = params.year;
     }
     
-    // 调用API
+    // 璋冪敤API
     const result = await api.get('/search/posts', queryParams);
     
-    // 如果搜索成功且有关键词，保存搜索历史
+    // 濡傛灉鎼滅储鎴愬姛涓旀湁鍏抽敭璇嶏紝淇濆瓨鎼滅储鍘嗗彶
     if (keyword && keyword.trim()) {
       saveSearchHistory(keyword.trim());
     }
     
     return result;
   } catch (error) {
-    console.error('搜索文章失败:', error);
+    console.error('鎼滅储鏂囩珷澶辫触:', error);
     throw error;
   }
 };
 
 /**
- * 搜索用户
- * @param {string} keyword - 搜索关键词
- * @param {Object} params - 搜索参数
- * @param {number} params.page - 页码，默认1
- * @param {number} params.per_page - 每页数量，默认10
- * @returns {Promise<Object>} - 包含用户列表和总数的对象
- */
+ * 鎼滅储鐢ㄦ埛
+ * @param {string} keyword - 鎼滅储鍏抽敭璇? * @param {Object} params - 鎼滅储鍙傛暟
+ * @param {number} params.page - 椤电爜锛岄粯璁?
+ * @param {number} params.per_page - 姣忛〉鏁伴噺锛岄粯璁?0
+ * @returns {Promise<Object>} - 鍖呭惈鐢ㄦ埛鍒楄〃鍜屾€绘暟鐨勫璞? */
 export const searchUsers = async (keyword, params = {}) => {
   try {
-    // 构建查询参数
+    // 鏋勫缓鏌ヨ鍙傛暟
     const queryParams = {
       s: keyword,
       page: params.page || 1,
       per_page: params.per_page || 10
     };
     
-    // 调用API
+    // 璋冪敤API
     return await api.get('/search/users', queryParams);
   } catch (error) {
-    console.error('搜索用户失败:', error);
+    console.error('鎼滅储鐢ㄦ埛澶辫触:', error);
     throw error;
   }
 };
 
 /**
- * 搜索商品（如果有电商功能）
- * @param {string} keyword - 搜索关键词
- * @param {Object} params - 搜索参数
- * @param {number} params.page - 页码，默认1
- * @param {number} params.per_page - 每页数量，默认10
- * @param {string} params.orderby - 排序字段，默认'relevance'
- * @param {string} params.order - 排序方向，默认'desc'
- * @param {string} params.category - 商品分类过滤
- * @param {string} params.min_price - 最低价格过滤
- * @param {string} params.max_price - 最高价格过滤
- * @returns {Promise<Object>} - 包含商品列表和总数的对象
- */
+ * 鎼滅储鍟嗗搧锛堝鏋滄湁鐢靛晢鍔熻兘锛? * @param {string} keyword - 鎼滅储鍏抽敭璇? * @param {Object} params - 鎼滅储鍙傛暟
+ * @param {number} params.page - 椤电爜锛岄粯璁?
+ * @param {number} params.per_page - 姣忛〉鏁伴噺锛岄粯璁?0
+ * @param {string} params.orderby - 鎺掑簭瀛楁锛岄粯璁?relevance'
+ * @param {string} params.order - 鎺掑簭鏂瑰悜锛岄粯璁?desc'
+ * @param {string} params.category - 鍟嗗搧鍒嗙被杩囨护
+ * @param {string} params.min_price - 鏈€浣庝环鏍艰繃婊? * @param {string} params.max_price - 鏈€楂樹环鏍艰繃婊? * @returns {Promise<Object>} - 鍖呭惈鍟嗗搧鍒楄〃鍜屾€绘暟鐨勫璞? */
 export const searchProducts = async (keyword, params = {}) => {
   try {
-    // 构建查询参数
+    // 鏋勫缓鏌ヨ鍙傛暟
     const queryParams = {
       s: keyword,
       page: params.page || 1,
@@ -104,8 +94,7 @@ export const searchProducts = async (keyword, params = {}) => {
       order: params.order || 'desc'
     };
     
-    // 添加可选过滤参数
-    if (params.category) {
+    // 娣诲姞鍙€夎繃婊ゅ弬鏁?    if (params.category) {
       queryParams.category = params.category;
     }
     
@@ -117,26 +106,26 @@ export const searchProducts = async (keyword, params = {}) => {
       queryParams.max_price = params.max_price;
     }
     
-    // 调用API
+    // 璋冪敤API
     const result = await api.get('/search/products', queryParams);
     
-    // 如果搜索成功且有关键词，保存搜索历史
+    // 濡傛灉鎼滅储鎴愬姛涓旀湁鍏抽敭璇嶏紝淇濆瓨鎼滅储鍘嗗彶
     if (keyword && keyword.trim()) {
       saveSearchHistory(keyword.trim());
     }
     
     return result;
   } catch (error) {
-    console.error('搜索商品失败:', error);
+    console.error('鎼滅储鍟嗗搧澶辫触:', error);
     throw error;
   }
 };
 
 /**
- * 获取搜索建议
- * @param {string} keyword - 关键词前缀
- * @param {number} limit - 返回数量限制，默认5
- * @returns {Promise<Array>} - 返回搜索建议列表
+ * 鑾峰彇鎼滅储寤鸿
+ * @param {string} keyword - 鍏抽敭璇嶅墠缂€
+ * @param {number} limit - 杩斿洖鏁伴噺闄愬埗锛岄粯璁?
+ * @returns {Promise<Array>} - 杩斿洖鎼滅储寤鸿鍒楄〃
  */
 export const getSearchSuggestions = async (keyword, limit = 5) => {
   try {
@@ -144,162 +133,148 @@ export const getSearchSuggestions = async (keyword, limit = 5) => {
       return [];
     }
     
-    // 调用API
+    // 璋冪敤API
     return await api.get('/search/suggestions', {
       s: keyword.trim(),
       limit
     });
   } catch (error) {
-    console.error('获取搜索建议失败:', error);
-    // 失败时返回空数组，不影响用户体验
+    console.error('鑾峰彇鎼滅储寤鸿澶辫触:', error);
+    // 澶辫触鏃惰繑鍥炵┖鏁扮粍锛屼笉褰卞搷鐢ㄦ埛浣撻獙
     return [];
   }
 };
 
 /**
- * 保存搜索历史
- * @param {string} keyword - 搜索关键词
- */
+ * 淇濆瓨鎼滅储鍘嗗彶
+ * @param {string} keyword - 鎼滅储鍏抽敭璇? */
 export const saveSearchHistory = (keyword) => {
   try {
-    // 获取现有历史记录
+    // 鑾峰彇鐜版湁鍘嗗彶璁板綍
     let history = getStorage(SEARCH_HISTORY_KEY) || [];
     
-    // 移除重复项
-    history = history.filter(item => item !== keyword);
+    // 绉婚櫎閲嶅椤?    history = history.filter(item => item !== keyword);
     
-    // 添加到历史记录开头
-    history.unshift(keyword);
+    // 娣诲姞鍒板巻鍙茶褰曞紑澶?    history.unshift(keyword);
     
-    // 限制历史记录数量
+    // 闄愬埗鍘嗗彶璁板綍鏁伴噺
     if (history.length > SEARCH_HISTORY_MAX_SIZE) {
       history = history.slice(0, SEARCH_HISTORY_MAX_SIZE);
     }
     
-    // 保存到本地存储
-    setStorage(SEARCH_HISTORY_KEY, history);
+    // 淇濆瓨鍒版湰鍦板瓨鍌?    setStorage(SEARCH_HISTORY_KEY, history);
   } catch (error) {
-    console.error('保存搜索历史失败:', error);
+    console.error('淇濆瓨鎼滅储鍘嗗彶澶辫触:', error);
   }
 };
 
 /**
- * 获取搜索历史
- * @returns {Array} - 搜索历史记录
+ * 鑾峰彇鎼滅储鍘嗗彶
+ * @returns {Array} - 鎼滅储鍘嗗彶璁板綍
  */
 export const getSearchHistory = () => {
   try {
     return getStorage(SEARCH_HISTORY_KEY) || [];
   } catch (error) {
-    console.error('获取搜索历史失败:', error);
+    console.error('鑾峰彇鎼滅储鍘嗗彶澶辫触:', error);
     return [];
   }
 };
 
 /**
- * 清空搜索历史
+ * 娓呯┖鎼滅储鍘嗗彶
  */
 export const clearSearchHistory = () => {
   try {
     setStorage(SEARCH_HISTORY_KEY, []);
   } catch (error) {
-    console.error('清空搜索历史失败:', error);
+    console.error('娓呯┖鎼滅储鍘嗗彶澶辫触:', error);
   }
 };
 
 /**
- * 删除单条搜索历史
- * @param {string} keyword - 要删除的关键词
- */
+ * 鍒犻櫎鍗曟潯鎼滅储鍘嗗彶
+ * @param {string} keyword - 瑕佸垹闄ょ殑鍏抽敭璇? */
 export const deleteSearchHistoryItem = (keyword) => {
   try {
-    // 获取现有历史记录
+    // 鑾峰彇鐜版湁鍘嗗彶璁板綍
     let history = getStorage(SEARCH_HISTORY_KEY) || [];
     
-    // 过滤掉指定关键词
+    // 杩囨护鎺夋寚瀹氬叧閿瘝
     history = history.filter(item => item !== keyword);
     
-    // 保存到本地存储
-    setStorage(SEARCH_HISTORY_KEY, history);
+    // 淇濆瓨鍒版湰鍦板瓨鍌?    setStorage(SEARCH_HISTORY_KEY, history);
   } catch (error) {
-    console.error('删除搜索历史项失败:', error);
+    console.error('鍒犻櫎鎼滅储鍘嗗彶椤瑰け璐?', error);
   }
 };
 
 /**
- * 获取热门搜索词
- * @param {number} limit - 获取数量，默认10
- * @returns {Promise<Array>} - 热门搜索词列表
- */
+ * 鑾峰彇鐑棬鎼滅储璇? * @param {number} limit - 鑾峰彇鏁伴噺锛岄粯璁?0
+ * @returns {Promise<Array>} - 鐑棬鎼滅储璇嶅垪琛? */
 export const getHotSearchTerms = async (limit = 10) => {
   try {
-    // 尝试从服务器获取热门搜索词
-    return await api.get('/search/hot', { limit });
+    // 灏濊瘯浠庢湇鍔″櫒鑾峰彇鐑棬鎼滅储璇?    return await api.get('/search/hot', { limit });
   } catch (error) {
-    console.error('获取热门搜索词失败:', error);
-    // 返回默认热门搜索词（用于离线状态或API调用失败时）
+    console.error('鑾峰彇鐑棬鎼滅储璇嶅け璐?', error);
+    // 杩斿洖榛樿鐑棬鎼滅储璇嶏紙鐢ㄤ簬绂荤嚎鐘舵€佹垨API璋冪敤澶辫触鏃讹級
     return [
-      '最新资讯',
-      '热门文章',
-      '技术教程',
-      '开发经验',
-      '前端开发',
-      '后端开发',
-      '小程序开发',
-      'WordPress教程',
-      '技术分享',
-      '实用工具'
+      '鏈€鏂拌祫璁?,
+      '鐑棬鏂囩珷',
+      '鎶€鏈暀绋?,
+      '寮€鍙戠粡楠?,
+      '鍓嶇寮€鍙?,
+      '鍚庣寮€鍙?,
+      '灏忕▼搴忓紑鍙?,
+      'WordPress鏁欑▼',
+      '鎶€鏈垎浜?,
+      '瀹炵敤宸ュ叿'
     ].slice(0, limit);
   }
 };
 
 /**
- * 综合搜索（文章、用户、商品等）
- * @param {string} keyword - 搜索关键词
- * @param {Object} params - 搜索参数
- * @param {Array} params.types - 搜索类型列表，如['posts', 'users', 'products']
- * @param {number} params.limit - 每种类型返回数量限制
- * @returns {Promise<Object>} - 包含各类型搜索结果的对象
+ * 缁煎悎鎼滅储锛堟枃绔犮€佺敤鎴枫€佸晢鍝佺瓑锛? * @param {string} keyword - 鎼滅储鍏抽敭璇? * @param {Object} params - 鎼滅储鍙傛暟
+ * @param {Array} params.types - 鎼滅储绫诲瀷鍒楄〃锛屽['posts', 'users', 'products']
+ * @param {number} params.limit - 姣忕绫诲瀷杩斿洖鏁伴噺闄愬埗
+ * @returns {Promise<Object>} - 鍖呭惈鍚勭被鍨嬫悳绱㈢粨鏋滅殑瀵硅薄
  */
 export const searchAll = async (keyword, params = {}) => {
   try {
-    // 设置默认值
-    const searchTypes = params.types || ['posts'];
+    // 璁剧疆榛樿鍊?    const searchTypes = params.types || ['posts'];
     const limit = params.limit || 5;
     
-    // 构建查询参数
+    // 鏋勫缓鏌ヨ鍙傛暟
     const queryParams = {
       s: keyword,
       types: searchTypes.join(','),
       limit
     };
     
-    // 调用API
+    // 璋冪敤API
     const result = await api.get('/search/all', queryParams);
     
-    // 如果搜索成功且有关键词，保存搜索历史
+    // 濡傛灉鎼滅储鎴愬姛涓旀湁鍏抽敭璇嶏紝淇濆瓨鎼滅储鍘嗗彶
     if (keyword && keyword.trim()) {
       saveSearchHistory(keyword.trim());
     }
     
     return result;
   } catch (error) {
-    console.error('综合搜索失败:', error);
-    // 如果API调用失败，尝试分别搜索各类型（备用方案）
+    console.error('缁煎悎鎼滅储澶辫触:', error);
+    // 濡傛灉API璋冪敤澶辫触锛屽皾璇曞垎鍒悳绱㈠悇绫诲瀷锛堝鐢ㄦ柟妗堬級
     const fallbackResults = {};
     const searchTypes = params.types || ['posts'];
     
-    // 仅在离线情况下尝试备用方案
-    if (error && error.name === 'NetworkError') {
-      // 这里可以添加离线搜索逻辑，但通常需要本地存储的索引数据
+    // 浠呭湪绂荤嚎鎯呭喌涓嬪皾璇曞鐢ㄦ柟妗?    if (error && error.name === 'NetworkError') {
+      // 杩欓噷鍙互娣诲姞绂荤嚎鎼滅储閫昏緫锛屼絾閫氬父闇€瑕佹湰鍦板瓨鍌ㄧ殑绱㈠紩鏁版嵁
     }
     
     throw error;
   }
 };
 
-// 导出所有方法
-export default {
+// 瀵煎嚭鎵€鏈夋柟娉?export default {
   searchArticles,
   searchUsers,
   searchProducts,

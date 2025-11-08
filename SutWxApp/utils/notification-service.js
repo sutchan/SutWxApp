@@ -1,46 +1,42 @@
-// notification-service.js - 消息通知相关服务模块
-// 处理系统消息、评论通知等功能
-
-// 是否使用模拟数据（开发阶段使用）
+﻿// notification-service.js - 娑堟伅閫氱煡鐩稿叧鏈嶅姟妯″潡
+// 澶勭悊绯荤粺娑堟伅銆佽瘎璁洪€氱煡绛夊姛鑳?
+// 鏄惁浣跨敤妯℃嫙鏁版嵁锛堝紑鍙戦樁娈典娇鐢級
 const USE_MOCK_DATA = true;
 
 import api from './api';
 import { getStorage, setStorage } from './global';
 
-// 如果使用模拟数据，则导入模拟数据服务
+// 濡傛灉浣跨敤妯℃嫙鏁版嵁锛屽垯瀵煎叆妯℃嫙鏁版嵁鏈嶅姟
 let mockService;
 if (USE_MOCK_DATA) {
   try {
     mockService = require('./notification-mock');
   } catch (e) {
-    console.warn('无法导入模拟通知服务:', e);
+    console.warn('鏃犳硶瀵煎叆妯℃嫙閫氱煡鏈嶅姟:', e);
   }
 }
 
-// 缓存配置
+// 缂撳瓨閰嶇疆
 const CACHE_DURATION = {
-  NOTIFICATIONS: 1 * 60 * 1000 // 1分钟
+  NOTIFICATIONS: 1 * 60 * 1000 // 1鍒嗛挓
 };
 
 /**
- * 获取通知列表
- * @param {Object} params - 查询参数
- * @param {number} params.page - 页码，默认1
- * @param {number} params.per_page - 每页数量，默认10
- * @param {string} params.type - 通知类型筛选
- * @param {boolean} params.unread_only - 是否只获取未读通知，默认false
- * @returns {Promise<Object>} - 包含通知列表和总数的对象
- */
+ * 鑾峰彇閫氱煡鍒楄〃
+ * @param {Object} params - 鏌ヨ鍙傛暟
+ * @param {number} params.page - 椤电爜锛岄粯璁?
+ * @param {number} params.per_page - 姣忛〉鏁伴噺锛岄粯璁?0
+ * @param {string} params.type - 閫氱煡绫诲瀷绛涢€? * @param {boolean} params.unread_only - 鏄惁鍙幏鍙栨湭璇婚€氱煡锛岄粯璁alse
+ * @returns {Promise<Object>} - 鍖呭惈閫氱煡鍒楄〃鍜屾€绘暟鐨勫璞? */
 export const getNotifications = async (params = {}) => {
   try {
-    // 构建查询参数
+    // 鏋勫缓鏌ヨ鍙傛暟
     const queryParams = {
       page: params.page || 1,
       per_page: params.per_page || 10
     };
     
-    // 添加可选筛选参数
-    if (params.type) {
+    // 娣诲姞鍙€夌瓫閫夊弬鏁?    if (params.type) {
       queryParams.type = params.type;
     }
     
@@ -48,10 +44,10 @@ export const getNotifications = async (params = {}) => {
       queryParams.unread_only = true;
     }
     
-    // 生成缓存键（仅第一页使用缓存）
+    // 鐢熸垚缂撳瓨閿紙浠呯涓€椤典娇鐢ㄧ紦瀛橈級
     const cacheKey = `cache_notifications_${JSON.stringify(queryParams)}`;
     
-    // 尝试从缓存获取数据（仅第一页且不是只看未读时使用缓存）
+    // 灏濊瘯浠庣紦瀛樿幏鍙栨暟鎹紙浠呯涓€椤典笖涓嶆槸鍙湅鏈鏃朵娇鐢ㄧ紦瀛橈級
     if (queryParams.page === 1 && !params.unread_only) {
       const cachedData = getStorage(cacheKey);
       if (cachedData && (Date.now() - cachedData.timestamp < CACHE_DURATION.NOTIFICATIONS)) {
@@ -59,11 +55,10 @@ export const getNotifications = async (params = {}) => {
       }
     }
     
-    // 调用API
+    // 璋冪敤API
     const result = await api.get('/notifications', queryParams);
     
-    // 缓存第一页数据
-    if (queryParams.page === 1 && !params.unread_only) {
+    // 缂撳瓨绗竴椤垫暟鎹?    if (queryParams.page === 1 && !params.unread_only) {
       setStorage(cacheKey, {
         data: result,
         timestamp: Date.now()
@@ -72,10 +67,10 @@ export const getNotifications = async (params = {}) => {
     
     return result;
   } catch (error) {
-    console.error('获取通知列表失败:', error);
-    // 如果启用了模拟数据且有可用的模拟服务，则使用模拟数据
+    console.error('鑾峰彇閫氱煡鍒楄〃澶辫触:', error);
+    // 濡傛灉鍚敤浜嗘ā鎷熸暟鎹笖鏈夊彲鐢ㄧ殑妯℃嫙鏈嶅姟锛屽垯浣跨敤妯℃嫙鏁版嵁
     if (USE_MOCK_DATA && mockService && mockService.getNotifications) {
-      console.log('使用模拟数据获取通知列表');
+      console.log('浣跨敤妯℃嫙鏁版嵁鑾峰彇閫氱煡鍒楄〃');
       return await mockService.getNotifications(params);
     }
     throw error;
@@ -83,53 +78,51 @@ export const getNotifications = async (params = {}) => {
 };
 
 /**
- * 获取未读通知数量
- * @returns {Promise<number>} - 未读通知数量
+ * 鑾峰彇鏈閫氱煡鏁伴噺
+ * @returns {Promise<number>} - 鏈閫氱煡鏁伴噺
  */
 export const getUnreadNotificationCount = async () => {
   try {
-    // 调用API
+    // 璋冪敤API
     const result = await api.get('/notifications/unread-count');
     return result.count || 0;
   } catch (error) {
-    console.error('获取未读通知数量失败:', error);
-    // 如果启用了模拟数据且有可用的模拟服务，则使用模拟数据
+    console.error('鑾峰彇鏈閫氱煡鏁伴噺澶辫触:', error);
+    // 濡傛灉鍚敤浜嗘ā鎷熸暟鎹笖鏈夊彲鐢ㄧ殑妯℃嫙鏈嶅姟锛屽垯浣跨敤妯℃嫙鏁版嵁
     if (USE_MOCK_DATA && mockService && mockService.getUnreadNotificationCount) {
-      console.log('使用模拟数据获取未读通知数量');
+      console.log('浣跨敤妯℃嫙鏁版嵁鑾峰彇鏈閫氱煡鏁伴噺');
       return await mockService.getUnreadNotificationCount();
     }
-    // 失败时返回0，不影响用户体验
+    // 澶辫触鏃惰繑鍥?锛屼笉褰卞搷鐢ㄦ埛浣撻獙
     return 0;
   }
 };
 
 /**
- * 标记通知为已读
- * @param {number|string} notificationId - 通知ID
- * @returns {Promise<Object>} - 返回更新后的通知对象
+ * 鏍囪閫氱煡涓哄凡璇? * @param {number|string} notificationId - 閫氱煡ID
+ * @returns {Promise<Object>} - 杩斿洖鏇存柊鍚庣殑閫氱煡瀵硅薄
  */
 export const markAsRead = async (notificationId) => {
   try {
-    // 调用API
+    // 璋冪敤API
     const result = await api.put(`/notifications/${notificationId}/read`);
     
-    // 清除缓存，确保下次获取最新数据
-    clearNotificationCache();
+    // 娓呴櫎缂撳瓨锛岀‘淇濅笅娆¤幏鍙栨渶鏂版暟鎹?    clearNotificationCache();
     
-    // 确保结果中包含正确的is_read字段
+    // 纭繚缁撴灉涓寘鍚纭殑is_read瀛楁
     if (result && typeof result === 'object') {
       return { ...result, is_read: true };
     }
     
     return result;
   } catch (error) {
-    console.error('标记通知已读失败:', error);
-    // 如果启用了模拟数据且有可用的模拟服务，则使用模拟数据
+    console.error('鏍囪閫氱煡宸茶澶辫触:', error);
+    // 濡傛灉鍚敤浜嗘ā鎷熸暟鎹笖鏈夊彲鐢ㄧ殑妯℃嫙鏈嶅姟锛屽垯浣跨敤妯℃嫙鏁版嵁
     if (USE_MOCK_DATA && mockService && mockService.markAsRead) {
-      console.log('使用模拟数据标记通知已读');
+      console.log('浣跨敤妯℃嫙鏁版嵁鏍囪閫氱煡宸茶');
       clearNotificationCache();
       const mockResult = await mockService.markAsRead(notificationId);
-      // 确保模拟结果也包含正确的is_read字段
+      // 纭繚妯℃嫙缁撴灉涔熷寘鍚纭殑is_read瀛楁
       if (mockResult && typeof mockResult === 'object') {
         return { ...mockResult, is_read: true };
       }
@@ -140,23 +133,22 @@ export const markAsRead = async (notificationId) => {
 };
 
 /**
- * 标记所有通知为已读
- * @returns {Promise<boolean>} - 是否标记成功
+ * 鏍囪鎵€鏈夐€氱煡涓哄凡璇? * @returns {Promise<boolean>} - 鏄惁鏍囪鎴愬姛
  */
 export const markAllAsRead = async () => {
   try {
-    // 调用API
+    // 璋冪敤API
     await api.put('/notifications/read-all');
     
-    // 清除缓存
+    // 娓呴櫎缂撳瓨
     clearNotificationCache();
     
     return true;
   } catch (error) {
-    console.error('标记所有通知已读失败:', error);
-    // 如果启用了模拟数据且有可用的模拟服务，则使用模拟数据
+    console.error('鏍囪鎵€鏈夐€氱煡宸茶澶辫触:', error);
+    // 濡傛灉鍚敤浜嗘ā鎷熸暟鎹笖鏈夊彲鐢ㄧ殑妯℃嫙鏈嶅姟锛屽垯浣跨敤妯℃嫙鏁版嵁
     if (USE_MOCK_DATA && mockService && mockService.markAllAsRead) {
-      console.log('使用模拟数据标记所有通知已读');
+      console.log('浣跨敤妯℃嫙鏁版嵁鏍囪鎵€鏈夐€氱煡宸茶');
       clearNotificationCache();
       await mockService.markAllAsRead();
       return true;
@@ -166,81 +158,78 @@ export const markAllAsRead = async () => {
 };
 
 /**
- * 删除通知
- * @param {number|string} notificationId - 通知ID
- * @returns {Promise<boolean>} - 是否删除成功
+ * 鍒犻櫎閫氱煡
+ * @param {number|string} notificationId - 閫氱煡ID
+ * @returns {Promise<boolean>} - 鏄惁鍒犻櫎鎴愬姛
  */
 export const deleteNotification = async (notificationId) => {
   try {
-    // 调用API
+    // 璋冪敤API
     await api.delete(`/notifications/${notificationId}`);
     
-    // 清除缓存
+    // 娓呴櫎缂撳瓨
     clearNotificationCache();
     
     return true;
   } catch (error) {
-    console.error('删除通知失败:', error);
+    console.error('鍒犻櫎閫氱煡澶辫触:', error);
     throw error;
   }
 };
 
 /**
- * 删除所有通知
- * @returns {Promise<boolean>} - 是否删除成功
+ * 鍒犻櫎鎵€鏈夐€氱煡
+ * @returns {Promise<boolean>} - 鏄惁鍒犻櫎鎴愬姛
  */
 export const deleteAllNotifications = async () => {
   try {
-    // 调用API
+    // 璋冪敤API
     await api.delete('/notifications');
     
-    // 清除缓存
+    // 娓呴櫎缂撳瓨
     clearNotificationCache();
     
     return true;
   } catch (error) {
-    console.error('删除所有通知失败:', error);
+    console.error('鍒犻櫎鎵€鏈夐€氱煡澶辫触:', error);
     throw error;
   }
 };
 
 /**
- * 获取通知详情
- * @param {number|string} notificationId - 通知ID
- * @returns {Promise<Object>} - 返回通知详情
+ * 鑾峰彇閫氱煡璇︽儏
+ * @param {number|string} notificationId - 閫氱煡ID
+ * @returns {Promise<Object>} - 杩斿洖閫氱煡璇︽儏
  */
 export const getNotificationDetail = async (notificationId) => {
   try {
-    // 尝试从缓存获取
-    const cacheKey = `notification_detail_${notificationId}`;
+    // 灏濊瘯浠庣紦瀛樿幏鍙?    const cacheKey = `notification_detail_${notificationId}`;
     const cachedData = getStorage(cacheKey);
     if (cachedData) {
-      // 异步标记为已读
-      if (!cachedData.is_read) {
+      // 寮傛鏍囪涓哄凡璇?      if (!cachedData.is_read) {
         markAsRead(notificationId).catch(err => {
-          console.error('异步标记已读失败:', err);
+          console.error('寮傛鏍囪宸茶澶辫触:', err);
         });
       }
       return cachedData;
     }
 
-    // 调用API
+    // 璋冪敤API
     const result = await api.get(`/notifications/${notificationId}`);
     
-    // 缓存通知详情
+    // 缂撳瓨閫氱煡璇︽儏
     setStorage(cacheKey, result);
     
-    // 自动标记为已读
-    if (!result.is_read) {
+    // 鑷姩鏍囪涓哄凡璇?    if (!result.is_read) {
       await markAsRead(notificationId);
     }
     
     return result;
   } catch (error) {
-    console.error('获取通知详情失败:', error);
-    // 如果启用了模拟数据且有可用的模拟服务，则使用模拟数据
+    console.error('鑾峰彇閫氱煡璇︽儏澶辫触:', error);
+    // 濡傛灉鍚敤浜嗘ā鎷熸暟鎹笖鏈夊彲鐢ㄧ殑妯℃嫙鏈嶅姟锛屽垯浣跨敤妯℃嫙鏁版嵁
     if (USE_MOCK_DATA && mockService && mockService.getNotificationDetail) {
-      console.log('使用模拟数据获取通知详情');
+      console.log('浣跨敤妯℃嫙鏁版嵁鑾峰彇閫氱煡璇︽儏');
       return await mockService.getNotificationDetail(notificationId);
     }
     throw error;
@@ -248,17 +237,17 @@ export const getNotificationDetail = async (notificationId) => {
 };
 
 /**
- * 订阅系统通知
- * @param {Object} options - 订阅选项
- * @param {boolean} options.system - 是否订阅系统通知
- * @param {boolean} options.comment - 是否订阅评论通知
- * @param {boolean} options.follow - 是否订阅关注通知
- * @param {boolean} options.like - 是否订阅点赞通知
- * @returns {Promise<Object>} - 返回更新后的订阅设置
+ * 璁㈤槄绯荤粺閫氱煡
+ * @param {Object} options - 璁㈤槄閫夐」
+ * @param {boolean} options.system - 鏄惁璁㈤槄绯荤粺閫氱煡
+ * @param {boolean} options.comment - 鏄惁璁㈤槄璇勮閫氱煡
+ * @param {boolean} options.follow - 鏄惁璁㈤槄鍏虫敞閫氱煡
+ * @param {boolean} options.like - 鏄惁璁㈤槄鐐硅禐閫氱煡
+ * @returns {Promise<Object>} - 杩斿洖鏇存柊鍚庣殑璁㈤槄璁剧疆
  */
 export const updateNotificationSettings = async (options = {}) => {
   try {
-    // 构建订阅数据
+    // 鏋勫缓璁㈤槄鏁版嵁
     const settingsData = {
       system: options.system !== undefined ? options.system : true,
       comment: options.comment !== undefined ? options.comment : true,
@@ -266,25 +255,25 @@ export const updateNotificationSettings = async (options = {}) => {
       like: options.like !== undefined ? options.like : true
     };
     
-    // 调用API
+    // 璋冪敤API
     return await api.put('/notifications/settings', settingsData);
   } catch (error) {
-    console.error('更新通知设置失败:', error);
+    console.error('鏇存柊閫氱煡璁剧疆澶辫触:', error);
     throw error;
   }
 };
 
 /**
- * 获取通知设置
- * @returns {Promise<Object>} - 返回当前通知设置
+ * 鑾峰彇閫氱煡璁剧疆
+ * @returns {Promise<Object>} - 杩斿洖褰撳墠閫氱煡璁剧疆
  */
 export const getNotificationSettings = async () => {
   try {
-    // 调用API
+    // 璋冪敤API
     return await api.get('/notifications/settings');
   } catch (error) {
-    console.error('获取通知设置失败:', error);
-    // 返回默认设置
+    console.error('鑾峰彇閫氱煡璁剧疆澶辫触:', error);
+    // 杩斿洖榛樿璁剧疆
     return {
       system: true,
       comment: true,
@@ -295,43 +284,40 @@ export const getNotificationSettings = async () => {
 };
 
 /**
- * 处理通知点击事件
- * @param {Object} notification - 通知对象
- * @returns {boolean} - 是否成功处理
+ * 澶勭悊閫氱煡鐐瑰嚮浜嬩欢
+ * @param {Object} notification - 閫氱煡瀵硅薄
+ * @returns {boolean} - 鏄惁鎴愬姛澶勭悊
  */
 export const handleNotificationClick = (notification) => {
   try {
-    // 根据通知类型跳转到相应页面
-    switch (notification.type) {
+    // 鏍规嵁閫氱煡绫诲瀷璺宠浆鍒扮浉搴旈〉闈?    switch (notification.type) {
       case 'comment':
-        // 跳转到评论所在的文章页面，并滚动到评论位置
-        wx.navigateTo({
+        // 璺宠浆鍒拌瘎璁烘墍鍦ㄧ殑鏂囩珷椤甸潰锛屽苟婊氬姩鍒拌瘎璁轰綅缃?        wx.navigateTo({
           url: `/pages/article/article?id=${notification.post_id}&comment_id=${notification.comment_id}`
         });
         break;
       
       case 'follow':
-        // 跳转到关注者的用户页面
+        // 璺宠浆鍒板叧娉ㄨ€呯殑鐢ㄦ埛椤甸潰
         wx.navigateTo({
           url: `/pages/user/profile?id=${notification.user_id}`
         });
         break;
       
       case 'system':
-        // 跳转到系统通知详情页
-        wx.navigateTo({
+        // 璺宠浆鍒扮郴缁熼€氱煡璇︽儏椤?        wx.navigateTo({
           url: `/pages/notification/detail?id=${notification.id}`
         });
         break;
       
       case 'like':
-        // 跳转到点赞所在的内容页面
+        // 璺宠浆鍒扮偣璧炴墍鍦ㄧ殑鍐呭椤甸潰
         if (notification.post_id) {
           wx.navigateTo({
             url: `/pages/article/article?id=${notification.post_id}`
           });
         } else {
-          // 默认跳转到通知列表
+          // 榛樿璺宠浆鍒伴€氱煡鍒楄〃
           wx.navigateTo({
             url: '/pages/notification/list'
           });
@@ -339,46 +325,43 @@ export const handleNotificationClick = (notification) => {
         break;
       
       default:
-        // 默认跳转到通知列表
+        // 榛樿璺宠浆鍒伴€氱煡鍒楄〃
         wx.navigateTo({
           url: '/pages/notification/list'
         });
     }
     
-    // 标记为已读
-    if (!notification.is_read) {
+    // 鏍囪涓哄凡璇?    if (!notification.is_read) {
       markAsRead(notification.id).catch(err => {
-        console.error('自动标记通知已读失败:', err);
+        console.error('鑷姩鏍囪閫氱煡宸茶澶辫触:', err);
       });
     }
     
     return true;
   } catch (error) {
-    console.error('处理通知点击失败:', error);
+    console.error('澶勭悊閫氱煡鐐瑰嚮澶辫触:', error);
     return false;
   }
 };
 
 /**
- * 清除通知相关缓存
+ * 娓呴櫎閫氱煡鐩稿叧缂撳瓨
  */
 export const clearNotificationCache = () => {
   try {
     const storage = wx.getStorageSync() || {};
     
-    // 清除所有通知相关的缓存
-    for (const key in storage) {
+    // 娓呴櫎鎵€鏈夐€氱煡鐩稿叧鐨勭紦瀛?    for (const key in storage) {
       if (key.startsWith('cache_notifications_') || key.startsWith('notification_detail_')) {
         wx.removeStorageSync(key);
       }
     }
   } catch (error) {
-    console.error('清除通知缓存失败:', error);
+    console.error('娓呴櫎閫氱煡缂撳瓨澶辫触:', error);
   }
 };
 
-// 导出所有方法
-export default {
+// 瀵煎嚭鎵€鏈夋柟娉?export default {
   getNotifications,
   getUnreadNotificationCount,
   markAsRead,

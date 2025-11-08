@@ -1,65 +1,61 @@
-// 订单详情页面JS
+﻿// 璁㈠崟璇︽儏椤甸潰JS
 Page({
   /**
-   * 页面的初始数据
-   */
+   * 椤甸潰鐨勫垵濮嬫暟鎹?   */
   data: {
-    // 订单详情数据
+    // 璁㈠崟璇︽儏鏁版嵁
     orderDetail: null,
-    // 加载状态
-    loading: false,
-    // 错误信息
+    // 鍔犺浇鐘舵€?    loading: false,
+    // 閿欒淇℃伅
     error: false,
     errorMsg: '',
-    // 地址信息
+    // 鍦板潃淇℃伅
     address: null
   },
 
   /**
-   * 生命周期函数--监听页面加载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
    */
   onLoad: function(options) {
-    // 获取订单ID
+    // 鑾峰彇璁㈠崟ID
     this.orderId = options.id || '';
-    // 加载订单详情
+    // 鍔犺浇璁㈠崟璇︽儏
     this.loadOrderDetail();
   },
 
   /**
-   * 下拉刷新
+   * 涓嬫媺鍒锋柊
    */
   onPullDownRefresh: function() {
-    // 重新加载数据
+    // 閲嶆柊鍔犺浇鏁版嵁
     this.loadOrderDetail();
   },
 
   /**
-   * 加载订单详情
+   * 鍔犺浇璁㈠崟璇︽儏
    */
   loadOrderDetail: function() {
-    // 检查登录状态
-    if (!wx.getApp().isLoggedIn()) {
+    // 妫€鏌ョ櫥褰曠姸鎬?    if (!wx.getApp().isLoggedIn()) {
       this.setData({
         loading: false,
         error: true,
-        errorMsg: '请先登录',
+        errorMsg: '璇峰厛鐧诲綍',
         orderDetail: null
       });
       return;
     }
 
-    // 设置加载状态
-    this.setData({
+    // 璁剧疆鍔犺浇鐘舵€?    this.setData({
       loading: true,
       error: false
     });
 
-    // 模拟API请求
+    // 妯℃嫙API璇锋眰
     setTimeout(() => {
       try {
-        // 模拟订单详情数据
+        // 妯℃嫙璁㈠崟璇︽儏鏁版嵁
         const orderDetail = this.generateMockOrderDetail();
-        // 模拟地址数据
+        // 妯℃嫙鍦板潃鏁版嵁
         const address = this.generateMockAddress();
         
         this.setData({
@@ -67,15 +63,15 @@ Page({
           address: address
         });
 
-        // 结束下拉刷新
+        // 缁撴潫涓嬫媺鍒锋柊
         wx.stopPullDownRefresh();
       } catch (err) {
         this.setData({
           error: true,
-          errorMsg: '加载失败，请重试',
+          errorMsg: '鍔犺浇澶辫触锛岃閲嶈瘯',
           orderDetail: null
         });
-        console.error('加载订单详情失败:', err);
+        console.error('鍔犺浇璁㈠崟璇︽儏澶辫触:', err);
       } finally {
         this.setData({
           loading: false
@@ -85,8 +81,7 @@ Page({
   },
 
   /**
-   * 跳转到商品详情
-   */
+   * 璺宠浆鍒板晢鍝佽鎯?   */
   onProductTap: function(e) {
     const productId = e.currentTarget.dataset.id;
     wx.navigateTo({
@@ -95,36 +90,32 @@ Page({
   },
 
   /**
-   * 去支付
-   */
+   * 鍘绘敮浠?   */
   onPayOrder: function() {
-    // 跳转到支付页面
-    wx.navigateTo({
+    // 璺宠浆鍒版敮浠橀〉闈?    wx.navigateTo({
       url: `/pages/order/pay/pay?id=${this.orderId}`
     });
   },
 
   /**
-   * 确认收货
+   * 纭鏀惰揣
    */
   onConfirmReceipt: function() {
-    // 弹出确认框
-    wx.showModal({
-      title: '确认收货',
-      content: '确认已收到商品吗？',
+    // 寮瑰嚭纭妗?    wx.showModal({
+      title: '纭鏀惰揣',
+      content: '纭宸叉敹鍒板晢鍝佸悧锛?,
       success: (res) => {
         if (res.confirm) {
-          // 模拟API调用
+          // 妯℃嫙API璋冪敤
           this.setData({
             loading: true
           });
           
           setTimeout(() => {
             try {
-              // 更新订单状态
-              const orderDetail = this.data.orderDetail;
+              // 鏇存柊璁㈠崟鐘舵€?              const orderDetail = this.data.orderDetail;
               orderDetail.status = 'completed';
-              orderDetail.statusText = '已完成';
+              orderDetail.statusText = '宸插畬鎴?;
               
               this.setData({
                 orderDetail: orderDetail,
@@ -132,7 +123,7 @@ Page({
               });
               
               wx.showToast({
-                title: '收货成功',
+                title: '鏀惰揣鎴愬姛',
                 icon: 'success'
               });
             } catch (err) {
@@ -140,10 +131,10 @@ Page({
                 loading: false
               });
               wx.showToast({
-                title: '操作失败，请重试',
+                title: '鎿嶄綔澶辫触锛岃閲嶈瘯',
                 icon: 'none'
               });
-              console.error('确认收货失败:', err);
+              console.error('纭鏀惰揣澶辫触:', err);
             }
           }, 1000);
         }
@@ -152,26 +143,24 @@ Page({
   },
 
   /**
-   * 取消订单
+   * 鍙栨秷璁㈠崟
    */
   onCancelOrder: function() {
-    // 弹出确认框
-    wx.showModal({
-      title: '取消订单',
-      content: '确定要取消该订单吗？',
+    // 寮瑰嚭纭妗?    wx.showModal({
+      title: '鍙栨秷璁㈠崟',
+      content: '纭畾瑕佸彇娑堣璁㈠崟鍚楋紵',
       success: (res) => {
         if (res.confirm) {
-          // 模拟API调用
+          // 妯℃嫙API璋冪敤
           this.setData({
             loading: true
           });
           
           setTimeout(() => {
             try {
-              // 更新订单状态
-              const orderDetail = this.data.orderDetail;
+              // 鏇存柊璁㈠崟鐘舵€?              const orderDetail = this.data.orderDetail;
               orderDetail.status = 'cancelled';
-              orderDetail.statusText = '已取消';
+              orderDetail.statusText = '宸插彇娑?;
               
               this.setData({
                 orderDetail: orderDetail,
@@ -179,7 +168,7 @@ Page({
               });
               
               wx.showToast({
-                title: '取消成功',
+                title: '鍙栨秷鎴愬姛',
                 icon: 'success'
               });
             } catch (err) {
@@ -187,10 +176,10 @@ Page({
                 loading: false
               });
               wx.showToast({
-                title: '操作失败，请重试',
+                title: '鎿嶄綔澶辫触锛岃閲嶈瘯',
                 icon: 'none'
               });
-              console.error('取消订单失败:', err);
+              console.error('鍙栨秷璁㈠崟澶辫触:', err);
             }
           }, 1000);
         }
@@ -199,18 +188,18 @@ Page({
   },
 
   /**
-   * 联系客服
+   * 鑱旂郴瀹㈡湇
    */
   onContactService: function() {
     wx.makePhoneCall({
       phoneNumber: '400-123-4567',
       success: () => {
-        console.log('拨打客服电话成功');
+        console.log('鎷ㄦ墦瀹㈡湇鐢佃瘽鎴愬姛');
       },
       fail: (err) => {
-        console.error('拨打客服电话失败:', err);
+        console.error('鎷ㄦ墦瀹㈡湇鐢佃瘽澶辫触:', err);
         wx.showToast({
-          title: '拨打失败，请重试',
+          title: '鎷ㄦ墦澶辫触锛岃閲嶈瘯',
           icon: 'none'
         });
       }
@@ -218,25 +207,22 @@ Page({
   },
 
   /**
-   * 去评价
-   */
+   * 鍘昏瘎浠?   */
   onReviewOrder: function() {
-    // 跳转到评价页面
-    wx.navigateTo({
+    // 璺宠浆鍒拌瘎浠烽〉闈?    wx.navigateTo({
       url: `/pages/order/review/review?id=${this.orderId}`
     });
   },
 
   /**
-   * 重试加载
+   * 閲嶈瘯鍔犺浇
    */
   onRetry: function() {
     this.loadOrderDetail();
   },
 
   /**
-   * 去登录
-   */
+   * 鍘荤櫥褰?   */
   onLogin: function() {
     wx.navigateTo({
       url: '/pages/user/login/login'
@@ -244,14 +230,13 @@ Page({
   },
 
   /**
-   * 模拟生成订单详情数据
+   * 妯℃嫙鐢熸垚璁㈠崟璇︽儏鏁版嵁
    */
   generateMockOrderDetail: function() {
-    // 随机状态
-    const statuses = ['pending_payment', 'pending_shipping', 'pending_receipt', 'completed'];
+    // 闅忔満鐘舵€?    const statuses = ['pending_payment', 'pending_shipping', 'pending_receipt', 'completed'];
     const orderStatus = statuses[Math.floor(Math.random() * statuses.length)];
     
-    // 生成商品列表
+    // 鐢熸垚鍟嗗搧鍒楄〃
     const productCount = Math.floor(Math.random() * 3) + 1;
     const products = [];
     let totalPrice = 0;
@@ -263,42 +248,39 @@ Page({
       
       products.push({
         id: `product_${i}`,
-        title: `模拟商品${i + 1}`,
+        title: `妯℃嫙鍟嗗搧${i + 1}`,
         image: '/images/default-post.svg',
         price: price,
         quantity: quantity
       });
     }
     
-    // 计算总价（包含运费和优惠券）
+    // 璁＄畻鎬讳环锛堝寘鍚繍璐瑰拰浼樻儬鍒革級
     const freight = 10;
-    // 随机决定是否使用优惠券（70%概率使用）
-    const useCoupon = Math.random() < 0.7;
+    // 闅忔満鍐冲畾鏄惁浣跨敤浼樻儬鍒革紙70%姒傜巼浣跨敤锛?    const useCoupon = Math.random() < 0.7;
     let couponDiscount = 0;
     let couponInfo = null;
     
     if (useCoupon && totalPrice >= 50) {
-      // 优惠券类型：50%概率为现金券，50%概率为折扣券
+      // 浼樻儬鍒哥被鍨嬶細50%姒傜巼涓虹幇閲戝埜锛?0%姒傜巼涓烘姌鎵ｅ埜
       const couponType = Math.random() < 0.5 ? 'cash' : 'percent';
       
       if (couponType === 'cash') {
-        // 现金券：10-30元之间的优惠金额
+        // 鐜伴噾鍒革細10-30鍏冧箣闂寸殑浼樻儬閲戦
         couponDiscount = Math.floor(Math.random() * 21) + 10;
         couponInfo = {
           id: 'coupon_cash_' + Math.floor(Math.random() * 1000),
-          name: '满50减' + couponDiscount + '元',
+          name: '婊?0鍑? + couponDiscount + '鍏?,
           value: couponDiscount,
           type: 'cash'
         };
       } else {
-        // 折扣券：8折或9折
-        const discountRate = Math.random() < 0.5 ? 8 : 9;
+        // 鎶樻墸鍒革細8鎶樻垨9鎶?        const discountRate = Math.random() < 0.5 ? 8 : 9;
         couponDiscount = Math.floor(totalPrice * (1 - discountRate / 10));
         couponInfo = {
           id: 'coupon_percent_' + Math.floor(Math.random() * 1000),
-          name: discountRate + '折优惠券',
-          value: discountRate * 10, // 存储为80表示8折
-          type: 'percent'
+          name: discountRate + '鎶樹紭鎯犲埜',
+          value: discountRate * 10, // 瀛樺偍涓?0琛ㄧず8鎶?          type: 'percent'
         };
       }
     }
@@ -321,37 +303,36 @@ Page({
       couponDiscount: couponDiscount,
       couponInfo: couponInfo,
       finalTotal: finalTotal,
-      paymentMethod: orderStatus !== 'pending_payment' ? '微信支付' : '',
-      orderRemark: '请尽快发货',
+      paymentMethod: orderStatus !== 'pending_payment' ? '寰俊鏀粯' : '',
+      orderRemark: '璇峰敖蹇彂璐?,
       trackingNo: ['pending_receipt', 'completed'].includes(orderStatus) ? `SF1234567890${Math.floor(Math.random() * 100)}` : ''
     };
   },
 
   /**
-   * 模拟生成地址数据
+   * 妯℃嫙鐢熸垚鍦板潃鏁版嵁
    */
   generateMockAddress: function() {
     return {
-      receiver: '张三',
+      receiver: '寮犱笁',
       phone: '138****8888',
-      province: '广东省',
-      city: '深圳市',
-      district: '南山区',
-      detail: '科技园南区8栋'
+      province: '骞夸笢鐪?,
+      city: '娣卞湷甯?,
+      district: '鍗楀北鍖?,
+      detail: '绉戞妧鍥崡鍖?鏍?
     };
   },
 
   /**
-   * 获取订单状态文本
-   */
+   * 鑾峰彇璁㈠崟鐘舵€佹枃鏈?   */
   getStatusText: function(status) {
     const statusMap = {
-      'pending_payment': '待付款',
-      'pending_shipping': '待发货',
-      'pending_receipt': '待收货',
-      'completed': '已完成',
-      'cancelled': '已取消'
+      'pending_payment': '寰呬粯娆?,
+      'pending_shipping': '寰呭彂璐?,
+      'pending_receipt': '寰呮敹璐?,
+      'completed': '宸插畬鎴?,
+      'cancelled': '宸插彇娑?
     };
-    return statusMap[status] || '未知';
+    return statusMap[status] || '鏈煡';
   }
 });

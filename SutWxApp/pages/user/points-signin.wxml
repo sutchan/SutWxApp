@@ -1,0 +1,105 @@
+﻿<!-- 姣忔棩绛惧埌椤甸潰 -->
+<view class="signin-container">
+  <!-- 椤甸潰鏍囬 -->
+  <view class="page-header">
+    <text class="page-title">姣忔棩绛惧埌</text>
+  </view>
+
+  <!-- 鍔犺浇鐘舵€?-->
+  <view class="loading-container" wx:if="{{loading}}">
+    <view class="loading-icon"></view>
+    <text class="loading-text">鍔犺浇涓?..</text>
+  </view>
+
+  <!-- 閿欒鎻愮ず -->
+  <view class="error-container" wx:if="{{error}}">
+    <view class="error-icon">鈿狅笍</view>
+    <text class="error-text">{{error}}</text>
+    <button class="retry-button" bindtap="onRetry">閲嶈瘯</button>
+  </view>
+
+  <!-- 绛惧埌鍐呭 -->
+  <view class="signin-content" wx:if="{{!loading && !error}}">
+    <!-- 绛惧埌鎸夐挳鍖哄煙 -->
+    <view class="signin-section">
+      <view class="signin-card">
+        <view class="signin-status">
+          <text class="status-text">{{todaySigned ? '浠婃棩宸茬鍒? : '姣忔棩绛惧埌'}}</text>
+          <text class="points-tip">绛惧埌鍙幏寰楃Н鍒嗗鍔?/text>
+        </view>
+        
+        <button 
+          class="signin-button {{todaySigned ? 'signed' : ''}}"
+          bindtap="doSignIn"
+          loading="{{signing}}"
+          disabled="{{todaySigned || signing}}"
+        >
+          {{todaySigned ? '宸茬鍒? : '绔嬪嵆绛惧埌'}}
+        </button>
+      </view>
+    </view>
+
+    <!-- 绛惧埌缁熻 -->
+    <view class="stats-section">
+      <view class="stats-card">
+        <view class="stat-item">
+          <text class="stat-value">{{consecutiveDays}}</text>
+          <text class="stat-label">杩炵画绛惧埌(澶?</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-value">{{monthlySignedDays}}</text>
+          <text class="stat-label">鏈湀绛惧埌(澶?</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-value">{{totalSignedDays}}</text>
+          <text class="stat-label">绱绛惧埌(澶?</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 绛惧埌鏃ュ巻 -->
+    <view class="calendar-section">
+      <view class="section-title">鏈湀绛惧埌璁板綍</view>
+      <view class="calendar-grid">
+        <!-- 鏄熸湡鏍囬 -->
+        <view class="calendar-weekdays">
+          <view class="weekday-item">鏃?/view>
+          <view class="weekday-item">涓€</view>
+          <view class="weekday-item">浜?/view>
+          <view class="weekday-item">涓?/view>
+          <view class="weekday-item">鍥?/view>
+          <view class="weekday-item">浜?/view>
+          <view class="weekday-item">鍏?/view>
+        </view>
+        
+        <!-- 鏃ユ湡鏍煎瓙 -->
+        <view class="calendar-days">
+          <view 
+            wx:for="{{calendarData}}" 
+            wx:key="day"
+            class="day-item {{item.isSigned ? 'signed' : ''}} {{item.isToday ? 'today' : ''}}"
+          >
+            <text class="day-number">{{item.day}}</text>
+            <view class="signed-mark" wx:if="{{item.isSigned}}">鉁?/view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 绉垎瑙勫垯鎻愮ず -->
+    <view class="rules-tip">
+      <text class="tip-text">馃摑 绉垎瑙勫垯锛氳繛缁鍒板ぉ鏁拌秺澶氾紝鑾峰緱鐨勭Н鍒嗗鍔辫秺澶?/text>
+    </view>
+
+    <!-- 蹇€熷叆鍙?-->
+    <view class="quick-actions">
+      <view class="action-card">
+        <text class="action-title">蹇€熷叆鍙?/text>
+        <view class="action-buttons">
+          <button class="action-button" bindtap="navigateToPointsHistory">鏌ョ湅绉垎鏄庣粏</button>
+          <button class="action-button" bindtap="navigateToPointsMall">鍓嶅線绉垎鍟嗗煄</button>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

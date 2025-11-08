@@ -1,11 +1,11 @@
-/* pages/article/detail/detail.wxss */
+﻿/* pages/article/detail/detail.wxss */
 .article-detail-container {
   width: 100%;
   background-color: #f8f8f8;
   min-height: 100vh;
 }
 
-/* 加载状态样式 */
+/* 鍔犺浇鐘舵€佹牱寮?*/
 .loading-container {
   width: 100%;
   height: 100vh;
@@ -25,13 +25,13 @@
   color: #999999;
 }
 
-/* 文章内容区域样式 */
+/* 鏂囩珷鍐呭鍖哄煙鏍峰紡 */
 .article-content {
   width: 100%;
   padding-bottom: 100px;
 }
 
-/* 文章头部样式 */
+/* 鏂囩珷澶撮儴鏍峰紡 */
 .article-header {
   padding: 20px;
   background-color: #ffffff;
@@ -72,7 +72,7 @@
   color: #666666;
 }
 
-/* 文章内容样式 */
+/* 鏂囩珷鍐呭鏍峰紡 */
 .article-body {
   padding: 20px;
   background-color: #ffffff;
@@ -99,7 +99,7 @@
   font-size: 14px;
 }
 
-/* 错误状态样式 */
+/* 閿欒鐘舵€佹牱寮?*/
 .error-container {
   display: flex;
   flex-direction: column;
@@ -127,7 +127,7 @@
   min-width: 200rpx;
 }
 
-/* 骨架屏样式 */
+/* 楠ㄦ灦灞忔牱寮?*/
 .skeleton-container {
   padding: 30rpx;
   background-color: #fff;
@@ -224,7 +224,7 @@
   }
 }
 
-/* 文章底部操作栏样式 */
+/* 鏂囩珷搴曢儴鎿嶄綔鏍忔牱寮?*/
 .article-actions {
   display: flex;
   justify-content: space-around;
@@ -259,7 +259,7 @@
   margin-top: 2px;
 }
 
-/* 评论区域样式 */
+/* 璇勮鍖哄煙鏍峰紡 */
 .comment-section {
   margin-top: 10px;
   background-color: #ffffff;
@@ -362,7 +362,7 @@
   color: #999;
 }
 
-/* 加载更多按钮样式 */
+/* 鍔犺浇鏇村鎸夐挳鏍峰紡 */
 .load-more {
   padding: 15px 0;
   text-align: center;
@@ -390,7 +390,7 @@
   color: #999999;
 }
 
-/* 相关推荐样式 */
+/* 鐩稿叧鎺ㄨ崘鏍峰紡 */
 .related-articles {
   margin-top: 10px;
   background-color: #ffffff;
@@ -433,7 +433,7 @@
   text-overflow: ellipsis;
 }
 
-/* 评论输入框样式 */
+/* 璇勮杈撳叆妗嗘牱寮?*/
 .comment-input-container {
   position: fixed;
   bottom: 0;

@@ -1,13 +1,13 @@
-/* 用户关注页面样式 */
+﻿/* 鐢ㄦ埛鍏虫敞椤甸潰鏍峰紡 */
 
-/* 容器 */
+/* 瀹瑰櫒 */
 .following-container {
   padding: 20rpx;
   min-height: 100vh;
   background-color: #f8f8f8;
 }
 
-/* 加载状态 */
+/* 鍔犺浇鐘舵€?*/
 .loading-container {
   display: flex;
   flex-direction: column;
@@ -36,7 +36,7 @@
   100% { transform: rotate(360deg); }
 }
 
-/* 错误状态 */
+/* 閿欒鐘舵€?*/
 .error-container {
   display: flex;
   flex-direction: column;
@@ -67,7 +67,7 @@
   border: none;
 }
 
-/* 空状态 */
+/* 绌虹姸鎬?*/
 .empty-container {
   display: flex;
   flex-direction: column;
@@ -88,7 +88,7 @@
   color: #999;
 }
 
-/* 关注列表 */
+/* 鍏虫敞鍒楄〃 */
 .following-list {
   display: flex;
   flex-direction: column;
@@ -110,7 +110,7 @@
   transform: scale(0.98);
 }
 
-/* 用户信息 */
+/* 鐢ㄦ埛淇℃伅 */
 .user-info {
   display: flex;
   flex-direction: row;
@@ -148,7 +148,7 @@
   overflow: hidden;
 }
 
-/* 操作按钮 */
+/* 鎿嶄綔鎸夐挳 */
 .following-actions {
   margin-left: 20rpx;
 }
@@ -163,7 +163,7 @@
   line-height: 1.2;
 }
 
-/* 加载更多 */
+/* 鍔犺浇鏇村 */
 .load-more {
   display: flex;
   flex-direction: column;
@@ -188,7 +188,7 @@
   color: #999;
 }
 
-/* 没有更多 */
+/* 娌℃湁鏇村 */
 .no-more {
   text-align: center;
   padding: 30rpx 0;

@@ -1,0 +1,467 @@
+﻿msgid "points_tasks"
+msgstr "绉垎浠诲姟"
+
+msgid "task_type_all"
+msgstr "鍏ㄩ儴"
+
+msgid "task_type_once"
+msgstr "鏂版墜"
+
+msgid "task_type_daily"
+msgstr "姣忔棩"
+
+msgid "task_type_weekly"
+msgstr "姣忓懆"
+
+msgid "task_type_monthly"
+msgstr "姣忔湀"
+
+msgid "task_status_completed"
+msgstr "宸插畬鎴?
+
+msgid "task_status_unclaimed"
+msgstr "寰呴鍙?
+
+msgid "task_status_pending"
+msgstr "杩涜涓?
+
+msgid "task_claim_reward"
+msgstr "棰嗗彇濂栧姳"
+
+msgid "task_go_complete"
+msgstr "鍘诲畬鎴?
+
+msgid "task_completed"
+msgstr "宸插畬鎴?
+
+msgid "task_progress"
+msgstr "杩涘害"
+
+msgid "points_reward_success"
+msgstr "鎭枩鑾峰緱{{points}}绉垎"
+
+msgid "loading"
+msgstr "鍔犺浇涓?.."
+
+msgid "retry"
+msgstr "閲嶈瘯"
+
+msgid "no_tasks"
+msgstr "鏆傛棤浠诲姟"
+
+msgid "network_error"
+msgstr "缃戠粶閿欒锛岃绋嶅悗閲嶈瘯"
+
+msgid "points"
+msgstr "绉垎"
+
+msgid "points_tasks_title"
+msgstr "绉垎浠诲姟"
+
+msgid "task_once_desc"
+msgstr "瀹屾垚浠诲姟鑾峰彇棰濆绉垎濂栧姳"
+
+msgid "task_daily_desc"
+msgstr "姣忔棩鍙噸澶嶅畬鎴愮殑浠诲姟"
+
+msgid "task_weekly_desc"
+msgstr "姣忓懆鏇存柊鐨勯暱鏈熶换鍔?
+
+msgid "task_monthly_desc"
+msgstr "鏈堝害鎸戞垬浠诲姟"
+
+msgid "task_complete_now"
+msgstr "绔嬪嵆瀹屾垚"
+
+msgid "no_points_tasks"
+msgstr "鏆傛棤绉垎浠诲姟"
+
+msgid "please_check_later"
+msgstr "璇风◢鍚庡啀鏉ユ煡鐪?
+
+msgid "sign_in"
+msgstr "绛惧埌"
+
+msgid "my_profile"
+msgstr "涓汉涓績"
+
+msgid "my_orders"
+msgstr "鎴戠殑璁㈠崟"
+
+msgid "my_favorites"
+msgstr "鎴戠殑鏀惰棌"
+
+msgid "my_addresses"
+msgstr "鎴戠殑鍦板潃"
+
+msgid "settings"
+msgstr "璁剧疆"
+
+msgid "logout"
+msgstr "閫€鍑虹櫥褰?
+
+msgid "confirm"
+msgstr "纭"
+
+msgid "cancel"
+msgstr "鍙栨秷"
+
+msgid "success"
+msgstr "鎴愬姛"
+
+msgid "error"
+msgstr "閿欒"
+
+msgid "ok"
+msgstr "纭畾"
+
+msgid "article_title"
+msgstr "鏂囩珷鏍囬"
+
+msgid "article_content"
+msgstr "鏂囩珷鍐呭"
+
+msgid "article_author"
+msgstr "浣滆€?
+
+msgid "article_time"
+msgstr "鏃堕棿"
+
+msgid "article_category"
+msgstr "鍒嗙被"
+
+msgid "article_tags"
+msgstr "鏍囩"
+
+msgid "article_likes"
+msgstr "鐐硅禐"
+
+msgid "article_comments"
+msgstr "璇勮"
+
+msgid "article_share"
+msgstr "鍒嗕韩"
+
+msgid "article_favorite"
+msgstr "鏀惰棌"
+
+msgid "comment_text"
+msgstr "璇勮鍐呭"
+
+msgid "submit_comment"
+msgstr "鎻愪氦璇勮"
+
+msgid "login_required"
+msgstr "璇峰厛鐧诲綍"
+
+msgid "username_or_email"
+msgstr "鐢ㄦ埛鍚嶆垨閭"
+
+msgid "password"
+msgstr "瀵嗙爜"
+
+msgid "remember_me"
+msgstr "璁颁綇鎴?
+
+msgid "forgot_password"
+msgstr "蹇樿瀵嗙爜"
+
+msgid "register"
+msgstr "娉ㄥ唽"
+
+msgid "login"
+msgstr "鐧诲綍"
+
+msgid "home"
+msgstr "棣栭〉"
+
+msgid "categories"
+msgstr "鍒嗙被"
+
+msgid "cart"
+msgstr "璐墿杞?
+
+msgid "orders"
+msgstr "璁㈠崟"
+
+msgid "user_center"
+msgstr "鎴戠殑"
+
+msgid "search_placeholder"
+msgstr "鎼滅储鍟嗗搧"
+
+msgid "search_button"
+msgstr "鎼滅储"
+
+msgid "search_results"
+msgstr "鎼滅储缁撴灉"
+
+msgid "no_results"
+msgstr "鏆傛棤缁撴灉"
+
+msgid "product_details"
+msgstr "鍟嗗搧璇︽儏"
+
+msgid "product_price"
+msgstr "浠锋牸"
+
+msgid "product_description"
+msgstr "鍟嗗搧鎻忚堪"
+
+msgid "add_to_cart"
+msgstr "鍔犲叆璐墿杞?
+
+msgid "buy_now"
+msgstr "绔嬪嵆璐拱"
+
+msgid "cart_empty"
+msgstr "璐墿杞︽槸绌虹殑"
+
+msgid "cart_total"
+msgstr "鍚堣"
+
+msgid "checkout"
+msgstr "鍘荤粨绠?
+
+msgid "order_confirm"
+msgstr "纭璁㈠崟"
+
+msgid "order_payment"
+msgstr "璁㈠崟鏀粯"
+
+msgid "order_success"
+msgstr "璁㈠崟鎴愬姛"
+
+msgid "order_failed"
+msgstr "璁㈠崟澶辫触"
+
+msgid "address_manager"
+msgstr "鍦板潃绠＄悊"
+
+msgid "add_new_address"
+msgstr "鏂板鍦板潃"
+
+msgid "edit_address"
+msgstr "缂栬緫鍦板潃"
+
+msgid "delete_address"
+msgstr "鍒犻櫎鍦板潃"
+
+msgid "address_name"
+msgstr "鏀惰揣浜哄鍚?
+
+msgid "address_phone"
+msgstr "鎵嬫満鍙风爜"
+
+msgid "address_province"
+msgstr "鐪佷唤"
+
+msgid "address_city"
+msgstr "鍩庡競"
+
+msgid "address_district"
+msgstr "鍖哄幙"
+
+msgid "address_detail"
+msgstr "璇︾粏鍦板潃"
+
+msgid "address_is_default"
+msgstr "璁句负榛樿"
+
+msgid "settings_language"
+msgstr "璇█璁剧疆"
+
+msgid "settings_notification"
+msgstr "閫氱煡璁剧疆"
+
+msgid "settings_clear_cache"
+msgstr "娓呴櫎缂撳瓨"
+
+msgid "settings_about"
+msgstr "鍏充簬鎴戜滑"
+
+msgid "settings_help"
+msgstr "甯姪涓績"
+
+msgid "settings_privacy"
+msgstr "闅愮鏀跨瓥"
+
+msgid "settings_user_agreement"
+msgstr "鐢ㄦ埛鍗忚"
+
+msgid "settings_version"
+msgstr "鐗堟湰鍙?
+
+msgid "clear_cache_confirm"
+msgstr "纭畾瑕佹竻闄ょ紦瀛樺悧锛?
+
+msgid "cache_cleared"
+msgstr "缂撳瓨宸叉竻闄?
+
+msgid "loading_more"
+msgstr "鍔犺浇鏇村..."
+
+msgid "refresh"
+msgstr "鍒锋柊"
+
+msgid "pull_to_refresh"
+msgstr "涓嬫媺鍒锋柊"
+
+msgid "release_to_refresh"
+msgstr "閲婃斁鍒锋柊"
+
+msgid "refreshing"
+msgstr "鍒锋柊涓?.."
+
+msgid "no_more_data"
+msgstr "娌℃湁鏇村鏁版嵁浜?
+
+msgid "network_connection_error"
+msgstr "缃戠粶杩炴帴澶辫触"
+
+msgid "server_error"
+msgstr "鏈嶅姟鍣ㄩ敊璇?
+
+msgid "please_check_network"
+msgstr "璇锋鏌ョ綉缁滆繛鎺?
+
+msgid "try_again"
+msgstr "閲嶈瘯"
+
+msgid "app_name"
+msgstr "鑻忕壒寰俊灏忕▼搴?
+
+msgid "app_slogan"
+msgstr "鍝佽川鐢熸椿锛屼粠鑻忕壒寮€濮?
+
+msgid "welcome_back"
+msgstr "娆㈣繋鍥炴潵"
+
+msgid "goodbye"
+msgstr "鍐嶈"
+
+msgid "points_mall"
+msgstr "绉垎鍟嗗煄"
+
+msgid "exchange_points"
+msgstr "鍏戞崲绉垎"
+
+msgid "points_history"
+msgstr "绉垎鍘嗗彶"
+
+msgid "points_exchange_records"
+msgstr "鍏戞崲璁板綍"
+
+msgid "low_points"
+msgstr "绉垎涓嶈冻"
+
+msgid "exchange_success"
+msgstr "鍏戞崲鎴愬姛"
+
+msgid "exchange_failed"
+msgstr "鍏戞崲澶辫触"
+
+msgid "task_details"
+msgstr "浠诲姟璇︽儏"
+
+msgid "task_description"
+msgstr "浠诲姟鎻忚堪"
+
+msgid "task_reward"
+msgstr "浠诲姟濂栧姳"
+
+msgid "task_time_limit"
+msgstr "鏃堕棿闄愬埗"
+
+msgid "task_rules"
+msgstr "浠诲姟瑙勫垯"
+
+msgid "task_go_now"
+msgstr "绔嬪嵆鍘诲仛"
+
+msgid "task_has_completed"
+msgstr "宸插畬鎴?
+
+msgid "task_has_claimed"
+msgstr "宸查鍙?
+
+msgid "task_next_refresh"
+msgstr "涓嬫鍒锋柊"
+
+msgid "share_task_title"
+msgstr "鍒嗕韩浠诲姟"
+
+msgid "share_task_description"
+msgstr "鍒嗕韩缁欏ソ鍙?
+
+msgid "share_task_image"
+msgstr "鍒嗕韩鍥剧墖"
+
+msgid "share_task_url"
+msgstr "鍒嗕韩閾炬帴"
+
+msgid "share_task_success"
+msgstr "鍒嗕韩鎴愬姛"
+
+msgid "share_task_failed"
+msgstr "鍒嗕韩澶辫触"
+
+msgid "share_task_confirm"
+msgstr "纭鍒嗕韩"
+
+msgid "points_exchange_title"
+msgstr "绉垎鍏戞崲"
+
+msgid "points_exchange_description"
+msgstr "鍏戞崲璇存槑"
+
+msgid "points_exchange_image"
+msgstr "鍏戞崲鍥剧墖"
+
+msgid "points_exchange_url"
+msgstr "鍏戞崲閾炬帴"
+
+msgid "points_exchange_confirm"
+msgstr "纭鍏戞崲"
+
+msgid "points_exchange_cancel"
+msgstr "鍙栨秷鍏戞崲"
+
+msgid "points_exchange_loading"
+msgstr "鍏戞崲涓?.."
+
+msgid "points_exchange_error"
+msgstr "鍏戞崲閿欒"
+
+msgid "points_exchange_not_enough"
+msgstr "绉垎涓嶈冻锛屾棤娉曞厬鎹?
+
+msgid "points_exchange_success_msg"
+msgstr "鍏戞崲鎴愬姛锛屾劅璋㈡偍鐨勬敮鎸?
+
+msgid "points_exchange_failed_msg"
+msgstr "鍏戞崲澶辫触锛岃绋嶅悗閲嶈瘯"
+
+msgid "points_exchange_history_empty"
+msgstr "鏆傛棤鍏戞崲璁板綍"
+
+msgid "points_exchange_history_title"
+msgstr "鍏戞崲璁板綍"
+
+msgid "points_exchange_history_date"
+msgstr "鍏戞崲鏃ユ湡"
+
+msgid "points_exchange_history_points"
+msgstr "娑堣€楃Н鍒?
+
+msgid "points_exchange_history_status"
+msgstr "鐘舵€?
+
+msgid "points_exchange_history_success"
+msgstr "鎴愬姛"
+
+msgid "points_exchange_history_failed"
+msgstr "澶辫触"
+
+msgid "points_exchange_history_processing"
+msgstr "澶勭悊涓?

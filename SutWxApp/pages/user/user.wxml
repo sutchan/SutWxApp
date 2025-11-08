@@ -1,26 +1,26 @@
-<!-- 用户中心页面 -->
+﻿<!-- 鐢ㄦ埛涓績椤甸潰 -->
 <view class="user-container">
-  <!-- 用户信息区域 -->
+  <!-- 鐢ㄦ埛淇℃伅鍖哄煙 -->
   <view class="user-info-section">
     <view class="user-info" bindtap="{{userInfo.isLoggedIn ? '' : 'onWechatLogin'}}">
-      <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill" aria-label="用户头像"></image>
+      <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill" aria-label="鐢ㄦ埛澶村儚"></image>
       <view class="user-details">
         <text class="nickname">{{userInfo.nickName}}</text>
-        <text class="login-hint" wx:if="!userInfo.isLoggedIn">点击登录</text>
-        <text class="login-hint" wx:else>{{userInfo.isLoggedIn ? '已登录' : ''}}</text>
+        <text class="login-hint" wx:if="!userInfo.isLoggedIn">鐐瑰嚮鐧诲綍</text>
+        <text class="login-hint" wx:else>{{userInfo.isLoggedIn ? '宸茬櫥褰? : ''}}</text>
       </view>
       <image class="arrow" src="/images/arrow-right.svg" wx:if="userInfo.isLoggedIn" mode="aspectFit"></image>
     </view>
     
-    <!-- 绑定WordPress账号按钮 -->
+    <!-- 缁戝畾WordPress璐﹀彿鎸夐挳 -->
     <view class="bind-account" wx:if="userInfo.isLoggedIn">
       <button class="bind-button" bindtap="bindWordPressAccount" type="default">
-        绑定WordPress账号
+        缁戝畾WordPress璐﹀彿
       </button>
     </view>
   </view>
 
-  <!-- 菜单列表 -->
+  <!-- 鑿滃崟鍒楄〃 -->
   <view class="menu-section">
     <view class="menu-group">
       <view 
@@ -42,20 +42,20 @@
     </view>
   </view>
 
-  <!-- 退出登录按钮 -->
+  <!-- 閫€鍑虹櫥褰曟寜閽?-->
   <view class="logout-section" wx:if="userInfo.isLoggedIn">
-    <button class="logout-button" bindtap="logout" type="warn">退出登录</button>
+    <button class="logout-button" bindtap="logout" type="warn">閫€鍑虹櫥褰?/button>
   </view>
 
-  <!-- 加载状态 -->
+  <!-- 鍔犺浇鐘舵€?-->
   <view class="loading-container" wx:if="isLoading">
     <view class="loading"></view>
-    <text class="loading-text">加载中...</text>
+    <text class="loading-text">鍔犺浇涓?..</text>
   </view>
 
-  <!-- 错误提示 -->
+  <!-- 閿欒鎻愮ず -->
   <view class="error-container" wx:if="error">
     <text class="error-text">{{error}}</text>
-    <button class="retry-button" bindtap="checkLoginStatus">重试</button>
+    <button class="retry-button" bindtap="checkLoginStatus">閲嶈瘯</button>
   </view>
 </view>

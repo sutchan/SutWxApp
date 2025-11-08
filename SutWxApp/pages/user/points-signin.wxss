@@ -1,0 +1,293 @@
+﻿/* 姣忔棩绛惧埌椤甸潰鏍峰紡 */
+.signin-container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding-bottom: 40rpx;
+}
+
+/* 椤甸潰鏍囬 */
+.page-header {
+  background: linear-gradient(135deg, #ff6600 0%, #ff9933 100%);
+  padding: 30rpx 0;
+  text-align: center;
+  color: #fff;
+  position: relative;
+}
+
+.page-title {
+  font-size: 36rpx;
+  font-weight: 600;
+}
+
+/* 鍔犺浇鐘舵€?*/
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100rpx 0;
+  color: #999;
+}
+
+.loading-icon {
+  width: 60rpx;
+  height: 60rpx;
+  border: 4rpx solid #e0e0e0;
+  border-top-color: #ff6600;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20rpx;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-text {
+  font-size: 28rpx;
+  color: #999;
+}
+
+/* 閿欒鎻愮ず */
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100rpx 0;
+  text-align: center;
+}
+
+.error-icon {
+  font-size: 80rpx;
+  margin-bottom: 20rpx;
+}
+
+.error-text {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 30rpx;
+  padding: 0 40rpx;
+}
+
+.retry-button {
+  background-color: #ff6600;
+  color: #fff;
+  font-size: 28rpx;
+  padding: 14rpx 40rpx;
+  border-radius: 20rpx;
+  line-height: 1.8;
+}
+
+/* 绛惧埌鍐呭 */
+.signin-content {
+  padding: 20rpx;
+}
+
+/* 绛惧埌鎸夐挳鍖哄煙 */
+.signin-section {
+  margin-bottom: 20rpx;
+}
+
+.signin-card {
+  background: linear-gradient(135deg, #ff6600 0%, #ff9933 100%);
+  border-radius: 20rpx;
+  padding: 40rpx 0;
+  text-align: center;
+  color: #fff;
+}
+
+.signin-status {
+  margin-bottom: 30rpx;
+}
+
+.status-text {
+  font-size: 40rpx;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 10rpx;
+}
+
+.points-tip {
+  font-size: 28rpx;
+  opacity: 0.9;
+}
+
+.signin-button {
+  background-color: #fff;
+  color: #ff6600;
+  font-size: 36rpx;
+  font-weight: 600;
+  padding: 20rpx 0;
+  border-radius: 40rpx;
+  min-width: 300rpx;
+  line-height: 1.8;
+}
+
+.signin-button.signed {
+  background-color: #f5f5f5;
+  color: #999;
+}
+
+/* 绛惧埌缁熻 */
+.stats-section {
+  margin-bottom: 20rpx;
+}
+
+.stats-card {
+  background-color: #fff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+  display: flex;
+  justify-content: space-between;
+}
+
+.stat-item {
+  flex: 1;
+  text-align: center;
+}
+
+.stat-value {
+  display: block;
+  font-size: 40rpx;
+  font-weight: 600;
+  color: #ff6600;
+  margin-bottom: 10rpx;
+}
+
+.stat-label {
+  font-size: 26rpx;
+  color: #666;
+}
+
+/* 绛惧埌鏃ュ巻 */
+.calendar-section {
+  margin-bottom: 20rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 20rpx;
+  padding: 0 10rpx;
+}
+
+.calendar-grid {
+  background-color: #fff;
+  border-radius: 16rpx;
+  padding: 20rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+.calendar-weekdays {
+  display: flex;
+  margin-bottom: 20rpx;
+}
+
+.weekday-item {
+  flex: 1;
+  text-align: center;
+  font-size: 26rpx;
+  color: #666;
+  padding: 10rpx 0;
+}
+
+.calendar-days {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.day-item {
+  width: 14.28%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20rpx 0;
+  position: relative;
+}
+
+.day-number {
+  font-size: 28rpx;
+  color: #333;
+}
+
+.day-item.signed .day-number {
+  color: #ff6600;
+  font-weight: 500;
+}
+
+.day-item.today .day-number {
+  background-color: #ff6600;
+  color: #fff;
+  width: 44rpx;
+  height: 44rpx;
+  line-height: 44rpx;
+  text-align: center;
+  border-radius: 50%;
+}
+
+.signed-mark {
+  position: absolute;
+  top: 10rpx;
+  right: 10rpx;
+  width: 20rpx;
+  height: 20rpx;
+  background-color: #ff6600;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 绉垎瑙勫垯鎻愮ず */
+.rules-tip {
+  margin-bottom: 20rpx;
+}
+
+.tip-text {
+  display: block;
+  background-color: #fffbf0;
+  color: #ff6600;
+  font-size: 26rpx;
+  padding: 20rpx;
+  border-radius: 12rpx;
+  line-height: 1.5;
+}
+
+/* 蹇€熷叆鍙?*/
+.quick-actions {
+  margin-bottom: 20rpx;
+}
+
+.action-card {
+  background-color: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+.action-title {
+  display: block;
+  font-size: 30rpx;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 20rpx;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 20rpx;
+}
+
+.action-button {
+  flex: 1;
+  background-color: #f5f5f5;
+  color: #333;
+  font-size: 28rpx;
+  padding: 16rpx 0;
+  border-radius: 12rpx;
+}

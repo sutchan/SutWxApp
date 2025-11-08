@@ -1,18 +1,18 @@
-/* 通知详情页面样式 */
+﻿/* 閫氱煡璇︽儏椤甸潰鏍峰紡 */
 .container {
   padding: 0;
   background-color: #f8f8f8;
   min-height: 100vh;
 }
 
-/* 通知详情卡片 */
+/* 閫氱煡璇︽儏鍗＄墖 */
 .notification-detail {
   background-color: #ffffff;
   padding: 30rpx;
   margin-bottom: 20rpx;
 }
 
-/* 通知头部 */
+/* 閫氱煡澶撮儴 */
 .notification-header {
   margin-bottom: 30rpx;
   padding-bottom: 20rpx;
@@ -46,7 +46,7 @@
   color: #666666;
 }
 
-/* 通知类型样式 */
+/* 閫氱煡绫诲瀷鏍峰紡 */
 .type-system {
   background-color: #e0f7fa;
   color: #006064;
@@ -77,7 +77,7 @@
   color: #1565c0;
 }
 
-/* 通知内容 */
+/* 閫氱煡鍐呭 */
 .notification-content {
   font-size: 30rpx;
   color: #666666;
@@ -85,7 +85,7 @@
   padding: 20rpx 0;
 }
 
-/* 相关内容卡片 */
+/* 鐩稿叧鍐呭鍗＄墖 */
 .related-content {
   background-color: #ffffff;
   margin-top: 20rpx;
@@ -131,7 +131,7 @@
   color: #999999;
 }
 
-/* 操作按钮 */
+/* 鎿嶄綔鎸夐挳 */
 .action-buttons {
   padding: 30rpx;
   margin-top: 20rpx;
@@ -159,7 +159,7 @@
   border: 1px solid #e0e0e0;
 }
 
-/* 加载状态 */
+/* 鍔犺浇鐘舵€?*/
 .loading {
   padding: 60rpx 0;
   display: flex;
@@ -168,7 +168,7 @@
   color: #999999;
 }
 
-/* 错误状态 */
+/* 閿欒鐘舵€?*/
 .error {
   padding: 60rpx 30rpx;
   display: flex;

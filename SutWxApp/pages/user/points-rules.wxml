@@ -1,32 +1,65 @@
-<!-- 积分规则页面 -->
+﻿<!-- 绉垎瑙勫垯椤甸潰 -->
 <view class="rules-container">
-  <!-- 积分获取规则 -->
-  <view class="section" wx:if="{{!isLoading && !error}}">
+  <!-- 绉垎鑾峰彇瑙勫垯 -->
+  <view class="section" wx:if="{{!isLoading && !error && earnRules.length > 0}}">
     <view class="section-header">
-      <text class="section-title">积分获取规则</text>
+      <text class="section-title">绉垎鑾峰彇瑙勫垯</text>
     </view>
     
     <view class="rules-list">
       <view 
-        wx:for="{{rules}}" 
+        wx:for="{{earnRules}}" 
         wx:key="index"
         class="rule-item"
-        aria-label="积分规则：{{item.title || ''}}，{{item.points || 0}}积分">
+        aria-label="绉垎瑙勫垯锛歿{item.description || ''}}">
         <view class="rule-content">
-          <view class="rule-title">
-            <text class="title-text">{{item.title || '未命名规则'}}</text>
-            <text class="points-text">+{{item.points || 0}}分</text>
-          </view>
           <text class="rule-description">{{item.description || ''}}</text>
+          <text class="rule-limit" wx:if="{{item.dailyLimit > 0}}">姣忔棩涓婇檺锛歿{item.dailyLimit}}娆?/text>
+          <text class="rule-limit" wx:elif="{{item.dailyLimit === 1}}">涓€娆℃€у鍔?/text>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 绉垎浣跨敤瑙勫垯 -->
+  <view class="section" wx:if="{{!isLoading && !error && useRules.length > 0}}">
+    <view class="section-header">
+      <text class="section-title">绉垎浣跨敤瑙勫垯</text>
+    </view>
+    
+    <view class="rules-list">
+      <view 
+        wx:for="{{useRules}}" 
+        wx:key="index"
+        class="rule-item"
+        aria-label="绉垎浣跨敤瑙勫垯锛歿{item.description || ''}}">
+        <view class="rule-content">
+          <text class="rule-description">{{item.description || ''}}</text>
+          <text class="rule-limit" wx:if="{{item.minPoints > 0}}">鏈€浣庝娇鐢細{{item.minPoints}}绉垎</text>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 绉垎杩囨湡瑙勫垯 -->
+  <view class="section" wx:if="{{!isLoading && !error && expireRules}}">
+    <view class="section-header">
+      <text class="section-title">绉垎杩囨湡瑙勫垯</text>
+    </view>
+    
+    <view class="rules-list">
+      <view class="rule-item" aria-label="绉垎杩囨湡瑙勫垯锛歿{expireRules.description || ''}}">
+        <view class="rule-content">
+          <text class="rule-description">{{expireRules.description || ''}}</text>
         </view>
       </view>
     </view>
   </view>
 
-  <!-- 常见问题 -->
+  <!-- 甯歌闂 -->
   <view class="section" wx:if="{{faqs.length > 0 && !isLoading && !error}}">
     <view class="section-header">
-      <text class="section-title">常见问题</text>
+      <text class="section-title">甯歌闂</text>
     </view>
     
     <view class="faq-list">
@@ -36,9 +69,9 @@
         class="faq-item"
         bindtap="toggleFaq"
         data-index="{{index}}"
-        aria-label="常见问题：{{item.question || ''}}">
+        aria-label="甯歌闂锛歿{item.question || ''}}">
         <view class="faq-header">
-          <text class="faq-question">{{item.question || '未命名问题'}}</text>
+          <text class="faq-question">{{item.question || '鏈懡鍚嶉棶棰?}}</text>
           <image 
             class="faq-icon {{item.expanded ? 'expanded' : ''}}" 
             src="/images/arrow-down.svg" 
@@ -46,23 +79,23 @@
           </image>
         </view>
         <view class="faq-answer" wx:if="{{item.expanded}}">
-          <text>{{item.answer || '暂无答案'}}</text>
+          <text>{{item.answer || '鏆傛棤绛旀'}}</text>
         </view>
       </view>
     </view>
   </view>
 
-  <!-- 加载状态 -->
+  <!-- 鍔犺浇鐘舵€?-->
   <view class="loading-container" wx:if="isLoading">
     <view class="loading"></view>
-    <text class="loading-text">加载中...</text>
+    <text class="loading-text">鍔犺浇涓?..</text>
   </view>
 
-  <!-- 错误提示 -->
+  <!-- 閿欒鎻愮ず -->
   <view class="error-container" wx:if="error">
     <image src="/images/error.svg" class="error-icon"></image>
     <text class="error-text">{{error}}</text>
-    <button class="retry-button" bindtap="onRetry">重试</button>
-    <text class="error-note">当前显示的是默认规则，请重试获取最新规则</text>
+    <button class="retry-button" bindtap="onRetry">閲嶈瘯</button>
+    <text class="error-note">褰撳墠鏄剧ず鐨勬槸榛樿瑙勫垯锛岃閲嶈瘯鑾峰彇鏈€鏂拌鍒?/text>
   </view>
 </view>

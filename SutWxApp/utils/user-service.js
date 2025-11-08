@@ -1,16 +1,15 @@
-// 用户服务模块
-// 提供用户相关的API调用功能
+﻿// 鐢ㄦ埛鏈嶅姟妯″潡
+// 鎻愪緵鐢ㄦ埛鐩稿叧鐨凙PI璋冪敤鍔熻兘
 import { request } from './api';
 import { showToast } from './global';
 
-// 常量定义
+// 甯搁噺瀹氫箟
 const USER_INFO_KEY = 'user_info';
 const USER_PREFERENCES_KEY = 'user_preferences';
 const CACHE_PREFIX = 'user_cache_';
-const DEFAULT_CACHE_EXPIRY = 300; // 默认缓存5分钟
+const DEFAULT_CACHE_EXPIRY = 300; // 榛樿缂撳瓨5鍒嗛挓
 
-// 缓存键定义
-const CACHE_KEYS = {
+// 缂撳瓨閿畾涔?const CACHE_KEYS = {
   USER_PROFILE: 'user_profile',
   USER_COUPONS: 'user_coupons',
   USER_ADDRESSES: 'user_addresses',
@@ -30,9 +29,9 @@ const CACHE_KEYS = {
   AVAILABLE_COUPONS: 'available_coupons'
 };
 
-// 缓存管理工具函数
+// 缂撳瓨绠＄悊宸ュ叿鍑芥暟
 const cacheManager = {
-  // 设置缓存
+  // 璁剧疆缂撳瓨
   set(key, value, expiry = DEFAULT_CACHE_EXPIRY) {
     try {
       const cacheKey = `${CACHE_PREFIX}${key}`;
@@ -42,11 +41,11 @@ const cacheManager = {
       };
       wx.setStorageSync(cacheKey, JSON.stringify(cacheData));
     } catch (error) {
-      console.error('设置缓存失败:', error);
+      console.error('璁剧疆缂撳瓨澶辫触:', error);
     }
   },
 
-  // 获取缓存
+  // 鑾峰彇缂撳瓨
   get(key) {
     try {
       const cacheKey = `${CACHE_PREFIX}${key}`;
@@ -55,30 +54,29 @@ const cacheManager = {
 
       const cacheData = JSON.parse(cacheDataStr);
       if (cacheData.expiry && Date.now() > cacheData.expiry) {
-        // 缓存已过期，清除缓存
+        // 缂撳瓨宸茶繃鏈燂紝娓呴櫎缂撳瓨
         this.remove(key);
         return null;
       }
 
       return cacheData.value;
     } catch (error) {
-      console.error('获取缓存失败:', error);
+      console.error('鑾峰彇缂撳瓨澶辫触:', error);
       return null;
     }
   },
 
-  // 移除缓存
+  // 绉婚櫎缂撳瓨
   remove(key) {
     try {
       const cacheKey = `${CACHE_PREFIX}${key}`;
       wx.removeStorageSync(cacheKey);
     } catch (error) {
-      console.error('移除缓存失败:', error);
+      console.error('绉婚櫎缂撳瓨澶辫触:', error);
     }
   },
 
-  // 清除所有用户相关缓存
-  clearAll() {
+  // 娓呴櫎鎵€鏈夌敤鎴风浉鍏崇紦瀛?  clearAll() {
     try {
       const keys = wx.getStorageInfoSync().keys;
       keys.forEach(key => {
@@ -87,12 +85,12 @@ const cacheManager = {
         }
       });
     } catch (error) {
-      console.error('清除缓存失败:', error);
+      console.error('娓呴櫎缂撳瓨澶辫触:', error);
     }
   }
 };
 
-// 重试请求函数
+// 閲嶈瘯璇锋眰鍑芥暟
 const retryRequest = async (requestFn, maxRetries = 2, delay = 1000) => {
   let lastError;
   
@@ -102,11 +100,10 @@ const retryRequest = async (requestFn, maxRetries = 2, delay = 1000) => {
     } catch (error) {
       lastError = error;
       
-      // 如果是最后一次重试，抛出错误
+      // 濡傛灉鏄渶鍚庝竴娆￠噸璇曪紝鎶涘嚭閿欒
       if (i === maxRetries) break;
       
-      // 指数退避
-      const waitTime = delay * Math.pow(2, i);
+      // 鎸囨暟閫€閬?      const waitTime = delay * Math.pow(2, i);
       await new Promise(resolve => setTimeout(resolve, waitTime));
     }
   }
@@ -114,7 +111,7 @@ const retryRequest = async (requestFn, maxRetries = 2, delay = 1000) => {
   throw lastError;
 };
 
-// 数据验证工具
+// 鏁版嵁楠岃瘉宸ュ叿
 const validator = {
   isString(value) {
     return typeof value === 'string' && value.trim() !== '';
@@ -143,13 +140,12 @@ const validator = {
 
 const userService = {
   /**
-   * 获取用户个人资料
-   * @param {boolean} forceRefresh - 是否强制刷新，不使用缓存
-   * @returns {Promise} 返回用户资料
+   * 鑾峰彇鐢ㄦ埛涓汉璧勬枡
+   * @param {boolean} forceRefresh - 鏄惁寮哄埗鍒锋柊锛屼笉浣跨敤缂撳瓨
+   * @returns {Promise} 杩斿洖鐢ㄦ埛璧勬枡
    */
   async getUserProfile(forceRefresh = false) {
-    // 尝试从缓存获取
-    if (!forceRefresh) {
+    // 灏濊瘯浠庣紦瀛樿幏鍙?    if (!forceRefresh) {
       const cachedProfile = cacheManager.get(CACHE_KEYS.USER_PROFILE);
       if (cachedProfile) {
         return cachedProfile;
@@ -164,19 +160,18 @@ const userService = {
         })
       );
       
-      // 更新缓存
-      cacheManager.set(CACHE_KEYS.USER_PROFILE, profile, 300); // 5分钟缓存
+      // 鏇存柊缂撳瓨
+      cacheManager.set(CACHE_KEYS.USER_PROFILE, profile, 300); // 5鍒嗛挓缂撳瓨
       
-      // 更新用户信息缓存
+      // 鏇存柊鐢ㄦ埛淇℃伅缂撳瓨
       this.cacheUserInfo(profile);
       
       return profile;
     } catch (error) {
-      console.error('获取用户资料失败:', error);
-      // 如果请求失败，尝试返回缓存数据
-      const cachedProfile = cacheManager.get(CACHE_KEYS.USER_PROFILE);
+      console.error('鑾峰彇鐢ㄦ埛璧勬枡澶辫触:', error);
+      // 濡傛灉璇锋眰澶辫触锛屽皾璇曡繑鍥炵紦瀛樻暟鎹?      const cachedProfile = cacheManager.get(CACHE_KEYS.USER_PROFILE);
       if (cachedProfile) {
-        console.log('使用缓存的用户资料');
+        console.log('浣跨敤缂撳瓨鐨勭敤鎴疯祫鏂?);
         return cachedProfile;
       }
       throw error;
@@ -184,14 +179,14 @@ const userService = {
   },
 
   /**
-   * 更新用户个人资料
-   * @param {Object} profileData - 用户资料数据
-   * @returns {Promise} 返回更新结果
+   * 鏇存柊鐢ㄦ埛涓汉璧勬枡
+   * @param {Object} profileData - 鐢ㄦ埛璧勬枡鏁版嵁
+   * @returns {Promise} 杩斿洖鏇存柊缁撴灉
    */
   async updateUserProfile(profileData) {
-    // 数据验证
+    // 鏁版嵁楠岃瘉
     if (!validator.isObject(profileData)) {
-      throw new Error('用户资料数据格式不正确');
+      throw new Error('鐢ㄦ埛璧勬枡鏁版嵁鏍煎紡涓嶆纭?);
     }
 
     try {
@@ -203,28 +198,28 @@ const userService = {
         })
       );
       
-      // 清除缓存，下次获取会重新加载
+      // 娓呴櫎缂撳瓨锛屼笅娆¤幏鍙栦細閲嶆柊鍔犺浇
       cacheManager.remove(CACHE_KEYS.USER_PROFILE);
       
-      // 更新本地用户信息缓存
+      // 鏇存柊鏈湴鐢ㄦ埛淇℃伅缂撳瓨
       const currentUser = this.getCachedUserInfo() || {};
       const updatedUser = { ...currentUser, ...profileData };
       this.cacheUserInfo(updatedUser);
       
-      // 显示成功提示
-      showToast('更新成功');
+      // 鏄剧ず鎴愬姛鎻愮ず
+      showToast('鏇存柊鎴愬姛');
       
       return result;
     } catch (error) {
-      console.error('更新用户资料失败:', error);
-      showToast(error.message || '更新失败，请重试');
+      console.error('鏇存柊鐢ㄦ埛璧勬枡澶辫触:', error);
+      showToast(error.message || '鏇存柊澶辫触锛岃閲嶈瘯');
       throw error;
     }
   },
 
   /**
-   * 获取用户设置
-   * @returns {Promise} 返回用户设置
+   * 鑾峰彇鐢ㄦ埛璁剧疆
+   * @returns {Promise} 杩斿洖鐢ㄦ埛璁剧疆
    */
   async getUserSettings() {
     try {
@@ -235,20 +230,20 @@ const userService = {
         })
       );
     } catch (error) {
-      console.error('获取用户设置失败:', error);
+      console.error('鑾峰彇鐢ㄦ埛璁剧疆澶辫触:', error);
       throw error;
     }
   },
 
   /**
-   * 更新用户设置
-   * @param {Object} settings - 设置数据
-   * @returns {Promise} 返回更新结果
+   * 鏇存柊鐢ㄦ埛璁剧疆
+   * @param {Object} settings - 璁剧疆鏁版嵁
+   * @returns {Promise} 杩斿洖鏇存柊缁撴灉
    */
   async updateUserSettings(settings) {
-    // 数据验证
+    // 鏁版嵁楠岃瘉
     if (!validator.isObject(settings)) {
-      throw new Error('设置数据格式不正确');
+      throw new Error('璁剧疆鏁版嵁鏍煎紡涓嶆纭?);
     }
 
     try {
@@ -260,18 +255,18 @@ const userService = {
         })
       );
       
-      showToast('设置已更新');
+      showToast('璁剧疆宸叉洿鏂?);
       return result;
     } catch (error) {
-      console.error('更新用户设置失败:', error);
-      showToast(error.message || '更新失败，请重试');
+      console.error('鏇存柊鐢ㄦ埛璁剧疆澶辫触:', error);
+      showToast(error.message || '鏇存柊澶辫触锛岃閲嶈瘯');
       throw error;
     }
   },
 
   /**
-   * 获取用户隐私设置
-   * @returns {Promise} 返回隐私设置
+   * 鑾峰彇鐢ㄦ埛闅愮璁剧疆
+   * @returns {Promise} 杩斿洖闅愮璁剧疆
    */
   async getUserPrivacySettings() {
     try {
@@ -282,20 +277,20 @@ const userService = {
         })
       );
     } catch (error) {
-      console.error('获取隐私设置失败:', error);
+      console.error('鑾峰彇闅愮璁剧疆澶辫触:', error);
       throw error;
     }
   },
 
   /**
-   * 更新用户隐私设置
-   * @param {Object} privacySettings - 隐私设置数据
-   * @returns {Promise} 返回更新结果
+   * 鏇存柊鐢ㄦ埛闅愮璁剧疆
+   * @param {Object} privacySettings - 闅愮璁剧疆鏁版嵁
+   * @returns {Promise} 杩斿洖鏇存柊缁撴灉
    */
   async updateUserPrivacySettings(privacySettings) {
-    // 数据验证
+    // 鏁版嵁楠岃瘉
     if (!validator.isObject(privacySettings)) {
-      throw new Error('隐私设置数据格式不正确');
+      throw new Error('闅愮璁剧疆鏁版嵁鏍煎紡涓嶆纭?);
     }
 
     try {
@@ -307,24 +302,23 @@ const userService = {
         })
       );
       
-      showToast('隐私设置已更新');
+      showToast('闅愮璁剧疆宸叉洿鏂?);
       return result;
     } catch (error) {
-      console.error('更新隐私设置失败:', error);
-      showToast(error.message || '更新失败，请重试');
+      console.error('鏇存柊闅愮璁剧疆澶辫触:', error);
+      showToast(error.message || '鏇存柊澶辫触锛岃閲嶈瘯');
       throw error;
     }
   },
 
   /**
-   * 获取用户统计数据
-   * @returns {Promise} 返回用户统计数据
+   * 鑾峰彇鐢ㄦ埛缁熻鏁版嵁
+   * @returns {Promise} 杩斿洖鐢ㄦ埛缁熻鏁版嵁
    */
   async getUserStats() {
     const cacheKey = 'user_stats';
     
-    // 尝试从缓存获取
-    const cachedStats = cacheManager.get(cacheKey);
+    // 灏濊瘯浠庣紦瀛樿幏鍙?    const cachedStats = cacheManager.get(cacheKey);
     if (cachedStats) {
       return cachedStats;
     }
@@ -337,29 +331,28 @@ const userService = {
         })
       );
       
-      // 更新缓存
-      cacheManager.set(cacheKey, stats, 300); // 5分钟缓存
+      // 鏇存柊缂撳瓨
+      cacheManager.set(cacheKey, stats, 300); // 5鍒嗛挓缂撳瓨
       
       return stats;
     } catch (error) {
-      console.error('获取用户统计数据失败:', error);
+      console.error('鑾峰彇鐢ㄦ埛缁熻鏁版嵁澶辫触:', error);
       throw error;
     }
   },
 
   /**
-   * 上传用户头像
-   * @param {string} filePath - 头像文件路径
-   * @returns {Promise} 返回上传结果
+   * 涓婁紶鐢ㄦ埛澶村儚
+   * @param {string} filePath - 澶村儚鏂囦欢璺緞
+   * @returns {Promise} 杩斿洖涓婁紶缁撴灉
    */
   async uploadAvatar(filePath) {
     if (!validator.isString(filePath)) {
-      throw new Error('头像文件路径不能为空');
+      throw new Error('澶村儚鏂囦欢璺緞涓嶈兘涓虹┖');
     }
 
     try {
-      // 定义上传文件函数，用于重试机制
-      const uploadFn = () => {
+      // 瀹氫箟涓婁紶鏂囦欢鍑芥暟锛岀敤浜庨噸璇曟満鍒?      const uploadFn = () => {
         return new Promise((resolve, reject) => {
           wx.uploadFile({
             url: request.getBaseUrl() + '/user/avatar',
@@ -375,10 +368,10 @@ const userService = {
                 if (data.code === 200) {
                   resolve(data);
                 } else {
-                  reject(new Error(data.message || '上传头像失败'));
+                  reject(new Error(data.message || '涓婁紶澶村儚澶辫触'));
                 }
               } catch (e) {
-                reject(new Error('解析响应失败'));
+                reject(new Error('瑙ｆ瀽鍝嶅簲澶辫触'));
               }
             },
             fail: (error) => {
@@ -390,44 +383,41 @@ const userService = {
 
       const result = await retryRequest(uploadFn);
       
-      // 清除用户资料缓存
+      // 娓呴櫎鐢ㄦ埛璧勬枡缂撳瓨
       cacheManager.remove(CACHE_KEYS.USER_PROFILE);
       
-      // 更新本地用户信息缓存
+      // 鏇存柊鏈湴鐢ㄦ埛淇℃伅缂撳瓨
       const currentUser = this.getCachedUserInfo() || {};
       if (result.data && result.data.avatar_url) {
         currentUser.avatar_url = result.data.avatar_url;
         this.cacheUserInfo(currentUser);
       }
       
-      showToast('头像上传成功');
+      showToast('澶村儚涓婁紶鎴愬姛');
       return result;
     } catch (error) {
-      console.error('上传头像失败:', error);
-      showToast(error.message || '上传失败，请重试');
+      console.error('涓婁紶澶村儚澶辫触:', error);
+      showToast(error.message || '涓婁紶澶辫触锛岃閲嶈瘯');
       throw error;
     }
   },
 
   /**
-   * 绑定用户账号
-   * @param {Object} bindData - 绑定数据
-   * @param {string} bindData.type - 绑定类型 (phone, email)
-   * @param {string} bindData.value - 绑定值
-   * @param {string} bindData.code - 验证码
-   * @returns {Promise} 返回绑定结果
+   * 缁戝畾鐢ㄦ埛璐﹀彿
+   * @param {Object} bindData - 缁戝畾鏁版嵁
+   * @param {string} bindData.type - 缁戝畾绫诲瀷 (phone, email)
+   * @param {string} bindData.value - 缁戝畾鍊?   * @param {string} bindData.code - 楠岃瘉鐮?   * @returns {Promise} 杩斿洖缁戝畾缁撴灉
    */
   async bindAccount(bindData) {
-    // 数据验证
+    // 鏁版嵁楠岃瘉
     if (!validator.isObject(bindData) || !bindData.type || !bindData.value) {
-      throw new Error('绑定数据不完整');
+      throw new Error('缁戝畾鏁版嵁涓嶅畬鏁?);
     }
     
-    // 验证绑定值格式
-    if (bindData.type === 'phone' && !validator.isValidPhone(bindData.value)) {
-      throw new Error('请输入正确的手机号');
+    // 楠岃瘉缁戝畾鍊兼牸寮?    if (bindData.type === 'phone' && !validator.isValidPhone(bindData.value)) {
+      throw new Error('璇疯緭鍏ユ纭殑鎵嬫満鍙?);
     } else if (bindData.type === 'email' && !validator.isValidEmail(bindData.value)) {
-      throw new Error('请输入正确的邮箱地址');
+      throw new Error('璇疯緭鍏ユ纭殑閭鍦板潃');
     }
 
     try {
@@ -439,27 +429,27 @@ const userService = {
         })
       );
       
-      // 清除用户资料缓存
+      // 娓呴櫎鐢ㄦ埛璧勬枡缂撳瓨
       cacheManager.remove(CACHE_KEYS.USER_PROFILE);
       
-      showToast('账号绑定成功');
+      showToast('璐﹀彿缁戝畾鎴愬姛');
       return result;
     } catch (error) {
-      console.error('绑定账号失败:', error);
-      showToast(error.message || '绑定失败，请重试');
+      console.error('缁戝畾璐﹀彿澶辫触:', error);
+      showToast(error.message || '缁戝畾澶辫触锛岃閲嶈瘯');
       throw error;
     }
   },
 
   /**
-   * 解绑用户账号
-   * @param {string} type - 解绑类型 (phone, email)
-   * @returns {Promise} 返回解绑结果
+   * 瑙ｇ粦鐢ㄦ埛璐﹀彿
+   * @param {string} type - 瑙ｇ粦绫诲瀷 (phone, email)
+   * @returns {Promise} 杩斿洖瑙ｇ粦缁撴灉
    */
   async unbindAccount(type) {
-    // 数据验证
+    // 鏁版嵁楠岃瘉
     if (!validator.isString(type) || !['phone', 'email'].includes(type)) {
-      throw new Error('解绑类型不正确');
+      throw new Error('瑙ｇ粦绫诲瀷涓嶆纭?);
     }
 
     try {
@@ -470,21 +460,21 @@ const userService = {
         })
       );
       
-      // 清除用户资料缓存
+      // 娓呴櫎鐢ㄦ埛璧勬枡缂撳瓨
       cacheManager.remove(CACHE_KEYS.USER_PROFILE);
       
-      showToast('账号解绑成功');
+      showToast('璐﹀彿瑙ｇ粦鎴愬姛');
       return result;
     } catch (error) {
-      console.error('解绑账号失败:', error);
-      showToast(error.message || '解绑失败，请重试');
+      console.error('瑙ｇ粦璐﹀彿澶辫触:', error);
+      showToast(error.message || '瑙ｇ粦澶辫触锛岃閲嶈瘯');
       throw error;
     }
   },
 
   /**
-   * 获取用户消息通知设置
-   * @returns {Promise} 返回通知设置
+   * 鑾峰彇鐢ㄦ埛娑堟伅閫氱煡璁剧疆
+   * @returns {Promise} 杩斿洖閫氱煡璁剧疆
    */
   async getNotificationSettings() {
     try {
@@ -495,20 +485,20 @@ const userService = {
         })
       );
     } catch (error) {
-      console.error('获取通知设置失败:', error);
+      console.error('鑾峰彇閫氱煡璁剧疆澶辫触:', error);
       throw error;
     }
   },
 
   /**
-   * 更新用户消息通知设置
-   * @param {Object} notificationSettings - 通知设置
-   * @returns {Promise} 返回更新结果
+   * 鏇存柊鐢ㄦ埛娑堟伅閫氱煡璁剧疆
+   * @param {Object} notificationSettings - 閫氱煡璁剧疆
+   * @returns {Promise} 杩斿洖鏇存柊缁撴灉
    */
   async updateNotificationSettings(notificationSettings) {
-    // 数据验证
+    // 鏁版嵁楠岃瘉
     if (!validator.isObject(notificationSettings)) {
-      throw new Error('通知设置数据格式不正确');
+      throw new Error('閫氱煡璁剧疆鏁版嵁鏍煎紡涓嶆纭?);
     }
 
     try {
@@ -520,23 +510,23 @@ const userService = {
         })
       );
       
-      showToast('通知设置已更新');
+      showToast('閫氱煡璁剧疆宸叉洿鏂?);
       return result;
     } catch (error) {
-      console.error('更新通知设置失败:', error);
-      showToast(error.message || '更新失败，请重试');
+      console.error('鏇存柊閫氱煡璁剧疆澶辫触:', error);
+      showToast(error.message || '鏇存柊澶辫触锛岃閲嶈瘯');
       throw error;
     }
   },
 
   /**
-   * 收藏文章
-   * @param {string} articleId - 文章ID
-   * @returns {Promise} 返回收藏结果
+   * 鏀惰棌鏂囩珷
+   * @param {string} articleId - 鏂囩珷ID
+   * @returns {Promise} 杩斿洖鏀惰棌缁撴灉
    */
   async favoriteArticle(articleId) {
     if (!articleId) {
-      throw new Error('文章ID不能为空');
+      throw new Error('鏂囩珷ID涓嶈兘涓虹┖');
     }
 
     try {
@@ -548,28 +538,27 @@ const userService = {
         })
       );
       
-      // 清除收藏列表缓存
+      // 娓呴櫎鏀惰棌鍒楄〃缂撳瓨
       cacheManager.remove('user_favorites_1');
-      // 清除文章收藏状态缓存
-      cacheManager.remove(`favorite_status_${articleId}`);
+      // 娓呴櫎鏂囩珷鏀惰棌鐘舵€佺紦瀛?      cacheManager.remove(`favorite_status_${articleId}`);
       
-      showToast('收藏成功');
+      showToast('鏀惰棌鎴愬姛');
       return result;
     } catch (error) {
-      console.error('收藏文章失败:', error);
-      showToast(error.message || '收藏失败，请重试');
+      console.error('鏀惰棌鏂囩珷澶辫触:', error);
+      showToast(error.message || '鏀惰棌澶辫触锛岃閲嶈瘯');
       throw error;
     }
   },
 
   /**
-   * 取消收藏文章
-   * @param {string} articleId - 文章ID
-   * @returns {Promise} 返回取消收藏结果
+   * 鍙栨秷鏀惰棌鏂囩珷
+   * @param {string} articleId - 鏂囩珷ID
+   * @returns {Promise} 杩斿洖鍙栨秷鏀惰棌缁撴灉
    */
   async unfavoriteArticle(articleId) {
     if (!articleId) {
-      throw new Error('文章ID不能为空');
+      throw new Error('鏂囩珷ID涓嶈兘涓虹┖');
     }
 
     try {
@@ -581,34 +570,31 @@ const userService = {
         })
       );
       
-      // 清除收藏列表缓存
+      // 娓呴櫎鏀惰棌鍒楄〃缂撳瓨
       cacheManager.remove('user_favorites_1');
-      // 清除文章收藏状态缓存
-      cacheManager.remove(`favorite_status_${articleId}`);
+      // 娓呴櫎鏂囩珷鏀惰棌鐘舵€佺紦瀛?      cacheManager.remove(`favorite_status_${articleId}`);
       
-      showToast('已取消收藏');
+      showToast('宸插彇娑堟敹钘?);
       return result;
     } catch (error) {
-      console.error('取消收藏失败:', error);
-      showToast(error.message || '取消收藏失败，请重试');
+      console.error('鍙栨秷鏀惰棌澶辫触:', error);
+      showToast(error.message || '鍙栨秷鏀惰棌澶辫触锛岃閲嶈瘯');
       throw error;
     }
   },
 
   /**
-   * 检查文章是否被收藏
-   * @param {string} articleId - 文章ID
-   * @returns {Promise} 返回收藏状态
-   */
+   * 妫€鏌ユ枃绔犳槸鍚﹁鏀惰棌
+   * @param {string} articleId - 鏂囩珷ID
+   * @returns {Promise} 杩斿洖鏀惰棌鐘舵€?   */
   async checkFavorite(articleId) {
     if (!articleId) {
-      throw new Error('文章ID不能为空');
+      throw new Error('鏂囩珷ID涓嶈兘涓虹┖');
     }
 
     const cacheKey = `favorite_status_${articleId}`;
     
-    // 尝试从缓存获取
-    const cachedStatus = cacheManager.get(cacheKey);
+    // 灏濊瘯浠庣紦瀛樿幏鍙?    const cachedStatus = cacheManager.get(cacheKey);
     if (cachedStatus !== undefined) {
       return cachedStatus;
     }
@@ -621,30 +607,29 @@ const userService = {
         })
       );
       
-      // 更新缓存
-      cacheManager.set(cacheKey, status, 300); // 5分钟缓存
+      // 鏇存柊缂撳瓨
+      cacheManager.set(cacheKey, status, 300); // 5鍒嗛挓缂撳瓨
       
       return status;
     } catch (error) {
-      console.error('检查收藏状态失败:', error);
+      console.error('妫€鏌ユ敹钘忕姸鎬佸け璐?', error);
       throw error;
     }
   },
 
   /**
-   * 获取用户收藏的文章列表
-   * @param {Object} params - 查询参数
-   * @param {number} params.page - 页码
-   * @param {number} params.page_size - 每页数量
-   * @returns {Promise} 返回收藏文章列表
+   * 鑾峰彇鐢ㄦ埛鏀惰棌鐨勬枃绔犲垪琛?   * @param {Object} params - 鏌ヨ鍙傛暟
+   * @param {number} params.page - 椤电爜
+   * @param {number} params.page_size - 姣忛〉鏁伴噺
+   * @returns {Promise} 杩斿洖鏀惰棌鏂囩珷鍒楄〃
    */
   async getUserFavorites(params = { page: 1, page_size: 10 }) {
-    // 数据验证
+    // 鏁版嵁楠岃瘉
     if (!validator.isObject(params)) {
       params = { page: 1, page_size: 10 };
     }
     
-    // 只有第一页才使用缓存
+    // 鍙湁绗竴椤垫墠浣跨敤缂撳瓨
     const queryParams = { page: params.page || 1, page_size: params.page_size || 10 };
     const cacheKey = `user_favorites_${queryParams.page}`;
     
@@ -664,19 +649,17 @@ const userService = {
         })
       );
       
-      // 只缓存第一页数据
-      if (queryParams.page === 1) {
-        cacheManager.set(cacheKey, favorites, 180); // 3分钟缓存
+      // 鍙紦瀛樼涓€椤垫暟鎹?      if (queryParams.page === 1) {
+        cacheManager.set(cacheKey, favorites, 180); // 3鍒嗛挓缂撳瓨
       }
       
       return favorites;
     } catch (error) {
-      console.error('获取收藏列表失败:', error);
-      // 如果是第一页且请求失败，尝试返回缓存数据
-      if (queryParams.page === 1) {
+      console.error('鑾峰彇鏀惰棌鍒楄〃澶辫触:', error);
+      // 濡傛灉鏄涓€椤典笖璇锋眰澶辫触锛屽皾璇曡繑鍥炵紦瀛樻暟鎹?      if (queryParams.page === 1) {
         const cachedData = cacheManager.get(cacheKey);
         if (cachedData) {
-          console.log('使用缓存的收藏列表');
+          console.log('浣跨敤缂撳瓨鐨勬敹钘忓垪琛?);
           return cachedData;
         }
       }
@@ -685,19 +668,19 @@ const userService = {
   },
 
   /**
-   * 获取用户评论列表
-   * @param {Object} params - 查询参数
-   * @param {number} params.page - 页码
-   * @param {number} params.page_size - 每页数量
-   * @returns {Promise} 返回用户评论列表
+   * 鑾峰彇鐢ㄦ埛璇勮鍒楄〃
+   * @param {Object} params - 鏌ヨ鍙傛暟
+   * @param {number} params.page - 椤电爜
+   * @param {number} params.page_size - 姣忛〉鏁伴噺
+   * @returns {Promise} 杩斿洖鐢ㄦ埛璇勮鍒楄〃
    */
   async getUserComments(params = { page: 1, page_size: 10 }) {
-    // 数据验证
+    // 鏁版嵁楠岃瘉
     if (!validator.isObject(params)) {
       params = { page: 1, page_size: 10 };
     }
     
-    // 只有第一页才使用缓存
+    // 鍙湁绗竴椤垫墠浣跨敤缂撳瓨
     const queryParams = { page: params.page || 1, page_size: params.page_size || 10 };
     const cacheKey = `user_comments_${queryParams.page}`;
     
@@ -717,19 +700,17 @@ const userService = {
         })
       );
       
-      // 只缓存第一页数据
-      if (queryParams.page === 1) {
-        cacheManager.set(cacheKey, comments, 180); // 3分钟缓存
+      // 鍙紦瀛樼涓€椤垫暟鎹?      if (queryParams.page === 1) {
+        cacheManager.set(cacheKey, comments, 180); // 3鍒嗛挓缂撳瓨
       }
       
       return comments;
     } catch (error) {
-      console.error('获取评论列表失败:', error);
-      // 如果是第一页且请求失败，尝试返回缓存数据
-      if (queryParams.page === 1) {
+      console.error('鑾峰彇璇勮鍒楄〃澶辫触:', error);
+      // 濡傛灉鏄涓€椤典笖璇锋眰澶辫触锛屽皾璇曡繑鍥炵紦瀛樻暟鎹?      if (queryParams.page === 1) {
         const cachedData = cacheManager.get(cacheKey);
         if (cachedData) {
-          console.log('使用缓存的评论列表');
+          console.log('浣跨敤缂撳瓨鐨勮瘎璁哄垪琛?);
           return cachedData;
         }
       }
@@ -738,13 +719,12 @@ const userService = {
   },
 
   /**
-   * 获取用户地址列表
-   * @param {boolean} forceRefresh - 是否强制刷新，不使用缓存
-   * @returns {Promise} 返回地址列表
+   * 鑾峰彇鐢ㄦ埛鍦板潃鍒楄〃
+   * @param {boolean} forceRefresh - 鏄惁寮哄埗鍒锋柊锛屼笉浣跨敤缂撳瓨
+   * @returns {Promise} 杩斿洖鍦板潃鍒楄〃
    */
   async getUserAddresses(forceRefresh = false) {
-    // 尝试从缓存获取
-    if (!forceRefresh) {
+    // 灏濊瘯浠庣紦瀛樿幏鍙?    if (!forceRefresh) {
       const cachedAddresses = cacheManager.get(CACHE_KEYS.USER_ADDRESSES);
       if (cachedAddresses) {
         return cachedAddresses;
@@ -759,16 +739,15 @@ const userService = {
         })
       );
       
-      // 更新缓存
-      cacheManager.set(CACHE_KEYS.USER_ADDRESSES, addresses, 300); // 5分钟缓存
+      // 鏇存柊缂撳瓨
+      cacheManager.set(CACHE_KEYS.USER_ADDRESSES, addresses, 300); // 5鍒嗛挓缂撳瓨
       
       return addresses;
     } catch (error) {
-      console.error('获取用户地址列表失败:', error);
-      // 如果请求失败，尝试返回缓存数据
-      const cachedAddresses = cacheManager.get(CACHE_KEYS.USER_ADDRESSES);
+      console.error('鑾峰彇鐢ㄦ埛鍦板潃鍒楄〃澶辫触:', error);
+      // 濡傛灉璇锋眰澶辫触锛屽皾璇曡繑鍥炵紦瀛樻暟鎹?      const cachedAddresses = cacheManager.get(CACHE_KEYS.USER_ADDRESSES);
       if (cachedAddresses) {
-        console.log('使用缓存的地址列表');
+        console.log('浣跨敤缂撳瓨鐨勫湴鍧€鍒楄〃');
         return cachedAddresses;
       }
       throw error;
@@ -776,27 +755,26 @@ const userService = {
   },
 
   /**
-   * 添加新地址
-   * @param {Object} addressData - 地址数据
-   * @returns {Promise} 返回添加结果
+   * 娣诲姞鏂板湴鍧€
+   * @param {Object} addressData - 鍦板潃鏁版嵁
+   * @returns {Promise} 杩斿洖娣诲姞缁撴灉
    */
   async addAddress(addressData) {
-    // 数据验证
+    // 鏁版嵁楠岃瘉
     if (!validator.isObject(addressData)) {
-      throw new Error('地址数据格式不正确');
+      throw new Error('鍦板潃鏁版嵁鏍煎紡涓嶆纭?);
     }
     
-    // 基本字段验证
+    // 鍩烘湰瀛楁楠岃瘉
     const requiredFields = ['name', 'phone', 'province', 'city', 'district', 'detail_address'];
     for (const field of requiredFields) {
       if (!addressData[field] || !validator.isString(addressData[field])) {
-        throw new Error(`地址信息不完整，请填写${field === 'detail_address' ? '详细地址' : field}`);
+        throw new Error(`鍦板潃淇℃伅涓嶅畬鏁达紝璇峰～鍐?{field === 'detail_address' ? '璇︾粏鍦板潃' : field}`);
       }
     }
     
-    // 手机号验证
-    if (!validator.isValidPhone(addressData.phone)) {
-      throw new Error('请输入正确的手机号');
+    // 鎵嬫満鍙烽獙璇?    if (!validator.isValidPhone(addressData.phone)) {
+      throw new Error('璇疯緭鍏ユ纭殑鎵嬫満鍙?);
     }
 
     try {
@@ -808,47 +786,46 @@ const userService = {
         })
       );
       
-      // 清除地址列表缓存
+      // 娓呴櫎鍦板潃鍒楄〃缂撳瓨
       cacheManager.remove(CACHE_KEYS.USER_ADDRESSES);
       
-      // 显示成功提示
-      showToast('添加地址成功');
+      // 鏄剧ず鎴愬姛鎻愮ず
+      showToast('娣诲姞鍦板潃鎴愬姛');
       
       return result;
     } catch (error) {
-      console.error('添加地址失败:', error);
-      showToast(error.message || '添加地址失败，请重试');
+      console.error('娣诲姞鍦板潃澶辫触:', error);
+      showToast(error.message || '娣诲姞鍦板潃澶辫触锛岃閲嶈瘯');
       throw error;
     }
   },
 
   /**
-   * 更新地址
-   * @param {string} addressId - 地址ID
-   * @param {Object} addressData - 地址数据
-   * @returns {Promise} 返回更新结果
+   * 鏇存柊鍦板潃
+   * @param {string} addressId - 鍦板潃ID
+   * @param {Object} addressData - 鍦板潃鏁版嵁
+   * @returns {Promise} 杩斿洖鏇存柊缁撴灉
    */
   async updateAddress(addressId, addressData) {
-    // 数据验证
+    // 鏁版嵁楠岃瘉
     if (!addressId) {
-      throw new Error('地址ID不能为空');
+      throw new Error('鍦板潃ID涓嶈兘涓虹┖');
     }
     
     if (!validator.isObject(addressData)) {
-      throw new Error('地址数据格式不正确');
+      throw new Error('鍦板潃鏁版嵁鏍煎紡涓嶆纭?);
     }
     
-    // 基本字段验证
+    // 鍩烘湰瀛楁楠岃瘉
     const requiredFields = ['name', 'phone', 'province', 'city', 'district', 'detail_address'];
     for (const field of requiredFields) {
       if (addressData.hasOwnProperty(field) && (!addressData[field] || !validator.isString(addressData[field]))) {
-        throw new Error(`地址信息不完整，请填写${field === 'detail_address' ? '详细地址' : field}`);
+        throw new Error(`鍦板潃淇℃伅涓嶅畬鏁达紝璇峰～鍐?{field === 'detail_address' ? '璇︾粏鍦板潃' : field}`);
       }
     }
     
-    // 手机号验证
-    if (addressData.phone && !validator.isValidPhone(addressData.phone)) {
-      throw new Error('请输入正确的手机号');
+    // 鎵嬫満鍙烽獙璇?    if (addressData.phone && !validator.isValidPhone(addressData.phone)) {
+      throw new Error('璇疯緭鍏ユ纭殑鎵嬫満鍙?);
     }
 
     try {
@@ -860,26 +837,26 @@ const userService = {
         })
       );
       
-      // 清除地址列表缓存
+      // 娓呴櫎鍦板潃鍒楄〃缂撳瓨
       cacheManager.remove(CACHE_KEYS.USER_ADDRESSES);
       
-      showToast('地址更新成功');
+      showToast('鍦板潃鏇存柊鎴愬姛');
       return result;
     } catch (error) {
-      console.error('更新地址失败:', error);
-      showToast(error.message || '更新地址失败，请重试');
+      console.error('鏇存柊鍦板潃澶辫触:', error);
+      showToast(error.message || '鏇存柊鍦板潃澶辫触锛岃閲嶈瘯');
       throw error;
     }
   },
 
   /**
-   * 删除地址
-   * @param {string} addressId - 地址ID
-   * @returns {Promise} 返回删除结果
+   * 鍒犻櫎鍦板潃
+   * @param {string} addressId - 鍦板潃ID
+   * @returns {Promise} 杩斿洖鍒犻櫎缁撴灉
    */
   async deleteAddress(addressId) {
     if (!addressId) {
-      throw new Error('地址ID不能为空');
+      throw new Error('鍦板潃ID涓嶈兘涓虹┖');
     }
 
     try {
@@ -890,26 +867,26 @@ const userService = {
         })
       );
       
-      // 清除地址列表缓存
+      // 娓呴櫎鍦板潃鍒楄〃缂撳瓨
       cacheManager.remove(CACHE_KEYS.USER_ADDRESSES);
       
-      showToast('地址已删除');
+      showToast('鍦板潃宸插垹闄?);
       return result;
     } catch (error) {
-      console.error('删除地址失败:', error);
-      showToast(error.message || '删除地址失败，请重试');
+      console.error('鍒犻櫎鍦板潃澶辫触:', error);
+      showToast(error.message || '鍒犻櫎鍦板潃澶辫触锛岃閲嶈瘯');
       throw error;
     }
   },
 
   /**
-   * 设置默认地址
-   * @param {string} addressId - 地址ID
-   * @returns {Promise} 返回设置结果
+   * 璁剧疆榛樿鍦板潃
+   * @param {string} addressId - 鍦板潃ID
+   * @returns {Promise} 杩斿洖璁剧疆缁撴灉
    */
   async setDefaultAddress(addressId) {
     if (!addressId) {
-      throw new Error('地址ID不能为空');
+      throw new Error('鍦板潃ID涓嶈兘涓虹┖');
     }
 
     try {
@@ -920,26 +897,25 @@ const userService = {
         })
       );
       
-      // 清除地址列表缓存
+      // 娓呴櫎鍦板潃鍒楄〃缂撳瓨
       cacheManager.remove(CACHE_KEYS.USER_ADDRESSES);
       
-      showToast('已设置为默认地址');
+      showToast('宸茶缃负榛樿鍦板潃');
       return result;
     } catch (error) {
-      console.error('设置默认地址失败:', error);
-      showToast(error.message || '设置默认地址失败，请重试');
+      console.error('璁剧疆榛樿鍦板潃澶辫触:', error);
+      showToast(error.message || '璁剧疆榛樿鍦板潃澶辫触锛岃閲嶈瘯');
       throw error;
     }
   },
 
   /**
-   * 获取用户积分信息
-   * @param {boolean} forceRefresh - 是否强制刷新，不使用缓存
-   * @returns {Promise} 返回积分信息
+   * 鑾峰彇鐢ㄦ埛绉垎淇℃伅
+   * @param {boolean} forceRefresh - 鏄惁寮哄埗鍒锋柊锛屼笉浣跨敤缂撳瓨
+   * @returns {Promise} 杩斿洖绉垎淇℃伅
    */
   async getUserPoints(forceRefresh = false) {
-    // 尝试从缓存获取
-    if (!forceRefresh) {
+    // 灏濊瘯浠庣紦瀛樿幏鍙?    if (!forceRefresh) {
       const cachedPoints = cacheManager.get(CACHE_KEYS.USER_POINTS);
       if (cachedPoints) {
         return cachedPoints;
@@ -954,16 +930,15 @@ const userService = {
         })
       );
       
-      // 更新缓存
-      cacheManager.set(CACHE_KEYS.USER_POINTS, points, 180); // 3分钟缓存
+      // 鏇存柊缂撳瓨
+      cacheManager.set(CACHE_KEYS.USER_POINTS, points, 180); // 3鍒嗛挓缂撳瓨
       
       return points;
     } catch (error) {
-      console.error('获取积分信息失败:', error);
-      // 如果请求失败，尝试返回缓存数据
-      const cachedPoints = cacheManager.get(CACHE_KEYS.USER_POINTS);
+      console.error('鑾峰彇绉垎淇℃伅澶辫触:', error);
+      // 濡傛灉璇锋眰澶辫触锛屽皾璇曡繑鍥炵紦瀛樻暟鎹?      const cachedPoints = cacheManager.get(CACHE_KEYS.USER_POINTS);
       if (cachedPoints) {
-        console.log('使用缓存的积分信息');
+        console.log('浣跨敤缂撳瓨鐨勭Н鍒嗕俊鎭?);
         return cachedPoints;
       }
       throw error;
@@ -971,19 +946,19 @@ const userService = {
   },
 
   /**
-   * 获取用户积分历史
-   * @param {Object} params - 查询参数
-   * @param {number} params.page - 页码
-   * @param {number} params.page_size - 每页数量
-   * @returns {Promise} 返回积分历史
+   * 鑾峰彇鐢ㄦ埛绉垎鍘嗗彶
+   * @param {Object} params - 鏌ヨ鍙傛暟
+   * @param {number} params.page - 椤电爜
+   * @param {number} params.page_size - 姣忛〉鏁伴噺
+   * @returns {Promise} 杩斿洖绉垎鍘嗗彶
    */
   async getUserPointsHistory(params = { page: 1, page_size: 10 }) {
-    // 数据验证
+    // 鏁版嵁楠岃瘉
     if (!validator.isObject(params)) {
       params = { page: 1, page_size: 10 };
     }
     
-    // 只有第一页才使用缓存
+    // 鍙湁绗竴椤垫墠浣跨敤缂撳瓨
     const queryParams = { page: params.page || 1, page_size: params.page_size || 10 };
     const cacheKey = `user_points_history_${queryParams.page}`;
     
@@ -1003,19 +978,17 @@ const userService = {
         })
       );
       
-      // 只缓存第一页数据
-      if (queryParams.page === 1) {
-        cacheManager.set(cacheKey, history, 180); // 3分钟缓存
+      // 鍙紦瀛樼涓€椤垫暟鎹?      if (queryParams.page === 1) {
+        cacheManager.set(cacheKey, history, 180); // 3鍒嗛挓缂撳瓨
       }
       
       return history;
     } catch (error) {
-      console.error('获取积分历史失败:', error);
-      // 如果是第一页且请求失败，尝试返回缓存数据
-      if (queryParams.page === 1) {
+      console.error('鑾峰彇绉垎鍘嗗彶澶辫触:', error);
+      // 濡傛灉鏄涓€椤典笖璇锋眰澶辫触锛屽皾璇曡繑鍥炵紦瀛樻暟鎹?      if (queryParams.page === 1) {
         const cachedData = cacheManager.get(cacheKey);
         if (cachedData) {
-          console.log('使用缓存的积分历史');
+          console.log('浣跨敤缂撳瓨鐨勭Н鍒嗗巻鍙?);
           return cachedData;
         }
       }
@@ -1024,8 +997,8 @@ const userService = {
   },
 
   /**
-   * 签到功能
-   * @returns {Promise} 返回签到结果
+   * 绛惧埌鍔熻兘
+   * @returns {Promise} 杩斿洖绛惧埌缁撴灉
    */
   async signIn() {
     try {
@@ -1036,28 +1009,25 @@ const userService = {
         })
       );
       
-      // 清除签到相关缓存
+      // 娓呴櫎绛惧埌鐩稿叧缂撳瓨
       cacheManager.remove(CACHE_KEYS.USER_SIGNIN_HISTORY);
       cacheManager.remove('user_checkin_status');
       
-      showToast(`签到成功，获得${result.points || 0}积分`);
+      showToast(`绛惧埌鎴愬姛锛岃幏寰?{result.points || 0}绉垎`);
       return result;
     } catch (error) {
-      console.error('用户签到失败:', error);
-      showToast(error.message || '签到失败，请重试');
+      console.error('鐢ㄦ埛绛惧埌澶辫触:', error);
+      showToast(error.message || '绛惧埌澶辫触锛岃閲嶈瘯');
       throw error;
     }
   },
 
   /**
-   * 获取签到状态
-   * @returns {Promise} 返回签到状态
-   */
+   * 鑾峰彇绛惧埌鐘舵€?   * @returns {Promise} 杩斿洖绛惧埌鐘舵€?   */
   async getSignInStatus() {
     const cacheKey = 'user_checkin_status';
     
-    // 尝试从缓存获取
-    const cachedStatus = cacheManager.get(cacheKey);
+    // 灏濊瘯浠庣紦瀛樿幏鍙?    const cachedStatus = cacheManager.get(cacheKey);
     if (cachedStatus) {
       return cachedStatus;
     }
@@ -1070,23 +1040,23 @@ const userService = {
         })
       );
       
-      // 更新缓存
-      cacheManager.set(cacheKey, status, 60); // 1分钟缓存
+      // 鏇存柊缂撳瓨
+      cacheManager.set(cacheKey, status, 60); // 1鍒嗛挓缂撳瓨
       
       return status;
     } catch (error) {
-      console.error('获取签到状态失败:', error);
+      console.error('鑾峰彇绛惧埌鐘舵€佸け璐?', error);
       throw error;
     }
   },
 
   /**
-   * 获取签到历史
-   * @param {Object} params - 查询参数
-   * @param {number} params.page - 页码
-   * @param {number} params.page_size - 每页数量
-   * @param {boolean} forceRefresh - 是否强制刷新，不使用缓存
-   * @returns {Promise} 返回签到历史
+   * 鑾峰彇绛惧埌鍘嗗彶
+   * @param {Object} params - 鏌ヨ鍙傛暟
+   * @param {number} params.page - 椤电爜
+   * @param {number} params.page_size - 姣忛〉鏁伴噺
+   * @param {boolean} forceRefresh - 鏄惁寮哄埗鍒锋柊锛屼笉浣跨敤缂撳瓨
+   * @returns {Promise} 杩斿洖绛惧埌鍘嗗彶
    */
   async getSignInHistory(params = { page: 1, page_size: 30 }, forceRefresh = false) {
     const queryParams = {
@@ -1094,7 +1064,7 @@ const userService = {
       page_size: params.page_size || 30
     };
 
-    // 只有第一页才使用缓存
+    // 鍙湁绗竴椤垫墠浣跨敤缂撳瓨
     if (!forceRefresh && queryParams.page === 1) {
       const cacheKey = `${CACHE_KEYS.USER_SIGNIN_HISTORY}`;
       const cachedHistory = cacheManager.get(cacheKey);
@@ -1112,21 +1082,20 @@ const userService = {
         })
       );
       
-      // 只有第一页才缓存
+      // 鍙湁绗竴椤垫墠缂撳瓨
       if (queryParams.page === 1) {
         const cacheKey = `${CACHE_KEYS.USER_SIGNIN_HISTORY}`;
-        cacheManager.set(cacheKey, history, 180); // 3分钟缓存
+        cacheManager.set(cacheKey, history, 180); // 3鍒嗛挓缂撳瓨
       }
       
       return history;
     } catch (error) {
-      console.error('获取签到历史失败:', error);
-      // 如果是第一页且请求失败，尝试返回缓存数据
-      if (queryParams.page === 1) {
+      console.error('鑾峰彇绛惧埌鍘嗗彶澶辫触:', error);
+      // 濡傛灉鏄涓€椤典笖璇锋眰澶辫触锛屽皾璇曡繑鍥炵紦瀛樻暟鎹?      if (queryParams.page === 1) {
         const cacheKey = `${CACHE_KEYS.USER_SIGNIN_HISTORY}`;
         const cachedHistory = cacheManager.get(cacheKey);
         if (cachedHistory) {
-          console.log('使用缓存的签到历史');
+          console.log('浣跨敤缂撳瓨鐨勭鍒板巻鍙?);
           return cachedHistory;
         }
       }
@@ -1135,78 +1104,76 @@ const userService = {
   },
 
   /**
-   * 检查用户是否已登录
-   * @returns {boolean} 是否已登录
-   */
+   * 妫€鏌ョ敤鎴锋槸鍚﹀凡鐧诲綍
+   * @returns {boolean} 鏄惁宸茬櫥褰?   */
   isLoggedIn() {
     return request.getToken() !== null;
   },
 
   /**
-   * 获取缓存的用户信息
-   * @returns {Object|null} 用户信息对象或null
+   * 鑾峰彇缂撳瓨鐨勭敤鎴蜂俊鎭?   * @returns {Object|null} 鐢ㄦ埛淇℃伅瀵硅薄鎴杗ull
    */
   getCachedUserInfo() {
     try {
       const userInfo = wx.getStorageSync(USER_INFO_KEY);
       return userInfo ? JSON.parse(userInfo) : null;
     } catch (error) {
-      console.error('获取缓存用户信息失败:', error);
+      console.error('鑾峰彇缂撳瓨鐢ㄦ埛淇℃伅澶辫触:', error);
       return null;
     }
   },
 
   /**
-   * 缓存用户信息
-   * @param {Object} userInfo - 用户信息
+   * 缂撳瓨鐢ㄦ埛淇℃伅
+   * @param {Object} userInfo - 鐢ㄦ埛淇℃伅
    */
   cacheUserInfo(userInfo) {
     try {
       wx.setStorageSync(USER_INFO_KEY, JSON.stringify(userInfo));
     } catch (error) {
-      console.error('缓存用户信息失败:', error);
+      console.error('缂撳瓨鐢ㄦ埛淇℃伅澶辫触:', error);
     }
   },
 
   /**
-   * 清除用户登录状态和缓存
-   * @returns {boolean} 操作是否成功
+   * 娓呴櫎鐢ㄦ埛鐧诲綍鐘舵€佸拰缂撳瓨
+   * @returns {boolean} 鎿嶄綔鏄惁鎴愬姛
    */
   clearLoginStatus() {
     try {
-      // 清除用户信息缓存
+      // 娓呴櫎鐢ㄦ埛淇℃伅缂撳瓨
       wx.removeStorageSync(USER_INFO_KEY);
       
-      // 清除用户偏好设置缓存
+      // 娓呴櫎鐢ㄦ埛鍋忓ソ璁剧疆缂撳瓨
       wx.removeStorageSync(USER_PREFERENCES_KEY);
       
-      // 清除用户相关缓存
+      // 娓呴櫎鐢ㄦ埛鐩稿叧缂撳瓨
       cacheManager.clearAll();
       
-      // 清除认证令牌
+      // 娓呴櫎璁よ瘉浠ょ墝
       request.removeToken();
       
-      console.log('用户登录状态已清除');
+      console.log('鐢ㄦ埛鐧诲綍鐘舵€佸凡娓呴櫎');
       return true;
     } catch (error) {
-      console.error('清除登录状态失败:', error);
-      // 尝试清理特定的缓存键，确保关键数据被清除
+      console.error('娓呴櫎鐧诲綍鐘舵€佸け璐?', error);
+      // 灏濊瘯娓呯悊鐗瑰畾鐨勭紦瀛橀敭锛岀‘淇濆叧閿暟鎹娓呴櫎
       try {
         wx.removeStorageSync(USER_INFO_KEY);
         request.removeToken();
       } catch (e) {
-        console.error('清除关键缓存失败:', e);
+        console.error('娓呴櫎鍏抽敭缂撳瓨澶辫触:', e);
       }
       return false;
     }
   },
 
   /**
-   * 获取用户关注列表
-   * @param {Object} params - 查询参数
-   * @param {number} params.page - 页码
-   * @param {number} params.page_size - 每页数量
-   * @returns {Promise} 返回关注列表
+   * 鑾峰彇鐢ㄦ埛鍏虫敞鍒楄〃
+   * @param {Object} params - 鏌ヨ鍙傛暟
+   * @param {number} params.page - 椤电爜
+   * @param {number} params.page_size - 姣忛〉鏁伴噺
+   * @returns {Promise} 杩斿洖鍏虫敞鍒楄〃
    */
   async getUserFollowing(params = { page: 1, page_size: 20 }) {
     const queryParams = {
@@ -1223,17 +1190,17 @@ const userService = {
         })
       );
     } catch (error) {
-      console.error('获取关注列表失败:', error);
+      console.error('鑾峰彇鍏虫敞鍒楄〃澶辫触:', error);
       throw error;
     }
   },
 
   /**
-   * 获取用户粉丝列表
-   * @param {Object} params - 查询参数
-   * @param {number} params.page - 页码
-   * @param {number} params.page_size - 每页数量
-   * @returns {Promise} 返回粉丝列表
+   * 鑾峰彇鐢ㄦ埛绮変笣鍒楄〃
+   * @param {Object} params - 鏌ヨ鍙傛暟
+   * @param {number} params.page - 椤电爜
+   * @param {number} params.page_size - 姣忛〉鏁伴噺
+   * @returns {Promise} 杩斿洖绮変笣鍒楄〃
    */
   async getUserFollowers(params = { page: 1, page_size: 20 }) {
     const queryParams = {
@@ -1250,19 +1217,19 @@ const userService = {
         })
       );
     } catch (error) {
-      console.error('获取粉丝列表失败:', error);
+      console.error('鑾峰彇绮変笣鍒楄〃澶辫触:', error);
       throw error;
     }
   },
 
   /**
-   * 关注用户
-   * @param {number|string} userId - 要关注的用户ID
-   * @returns {Promise} 返回关注结果
+   * 鍏虫敞鐢ㄦ埛
+   * @param {number|string} userId - 瑕佸叧娉ㄧ殑鐢ㄦ埛ID
+   * @returns {Promise} 杩斿洖鍏虫敞缁撴灉
    */
   async followUser(userId) {
     if (!userId) {
-      throw new Error('用户ID不能为空');
+      throw new Error('鐢ㄦ埛ID涓嶈兘涓虹┖');
     }
 
     try {
@@ -1274,23 +1241,23 @@ const userService = {
         })
       );
       
-      showToast('关注成功');
+      showToast('鍏虫敞鎴愬姛');
       return result;
     } catch (error) {
-      console.error('关注用户失败:', error);
-      showToast(error.message || '关注失败，请重试');
+      console.error('鍏虫敞鐢ㄦ埛澶辫触:', error);
+      showToast(error.message || '鍏虫敞澶辫触锛岃閲嶈瘯');
       throw error;
     }
   },
 
   /**
-   * 取消关注
-   * @param {number|string} userId - 要取消关注的用户ID
-   * @returns {Promise} 返回取消关注结果
+   * 鍙栨秷鍏虫敞
+   * @param {number|string} userId - 瑕佸彇娑堝叧娉ㄧ殑鐢ㄦ埛ID
+   * @returns {Promise} 杩斿洖鍙栨秷鍏虫敞缁撴灉
    */
   async unfollowUser(userId) {
     if (!userId) {
-      throw new Error('用户ID不能为空');
+      throw new Error('鐢ㄦ埛ID涓嶈兘涓虹┖');
     }
 
     try {
@@ -1302,29 +1269,27 @@ const userService = {
         })
       );
       
-      showToast('已取消关注');
+      showToast('宸插彇娑堝叧娉?);
       return result;
     } catch (error) {
-      console.error('取消关注失败:', error);
-      showToast(error.message || '取消关注失败，请重试');
+      console.error('鍙栨秷鍏虫敞澶辫触:', error);
+      showToast(error.message || '鍙栨秷鍏虫敞澶辫触锛岃閲嶈瘯');
       throw error;
     }
   },
 
   /**
-   * 检查是否已关注用户
-   * @param {number|string} userId - 用户ID
-   * @returns {Promise} 返回关注状态
-   */
+   * 妫€鏌ユ槸鍚﹀凡鍏虫敞鐢ㄦ埛
+   * @param {number|string} userId - 鐢ㄦ埛ID
+   * @returns {Promise} 杩斿洖鍏虫敞鐘舵€?   */
   async checkFollowing(userId) {
     if (!userId) {
-      throw new Error('用户ID不能为空');
+      throw new Error('鐢ㄦ埛ID涓嶈兘涓虹┖');
     }
 
     const cacheKey = `following_status_${userId}`;
     
-    // 尝试从缓存获取
-    const cachedStatus = cacheManager.get(cacheKey);
+    // 灏濊瘯浠庣紦瀛樿幏鍙?    const cachedStatus = cacheManager.get(cacheKey);
     if (cachedStatus !== undefined) {
       return cachedStatus;
     }
@@ -1337,23 +1302,23 @@ const userService = {
         })
       );
       
-      // 更新缓存
-      cacheManager.set(cacheKey, status, 300); // 5分钟缓存
+      // 鏇存柊缂撳瓨
+      cacheManager.set(cacheKey, status, 300); // 5鍒嗛挓缂撳瓨
       
       return status;
     } catch (error) {
-      console.error('检查关注状态失败:', error);
+      console.error('妫€鏌ュ叧娉ㄧ姸鎬佸け璐?', error);
       throw error;
     }
   },
 
   /**
-   * 获取用户推荐列表
-   * @param {Object} params - 查询参数
-   * @param {number} params.page - 页码
-   * @param {number} params.page_size - 每页数量
-   * @param {boolean} forceRefresh - 是否强制刷新，不使用缓存
-   * @returns {Promise} 返回推荐用户列表
+   * 鑾峰彇鐢ㄦ埛鎺ㄨ崘鍒楄〃
+   * @param {Object} params - 鏌ヨ鍙傛暟
+   * @param {number} params.page - 椤电爜
+   * @param {number} params.page_size - 姣忛〉鏁伴噺
+   * @param {boolean} forceRefresh - 鏄惁寮哄埗鍒锋柊锛屼笉浣跨敤缂撳瓨
+   * @returns {Promise} 杩斿洖鎺ㄨ崘鐢ㄦ埛鍒楄〃
    */
   async getUserRecommendations(params = { page: 1, page_size: 20 }, forceRefresh = false) {
     const queryParams = {
@@ -1361,7 +1326,7 @@ const userService = {
       page_size: params.page_size || 20
     };
 
-    // 只有第一页才使用缓存
+    // 鍙湁绗竴椤垫墠浣跨敤缂撳瓨
     const cacheKey = `user_recommendations_${queryParams.page}`;
     
     if (!forceRefresh && queryParams.page === 1) {
@@ -1380,19 +1345,17 @@ const userService = {
         })
       );
       
-      // 只缓存第一页数据
-      if (queryParams.page === 1) {
-        cacheManager.set(cacheKey, recommendations, 300); // 5分钟缓存
+      // 鍙紦瀛樼涓€椤垫暟鎹?      if (queryParams.page === 1) {
+        cacheManager.set(cacheKey, recommendations, 300); // 5鍒嗛挓缂撳瓨
       }
       
       return recommendations;
     } catch (error) {
-      console.error('获取推荐用户失败:', error);
-      // 如果是第一页且请求失败，尝试返回缓存数据
-      if (queryParams.page === 1) {
+      console.error('鑾峰彇鎺ㄨ崘鐢ㄦ埛澶辫触:', error);
+      // 濡傛灉鏄涓€椤典笖璇锋眰澶辫触锛屽皾璇曡繑鍥炵紦瀛樻暟鎹?      if (queryParams.page === 1) {
         const cachedRecommendations = cacheManager.get(cacheKey);
         if (cachedRecommendations) {
-          console.log('使用缓存的用户推荐');
+          console.log('浣跨敤缂撳瓨鐨勭敤鎴锋帹鑽?);
           return cachedRecommendations;
         }
       }
@@ -1401,8 +1364,7 @@ const userService = {
   },
 
   /**
-   * 清除指定类型的缓存
-   * @param {string} cacheType - 缓存类型，可选值：'profile', 'coupons', 'addresses', 'points'
+   * 娓呴櫎鎸囧畾绫诲瀷鐨勭紦瀛?   * @param {string} cacheType - 缂撳瓨绫诲瀷锛屽彲閫夊€硷細'profile', 'coupons', 'addresses', 'points'
    */
   clearCache(cacheType) {
     switch (cacheType) {
@@ -1410,8 +1372,7 @@ const userService = {
         cacheManager.remove(CACHE_KEYS.USER_PROFILE);
         break;
       case 'coupons':
-        // 清除所有状态的优惠券缓存
-        ['valid', 'used', 'expired', 'all'].forEach(status => {
+        // 娓呴櫎鎵€鏈夌姸鎬佺殑浼樻儬鍒哥紦瀛?        ['valid', 'used', 'expired', 'all'].forEach(status => {
           cacheManager.remove(`${CACHE_KEYS.USER_COUPONS}_${status}`);
         });
         break;
@@ -1422,30 +1383,26 @@ const userService = {
         cacheManager.remove(CACHE_KEYS.USER_POINTS);
         break;
       default:
-        // 清除所有缓存
-        cacheManager.clearAll();
+        // 娓呴櫎鎵€鏈夌紦瀛?        cacheManager.clearAll();
     }
   },
   
   /**
-   * 清除所有缓存
-   * @returns {boolean} 操作是否成功
+   * 娓呴櫎鎵€鏈夌紦瀛?   * @returns {boolean} 鎿嶄綔鏄惁鎴愬姛
    */
   clearAllCache() {
     try {
       cacheManager.clearAll();
-      console.log('所有缓存已清除');
+      console.log('鎵€鏈夌紦瀛樺凡娓呴櫎');
       return true;
     } catch (error) {
-      console.error('清除缓存失败:', error);
+      console.error('娓呴櫎缂撳瓨澶辫触:', error);
       return false;
     }
   },
   
   /**
-   * 清除特定类型的缓存
-   * @param {string|Array} cacheType - 缓存类型，可以是单个键名或键名数组
-   * @returns {boolean} 操作是否成功
+   * 娓呴櫎鐗瑰畾绫诲瀷鐨勭紦瀛?   * @param {string|Array} cacheType - 缂撳瓨绫诲瀷锛屽彲浠ユ槸鍗曚釜閿悕鎴栭敭鍚嶆暟缁?   * @returns {boolean} 鎿嶄綔鏄惁鎴愬姛
    */
   clearSpecificCache(cacheType) {
     try {
@@ -1458,32 +1415,29 @@ const userService = {
       } else if (typeof cacheType === 'string') {
         cacheManager.remove(cacheType);
       } else {
-        throw new Error('缓存类型必须是字符串或字符串数组');
+        throw new Error('缂撳瓨绫诲瀷蹇呴』鏄瓧绗︿覆鎴栧瓧绗︿覆鏁扮粍');
       }
-      console.log(`缓存已清除: ${cacheType}`);
+      console.log(`缂撳瓨宸叉竻闄? ${cacheType}`);
       return true;
     } catch (error) {
-      console.error('清除指定缓存失败:', error);
+      console.error('娓呴櫎鎸囧畾缂撳瓨澶辫触:', error);
       return false;
     }
   },
   
   /**
-   * 清除用户相关所有缓存
-   * @returns {boolean} 操作是否成功
+   * 娓呴櫎鐢ㄦ埛鐩稿叧鎵€鏈夌紦瀛?   * @returns {boolean} 鎿嶄綔鏄惁鎴愬姛
    */
   clearUserCache() {
     try {
-      // 清除所有预定义的用户缓存键
+      // 娓呴櫎鎵€鏈夐瀹氫箟鐨勭敤鎴风紦瀛橀敭
       Object.values(CACHE_KEYS).forEach(key => {
         cacheManager.remove(key);
       });
       
-      // 清除可能的动态缓存键（如收藏状态、关注状态等）
-      const cacheKeys = wx.getStorageInfoSync().keys || [];
+      // 娓呴櫎鍙兘鐨勫姩鎬佺紦瀛橀敭锛堝鏀惰棌鐘舵€併€佸叧娉ㄧ姸鎬佺瓑锛?      const cacheKeys = wx.getStorageInfoSync().keys || [];
       cacheKeys.forEach(key => {
-        // 清除以特定前缀开头的缓存键
-        if (key.startsWith('favorite_status_') || 
+        // 娓呴櫎浠ョ壒瀹氬墠缂€寮€澶寸殑缂撳瓨閿?        if (key.startsWith('favorite_status_') || 
             key.startsWith('following_status_') ||
             key.startsWith('coupon_detail_') ||
             key.startsWith('user_favorites_') ||
@@ -1496,45 +1450,44 @@ const userService = {
         }
       });
       
-      console.log('用户相关缓存已清除');
+      console.log('鐢ㄦ埛鐩稿叧缂撳瓨宸叉竻闄?);
       return true;
     } catch (error) {
-      console.error('清除用户缓存失败:', error);
+      console.error('娓呴櫎鐢ㄦ埛缂撳瓨澶辫触:', error);
       return false;
     }
   },
 
   /**
-   * 获取用户偏好设置
-   * @returns {Object} 用户偏好设置
+   * 鑾峰彇鐢ㄦ埛鍋忓ソ璁剧疆
+   * @returns {Object} 鐢ㄦ埛鍋忓ソ璁剧疆
    */
   getUserPreferences() {
     try {
       const preferences = wx.getStorageSync(USER_PREFERENCES_KEY);
       return preferences ? JSON.parse(preferences) : {};
     } catch (error) {
-      console.error('获取用户偏好设置失败:', error);
+      console.error('鑾峰彇鐢ㄦ埛鍋忓ソ璁剧疆澶辫触:', error);
       return {};
     }
   },
 
   /**
-   * 设置用户偏好设置
-   * @param {Object} preferences - 偏好设置对象
+   * 璁剧疆鐢ㄦ埛鍋忓ソ璁剧疆
+   * @param {Object} preferences - 鍋忓ソ璁剧疆瀵硅薄
    */
   setUserPreferences(preferences) {
     try {
       wx.setStorageSync(USER_PREFERENCES_KEY, JSON.stringify(preferences));
     } catch (error) {
-      console.error('设置用户偏好设置失败:', error);
+      console.error('璁剧疆鐢ㄦ埛鍋忓ソ璁剧疆澶辫触:', error);
     }
   },
 
   /**
-   * 更新单个用户偏好设置
-   * @param {string} key - 偏好设置键名
-   * @param {*} value - 偏好设置值
-   */
+   * 鏇存柊鍗曚釜鐢ㄦ埛鍋忓ソ璁剧疆
+   * @param {string} key - 鍋忓ソ璁剧疆閿悕
+   * @param {*} value - 鍋忓ソ璁剧疆鍊?   */
   updateUserPreference(key, value) {
     const preferences = this.getUserPreferences();
     preferences[key] = value;
@@ -1542,23 +1495,21 @@ const userService = {
   },
 
   /**
-   * 获取用户优惠券列表
-   * @param {Object} params - 查询参数
-   * @param {number} params.page - 页码
-   * @param {number} params.page_size - 每页数量
-   * @param {string} params.status - 优惠券状态 (all, valid, used, expired)
-   * @param {boolean} forceRefresh - 是否强制刷新，不使用缓存
-   * @returns {Promise} 返回优惠券列表
-   */
+   * 鑾峰彇鐢ㄦ埛浼樻儬鍒稿垪琛?   * @param {Object} params - 鏌ヨ鍙傛暟
+   * @param {number} params.page - 椤电爜
+   * @param {number} params.page_size - 姣忛〉鏁伴噺
+   * @param {string} params.status - 浼樻儬鍒哥姸鎬?(all, valid, used, expired)
+   * @param {boolean} forceRefresh - 鏄惁寮哄埗鍒锋柊锛屼笉浣跨敤缂撳瓨
+   * @returns {Promise} 杩斿洖浼樻儬鍒稿垪琛?   */
   async getUserCoupons(params = { page: 1, page_size: 10, status: 'valid' }, forceRefresh = false) {
-    // 默认参数处理
+    // 榛樿鍙傛暟澶勭悊
     const queryParams = {
       page: params.page || 1,
       page_size: params.page_size || 10,
       status: params.status || 'valid'
     };
 
-    // 只有第一页才使用缓存
+    // 鍙湁绗竴椤垫墠浣跨敤缂撳瓨
     if (!forceRefresh && queryParams.page === 1) {
       const cacheKey = `${CACHE_KEYS.USER_COUPONS}_${queryParams.status}`;
       const cachedCoupons = cacheManager.get(cacheKey);
@@ -1576,21 +1527,20 @@ const userService = {
         })
       );
       
-      // 只有第一页才缓存
+      // 鍙湁绗竴椤垫墠缂撳瓨
       if (queryParams.page === 1) {
         const cacheKey = `${CACHE_KEYS.USER_COUPONS}_${queryParams.status}`;
-        cacheManager.set(cacheKey, coupons, 180); // 3分钟缓存
+        cacheManager.set(cacheKey, coupons, 180); // 3鍒嗛挓缂撳瓨
       }
       
       return coupons;
     } catch (error) {
-      console.error('获取优惠券列表失败:', error);
-      // 如果是第一页且请求失败，尝试返回缓存数据
-      if (queryParams.page === 1) {
+      console.error('鑾峰彇浼樻儬鍒稿垪琛ㄥけ璐?', error);
+      // 濡傛灉鏄涓€椤典笖璇锋眰澶辫触锛屽皾璇曡繑鍥炵紦瀛樻暟鎹?      if (queryParams.page === 1) {
         const cacheKey = `${CACHE_KEYS.USER_COUPONS}_${queryParams.status}`;
         const cachedCoupons = cacheManager.get(cacheKey);
         if (cachedCoupons) {
-          console.log('使用缓存的优惠券列表');
+          console.log('浣跨敤缂撳瓨鐨勪紭鎯犲埜鍒楄〃');
           return cachedCoupons;
         }
       }
@@ -1599,19 +1549,16 @@ const userService = {
   },
 
   /**
-   * 获取优惠券详情
-   * @param {string} couponId - 优惠券ID
-   * @returns {Promise} 返回优惠券详情
-   */
+   * 鑾峰彇浼樻儬鍒歌鎯?   * @param {string} couponId - 浼樻儬鍒窱D
+   * @returns {Promise} 杩斿洖浼樻儬鍒歌鎯?   */
   async getCouponDetail(couponId) {
     if (!couponId) {
-      throw new Error('优惠券ID不能为空');
+      throw new Error('浼樻儬鍒窱D涓嶈兘涓虹┖');
     }
 
     const cacheKey = `coupon_detail_${couponId}`;
     
-    // 尝试从缓存获取
-    const cachedDetail = cacheManager.get(cacheKey);
+    // 灏濊瘯浠庣紦瀛樿幏鍙?    const cachedDetail = cacheManager.get(cacheKey);
     if (cachedDetail) {
       return cachedDetail;
     }
@@ -1624,24 +1571,23 @@ const userService = {
         })
       );
       
-      // 更新缓存
-      cacheManager.set(cacheKey, detail, 300); // 5分钟缓存
+      // 鏇存柊缂撳瓨
+      cacheManager.set(cacheKey, detail, 300); // 5鍒嗛挓缂撳瓨
       
       return detail;
     } catch (error) {
-      console.error('获取优惠券详情失败:', error);
+      console.error('鑾峰彇浼樻儬鍒歌鎯呭け璐?', error);
       throw error;
     }
   },
 
   /**
-   * 兑换优惠券
-   * @param {string} couponCode - 优惠券兑换码
-   * @returns {Promise} 返回兑换结果
+   * 鍏戞崲浼樻儬鍒?   * @param {string} couponCode - 浼樻儬鍒稿厬鎹㈢爜
+   * @returns {Promise} 杩斿洖鍏戞崲缁撴灉
    */
   async redeemCoupon(couponCode) {
     if (!validator.isString(couponCode) || couponCode.trim() === '') {
-      throw new Error('优惠券码不能为空');
+      throw new Error('浼樻儬鍒哥爜涓嶈兘涓虹┖');
     }
 
     try {
@@ -1653,36 +1599,32 @@ const userService = {
         })
       );
       
-      // 清除优惠券列表缓存
-      cacheManager.remove(`${CACHE_KEYS.USER_COUPONS}_valid`);
+      // 娓呴櫎浼樻儬鍒稿垪琛ㄧ紦瀛?      cacheManager.remove(`${CACHE_KEYS.USER_COUPONS}_valid`);
       cacheManager.remove(`${CACHE_KEYS.USER_COUPONS}_all`);
       
-      showToast('兑换成功');
+      showToast('鍏戞崲鎴愬姛');
       return result;
     } catch (error) {
-      console.error('兑换优惠券失败:', error);
-      showToast(error.message || '兑换失败，请检查优惠券码是否正确');
+      console.error('鍏戞崲浼樻儬鍒稿け璐?', error);
+      showToast(error.message || '鍏戞崲澶辫触锛岃妫€鏌ヤ紭鎯犲埜鐮佹槸鍚︽纭?);
       throw error;
     }
   },
 
   /**
-   * 获取可用的优惠券列表（用于订单页面）
-   * @param {Object} params - 查询参数
-   * @param {number} params.total - 订单总金额
-   * @param {Array} params.productIds - 产品ID列表
-   * @returns {Promise} 返回可用优惠券列表
-   */
+   * 鑾峰彇鍙敤鐨勪紭鎯犲埜鍒楄〃锛堢敤浜庤鍗曢〉闈級
+   * @param {Object} params - 鏌ヨ鍙傛暟
+   * @param {number} params.total - 璁㈠崟鎬婚噾棰?   * @param {Array} params.productIds - 浜у搧ID鍒楄〃
+   * @returns {Promise} 杩斿洖鍙敤浼樻儬鍒稿垪琛?   */
   async getAvailableCoupons(params = {}) {
-    // 数据验证
+    // 鏁版嵁楠岃瘉
     if (!validator.isObject(params)) {
       params = {};
     }
     
     const cacheKey = 'available_coupons';
     
-    // 尝试从缓存获取
-    const cachedCoupons = cacheManager.get(cacheKey);
+    // 灏濊瘯浠庣紦瀛樿幏鍙?    const cachedCoupons = cacheManager.get(cacheKey);
     if (cachedCoupons) {
       return cachedCoupons;
     }
@@ -1696,15 +1638,14 @@ const userService = {
         })
       );
       
-      // 更新缓存
-      cacheManager.set(cacheKey, coupons, 120); // 2分钟缓存
+      // 鏇存柊缂撳瓨
+      cacheManager.set(cacheKey, coupons, 120); // 2鍒嗛挓缂撳瓨
       
       return coupons;
     } catch (error) {
-      console.error('获取可用优惠券失败:', error);
-      // 如果请求失败，尝试返回缓存数据
-      if (cachedCoupons) {
-        console.log('使用缓存的可用优惠券');
+      console.error('鑾峰彇鍙敤浼樻儬鍒稿け璐?', error);
+      // 濡傛灉璇锋眰澶辫触锛屽皾璇曡繑鍥炵紦瀛樻暟鎹?      if (cachedCoupons) {
+        console.log('浣跨敤缂撳瓨鐨勫彲鐢ㄤ紭鎯犲埜');
         return cachedCoupons;
       }
       throw error;

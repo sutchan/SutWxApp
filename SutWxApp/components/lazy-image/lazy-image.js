@@ -1,129 +1,114 @@
-// lazy-image.js - 图片懒加载组件
-// 基于技术设计文档实现的高性能图片懒加载组件
-Component({
+﻿// lazy-image.js - 鍥剧墖鎳掑姞杞界粍浠?// 鍩轰簬鎶€鏈璁℃枃妗ｅ疄鐜扮殑楂樻€ц兘鍥剧墖鎳掑姞杞界粍浠?Component({
   /**
-   * 组件的属性列表
-   */
+   * 缁勪欢鐨勫睘鎬у垪琛?   */
   properties: {
-    // 图片src地址
+    // 鍥剧墖src鍦板潃
     src: {
       type: String,
       value: ''
     },
     
-    // 占位图地址
+    // 鍗犱綅鍥惧湴鍧€
     placeholder: {
       type: String,
       value: '/images/placeholder.png'
     },
     
-    // 图片加载失败时显示的图
-    error: {
+    // 鍥剧墖鍔犺浇澶辫触鏃舵樉绀虹殑鍥?    error: {
       type: String,
       value: '/images/error.png'
     },
     
-    // 是否使用渐进式加载
-    progressive: {
+    // 鏄惁浣跨敤娓愯繘寮忓姞杞?    progressive: {
       type: Boolean,
       value: false
     },
     
-    // 渐进式加载的缩略图地址
+    // 娓愯繘寮忓姞杞界殑缂╃暐鍥惧湴鍧€
     thumbSrc: {
       type: String,
       value: ''
     },
     
-    // 图片alt属性
-    alt: {
+    // 鍥剧墖alt灞炴€?    alt: {
       type: String,
       value: ''
     },
     
-    // 图片样式类
-    imageClass: {
+    // 鍥剧墖鏍峰紡绫?    imageClass: {
       type: String,
       value: ''
     },
     
-    // 容器样式类
-    containerClass: {
+    // 瀹瑰櫒鏍峰紡绫?    containerClass: {
       type: String,
       value: ''
     },
     
-    // 图片内联样式
+    // 鍥剧墖鍐呰仈鏍峰紡
     imgStyle: {
       type: String,
       value: ''
     },
     
-    // 容器内联样式
+    // 瀹瑰櫒鍐呰仈鏍峰紡
     containerStyle: {
       type: String,
       value: ''
     },
     
-    // 是否显示加载动画
+    // 鏄惁鏄剧ず鍔犺浇鍔ㄧ敾
     showLoading: {
       type: Boolean,
       value: true
     },
     
-    // 预加载阈值（像素）
-    preloadThreshold: {
+    // 棰勫姞杞介槇鍊硷紙鍍忕礌锛?    preloadThreshold: {
       type: Number,
       value: 200
     },
     
-    // 是否自动加载，默认为true
+    // 鏄惁鑷姩鍔犺浇锛岄粯璁や负true
     autoLoad: {
       type: Boolean,
       value: true
     },
     
-    // 是否启用节流
+    // 鏄惁鍚敤鑺傛祦
     throttle: {
       type: Boolean,
       value: true
     },
     
-    // 节流时间（单位ms）
-    throttleTime: {
+    // 鑺傛祦鏃堕棿锛堝崟浣峬s锛?    throttleTime: {
       type: Number,
       value: 100
     },
     
-    // 图片mode属性
-    mode: {
+    // 鍥剧墖mode灞炴€?    mode: {
       type: String,
       value: 'aspectFill'
     }
   },
 
   /**
-   * 组件的初始数据
-   */
+   * 缁勪欢鐨勫垵濮嬫暟鎹?   */
   data: {
-    // 当前显示的图片地址
+    // 褰撳墠鏄剧ず鐨勫浘鐗囧湴鍧€
     displaySrc: '',
-    // 是否已经加载过图片
-    loaded: false,
-    // 是否在可视区域内
+    // 鏄惁宸茬粡鍔犺浇杩囧浘鐗?    loaded: false,
+    // 鏄惁鍦ㄥ彲瑙嗗尯鍩熷唴
     visible: false,
-    // 是否正在加载中
-    isLoading: false,
-    // 是否加载失败
+    // 鏄惁姝ｅ湪鍔犺浇涓?    isLoading: false,
+    // 鏄惁鍔犺浇澶辫触
     error: false
   },
 
   /**
-   * 组件的方法列表
-   */
+   * 缁勪欢鐨勬柟娉曞垪琛?   */
   methods: {
     /**
-     * 获取元素位置信息
+     * 鑾峰彇鍏冪礌浣嶇疆淇℃伅
      */
     getRect() {
       return new Promise((resolve, reject) => {
@@ -135,7 +120,7 @@ Component({
               if (res && res[0]) {
                 resolve(res[0]);
               } else {
-                reject(new Error('获取元素位置失败'));
+                reject(new Error('鑾峰彇鍏冪礌浣嶇疆澶辫触'));
               }
             });
         } catch (error) {
@@ -145,20 +130,18 @@ Component({
     },
 
     /**
-     * 绑定滚动事件
+     * 缁戝畾婊氬姩浜嬩欢
      */
     bindScrollEvent() {
       if (this._scrollHandler) return;
       
-      // 创建节流的滚动处理函数
-      if (this.data.throttle) {
+      // 鍒涘缓鑺傛祦鐨勬粴鍔ㄥ鐞嗗嚱鏁?      if (this.data.throttle) {
         this._scrollHandler = this.throttle(this.handleScroll, this.data.throttleTime);
       } else {
         this._scrollHandler = this.handleScroll.bind(this);
       }
       
-      // 使用IntersectionObserver监听元素可见性（更现代的方式）
-      try {
+      // 浣跨敤IntersectionObserver鐩戝惉鍏冪礌鍙鎬э紙鏇寸幇浠ｇ殑鏂瑰紡锛?      try {
         this._observer = wx.createIntersectionObserver(this, {
           rootMargin: `${this.data.preloadThreshold}px 0px ${this.data.preloadThreshold}px 0px`
         });
@@ -170,15 +153,15 @@ Component({
           }
         });
       } catch (error) {
-        console.warn('IntersectionObserver不可用，使用滚动事件作为备用:', error);
+        console.warn('IntersectionObserver涓嶅彲鐢紝浣跨敤婊氬姩浜嬩欢浣滀负澶囩敤:', error);
       }
       
-      // 同时监听页面滚动作为备用方案
+      // 鍚屾椂鐩戝惉椤甸潰婊氬姩浣滀负澶囩敤鏂规
       wx.onPageScroll(this._scrollHandler);
     },
 
     /**
-     * 解绑滚动事件
+     * 瑙ｇ粦婊氬姩浜嬩欢
      */
     unbindScrollEvent() {
       if (this._scrollHandler) {
@@ -186,15 +169,14 @@ Component({
         this._scrollHandler = null;
       }
       
-      // 关闭相交观察者
-      if (this._observer) {
+      // 鍏抽棴鐩镐氦瑙傚療鑰?      if (this._observer) {
         this._observer.disconnect();
         this._observer = null;
       }
     },
 
     /**
-     * 处理页面滚动
+     * 澶勭悊椤甸潰婊氬姩
      */
     async handleScroll() {
       if (!this.data.loaded && !this.data.isLoading) {
@@ -203,10 +185,10 @@ Component({
     },
 
     /**
-     * 节流函数
-     * @param {Function} func - 需要节流的函数
-     * @param {number} delay - 延迟时间（毫秒）
-     * @returns {Function} 节流后的函数
+     * 鑺傛祦鍑芥暟
+     * @param {Function} func - 闇€瑕佽妭娴佺殑鍑芥暟
+     * @param {number} delay - 寤惰繜鏃堕棿锛堟绉掞級
+     * @returns {Function} 鑺傛祦鍚庣殑鍑芥暟
      */
     throttle(func, delay) {
       let lastCall = 0;
@@ -220,18 +202,16 @@ Component({
     },
 
     /**
-     * 检查图片是否可见
-     */
+     * 妫€鏌ュ浘鐗囨槸鍚﹀彲瑙?     */
     async checkVisibility() {
       try {
         const rect = await this.getRect();
         if (!rect) return;
 
-        // 获取窗口高度
+        // 鑾峰彇绐楀彛楂樺害
         const windowHeight = wx.getSystemInfoSync().windowHeight;
         
-        // 计算图片是否在可视区域内或预加载距离内
-        const isVisible = rect.top < windowHeight + this.data.preloadThreshold && 
+        // 璁＄畻鍥剧墖鏄惁鍦ㄥ彲瑙嗗尯鍩熷唴鎴栭鍔犺浇璺濈鍐?        const isVisible = rect.top < windowHeight + this.data.preloadThreshold && 
                           rect.bottom > -this.data.preloadThreshold;
         
         if (isVisible && !this.data.visible) {
@@ -239,44 +219,40 @@ Component({
           this.loadImage();
         }
       } catch (error) {
-        console.error('检查图片可见性失败:', error);
+        console.error('妫€鏌ュ浘鐗囧彲瑙佹€уけ璐?', error);
       }
     },
 
     /**
-     * 加载图片
-     * @param {string} [imageUrl] - 图片地址，如果不传则使用组件属性中的src
+     * 鍔犺浇鍥剧墖
+     * @param {string} [imageUrl] - 鍥剧墖鍦板潃锛屽鏋滀笉浼犲垯浣跨敤缁勪欢灞炴€т腑鐨剆rc
      */
     loadImage(imageUrl) {
-      // 如果没有设置图片地址，或者已经加载过，或者正在加载中，则不执行
-      const src = imageUrl || this.data.src;
+      // 濡傛灉娌℃湁璁剧疆鍥剧墖鍦板潃锛屾垨鑰呭凡缁忓姞杞借繃锛屾垨鑰呮鍦ㄥ姞杞戒腑锛屽垯涓嶆墽琛?      const src = imageUrl || this.data.src;
       if (!src || this.data.loaded || this.data.isLoading) return;
       
       this.setData({ isLoading: true, error: false });
       
-      // 设置初始显示的图片
-      if (this.data.progressive && this.data.thumbSrc) {
-        // 渐进式加载时显示缩略图
-        this.setData({ displaySrc: this.data.thumbSrc });
-        // 先加载缩略图
+      // 璁剧疆鍒濆鏄剧ず鐨勫浘鐗?      if (this.data.progressive && this.data.thumbSrc) {
+        // 娓愯繘寮忓姞杞芥椂鏄剧ず缂╃暐鍥?        this.setData({ displaySrc: this.data.thumbSrc });
+        // 鍏堝姞杞界缉鐣ュ浘
         this.loadThumbnail().then(() => {
-          // 缩略图加载成功后，再加载原图
+          // 缂╃暐鍥惧姞杞芥垚鍔熷悗锛屽啀鍔犺浇鍘熷浘
           return this.loadOriginalImage(src);
         }).catch(() => {
-          // 缩略图加载失败，直接加载原图
+          // 缂╃暐鍥惧姞杞藉け璐ワ紝鐩存帴鍔犺浇鍘熷浘
           return this.loadOriginalImage(src);
         });
       } else {
-        // 非渐进式加载时显示占位图
+        // 闈炴笎杩涘紡鍔犺浇鏃舵樉绀哄崰浣嶅浘
         this.setData({ displaySrc: this.data.placeholder });
-        // 直接加载原图
+        // 鐩存帴鍔犺浇鍘熷浘
         this.loadOriginalImage(src);
       }
     },
     
     /**
-     * 加载缩略图
-     * @returns {Promise}
+     * 鍔犺浇缂╃暐鍥?     * @returns {Promise}
      */
     loadThumbnail() {
       return new Promise((resolve, reject) => {
@@ -288,14 +264,14 @@ Component({
         };
         
         img.onerror = () => {
-          reject(new Error('缩略图加载失败'));
+          reject(new Error('缂╃暐鍥惧姞杞藉け璐?));
         };
       });
     },
     
     /**
-     * 加载原始图片
-     * @param {string} src - 图片地址
+     * 鍔犺浇鍘熷鍥剧墖
+     * @param {string} src - 鍥剧墖鍦板潃
      */
     loadOriginalImage(src) {
       const image = wx.createImage();
@@ -308,41 +284,40 @@ Component({
           error: false
         });
         
-        // 触发加载成功事件
+        // 瑙﹀彂鍔犺浇鎴愬姛浜嬩欢
         this.triggerEvent('load', {
           src: src,
           width: image.width,
           height: image.height
         });
         
-        // 图片加载成功后，停止观察
+        // 鍥剧墖鍔犺浇鎴愬姛鍚庯紝鍋滄瑙傚療
         this.unbindScrollEvent();
       };
       
       image.onerror = (error) => {
-        console.error('图片加载失败:', error);
+        console.error('鍥剧墖鍔犺浇澶辫触:', error);
         
-        // 图片加载失败，显示错误图片
-        this.setData({
+        // 鍥剧墖鍔犺浇澶辫触锛屾樉绀洪敊璇浘鐗?        this.setData({
           displaySrc: this.data.error,
           loaded: true,
           isLoading: false,
           error: true
         });
         
-        // 触发加载失败事件
+        // 瑙﹀彂鍔犺浇澶辫触浜嬩欢
         this.triggerEvent('error', {
           src: src,
           error: error
         });
       };
       
-      // 设置图片地址
+      // 璁剧疆鍥剧墖鍦板潃
       image.src = src;
     },
     
     /**
-     * 手动加载图片（当autoLoad为false时使用）
+     * 鎵嬪姩鍔犺浇鍥剧墖锛堝綋autoLoad涓篺alse鏃朵娇鐢級
      */
     manuallyLoad() {
       if (!this.data.loaded && !this.data.isLoading) {
@@ -352,7 +327,7 @@ Component({
     },
     
     /**
-     * 重新加载图片
+     * 閲嶆柊鍔犺浇鍥剧墖
      */
     reload() {
       this.setData({
@@ -369,33 +344,30 @@ Component({
     },
     
     /**
-     * 图片点击事件
+     * 鍥剧墖鐐瑰嚮浜嬩欢
      */
     onImageTap() {
       this.triggerEvent('tap');
       
-      // 如果图片加载失败，可以触发重新加载
-      if (this.data.error) {
+      // 濡傛灉鍥剧墖鍔犺浇澶辫触锛屽彲浠ヨЕ鍙戦噸鏂板姞杞?      if (this.data.error) {
         this.reload();
       }
     },
     
     /**
-     * 开始观察元素是否在可视区域
+     * 寮€濮嬭瀵熷厓绱犳槸鍚﹀湪鍙鍖哄煙
      */
     startObserver() {
-      // 如果已经加载过，则不再观察
-      if (this.data.loaded) return;
+      // 濡傛灉宸茬粡鍔犺浇杩囷紝鍒欎笉鍐嶈瀵?      if (this.data.loaded) return;
       
-      // 绑定滚动事件
+      // 缁戝畾婊氬姩浜嬩欢
       this.bindScrollEvent();
       
-      // 立即检查一次
-      this.checkVisibility();
+      // 绔嬪嵆妫€鏌ヤ竴娆?      this.checkVisibility();
     },
     
     /**
-     * 停止观察元素
+     * 鍋滄瑙傚療鍏冪礌
      */
     stopObserver() {
       this.unbindScrollEvent();
@@ -403,13 +375,12 @@ Component({
   },
 
   /**
-   * 组件生命周期
+   * 缁勪欢鐢熷懡鍛ㄦ湡
    */
   lifetimes: {
-    // 组件实例进入页面节点树时执行
+    // 缁勪欢瀹炰緥杩涘叆椤甸潰鑺傜偣鏍戞椂鎵ц
     attached() {
-      // 初始化数据
-      this.setData({ 
+      // 鍒濆鍖栨暟鎹?      this.setData({ 
         displaySrc: this.data.placeholder,
         loaded: false,
         visible: false,
@@ -422,49 +393,45 @@ Component({
       }
     },
     
-    // 组件实例被从页面节点树移除时执行
+    // 缁勪欢瀹炰緥琚粠椤甸潰鑺傜偣鏍戠Щ闄ゆ椂鎵ц
     detached() {
       this.stopObserver();
     },
     
-    // 组件移动位置时执行
-    moved() {
-      // 组件移动位置后重新检查可见性
-      if (this.data.autoLoad && !this.data.loaded) {
+    // 缁勪欢绉诲姩浣嶇疆鏃舵墽琛?    moved() {
+      // 缁勪欢绉诲姩浣嶇疆鍚庨噸鏂版鏌ュ彲瑙佹€?      if (this.data.autoLoad && !this.data.loaded) {
         setTimeout(() => {
           this.checkVisibility();
         }, 0);
       }
     },
     
-    // 组件所在页面显示时执行
+    // 缁勪欢鎵€鍦ㄩ〉闈㈡樉绀烘椂鎵ц
     show() {
       if (this.data.autoLoad && !this.data.loaded) {
         this.startObserver();
       }
     },
     
-    // 组件所在页面隐藏时执行
+    // 缁勪欢鎵€鍦ㄩ〉闈㈤殣钘忔椂鎵ц
     hide() {
       this.stopObserver();
     }
   },
 
   /**
-   * 监听属性变化
-   */
+   * 鐩戝惉灞炴€у彉鍖?   */
   observers: {
     'src': function(newSrc) {
       if (newSrc) {
-        // 图片地址改变时重置状态
-        this.setData({
+        // 鍥剧墖鍦板潃鏀瑰彉鏃堕噸缃姸鎬?        this.setData({
           loaded: false,
           isLoading: false,
           visible: false,
           error: false
         });
         
-        // 如果元素已经可见或设置为自动加载，则重新加载
+        // 濡傛灉鍏冪礌宸茬粡鍙鎴栬缃负鑷姩鍔犺浇锛屽垯閲嶆柊鍔犺浇
         if ((this.data.visible || this.data.autoLoad) && !this.data.loaded && !this.data.isLoading) {
           this.loadImage(newSrc);
         }

@@ -1,11 +1,10 @@
-// 用户设置页面逻辑
+﻿// 鐢ㄦ埛璁剧疆椤甸潰閫昏緫
 const app = getApp();
 const { showToast } = app.global;
 
 Page({
   /**
-   * 页面的初始数据
-   */
+   * 椤甸潰鐨勫垵濮嬫暟鎹?   */
   data: {
     userInfo: null,
     notificationSettings: {
@@ -18,10 +17,10 @@ Page({
   },
 
   /**
-   * 生命周期函数--监听页面加载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
    */
   onLoad: function(options) {
-    // 记录页面访问事件
+    // 璁板綍椤甸潰璁块棶浜嬩欢
     app.analyticsService.track('page_view', {
       page: 'settings'
     });
@@ -30,7 +29,7 @@ Page({
   },
 
   /**
-   * 加载用户设置
+   * 鍔犺浇鐢ㄦ埛璁剧疆
    */
   async loadUserSettings() {
     try {
@@ -38,7 +37,7 @@ Page({
       
       const userInfo = wx.getStorageSync('userInfo') || {};
       
-      // 使用userService获取用户设置
+      // 浣跨敤userService鑾峰彇鐢ㄦ埛璁剧疆
       const result = await app.services.user.getUserSettings();
       
       this.setData({
@@ -49,7 +48,7 @@ Page({
     } catch (err) {
       this.setData({ 
         userInfo: wx.getStorageSync('userInfo') || {},
-        error: err.message || '获取设置失败' 
+        error: err.message || '鑾峰彇璁剧疆澶辫触' 
       });
     } finally {
       this.setData({ isLoading: false });
@@ -57,7 +56,7 @@ Page({
   },
 
   /**
-   * 更新通知设置
+   * 鏇存柊閫氱煡璁剧疆
    */
   updateNotificationSetting(e) {
     const { type, checked } = e.detail;
@@ -73,7 +72,7 @@ Page({
     
     this.setData({ notificationSettings: newSettings });
     
-    // 记录通知设置变更事件
+    // 璁板綍閫氱煡璁剧疆鍙樻洿浜嬩欢
     app.analyticsService.track('notification_setting_changed', {
       type: type,
       enabled: checked
@@ -83,64 +82,60 @@ Page({
   },
 
   /**
-   * 保存设置
+   * 淇濆瓨璁剧疆
    */
   async saveSettings(settings) {
     try {
-      // 使用userService保存用户设置
+      // 浣跨敤userService淇濆瓨鐢ㄦ埛璁剧疆
       await app.services.user.updateUserSettings({ notifications: settings });
       
-      // 设置保存成功，不显示提示，保持操作流畅
-    } catch (err) {
-      showToast(err.message || '保存失败，请重试', 'none');
+      // 璁剧疆淇濆瓨鎴愬姛锛屼笉鏄剧ず鎻愮ず锛屼繚鎸佹搷浣滄祦鐣?    } catch (err) {
+      showToast(err.message || '淇濆瓨澶辫触锛岃閲嶈瘯', 'none');
     }
   },
 
   /**
-   * 跳转到个人资料编辑页面
-   */
+   * 璺宠浆鍒颁釜浜鸿祫鏂欑紪杈戦〉闈?   */
   navigateToEditProfile: function() {
-    // 记录导航事件
+    // 璁板綍瀵艰埅浜嬩欢
     app.analyticsService.track('navigate_to_edit_profile');
     
     wx.navigateTo({ url: '/pages/user/edit-profile' });
   },
 
   /**
-   * 跳转到账号绑定页面
-   */
+   * 璺宠浆鍒拌处鍙风粦瀹氶〉闈?   */
   navigateToBindAccount: function() {
-    // 记录导航事件
+    // 璁板綍瀵艰埅浜嬩欢
     app.analyticsService.track('navigate_to_bind_account');
     
     wx.navigateTo({ url: '/pages/user/bind-account' });
   },
 
   /**
-   * 跳转到隐私设置页面
-   */
+   * 璺宠浆鍒伴殣绉佽缃〉闈?   */
   navigateToPrivacySettings: function() {
-    // 记录导航事件
+    // 璁板綍瀵艰埅浜嬩欢
     app.analyticsService.track('navigate_to_privacy_settings');
     
     wx.navigateTo({ url: '/pages/user/privacy-settings' });
   },
 
   /**
-   * 清除缓存
+   * 娓呴櫎缂撳瓨
    */
   clearCache: function() {
     wx.showModal({
-      title: '清除缓存',
-      content: '确定要清除所有缓存数据吗？',
+      title: '娓呴櫎缂撳瓨',
+      content: '纭畾瑕佹竻闄ゆ墍鏈夌紦瀛樻暟鎹悧锛?,
       success: (res) => {
         if (res.confirm) {
-          // 记录清除缓存事件
+          // 璁板綍娓呴櫎缂撳瓨浜嬩欢
           app.analyticsService.track('cache_cleared');
           
           wx.clearStorageSync();
-          showToast('缓存已清除', 'success');
-          // 重新加载用户数据
+          showToast('缂撳瓨宸叉竻闄?, 'success');
+          // 閲嶆柊鍔犺浇鐢ㄦ埛鏁版嵁
           this.loadUserSettings();
         }
       }
@@ -148,20 +143,19 @@ Page({
   },
 
   /**
-   * 跳转到关于我们页面
-   */
+   * 璺宠浆鍒板叧浜庢垜浠〉闈?   */
   navigateToAbout: function() {
-    // 记录导航事件
+    // 璁板綍瀵艰埅浜嬩欢
     app.analyticsService.track('navigate_to_about');
     
     wx.navigateTo({ url: '/pages/user/about' });
   },
 
   /**
-   * 重试加载
+   * 閲嶈瘯鍔犺浇
    */
   onRetry: function() {
-    // 记录重试加载事件
+    // 璁板綍閲嶈瘯鍔犺浇浜嬩欢
     app.analyticsService.track('retry_loading', {
       page: 'settings'
     });

@@ -1,11 +1,11 @@
-/* 购物车页面样式 */
+﻿/* 璐墿杞﹂〉闈㈡牱寮?*/
 .container {
   background-color: #f8f8f8;
   min-height: 100vh;
-  padding-bottom: 100rpx; /* 为底部操作栏留出空间 */
+  padding-bottom: 100rpx; /* 涓哄簳閮ㄦ搷浣滄爮鐣欏嚭绌洪棿 */
 }
 
-/* 加载状态样式 */
+/* 鍔犺浇鐘舵€佹牱寮?*/
 .loading {
   padding: 60rpx;
   text-align: center;
@@ -13,7 +13,7 @@
   color: #999999;
 }
 
-/* 错误状态样式 */
+/* 閿欒鐘舵€佹牱寮?*/
 .error {
   padding: 60rpx 20rpx;
   text-align: center;
@@ -40,7 +40,7 @@
   border-radius: 30rpx;
 }
 
-/* 空购物车状态样式 */
+/* 绌鸿喘鐗╄溅鐘舵€佹牱寮?*/
 .empty-cart {
   padding: 100rpx 20rpx;
   text-align: center;
@@ -67,7 +67,7 @@
   border-radius: 30rpx;
 }
 
-/* 购物车商品列表样式 */
+/* 璐墿杞﹀晢鍝佸垪琛ㄦ牱寮?*/
 .cart-list {
   background-color: #ffffff;
 }
@@ -79,7 +79,7 @@
   position: relative;
 }
 
-/* 选择框样式 */
+/* 閫夋嫨妗嗘牱寮?*/
 .checkbox {
   display: flex;
   align-items: center;
@@ -105,7 +105,7 @@
   color: #ffffff;
 }
 
-/* 商品信息样式 */
+/* 鍟嗗搧淇℃伅鏍峰紡 */
 .item-content {
   flex: 1;
   display: flex;
@@ -142,7 +142,7 @@
   margin-bottom: 10rpx;
 }
 
-/* 商品状态样式 */
+/* 鍟嗗搧鐘舵€佹牱寮?*/
 .product-status {
   font-size: 24rpx;
   margin: 10rpx 0;
@@ -161,7 +161,7 @@
   color: #ff6b81;
 }
 
-/* 库存不足警告样式 */
+/* 搴撳瓨涓嶈冻璀﹀憡鏍峰紡 */
 .stock-warning {
   font-size: 22rpx;
   color: #ff9500;
@@ -182,13 +182,13 @@
   font-weight: bold;
 }
 
-/* 数量控制样式 */
+/* 鏁伴噺鎺у埗鏍峰紡 */
 .quantity-control {
   display: flex;
   align-items: center;
 }
 
-/* 不可操作的数量控制器 */
+/* 涓嶅彲鎿嶄綔鐨勬暟閲忔帶鍒跺櫒 */
 .quantity-control.disabled {
   opacity: 0.6;
   pointer-events: none;
@@ -232,7 +232,7 @@
   border-bottom: 1rpx solid #eeeeee;
 }
 
-/* 操作按钮区域样式 */
+/* 鎿嶄綔鎸夐挳鍖哄煙鏍峰紡 */
 .item-actions {
   position: absolute;
   top: 10rpx;
@@ -242,7 +242,7 @@
   align-items: center;
 }
 
-/* 删除按钮样式 */
+/* 鍒犻櫎鎸夐挳鏍峰紡 */
 .delete-btn {
   padding: 10rpx;
   margin-bottom: 10rpx;
@@ -254,20 +254,20 @@
   display: inline-block;
 }
 
-/* 编辑模式下的删除按钮 */
+/* 缂栬緫妯″紡涓嬬殑鍒犻櫎鎸夐挳 */
 .delete-btn text[hidden="false"] {
   font-size: 24rpx;
   color: #ff6b81;
 }
 
-/* 移至收藏按钮样式 */
+/* 绉昏嚦鏀惰棌鎸夐挳鏍峰紡 */
 .favorite-btn {
   padding: 10rpx;
   margin-bottom: 10rpx;
   color: #ffc107;
 }
 
-/* 底部操作栏样式 */
+/* 搴曢儴鎿嶄綔鏍忔牱寮?*/
 .bottom-bar {
   position: fixed;
   bottom: 0;
@@ -281,7 +281,7 @@
   padding: 0 20rpx;
 }
 
-/* 全选样式 */
+/* 鍏ㄩ€夋牱寮?*/
 .all-select {
   display: flex;
   align-items: center;
@@ -293,7 +293,7 @@
   margin-left: 10rpx;
 }
 
-/* 编辑模式按钮 */
+/* 缂栬緫妯″紡鎸夐挳 */
 .edit-mode {
   flex: 1;
   display: flex;
@@ -309,7 +309,7 @@
   padding: 0;
 }
 
-/* 编辑模式操作按钮 */
+/* 缂栬緫妯″紡鎿嶄綔鎸夐挳 */
 .edit-actions {
   flex: 1;
   display: flex;
@@ -333,7 +333,7 @@
   padding: 0;
 }
 
-/* 合计与结算区域 */
+/* 鍚堣涓庣粨绠楀尯鍩?*/
 .total-section {
   flex: 1;
   display: flex;
@@ -341,7 +341,7 @@
   align-items: center;
 }
 
-/* 合计样式 */
+/* 鍚堣鏍峰紡 */
 .total-info {
   display: flex;
   align-items: center;
@@ -360,7 +360,7 @@
   font-weight: bold;
 }
 
-/* 结算按钮样式 */
+/* 缁撶畻鎸夐挳鏍峰紡 */
 .checkout-btn {
   width: 200rpx;
   height: 70rpx;

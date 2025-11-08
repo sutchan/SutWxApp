@@ -1,4 +1,4 @@
-# SUT WeChat Mini Program
+﻿# SUT WeChat Mini Program
 
 This is a WeChat Mini Program frontend project developed based on WordPress, used for displaying and managing content related to SUT (School of Urban Technology), including articles, categories, etc.
 
@@ -6,20 +6,20 @@ This is a WeChat Mini Program frontend project developed based on WordPress, use
 
 ```
 SutWxApp/
-├── app.js              # Mini Program entry file
-├── app.json            # Global configuration file
-├── app.wxss            # Global style file
-├── images/             # Image resources directory
-│   ├── default-avatar.png    # Default avatar image
-│   └── tabbar/               # Bottom tabbar icons
-└── pages/              # Pages directory
-    ├── index/          # Home page
-    ├── category/       # Category page
-    ├── article/        # Article related pages
-    │   └── detail/     # Article detail page
-    └── user/           # User related pages
-        ├── login/      # Login page
-        └── profile/    # User profile page
+鈹溾攢鈹€ app.js              # Mini Program entry file
+鈹溾攢鈹€ app.json            # Global configuration file
+鈹溾攢鈹€ app.wxss            # Global style file
+鈹溾攢鈹€ images/             # Image resources directory
+鈹?  鈹溾攢鈹€ default-avatar.png    # Default avatar image
+鈹?  鈹斺攢鈹€ tabbar/               # Bottom tabbar icons
+鈹斺攢鈹€ pages/              # Pages directory
+    鈹溾攢鈹€ index/          # Home page
+    鈹溾攢鈹€ category/       # Category page
+    鈹溾攢鈹€ article/        # Article related pages
+    鈹?  鈹斺攢鈹€ detail/     # Article detail page
+    鈹斺攢鈹€ user/           # User related pages
+        鈹溾攢鈹€ login/      # Login page
+        鈹斺攢鈹€ profile/    # User profile page
 ```
 
 ## Functional Modules

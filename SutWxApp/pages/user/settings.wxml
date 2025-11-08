@@ -1,18 +1,18 @@
-<!-- 用户设置页面 -->
+﻿<!-- 鐢ㄦ埛璁剧疆椤甸潰 -->
 <view class="settings-container">
-  <!-- 个人信息设置 -->
+  <!-- 涓汉淇℃伅璁剧疆 -->
   <view class="section" wx:if="{{!isLoading && !error}}">
     <view class="section-header">
-      <text class="section-title">个人信息</text>
+      <text class="section-title">涓汉淇℃伅</text>
     </view>
     
     <view class="settings-list">
       <view 
         class="setting-item"
         bindtap="navigateToEditProfile"
-        aria-label="编辑个人资料">
+        aria-label="缂栬緫涓汉璧勬枡">
         <view class="setting-content">
-          <text class="setting-label">编辑个人资料</text>
+          <text class="setting-label">缂栬緫涓汉璧勬枡</text>
         </view>
         <image class="arrow-icon" src="/images/arrow-right.svg" mode="aspectFit"></image>
       </view>
@@ -20,27 +20,27 @@
       <view 
         class="setting-item"
         bindtap="navigateToBindAccount"
-        aria-label="账号绑定">
+        aria-label="璐﹀彿缁戝畾">
         <view class="setting-content">
-          <text class="setting-label">账号绑定</text>
-          <text class="setting-value" wx:if="{{userInfo && userInfo.bound_to_wordpress}}">已绑定</text>
-          <text class="setting-value unbound" wx:else>未绑定</text>
+          <text class="setting-label">璐﹀彿缁戝畾</text>
+          <text class="setting-value" wx:if="{{userInfo && userInfo.bound_to_wordpress}}">宸茬粦瀹?/text>
+          <text class="setting-value unbound" wx:else>鏈粦瀹?/text>
         </view>
         <image class="arrow-icon" src="/images/arrow-right.svg" mode="aspectFit"></image>
       </view>
     </view>
   </view>
 
-  <!-- 通知设置 -->
+  <!-- 閫氱煡璁剧疆 -->
   <view class="section" wx:if="{{!isLoading && !error}}">
     <view class="section-header">
-      <text class="section-title">通知设置</text>
+      <text class="section-title">閫氱煡璁剧疆</text>
     </view>
     
     <view class="settings-list">
       <view class="setting-item">
         <view class="setting-content">
-          <text class="setting-label">推送通知</text>
+          <text class="setting-label">鎺ㄩ€侀€氱煡</text>
         </view>
         <switch 
           checked="{{notificationSettings.pushEnabled}}"
@@ -52,7 +52,7 @@
       
       <view class="setting-item">
         <view class="setting-content">
-          <text class="setting-label">评论提醒</text>
+          <text class="setting-label">璇勮鎻愰啋</text>
         </view>
         <switch 
           checked="{{notificationSettings.commentEnabled}}"
@@ -64,7 +64,7 @@
       
       <view class="setting-item">
         <view class="setting-content">
-          <text class="setting-label">系统消息</text>
+          <text class="setting-label">绯荤粺娑堟伅</text>
         </view>
         <switch 
           checked="{{notificationSettings.systemEnabled}}"
@@ -76,15 +76,15 @@
     </view>
   </view>
 
-  <!-- 其他设置 -->
+  <!-- 鍏朵粬璁剧疆 -->
   <view class="section" wx:if="{{!isLoading && !error}}">
     <view class="settings-list">
       <view 
         class="setting-item"
         bindtap="navigateToPrivacySettings"
-        aria-label="隐私设置">
+        aria-label="闅愮璁剧疆">
         <view class="setting-content">
-          <text class="setting-label">隐私设置</text>
+          <text class="setting-label">闅愮璁剧疆</text>
         </view>
         <image class="arrow-icon" src="/images/arrow-right.svg" mode="aspectFit"></image>
       </view>
@@ -92,9 +92,9 @@
       <view 
         class="setting-item"
         bindtap="clearCache"
-        aria-label="清除缓存">
+        aria-label="娓呴櫎缂撳瓨">
         <view class="setting-content">
-          <text class="setting-label">清除缓存</text>
+          <text class="setting-label">娓呴櫎缂撳瓨</text>
         </view>
         <image class="arrow-icon" src="/images/arrow-right.svg" mode="aspectFit"></image>
       </view>
@@ -102,30 +102,30 @@
       <view 
         class="setting-item"
         bindtap="navigateToAbout"
-        aria-label="关于我们">
+        aria-label="鍏充簬鎴戜滑">
         <view class="setting-content">
-          <text class="setting-label">关于我们</text>
+          <text class="setting-label">鍏充簬鎴戜滑</text>
         </view>
         <image class="arrow-icon" src="/images/arrow-right.svg" mode="aspectFit"></image>
       </view>
     </view>
   </view>
 
-  <!-- 版本信息 -->
+  <!-- 鐗堟湰淇℃伅 -->
   <view class="version-info" wx:if="{{!isLoading && !error}}">
-    <text class="version-text">版本 1.0.3</text>
+    <text class="version-text">鐗堟湰 1.0.3</text>
   </view>
 
-  <!-- 加载状态 -->
+  <!-- 鍔犺浇鐘舵€?-->
   <view class="loading-container" wx:if="isLoading">
     <view class="loading"></view>
-    <text class="loading-text">加载中...</text>
+    <text class="loading-text">鍔犺浇涓?..</text>
   </view>
 
-  <!-- 错误提示 -->
+  <!-- 閿欒鎻愮ず -->
   <view class="error-container" wx:if="error">
     <image src="/images/error.svg" class="error-icon"></image>
     <text class="error-text">{{error}}</text>
-    <button class="retry-button" bindtap="onRetry">重试</button>
+    <button class="retry-button" bindtap="onRetry">閲嶈瘯</button>
   </view>
 </view>

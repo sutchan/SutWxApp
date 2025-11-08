@@ -1,26 +1,23 @@
-// analytics-service.js - 统计分析相关服务模块
-// 处理页面访问统计、用户行为分析等功能
+﻿// analytics-service.js - 缁熻鍒嗘瀽鐩稿叧鏈嶅姟妯″潡
+// 澶勭悊椤甸潰璁块棶缁熻銆佺敤鎴疯涓哄垎鏋愮瓑鍔熻兘
 
 import api from './api';
 import { getStorage, setStorage } from './global';
 
-// 会话配置
+// 浼氳瘽閰嶇疆
 const SESSION_KEY = 'analytics_session';
-const SESSION_TIMEOUT = 30 * 60 * 1000; // 30分钟
+const SESSION_TIMEOUT = 30 * 60 * 1000; // 30鍒嗛挓
 
 /**
- * 初始化统计会话
- * @private
+ * 鍒濆鍖栫粺璁′細璇? * @private
  */
 const initSession = () => {
   try {
     let session = getStorage(SESSION_KEY);
     const now = Date.now();
     
-    // 检查会话是否存在或已过期
-    if (!session || (now - session.lastActivity > SESSION_TIMEOUT)) {
-      // 创建新会话
-      session = {
+    // 妫€鏌ヤ細璇濇槸鍚﹀瓨鍦ㄦ垨宸茶繃鏈?    if (!session || (now - session.lastActivity > SESSION_TIMEOUT)) {
+      // 鍒涘缓鏂颁細璇?      session = {
         sessionId: generateSessionId(),
         startTime: now,
         lastActivity: now,
@@ -28,54 +25,49 @@ const initSession = () => {
         events: []
       };
       
-      // 保存新会话
-      setStorage(SESSION_KEY, session);
+      // 淇濆瓨鏂颁細璇?      setStorage(SESSION_KEY, session);
       
-      // 发送会话开始事件
-      trackEvent('session_start', {
+      // 鍙戦€佷細璇濆紑濮嬩簨浠?      trackEvent('session_start', {
         session_id: session.sessionId,
         timestamp: now
       });
     } else {
-      // 更新最后活动时间
-      session.lastActivity = now;
+      // 鏇存柊鏈€鍚庢椿鍔ㄦ椂闂?      session.lastActivity = now;
       setStorage(SESSION_KEY, session);
     }
     
     return session;
   } catch (error) {
-    console.error('初始化统计会话失败:', error);
+    console.error('鍒濆鍖栫粺璁′細璇濆け璐?', error);
     return null;
   }
 };
 
 /**
- * 生成会话ID
+ * 鐢熸垚浼氳瘽ID
  * @private
- * @returns {string} - 唯一的会话ID
+ * @returns {string} - 鍞竴鐨勪細璇滻D
  */
 const generateSessionId = () => {
   return 'sess_' + Date.now() + '_' + Math.random().toString(36).substring(2, 10);
 };
 
 /**
- * 记录页面访问
- * @param {string} pagePath - 页面路径
- * @param {Object} params - 页面参数
- * @param {string} params.title - 页面标题
- * @param {number} params.duration - 页面停留时间（毫秒）
+ * 璁板綍椤甸潰璁块棶
+ * @param {string} pagePath - 椤甸潰璺緞
+ * @param {Object} params - 椤甸潰鍙傛暟
+ * @param {string} params.title - 椤甸潰鏍囬
+ * @param {number} params.duration - 椤甸潰鍋滅暀鏃堕棿锛堟绉掞級
  */
 export const trackPageView = async (pagePath, params = {}) => {
   try {
-    // 初始化会话
-    const session = initSession();
+    // 鍒濆鍖栦細璇?    const session = initSession();
     if (!session) return;
     
-    // 更新页面访问数
-    session.pageViews++;
+    // 鏇存柊椤甸潰璁块棶鏁?    session.pageViews++;
     setStorage(SESSION_KEY, session);
     
-    // 构建页面访问数据
+    // 鏋勫缓椤甸潰璁块棶鏁版嵁
     const pageData = {
       session_id: session.sessionId,
       page_path: pagePath,
@@ -86,27 +78,25 @@ export const trackPageView = async (pagePath, params = {}) => {
       page_params: params.page_params || {}
     };
     
-    // 异步发送到服务器（不阻塞主流程）
-    api.post('/analytics/pageview', pageData).catch(err => {
-      console.error('发送页面访问统计失败:', err);
+    // 寮傛鍙戦€佸埌鏈嶅姟鍣紙涓嶉樆濉炰富娴佺▼锛?    api.post('/analytics/pageview', pageData).catch(err => {
+      console.error('鍙戦€侀〉闈㈣闂粺璁″け璐?', err);
     });
   } catch (error) {
-    console.error('记录页面访问失败:', error);
+    console.error('璁板綍椤甸潰璁块棶澶辫触:', error);
   }
 };
 
 /**
- * 记录用户事件
- * @param {string} eventName - 事件名称
- * @param {Object} eventData - 事件相关数据
+ * 璁板綍鐢ㄦ埛浜嬩欢
+ * @param {string} eventName - 浜嬩欢鍚嶇О
+ * @param {Object} eventData - 浜嬩欢鐩稿叧鏁版嵁
  */
 export const trackEvent = async (eventName, eventData = {}) => {
   try {
-    // 初始化会话
-    const session = initSession();
+    // 鍒濆鍖栦細璇?    const session = initSession();
     if (!session) return;
     
-    // 构建事件数据
+    // 鏋勫缓浜嬩欢鏁版嵁
     const event = {
       session_id: session.sessionId,
       event_name: eventName,
@@ -114,80 +104,71 @@ export const trackEvent = async (eventName, eventData = {}) => {
       data: eventData
     };
     
-    // 添加到会话事件列表（用于批量发送）
+    // 娣诲姞鍒颁細璇濅簨浠跺垪琛紙鐢ㄤ簬鎵归噺鍙戦€侊級
     session.events.push(event);
     setStorage(SESSION_KEY, session);
     
-    // 如果事件数量超过阈值，批量发送
-    if (session.events.length >= 10) {
+    // 濡傛灉浜嬩欢鏁伴噺瓒呰繃闃堝€硷紝鎵归噺鍙戦€?    if (session.events.length >= 10) {
       flushEvents();
     }
     
-    // 异步发送到服务器（不阻塞主流程）
-    api.post('/analytics/event', event).catch(err => {
-      console.error('发送事件统计失败:', err);
+    // 寮傛鍙戦€佸埌鏈嶅姟鍣紙涓嶉樆濉炰富娴佺▼锛?    api.post('/analytics/event', event).catch(err => {
+      console.error('鍙戦€佷簨浠剁粺璁″け璐?', err);
     });
   } catch (error) {
-    console.error('记录事件失败:', error);
+    console.error('璁板綍浜嬩欢澶辫触:', error);
   }
 };
 
 /**
- * 批量发送事件
- * @private
+ * 鎵归噺鍙戦€佷簨浠? * @private
  */
 const flushEvents = async () => {
   try {
     const session = getStorage(SESSION_KEY);
     if (!session || session.events.length === 0) return;
     
-    // 复制事件列表并清空
-    const eventsToSend = [...session.events];
+    // 澶嶅埗浜嬩欢鍒楄〃骞舵竻绌?    const eventsToSend = [...session.events];
     session.events = [];
     setStorage(SESSION_KEY, session);
     
-    // 批量发送
-    await api.post('/analytics/events/batch', {
+    // 鎵归噺鍙戦€?    await api.post('/analytics/events/batch', {
       events: eventsToSend
     });
   } catch (error) {
-    console.error('批量发送事件失败:', error);
-    // 如果发送失败，可以考虑将事件放回队列
-  }
+    console.error('鎵归噺鍙戦€佷簨浠跺け璐?', error);
+    // 濡傛灉鍙戦€佸け璐ワ紝鍙互鑰冭檻灏嗕簨浠舵斁鍥為槦鍒?  }
 };
 
 /**
- * 记录文章阅读进度
- * @param {string} articleId - 文章ID
- * @param {number} progress - 阅读进度（0-100）
- */
+ * 璁板綍鏂囩珷闃呰杩涘害
+ * @param {string} articleId - 鏂囩珷ID
+ * @param {number} progress - 闃呰杩涘害锛?-100锛? */
 export const trackArticleProgress = async (articleId, progress) => {
   try {
-    // 确保进度在有效范围内
+    // 纭繚杩涘害鍦ㄦ湁鏁堣寖鍥村唴
     const validProgress = Math.max(0, Math.min(100, Math.round(progress)));
     
-    // 记录进度事件
+    // 璁板綍杩涘害浜嬩欢
     trackEvent('article_progress', {
       article_id: articleId,
       progress: validProgress
     });
     
-    // 特殊处理阅读完成事件
+    // 鐗规畩澶勭悊闃呰瀹屾垚浜嬩欢
     if (validProgress >= 95) {
       trackEvent('article_read_complete', {
         article_id: articleId
       });
     }
   } catch (error) {
-    console.error('记录文章阅读进度失败:', error);
+    console.error('璁板綍鏂囩珷闃呰杩涘害澶辫触:', error);
   }
 };
 
 /**
- * 记录用户搜索
- * @param {string} keyword - 搜索关键词
- * @param {boolean} hasResults - 是否有结果
- */
+ * 璁板綍鐢ㄦ埛鎼滅储
+ * @param {string} keyword - 鎼滅储鍏抽敭璇? * @param {boolean} hasResults - 鏄惁鏈夌粨鏋? */
 export const trackSearch = async (keyword, hasResults = false) => {
   try {
     trackEvent('search', {
@@ -195,15 +176,15 @@ export const trackSearch = async (keyword, hasResults = false) => {
       has_results: hasResults
     });
   } catch (error) {
-    console.error('记录搜索失败:', error);
+    console.error('璁板綍鎼滅储澶辫触:', error);
   }
 };
 
 /**
- * 记录分享行为
- * @param {string} contentId - 分享的内容ID
- * @param {string} contentType - 内容类型（article, product等）
- * @param {string} shareChannel - 分享渠道
+ * 璁板綍鍒嗕韩琛屼负
+ * @param {string} contentId - 鍒嗕韩鐨勫唴瀹笽D
+ * @param {string} contentType - 鍐呭绫诲瀷锛坅rticle, product绛夛級
+ * @param {string} shareChannel - 鍒嗕韩娓犻亾
  */
 export const trackShare = async (contentId, contentType, shareChannel) => {
   try {
@@ -213,14 +194,14 @@ export const trackShare = async (contentId, contentType, shareChannel) => {
       share_channel: shareChannel
     });
   } catch (error) {
-    console.error('记录分享失败:', error);
+    console.error('璁板綍鍒嗕韩澶辫触:', error);
   }
 };
 
 /**
- * 记录用户登录
- * @param {string} loginMethod - 登录方式
- * @param {boolean} success - 是否成功
+ * 璁板綍鐢ㄦ埛鐧诲綍
+ * @param {string} loginMethod - 鐧诲綍鏂瑰紡
+ * @param {boolean} success - 鏄惁鎴愬姛
  */
 export const trackLogin = async (loginMethod, success = true) => {
   try {
@@ -229,14 +210,14 @@ export const trackLogin = async (loginMethod, success = true) => {
       success
     });
   } catch (error) {
-    console.error('记录登录失败:', error);
+    console.error('璁板綍鐧诲綍澶辫触:', error);
   }
 };
 
 /**
- * 记录用户注册
- * @param {string} registerMethod - 注册方式
- * @param {boolean} success - 是否成功
+ * 璁板綍鐢ㄦ埛娉ㄥ唽
+ * @param {string} registerMethod - 娉ㄥ唽鏂瑰紡
+ * @param {boolean} success - 鏄惁鎴愬姛
  */
 export const trackRegister = async (registerMethod, success = true) => {
   try {
@@ -245,12 +226,12 @@ export const trackRegister = async (registerMethod, success = true) => {
       success
     });
   } catch (error) {
-    console.error('记录注册失败:', error);
+    console.error('璁板綍娉ㄥ唽澶辫触:', error);
   }
 };
 
 /**
- * 结束当前会话
+ * 缁撴潫褰撳墠浼氳瘽
  */
 export const endSession = async () => {
   try {
@@ -260,27 +241,25 @@ export const endSession = async () => {
     const now = Date.now();
     const sessionDuration = now - session.startTime;
     
-    // 发送会话结束事件
-    trackEvent('session_end', {
+    // 鍙戦€佷細璇濈粨鏉熶簨浠?    trackEvent('session_end', {
       session_id: session.sessionId,
       duration: sessionDuration,
       page_views: session.pageViews,
       events_count: session.events.length
     });
     
-    // 确保所有事件都已发送
-    flushEvents();
+    // 纭繚鎵€鏈変簨浠堕兘宸插彂閫?    flushEvents();
     
-    // 清除会话
+    // 娓呴櫎浼氳瘽
     wx.removeStorageSync(SESSION_KEY);
   } catch (error) {
-    console.error('结束会话失败:', error);
+    console.error('缁撴潫浼氳瘽澶辫触:', error);
   }
 };
 
 /**
- * 获取用户设备信息
- * @returns {Object} - 设备信息
+ * 鑾峰彇鐢ㄦ埛璁惧淇℃伅
+ * @returns {Object} - 璁惧淇℃伅
  */
 export const getDeviceInfo = () => {
   try {
@@ -298,15 +277,15 @@ export const getDeviceInfo = () => {
       pixel_ratio: systemInfo.pixelRatio
     };
   } catch (error) {
-    console.error('获取设备信息失败:', error);
+    console.error('鑾峰彇璁惧淇℃伅澶辫触:', error);
     return {};
   }
 };
 
 /**
- * 记录错误信息
- * @param {string} errorMessage - 错误消息
- * @param {Object} errorInfo - 错误详情
+ * 璁板綍閿欒淇℃伅
+ * @param {string} errorMessage - 閿欒娑堟伅
+ * @param {Object} errorInfo - 閿欒璇︽儏
  */
 export const trackError = async (errorMessage, errorInfo = {}) => {
   try {
@@ -318,17 +297,15 @@ export const trackError = async (errorMessage, errorInfo = {}) => {
       timestamp: Date.now()
     };
     
-    // 发送错误日志到服务器
-    api.post('/analytics/error', errorData).catch(err => {
-      console.error('发送错误日志失败:', err);
+    // 鍙戦€侀敊璇棩蹇楀埌鏈嶅姟鍣?    api.post('/analytics/error', errorData).catch(err => {
+      console.error('鍙戦€侀敊璇棩蹇楀け璐?', err);
     });
   } catch (error) {
-    console.error('记录错误失败:', error);
+    console.error('璁板綍閿欒澶辫触:', error);
   }
 };
 
-// 导出所有方法
-export default {
+// 瀵煎嚭鎵€鏈夋柟娉?export default {
   trackPageView,
   trackEvent,
   trackArticleProgress,

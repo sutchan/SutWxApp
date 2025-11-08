@@ -1,23 +1,21 @@
-// 图片上传工具类
-// 用于处理小程序中的图片上传功能
-
+﻿// 鍥剧墖涓婁紶宸ュ叿绫?// 鐢ㄤ簬澶勭悊灏忕▼搴忎腑鐨勫浘鐗囦笂浼犲姛鑳?
 /**
- * 上传单张图片到服务器
- * @param {string} filePath - 本地图片路径
- * @param {object} options - 上传选项
- * @param {Function} options.success - 上传成功回调
- * @param {Function} options.fail - 上传失败回调
- * @param {Function} options.progress - 上传进度回调
- * @returns {Promise} 返回Promise对象
+ * 涓婁紶鍗曞紶鍥剧墖鍒版湇鍔″櫒
+ * @param {string} filePath - 鏈湴鍥剧墖璺緞
+ * @param {object} options - 涓婁紶閫夐」
+ * @param {Function} options.success - 涓婁紶鎴愬姛鍥炶皟
+ * @param {Function} options.fail - 涓婁紶澶辫触鍥炶皟
+ * @param {Function} options.progress - 涓婁紶杩涘害鍥炶皟
+ * @returns {Promise} 杩斿洖Promise瀵硅薄
  */
 export function uploadImage(filePath, options = {}) {
   const app = getApp();
   const { success, fail, progress } = options;
   
   return new Promise((resolve, reject) => {
-    // 检查token是否存在
+    // 妫€鏌oken鏄惁瀛樺湪
     if (!app.globalData.token) {
-      const error = { errMsg: '未登录，请先登录', code: 401 };
+      const error = { errMsg: '鏈櫥褰曪紝璇峰厛鐧诲綍', code: 401 };
       if (fail) fail(error);
       reject(error);
       return;
@@ -39,7 +37,7 @@ export function uploadImage(filePath, options = {}) {
             resolve(data.data);
           } else {
             const error = {
-              errMsg: data.message || '上传失败',
+              errMsg: data.message || '涓婁紶澶辫触',
               code: data.code || 500
             };
             if (fail) fail(error);
@@ -47,7 +45,7 @@ export function uploadImage(filePath, options = {}) {
           }
         } catch (e) {
           const error = {
-            errMsg: '服务器响应格式错误',
+            errMsg: '鏈嶅姟鍣ㄥ搷搴旀牸寮忛敊璇?,
             code: 500
           };
           if (fail) fail(error);
@@ -72,14 +70,14 @@ export function uploadImage(filePath, options = {}) {
 }
 
 /**
- * 上传多张图片
- * @param {Array} filePaths - 本地图片路径数组
- * @param {object} options - 上传选项
- * @param {Function} options.success - 单张上传成功回调
- * @param {Function} options.fail - 单张上传失败回调
- * @param {Function} options.progress - 单张上传进度回调
- * @param {Function} options.complete - 全部上传完成回调
- * @returns {Promise} 返回Promise对象，resolve值为上传结果数组
+ * 涓婁紶澶氬紶鍥剧墖
+ * @param {Array} filePaths - 鏈湴鍥剧墖璺緞鏁扮粍
+ * @param {object} options - 涓婁紶閫夐」
+ * @param {Function} options.success - 鍗曞紶涓婁紶鎴愬姛鍥炶皟
+ * @param {Function} options.fail - 鍗曞紶涓婁紶澶辫触鍥炶皟
+ * @param {Function} options.progress - 鍗曞紶涓婁紶杩涘害鍥炶皟
+ * @param {Function} options.complete - 鍏ㄩ儴涓婁紶瀹屾垚鍥炶皟
+ * @returns {Promise} 杩斿洖Promise瀵硅薄锛宺esolve鍊间负涓婁紶缁撴灉鏁扮粍
  */
 export function uploadImages(filePaths, options = {}) {
   const { success, fail, progress, complete } = options;
@@ -122,16 +120,15 @@ export function uploadImages(filePaths, options = {}) {
 }
 
 /**
- * 从相册选择并上传图片
- * @param {object} options - 选择和上传选项
- * @param {number} options.count - 选择图片数量，默认1
- * @param {Array} options.sizeType - 压缩类型，默认['compressed']
- * @param {Array} options.sourceType - 来源类型，默认['album', 'camera']
- * @param {Function} options.chooseSuccess - 选择成功回调
- * @param {Function} options.uploadSuccess - 上传成功回调
- * @param {Function} options.uploadFail - 上传失败回调
- * @param {Function} options.progress - 上传进度回调
- * @returns {Promise} 返回Promise对象
+ * 浠庣浉鍐岄€夋嫨骞朵笂浼犲浘鐗? * @param {object} options - 閫夋嫨鍜屼笂浼犻€夐」
+ * @param {number} options.count - 閫夋嫨鍥剧墖鏁伴噺锛岄粯璁?
+ * @param {Array} options.sizeType - 鍘嬬缉绫诲瀷锛岄粯璁'compressed']
+ * @param {Array} options.sourceType - 鏉ユ簮绫诲瀷锛岄粯璁'album', 'camera']
+ * @param {Function} options.chooseSuccess - 閫夋嫨鎴愬姛鍥炶皟
+ * @param {Function} options.uploadSuccess - 涓婁紶鎴愬姛鍥炶皟
+ * @param {Function} options.uploadFail - 涓婁紶澶辫触鍥炶皟
+ * @param {Function} options.progress - 涓婁紶杩涘害鍥炶皟
+ * @returns {Promise} 杩斿洖Promise瀵硅薄
  */
 export function chooseAndUploadImage(options = {}) {
   const {
@@ -145,7 +142,7 @@ export function chooseAndUploadImage(options = {}) {
   } = options;
   
   return new Promise((resolve, reject) => {
-    // 选择图片
+    // 閫夋嫨鍥剧墖
     wx.chooseImage({
       count: count,
       sizeType: sizeType,
@@ -154,7 +151,7 @@ export function chooseAndUploadImage(options = {}) {
         const tempFilePaths = res.tempFilePaths;
         if (chooseSuccess) chooseSuccess(tempFilePaths);
         
-        // 如果只选择一张，直接上传
+        // 濡傛灉鍙€夋嫨涓€寮狅紝鐩存帴涓婁紶
         if (count === 1) {
           uploadImage(tempFilePaths[0], {
             success: (data) => {
@@ -168,7 +165,7 @@ export function chooseAndUploadImage(options = {}) {
             progress: progress
           });
         } else {
-          // 多张图片上传
+          // 澶氬紶鍥剧墖涓婁紶
           uploadImages(tempFilePaths, {
             success: uploadSuccess,
             fail: uploadFail,
@@ -187,10 +184,9 @@ export function chooseAndUploadImage(options = {}) {
 }
 
 /**
- * 预览图片
- * @param {Array} urls - 图片URL数组
- * @param {number} current - 当前预览的图片索引
- */
+ * 棰勮鍥剧墖
+ * @param {Array} urls - 鍥剧墖URL鏁扮粍
+ * @param {number} current - 褰撳墠棰勮鐨勫浘鐗囩储寮? */
 export function previewImage(urls, current = 0) {
   wx.previewImage({
     current: urls[current],
@@ -198,8 +194,7 @@ export function previewImage(urls, current = 0) {
   });
 }
 
-// 导出所有函数
-export default {
+// 瀵煎嚭鎵€鏈夊嚱鏁?export default {
   uploadImage,
   uploadImages,
   chooseAndUploadImage,

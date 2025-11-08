@@ -1,14 +1,11 @@
-// cart.js - 购物车页面
-
-// 导入购物车服务
-import cartService from '../../utils/cart-service';
+﻿// cart.js - 璐墿杞﹂〉闈?
+// 瀵煎叆璐墿杞︽湇鍔?import cartService from '../../utils/cart-service';
 import { showToast, showConfirm, showLoading, hideLoading } from '../../utils/global';
 import { validateId, validateCartItemQuantity } from '../../utils/validator';
 
 Page({
   /**
-   * 页面的初始数据
-   */
+   * 椤甸潰鐨勫垵濮嬫暟鎹?   */
   data: {
     cartItems: [],
     totalPrice: 0,
@@ -18,46 +15,43 @@ Page({
     refreshing: false,
     isEditing: false,
     checkedGoodsList: [],
-    submitting: false // 防止重复提交
+    submitting: false // 闃叉閲嶅鎻愪氦
   },
 
   /**
-   * 生命周期函数--监听页面加载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
    */
   onLoad: function (options) {
     this.loadCartData();
   },
 
   /**
-   * 生命周期函数--监听页面显示
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
    */
   onShow: function () {
-    // 页面显示时重新加载购物车数据
+    // 椤甸潰鏄剧ず鏃堕噸鏂板姞杞借喘鐗╄溅鏁版嵁
     this.loadCartData();
   },
 
   /**
-   * 页面卸载前清理请求
-   */
+   * 椤甸潰鍗歌浇鍓嶆竻鐞嗚姹?   */
   onUnload: function() {
-    // 页面卸载时取消未完成的请求，避免内存泄漏
+    // 椤甸潰鍗歌浇鏃跺彇娑堟湭瀹屾垚鐨勮姹傦紝閬垮厤鍐呭瓨娉勬紡
     cartService.clearCartCache();
   },
 
   /**
-   * 下拉刷新
+   * 涓嬫媺鍒锋柊
    */
   onPullDownRefresh: function() {
     this.setData({
       refreshing: true
     });
-    // 强制刷新购物车数据
-    this.loadCartData(true);
+    // 寮哄埗鍒锋柊璐墿杞︽暟鎹?    this.loadCartData(true);
   },
 
   /**
-   * 加载购物车数据
-   */
+   * 鍔犺浇璐墿杞︽暟鎹?   */
   loadCartData: async function (forceRefresh = false) {
     try {
       this.setData({
@@ -66,22 +60,19 @@ Page({
       
       const cartItems = await cartService.getCartItems({ forceRefresh });
       
-      // 检查商品状态（下架、库存不足等）
-      this.checkCartItemsStatus(cartItems);
+      // 妫€鏌ュ晢鍝佺姸鎬侊紙涓嬫灦銆佸簱瀛樹笉瓒崇瓑锛?      this.checkCartItemsStatus(cartItems);
       
       this.setData({
         cartItems: cartItems || []
       });
       
-      // 初始化选中状态
-      this.initSelectedState();
+      // 鍒濆鍖栭€変腑鐘舵€?      this.initSelectedState();
       
-      // 计算总价和数量
-      this.calculateTotal();
+      // 璁＄畻鎬讳环鍜屾暟閲?      this.calculateTotal();
       
     } catch (error) {
-      console.error('加载购物车数据失败:', error);
-      showToast('加载购物车失败，请重试', { icon: 'none' });
+      console.error('鍔犺浇璐墿杞︽暟鎹け璐?', error);
+      showToast('鍔犺浇璐墿杞﹀け璐ワ紝璇烽噸璇?, { icon: 'none' });
     } finally {
       this.setData({
         loading: false,
@@ -91,23 +82,21 @@ Page({
   },
 
   /**
-   * 检查购物车商品状态
-   */
+   * 妫€鏌ヨ喘鐗╄溅鍟嗗搧鐘舵€?   */
   checkCartItemsStatus: function (cartItems) {
-    // 检查商品是否可用、是否下架等
+    // 妫€鏌ュ晢鍝佹槸鍚﹀彲鐢ㄣ€佹槸鍚︿笅鏋剁瓑
     cartItems.forEach(item => {
-      // 重置状态标志
-      item.unavailable = false;
+      // 閲嶇疆鐘舵€佹爣蹇?      item.unavailable = false;
       item.outOfStock = false;
       item.overStock = false;
       item.unavailableReason = '';
       
       if (!item.available || item.status !== 1) {
         item.unavailable = true;
-        item.unavailableReason = item.statusText || '商品已下架或不可用';
+        item.unavailableReason = item.statusText || '鍟嗗搧宸蹭笅鏋舵垨涓嶅彲鐢?;
       } else if (item.stock <= 0) {
         item.outOfStock = true;
-        item.unavailableReason = '商品库存不足';
+        item.unavailableReason = '鍟嗗搧搴撳瓨涓嶈冻';
       } else if (item.quantity > item.stock) {
         item.overStock = true;
         item.availableQuantity = item.stock;
@@ -116,13 +105,11 @@ Page({
   },
 
   /**
-   * 初始化选中状态
-   */
+   * 鍒濆鍖栭€変腑鐘舵€?   */
   initSelectedState: function () {
     const cartItems = [...this.data.cartItems];
     
-    // 默认选中可用的商品
-    cartItems.forEach(item => {
+    // 榛樿閫変腑鍙敤鐨勫晢鍝?    cartItems.forEach(item => {
       if (!item.unavailable && !item.outOfStock) {
         item.selected = true;
       } else {
@@ -134,13 +121,11 @@ Page({
       cartItems
     });
     
-    // 检查是否全选
-    this.checkAllSelected();
+    // 妫€鏌ユ槸鍚﹀叏閫?    this.checkAllSelected();
   },
 
   /**
-   * 检查是否全选
-   */
+   * 妫€鏌ユ槸鍚﹀叏閫?   */
   checkAllSelected: function () {
     const availableItems = this.data.cartItems.filter(item => !item.unavailable && !item.outOfStock);
     
@@ -159,14 +144,12 @@ Page({
   },
 
   /**
-   * 全选/取消全选
-   */
+   * 鍏ㄩ€?鍙栨秷鍏ㄩ€?   */
   toggleAllSelected: function () {
     const allSelected = !this.data.allSelected;
     const cartItems = [...this.data.cartItems];
     
-    // 更新选中状态
-    cartItems.forEach(item => {
+    // 鏇存柊閫変腑鐘舵€?    cartItems.forEach(item => {
       if (!item.unavailable && !item.outOfStock) {
         item.selected = allSelected;
       }
@@ -177,144 +160,130 @@ Page({
       allSelected
     });
     
-    // 计算总价
+    // 璁＄畻鎬讳环
     this.calculateTotal();
   },
 
   /**
-   * 切换商品选中状态
-   */
+   * 鍒囨崲鍟嗗搧閫変腑鐘舵€?   */
   toggleItemSelected: function (e) {
     const index = e.currentTarget.dataset.index;
     const cartItems = [...this.data.cartItems];
     
-    // 切换选中状态
-    cartItems[index].selected = !cartItems[index].selected;
+    // 鍒囨崲閫変腑鐘舵€?    cartItems[index].selected = !cartItems[index].selected;
     
     this.setData({
       cartItems
     });
     
-    // 检查是否全选
-    this.checkAllSelected();
+    // 妫€鏌ユ槸鍚﹀叏閫?    this.checkAllSelected();
     
-    // 计算总价
+    // 璁＄畻鎬讳环
     this.calculateTotal();
   },
 
   /**
-   * 增加商品数量
+   * 澧炲姞鍟嗗搧鏁伴噺
    */
   increaseQuantity: async function (e) {
     try {
       const index = e.currentTarget.dataset.index;
       const item = this.data.cartItems[index];
       
-      // 检查商品是否可用
-      if (item.unavailable || item.outOfStock) {
+      // 妫€鏌ュ晢鍝佹槸鍚﹀彲鐢?      if (item.unavailable || item.outOfStock) {
         return;
       }
       
-      // 检查库存限制
-      if (item.quantity >= item.stock) {
-        showToast('已达到最大库存', { icon: 'none' });
+      // 妫€鏌ュ簱瀛橀檺鍒?      if (item.quantity >= item.stock) {
+        showToast('宸茶揪鍒版渶澶у簱瀛?, { icon: 'none' });
         return;
       }
       
       const newQuantity = item.quantity + 1;
       
-      // 数据验证
+      // 鏁版嵁楠岃瘉
       validateCartItemQuantity(newQuantity);
       
-      // 更新UI
+      // 鏇存柊UI
       this.setData({
         [`cartItems[${index}].quantity`]: newQuantity,
         [`cartItems[${index}].loading`]: true
       });
       
-      // 更新购物车
-      await cartService.updateCartItem(item.id, newQuantity);
+      // 鏇存柊璐墿杞?      await cartService.updateCartItem(item.id, newQuantity);
       
-      // 计算总价
+      // 璁＄畻鎬讳环
       this.calculateTotal();
       
     } catch (error) {
-      console.error('增加商品数量失败:', error);
-      showToast(error.message || '更新失败，请重试', { icon: 'none' });
+      console.error('澧炲姞鍟嗗搧鏁伴噺澶辫触:', error);
+      showToast(error.message || '鏇存柊澶辫触锛岃閲嶈瘯', { icon: 'none' });
       
-      // 恢复原数量
-      const index = e.currentTarget.dataset.index;
+      // 鎭㈠鍘熸暟閲?      const index = e.currentTarget.dataset.index;
       this.setData({
         [`cartItems[${index}].loading`]: false
       });
       
-      // 重新加载数据以确保准确性
-      this.loadCartData();
+      // 閲嶆柊鍔犺浇鏁版嵁浠ョ‘淇濆噯纭€?      this.loadCartData();
     }
   },
 
   /**
-   * 减少商品数量
+   * 鍑忓皯鍟嗗搧鏁伴噺
    */
   decreaseQuantity: async function (e) {
     try {
       const index = e.currentTarget.dataset.index;
       const item = this.data.cartItems[index];
       
-      // 检查是否为最小值
-      if (item.quantity <= 1) {
+      // 妫€鏌ユ槸鍚︿负鏈€灏忓€?      if (item.quantity <= 1) {
         return;
       }
       
       const newQuantity = item.quantity - 1;
       
-      // 数据验证
+      // 鏁版嵁楠岃瘉
       validateCartItemQuantity(newQuantity);
       
-      // 更新UI
+      // 鏇存柊UI
       this.setData({
         [`cartItems[${index}].quantity`]: newQuantity,
         [`cartItems[${index}].loading`]: true
       });
       
-      // 更新购物车
-      await cartService.updateCartItem(item.id, newQuantity);
+      // 鏇存柊璐墿杞?      await cartService.updateCartItem(item.id, newQuantity);
       
-      // 计算总价
+      // 璁＄畻鎬讳环
       this.calculateTotal();
       
     } catch (error) {
-      console.error('减少商品数量失败:', error);
-      showToast(error.message || '更新失败，请重试', { icon: 'none' });
+      console.error('鍑忓皯鍟嗗搧鏁伴噺澶辫触:', error);
+      showToast(error.message || '鏇存柊澶辫触锛岃閲嶈瘯', { icon: 'none' });
       
-      // 恢复原数量
-      const index = e.currentTarget.dataset.index;
+      // 鎭㈠鍘熸暟閲?      const index = e.currentTarget.dataset.index;
       this.setData({
         [`cartItems[${index}].loading`]: false
       });
       
-      // 重新加载数据以确保准确性
-      this.loadCartData();
+      // 閲嶆柊鍔犺浇鏁版嵁浠ョ‘淇濆噯纭€?      this.loadCartData();
     }
   },
 
   /**
-   * 删除购物车商品
-   */
+   * 鍒犻櫎璐墿杞﹀晢鍝?   */
   deleteCartItem: async function (e) {
     try {
       const index = e.currentTarget.dataset.index;
       const item = this.data.cartItems[index];
       
-      // 显示确认对话框
-      await showConfirm('确认从购物车中移除该商品吗？', '确认删除', '取消');
+      // 鏄剧ず纭瀵硅瘽妗?      await showConfirm('纭浠庤喘鐗╄溅涓Щ闄よ鍟嗗搧鍚楋紵', '纭鍒犻櫎', '鍙栨秷');
       
-      showLoading('正在删除...');
+      showLoading('姝ｅ湪鍒犻櫎...');
       
-      // 删除商品
+      // 鍒犻櫎鍟嗗搧
       await cartService.deleteCartItem(item.id);
       
-      // 更新本地数据
+      // 鏇存柊鏈湴鏁版嵁
       const cartItems = [...this.data.cartItems];
       cartItems.splice(index, 1);
       
@@ -322,18 +291,17 @@ Page({
         cartItems
       });
       
-      // 计算总价
+      // 璁＄畻鎬讳环
       this.calculateTotal();
       
-      // 检查是否全选
-      this.checkAllSelected();
+      // 妫€鏌ユ槸鍚﹀叏閫?      this.checkAllSelected();
       
-      showToast('删除成功');
+      showToast('鍒犻櫎鎴愬姛');
       
     } catch (error) {
-      console.error('删除购物车商品失败:', error);
+      console.error('鍒犻櫎璐墿杞﹀晢鍝佸け璐?', error);
       if (error.message !== 'cancel') {
-        showToast(error.message || '删除失败，请重试', { icon: 'none' });
+        showToast(error.message || '鍒犻櫎澶辫触锛岃閲嶈瘯', { icon: 'none' });
       }
     } finally {
       hideLoading();
@@ -341,28 +309,25 @@ Page({
   },
 
   /**
-   * 批量删除选中的商品
-   */
+   * 鎵归噺鍒犻櫎閫変腑鐨勫晢鍝?   */
   deleteSelectedItems: async function () {
     try {
-      // 获取选中的商品
-      const selectedItems = this.data.cartItems.filter(item => item.selected);
+      // 鑾峰彇閫変腑鐨勫晢鍝?      const selectedItems = this.data.cartItems.filter(item => item.selected);
       
       if (selectedItems.length === 0) {
-        showToast('请选择要删除的商品', { icon: 'none' });
+        showToast('璇烽€夋嫨瑕佸垹闄ょ殑鍟嗗搧', { icon: 'none' });
         return;
       }
       
-      // 显示确认对话框
-      await showConfirm(`确认删除选中的${selectedItems.length}件商品吗？`, '确认删除', '取消');
+      // 鏄剧ず纭瀵硅瘽妗?      await showConfirm(`纭鍒犻櫎閫変腑鐨?{selectedItems.length}浠跺晢鍝佸悧锛焋, '纭鍒犻櫎', '鍙栨秷');
       
-      showLoading('正在删除...');
+      showLoading('姝ｅ湪鍒犻櫎...');
       
-      // 批量删除商品
+      // 鎵归噺鍒犻櫎鍟嗗搧
       const itemIds = selectedItems.map(item => item.id);
       await cartService.deleteCartItems(itemIds);
       
-      // 更新本地数据
+      // 鏇存柊鏈湴鏁版嵁
       const cartItems = this.data.cartItems.filter(item => !item.selected);
       
       this.setData({
@@ -371,15 +336,15 @@ Page({
         isEditing: false
       });
       
-      // 计算总价
+      // 璁＄畻鎬讳环
       this.calculateTotal();
       
-      showToast('删除成功');
+      showToast('鍒犻櫎鎴愬姛');
       
     } catch (error) {
-      console.error('批量删除购物车商品失败:', error);
+      console.error('鎵归噺鍒犻櫎璐墿杞﹀晢鍝佸け璐?', error);
       if (error.message !== 'cancel') {
-        showToast(error.message || '删除失败，请重试', { icon: 'none' });
+        showToast(error.message || '鍒犻櫎澶辫触锛岃閲嶈瘯', { icon: 'none' });
       }
     } finally {
       hideLoading();
@@ -387,19 +352,16 @@ Page({
   },
 
   /**
-   * 清空购物车
-   */
+   * 娓呯┖璐墿杞?   */
   clearCart: async function () {
     try {
-      // 显示确认对话框
-      await showConfirm('确认清空购物车吗？此操作不可恢复。', '确认清空', '取消');
+      // 鏄剧ず纭瀵硅瘽妗?      await showConfirm('纭娓呯┖璐墿杞﹀悧锛熸鎿嶄綔涓嶅彲鎭㈠銆?, '纭娓呯┖', '鍙栨秷');
       
-      showLoading('正在清空购物车...');
+      showLoading('姝ｅ湪娓呯┖璐墿杞?..');
       
-      // 清空购物车
-      await cartService.clearCart();
+      // 娓呯┖璐墿杞?      await cartService.clearCart();
       
-      // 更新本地数据
+      // 鏇存柊鏈湴鏁版嵁
       this.setData({
         cartItems: [],
         totalPrice: 0,
@@ -408,12 +370,12 @@ Page({
         checkedGoodsList: []
       });
       
-      showToast('购物车已清空');
+      showToast('璐墿杞﹀凡娓呯┖');
       
     } catch (error) {
-      console.error('清空购物车失败:', error);
+      console.error('娓呯┖璐墿杞﹀け璐?', error);
       if (error.message !== 'cancel') {
-        showToast(error.message || '清空失败，请重试', { icon: 'none' });
+        showToast(error.message || '娓呯┖澶辫触锛岃閲嶈瘯', { icon: 'none' });
       }
     } finally {
       hideLoading();
@@ -421,22 +383,20 @@ Page({
   },
 
   /**
-   * 将商品移至收藏
-   */
+   * 灏嗗晢鍝佺Щ鑷虫敹钘?   */
   moveToFavorite: async function (e) {
     try {
       const index = e.currentTarget.dataset.index;
       const item = this.data.cartItems[index];
       
-      // 显示确认对话框
-      await showConfirm('确认将此商品添加到收藏夹吗？添加后会从购物车中移除。', '确认添加', '取消');
+      // 鏄剧ず纭瀵硅瘽妗?      await showConfirm('纭灏嗘鍟嗗搧娣诲姞鍒版敹钘忓す鍚楋紵娣诲姞鍚庝細浠庤喘鐗╄溅涓Щ闄ゃ€?, '纭娣诲姞', '鍙栨秷');
       
-      showLoading('正在添加到收藏夹...');
+      showLoading('姝ｅ湪娣诲姞鍒版敹钘忓す...');
       
-      // 移至收藏
+      // 绉昏嚦鏀惰棌
       await cartService.moveToFavorite(item.id);
       
-      // 更新本地数据
+      // 鏇存柊鏈湴鏁版嵁
       const cartItems = [...this.data.cartItems];
       cartItems.splice(index, 1);
       
@@ -444,18 +404,17 @@ Page({
         cartItems
       });
       
-      // 计算总价
+      // 璁＄畻鎬讳环
       this.calculateTotal();
       
-      // 检查是否全选
-      this.checkAllSelected();
+      // 妫€鏌ユ槸鍚﹀叏閫?      this.checkAllSelected();
       
-      showToast('已添加到收藏夹');
+      showToast('宸叉坊鍔犲埌鏀惰棌澶?);
       
     } catch (error) {
-      console.error('移至收藏夹失败:', error);
+      console.error('绉昏嚦鏀惰棌澶瑰け璐?', error);
       if (error.message !== 'cancel') {
-        showToast(error.message || '添加失败，请重试', { icon: 'none' });
+        showToast(error.message || '娣诲姞澶辫触锛岃閲嶈瘯', { icon: 'none' });
       }
     } finally {
       hideLoading();
@@ -463,7 +422,7 @@ Page({
   },
 
   /**
-   * 计算总价和选中数量
+   * 璁＄畻鎬讳环鍜岄€変腑鏁伴噺
    */
   calculateTotal: function () {
     const cartItems = this.data.cartItems;
@@ -487,11 +446,11 @@ Page({
   },
 
   /**
-   * 结算
+   * 缁撶畻
    */
   checkout: async function () {
     try {
-      // 防止重复提交
+      // 闃叉閲嶅鎻愪氦
       if (this.data.submitting) {
         return;
       }
@@ -500,41 +459,39 @@ Page({
         submitting: true
       });
       
-      // 获取选中的商品
-      const selectedItems = this.data.cartItems.filter(item => item.selected);
+      // 鑾峰彇閫変腑鐨勫晢鍝?      const selectedItems = this.data.cartItems.filter(item => item.selected);
       
       if (selectedItems.length === 0) {
-        showToast('请选择要结算的商品', { icon: 'none' });
+        showToast('璇烽€夋嫨瑕佺粨绠楃殑鍟嗗搧', { icon: 'none' });
         return;
       }
       
-      // 检查选中商品是否可用
+      // 妫€鏌ラ€変腑鍟嗗搧鏄惁鍙敤
       const unavailableItems = selectedItems.filter(item => item.unavailable || item.outOfStock);
       if (unavailableItems.length > 0) {
-        showToast('选中的商品中有不可用或库存不足的商品', { icon: 'none' });
+        showToast('閫変腑鐨勫晢鍝佷腑鏈変笉鍙敤鎴栧簱瀛樹笉瓒崇殑鍟嗗搧', { icon: 'none' });
         return;
       }
       
-      // 检查库存
-      const overStockItems = selectedItems.filter(item => item.overStock);
+      // 妫€鏌ュ簱瀛?      const overStockItems = selectedItems.filter(item => item.overStock);
       if (overStockItems.length > 0) {
-        showToast('部分商品库存不足，请调整数量后再结算', { icon: 'none' });
+        showToast('閮ㄥ垎鍟嗗搧搴撳瓨涓嶈冻锛岃璋冩暣鏁伴噺鍚庡啀缁撶畻', { icon: 'none' });
         return;
       }
       
-      showLoading('正在检查库存...');
+      showLoading('姝ｅ湪妫€鏌ュ簱瀛?..');
       
-      // 二次检查库存（实时检查）
+      // 浜屾妫€鏌ュ簱瀛橈紙瀹炴椂妫€鏌ワ級
       const stockResult = await cartService.checkCartStock(selectedItems);
       
       if (stockResult.out_of_stock && stockResult.out_of_stock.length > 0) {
-        showToast('部分商品库存不足，请刷新购物车后重试', { icon: 'none' });
-        // 重新加载数据
+        showToast('閮ㄥ垎鍟嗗搧搴撳瓨涓嶈冻锛岃鍒锋柊璐墿杞﹀悗閲嶈瘯', { icon: 'none' });
+        // 閲嶆柊鍔犺浇鏁版嵁
         this.loadCartData(true);
         return;
       }
       
-      // 构建订单数据
+      // 鏋勫缓璁㈠崟鏁版嵁
       const orderData = {
         items: selectedItems.map(item => ({
           cart_item_id: item.id,
@@ -544,18 +501,17 @@ Page({
         }))
       };
       
-      // 跳转到结算页面
-      wx.navigateTo({
+      // 璺宠浆鍒扮粨绠楅〉闈?      wx.navigateTo({
         url: '/pages/checkout/checkout?orderData=' + encodeURIComponent(JSON.stringify(orderData)),
         fail: (err) => {
-          console.error('跳转到结算页面失败:', err);
-          showToast('跳转失败，请重试', { icon: 'none' });
+          console.error('璺宠浆鍒扮粨绠楅〉闈㈠け璐?', err);
+          showToast('璺宠浆澶辫触锛岃閲嶈瘯', { icon: 'none' });
         }
       });
       
     } catch (error) {
-      console.error('结算失败:', error);
-      showToast(error.message || '结算失败，请重试', { icon: 'none' });
+      console.error('缁撶畻澶辫触:', error);
+      showToast(error.message || '缁撶畻澶辫触锛岃閲嶈瘯', { icon: 'none' });
     } finally {
       hideLoading();
       this.setData({
@@ -565,7 +521,7 @@ Page({
   },
 
   /**
-   * 编辑模式切换
+   * 缂栬緫妯″紡鍒囨崲
    */
   toggleEditMode: function() {
     this.setData({
@@ -574,8 +530,7 @@ Page({
   },
 
   /**
-   * 跳转到商品详情
-   */
+   * 璺宠浆鍒板晢鍝佽鎯?   */
   navigateToProductDetail: function(e) {
     const productId = e.currentTarget.dataset.productId;
     wx.navigateTo({

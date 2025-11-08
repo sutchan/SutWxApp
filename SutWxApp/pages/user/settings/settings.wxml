@@ -1,23 +1,23 @@
-<!-- pages/user/settings/settings.wxml -->
+﻿<!-- pages/user/settings/settings.wxml -->
 <view class="settings-container">
-  <!-- 设置分组：用户信息 -->
+  <!-- 璁剧疆鍒嗙粍锛氱敤鎴蜂俊鎭?-->
   <view class="settings-section">
-    <view class="section-title">用户信息</view>
+    <view class="section-title">鐢ㄦ埛淇℃伅</view>
     <view class="settings-item">
-      <view class="settings-label">用户名</view>
-      <view class="settings-value">{{userInfo ? userInfo.nickname : '未登录'}}</view>
+      <view class="settings-label">鐢ㄦ埛鍚?/view>
+      <view class="settings-value">{{userInfo ? userInfo.nickname : '鏈櫥褰?}}</view>
     </view>
     <view class="settings-item">
-      <view class="settings-label">用户ID</view>
+      <view class="settings-label">鐢ㄦ埛ID</view>
       <view class="settings-value">{{userInfo ? userInfo.id : 'N/A'}}</view>
     </view>
   </view>
 
-  <!-- 设置分组：通知设置 -->
+  <!-- 璁剧疆鍒嗙粍锛氶€氱煡璁剧疆 -->
   <view class="settings-section">
-    <view class="section-title">通知设置</view>
+    <view class="section-title">閫氱煡璁剧疆</view>
     <view class="settings-item">
-      <view class="settings-label">推送通知</view>
+      <view class="settings-label">鎺ㄩ€侀€氱煡</view>
       <switch 
         class="settings-switch" 
         checked="{{notificationEnabled}}" 
@@ -26,7 +26,7 @@
       />
     </view>
     <view class="settings-item">
-      <view class="settings-label">自动播放</view>
+      <view class="settings-label">鑷姩鎾斁</view>
       <switch 
         class="settings-switch" 
         checked="{{autoPlayEnabled}}" 
@@ -35,7 +35,7 @@
       />
     </view>
     <view class="settings-item">
-      <view class="settings-label">深色模式</view>
+      <view class="settings-label">娣辫壊妯″紡</view>
       <switch 
         class="settings-switch" 
         checked="{{darkModeEnabled}}" 
@@ -45,45 +45,45 @@
     </view>
   </view>
 
-  <!-- 设置分组：存储管理 -->
+  <!-- 璁剧疆鍒嗙粍锛氬瓨鍌ㄧ鐞?-->
   <view class="settings-section">
-    <view class="section-title">存储管理</view>
+    <view class="section-title">瀛樺偍绠＄悊</view>
     <view class="settings-item" bindtap="clearCache">
-      <view class="settings-label">清除缓存</view>
+      <view class="settings-label">娓呴櫎缂撳瓨</view>
       <view class="settings-value-container">
         <text class="settings-value">{{cacheSize}}</text>
-        <text class="settings-arrow">›</text>
+        <text class="settings-arrow">鈥?/text>
       </view>
     </view>
   </view>
 
-  <!-- 设置分组：关于 -->
+  <!-- 璁剧疆鍒嗙粍锛氬叧浜?-->
   <view class="settings-section">
-    <view class="section-title">关于</view>
+    <view class="section-title">鍏充簬</view>
     <view class="settings-item" bindtap="viewUserAgreement">
-      <view class="settings-label">用户协议</view>
-      <text class="settings-arrow">›</text>
+      <view class="settings-label">鐢ㄦ埛鍗忚</view>
+      <text class="settings-arrow">鈥?/text>
     </view>
     <view class="settings-item" bindtap="viewPrivacyPolicy">
-      <view class="settings-label">隐私政策</view>
-      <text class="settings-arrow">›</text>
+      <view class="settings-label">闅愮鏀跨瓥</view>
+      <text class="settings-arrow">鈥?/text>
     </view>
     <view class="settings-item" bindtap="contactService">
-      <view class="settings-label">联系客服</view>
-      <text class="settings-arrow">›</text>
+      <view class="settings-label">鑱旂郴瀹㈡湇</view>
+      <text class="settings-arrow">鈥?/text>
     </view>
     <view class="settings-item" bindtap="viewAbout">
-      <view class="settings-label">关于我们</view>
-      <text class="settings-arrow">›</text>
+      <view class="settings-label">鍏充簬鎴戜滑</view>
+      <text class="settings-arrow">鈥?/text>
     </view>
     <view class="settings-item" bindtap="checkForUpdates">
-      <view class="settings-label">检查更新</view>
-      <text class="settings-arrow">›</text>
+      <view class="settings-label">妫€鏌ユ洿鏂?/view>
+      <text class="settings-arrow">鈥?/text>
     </view>
   </view>
 
-  <!-- 版本信息 -->
+  <!-- 鐗堟湰淇℃伅 -->
   <view class="version-info">
-    <text>版本 {{appVersion}}</text>
+    <text>鐗堟湰 {{appVersion}}</text>
   </view>
 </view>

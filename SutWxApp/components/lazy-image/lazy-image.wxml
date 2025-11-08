@@ -1,12 +1,12 @@
-<!-- lazy-image.wxml - 图片懒加载组件模板 -->
+﻿<!-- lazy-image.wxml - 鍥剧墖鎳掑姞杞界粍浠舵ā鏉?-->
 <view 
   class="lazy-image-container {{containerClass}}" 
   style="{{containerStyle}}"
   bindtap="onImageTap"
 >
-  <!-- 占位图或加载中的缩略图 -->
+  <!-- 鍗犱綅鍥炬垨鍔犺浇涓殑缂╃暐鍥?-->
   <view class="image-wrapper">
-    <!-- 显示的图片 -->
+    <!-- 鏄剧ず鐨勫浘鐗?-->
     <image
       class="lazy-image {{imageClass}}"
       style="{{imgStyle}}"
@@ -17,14 +17,14 @@
       binderror="onImageTap"
     ></image>
     
-    <!-- 加载动画 -->
+    <!-- 鍔犺浇鍔ㄧ敾 -->
     <view class="loading-indicator" wx:if="{{isLoading && showLoading}}">
       <view class="loading-spinner"></view>
     </view>
     
-    <!-- 加载失败提示 - 现在使用error状态来控制 -->
+    <!-- 鍔犺浇澶辫触鎻愮ず - 鐜板湪浣跨敤error鐘舵€佹潵鎺у埗 -->
     <view class="error-indicator" wx:if="{{error}}">
-      <text class="error-text">点击重试</text>
+      <text class="error-text">鐐瑰嚮閲嶈瘯</text>
     </view>
   </view>
 </view>

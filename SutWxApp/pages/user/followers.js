@@ -1,63 +1,59 @@
-// pages/user/followers.js
-// 粉丝列表页面
+﻿// pages/user/followers.js
+// 绮変笣鍒楄〃椤甸潰
 import { showToast } from '../../utils/global';
 
 Page({
   /**
-   * 页面的初始数据
-   */
+   * 椤甸潰鐨勫垵濮嬫暟鎹?   */
   data: {
-    followersList: [], // 粉丝列表
-    loading: false, // 加载状态
-    error: null, // 错误信息
-    currentPage: 1, // 当前页码
-    pageSize: 10, // 每页数量
-    hasMore: true // 是否有更多数据
-  },
+    followersList: [], // 绮変笣鍒楄〃
+    loading: false, // 鍔犺浇鐘舵€?    error: null, // 閿欒淇℃伅
+    currentPage: 1, // 褰撳墠椤电爜
+    pageSize: 10, // 姣忛〉鏁伴噺
+    hasMore: true // 鏄惁鏈夋洿澶氭暟鎹?  },
 
   /**
-   * 生命周期函数--监听页面加载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
    */
   onLoad: function(options) {
     this.loadFollowersList();
   },
 
   /**
-   * 生命周期函数--监听页面显示
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
    */
   onShow: function() {
-    // 页面显示时刷新数据
-    if (this.data.followersList.length > 0) {
+    // 椤甸潰鏄剧ず鏃跺埛鏂版暟鎹?    if (this.data.followersList.length > 0) {
       this.refreshList();
     }
   },
 
   /**
-   * 页面相关事件处理函数--监听用户下拉动作
+   * 椤甸潰鐩稿叧浜嬩欢澶勭悊鍑芥暟--鐩戝惉鐢ㄦ埛涓嬫媺鍔ㄤ綔
    */
   onPullDownRefresh: function() {
     this.refreshList();
   },
 
   /**
-   * 加载粉丝列表
+   * 鍔犺浇绮変笣鍒楄〃
    */
   loadFollowersList: function(refresh = false) {
     const app = getApp();
     
-    // 检查是否已登录
+    // 妫€鏌ユ槸鍚﹀凡鐧诲綍
     if (!app.isLoggedIn()) {
       wx.stopPullDownRefresh();
       this.setData({
         loading: false,
-        error: '请先登录',
+        error: '璇峰厛鐧诲綍',
         hasMore: false
       });
-      showToast('请先登录', 'none');
+      showToast('璇峰厛鐧诲綍', 'none');
       return;
     }
 
-    // 设置页码
+    // 璁剧疆椤电爜
     if (refresh) {
       this.setData({ currentPage: 1, hasMore: true, error: null });
     } else if (!this.data.hasMore) {
@@ -65,10 +61,9 @@ Page({
       return;
     }
 
-    // 显示加载状态
-    this.setData({ loading: true });
+    // 鏄剧ず鍔犺浇鐘舵€?    this.setData({ loading: true });
 
-    // 调用关注服务获取粉丝列表
+    // 璋冪敤鍏虫敞鏈嶅姟鑾峰彇绮変笣鍒楄〃
     app.services.following.getMyFollowers({
       page: this.data.currentPage,
       per_page: this.data.pageSize
@@ -87,43 +82,43 @@ Page({
           error: null
         });
         
-        // 增加页码
+        // 澧炲姞椤电爜
         if (!refresh && newFollowers.length > 0) {
           this.setData({ currentPage: this.data.currentPage + 1 });
         }
       } else {
         this.setData({
           loading: false,
-          error: res.message || '获取粉丝列表失败'
+          error: res.message || '鑾峰彇绮変笣鍒楄〃澶辫触'
         });
       }
     })
     .catch(error => {
       wx.stopPullDownRefresh();
-      console.error('获取粉丝列表失败:', error);
+      console.error('鑾峰彇绮変笣鍒楄〃澶辫触:', error);
       this.setData({
         loading: false,
-        error: '网络错误，请重试'
+        error: '缃戠粶閿欒锛岃閲嶈瘯'
       });
     });
   },
 
   /**
-   * 刷新列表
+   * 鍒锋柊鍒楄〃
    */
   refreshList: function() {
     this.loadFollowersList(true);
   },
 
   /**
-   * 重试加载
+   * 閲嶈瘯鍔犺浇
    */
   retryLoad: function() {
     this.refreshList();
   },
 
   /**
-   * 加载更多
+   * 鍔犺浇鏇村
    */
   loadMore: function() {
     if (!this.data.loading && this.data.hasMore) {
@@ -132,7 +127,7 @@ Page({
   },
 
   /**
-   * 跳转到用户详情页
+   * 璺宠浆鍒扮敤鎴疯鎯呴〉
    */
   navigateToUserProfile: function(e) {
     const userId = e.currentTarget.dataset.user_id;
@@ -144,37 +139,35 @@ Page({
   },
 
   /**
-   * 关注用户
+   * 鍏虫敞鐢ㄦ埛
    */
   followUser: function(e) {
     const { id, index } = e.currentTarget.dataset;
     const app = getApp();
     
-    // 显示加载状态
-    wx.showLoading({ title: '操作中' });
+    // 鏄剧ず鍔犺浇鐘舵€?    wx.showLoading({ title: '鎿嶄綔涓? });
     
-    // 调用关注服务进行关注操作
+    // 璋冪敤鍏虫敞鏈嶅姟杩涜鍏虫敞鎿嶄綔
     app.services.following.followUser(id)
       .then(res => {
         wx.hideLoading();
         
         if (res.code === 200) {
-          // 更新粉丝列表中的关注状态
-          const followersList = [...this.data.followersList];
+          // 鏇存柊绮変笣鍒楄〃涓殑鍏虫敞鐘舵€?          const followersList = [...this.data.followersList];
           if (followersList[index]) {
             followersList[index].is_following = true;
           }
           this.setData({ followersList });
           
-          showToast('关注成功');
+          showToast('鍏虫敞鎴愬姛');
         } else {
-          showToast(res.message || '关注失败', 'none');
+          showToast(res.message || '鍏虫敞澶辫触', 'none');
         }
       })
       .catch(error => {
         wx.hideLoading();
-        console.error('关注用户失败:', error);
-        showToast('网络错误，请重试', 'none');
+        console.error('鍏虫敞鐢ㄦ埛澶辫触:', error);
+        showToast('缃戠粶閿欒锛岃閲嶈瘯', 'none');
       });
   }
 });

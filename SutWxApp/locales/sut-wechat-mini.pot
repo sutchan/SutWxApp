@@ -1,0 +1,85 @@
+﻿msgid ""msgstr """Project-Id-Version: Sut WeChat Mini 1.0.0\n""Report-Msgid-Bugs-To: \n""POT-Creation-Date: 2024-03-20\n""PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n""Last-Translator: FULL NAME <EMAIL@ADDRESS>\n""Language-Team: LANGUAGE <LL@li.org>\n""Language: \n""MIME-Version: 1.0\n""Content-Type: text/plain; charset=UTF-8\n""Content-Transfer-Encoding: 8bit\n""Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: pages/user/points-tasks.jsmsgid "loading"
+msgstr ""
+
+#: pages/user/points-tasks.jsmsgid "network_error"
+msgstr ""
+
+#: pages/user/points-tasks.jsmsgid "login_required"
+msgstr ""
+
+#: pages/user/points-tasks.jsmsgid "task_completed"
+msgstr ""
+
+#: pages/user/points-tasks.jsmsgid "points_reward_success"
+msgstr ""
+
+#: pages/user/points-tasks.jsmsgid "share_task_description"
+msgstr ""
+
+#: pages/user/points-tasks.jsmsgid "app_slogan"
+msgstr ""
+
+#: pages/user/points-tasks.wxmlmsgid "points_tasks_page_title"
+msgstr ""
+
+#: pages/user/points-tasks.wxmlmsgid "points_rules"
+msgstr ""
+
+#: pages/user/points-tasks.wxmlmsgid "points_mall"
+msgstr ""
+
+#: pages/user/points-tasks.wxmlmsgid "task_type_all"
+msgstr ""
+
+#: pages/user/points-tasks.wxmlmsgid "task_type_once"
+msgstr ""
+
+#: pages/user/points-tasks.wxmlmsgid "task_type_daily"
+msgstr ""
+
+#: pages/user/points-tasks.wxmlmsgid "task_type_weekly"
+msgstr ""
+
+#: pages/user/points-tasks.wxmlmsgid "task_type_monthly"
+msgstr ""
+
+#: pages/user/points-tasks.wxmlmsgid "task_once_desc"
+msgstr ""
+
+#: pages/user/points-tasks.wxmlmsgid "task_daily_desc"
+msgstr ""
+
+#: pages/user/points-tasks.wxmlmsgid "task_weekly_desc"
+msgstr ""
+
+#: pages/user/points-tasks.wxmlmsgid "task_monthly_desc"
+msgstr ""
+
+#: pages/user/points-tasks.wxmlmsgid "points"
+msgstr ""
+
+#: pages/user/points-tasks.wxmlmsgid "task_claim_reward"
+msgstr ""
+
+#: pages/user/points-tasks.wxmlmsgid "task_complete_now"
+msgstr ""
+
+#: pages/user/points-tasks.wxmlmsgid "task_go_complete"
+msgstr ""
+
+#: pages/user/points-tasks.wxmlmsgid "task_progress"
+msgstr ""
+
+#: pages/user/points-tasks.wxmlmsgid "no_points_tasks"
+msgstr ""
+
+#: pages/user/points-tasks.wxmlmsgid "please_check_later"
+msgstr ""
+
+#: pages/user/points-tasks.wxmlmsgid "points_records"
+msgstr ""
+
+#: pages/user/points-tasks.wxmlmsgid "retry"
+msgstr ""

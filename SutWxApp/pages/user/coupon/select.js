@@ -1,22 +1,19 @@
-// 优惠券选择页面逻辑
+﻿// 浼樻儬鍒搁€夋嫨椤甸潰閫昏緫
 const app = getApp();
 import { showToast } from '../../../../utils/global';
 
 Page({
   data: {
-    coupons: [], // 可用优惠券列表
-    params: null, // 从订单确认页传入的参数
-    currentCouponId: '', // 当前已选择的优惠券ID
-    loading: true, // 加载状态
-    noCoupons: false, // 是否无可用优惠券
-    selectedCoupon: null // 选中的优惠券
+    coupons: [], // 鍙敤浼樻儬鍒稿垪琛?    params: null, // 浠庤鍗曠‘璁ら〉浼犲叆鐨勫弬鏁?    currentCouponId: '', // 褰撳墠宸查€夋嫨鐨勪紭鎯犲埜ID
+    loading: true, // 鍔犺浇鐘舵€?    noCoupons: false, // 鏄惁鏃犲彲鐢ㄤ紭鎯犲埜
+    selectedCoupon: null // 閫変腑鐨勪紭鎯犲埜
   },
 
   /**
-   * 生命周期函数--监听页面加载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
    */
   onLoad: function(options) {
-    // 解析参数
+    // 瑙ｆ瀽鍙傛暟
     if (options.params) {
       try {
         const params = JSON.parse(decodeURIComponent(options.params));
@@ -25,33 +22,29 @@ Page({
           currentCouponId: params.current_coupon_id || ''
         });
         
-        // 加载可用优惠券
-        this.loadAvailableCoupons();
+        // 鍔犺浇鍙敤浼樻儬鍒?        this.loadAvailableCoupons();
       } catch (e) {
-        console.error('解析参数失败', e);
-        showToast('参数错误', 'none');
+        console.error('瑙ｆ瀽鍙傛暟澶辫触', e);
+        showToast('鍙傛暟閿欒', 'none');
         wx.navigateBack();
       }
     }
   },
 
   /**
-   * 加载可用优惠券
-   */
+   * 鍔犺浇鍙敤浼樻儬鍒?   */
   async loadAvailableCoupons() {
     try {
       this.setData({ loading: true });
       
-      // 检查是否有优惠券服务
-      if (!app.services || !app.services.coupon) {
-        throw new Error('优惠券服务未初始化');
+      // 妫€鏌ユ槸鍚︽湁浼樻儬鍒告湇鍔?      if (!app.services || !app.services.coupon) {
+        throw new Error('浼樻儬鍒告湇鍔℃湭鍒濆鍖?);
       }
       
-      // 调用优惠券服务获取可用优惠券
+      // 璋冪敤浼樻儬鍒告湇鍔¤幏鍙栧彲鐢ㄤ紭鎯犲埜
       const coupons = await app.services.coupon.getAvailableCoupons(this.data.params);
       
-      // 模拟数据（当API不可用时使用）
-      // const coupons = this.getMockCoupons();
+      // 妯℃嫙鏁版嵁锛堝綋API涓嶅彲鐢ㄦ椂浣跨敤锛?      // const coupons = this.getMockCoupons();
       
       this.setData({
         coupons: coupons,
@@ -59,39 +52,38 @@ Page({
         noCoupons: coupons.length === 0
       });
     } catch (err) {
-      console.error('加载优惠券失败', err);
+      console.error('鍔犺浇浼樻儬鍒稿け璐?, err);
       this.setData({
         loading: false,
         noCoupons: true
       });
-      showToast('获取优惠券失败', 'none');
+      showToast('鑾峰彇浼樻儬鍒稿け璐?, 'none');
     }
   },
 
   /**
-   * 选择优惠券
-   */
+   * 閫夋嫨浼樻儬鍒?   */
   onSelectCoupon(e) {
     const couponId = e.currentTarget.dataset.id;
     
-    // 查找对应的优惠券
+    // 鏌ユ壘瀵瑰簲鐨勪紭鎯犲埜
     const selectedCoupon = this.data.coupons.find(coupon => coupon.id === couponId);
     
     if (selectedCoupon) {
       this.setData({ selectedCoupon: selectedCoupon });
       
-      // 返回上一页并传递选中的优惠券
+      // 杩斿洖涓婁竴椤靛苟浼犻€掗€変腑鐨勪紭鎯犲埜
       this.selectCouponAndReturn(selectedCoupon);
     }
   },
 
   /**
-   * 不使用优惠券
+   * 涓嶄娇鐢ㄤ紭鎯犲埜
    */
   onNoUseCoupon() {
     this.setData({ selectedCoupon: null });
     
-    // 获取事件通道并发送清空优惠券信号
+    // 鑾峰彇浜嬩欢閫氶亾骞跺彂閫佹竻绌轰紭鎯犲埜淇″彿
     const eventChannel = this.getOpenerEventChannel();
     if (eventChannel) {
       eventChannel.emit('selectCoupon', {
@@ -99,15 +91,14 @@ Page({
       });
     }
     
-    // 返回上一页
-    wx.navigateBack();
+    // 杩斿洖涓婁竴椤?    wx.navigateBack();
   },
 
   /**
-   * 选择优惠券并返回结果
+   * 閫夋嫨浼樻儬鍒稿苟杩斿洖缁撴灉
    */
   selectCouponAndReturn(coupon) {
-    // 获取事件通道并发送选择结果
+    // 鑾峰彇浜嬩欢閫氶亾骞跺彂閫侀€夋嫨缁撴灉
     const eventChannel = this.getOpenerEventChannel();
     if (eventChannel) {
       eventChannel.emit('selectCoupon', {
@@ -115,61 +106,59 @@ Page({
       });
     }
     
-    // 返回上一页
-    wx.navigateBack();
+    // 杩斿洖涓婁竴椤?    wx.navigateBack();
   },
 
   /**
-   * 查看优惠券详情
-   */
+   * 鏌ョ湅浼樻儬鍒歌鎯?   */
   onViewCouponDetail(e) {
     const couponId = e.currentTarget.dataset.id;
     
-    // 这里可以跳转到优惠券详情页面
+    // 杩欓噷鍙互璺宠浆鍒颁紭鎯犲埜璇︽儏椤甸潰
     // wx.navigateTo({
     //   url: `/pages/user/coupon/detail?id=${couponId}`
     // });
     
-    // 暂时显示提示
-    showToast('优惠券详情功能开发中', 'none');
+    // 鏆傛椂鏄剧ず鎻愮ず
+    showToast('浼樻儬鍒歌鎯呭姛鑳藉紑鍙戜腑', 'none');
   },
 
   /**
-   * 格式化优惠券信息
+   * 鏍煎紡鍖栦紭鎯犲埜淇℃伅
    */
   formatCoupon(coupon) {
     if (!coupon) return {};
     
-    // 格式化优惠券类型文本
+    // 鏍煎紡鍖栦紭鎯犲埜绫诲瀷鏂囨湰
     let typeText = '';
     let valueText = '';
     
     if (app.services && app.services.coupon) {
       typeText = app.services.coupon.getCouponTypeText(coupon.type);
     } else {
-      // 备用逻辑
+      // 澶囩敤閫昏緫
       const typeMap = {
-        'cash': '现金券',
-        'percent': '折扣券',
-        'shipping': '运费券'
+        'cash': '鐜伴噾鍒?,
+        'percent': '鎶樻墸鍒?,
+        'shipping': '杩愯垂鍒?
       };
-      typeText = typeMap[coupon.type] || '优惠券';
+      typeText = typeMap[coupon.type] || '浼樻儬鍒?;
     }
     
-    // 格式化优惠券金额/折扣
+    // 鏍煎紡鍖栦紭鎯犲埜閲戦/鎶樻墸
     if (coupon.type === 'cash') {
-      valueText = `¥${coupon.value}`;
+      valueText = `楼${coupon.value}`;
     } else if (coupon.type === 'percent') {
-      valueText = `${coupon.value}折`;
+      valueText = `${coupon.value}鎶榒;
     }
     
-    // 格式化有效期
+    // 鏍煎紡鍖栨湁鏁堟湡
     let expireText = '';
     if (coupon.end_time) {
       if (app.services && app.services.coupon) {
         expireText = app.services.coupon.formatExpireTime(coupon.end_time);
       } else {
-        // 备用格式化逻辑
+        // 澶囩敤鏍煎紡鍖栭€昏緫
         const date = new Date(coupon.end_time);
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -178,8 +167,7 @@ Page({
       }
     }
     
-    // 格式化使用条件
-    const conditionText = coupon.min_amount > 0 ? `满${coupon.min_amount}元可用` : '无门槛';
+    // 鏍煎紡鍖栦娇鐢ㄦ潯浠?    const conditionText = coupon.min_amount > 0 ? `婊?{coupon.min_amount}鍏冨彲鐢╜ : '鏃犻棬妲?;
     
     return {
       ...coupon,
@@ -191,24 +179,24 @@ Page({
   },
 
   /**
-   * 模拟优惠券数据（测试用）
+   * 妯℃嫙浼樻儬鍒告暟鎹紙娴嬭瘯鐢級
    */
   getMockCoupons() {
     return [
       {
         id: '1',
-        name: '新人专享券',
+        name: '鏂颁汉涓撲韩鍒?,
         type: 'cash',
         value: 10,
         min_amount: 50,
         start_time: '2024-01-01T00:00:00Z',
         end_time: '2024-12-31T23:59:59Z',
         status: 'available',
-        description: '新用户专享，订单满50元可用'
+        description: '鏂扮敤鎴蜂笓浜紝璁㈠崟婊?0鍏冨彲鐢?
       },
       {
         id: '2',
-        name: '全场通用折扣券',
+        name: '鍏ㄥ満閫氱敤鎶樻墸鍒?,
         type: 'percent',
         value: 90,
         min_amount: 0,
@@ -216,7 +204,7 @@ Page({
         start_time: '2024-01-01T00:00:00Z',
         end_time: '2024-12-31T23:59:59Z',
         status: 'available',
-        description: '全场通用，最高优惠50元'
+        description: '鍏ㄥ満閫氱敤锛屾渶楂樹紭鎯?0鍏?
       }
     ];
   }

@@ -1,38 +1,35 @@
-// order-service.js - 订单相关服务模块
-// 处理订单的创建、查询、支付、取消等功能
+﻿// order-service.js - 璁㈠崟鐩稿叧鏈嶅姟妯″潡
+// 澶勭悊璁㈠崟鐨勫垱寤恒€佹煡璇€佹敮浠樸€佸彇娑堢瓑鍔熻兘
 
 import api from './api';
 import { showToast, showLoading, hideLoading, setStorage, getStorage, removeStorage } from './global';
 
-// 缓存键常量定义
-const CACHE_KEYS = {
-  // 订单列表缓存
+// 缂撳瓨閿父閲忓畾涔?const CACHE_KEYS = {
+  // 璁㈠崟鍒楄〃缂撳瓨
   ORDER_LIST: 'order_list_',
-  // 订单详情缓存
+  // 璁㈠崟璇︽儏缂撳瓨
   ORDER_DETAIL: 'order_detail_',
-  // 订单统计缓存
+  // 璁㈠崟缁熻缂撳瓨
   ORDER_STATS: 'order_stats',
-  // 订单物流信息缓存
+  // 璁㈠崟鐗╂祦淇℃伅缂撳瓨
   ORDER_TRACKING: 'order_tracking_',
-  // 支付状态缓存
-  PAYMENT_STATUS: 'payment_status_'
+  // 鏀粯鐘舵€佺紦瀛?  PAYMENT_STATUS: 'payment_status_'
 };
 
-// 缓存时间常量（毫秒）
+// 缂撳瓨鏃堕棿甯搁噺锛堟绉掞級
 const CACHE_DURATION = {
-  // 短期缓存，3分钟
+  // 鐭湡缂撳瓨锛?鍒嗛挓
   SHORT: 3 * 60 * 1000,
-  // 中期缓存，10分钟
+  // 涓湡缂撳瓨锛?0鍒嗛挓
   MEDIUM: 10 * 60 * 1000,
-  // 长期缓存，30分钟
+  // 闀挎湡缂撳瓨锛?0鍒嗛挓
   LONG: 30 * 60 * 1000
 };
 
 /**
- * 缓存管理器 - 设置缓存
- * @param {string} key - 缓存键
- * @param {*} data - 缓存数据
- * @param {number} duration - 缓存时间（毫秒）
+ * 缂撳瓨绠＄悊鍣?- 璁剧疆缂撳瓨
+ * @param {string} key - 缂撳瓨閿? * @param {*} data - 缂撳瓨鏁版嵁
+ * @param {number} duration - 缂撳瓨鏃堕棿锛堟绉掞級
  */
 const setCache = (key, data, duration = CACHE_DURATION.SHORT) => {
   const cacheData = {
@@ -44,9 +41,8 @@ const setCache = (key, data, duration = CACHE_DURATION.SHORT) => {
 };
 
 /**
- * 缓存管理器 - 获取缓存
- * @param {string} key - 缓存键
- * @returns {*} - 缓存数据或null
+ * 缂撳瓨绠＄悊鍣?- 鑾峰彇缂撳瓨
+ * @param {string} key - 缂撳瓨閿? * @returns {*} - 缂撳瓨鏁版嵁鎴杗ull
  */
 const getCache = (key) => {
   try {
@@ -54,32 +50,29 @@ const getCache = (key) => {
     if (cacheData && cacheData.expire > Date.now()) {
       return cacheData.data;
     }
-    // 缓存过期，清除
-    removeStorage(key);
+    // 缂撳瓨杩囨湡锛屾竻闄?    removeStorage(key);
     return null;
   } catch (error) {
-    console.error('获取缓存失败:', error);
+    console.error('鑾峰彇缂撳瓨澶辫触:', error);
     return null;
   }
 };
 
 /**
- * 缓存管理器 - 移除缓存
- * @param {string} key - 缓存键
- */
+ * 缂撳瓨绠＄悊鍣?- 绉婚櫎缂撳瓨
+ * @param {string} key - 缂撳瓨閿? */
 const removeCache = (key) => {
   try {
     removeStorage(key);
   } catch (error) {
-    console.error('移除缓存失败:', error);
+    console.error('绉婚櫎缂撳瓨澶辫触:', error);
   }
 };
 
 /**
- * 请求重试机制
- * @param {Function} fn - 请求函数
- * @param {number} maxRetries - 最大重试次数
- * @returns {Promise} - 返回Promise对象
+ * 璇锋眰閲嶈瘯鏈哄埗
+ * @param {Function} fn - 璇锋眰鍑芥暟
+ * @param {number} maxRetries - 鏈€澶ч噸璇曟鏁? * @returns {Promise} - 杩斿洖Promise瀵硅薄
  */
 const retryRequest = async (fn, maxRetries = 2) => {
   let lastError;
@@ -90,10 +83,9 @@ const retryRequest = async (fn, maxRetries = 2) => {
     } catch (error) {
       lastError = error;
       
-      // 只对网络错误和服务器错误进行重试
+      // 鍙缃戠粶閿欒鍜屾湇鍔″櫒閿欒杩涜閲嶈瘯
       if (i < maxRetries && (error.statusCode >= 500 || !error.statusCode)) {
-        // 指数退避策略
-        const delay = Math.pow(2, i) * 1000;
+        // 鎸囨暟閫€閬跨瓥鐣?        const delay = Math.pow(2, i) * 1000;
         await new Promise(resolve => setTimeout(resolve, delay));
       } else {
         throw error;
@@ -105,18 +97,18 @@ const retryRequest = async (fn, maxRetries = 2) => {
 };
 
 /**
- * 数据验证工具
+ * 鏁版嵁楠岃瘉宸ュ叿
  */
 const validator = {
-  // 验证订单ID
+  // 楠岃瘉璁㈠崟ID
   isValidOrderId: (id) => {
     return id && (typeof id === 'string' || typeof id === 'number');
   },
-  // 验证页码参数
+  // 楠岃瘉椤电爜鍙傛暟
   isValidPage: (page) => {
     return typeof page === 'number' && page > 0;
   },
-  // 验证订单数据
+  // 楠岃瘉璁㈠崟鏁版嵁
   isValidOrderData: (data) => {
     return data && 
            Array.isArray(data.items) && 
@@ -127,22 +119,21 @@ const validator = {
 };
 
 /**
- * 清除订单相关缓存
- * @param {string|number} orderId - 可选，指定订单ID
+ * 娓呴櫎璁㈠崟鐩稿叧缂撳瓨
+ * @param {string|number} orderId - 鍙€夛紝鎸囧畾璁㈠崟ID
  */
 const clearOrderCache = (orderId) => {
   try {
-    // 清除订单统计缓存
+    // 娓呴櫎璁㈠崟缁熻缂撳瓨
     removeCache(CACHE_KEYS.ORDER_STATS);
     
-    // 如果指定了订单ID，清除特定订单缓存
-    if (orderId) {
+    // 濡傛灉鎸囧畾浜嗚鍗旾D锛屾竻闄ょ壒瀹氳鍗曠紦瀛?    if (orderId) {
       removeCache(`${CACHE_KEYS.ORDER_DETAIL}${orderId}`);
       removeCache(`${CACHE_KEYS.ORDER_TRACKING}${orderId}`);
       removeCache(`${CACHE_KEYS.PAYMENT_STATUS}${orderId}`);
     }
     
-    // 清除所有订单列表缓存（简单实现，实际可能需要更精确的清除）
+    // 娓呴櫎鎵€鏈夎鍗曞垪琛ㄧ紦瀛橈紙绠€鍗曞疄鐜帮紝瀹為檯鍙兘闇€瑕佹洿绮剧‘鐨勬竻闄わ級
     const keys = wx.getStorageInfoSync().keys;
     keys.forEach(key => {
       if (key.startsWith(CACHE_KEYS.ORDER_LIST)) {
@@ -150,29 +141,28 @@ const clearOrderCache = (orderId) => {
       }
     });
   } catch (error) {
-    console.error('清除订单缓存失败:', error);
+    console.error('娓呴櫎璁㈠崟缂撳瓨澶辫触:', error);
   }
 };
 
 /**
- * 创建订单
- * @param {Object} orderData - 订单数据
- * @param {Array} orderData.items - 订单商品列表
- * @param {Object} orderData.address - 收货地址
- * @param {string} orderData.payment_method - 支付方式
- * @param {string} orderData.remark - 订单备注
- * @returns {Promise<Object>} - 返回创建的订单信息
- */
+ * 鍒涘缓璁㈠崟
+ * @param {Object} orderData - 璁㈠崟鏁版嵁
+ * @param {Array} orderData.items - 璁㈠崟鍟嗗搧鍒楄〃
+ * @param {Object} orderData.address - 鏀惰揣鍦板潃
+ * @param {string} orderData.payment_method - 鏀粯鏂瑰紡
+ * @param {string} orderData.remark - 璁㈠崟澶囨敞
+ * @returns {Promise<Object>} - 杩斿洖鍒涘缓鐨勮鍗曚俊鎭? */
 export const createOrder = async (orderData) => {
   try {
-    // 数据验证
+    // 鏁版嵁楠岃瘉
     if (!validator.isValidOrderData(orderData)) {
-      throw new Error('订单数据格式不正确');
+      throw new Error('璁㈠崟鏁版嵁鏍煎紡涓嶆纭?);
     }
     
-    showLoading('创建订单中...');
+    showLoading('鍒涘缓璁㈠崟涓?..');
     
-    // 使用重试机制
+    // 浣跨敤閲嶈瘯鏈哄埗
     const result = await retryRequest(() => 
       api.post('/orders/create', orderData)
     );
@@ -180,27 +170,26 @@ export const createOrder = async (orderData) => {
     hideLoading();
     
     if (result.code === 200 && result.order) {
-      // 创建成功后清除订单相关缓存
-      clearOrderCache();
+      // 鍒涘缓鎴愬姛鍚庢竻闄よ鍗曠浉鍏崇紦瀛?      clearOrderCache();
       return result.order;
     } else {
-      throw new Error(result.message || '创建订单失败');
+      throw new Error(result.message || '鍒涘缓璁㈠崟澶辫触');
     }
   } catch (error) {
     hideLoading();
-    console.error('创建订单失败:', error);
-    showToast(error.message || '创建订单失败，请重试', { icon: 'none' });
+    console.error('鍒涘缓璁㈠崟澶辫触:', error);
+    showToast(error.message || '鍒涘缓璁㈠崟澶辫触锛岃閲嶈瘯', { icon: 'none' });
     throw error;
   }
 };
 
 /**
- * 获取订单列表
- * @param {Object} params - 查询参数
- * @param {number} params.page - 页码，默认1
- * @param {number} params.pageSize - 每页数量，默认10
- * @param {string} params.status - 订单状态（可选）
- * @returns {Promise<Object>} - 返回订单列表数据
+ * 鑾峰彇璁㈠崟鍒楄〃
+ * @param {Object} params - 鏌ヨ鍙傛暟
+ * @param {number} params.page - 椤电爜锛岄粯璁?
+ * @param {number} params.pageSize - 姣忛〉鏁伴噺锛岄粯璁?0
+ * @param {string} params.status - 璁㈠崟鐘舵€侊紙鍙€夛級
+ * @returns {Promise<Object>} - 杩斿洖璁㈠崟鍒楄〃鏁版嵁
  */
 export const getOrders = async (params = {}) => {
   try {
@@ -210,37 +199,34 @@ export const getOrders = async (params = {}) => {
       status: params.status || ''
     };
     
-    // 构建缓存键
-    const cacheKey = `${CACHE_KEYS.ORDER_LIST}${requestParams.page}_${requestParams.page_size}_${requestParams.status}`;
+    // 鏋勫缓缂撳瓨閿?    const cacheKey = `${CACHE_KEYS.ORDER_LIST}${requestParams.page}_${requestParams.page_size}_${requestParams.status}`;
     
-    // 尝试获取缓存，仅对第一页使用缓存
-    if (requestParams.page === 1) {
+    // 灏濊瘯鑾峰彇缂撳瓨锛屼粎瀵圭涓€椤典娇鐢ㄧ紦瀛?    if (requestParams.page === 1) {
       const cachedData = getCache(cacheKey);
       if (cachedData) {
         return cachedData;
       }
     }
     
-    // 使用重试机制
+    // 浣跨敤閲嶈瘯鏈哄埗
     const result = await retryRequest(() => 
       api.get('/orders', { params: requestParams })
     );
     
-    // 缓存第一页数据
-    if (requestParams.page === 1) {
+    // 缂撳瓨绗竴椤垫暟鎹?    if (requestParams.page === 1) {
       setCache(cacheKey, result, CACHE_DURATION.SHORT);
     }
     
     return result;
   } catch (error) {
-    console.error('获取订单列表失败:', error);
+    console.error('鑾峰彇璁㈠崟鍒楄〃澶辫触:', error);
     
-    // 如果是第一页且有缓存，返回缓存数据
+    // 濡傛灉鏄涓€椤典笖鏈夌紦瀛橈紝杩斿洖缂撳瓨鏁版嵁
     if ((params.page === 1 || !params.page) && params.pageSize === undefined) {
       const cacheKey = `${CACHE_KEYS.ORDER_LIST}1_10_${params.status || ''}`;
       const cachedData = getCache(cacheKey);
       if (cachedData) {
-        console.log('使用缓存的订单列表数据');
+        console.log('浣跨敤缂撳瓨鐨勮鍗曞垪琛ㄦ暟鎹?);
         return cachedData;
       }
     }
@@ -250,46 +236,45 @@ export const getOrders = async (params = {}) => {
 };
 
 /**
- * 获取订单详情
- * @param {number|string} orderId - 订单ID
- * @returns {Promise<Object>} - 返回订单详情数据
+ * 鑾峰彇璁㈠崟璇︽儏
+ * @param {number|string} orderId - 璁㈠崟ID
+ * @returns {Promise<Object>} - 杩斿洖璁㈠崟璇︽儏鏁版嵁
  */
 export const getOrderDetail = async (orderId) => {
   try {
-    // 数据验证
+    // 鏁版嵁楠岃瘉
     if (!validator.isValidOrderId(orderId)) {
-      throw new Error('订单ID格式不正确');
+      throw new Error('璁㈠崟ID鏍煎紡涓嶆纭?);
     }
     
-    // 构建缓存键
-    const cacheKey = `${CACHE_KEYS.ORDER_DETAIL}${orderId}`;
+    // 鏋勫缓缂撳瓨閿?    const cacheKey = `${CACHE_KEYS.ORDER_DETAIL}${orderId}`;
     
-    // 尝试获取缓存
+    // 灏濊瘯鑾峰彇缂撳瓨
     const cachedData = getCache(cacheKey);
     if (cachedData) {
       return cachedData;
     }
     
-    // 使用重试机制
+    // 浣跨敤閲嶈瘯鏈哄埗
     const result = await retryRequest(() => 
       api.get(`/orders/${orderId}`)
     );
     
     if (result.code === 200 && result.order) {
-      // 缓存订单详情
+      // 缂撳瓨璁㈠崟璇︽儏
       setCache(cacheKey, result.order, CACHE_DURATION.MEDIUM);
       return result.order;
     } else {
-      throw new Error(result.message || '获取订单详情失败');
+      throw new Error(result.message || '鑾峰彇璁㈠崟璇︽儏澶辫触');
     }
   } catch (error) {
-    console.error('获取订单详情失败:', error);
+    console.error('鑾峰彇璁㈠崟璇︽儏澶辫触:', error);
     
-    // 尝试返回缓存数据
+    // 灏濊瘯杩斿洖缂撳瓨鏁版嵁
     const cacheKey = `${CACHE_KEYS.ORDER_DETAIL}${orderId}`;
     const cachedData = getCache(cacheKey);
     if (cachedData) {
-      console.log('使用缓存的订单详情数据');
+      console.log('浣跨敤缂撳瓨鐨勮鍗曡鎯呮暟鎹?);
       return cachedData;
     }
     
@@ -298,21 +283,21 @@ export const getOrderDetail = async (orderId) => {
 };
 
 /**
- * 取消订单
- * @param {number|string} orderId - 订单ID
- * @param {string} reason - 取消原因
- * @returns {Promise<Object>} - 返回取消结果
+ * 鍙栨秷璁㈠崟
+ * @param {number|string} orderId - 璁㈠崟ID
+ * @param {string} reason - 鍙栨秷鍘熷洜
+ * @returns {Promise<Object>} - 杩斿洖鍙栨秷缁撴灉
  */
 export const cancelOrder = async (orderId, reason = '') => {
   try {
-    // 数据验证
+    // 鏁版嵁楠岃瘉
     if (!validator.isValidOrderId(orderId)) {
-      throw new Error('订单ID格式不正确');
+      throw new Error('璁㈠崟ID鏍煎紡涓嶆纭?);
     }
     
-    showLoading('取消订单中...');
+    showLoading('鍙栨秷璁㈠崟涓?..');
     
-    // 使用重试机制
+    // 浣跨敤閲嶈瘯鏈哄埗
     const result = await retryRequest(() => 
       api.post(`/orders/${orderId}/cancel`, {
         reason: reason
@@ -322,36 +307,36 @@ export const cancelOrder = async (orderId, reason = '') => {
     hideLoading();
     
     if (result.code === 200) {
-      // 清除相关缓存
+      // 娓呴櫎鐩稿叧缂撳瓨
       clearOrderCache(orderId);
-      showToast('订单已取消', { icon: 'success' });
+      showToast('璁㈠崟宸插彇娑?, { icon: 'success' });
       return result;
     } else {
-      throw new Error(result.message || '取消订单失败');
+      throw new Error(result.message || '鍙栨秷璁㈠崟澶辫触');
     }
   } catch (error) {
     hideLoading();
-    console.error('取消订单失败:', error);
-    showToast(error.message || '取消订单失败，请重试', { icon: 'none' });
+    console.error('鍙栨秷璁㈠崟澶辫触:', error);
+    showToast(error.message || '鍙栨秷璁㈠崟澶辫触锛岃閲嶈瘯', { icon: 'none' });
     throw error;
   }
 };
 
 /**
- * 确认收货
- * @param {number|string} orderId - 订单ID
- * @returns {Promise<Object>} - 返回确认结果
+ * 纭鏀惰揣
+ * @param {number|string} orderId - 璁㈠崟ID
+ * @returns {Promise<Object>} - 杩斿洖纭缁撴灉
  */
 export const confirmReceipt = async (orderId) => {
   try {
-    // 数据验证
+    // 鏁版嵁楠岃瘉
     if (!validator.isValidOrderId(orderId)) {
-      throw new Error('订单ID格式不正确');
+      throw new Error('璁㈠崟ID鏍煎紡涓嶆纭?);
     }
     
-    showLoading('确认收货中...');
+    showLoading('纭鏀惰揣涓?..');
     
-    // 使用重试机制
+    // 浣跨敤閲嶈瘯鏈哄埗
     const result = await retryRequest(() => 
       api.post(`/orders/${orderId}/confirm`)
     );
@@ -359,41 +344,41 @@ export const confirmReceipt = async (orderId) => {
     hideLoading();
     
     if (result.code === 200) {
-      // 清除相关缓存
+      // 娓呴櫎鐩稿叧缂撳瓨
       clearOrderCache(orderId);
-      showToast('收货成功', { icon: 'success' });
+      showToast('鏀惰揣鎴愬姛', { icon: 'success' });
       return result;
     } else {
-      throw new Error(result.message || '确认收货失败');
+      throw new Error(result.message || '纭鏀惰揣澶辫触');
     }
   } catch (error) {
     hideLoading();
-    console.error('确认收货失败:', error);
-    showToast(error.message || '确认收货失败，请重试', { icon: 'none' });
+    console.error('纭鏀惰揣澶辫触:', error);
+    showToast(error.message || '纭鏀惰揣澶辫触锛岃閲嶈瘯', { icon: 'none' });
     throw error;
   }
 };
 
 /**
- * 获取订单支付信息
- * @param {number|string} orderId - 订单ID
- * @param {string} paymentMethod - 支付方式
- * @returns {Promise<Object>} - 返回支付信息
+ * 鑾峰彇璁㈠崟鏀粯淇℃伅
+ * @param {number|string} orderId - 璁㈠崟ID
+ * @param {string} paymentMethod - 鏀粯鏂瑰紡
+ * @returns {Promise<Object>} - 杩斿洖鏀粯淇℃伅
  */
 export const getPaymentInfo = async (orderId, paymentMethod) => {
   try {
-    // 数据验证
+    // 鏁版嵁楠岃瘉
     if (!validator.isValidOrderId(orderId)) {
-      throw new Error('订单ID格式不正确');
+      throw new Error('璁㈠崟ID鏍煎紡涓嶆纭?);
     }
     
     if (!paymentMethod || typeof paymentMethod !== 'string') {
-      throw new Error('支付方式不能为空');
+      throw new Error('鏀粯鏂瑰紡涓嶈兘涓虹┖');
     }
     
-    showLoading('获取支付信息...');
+    showLoading('鑾峰彇鏀粯淇℃伅...');
     
-    // 使用重试机制
+    // 浣跨敤閲嶈瘯鏈哄埗
     const result = await retryRequest(() => 
       api.post('/orders/pay', {
         order_id: orderId,
@@ -406,77 +391,66 @@ export const getPaymentInfo = async (orderId, paymentMethod) => {
     if (result.code === 200 && result.pay_params) {
       return result.pay_params;
     } else {
-      throw new Error(result.message || '获取支付信息失败');
+      throw new Error(result.message || '鑾峰彇鏀粯淇℃伅澶辫触');
     }
   } catch (error) {
     hideLoading();
-    console.error('获取支付信息失败:', error);
-    showToast(error.message || '获取支付信息失败，请重试', { icon: 'none' });
+    console.error('鑾峰彇鏀粯淇℃伅澶辫触:', error);
+    showToast(error.message || '鑾峰彇鏀粯淇℃伅澶辫触锛岃閲嶈瘯', { icon: 'none' });
     throw error;
   }
 };
 
 /**
- * 查询订单支付状态
- * @param {number|string} orderId - 订单ID
- * @returns {Promise<boolean>} - 是否已支付
- */
+ * 鏌ヨ璁㈠崟鏀粯鐘舵€? * @param {number|string} orderId - 璁㈠崟ID
+ * @returns {Promise<boolean>} - 鏄惁宸叉敮浠? */
 export const checkPaymentStatus = async (orderId) => {
   try {
-    // 数据验证
+    // 鏁版嵁楠岃瘉
     if (!validator.isValidOrderId(orderId)) {
-      throw new Error('订单ID格式不正确');
+      throw new Error('璁㈠崟ID鏍煎紡涓嶆纭?);
     }
     
-    // 构建缓存键
-    const cacheKey = `${CACHE_KEYS.PAYMENT_STATUS}${orderId}`;
+    // 鏋勫缓缂撳瓨閿?    const cacheKey = `${CACHE_KEYS.PAYMENT_STATUS}${orderId}`;
     
-    // 尝试获取缓存（支付状态缓存时间较短）
+    // 灏濊瘯鑾峰彇缂撳瓨锛堟敮浠樼姸鎬佺紦瀛樻椂闂磋緝鐭級
     const cachedData = getCache(cacheKey);
     if (cachedData) {
       return cachedData;
     }
     
-    // 使用重试机制
+    // 浣跨敤閲嶈瘯鏈哄埗
     const result = await retryRequest(() => 
       api.get(`/orders/${orderId}/payment-status`)
     );
     
     const isPaid = result.paid || false;
     
-    // 缓存支付状态，使用较短的缓存时间
-    setCache(cacheKey, isPaid, 30000); // 30秒
-    
+    // 缂撳瓨鏀粯鐘舵€侊紝浣跨敤杈冪煭鐨勭紦瀛樻椂闂?    setCache(cacheKey, isPaid, 30000); // 30绉?    
     return isPaid;
   } catch (error) {
-    console.error('查询支付状态失败:', error);
+    console.error('鏌ヨ鏀粯鐘舵€佸け璐?', error);
     return false;
   }
 };
 
 /**
- * 申请退款
- * @param {number|string} orderId - 订单ID
- * @param {Object} refundData - 退款信息
- * @param {string} refundData.reason - 退款原因
- * @param {string} refundData.description - 退款说明
- * @param {Array} refundData.images - 退款凭证图片
- * @returns {Promise<Object>} - 返回退款申请结果
- */
+ * 鐢宠閫€娆? * @param {number|string} orderId - 璁㈠崟ID
+ * @param {Object} refundData - 閫€娆句俊鎭? * @param {string} refundData.reason - 閫€娆惧師鍥? * @param {string} refundData.description - 閫€娆捐鏄? * @param {Array} refundData.images - 閫€娆惧嚟璇佸浘鐗? * @returns {Promise<Object>} - 杩斿洖閫€娆剧敵璇风粨鏋? */
 export const applyRefund = async (orderId, refundData) => {
   try {
-    // 数据验证
+    // 鏁版嵁楠岃瘉
     if (!validator.isValidOrderId(orderId)) {
-      throw new Error('订单ID格式不正确');
+      throw new Error('璁㈠崟ID鏍煎紡涓嶆纭?);
     }
     
     if (!refundData || !refundData.reason) {
-      throw new Error('退款原因不能为空');
+      throw new Error('閫€娆惧師鍥犱笉鑳戒负绌?);
     }
     
-    showLoading('提交退款申请...');
+    showLoading('鎻愪氦閫€娆剧敵璇?..');
     
-    // 使用重试机制
+    // 浣跨敤閲嶈瘯鏈哄埗
     const result = await retryRequest(() => 
       api.post(`/orders/${orderId}/refund`, refundData)
     );
@@ -484,34 +458,32 @@ export const applyRefund = async (orderId, refundData) => {
     hideLoading();
     
     if (result.code === 200) {
-      // 清除相关缓存
+      // 娓呴櫎鐩稿叧缂撳瓨
       clearOrderCache(orderId);
-      showToast('退款申请已提交', { icon: 'success' });
+      showToast('閫€娆剧敵璇峰凡鎻愪氦', { icon: 'success' });
       return result;
     } else {
-      throw new Error(result.message || '提交退款申请失败');
+      throw new Error(result.message || '鎻愪氦閫€娆剧敵璇峰け璐?);
     }
   } catch (error) {
     hideLoading();
-    console.error('申请退款失败:', error);
-    showToast(error.message || '申请退款失败，请重试', { icon: 'none' });
+    console.error('鐢宠閫€娆惧け璐?', error);
+    showToast(error.message || '鐢宠閫€娆惧け璐ワ紝璇烽噸璇?, { icon: 'none' });
     throw error;
   }
 };
 
 /**
- * 获取订单状态统计
- * @returns {Promise<Object>} - 返回各状态订单数量
- */
+ * 鑾峰彇璁㈠崟鐘舵€佺粺璁? * @returns {Promise<Object>} - 杩斿洖鍚勭姸鎬佽鍗曟暟閲? */
 export const getOrderStats = async () => {
   try {
-    // 尝试获取缓存
+    // 灏濊瘯鑾峰彇缂撳瓨
     const cachedData = getCache(CACHE_KEYS.ORDER_STATS);
     if (cachedData) {
       return cachedData;
     }
     
-    // 使用重试机制
+    // 浣跨敤閲嶈瘯鏈哄埗
     const result = await retryRequest(() => 
       api.get('/orders/stats')
     );
@@ -524,17 +496,17 @@ export const getOrderStats = async () => {
       cancelled: 0
     };
     
-    // 缓存统计数据
+    // 缂撳瓨缁熻鏁版嵁
     setCache(CACHE_KEYS.ORDER_STATS, stats, CACHE_DURATION.MEDIUM);
     
     return stats;
   } catch (error) {
-    console.error('获取订单统计失败:', error);
+    console.error('鑾峰彇璁㈠崟缁熻澶辫触:', error);
     
-    // 尝试返回缓存数据
+    // 灏濊瘯杩斿洖缂撳瓨鏁版嵁
     const cachedData = getCache(CACHE_KEYS.ORDER_STATS);
     if (cachedData) {
-      console.log('使用缓存的订单统计数据');
+      console.log('浣跨敤缂撳瓨鐨勮鍗曠粺璁℃暟鎹?);
       return cachedData;
     }
     
@@ -549,25 +521,25 @@ export const getOrderStats = async () => {
 };
 
 /**
- * 申请发票
- * @param {number|string} orderId - 订单ID
- * @param {Object} invoiceData - 发票信息
- * @returns {Promise<Object>} - 返回申请结果
+ * 鐢宠鍙戠エ
+ * @param {number|string} orderId - 璁㈠崟ID
+ * @param {Object} invoiceData - 鍙戠エ淇℃伅
+ * @returns {Promise<Object>} - 杩斿洖鐢宠缁撴灉
  */
 export const applyInvoice = async (orderId, invoiceData) => {
   try {
-    // 数据验证
+    // 鏁版嵁楠岃瘉
     if (!validator.isValidOrderId(orderId)) {
-      throw new Error('订单ID格式不正确');
+      throw new Error('璁㈠崟ID鏍煎紡涓嶆纭?);
     }
     
     if (!invoiceData) {
-      throw new Error('发票信息不能为空');
+      throw new Error('鍙戠エ淇℃伅涓嶈兘涓虹┖');
     }
     
-    showLoading('提交发票申请...');
+    showLoading('鎻愪氦鍙戠エ鐢宠...');
     
-    // 使用重试机制
+    // 浣跨敤閲嶈瘯鏈哄埗
     const result = await retryRequest(() => 
       api.post(`/orders/${orderId}/invoice`, invoiceData)
     );
@@ -575,36 +547,35 @@ export const applyInvoice = async (orderId, invoiceData) => {
     hideLoading();
     
     if (result.code === 200) {
-      // 清除订单详情缓存，因为发票信息会更新订单状态
-      removeCache(`${CACHE_KEYS.ORDER_DETAIL}${orderId}`);
-      showToast('发票申请已提交', { icon: 'success' });
+      // 娓呴櫎璁㈠崟璇︽儏缂撳瓨锛屽洜涓哄彂绁ㄤ俊鎭細鏇存柊璁㈠崟鐘舵€?      removeCache(`${CACHE_KEYS.ORDER_DETAIL}${orderId}`);
+      showToast('鍙戠エ鐢宠宸叉彁浜?, { icon: 'success' });
       return result;
     } else {
-      throw new Error(result.message || '提交发票申请失败');
+      throw new Error(result.message || '鎻愪氦鍙戠エ鐢宠澶辫触');
     }
   } catch (error) {
     hideLoading();
-    console.error('申请发票失败:', error);
-    showToast(error.message || '申请发票失败，请重试', { icon: 'none' });
+    console.error('鐢宠鍙戠エ澶辫触:', error);
+    showToast(error.message || '鐢宠鍙戠エ澶辫触锛岃閲嶈瘯', { icon: 'none' });
     throw error;
   }
 };
 
 /**
- * 再次购买订单商品
- * @param {number|string} orderId - 订单ID
- * @returns {Promise<boolean>} - 是否添加成功
+ * 鍐嶆璐拱璁㈠崟鍟嗗搧
+ * @param {number|string} orderId - 璁㈠崟ID
+ * @returns {Promise<boolean>} - 鏄惁娣诲姞鎴愬姛
  */
 export const buyAgain = async (orderId) => {
   try {
-    // 数据验证
+    // 鏁版嵁楠岃瘉
     if (!validator.isValidOrderId(orderId)) {
-      throw new Error('订单ID格式不正确');
+      throw new Error('璁㈠崟ID鏍煎紡涓嶆纭?);
     }
     
-    showLoading('添加到购物车...');
+    showLoading('娣诲姞鍒拌喘鐗╄溅...');
     
-    // 使用重试机制
+    // 浣跨敤閲嶈瘯鏈哄埗
     const result = await retryRequest(() => 
       api.post(`/orders/${orderId}/buy-again`)
     );
@@ -612,39 +583,39 @@ export const buyAgain = async (orderId) => {
     hideLoading();
     
     if (result.code === 200) {
-      showToast('已添加到购物车', { icon: 'success' });
+      showToast('宸叉坊鍔犲埌璐墿杞?, { icon: 'success' });
       return true;
     } else {
-      throw new Error(result.message || '添加失败');
+      throw new Error(result.message || '娣诲姞澶辫触');
     }
   } catch (error) {
     hideLoading();
-    console.error('再次购买失败:', error);
-    showToast(error.message || '添加失败，请重试', { icon: 'none' });
+    console.error('鍐嶆璐拱澶辫触:', error);
+    showToast(error.message || '娣诲姞澶辫触锛岃閲嶈瘯', { icon: 'none' });
     return false;
   }
 };
 
 /**
- * 评价订单
- * @param {number|string} orderId - 订单ID
- * @param {Array} ratings - 评价数据
- * @returns {Promise<Object>} - 返回评价结果
+ * 璇勪环璁㈠崟
+ * @param {number|string} orderId - 璁㈠崟ID
+ * @param {Array} ratings - 璇勪环鏁版嵁
+ * @returns {Promise<Object>} - 杩斿洖璇勪环缁撴灉
  */
 export const rateOrder = async (orderId, ratings) => {
   try {
-    // 数据验证
+    // 鏁版嵁楠岃瘉
     if (!validator.isValidOrderId(orderId)) {
-      throw new Error('订单ID格式不正确');
+      throw new Error('璁㈠崟ID鏍煎紡涓嶆纭?);
     }
     
     if (!Array.isArray(ratings) || ratings.length === 0) {
-      throw new Error('评价数据不能为空');
+      throw new Error('璇勪环鏁版嵁涓嶈兘涓虹┖');
     }
     
-    showLoading('提交评价...');
+    showLoading('鎻愪氦璇勪环...');
     
-    // 使用重试机制
+    // 浣跨敤閲嶈瘯鏈哄埗
     const result = await retryRequest(() => 
       api.post(`/orders/${orderId}/rate`, {
         ratings: ratings
@@ -654,63 +625,62 @@ export const rateOrder = async (orderId, ratings) => {
     hideLoading();
     
     if (result.code === 200) {
-      // 清除订单详情缓存
+      // 娓呴櫎璁㈠崟璇︽儏缂撳瓨
       removeCache(`${CACHE_KEYS.ORDER_DETAIL}${orderId}`);
-      showToast('评价成功', { icon: 'success' });
+      showToast('璇勪环鎴愬姛', { icon: 'success' });
       return result;
     } else {
-      throw new Error(result.message || '评价失败');
+      throw new Error(result.message || '璇勪环澶辫触');
     }
   } catch (error) {
     hideLoading();
-    console.error('评价订单失败:', error);
-    showToast(error.message || '评价失败，请重试', { icon: 'none' });
+    console.error('璇勪环璁㈠崟澶辫触:', error);
+    showToast(error.message || '璇勪环澶辫触锛岃閲嶈瘯', { icon: 'none' });
     throw error;
   }
 };
 
 /**
- * 获取订单物流信息
- * @param {number|string} orderId - 订单ID
- * @returns {Promise<Object>} - 返回物流信息
+ * 鑾峰彇璁㈠崟鐗╂祦淇℃伅
+ * @param {number|string} orderId - 璁㈠崟ID
+ * @returns {Promise<Object>} - 杩斿洖鐗╂祦淇℃伅
  */
 export const getOrderTracking = async (orderId) => {
   try {
-    // 数据验证
+    // 鏁版嵁楠岃瘉
     if (!validator.isValidOrderId(orderId)) {
-      throw new Error('订单ID格式不正确');
+      throw new Error('璁㈠崟ID鏍煎紡涓嶆纭?);
     }
     
-    // 构建缓存键
-    const cacheKey = `${CACHE_KEYS.ORDER_TRACKING}${orderId}`;
+    // 鏋勫缓缂撳瓨閿?    const cacheKey = `${CACHE_KEYS.ORDER_TRACKING}${orderId}`;
     
-    // 尝试获取缓存
+    // 灏濊瘯鑾峰彇缂撳瓨
     const cachedData = getCache(cacheKey);
     if (cachedData) {
       return cachedData;
     }
     
-    // 使用重试机制
+    // 浣跨敤閲嶈瘯鏈哄埗
     const result = await retryRequest(() => 
       api.get(`/orders/${orderId}/tracking`)
     );
     
     if (result.code === 200) {
       const tracking = result.tracking || {};
-      // 缓存物流信息
+      // 缂撳瓨鐗╂祦淇℃伅
       setCache(cacheKey, tracking, CACHE_DURATION.MEDIUM);
       return tracking;
     } else {
-      throw new Error(result.message || '获取物流信息失败');
+      throw new Error(result.message || '鑾峰彇鐗╂祦淇℃伅澶辫触');
     }
   } catch (error) {
-    console.error('获取物流信息失败:', error);
+    console.error('鑾峰彇鐗╂祦淇℃伅澶辫触:', error);
     
-    // 尝试返回缓存数据
+    // 灏濊瘯杩斿洖缂撳瓨鏁版嵁
     const cacheKey = `${CACHE_KEYS.ORDER_TRACKING}${orderId}`;
     const cachedData = getCache(cacheKey);
     if (cachedData) {
-      console.log('使用缓存的物流信息');
+      console.log('浣跨敤缂撳瓨鐨勭墿娴佷俊鎭?);
       return cachedData;
     }
     
@@ -718,8 +688,7 @@ export const getOrderTracking = async (orderId) => {
   }
 };
 
-// 导出所有方法
-export default {
+// 瀵煎嚭鎵€鏈夋柟娉?export default {
   createOrder,
   getOrders,
   getOrderDetail,

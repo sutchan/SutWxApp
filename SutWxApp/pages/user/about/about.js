@@ -1,20 +1,19 @@
-// pages/user/about/about.js
+﻿// pages/user/about/about.js
 /**
- * 关于我们页面 - 显示应用的相关信息
- */
+ * 鍏充簬鎴戜滑椤甸潰 - 鏄剧ず搴旂敤鐨勭浉鍏充俊鎭? */
 Page({
   data: {
-    appName: 'Sut微信小程序',
+    appName: 'Sut寰俊灏忕▼搴?,
     appVersion: '1.0.1',
-    appDescription: '为您提供优质的内容服务',
+    appDescription: '涓烘偍鎻愪緵浼樿川鐨勫唴瀹规湇鍔?,
     companyName: 'Sut Company',
-    copyright: '© 2024 Sut Company. 保留所有权利。',
+    copyright: '漏 2024 Sut Company. 淇濈暀鎵€鏈夋潈鍒┿€?,
     contactEmail: 'contact@sut.com',
     website: 'https://sutchan.github.io'
   },
 
   /**
-   * 生命周期函数--监听页面加载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
    */
   onLoad: function() {
     const app = getApp();
@@ -24,33 +23,32 @@ Page({
     });
     
     wx.setNavigationBarTitle({
-      title: '关于我们'
+      title: '鍏充簬鎴戜滑'
     });
   },
 
   /**
-   * 生命周期函数--监听页面显示
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
    */
   onShow: function() {
-    // 可以在这里更新页面数据
-  },
+    // 鍙互鍦ㄨ繖閲屾洿鏂伴〉闈㈡暟鎹?  },
 
   /**
-   * 复制邮箱地址
+   * 澶嶅埗閭鍦板潃
    */
   copyEmail: function() {
     wx.setClipboardData({
       data: this.data.contactEmail,
       success: () => {
         wx.showToast({
-          title: '邮箱已复制',
+          title: '閭宸插鍒?,
           icon: 'success',
           duration: 2000
         });
       },
       fail: () => {
         wx.showToast({
-          title: '复制失败',
+          title: '澶嶅埗澶辫触',
           icon: 'none'
         });
       }
@@ -58,30 +56,29 @@ Page({
   },
 
   /**
-   * 打开官方网站
+   * 鎵撳紑瀹樻柟缃戠珯
    */
   openWebsite: function() {
     wx.navigateToMiniProgram({
-      appId: '', // 如果是跳转到其他小程序
-      path: '',
+      appId: '', // 濡傛灉鏄烦杞埌鍏朵粬灏忕▼搴?      path: '',
       success: () => {
-        console.log('跳转成功');
+        console.log('璺宠浆鎴愬姛');
       },
       fail: () => {
-        // 如果没有指定小程序，则打开网页
+        // 濡傛灉娌℃湁鎸囧畾灏忕▼搴忥紝鍒欐墦寮€缃戦〉
         wx.openLocation({
           latitude: 0,
           longitude: 0,
           name: this.data.appName,
           address: this.data.website,
           success: () => {
-            console.log('打开位置成功');
+            console.log('鎵撳紑浣嶇疆鎴愬姛');
           },
           fail: () => {
-            // 尝试打开网页
+            // 灏濊瘯鎵撳紑缃戦〉
             wx.showModal({
-              title: '打开网站',
-              content: '是否跳转到官方网站？',
+              title: '鎵撳紑缃戠珯',
+              content: '鏄惁璺宠浆鍒板畼鏂圭綉绔欙紵',
               success: (res) => {
                 if (res.confirm) {
                   wx.navigateTo({
@@ -97,8 +94,7 @@ Page({
   },
 
   /**
-   * 检查更新
-   */
+   * 妫€鏌ユ洿鏂?   */
   checkUpdate: function() {
     const app = getApp();
     app.checkUpdate();

@@ -1,8 +1,7 @@
-<?php
+﻿<?php
 /**
- * SUT微信小程序插件安装文件
- *
- * 负责插件激活时的数据库表创建、初始设置等操作
+ * SUT寰俊灏忕▼搴忔彃浠跺畨瑁呮枃浠? *
+ * 璐熻矗鎻掍欢婵€娲绘椂鐨勬暟鎹簱琛ㄥ垱寤恒€佸垵濮嬭缃瓑鎿嶄綔
  *
  * @package SUT_WeChat_Mini
  */
@@ -12,69 +11,64 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * SUT_WeChat_Mini_Install 类
- */
+ * SUT_WeChat_Mini_Install 绫? */
 class SUT_WeChat_Mini_Install {
     
     /**
-     * 插件激活时执行
+     * 鎻掍欢婵€娲绘椂鎵ц
      */
     public static function activate() {
-        // 检查PHP版本
+        // 妫€鏌HP鐗堟湰
         self::check_php_version();
         
-        // 检查WordPress版本
+        // 妫€鏌ordPress鐗堟湰
         self::check_wordpress_version();
         
-        // 创建数据库表
+        // 鍒涘缓鏁版嵁搴撹〃
         self::create_tables();
         
-        // 初始化设置选项
+        // 鍒濆鍖栬缃€夐」
         self::init_settings();
         
-        // 注册重写规则
+        // 娉ㄥ唽閲嶅啓瑙勫垯
         self::register_rewrite_rules();
         
-        // 刷新重写规则
+        // 鍒锋柊閲嶅啓瑙勫垯
         flush_rewrite_rules();
         
-        // 记录激活日志
-        self::log_activation();
+        // 璁板綍婵€娲绘棩蹇?        self::log_activation();
     }
     
     /**
-     * 插件停用/卸载时执行
-     */
+     * 鎻掍欢鍋滅敤/鍗歌浇鏃舵墽琛?     */
     public static function deactivate() {
-        // 刷新重写规则
+        // 鍒锋柊閲嶅啓瑙勫垯
         flush_rewrite_rules();
         
-        // 记录停用日志
+        // 璁板綍鍋滅敤鏃ュ織
         self::log_deactivation();
     }
     
     /**
-     * 插件卸载时执行
-     */
+     * 鎻掍欢鍗歌浇鏃舵墽琛?     */
     public static function uninstall() {
-        // 删除数据库表
+        // 鍒犻櫎鏁版嵁搴撹〃
         self::drop_tables();
         
-        // 删除设置选项
+        // 鍒犻櫎璁剧疆閫夐」
         self::delete_settings();
         
-        // 删除上传的文件
-        self::delete_uploads();
+        // 鍒犻櫎涓婁紶鐨勬枃浠?        self::delete_uploads();
         
-        // 删除临时文件
+        // 鍒犻櫎涓存椂鏂囦欢
         self::delete_temp_files();
         
-        // 记录卸载日志
+        // 璁板綍鍗歌浇鏃ュ織
         self::log_uninstall();
     }
     
     /**
-     * 检查PHP版本
+     * 妫€鏌HP鐗堟湰
      */
     private static function check_php_version() {
         $required_php_version = '7.0';
@@ -84,18 +78,18 @@ class SUT_WeChat_Mini_Install {
             deactivate_plugins( plugin_basename( SUT_WECHAT_MINI_PLUGIN_FILE ) );
             wp_die( 
                 sprintf( 
-                    __( 'SUT微信小程序插件需要PHP %s或更高版本。您当前的PHP版本是 %s，请升级PHP版本后再启用插件。', 'sut-wechat-mini' ), 
+                    __( 'SUT寰俊灏忕▼搴忔彃浠堕渶瑕丳HP %s鎴栨洿楂樼増鏈€傛偍褰撳墠鐨凱HP鐗堟湰鏄?%s锛岃鍗囩骇PHP鐗堟湰鍚庡啀鍚敤鎻掍欢銆?, 'sut-wechat-mini' ), 
                     $required_php_version, 
                     $current_php_version 
                 ),
-                __( '激活失败', 'sut-wechat-mini' ),
+                __( '婵€娲诲け璐?, 'sut-wechat-mini' ),
                 array( 'back_link' => true )
             );
         }
     }
     
     /**
-     * 检查WordPress版本
+     * 妫€鏌ordPress鐗堟湰
      */
     private static function check_wordpress_version() {
         $required_wp_version = '5.0';
@@ -105,24 +99,24 @@ class SUT_WeChat_Mini_Install {
             deactivate_plugins( plugin_basename( SUT_WECHAT_MINI_PLUGIN_FILE ) );
             wp_die( 
                 sprintf( 
-                    __( 'SUT微信小程序插件需要WordPress %s或更高版本。您当前的WordPress版本是 %s，请升级WordPress版本后再启用插件。', 'sut-wechat-mini' ), 
+                    __( 'SUT寰俊灏忕▼搴忔彃浠堕渶瑕乄ordPress %s鎴栨洿楂樼増鏈€傛偍褰撳墠鐨刉ordPress鐗堟湰鏄?%s锛岃鍗囩骇WordPress鐗堟湰鍚庡啀鍚敤鎻掍欢銆?, 'sut-wechat-mini' ), 
                     $required_wp_version, 
                     $wp_version 
                 ),
-                __( '激活失败', 'sut-wechat-mini' ),
+                __( '婵€娲诲け璐?, 'sut-wechat-mini' ),
                 array( 'back_link' => true )
             );
         }
     }
     
     /**
-     * 创建数据库表
+     * 鍒涘缓鏁版嵁搴撹〃
      */
     private static function create_tables() {
         global $wpdb;
         $charset_collate = $wpdb->get_charset_collate();
         
-        // 小程序用户表
+        // 灏忕▼搴忕敤鎴疯〃
         $table_name = $wpdb->prefix . 'sut_wechat_mini_users';
         
         $sql = "CREATE TABLE $table_name (
@@ -148,8 +142,7 @@ class SUT_WeChat_Mini_Install {
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
         dbDelta( $sql );
         
-        // 用户地址表
-        $table_name = $wpdb->prefix . 'sut_wechat_mini_user_addresses';
+        // 鐢ㄦ埛鍦板潃琛?        $table_name = $wpdb->prefix . 'sut_wechat_mini_user_addresses';
         
         $sql = "CREATE TABLE $table_name (
             id bigint(20) NOT NULL AUTO_INCREMENT,
@@ -170,8 +163,7 @@ class SUT_WeChat_Mini_Install {
         
         dbDelta( $sql );
         
-        // 用户收藏表
-        $table_name = $wpdb->prefix . 'sut_wechat_mini_user_favorites';
+        // 鐢ㄦ埛鏀惰棌琛?        $table_name = $wpdb->prefix . 'sut_wechat_mini_user_favorites';
         
         $sql = "CREATE TABLE $table_name (
             id bigint(20) NOT NULL AUTO_INCREMENT,
@@ -188,8 +180,7 @@ class SUT_WeChat_Mini_Install {
         
         dbDelta( $sql );
         
-        // 用户签到表
-        $table_name = $wpdb->prefix . 'sut_wechat_mini_user_checkins';
+        // 鐢ㄦ埛绛惧埌琛?        $table_name = $wpdb->prefix . 'sut_wechat_mini_user_checkins';
         
         $sql = "CREATE TABLE $table_name (
             id bigint(20) NOT NULL AUTO_INCREMENT,
@@ -202,8 +193,7 @@ class SUT_WeChat_Mini_Install {
         
         dbDelta( $sql );
         
-        // 订单表
-        $table_name = $wpdb->prefix . 'sut_wechat_mini_orders';
+        // 璁㈠崟琛?        $table_name = $wpdb->prefix . 'sut_wechat_mini_orders';
         
         $sql = "CREATE TABLE $table_name (
             id bigint(20) NOT NULL AUTO_INCREMENT,
@@ -231,7 +221,7 @@ class SUT_WeChat_Mini_Install {
         
         dbDelta( $sql );
         
-        // 购物车表
+        // 璐墿杞﹁〃
         $table_name = $wpdb->prefix . 'sut_wechat_mini_cart';
         
         $sql = "CREATE TABLE $table_name (
@@ -251,8 +241,7 @@ class SUT_WeChat_Mini_Install {
         
         dbDelta( $sql );
         
-        // 浏览历史表
-        $table_name = $wpdb->prefix . 'sut_wechat_mini_browse_history';
+        // 娴忚鍘嗗彶琛?        $table_name = $wpdb->prefix . 'sut_wechat_mini_browse_history';
         
         $sql = "CREATE TABLE $table_name (
             id bigint(20) NOT NULL AUTO_INCREMENT,
@@ -269,8 +258,7 @@ class SUT_WeChat_Mini_Install {
         
         dbDelta( $sql );
         
-        // API日志表
-        $table_name = $wpdb->prefix . 'sut_wechat_mini_api_logs';
+        // API鏃ュ織琛?        $table_name = $wpdb->prefix . 'sut_wechat_mini_api_logs';
         
         $sql = "CREATE TABLE $table_name (
             id bigint(20) NOT NULL AUTO_INCREMENT,
@@ -296,8 +284,7 @@ class SUT_WeChat_Mini_Install {
         
         dbDelta( $sql );
         
-        // 支付日志表
-        $table_name = $wpdb->prefix . 'sut_wechat_mini_payment_logs';
+        // 鏀粯鏃ュ織琛?        $table_name = $wpdb->prefix . 'sut_wechat_mini_payment_logs';
         
         $sql = "CREATE TABLE $table_name (
             id bigint(20) NOT NULL AUTO_INCREMENT,
@@ -322,7 +309,7 @@ class SUT_WeChat_Mini_Install {
         
         dbDelta( $sql );
         
-        // 消息推送表
+        // 娑堟伅鎺ㄩ€佽〃
         $table_name = $wpdb->prefix . 'sut_wechat_mini_messages';
         
         $sql = "CREATE TABLE $table_name (
@@ -345,8 +332,7 @@ class SUT_WeChat_Mini_Install {
         
         dbDelta( $sql );
         
-        // 会员积分表
-        $table_name = $wpdb->prefix . 'sut_wechat_mini_points';
+        // 浼氬憳绉垎琛?        $table_name = $wpdb->prefix . 'sut_wechat_mini_points';
         
         $sql = "CREATE TABLE $table_name (
             id bigint(20) NOT NULL AUTO_INCREMENT,
@@ -366,34 +352,33 @@ class SUT_WeChat_Mini_Install {
     }
     
     /**
-     * 初始化设置选项
+     * 鍒濆鍖栬缃€夐」
      */
     private static function init_settings() {
-        // 获取已有的设置
-        $existing_settings = get_option( 'sut_wechat_mini_settings', array() );
+        // 鑾峰彇宸叉湁鐨勮缃?        $existing_settings = get_option( 'sut_wechat_mini_settings', array() );
         
-        // 定义默认设置
+        // 瀹氫箟榛樿璁剧疆
         $default_settings = array(
-            // 基础设置
+            // 鍩虹璁剧疆
             'app_id' => '',
             'app_secret' => '',
             'token' => '',
             'encoding_aes_key' => '',
             
-            // 内容设置
+            // 鍐呭璁剧疆
             'enable_content' => 1,
             'content_per_page' => 10,
             'enable_comments' => 1,
             'enable_share' => 1,
             'enable_collect' => 1,
             
-            // 电商设置
+            // 鐢靛晢璁剧疆
             'enable_ecommerce' => 1,
             'enable_woocommerce' => 1,
             'enable_cart' => 1,
             'enable_favorites' => 1,
             
-            // 支付设置
+            // 鏀粯璁剧疆
             'enable_pay' => 1,
             'mch_id' => '',
             'api_key' => '',
@@ -401,92 +386,88 @@ class SUT_WeChat_Mini_Install {
             'ssl_cert_path' => '',
             'ssl_key_path' => '',
             
-            // 用户设置
+            // 鐢ㄦ埛璁剧疆
             'enable_user' => 1,
             'enable_user_center' => 1,
             'enable_address' => 1,
             'enable_checkin' => 1,
             
-            // 缓存设置
+            // 缂撳瓨璁剧疆
             'enable_cache' => 1,
             'cache_time' => 3600,
             
-            // 日志设置
+            // 鏃ュ織璁剧疆
             'enable_log' => 0,
             'log_level' => 'error',
             
-            // 高级设置
+            // 楂樼骇璁剧疆
             'enable_debug' => 0,
             'ip_whitelist' => '',
             'api_rate_limit' => 0,
             
-            // 模板消息设置
+            // 妯℃澘娑堟伅璁剧疆
             'enable_template_message' => 0,
             'template_message_order_paid' => '',
             'template_message_order_shipped' => '',
             'template_message_order_completed' => '',
             'template_message_refund_success' => '',
             
-            // 统计设置
+            // 缁熻璁剧疆
             'enable_statistics' => 1,
             'statistics_retention_days' => 30,
             
-            // 国际化设置
-            'default_language' => 'zh_CN',
+            // 鍥介檯鍖栬缃?            'default_language' => 'zh_CN',
             'enable_multi_language' => 0,
             
-            // CDN设置
+            // CDN璁剧疆
             'enable_cdn' => 0,
             'cdn_domain' => '',
             
-            // 安全设置
+            // 瀹夊叏璁剧疆
             'enable_https' => 1,
             'enable_signature' => 1,
             
-            // 其他设置
+            // 鍏朵粬璁剧疆
             'version' => SUT_WECHAT_MINI_VERSION,
             'installed_time' => current_time( 'mysql' ),
             'last_updated_time' => current_time( 'mysql' ),
         );
         
-        // 合并设置（保留已有的设置，补充缺少的设置）
-        $settings = array_merge( $default_settings, $existing_settings );
+        // 鍚堝苟璁剧疆锛堜繚鐣欏凡鏈夌殑璁剧疆锛岃ˉ鍏呯己灏戠殑璁剧疆锛?        $settings = array_merge( $default_settings, $existing_settings );
         
-        // 更新设置
+        // 鏇存柊璁剧疆
         update_option( 'sut_wechat_mini_settings', $settings );
         
-        // 设置版本号
-        update_option( 'sut_wechat_mini_version', SUT_WECHAT_MINI_VERSION );
+        // 璁剧疆鐗堟湰鍙?        update_option( 'sut_wechat_mini_version', SUT_WECHAT_MINI_VERSION );
         
-        // 设置激活时间
-        if ( ! get_option( 'sut_wechat_mini_activated_time' ) ) {
+        // 璁剧疆婵€娲绘椂闂?        if ( ! get_option( 'sut_wechat_mini_activated_time' ) ) {
             update_option( 'sut_wechat_mini_activated_time', current_time( 'mysql' ) );
         }
     }
     
     /**
-     * 注册重写规则
+     * 娉ㄥ唽閲嶅啓瑙勫垯
      */
     private static function register_rewrite_rules() {
-        // 注册API重写规则
+        // 娉ㄥ唽API閲嶅啓瑙勫垯
         add_rewrite_rule( '^sut-wechat-mini-api/?$', 'index.php?sut_wechat_mini_api=1', 'top' );
         add_rewrite_rule( '^sut-wechat-mini-api/([^/]+)/?$', 'index.php?sut_wechat_mini_api=1&sut_wechat_mini_endpoint=$matches[1]', 'top' );
         add_rewrite_rule( '^sut-wechat-mini-api/([^/]+)/([^/]+)/?$', 'index.php?sut_wechat_mini_api=1&sut_wechat_mini_endpoint=$matches[1]&sut_wechat_mini_action=$matches[2]', 'top' );
         
-        // 注册支付回调重写规则
+        // 娉ㄥ唽鏀粯鍥炶皟閲嶅啓瑙勫垯
         add_rewrite_rule( '^sut-wechat-mini-pay-notify/?$', 'index.php?sut_wechat_mini_pay_notify=1', 'top' );
         
-        // 注册微信消息回调重写规则
+        // 娉ㄥ唽寰俊娑堟伅鍥炶皟閲嶅啓瑙勫垯
         add_rewrite_rule( '^sut-wechat-mini-message/?$', 'index.php?sut_wechat_mini_message=1', 'top' );
         
-        // 注册小程序码重写规则
+        // 娉ㄥ唽灏忕▼搴忕爜閲嶅啓瑙勫垯
         add_rewrite_rule( '^sut-wechat-mini-qrcode/?$', 'index.php?sut_wechat_mini_qrcode=1', 'top' );
         
-        // 注册REST API重写规则（如果需要）
+        // 娉ㄥ唽REST API閲嶅啓瑙勫垯锛堝鏋滈渶瑕侊級
         add_rewrite_rule( '^sut-wechat-mini-rest/([^/]+)/?$', 'index.php?sut_wechat_mini_rest=1&sut_wechat_mini_resource=$matches[1]', 'top' );
         add_rewrite_rule( '^sut-wechat-mini-rest/([^/]+)/([^/]+)/?$', 'index.php?sut_wechat_mini_rest=1&sut_wechat_mini_resource=$matches[1]&sut_wechat_mini_resource_id=$matches[2]', 'top' );
         
-        // 添加查询变量
+        // 娣诲姞鏌ヨ鍙橀噺
         add_filter( 'query_vars', function( $vars ) {
             $vars[] = 'sut_wechat_mini_api';
             $vars[] = 'sut_wechat_mini_endpoint';
@@ -502,12 +483,12 @@ class SUT_WeChat_Mini_Install {
     }
     
     /**
-     * 删除数据库表
+     * 鍒犻櫎鏁版嵁搴撹〃
      */
     private static function drop_tables() {
         global $wpdb;
         
-        // 获取所有要删除的表
+        // 鑾峰彇鎵€鏈夎鍒犻櫎鐨勮〃
         $tables = array(
             $wpdb->prefix . 'sut_wechat_mini_users',
             $wpdb->prefix . 'sut_wechat_mini_user_addresses',
@@ -522,17 +503,16 @@ class SUT_WeChat_Mini_Install {
             $wpdb->prefix . 'sut_wechat_mini_points',
         );
         
-        // 删除每个表
-        foreach ( $tables as $table ) {
+        // 鍒犻櫎姣忎釜琛?        foreach ( $tables as $table ) {
             $wpdb->query( "DROP TABLE IF EXISTS $table" );
         }
     }
     
     /**
-     * 删除设置选项
+     * 鍒犻櫎璁剧疆閫夐」
      */
     private static function delete_settings() {
-        // 获取所有要删除的选项
+        // 鑾峰彇鎵€鏈夎鍒犻櫎鐨勯€夐」
         $options = array(
             'sut_wechat_mini_settings',
             'sut_wechat_mini_version',
@@ -546,46 +526,43 @@ class SUT_WeChat_Mini_Install {
             'sut_wechat_mini_install_data',
         );
         
-        // 删除每个选项
+        // 鍒犻櫎姣忎釜閫夐」
         foreach ( $options as $option ) {
             delete_option( $option );
         }
     }
     
     /**
-     * 删除上传的文件
-     */
+     * 鍒犻櫎涓婁紶鐨勬枃浠?     */
     private static function delete_uploads() {
-        // 获取上传目录
+        // 鑾峰彇涓婁紶鐩綍
         $upload_dir = wp_upload_dir();
         $sut_wechat_mini_dir = $upload_dir['basedir'] . '/sut-wechat-mini';
         
-        // 检查目录是否存在
-        if ( is_dir( $sut_wechat_mini_dir ) ) {
-            // 删除目录及其内容
+        // 妫€鏌ョ洰褰曟槸鍚﹀瓨鍦?        if ( is_dir( $sut_wechat_mini_dir ) ) {
+            // 鍒犻櫎鐩綍鍙婂叾鍐呭
             self::delete_directory( $sut_wechat_mini_dir );
         }
     }
     
     /**
-     * 删除临时文件
+     * 鍒犻櫎涓存椂鏂囦欢
      */
     private static function delete_temp_files() {
-        // 获取临时目录
+        // 鑾峰彇涓存椂鐩綍
         $temp_dir = sys_get_temp_dir() . '/sut-wechat-mini';
         
-        // 检查目录是否存在
-        if ( is_dir( $temp_dir ) ) {
-            // 删除目录及其内容
+        // 妫€鏌ョ洰褰曟槸鍚﹀瓨鍦?        if ( is_dir( $temp_dir ) ) {
+            // 鍒犻櫎鐩綍鍙婂叾鍐呭
             self::delete_directory( $temp_dir );
         }
     }
     
     /**
-     * 递归删除目录
+     * 閫掑綊鍒犻櫎鐩綍
      *
-     * @param string $dir 目录路径
-     * @return bool 删除结果
+     * @param string $dir 鐩綍璺緞
+     * @return bool 鍒犻櫎缁撴灉
      */
     private static function delete_directory( $dir ) {
         if ( ! is_dir( $dir ) ) {
@@ -608,10 +585,9 @@ class SUT_WeChat_Mini_Install {
     }
     
     /**
-     * 记录激活日志
-     */
+     * 璁板綍婵€娲绘棩蹇?     */
     private static function log_activation() {
-        // 创建日志数据
+        // 鍒涘缓鏃ュ織鏁版嵁
         $log_data = array(
             'action' => 'activate',
             'plugin_version' => SUT_WECHAT_MINI_VERSION,
@@ -622,102 +598,93 @@ class SUT_WeChat_Mini_Install {
             'timestamp' => current_time( 'mysql' ),
         );
         
-        // 保存日志
+        // 淇濆瓨鏃ュ織
         update_option( 'sut_wechat_mini_install_data', $log_data );
         
-        // 如果启用了调试模式，记录详细日志
+        // 濡傛灉鍚敤浜嗚皟璇曟ā寮忥紝璁板綍璇︾粏鏃ュ織
         if ( WP_DEBUG ) {
-            error_log( 'SUT微信小程序插件已激活: ' . json_encode( $log_data ) );
+            error_log( 'SUT寰俊灏忕▼搴忔彃浠跺凡婵€娲? ' . json_encode( $log_data ) );
         }
     }
     
     /**
-     * 记录停用日志
+     * 璁板綍鍋滅敤鏃ュ織
      */
     private static function log_deactivation() {
-        // 创建日志数据
+        // 鍒涘缓鏃ュ織鏁版嵁
         $log_data = array(
             'action' => 'deactivate',
             'plugin_version' => SUT_WECHAT_MINI_VERSION,
             'timestamp' => current_time( 'mysql' ),
         );
         
-        // 保存停用时间
+        // 淇濆瓨鍋滅敤鏃堕棿
         update_option( 'sut_wechat_mini_deactivated_time', current_time( 'mysql' ) );
         
-        // 如果启用了调试模式，记录详细日志
+        // 濡傛灉鍚敤浜嗚皟璇曟ā寮忥紝璁板綍璇︾粏鏃ュ織
         if ( WP_DEBUG ) {
-            error_log( 'SUT微信小程序插件已停用: ' . json_encode( $log_data ) );
+            error_log( 'SUT寰俊灏忕▼搴忔彃浠跺凡鍋滅敤: ' . json_encode( $log_data ) );
         }
     }
     
     /**
-     * 记录卸载日志
+     * 璁板綍鍗歌浇鏃ュ織
      */
     private static function log_uninstall() {
-        // 创建日志数据
+        // 鍒涘缓鏃ュ織鏁版嵁
         $log_data = array(
             'action' => 'uninstall',
             'plugin_version' => SUT_WECHAT_MINI_VERSION,
             'timestamp' => current_time( 'mysql' ),
         );
         
-        // 保存卸载时间
+        // 淇濆瓨鍗歌浇鏃堕棿
         update_option( 'sut_wechat_mini_uninstalled_time', current_time( 'mysql' ) );
         
-        // 如果启用了调试模式，记录详细日志
+        // 濡傛灉鍚敤浜嗚皟璇曟ā寮忥紝璁板綍璇︾粏鏃ュ織
         if ( WP_DEBUG ) {
-            error_log( 'SUT微信小程序插件已卸载: ' . json_encode( $log_data ) );
+            error_log( 'SUT寰俊灏忕▼搴忔彃浠跺凡鍗歌浇: ' . json_encode( $log_data ) );
         }
     }
     
     /**
-     * 插件更新时执行
-     *
-     * @param string $old_version 旧版本号
-     * @param string $new_version 新版本号
+     * 鎻掍欢鏇存柊鏃舵墽琛?     *
+     * @param string $old_version 鏃х増鏈彿
+     * @param string $new_version 鏂扮増鏈彿
      */
     public static function update( $old_version, $new_version ) {
-        // 检查版本并执行相应的更新操作
-        if ( version_compare( $old_version, '1.0.0', '<' ) ) {
-            // 版本1.0.0的更新操作
-            self::update_to_1_0_0();
+        // 妫€鏌ョ増鏈苟鎵ц鐩稿簲鐨勬洿鏂版搷浣?        if ( version_compare( $old_version, '1.0.0', '<' ) ) {
+            // 鐗堟湰1.0.0鐨勬洿鏂版搷浣?            self::update_to_1_0_0();
         }
         
         if ( version_compare( $old_version, '1.1.0', '<' ) ) {
-            // 版本1.1.0的更新操作
-            self::update_to_1_1_0();
+            // 鐗堟湰1.1.0鐨勬洿鏂版搷浣?            self::update_to_1_1_0();
         }
         
         if ( version_compare( $old_version, '1.2.0', '<' ) ) {
-            // 版本1.2.0的更新操作
-            self::update_to_1_2_0();
+            // 鐗堟湰1.2.0鐨勬洿鏂版搷浣?            self::update_to_1_2_0();
         }
         
-        // 更新版本号
-        update_option( 'sut_wechat_mini_version', $new_version );
+        // 鏇存柊鐗堟湰鍙?        update_option( 'sut_wechat_mini_version', $new_version );
         
-        // 更新最后更新时间
-        $settings = get_option( 'sut_wechat_mini_settings', array() );
+        // 鏇存柊鏈€鍚庢洿鏂版椂闂?        $settings = get_option( 'sut_wechat_mini_settings', array() );
         $settings['last_updated_time'] = current_time( 'mysql' );
         update_option( 'sut_wechat_mini_settings', $settings );
         
-        // 刷新重写规则
+        // 鍒锋柊閲嶅啓瑙勫垯
         flush_rewrite_rules();
         
-        // 记录更新日志
+        // 璁板綍鏇存柊鏃ュ織
         self::log_update( $old_version, $new_version );
     }
     
     /**
-     * 更新到版本1.0.0
+     * 鏇存柊鍒扮増鏈?.0.0
      */
     private static function update_to_1_0_0() {
-        // 在这里添加版本1.0.0的更新操作
-        // 例如：添加新的数据库表、修改现有表结构、更新设置选项等
-        global $wpdb;
+        // 鍦ㄨ繖閲屾坊鍔犵増鏈?.0.0鐨勬洿鏂版搷浣?        // 渚嬪锛氭坊鍔犳柊鐨勬暟鎹簱琛ㄣ€佷慨鏀圭幇鏈夎〃缁撴瀯銆佹洿鏂拌缃€夐」绛?        global $wpdb;
         
-        // 示例：添加新的设置选项
+        // 绀轰緥锛氭坊鍔犳柊鐨勮缃€夐」
         $settings = get_option( 'sut_wechat_mini_settings', array() );
         
         if ( ! isset( $settings['enable_template_message'] ) ) {
@@ -732,23 +699,21 @@ class SUT_WeChat_Mini_Install {
     }
     
     /**
-     * 更新到版本1.1.0
+     * 鏇存柊鍒扮増鏈?.1.0
      */
     private static function update_to_1_1_0() {
-        // 在这里添加版本1.1.0的更新操作
-        global $wpdb;
+        // 鍦ㄨ繖閲屾坊鍔犵増鏈?.1.0鐨勬洿鏂版搷浣?        global $wpdb;
         
-        // 示例：修改现有表结构
+        // 绀轰緥锛氫慨鏀圭幇鏈夎〃缁撴瀯
         $table_name = $wpdb->prefix . 'sut_wechat_mini_users';
         
-        // 检查字段是否存在
-        $column_exists = $wpdb->get_var( "SHOW COLUMNS FROM $table_name LIKE 'session_key'" );
+        // 妫€鏌ュ瓧娈垫槸鍚﹀瓨鍦?        $column_exists = $wpdb->get_var( "SHOW COLUMNS FROM $table_name LIKE 'session_key'" );
         
         if ( ! $column_exists ) {
             $wpdb->query( "ALTER TABLE $table_name ADD COLUMN session_key varchar(100) DEFAULT NULL AFTER language" );
         }
         
-        // 示例：添加新的设置选项
+        // 绀轰緥锛氭坊鍔犳柊鐨勮缃€夐」
         $settings = get_option( 'sut_wechat_mini_settings', array() );
         
         if ( ! isset( $settings['enable_multi_language'] ) ) {
@@ -763,16 +728,14 @@ class SUT_WeChat_Mini_Install {
     }
     
     /**
-     * 更新到版本1.2.0
+     * 鏇存柊鍒扮増鏈?.2.0
      */
     private static function update_to_1_2_0() {
-        // 在这里添加版本1.2.0的更新操作
-        global $wpdb;
+        // 鍦ㄨ繖閲屾坊鍔犵増鏈?.2.0鐨勬洿鏂版搷浣?        global $wpdb;
         
-        // 示例：添加新的数据库表
-        $table_name = $wpdb->prefix . 'sut_wechat_mini_points';
+        // 绀轰緥锛氭坊鍔犳柊鐨勬暟鎹簱琛?        $table_name = $wpdb->prefix . 'sut_wechat_mini_points';
         
-        // 检查表是否存在
+        // 妫€鏌ヨ〃鏄惁瀛樺湪
         $table_exists = $wpdb->get_var( "SHOW TABLES LIKE '$table_name'" );
         
         if ( ! $table_exists ) {
@@ -796,7 +759,7 @@ class SUT_WeChat_Mini_Install {
             dbDelta( $sql );
         }
         
-        // 示例：添加新的设置选项
+        // 绀轰緥锛氭坊鍔犳柊鐨勮缃€夐」
         $settings = get_option( 'sut_wechat_mini_settings', array() );
         
         if ( ! isset( $settings['enable_statistics'] ) ) {
@@ -811,13 +774,13 @@ class SUT_WeChat_Mini_Install {
     }
     
     /**
-     * 记录更新日志
+     * 璁板綍鏇存柊鏃ュ織
      *
-     * @param string $old_version 旧版本号
-     * @param string $new_version 新版本号
+     * @param string $old_version 鏃х増鏈彿
+     * @param string $new_version 鏂扮増鏈彿
      */
     private static function log_update( $old_version, $new_version ) {
-        // 创建日志数据
+        // 鍒涘缓鏃ュ織鏁版嵁
         $log_data = array(
             'action' => 'update',
             'old_version' => $old_version,
@@ -825,33 +788,31 @@ class SUT_WeChat_Mini_Install {
             'timestamp' => current_time( 'mysql' ),
         );
         
-        // 保存更新日志
+        // 淇濆瓨鏇存柊鏃ュ織
         $update_logs = get_option( 'sut_wechat_mini_update_logs', array() );
         $update_logs[] = $log_data;
         update_option( 'sut_wechat_mini_update_logs', $update_logs );
         
-        // 如果启用了调试模式，记录详细日志
+        // 濡傛灉鍚敤浜嗚皟璇曟ā寮忥紝璁板綍璇︾粏鏃ュ織
         if ( WP_DEBUG ) {
-            error_log( 'SUT微信小程序插件已更新: ' . json_encode( $log_data ) );
+            error_log( 'SUT寰俊灏忕▼搴忔彃浠跺凡鏇存柊: ' . json_encode( $log_data ) );
         }
     }
     
     /**
-     * 检查是否需要更新
-     *
-     * @return array 更新信息
+     * 妫€鏌ユ槸鍚﹂渶瑕佹洿鏂?     *
+     * @return array 鏇存柊淇℃伅
      */
     public static function check_for_updates() {
-        // 获取当前版本
+        // 鑾峰彇褰撳墠鐗堟湰
         $current_version = SUT_WECHAT_MINI_VERSION;
         
-        // 检查是否已经检查过更新（避免频繁检查）
+        // 妫€鏌ユ槸鍚﹀凡缁忔鏌ヨ繃鏇存柊锛堥伩鍏嶉绻佹鏌ワ級
         $last_check = get_option( 'sut_wechat_mini_last_update_check', 0 );
-        $check_interval = 24 * 60 * 60; // 24小时
+        $check_interval = 24 * 60 * 60; // 24灏忔椂
         
         if ( time() - $last_check < $check_interval ) {
-            // 从缓存获取更新信息
-            $update_available = get_option( 'sut_wechat_mini_update_available', false );
+            // 浠庣紦瀛樿幏鍙栨洿鏂颁俊鎭?            $update_available = get_option( 'sut_wechat_mini_update_available', false );
             
             return array(
                 'update_available' => $update_available,
@@ -859,18 +820,16 @@ class SUT_WeChat_Mini_Install {
             );
         }
         
-        // 更新最后检查时间
-        update_option( 'sut_wechat_mini_last_update_check', time() );
+        // 鏇存柊鏈€鍚庢鏌ユ椂闂?        update_option( 'sut_wechat_mini_last_update_check', time() );
         
-        // 模拟检查更新（实际项目中应该从官方服务器检查）
+        // 妯℃嫙妫€鏌ユ洿鏂帮紙瀹為檯椤圭洰涓簲璇ヤ粠瀹樻柟鏈嶅姟鍣ㄦ鏌ワ級
         $update_available = false;
         $new_version = $current_version;
         $update_url = '';
         $update_description = '';
         
-        // 这里应该是实际的更新检查逻辑
-        // 例如：发送请求到官方服务器检查是否有新版本
-        /*
+        // 杩欓噷搴旇鏄疄闄呯殑鏇存柊妫€鏌ラ€昏緫
+        // 渚嬪锛氬彂閫佽姹傚埌瀹樻柟鏈嶅姟鍣ㄦ鏌ユ槸鍚︽湁鏂扮増鏈?        /*
         $response = wp_remote_get( 'https://example.com/wp-json/sut-wechat-mini/v1/update-check', array(
             'timeout' => 10,
             'sslverify' => true,
@@ -892,7 +851,7 @@ class SUT_WeChat_Mini_Install {
         }
         */
         
-        // 保存更新信息
+        // 淇濆瓨鏇存柊淇℃伅
         update_option( 'sut_wechat_mini_update_available', $update_available );
         
         if ( $update_available ) {
@@ -911,44 +870,44 @@ class SUT_WeChat_Mini_Install {
     }
     
     /**
-     * 清理插件数据
+     * 娓呯悊鎻掍欢鏁版嵁
      */
     public static function clean_data() {
         global $wpdb;
         
-        // 获取保留天数设置
+        // 鑾峰彇淇濈暀澶╂暟璁剧疆
         $settings = get_option( 'sut_wechat_mini_settings', array() );
         $retention_days = isset( $settings['statistics_retention_days'] ) ? intval( $settings['statistics_retention_days'] ) : 30;
         
-        // 计算截止日期
+        // 璁＄畻鎴鏃ユ湡
         $cutoff_date = date( 'Y-m-d H:i:s', strtotime( "-$retention_days days" ) );
         
-        // 清理API日志
+        // 娓呯悊API鏃ュ織
         $table_name = $wpdb->prefix . 'sut_wechat_mini_api_logs';
         $wpdb->query( $wpdb->prepare( "DELETE FROM $table_name WHERE request_time < %s", $cutoff_date ) );
         
-        // 清理支付日志
+        // 娓呯悊鏀粯鏃ュ織
         $table_name = $wpdb->prefix . 'sut_wechat_mini_payment_logs';
         $wpdb->query( $wpdb->prepare( "DELETE FROM $table_name WHERE create_time < %s AND status != 'pending'", $cutoff_date ) );
         
-        // 清理浏览历史
+        // 娓呯悊娴忚鍘嗗彶
         $table_name = $wpdb->prefix . 'sut_wechat_mini_browse_history';
         $wpdb->query( $wpdb->prepare( "DELETE FROM $table_name WHERE browse_time < %s", $cutoff_date ) );
         
-        // 记录清理日志
+        // 璁板綍娓呯悊鏃ュ織
         self::log_clean_data( $retention_days, $cutoff_date );
         
         return true;
     }
     
     /**
-     * 记录清理数据日志
+     * 璁板綍娓呯悊鏁版嵁鏃ュ織
      *
-     * @param int $retention_days 保留天数
-     * @param string $cutoff_date 截止日期
+     * @param int $retention_days 淇濈暀澶╂暟
+     * @param string $cutoff_date 鎴鏃ユ湡
      */
     private static function log_clean_data( $retention_days, $cutoff_date ) {
-        // 创建日志数据
+        // 鍒涘缓鏃ュ織鏁版嵁
         $log_data = array(
             'action' => 'clean_data',
             'retention_days' => $retention_days,
@@ -956,92 +915,87 @@ class SUT_WeChat_Mini_Install {
             'timestamp' => current_time( 'mysql' ),
         );
         
-        // 保存清理日志
+        // 淇濆瓨娓呯悊鏃ュ織
         $clean_logs = get_option( 'sut_wechat_mini_clean_logs', array() );
         $clean_logs[] = $log_data;
         update_option( 'sut_wechat_mini_clean_logs', $clean_logs );
         
-        // 如果启用了调试模式，记录详细日志
+        // 濡傛灉鍚敤浜嗚皟璇曟ā寮忥紝璁板綍璇︾粏鏃ュ織
         if ( WP_DEBUG ) {
-            error_log( 'SUT微信小程序插件数据已清理: ' . json_encode( $log_data ) );
+            error_log( 'SUT寰俊灏忕▼搴忔彃浠舵暟鎹凡娓呯悊: ' . json_encode( $log_data ) );
         }
     }
     
     /**
-     * 获取插件统计信息
+     * 鑾峰彇鎻掍欢缁熻淇℃伅
      *
-     * @return array 统计信息
+     * @return array 缁熻淇℃伅
      */
     public static function get_statistics() {
         global $wpdb;
         
         $statistics = array();
         
-        // 获取用户数量
+        // 鑾峰彇鐢ㄦ埛鏁伴噺
         $table_name = $wpdb->prefix . 'sut_wechat_mini_users';
         $statistics['total_users'] = $wpdb->get_var( "SELECT COUNT(*) FROM $table_name" );
         
-        // 获取今日新增用户数量
+        // 鑾峰彇浠婃棩鏂板鐢ㄦ埛鏁伴噺
         $today = date( 'Y-m-d 00:00:00' );
         $statistics['today_new_users'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $table_name WHERE create_time >= %s", $today ) );
         
-        // 获取订单数量
+        // 鑾峰彇璁㈠崟鏁伴噺
         $table_name = $wpdb->prefix . 'sut_wechat_mini_orders';
         $statistics['total_orders'] = $wpdb->get_var( "SELECT COUNT(*) FROM $table_name" );
         
-        // 获取今日订单数量
+        // 鑾峰彇浠婃棩璁㈠崟鏁伴噺
         $statistics['today_orders'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $table_name WHERE create_time >= %s", $today ) );
         
-        // 获取总销售额
+        // 鑾峰彇鎬婚攢鍞
         $statistics['total_sales'] = $wpdb->get_var( "SELECT SUM(total_amount) FROM $table_name WHERE status NOT IN ('cancelled', 'failed')" );
         
-        // 获取今日销售额
+        // 鑾峰彇浠婃棩閿€鍞
         $statistics['today_sales'] = $wpdb->get_var( $wpdb->prepare( "SELECT SUM(total_amount) FROM $table_name WHERE create_time >= %s AND status NOT IN ('cancelled', 'failed')", $today ) );
         
-        // 获取API请求数量
+        // 鑾峰彇API璇锋眰鏁伴噺
         $table_name = $wpdb->prefix . 'sut_wechat_mini_api_logs';
         $statistics['total_api_requests'] = $wpdb->get_var( "SELECT COUNT(*) FROM $table_name" );
         
-        // 获取今日API请求数量
+        // 鑾峰彇浠婃棩API璇锋眰鏁伴噺
         $statistics['today_api_requests'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $table_name WHERE request_time >= %s", $today ) );
         
-        // 获取错误请求数量
+        // 鑾峰彇閿欒璇锋眰鏁伴噺
         $statistics['error_api_requests'] = $wpdb->get_var( "SELECT COUNT(*) FROM $table_name WHERE status_code >= 400" );
         
-        // 获取支付成功的订单数量
-        $table_name = $wpdb->prefix . 'sut_wechat_mini_orders';
+        // 鑾峰彇鏀粯鎴愬姛鐨勮鍗曟暟閲?        $table_name = $wpdb->prefix . 'sut_wechat_mini_orders';
         $statistics['paid_orders'] = $wpdb->get_var( "SELECT COUNT(*) FROM $table_name WHERE status = 'paid'" );
         
-        // 获取完成的订单数量
-        $statistics['completed_orders'] = $wpdb->get_var( "SELECT COUNT(*) FROM $table_name WHERE status = 'completed'" );
+        // 鑾峰彇瀹屾垚鐨勮鍗曟暟閲?        $statistics['completed_orders'] = $wpdb->get_var( "SELECT COUNT(*) FROM $table_name WHERE status = 'completed'" );
         
-        // 获取取消的订单数量
-        $statistics['cancelled_orders'] = $wpdb->get_var( "SELECT COUNT(*) FROM $table_name WHERE status = 'cancelled'" );
+        // 鑾峰彇鍙栨秷鐨勮鍗曟暟閲?        $statistics['cancelled_orders'] = $wpdb->get_var( "SELECT COUNT(*) FROM $table_name WHERE status = 'cancelled'" );
         
-        // 获取失败的订单数量
-        $statistics['failed_orders'] = $wpdb->get_var( "SELECT COUNT(*) FROM $table_name WHERE status = 'failed'" );
+        // 鑾峰彇澶辫触鐨勮鍗曟暟閲?        $statistics['failed_orders'] = $wpdb->get_var( "SELECT COUNT(*) FROM $table_name WHERE status = 'failed'" );
         
-        // 获取收藏数量
+        // 鑾峰彇鏀惰棌鏁伴噺
         $table_name = $wpdb->prefix . 'sut_wechat_mini_user_favorites';
         $statistics['total_favorites'] = $wpdb->get_var( "SELECT COUNT(*) FROM $table_name" );
         
-        // 获取签到数量
+        // 鑾峰彇绛惧埌鏁伴噺
         $table_name = $wpdb->prefix . 'sut_wechat_mini_user_checkins';
         $statistics['total_checkins'] = $wpdb->get_var( "SELECT COUNT(*) FROM $table_name" );
         
-        // 获取地址数量
+        // 鑾峰彇鍦板潃鏁伴噺
         $table_name = $wpdb->prefix . 'sut_wechat_mini_user_addresses';
         $statistics['total_addresses'] = $wpdb->get_var( "SELECT COUNT(*) FROM $table_name" );
         
-        // 获取缓存统计（如果启用了缓存）
-        if ( function_exists( 'wp_cache_get_stats' ) ) {
+        // 鑾峰彇缂撳瓨缁熻锛堝鏋滃惎鐢ㄤ簡缂撳瓨锛?        if ( function_exists( 'wp_cache_get_stats' ) ) {
             $cache_stats = wp_cache_get_stats();
             $statistics['cache_size'] = isset( $cache_stats['cache_size'] ) ? $cache_stats['cache_size'] : 0;
             $statistics['cache_hits'] = isset( $cache_stats['cache_hits'] ) ? $cache_stats['cache_hits'] : 0;
             $statistics['cache_misses'] = isset( $cache_stats['cache_misses'] ) ? $cache_stats['cache_misses'] : 0;
         }
         
-        // 确保统计数据类型正确
+        // 纭繚缁熻鏁版嵁绫诲瀷姝ｇ‘
         foreach ( $statistics as $key => $value ) {
             if ( is_null( $value ) ) {
                 $statistics[$key] = 0;

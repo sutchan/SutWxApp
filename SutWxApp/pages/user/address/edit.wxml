@@ -1,47 +1,47 @@
-<!-- 地址编辑页面结构 -->
+﻿<!-- 鍦板潃缂栬緫椤甸潰缁撴瀯 -->
 <view class="container">
-  <!-- 加载状态 -->
+  <!-- 鍔犺浇鐘舵€?-->
   <view class="loading" wx:if="{{loading}}">
-    <text>加载中...</text>
+    <text>鍔犺浇涓?..</text>
   </view>
   
-  <!-- 编辑表单 -->
+  <!-- 缂栬緫琛ㄥ崟 -->
   <form class="address-form" wx:else bindsubmit="onSubmit">
-    <!-- 收货人姓名 -->
+    <!-- 鏀惰揣浜哄鍚?-->
     <view class="form-item">
-      <view class="label">收货人</view>
-      <input class="input" type="text" placeholder="请输入收货人姓名" value="{{name}}" bindinput="onNameInput" name="name" />
+      <view class="label">鏀惰揣浜?/view>
+      <input class="input" type="text" placeholder="璇疯緭鍏ユ敹璐т汉濮撳悕" value="{{name}}" bindinput="onNameInput" name="name" />
     </view>
     
-    <!-- 手机号码 -->
+    <!-- 鎵嬫満鍙风爜 -->
     <view class="form-item">
-      <view class="label">手机号码</view>
-      <input class="input" type="number" placeholder="请输入手机号码" value="{{phone}}" bindinput="onPhoneInput" name="phone" maxlength="11" />
+      <view class="label">鎵嬫満鍙风爜</view>
+      <input class="input" type="number" placeholder="璇疯緭鍏ユ墜鏈哄彿鐮? value="{{phone}}" bindinput="onPhoneInput" name="phone" maxlength="11" />
     </view>
     
-    <!-- 所在地区 -->
+    <!-- 鎵€鍦ㄥ湴鍖?-->
     <view class="form-item">
-      <view class="label">所在地区</view>
+      <view class="label">鎵€鍦ㄥ湴鍖?/view>
       <picker mode="region" bindchange="onRegionChange" value="{{[province, city, district]}}" custom-item="" name="region">
         <view class="picker">
           <text wx:if="{{province && city && district}}">{{province}} {{city}} {{district}}</text>
-          <text class="placeholder" wx:else>请选择省/市/区</text>
+          <text class="placeholder" wx:else>璇烽€夋嫨鐪?甯?鍖?/text>
         </view>
       </picker>
     </view>
     
-    <!-- 详细地址 -->
+    <!-- 璇︾粏鍦板潃 -->
     <view class="form-item">
-      <view class="label">详细地址</view>
-      <textarea class="textarea" placeholder="请输入详细地址信息，如街道、门牌号等" value="{{detail}}" bindinput="onDetailInput" name="detail" auto-height />
+      <view class="label">璇︾粏鍦板潃</view>
+      <textarea class="textarea" placeholder="璇疯緭鍏ヨ缁嗗湴鍧€淇℃伅锛屽琛楅亾銆侀棬鐗屽彿绛? value="{{detail}}" bindinput="onDetailInput" name="detail" auto-height />
     </view>
     
-    <!-- 是否默认地址 -->
+    <!-- 鏄惁榛樿鍦板潃 -->
     <view class="form-item checkbox-item">
-      <checkbox checked="{{isDefault}}" bindchange="onDefaultChange" name="isDefault" />设为默认收货地址
+      <checkbox checked="{{isDefault}}" bindchange="onDefaultChange" name="isDefault" />璁句负榛樿鏀惰揣鍦板潃
     </view>
     
-    <!-- 提交按钮 -->
-    <button class="submit-btn" form-type="submit" loading="{{submitting}}" disabled="{{submitting}}">{{mode === 'add' ? '保存' : '保存修改'}}</button>
+    <!-- 鎻愪氦鎸夐挳 -->
+    <button class="submit-btn" form-type="submit" loading="{{submitting}}" disabled="{{submitting}}">{{mode === 'add' ? '淇濆瓨' : '淇濆瓨淇敼'}}</button>
   </form>
 </view>

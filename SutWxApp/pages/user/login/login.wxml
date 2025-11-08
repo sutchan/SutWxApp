@@ -1,6 +1,6 @@
-<!-- pages/user/login/login.wxml -->
+﻿<!-- pages/user/login/login.wxml -->
 <view class="login-container">
-  <!-- 骨架屏 - 覆盖整个页面 -->
+  <!-- 楠ㄦ灦灞?- 瑕嗙洊鏁翠釜椤甸潰 -->
   <view class="skeleton-container" wx:if="{{showSkeleton}}" aria-hidden="true">
     <view class="skeleton-logo"></view>
     <view class="skeleton-title"></view>
@@ -11,91 +11,11 @@
     <view class="skeleton-feature"></view>
   </view>
 
-  <!-- 顶部Logo -->
-  <view class="logo-container" aria-label="应用Logo和名称">
-    <image src="/images/logo.png" class="logo" aria-label="应用Logo"></image>
-    <text class="app-name">SUT微信小程序</text>
-    <text class="app-slogan">连接校园，便捷生活</text>
-  </view>
-
-  <!-- 登录按钮区域 -->
-  <view class="login-btn-container">
-    <!-- 加载状态 -->
-    <view class="loading" wx:if="{{isLoading}}" aria-label="登录中">
-      <view class="loading-icon"></view>
-      <text>登录中...</text>
-    </view>
-
-    <!-- 错误状态 -->
-    <view class="error-message" wx:if="{{errorMessage}}" aria-label="错误提示">
-      <text>{{errorMessage}}</text>
-      <button class="retry-btn" bindtap="onRetry" aria-label="重试">重试</button>
-    </view>
-
-    <!-- 主要登录按钮 -->
-    <button wx:if="{{canIUseGetUserProfile && !isLoading}}" type="primary" class="login-btn" bindtap="getUserProfile" aria-label="微信一键登录">
-      微信一键登录
-    </button>
-
-    <!-- 兼容旧版本的登录按钮 -->
-    <button wx:elif="{{!isLoading}}" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo" type="primary" class="login-btn" aria-label="微信一键登录">
-      微信一键登录
-    </button>
-  </view>
-
-  <!-- 授权说明 -->
-  <view class="auth-tips" aria-label="授权说明">
-    <text>登录后可享受更多功能</text>
-  </view>
-
-  <!-- 授权功能列表 -->
-  <view class="auth-features" wx:if="{{showFeatures}}" aria-label="授权后可使用的功能">
-    <view class="feature-item">
-      <image src="/images/features/article.png" class="feature-icon"></image>
-      <text class="feature-text">浏览校园资讯</text>
-    </view>
-    <view class="feature-item">
-      <image src="/images/features/signin.png" class="feature-icon"></image>
-      <text class="feature-text">每日签到积分</text>
-    </view>
-    <view class="feature-item">
-      <image src="/images/features/collection.png" class="feature-icon"></image>
-      <text class="feature-text">收藏感兴趣的内容</text>
-    </view>
-  </view>
-
-  <!-- 用户信息展示区域（仅用于演示，实际项目中不推荐这样使用） -->
-  <view class="user-info-container" wx:if="{{canIUseOpenData}}" aria-hidden="true">
-    <view class="user-info">
-      <open-data type="userAvatarUrl"></open-data>
-      <open-data type="userNickName"></open-data>
-    </view>
-  </view>
-
-  <!-- 隐私政策同意复选框 -->
-  <view class="privacy-checkbox">
-    <checkbox checked="{{privacyPolicyAccepted}}" bindtap="togglePrivacyPolicy" aria-label="同意隐私政策和用户协议"></checkbox>
-    <text>我已阅读并同意</text>
-    <text class="link" bindtap="navigateToAgreement" data-type="privacy">《隐私政策》</text>
-    <text>和</text>
-    <text class="link" bindtap="navigateToAgreement" data-type="user">《用户协议》</text>
-  </view>
-
-  <!-- 服务条款和隐私政策 -->
-  <view class="agreement-container" aria-label="协议说明">
-    <text>登录即表示您同意</text>
-    <text class="link" bindtap="navigateToAgreement" data-type="user">《用户协议》</text>
-    <text>和</text>
-    <text class="link" bindtap="navigateToAgreement" data-type="privacy">《隐私政策》</text>
-  </view>
-
-  <!-- 客服联系方式 -->
-  <view class="customer-service">
-    <text class="service-text" bindtap="contactService" aria-label="联系客服">遇到问题？联系客服</text>
-  </view>
-
-  <!-- 版本信息 -->
-  <view class="version-info" wx:if="{{appVersion}}">
-    <text class="version-text">版本 {{appVersion}}</text>
-  </view>
-</view>
+  <!-- 椤堕儴Logo -->
+  <view class="logo-container" aria-label="搴旂敤Logo鍜屽悕绉?>
+    <image src="/images/logo.png" class="logo" aria-label="搴旂敤Logo"></image>
+    <text class="app-name">SUT寰俊灏忕▼搴?/text>
+    <text class="app-slogan">杩炴帴鏍″洯锛屼究鎹风敓娲?/text>
+  </view>\n\n  <!-- 鐧诲綍鎸夐挳鍖哄煙 -->\n  <view class="login-btn-container">\n    <!-- 鍔犺浇鐘舵€?-->\n    <view class="loading" wx:if="{{isLoading}}" aria-label="鐧诲綍涓?>\n      <view class="loading-icon"></view>\n      <text>鐧诲綍涓?..</text>\n    </view>\n\n    <!-- 閿欒鐘舵€?-->\n    <view class="error-message" wx:if="{{errorMessage}}" aria-label="閿欒鎻愮ず">\n      <text>{{errorMessage}}</text>\n      <button class="retry-btn" bindtap="onRetry" aria-label="閲嶈瘯">閲嶈瘯</button>\n    </view>\n\n    <!-- 涓昏鐧诲綍鎸夐挳 -->\n    <button wx:if="{{canIUseGetUserProfile && !isLoading}}" type="primary" class="login-btn" bindtap="getUserProfile" aria-label="寰俊涓€閿櫥褰?>\n      寰俊涓€閿櫥褰?
+    </button>\n\n    <!-- 鍏煎鏃х増鏈殑鐧诲綍鎸夐挳 -->\n    <button wx:elif="{{!isLoading}}" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo" type="primary" class="login-btn" aria-label="寰俊涓€閿櫥褰?>\n      寰俊涓€閿櫥褰?
+    </button>\n  </view>\n\n  <!-- 鎺堟潈璇存槑 -->\n  <view class="auth-tips" aria-label="鎺堟潈璇存槑">\n    <text>鐧诲綍鍚庡彲浜彈鏇村鍔熻兘</text>\n  </view>\n\n  <!-- 鎺堟潈鍔熻兘鍒楄〃 -->\n  <view class="auth-features" wx:if="{{showFeatures}}" aria-label="鎺堟潈鍚庡彲浣跨敤鐨勫姛鑳?>\n    <view class="feature-item">\n      <image src="/images/features/article.png" class="feature-icon"></image>\n      <text class="feature-text">娴忚鏍″洯璧勮</text>\n    </view>\n    <view class="feature-item">\n      <image src="/images/features/signin.png" class="feature-icon"></image>\n      <text class="feature-text">姣忔棩绛惧埌绉垎</text>\n    </view>\n    <view class="feature-item">\n      <image src="/images/features/collection.png" class="feature-icon"></image>\n      <text class="feature-text">鏀惰棌鎰熷叴瓒ｇ殑鍐呭</text>\n    </view>\n  </view>\n\n  <!-- 鐢ㄦ埛淇℃伅灞曠ず鍖哄煙锛堜粎鐢ㄤ簬婕旂ず锛屽疄闄呴」鐩腑涓嶆帹鑽愯繖鏍蜂娇鐢級 -->\n  <view class="user-info-container" wx:if="{{canIUseOpenData}}" aria-hidden="true">\n    <view class="user-info">\n      <open-data type="userAvatarUrl"></open-data>\n      <open-data type="userNickName"></open-data>\n    </view>\n  </view>\n\n  <!-- 闅愮鏀跨瓥鍚屾剰澶嶉€夋 -->\n  <view class="privacy-checkbox">\n    <checkbox checked="{{privacyPolicyAccepted}}" bindtap="togglePrivacyPolicy" aria-label="鍚屾剰闅愮鏀跨瓥鍜岀敤鎴峰崗璁?></checkbox>\n    <text>鎴戝凡闃呰骞跺悓鎰?/text>\n    <text class="link" bindtap="navigateToAgreement" data-type="privacy">銆婇殣绉佹斂绛栥€?/text>\n    <text>鍜?/text>\n    <text class="link" bindtap="navigateToAgreement" data-type="user">銆婄敤鎴峰崗璁€?/text>\n  </view>\n\n  <!-- 鏈嶅姟鏉℃鍜岄殣绉佹斂绛?-->\n  <view class="agreement-container" aria-label="鍗忚璇存槑">\n    <text>鐧诲綍鍗宠〃绀烘偍鍚屾剰</text>\n    <text class="link" bindtap="navigateToAgreement" data-type="user">銆婄敤鎴峰崗璁€?/text>\n    <text>鍜?/text>\n    <text class="link" bindtap="navigateToAgreement" data-type="privacy">銆婇殣绉佹斂绛栥€?/text>\n  </view>\n\n  <!-- 瀹㈡湇鑱旂郴鏂瑰紡 -->\n  <view class="customer-service">\n    <text class="service-text" bindtap="contactService" aria-label="鑱旂郴瀹㈡湇">閬囧埌闂锛熻仈绯诲鏈?/text>\n  </view>\n\n  <!-- 鐗堟湰淇℃伅 -->\n  <view class="version-info" wx:if="{{appVersion}}">\n    <text class="version-text">鐗堟湰 {{appVersion}}</text>\n  </view>\n</view>

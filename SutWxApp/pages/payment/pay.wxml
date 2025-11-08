@@ -1,0 +1,136 @@
+﻿<!-- pay.wxml - 鏀粯椤甸潰妯℃澘 -->
+
+<view class="payment-container">
+  <!-- 椤堕儴瀵艰埅 -->
+  <view class="nav-bar">
+    <view class="nav-left" bindtap="cancelPayment">
+      <text>鍙栨秷</text>
+    </view>
+    <view class="nav-title">璁㈠崟鏀粯</view>
+    <view class="nav-right"></view>
+  </view>
+
+  <!-- 鏀粯鐘舵€佷负绛夊緟鏀粯 -->
+  <view wx:if="{{payStatus === 'pending'}}">
+    <!-- 璁㈠崟淇℃伅 -->
+    <view class="order-info">
+      <view class="amount-section">
+        <view class="amount-label">鏀粯閲戦</view>
+        <view class="amount-value">楼{{amount}}</view>
+      </view>
+      
+      <view class="order-no-section" wx:if="{{orderDetail}}">
+        <view class="order-no-label">璁㈠崟缂栧彿</view>
+        <view class="order-no-value">{{orderDetail.order_no}}</view>
+      </view>
+      
+      <view class="countdown-section">
+        <view class="countdown-label">璇峰湪</view>
+        <view class="countdown-value">{{countdownText}}</view>
+        <view class="countdown-label">鍐呭畬鎴愭敮浠?/view>
+      </view>
+    </view>
+
+    <!-- 鏀粯鏂瑰紡 -->
+    <view class="payment-methods">
+      <view class="section-title">閫夋嫨鏀粯鏂瑰紡</view>
+      
+      <!-- 寰俊鏀粯 -->
+      <view 
+        class="payment-method {{payMethod === 'wechat' ? 'selected' : ''}}" 
+        bindtap="selectPayMethod" 
+        data-method="wechat"
+      >
+        <view class="payment-icon">
+          <image src="/assets/images/wechat-pay.png" mode="aspectFit"></image>
+        </view>
+        <view class="payment-name">寰俊鏀粯</view>
+        <view class="payment-check {{payMethod === 'wechat' ? 'selected' : ''}}">
+          <image wx:if="{{payMethod === 'wechat'}}" src="/assets/images/check.png" mode="aspectFit"></image>
+        </view>
+      </view>
+      
+      <!-- 鏀粯瀹?-->
+      <view 
+        class="payment-method {{payMethod === 'alipay' ? 'selected' : ''}}" 
+        bindtap="selectPayMethod" 
+        data-method="alipay"
+      >
+        <view class="payment-icon">
+          <image src="/assets/images/alipay.png" mode="aspectFit"></image>
+        </view>
+        <view class="payment-name">鏀粯瀹?/view>
+        <view class="payment-check {{payMethod === 'alipay' ? 'selected' : ''}}">
+          <image wx:if="{{payMethod === 'alipay'}}" src="/assets/images/check.png" mode="aspectFit"></image>
+        </view>
+      </view>
+    </view>
+
+    <!-- 璁㈠崟璇︽儏 -->
+    <view class="order-detail-section" wx:if="{{orderDetail}}">
+      <view class="section-title">璁㈠崟淇℃伅</view>
+      <view class="order-detail-content">
+        <view class="detail-item">
+          <view class="detail-label">鍒涘缓鏃堕棿</view>
+          <view class="detail-value">{{orderDetail.created_at}}</view>
+        </view>
+        <view class="detail-item">
+          <view class="detail-label">鏀粯鏂瑰紡</view>
+          <view class="detail-value">
+            <text wx:if="{{payMethod === 'wechat'}}">寰俊鏀粯</text>
+            <text wx:elif="{{payMethod === 'alipay'}}">鏀粯瀹?/text>
+            <text wx:else>鏈€夋嫨</text>
+          </view>
+        </view>
+        <view class="detail-item" wx:if="{{orderDetail.shipping_address}}">
+          <view class="detail-label">鏀惰揣鍦板潃</view>
+          <view class="detail-value">{{orderDetail.shipping_address.consignee}} {{orderDetail.shipping_address.phone}}</view>
+          <view class="detail-value address-detail">{{orderDetail.shipping_address.province}}{{orderDetail.shipping_address.city}}{{orderDetail.shipping_address.district}}{{orderDetail.shipping_address.address}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 鏀粯鐘舵€佷负鏀粯鎴愬姛 -->
+  <view wx:elif="{{payStatus === 'success'}}">
+    <view class="pay-result success">
+      <view class="result-icon">
+        <image src="/assets/images/success.png" mode="aspectFit"></image>
+      </view>
+      <view class="result-title">鏀粯鎴愬姛</view>
+      <view class="result-amount">楼{{amount}}</view>
+      <view class="result-order" wx:if="{{payResult.orderNo}}">璁㈠崟鍙? {{payResult.orderNo}}</view>
+      
+      <view class="result-buttons">
+        <button class="btn-primary" bindtap="viewOrderDetail">鏌ョ湅璁㈠崟</button>
+        <button class="btn-secondary" bindtap="backToHome">杩斿洖棣栭〉</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 鏀粯鐘舵€佷负鏀粯澶辫触 -->
+  <view wx:elif="{{payStatus === 'failed'}}">
+    <view class="pay-result failed">
+      <view class="result-icon">
+        <image src="/assets/images/failed.png" mode="aspectFit"></image>
+      </view>
+      <view class="result-title">鏀粯澶辫触</view>
+      <view class="result-message">{{payResult.message}}</view>
+      <view class="result-order" wx:if="{{payResult.orderNo}}">璁㈠崟鍙? {{payResult.orderNo}}</view>
+      
+      <view class="result-buttons">
+        <button class="btn-primary" bindtap="retryPayment">閲嶆柊鏀粯</button>
+        <button class="btn-secondary" bindtap="viewOrderDetail">鏌ョ湅璁㈠崟</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 鏀粯鎸夐挳 -->
+  <view class="bottom-bar" wx:if="{{payStatus === 'pending'}}">
+    <view class="bottom-amount">
+      <text>鏀粯閲戦锛?/text>
+      <text class="amount-value">楼{{amount}}</text>
+    </view>
+    <button class="pay-btn" bindtap="initiatePayment" loading="{{loading}}">纭鏀粯</button>
+  </view>
+</view>

@@ -1,34 +1,31 @@
-// 支付页面逻辑
+﻿// 鏀粯椤甸潰閫昏緫
 const app = getApp();
 const { showToast } = app.global;
 
 Page({
   data: {
-    orderId: '', // 订单ID
-    orderInfo: null, // 订单信息
-    paymentMethods: [ // 支付方式列表
-      { id: 'wechat', name: '微信支付', icon: '/images/payment/wechat.png', selected: true },
-      { id: 'alipay', name: '支付宝', icon: '/images/payment/alipay.png', selected: false }
+    orderId: '', // 璁㈠崟ID
+    orderInfo: null, // 璁㈠崟淇℃伅
+    paymentMethods: [ // 鏀粯鏂瑰紡鍒楄〃
+      { id: 'wechat', name: '寰俊鏀粯', icon: '/images/payment/wechat.png', selected: true },
+      { id: 'alipay', name: '鏀粯瀹?, icon: '/images/payment/alipay.png', selected: false }
     ],
-    loading: true, // 加载状态
-    paying: false // 支付中状态
-  },
+    loading: true, // 鍔犺浇鐘舵€?    paying: false // 鏀粯涓姸鎬?  },
 
   /**
-   * 生命周期函数--监听页面加载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
    */
   onLoad: function(options) {
-    // 记录页面访问事件
+    // 璁板綍椤甸潰璁块棶浜嬩欢
     app.analyticsService.track('page_view', {
       page: 'order_pay'
     });
     
-    // 获取订单ID
+    // 鑾峰彇璁㈠崟ID
     const orderId = options.orderId;
     if (!orderId) {
-      showToast('订单信息错误', 'none');
-      // 延迟返回订单列表页
-      setTimeout(() => {
+      showToast('璁㈠崟淇℃伅閿欒', 'none');
+      // 寤惰繜杩斿洖璁㈠崟鍒楄〃椤?      setTimeout(() => {
         wx.navigateTo({
           url: '/pages/order/list/list'
         });
@@ -40,16 +37,16 @@ Page({
       orderId: orderId
     });
     
-    // 加载订单详情
+    // 鍔犺浇璁㈠崟璇︽儏
     this.loadOrderInfo();
   },
 
   /**
-   * 加载订单详情
+   * 鍔犺浇璁㈠崟璇︽儏
    */
   async loadOrderInfo() {
     try {
-      // 使用orderService获取订单详情
+      // 浣跨敤orderService鑾峰彇璁㈠崟璇︽儏
       const res = await app.services.order.getOrderDetail(this.data.orderId);
       this.setData({
         orderInfo: res,
@@ -59,12 +56,12 @@ Page({
       this.setData({
         loading: false
       });
-      showToast(err.message || '加载订单信息失败', 'none');
+      showToast(err.message || '鍔犺浇璁㈠崟淇℃伅澶辫触', 'none');
     }
   },
 
   /**
-   * 选择支付方式
+   * 閫夋嫨鏀粯鏂瑰紡
    */
   onSelectPaymentMethod(e) {
     const methodId = e.currentTarget.dataset.id;
@@ -73,7 +70,7 @@ Page({
       selected: method.id === methodId
     }));
     
-    // 记录支付方式选择事件
+    // 璁板綍鏀粯鏂瑰紡閫夋嫨浜嬩欢
     app.analyticsService.track('payment_method_selected', {
       payment_method: methodId
     });
@@ -84,7 +81,7 @@ Page({
   },
 
   /**
-   * 发起支付
+   * 鍙戣捣鏀粯
    */
   async onPay() {
     if (this.data.paying) {
@@ -96,19 +93,18 @@ Page({
     });
     
     try {
-      // 获取选中的支付方式
-      const selectedMethod = this.data.paymentMethods.find(method => method.selected);
+      // 鑾峰彇閫変腑鐨勬敮浠樻柟寮?      const selectedMethod = this.data.paymentMethods.find(method => method.selected);
       
-      // 记录支付尝试事件
+      // 璁板綍鏀粯灏濊瘯浜嬩欢
       app.analyticsService.track('payment_attempt', {
         order_id: this.data.orderId,
         payment_method: selectedMethod.id,
         amount: this.data.orderInfo?.amount
       });
       
-      // 使用paymentService发起支付
+      // 浣跨敤paymentService鍙戣捣鏀粯
       try {
-        // 调用一站式支付流程
+        // 璋冪敤涓€绔欏紡鏀粯娴佺▼
         const paymentResult = await app.services.payment.payOrder(
           this.data.orderId, 
           selectedMethod.id
@@ -118,7 +114,7 @@ Page({
           paying: false
         });
         
-        // 记录支付成功事件
+        // 璁板綍鏀粯鎴愬姛浜嬩欢
         app.analyticsService.track('payment_success', {
           order_id: this.data.orderId,
           payment_method: selectedMethod.id,
@@ -126,8 +122,8 @@ Page({
         });
         
         wx.showModal({
-          title: '支付成功',
-          content: '您的订单已支付成功，是否查看订单详情？',
+          title: '鏀粯鎴愬姛',
+          content: '鎮ㄧ殑璁㈠崟宸叉敮浠樻垚鍔燂紝鏄惁鏌ョ湅璁㈠崟璇︽儏锛?,
           success: (resModal) => {
             if (resModal.confirm) {
               wx.navigateTo({
@@ -145,31 +141,30 @@ Page({
           paying: false
         });
         
-        // 处理用户取消支付的情况
-        if (error.message && error.message.includes('取消支付')) {
-          showToast('您已取消支付', 'none');
+        // 澶勭悊鐢ㄦ埛鍙栨秷鏀粯鐨勬儏鍐?        if (error.message && error.message.includes('鍙栨秷鏀粯')) {
+          showToast('鎮ㄥ凡鍙栨秷鏀粯', 'none');
           return;
         }
         
-        throw error; // 重新抛出其他错误，由外层catch处理
+        throw error; // 閲嶆柊鎶涘嚭鍏朵粬閿欒锛岀敱澶栧眰catch澶勭悊
       }
     } catch (err) {
       this.setData({
         paying: false
       });
       
-      // 记录支付失败事件
+      // 璁板綍鏀粯澶辫触浜嬩欢
       app.analyticsService.track('payment_failed', {
         order_id: this.data.orderId,
         error: err.message
       });
       
-      showToast(err.message || '支付失败，请重试', 'none');
+      showToast(err.message || '鏀粯澶辫触锛岃閲嶈瘯', 'none');
     }
   },
 
   /**
-   * 查看订单详情
+   * 鏌ョ湅璁㈠崟璇︽儏
    */
   onViewOrderDetail: function() {
     wx.navigateTo({
@@ -178,7 +173,7 @@ Page({
   },
 
   /**
-   * 返回订单列表
+   * 杩斿洖璁㈠崟鍒楄〃
    */
   onBackToOrderList: function() {
     wx.navigateTo({

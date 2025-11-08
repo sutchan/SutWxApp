@@ -1,28 +1,28 @@
-<!-- 用户评论页面 -->
+﻿<!-- 鐢ㄦ埛璇勮椤甸潰 -->
 <view class="comments-container">
-  <!-- 加载状态 -->
+  <!-- 鍔犺浇鐘舵€?-->
   <view class="loading-container" wx:if="{{loading && comments.length === 0}}">
     <view class="loading-spinner"></view>
-    <text class="loading-text">加载中...</text>
+    <text class="loading-text">鍔犺浇涓?..</text>
   </view>
 
-  <!-- 错误状态 -->
+  <!-- 閿欒鐘舵€?-->
   <view class="error-container" wx:elif="{{error}}">
     <image src="/images/error.svg" class="error-icon"></image>
-    <text class="error-text">加载失败</text>
-    <button class="retry-button" bindtap="retryLoad">重试</button>
+    <text class="error-text">鍔犺浇澶辫触</text>
+    <button class="retry-button" bindtap="retryLoad">閲嶈瘯</button>
   </view>
 
-  <!-- 空状态 -->
+  <!-- 绌虹姸鎬?-->
   <view class="empty-container" wx:elif="{{comments.length === 0}}">
     <image src="/images/empty.svg" class="empty-icon"></image>
-    <text class="empty-text">暂无评论</text>
+    <text class="empty-text">鏆傛棤璇勮</text>
   </view>
 
-  <!-- 评论列表 -->
+  <!-- 璇勮鍒楄〃 -->
   <view class="comments-list" wx:else>
     <view class="comment-item" wx:for="{{comments}}" wx:key="id">
-      <!-- 评论内容 -->
+      <!-- 璇勮鍐呭 -->
       <view class="comment-content">
         <view class="comment-header">
           <text class="comment-time">{{item.date || ''}}</text>
@@ -30,17 +30,17 @@
         <text class="comment-text">{{item.content || ''}}</text>
       </view>
 
-      <!-- 文章信息 -->
+      <!-- 鏂囩珷淇℃伅 -->
       <view 
         class="article-info" 
         bindtap="navigateToPostDetail"
         data-post-id="{{item.post_id}}"
       >
-        <text class="article-title">{{item.post_title || '未命名文章'}}</text>
+        <text class="article-title">{{item.post_title || '鏈懡鍚嶆枃绔?}}</text>
         <image src="/images/arrow-right.svg" class="arrow-icon" mode="aspectFit"></image>
       </view>
 
-      <!-- 操作按钮 -->
+      <!-- 鎿嶄綔鎸夐挳 -->
       <view class="comment-actions">
         <button 
           class="delete-button" 
@@ -49,21 +49,21 @@
           data-id="{{item.id}}"
           data-index="{{index}}"
         >
-          删除
+          鍒犻櫎
         </button>
       </view>
     </view>
 
-    <!-- 加载更多 -->
+    <!-- 鍔犺浇鏇村 -->
     <view class="load-more" wx:if="{{hasMore}}">
       <view class="load-more-spinner" wx:if="{{loading}}"></view>
-      <text class="load-more-text" wx:if="{{loading}}">加载更多...</text>
-      <text class="load-more-text" wx:else bindtap="loadMore">点击加载更多</text>
+      <text class="load-more-text" wx:if="{{loading}}">鍔犺浇鏇村...</text>
+      <text class="load-more-text" wx:else bindtap="loadMore">鐐瑰嚮鍔犺浇鏇村</text>
     </view>
 
-    <!-- 没有更多 -->
+    <!-- 娌℃湁鏇村 -->
     <view class="no-more" wx:elif="{{!hasMore && comments.length > 0}}">
-      <text class="no-more-text">没有更多了</text>
+      <text class="no-more-text">娌℃湁鏇村浜?/text>
     </view>
   </view>
 </view>

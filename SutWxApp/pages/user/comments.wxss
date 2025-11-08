@@ -1,11 +1,11 @@
-/* 用户评论页面样式 */
+﻿/* 鐢ㄦ埛璇勮椤甸潰鏍峰紡 */
 .comments-container {
   padding: 20rpx;
   min-height: 100vh;
   background-color: #f5f5f5;
 }
 
-/* 加载状态 */
+/* 鍔犺浇鐘舵€?*/
 .loading-container {
   display: flex;
   flex-direction: column;
@@ -34,7 +34,7 @@
   font-size: 28rpx;
 }
 
-/* 错误状态 */
+/* 閿欒鐘舵€?*/
 .error-container {
   display: flex;
   flex-direction: column;
@@ -70,7 +70,7 @@
   border: none;
 }
 
-/* 空状态 */
+/* 绌虹姸鎬?*/
 .empty-container {
   display: flex;
   flex-direction: column;
@@ -91,7 +91,7 @@
   font-size: 28rpx;
 }
 
-/* 评论列表 */
+/* 璇勮鍒楄〃 */
 .comments-list {
   display: flex;
   flex-direction: column;
@@ -174,7 +174,7 @@
   border: none;
 }
 
-/* 加载更多 */
+/* 鍔犺浇鏇村 */
 .load-more {
   display: flex;
   align-items: center;
@@ -197,7 +197,7 @@
   font-size: 26rpx;
 }
 
-/* 没有更多 */
+/* 娌℃湁鏇村 */
 .no-more {
   display: flex;
   justify-content: center;

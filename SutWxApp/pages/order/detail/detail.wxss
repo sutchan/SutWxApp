@@ -1,11 +1,11 @@
-/* 订单详情页面样式 */
+﻿/* 璁㈠崟璇︽儏椤甸潰鏍峰紡 */
 .container {
   background-color: #f8f8f8;
   min-height: 100vh;
-  padding-bottom: 120rpx; /* 为底部操作栏留出空间 */
+  padding-bottom: 120rpx; /* 涓哄簳閮ㄦ搷浣滄爮鐣欏嚭绌洪棿 */
 }
 
-/* 加载状态样式 */
+/* 鍔犺浇鐘舵€佹牱寮?*/
 .loading {
   padding: 60rpx;
   text-align: center;
@@ -13,7 +13,7 @@
   color: #999999;
 }
 
-/* 错误状态样式 */
+/* 閿欒鐘舵€佹牱寮?*/
 .error {
   padding: 60rpx 20rpx;
   text-align: center;
@@ -42,7 +42,7 @@
   margin: 0 10rpx;
 }
 
-/* 订单状态卡片样式 */
+/* 璁㈠崟鐘舵€佸崱鐗囨牱寮?*/
 .status-card {
   background-color: #ffffff;
   padding: 40rpx 30rpx;
@@ -55,7 +55,7 @@
   font-weight: bold;
 }
 
-/* 地址卡片样式 */
+/* 鍦板潃鍗＄墖鏍峰紡 */
 .address-card {
   background-color: #ffffff;
   padding: 30rpx;
@@ -87,7 +87,7 @@
   line-height: 36rpx;
 }
 
-/* 商品卡片样式 */
+/* 鍟嗗搧鍗＄墖鏍峰紡 */
 .products-card,
 .order-info-card,
 .price-card {
@@ -148,7 +148,7 @@
   color: #999999;
 }
 
-/* 订单信息样式 */
+/* 璁㈠崟淇℃伅鏍峰紡 */
 .info-item {
   display: flex;
   justify-content: space-between;
@@ -173,7 +173,7 @@
   text-align: right;
 }
 
-/* 价格信息样式 */
+/* 浠锋牸淇℃伅鏍峰紡 */
 .price-item {
   display: flex;
   justify-content: space-between;
@@ -200,7 +200,7 @@
   margin-left: 8rpx;
 }
 
-/* 底部操作栏样式 */
+/* 搴曢儴鎿嶄綔鏍忔牱寮?*/
 .bottom-bar {
   position: fixed;
   bottom: 0;

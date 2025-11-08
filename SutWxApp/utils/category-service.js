@@ -1,43 +1,42 @@
-// category-service.js - 分类相关服务模块
-// 处理分类列表和分类下的文章等功能
+﻿// category-service.js - 鍒嗙被鐩稿叧鏈嶅姟妯″潡
+// 澶勭悊鍒嗙被鍒楄〃鍜屽垎绫讳笅鐨勬枃绔犵瓑鍔熻兘
 
 import api from './api';
 import { getStorage, setStorage } from './global';
 
-// 缓存配置
+// 缂撳瓨閰嶇疆
 const CACHE_DURATION = {
-  CATEGORIES: 30 * 60 * 1000, // 30分钟
-  CATEGORY_ARTICLES: 5 * 60 * 1000 // 5分钟
+  CATEGORIES: 30 * 60 * 1000, // 30鍒嗛挓
+  CATEGORY_ARTICLES: 5 * 60 * 1000 // 5鍒嗛挓
 };
 
 /**
- * 获取分类列表
- * @param {boolean} ignoreCache - 是否忽略缓存，默认false
- * @param {Object} params - 查询参数
- * @param {boolean} params.hide_empty - 是否隐藏空分类，默认true
- * @returns {Promise<Array>} - 返回分类列表
+ * 鑾峰彇鍒嗙被鍒楄〃
+ * @param {boolean} ignoreCache - 鏄惁蹇界暐缂撳瓨锛岄粯璁alse
+ * @param {Object} params - 鏌ヨ鍙傛暟
+ * @param {boolean} params.hide_empty - 鏄惁闅愯棌绌哄垎绫伙紝榛樿true
+ * @returns {Promise<Array>} - 杩斿洖鍒嗙被鍒楄〃
  */
 export const getCategories = async (ignoreCache = false, params = {}) => {
   try {
     const cacheKey = 'cache_categories';
     
-    // 尝试从缓存获取数据
-    if (!ignoreCache) {
+    // 灏濊瘯浠庣紦瀛樿幏鍙栨暟鎹?    if (!ignoreCache) {
       const cachedData = getStorage(cacheKey);
       if (cachedData && (Date.now() - cachedData.timestamp < CACHE_DURATION.CATEGORIES)) {
         return cachedData.data;
       }
     }
     
-    // 构建查询参数
+    // 鏋勫缓鏌ヨ鍙傛暟
     const queryParams = {
       hide_empty: params.hide_empty !== undefined ? params.hide_empty : true
     };
     
-    // 调用API
+    // 璋冪敤API
     const categories = await api.get('/categories', queryParams);
     
-    // 缓存数据
+    // 缂撳瓨鏁版嵁
     setStorage(cacheKey, {
       data: categories,
       timestamp: Date.now()
@@ -45,13 +44,13 @@ export const getCategories = async (ignoreCache = false, params = {}) => {
     
     return categories;
   } catch (error) {
-    console.error('获取分类列表失败:', error);
+    console.error('鑾峰彇鍒嗙被鍒楄〃澶辫触:', error);
     
-    // 尝试使用缓存数据
+    // 灏濊瘯浣跨敤缂撳瓨鏁版嵁
     if (!ignoreCache) {
       const cachedData = getStorage('cache_categories');
       if (cachedData) {
-        console.log('使用缓存的分类数据');
+        console.log('浣跨敤缂撳瓨鐨勫垎绫绘暟鎹?);
         return cachedData.data;
       }
     }
@@ -61,33 +60,33 @@ export const getCategories = async (ignoreCache = false, params = {}) => {
 };
 
 /**
- * 获取分类详情
- * @param {number|string} id - 分类ID
- * @returns {Promise<Object>} - 返回分类详情
+ * 鑾峰彇鍒嗙被璇︽儏
+ * @param {number|string} id - 鍒嗙被ID
+ * @returns {Promise<Object>} - 杩斿洖鍒嗙被璇︽儏
  */
 export const getCategoryDetail = async (id) => {
   try {
     return await api.get(`/categories/${id}`);
   } catch (error) {
-    console.error('获取分类详情失败:', error);
+    console.error('鑾峰彇鍒嗙被璇︽儏澶辫触:', error);
     throw error;
   }
 };
 
 /**
- * 获取分类下的文章列表
- * @param {number|string} categoryId - 分类ID
- * @param {Object} params - 查询参数
- * @param {number} params.page - 页码，默认1
- * @param {number} params.per_page - 每页数量，默认10
- * @param {string} params.orderby - 排序字段，默认'date'
- * @param {string} params.order - 排序方向，默认'desc'
- * @param {boolean} params.ignoreCache - 是否忽略缓存，默认false
- * @returns {Promise<Array>} - 返回文章列表
+ * 鑾峰彇鍒嗙被涓嬬殑鏂囩珷鍒楄〃
+ * @param {number|string} categoryId - 鍒嗙被ID
+ * @param {Object} params - 鏌ヨ鍙傛暟
+ * @param {number} params.page - 椤电爜锛岄粯璁?
+ * @param {number} params.per_page - 姣忛〉鏁伴噺锛岄粯璁?0
+ * @param {string} params.orderby - 鎺掑簭瀛楁锛岄粯璁?date'
+ * @param {string} params.order - 鎺掑簭鏂瑰悜锛岄粯璁?desc'
+ * @param {boolean} params.ignoreCache - 鏄惁蹇界暐缂撳瓨锛岄粯璁alse
+ * @returns {Promise<Array>} - 杩斿洖鏂囩珷鍒楄〃
  */
 export const getCategoryArticles = async (categoryId, params = {}) => {
   try {
-    // 构建查询参数
+    // 鏋勫缓鏌ヨ鍙傛暟
     const queryParams = {
       page: params.page || 1,
       per_page: params.per_page || 10,
@@ -95,10 +94,9 @@ export const getCategoryArticles = async (categoryId, params = {}) => {
       order: params.order || 'desc'
     };
     
-    // 生成缓存键
-    const cacheKey = `cache_category_articles_${categoryId}_${JSON.stringify(queryParams)}`;
+    // 鐢熸垚缂撳瓨閿?    const cacheKey = `cache_category_articles_${categoryId}_${JSON.stringify(queryParams)}`;
     
-    // 尝试从缓存获取数据（仅第一页使用缓存）
+    // 灏濊瘯浠庣紦瀛樿幏鍙栨暟鎹紙浠呯涓€椤典娇鐢ㄧ紦瀛橈級
     if (!params.ignoreCache && queryParams.page === 1) {
       const cachedData = getStorage(cacheKey);
       if (cachedData && (Date.now() - cachedData.timestamp < CACHE_DURATION.CATEGORY_ARTICLES)) {
@@ -106,11 +104,10 @@ export const getCategoryArticles = async (categoryId, params = {}) => {
       }
     }
     
-    // 调用API
+    // 璋冪敤API
     const articles = await api.get(`/categories/${categoryId}/posts`, queryParams);
     
-    // 缓存第一页数据
-    if (queryParams.page === 1) {
+    // 缂撳瓨绗竴椤垫暟鎹?    if (queryParams.page === 1) {
       setStorage(cacheKey, {
         data: articles,
         timestamp: Date.now()
@@ -119,14 +116,14 @@ export const getCategoryArticles = async (categoryId, params = {}) => {
     
     return articles;
   } catch (error) {
-    console.error('获取分类文章列表失败:', error);
+    console.error('鑾峰彇鍒嗙被鏂囩珷鍒楄〃澶辫触:', error);
     
-    // 尝试使用缓存数据（仅第一页）
+    // 灏濊瘯浣跨敤缂撳瓨鏁版嵁锛堜粎绗竴椤碉級
     if (!params.ignoreCache && params.page === 1) {
       const cacheKey = `cache_category_articles_${categoryId}_${JSON.stringify({ page: 1, per_page: params.per_page || 10, orderby: 'date', order: 'desc' })}`;
       const cachedData = getStorage(cacheKey);
       if (cachedData) {
-        console.log('使用缓存的分类文章数据');
+        console.log('浣跨敤缂撳瓨鐨勫垎绫绘枃绔犳暟鎹?);
         return cachedData.data;
       }
     }
@@ -136,41 +133,35 @@ export const getCategoryArticles = async (categoryId, params = {}) => {
 };
 
 /**
- * 获取分类的子分类
- * @param {number|string} parentId - 父分类ID
- * @param {boolean} ignoreCache - 是否忽略缓存，默认false
- * @returns {Promise<Array>} - 返回子分类列表
- */
+ * 鑾峰彇鍒嗙被鐨勫瓙鍒嗙被
+ * @param {number|string} parentId - 鐖跺垎绫籌D
+ * @param {boolean} ignoreCache - 鏄惁蹇界暐缂撳瓨锛岄粯璁alse
+ * @returns {Promise<Array>} - 杩斿洖瀛愬垎绫诲垪琛? */
 export const getSubCategories = async (parentId, ignoreCache = false) => {
   try {
-    // 先获取所有分类
-    const allCategories = await getCategories(ignoreCache);
+    // 鍏堣幏鍙栨墍鏈夊垎绫?    const allCategories = await getCategories(ignoreCache);
     
-    // 过滤出子分类
+    // 杩囨护鍑哄瓙鍒嗙被
     const subCategories = allCategories.filter(category => category.parent === parentId);
     
     return subCategories;
   } catch (error) {
-    console.error('获取子分类失败:', error);
+    console.error('鑾峰彇瀛愬垎绫诲け璐?', error);
     throw error;
   }
 };
 
 /**
- * 获取分类树结构
- * @param {boolean} ignoreCache - 是否忽略缓存，默认false
- * @returns {Promise<Array>} - 返回分类树结构
- */
+ * 鑾峰彇鍒嗙被鏍戠粨鏋? * @param {boolean} ignoreCache - 鏄惁蹇界暐缂撳瓨锛岄粯璁alse
+ * @returns {Promise<Array>} - 杩斿洖鍒嗙被鏍戠粨鏋? */
 export const getCategoryTree = async (ignoreCache = false) => {
   try {
-    // 获取所有分类
-    const allCategories = await getCategories(ignoreCache);
+    // 鑾峰彇鎵€鏈夊垎绫?    const allCategories = await getCategories(ignoreCache);
     
-    // 构建分类树
-    const categoryMap = {};
+    // 鏋勫缓鍒嗙被鏍?    const categoryMap = {};
     const rootCategories = [];
     
-    // 先创建所有分类的映射
+    // 鍏堝垱寤烘墍鏈夊垎绫荤殑鏄犲皠
     allCategories.forEach(category => {
       categoryMap[category.id] = {
         ...category,
@@ -178,46 +169,42 @@ export const getCategoryTree = async (ignoreCache = false) => {
       };
     });
     
-    // 构建树结构
-    allCategories.forEach(category => {
+    // 鏋勫缓鏍戠粨鏋?    allCategories.forEach(category => {
       if (category.parent === 0 || !categoryMap[category.parent]) {
-        // 根分类
-        rootCategories.push(categoryMap[category.id]);
+        // 鏍瑰垎绫?        rootCategories.push(categoryMap[category.id]);
       } else {
-        // 子分类
-        categoryMap[category.parent].children.push(categoryMap[category.id]);
+        // 瀛愬垎绫?        categoryMap[category.parent].children.push(categoryMap[category.id]);
       }
     });
     
     return rootCategories;
   } catch (error) {
-    console.error('获取分类树失败:', error);
+    console.error('鑾峰彇鍒嗙被鏍戝け璐?', error);
     throw error;
   }
 };
 
 /**
- * 获取热门分类
- * @param {number} limit - 获取数量，默认10
- * @param {boolean} ignoreCache - 是否忽略缓存，默认false
- * @returns {Promise<Array>} - 返回热门分类列表
+ * 鑾峰彇鐑棬鍒嗙被
+ * @param {number} limit - 鑾峰彇鏁伴噺锛岄粯璁?0
+ * @param {boolean} ignoreCache - 鏄惁蹇界暐缂撳瓨锛岄粯璁alse
+ * @returns {Promise<Array>} - 杩斿洖鐑棬鍒嗙被鍒楄〃
  */
 export const getHotCategories = async (limit = 10, ignoreCache = false) => {
   try {
     const cacheKey = `cache_hot_categories_${limit}`;
     
-    // 尝试从缓存获取数据
-    if (!ignoreCache) {
+    // 灏濊瘯浠庣紦瀛樿幏鍙栨暟鎹?    if (!ignoreCache) {
       const cachedData = getStorage(cacheKey);
       if (cachedData && (Date.now() - cachedData.timestamp < CACHE_DURATION.CATEGORIES)) {
         return cachedData.data;
       }
     }
     
-    // 调用API
+    // 璋冪敤API
     const categories = await api.get('/categories/hot', { limit });
     
-    // 缓存数据
+    // 缂撳瓨鏁版嵁
     setStorage(cacheKey, {
       data: categories,
       timestamp: Date.now()
@@ -225,20 +212,18 @@ export const getHotCategories = async (limit = 10, ignoreCache = false) => {
     
     return categories;
   } catch (error) {
-    console.error('获取热门分类失败:', error);
+    console.error('鑾峰彇鐑棬鍒嗙被澶辫触:', error);
     
-    // 如果API调用失败，尝试从所有分类中按文章数量排序获取
-    if (!ignoreCache) {
+    // 濡傛灉API璋冪敤澶辫触锛屽皾璇曚粠鎵€鏈夊垎绫讳腑鎸夋枃绔犳暟閲忔帓搴忚幏鍙?    if (!ignoreCache) {
       try {
         const allCategories = await getCategories(false);
-        // 按文章数量排序
-        const sortedCategories = allCategories
+        // 鎸夋枃绔犳暟閲忔帓搴?        const sortedCategories = allCategories
           .sort((a, b) => (b.count || 0) - (a.count || 0))
           .slice(0, limit);
         
         return sortedCategories;
       } catch (innerError) {
-        console.error('获取所有分类失败:', innerError);
+        console.error('鑾峰彇鎵€鏈夊垎绫诲け璐?', innerError);
       }
     }
     
@@ -247,33 +232,32 @@ export const getHotCategories = async (limit = 10, ignoreCache = false) => {
 };
 
 /**
- * 获取标签列表
- * @param {boolean} ignoreCache - 是否忽略缓存，默认false
- * @param {Object} params - 查询参数
- * @param {number} params.limit - 获取数量，默认30
- * @returns {Promise<Array>} - 返回标签列表
+ * 鑾峰彇鏍囩鍒楄〃
+ * @param {boolean} ignoreCache - 鏄惁蹇界暐缂撳瓨锛岄粯璁alse
+ * @param {Object} params - 鏌ヨ鍙傛暟
+ * @param {number} params.limit - 鑾峰彇鏁伴噺锛岄粯璁?0
+ * @returns {Promise<Array>} - 杩斿洖鏍囩鍒楄〃
  */
 export const getTags = async (ignoreCache = false, params = {}) => {
   try {
     const cacheKey = 'cache_tags';
     
-    // 尝试从缓存获取数据
-    if (!ignoreCache) {
+    // 灏濊瘯浠庣紦瀛樿幏鍙栨暟鎹?    if (!ignoreCache) {
       const cachedData = getStorage(cacheKey);
       if (cachedData && (Date.now() - cachedData.timestamp < CACHE_DURATION.CATEGORIES)) {
         return cachedData.data;
       }
     }
     
-    // 构建查询参数
+    // 鏋勫缓鏌ヨ鍙傛暟
     const queryParams = {
       limit: params.limit || 30
     };
     
-    // 调用API
+    // 璋冪敤API
     const tags = await api.get('/tags', queryParams);
     
-    // 缓存数据
+    // 缂撳瓨鏁版嵁
     setStorage(cacheKey, {
       data: tags,
       timestamp: Date.now()
@@ -281,13 +265,13 @@ export const getTags = async (ignoreCache = false, params = {}) => {
     
     return tags;
   } catch (error) {
-    console.error('获取标签列表失败:', error);
+    console.error('鑾峰彇鏍囩鍒楄〃澶辫触:', error);
     
-    // 尝试使用缓存数据
+    // 灏濊瘯浣跨敤缂撳瓨鏁版嵁
     if (!ignoreCache) {
       const cachedData = getStorage('cache_tags');
       if (cachedData) {
-        console.log('使用缓存的标签数据');
+        console.log('浣跨敤缂撳瓨鐨勬爣绛炬暟鎹?);
         return cachedData.data;
       }
     }
@@ -297,31 +281,30 @@ export const getTags = async (ignoreCache = false, params = {}) => {
 };
 
 /**
- * 获取标签下的文章列表
- * @param {number|string} tagId - 标签ID
- * @param {Object} params - 查询参数
- * @param {number} params.page - 页码，默认1
- * @param {number} params.per_page - 每页数量，默认10
- * @returns {Promise<Array>} - 返回文章列表
+ * 鑾峰彇鏍囩涓嬬殑鏂囩珷鍒楄〃
+ * @param {number|string} tagId - 鏍囩ID
+ * @param {Object} params - 鏌ヨ鍙傛暟
+ * @param {number} params.page - 椤电爜锛岄粯璁?
+ * @param {number} params.per_page - 姣忛〉鏁伴噺锛岄粯璁?0
+ * @returns {Promise<Array>} - 杩斿洖鏂囩珷鍒楄〃
  */
 export const getTagArticles = async (tagId, params = {}) => {
   try {
-    // 构建查询参数
+    // 鏋勫缓鏌ヨ鍙傛暟
     const queryParams = {
       page: params.page || 1,
       per_page: params.per_page || 10
     };
     
-    // 调用API
+    // 璋冪敤API
     return await api.get(`/tags/${tagId}/posts`, queryParams);
   } catch (error) {
-    console.error('获取标签文章列表失败:', error);
+    console.error('鑾峰彇鏍囩鏂囩珷鍒楄〃澶辫触:', error);
     throw error;
   }
 };
 
-// 导出所有方法
-export default {
+// 瀵煎嚭鎵€鏈夋柟娉?export default {
   getCategories,
   getCategoryDetail,
   getCategoryArticles,

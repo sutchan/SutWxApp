@@ -1,4 +1,4 @@
-/* 全局样式 */
+﻿/* 鍏ㄥ眬鏍峰紡 */
 page {
   font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
   font-size: 14px;
@@ -9,15 +9,15 @@ page {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* 重置样式 */
+/* 閲嶇疆鏍峰紡 */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* 公共组件样式 */
-/* 按钮样式 */
+/* 鍏叡缁勪欢鏍峰紡 */
+/* 鎸夐挳鏍峰紡 */
 .btn {
   display: inline-block;
   padding: 8px 20px;
@@ -52,7 +52,7 @@ page {
   color: #cccccc;
 }
 
-/* 输入框样式 */
+/* 杈撳叆妗嗘牱寮?*/
 .input {
   width: 100%;
   height: 44px;
@@ -68,7 +68,7 @@ page {
   outline: none;
 }
 
-/* 列表项样式 */
+/* 鍒楄〃椤规牱寮?*/
 .list-item {
   display: flex;
   align-items: center;
@@ -81,7 +81,7 @@ page {
   border-bottom: none;
 }
 
-/* 卡片样式 */
+/* 鍗＄墖鏍峰紡 */
 .card {
   background-color: #ffffff;
   border-radius: 8px;
@@ -89,7 +89,7 @@ page {
   overflow: hidden;
 }
 
-/* 标题样式 */
+/* 鏍囬鏍峰紡 */
 .title {
   font-size: 18px;
   font-weight: 600;
@@ -104,7 +104,7 @@ page {
   margin-bottom: 8px;
 }
 
-/* 文本样式 */
+/* 鏂囨湰鏍峰紡 */
 .text-primary {
   color: #07c160;
 }
@@ -129,7 +129,7 @@ page {
   color: #ff3b30;
 }
 
-/* 间距样式 */
+/* 闂磋窛鏍峰紡 */
 .mt-5 {
   margin-top: 5px;
 }
@@ -210,7 +210,7 @@ page {
   padding: 20px;
 }
 
-/* 布局样式 */
+/* 甯冨眬鏍峰紡 */
 .flex {
   display: flex;
 }
@@ -251,7 +251,7 @@ page {
   text-align: right;
 }
 
-/* 加载状态 */
+/* 鍔犺浇鐘舵€?*/
 .loading {
   display: flex;
   justify-content: center;
@@ -259,7 +259,7 @@ page {
   padding: 40px 0;
 }
 
-/* 空状态 */
+/* 绌虹姸鎬?*/
 .empty {
   display: flex;
   flex-direction: column;
@@ -281,7 +281,7 @@ page {
   color: #999999;
 }
 
-/* 错误状态 */
+/* 閿欒鐘舵€?*/
 .error {
   display: flex;
   flex-direction: column;
@@ -304,7 +304,7 @@ page {
   margin-bottom: 15px;
 }
 
-/* 骨架屏 */
+/* 楠ㄦ灦灞?*/
 .skeleton {
   background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
   background-size: 200% 100%;
@@ -320,7 +320,7 @@ page {
   }
 }
 
-/* 动画效果 */
+/* 鍔ㄧ敾鏁堟灉 */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -349,18 +349,18 @@ page {
   animation: slideUp 0.3s ease-out;
 }
 
-/* 适配iPhone X等刘海屏 */
-/* 顶部安全区域 */
+/* 閫傞厤iPhone X绛夊垬娴峰睆 */
+/* 椤堕儴瀹夊叏鍖哄煙 */
 .safe-area-top {
   padding-top: env(safe-area-inset-top, 0);
 }
 
-/* 底部安全区域 */
+/* 搴曢儴瀹夊叏鍖哄煙 */
 .safe-area-bottom {
   padding-bottom: env(safe-area-inset-bottom, 0);
 }
 
-/* 响应式设计 */
+/* 鍝嶅簲寮忚璁?*/
 @media screen and (min-width: 375px) {
   page {
     font-size: 15px;

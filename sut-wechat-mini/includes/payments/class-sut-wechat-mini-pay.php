@@ -1,8 +1,8 @@
-<?php
+﻿<?php
 /**
- * SUT微信小程序支付集成类
+ * SUT寰俊灏忕▼搴忔敮浠橀泦鎴愮被
  *
- * 处理微信支付相关功能，包括支付创建、回调处理等
+ * 澶勭悊寰俊鏀粯鐩稿叧鍔熻兘锛屽寘鎷敮浠樺垱寤恒€佸洖璋冨鐞嗙瓑
  *
  * @package SUT_WeChat_Mini
  */
@@ -12,33 +12,31 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * SUT_WeChat_Mini_Pay 类
- */
+ * SUT_WeChat_Mini_Pay 绫? */
 class SUT_WeChat_Mini_Pay {
     
     /**
-     * 支付集成实例
+     * 鏀粯闆嗘垚瀹炰緥
      *
      * @var SUT_WeChat_Mini_Pay
      */
     private static $instance = null;
     
     /**
-     * 微信支付配置
+     * 寰俊鏀粯閰嶇疆
      *
      * @var array
      */
     private $config = array();
     
     /**
-     * 构造函数
-     */
+     * 鏋勯€犲嚱鏁?     */
     public function __construct() {
         $this->init();
     }
     
     /**
-     * 获取单例实例
+     * 鑾峰彇鍗曚緥瀹炰緥
      *
      * @return SUT_WeChat_Mini_Pay
      */
@@ -51,10 +49,9 @@ class SUT_WeChat_Mini_Pay {
     }
     
     /**
-     * 初始化支付配置
-     */
+     * 鍒濆鍖栨敮浠橀厤缃?     */
     private function init() {
-        // 获取支付配置
+        // 鑾峰彇鏀粯閰嶇疆
         $this->config = array(
             'app_id' => get_option( 'sut_wechat_mini_app_id', '' ),
             'mch_id' => get_option( 'sut_wechat_mini_mch_id', '' ),
@@ -65,56 +62,54 @@ class SUT_WeChat_Mini_Pay {
             'sandbox' => get_option( 'sut_wechat_mini_pay_sandbox', false ),
         );
         
-        // 注册支付相关的设置项
+        // 娉ㄥ唽鏀粯鐩稿叧鐨勮缃」
         add_filter( 'sut_wechat_mini_settings', array( $this, 'add_payment_settings' ) );
         
-        // 注册支付相关的API路由
+        // 娉ㄥ唽鏀粯鐩稿叧鐨凙PI璺敱
         add_filter( 'sut_wechat_mini_api_routes', array( $this, 'add_payment_routes' ) );
     }
     
     /**
-     * 添加支付相关的设置项
+     * 娣诲姞鏀粯鐩稿叧鐨勮缃」
      *
-     * @param array $settings 现有设置项
-     * @return array 修改后的设置项
-     */
+     * @param array $settings 鐜版湁璁剧疆椤?     * @return array 淇敼鍚庣殑璁剧疆椤?     */
     public function add_payment_settings( $settings ) {
         $payment_settings = array(
-            'title' => __( '支付设置', 'sut-wechat-mini' ),
+            'title' => __( '鏀粯璁剧疆', 'sut-wechat-mini' ),
             'fields' => array(
                 array(
                     'id' => 'mch_id',
-                    'title' => __( '商户ID', 'sut-wechat-mini' ),
+                    'title' => __( '鍟嗘埛ID', 'sut-wechat-mini' ),
                     'type' => 'text',
-                    'desc' => __( '微信支付商户ID', 'sut-wechat-mini' ),
+                    'desc' => __( '寰俊鏀粯鍟嗘埛ID', 'sut-wechat-mini' ),
                     'default' => '',
                 ),
                 array(
                     'id' => 'api_key',
-                    'title' => __( 'API密钥', 'sut-wechat-mini' ),
+                    'title' => __( 'API瀵嗛挜', 'sut-wechat-mini' ),
                     'type' => 'text',
-                    'desc' => __( '微信支付API密钥', 'sut-wechat-mini' ),
+                    'desc' => __( '寰俊鏀粯API瀵嗛挜', 'sut-wechat-mini' ),
                     'default' => '',
                 ),
                 array(
                     'id' => 'cert_path',
-                    'title' => __( '证书路径', 'sut-wechat-mini' ),
+                    'title' => __( '璇佷功璺緞', 'sut-wechat-mini' ),
                     'type' => 'text',
-                    'desc' => __( '微信支付证书路径（绝对路径）', 'sut-wechat-mini' ),
+                    'desc' => __( '寰俊鏀粯璇佷功璺緞锛堢粷瀵硅矾寰勶級', 'sut-wechat-mini' ),
                     'default' => '',
                 ),
                 array(
                     'id' => 'key_path',
-                    'title' => __( '密钥路径', 'sut-wechat-mini' ),
+                    'title' => __( '瀵嗛挜璺緞', 'sut-wechat-mini' ),
                     'type' => 'text',
-                    'desc' => __( '微信支付密钥路径（绝对路径）', 'sut-wechat-mini' ),
+                    'desc' => __( '寰俊鏀粯瀵嗛挜璺緞锛堢粷瀵硅矾寰勶級', 'sut-wechat-mini' ),
                     'default' => '',
                 ),
                 array(
                     'id' => 'pay_sandbox',
-                    'title' => __( '沙箱模式', 'sut-wechat-mini' ),
+                    'title' => __( '娌欑妯″紡', 'sut-wechat-mini' ),
                     'type' => 'checkbox',
-                    'desc' => __( '开启沙箱测试模式', 'sut-wechat-mini' ),
+                    'desc' => __( '寮€鍚矙绠辨祴璇曟ā寮?, 'sut-wechat-mini' ),
                     'default' => false,
                 ),
             ),
@@ -126,39 +121,37 @@ class SUT_WeChat_Mini_Pay {
     }
     
     /**
-     * 添加支付相关的API路由
+     * 娣诲姞鏀粯鐩稿叧鐨凙PI璺敱
      *
-     * @param array $routes 现有路由
-     * @return array 修改后的路由
+     * @param array $routes 鐜版湁璺敱
+     * @return array 淇敼鍚庣殑璺敱
      */
     public function add_payment_routes( $routes ) {
-        // 支付相关API路由已经在WooCommerce集成类中添加
+        // 鏀粯鐩稿叧API璺敱宸茬粡鍦╓ooCommerce闆嗘垚绫讳腑娣诲姞
         return $routes;
     }
     
     /**
-     * 创建支付
+     * 鍒涘缓鏀粯
      *
-     * @param WC_Order $order 订单对象
-     * @param int $user_id 用户ID
-     * @return array|WP_Error 支付参数或错误对象
-     */
+     * @param WC_Order $order 璁㈠崟瀵硅薄
+     * @param int $user_id 鐢ㄦ埛ID
+     * @return array|WP_Error 鏀粯鍙傛暟鎴栭敊璇璞?     */
     public function create_payment( $order, $user_id ) {
-        // 检查支付配置是否完整
-        if ( ! $this->is_config_valid() ) {
-            return new WP_Error( 'payment_config_invalid', __( '支付配置不完整', 'sut-wechat-mini' ) );
+        // 妫€鏌ユ敮浠橀厤缃槸鍚﹀畬鏁?        if ( ! $this->is_config_valid() ) {
+            return new WP_Error( 'payment_config_invalid', __( '鏀粯閰嶇疆涓嶅畬鏁?, 'sut-wechat-mini' ) );
         }
         
-        // 获取用户的openid
+        // 鑾峰彇鐢ㄦ埛鐨刼penid
         $openid = get_user_meta( $user_id, '_sut_wechat_mini_openid', true );
         
         if ( empty( $openid ) ) {
-            return new WP_Error( 'openid_not_found', __( '用户微信信息未找到', 'sut-wechat-mini' ) );
+            return new WP_Error( 'openid_not_found', __( '鐢ㄦ埛寰俊淇℃伅鏈壘鍒?, 'sut-wechat-mini' ) );
         }
         
-        // 构建统一下单参数
+        // 鏋勫缓缁熶竴涓嬪崟鍙傛暟
         $nonce_str = $this->generate_nonce_str();
-        $total_fee = intval( $order->get_total() * 100 ); // 转换为分
+        $total_fee = intval( $order->get_total() * 100 ); // 杞崲涓哄垎
         
         $params = array(
             'appid' => $this->config['app_id'],
@@ -173,38 +166,35 @@ class SUT_WeChat_Mini_Pay {
             'openid' => $openid,
         );
         
-        // 添加沙箱模式参数
+        // 娣诲姞娌欑妯″紡鍙傛暟
         if ( $this->config['sandbox'] ) {
             $params['sandbox_signkey'] = $this->get_sandbox_signkey();
         }
         
-        // 生成签名
+        // 鐢熸垚绛惧悕
         $sign = $this->generate_sign( $params );
         $params['sign'] = $sign;
         
-        // 转换为XML
+        // 杞崲涓篨ML
         $xml = $this->array_to_xml( $params );
         
-        // 发送请求到微信支付服务器
-        $gateway_url = $this->get_gateway_url( 'unifiedorder' );
+        // 鍙戦€佽姹傚埌寰俊鏀粯鏈嶅姟鍣?        $gateway_url = $this->get_gateway_url( 'unifiedorder' );
         $response = $this->send_request( $gateway_url, $xml );
         
-        // 解析XML响应
+        // 瑙ｆ瀽XML鍝嶅簲
         $result = $this->xml_to_array( $response );
         
-        // 检查响应结果
-        if ( ! $result || $result['return_code'] != 'SUCCESS' ) {
-            $error_msg = isset( $result['return_msg'] ) ? $result['return_msg'] : __( '请求失败', 'sut-wechat-mini' );
+        // 妫€鏌ュ搷搴旂粨鏋?        if ( ! $result || $result['return_code'] != 'SUCCESS' ) {
+            $error_msg = isset( $result['return_msg'] ) ? $result['return_msg'] : __( '璇锋眰澶辫触', 'sut-wechat-mini' );
             return new WP_Error( 'payment_request_failed', $error_msg );
         }
         
         if ( $result['result_code'] != 'SUCCESS' ) {
-            $error_msg = isset( $result['err_code_des'] ) ? $result['err_code_des'] : __( '业务处理失败', 'sut-wechat-mini' );
+            $error_msg = isset( $result['err_code_des'] ) ? $result['err_code_des'] : __( '涓氬姟澶勭悊澶辫触', 'sut-wechat-mini' );
             return new WP_Error( 'payment_business_failed', $error_msg );
         }
         
-        // 生成小程序支付参数
-        $time_stamp = (string) time();
+        // 鐢熸垚灏忕▼搴忔敮浠樺弬鏁?        $time_stamp = (string) time();
         $package = 'prepay_id=' . $result['prepay_id'];
         $pay_sign = $this->generate_pay_sign( $time_stamp, $nonce_str, $package );
         
@@ -221,38 +211,35 @@ class SUT_WeChat_Mini_Pay {
     }
     
     /**
-     * 验证支付回调签名
+     * 楠岃瘉鏀粯鍥炶皟绛惧悕
      *
-     * @param array $data 回调数据
-     * @return bool 验证结果
+     * @param array $data 鍥炶皟鏁版嵁
+     * @return bool 楠岃瘉缁撴灉
      */
     public function verify_notify_sign( $data ) {
-        // 复制数据，移除sign字段
+        // 澶嶅埗鏁版嵁锛岀Щ闄ign瀛楁
         $params = $data;
         if ( isset( $params['sign'] ) ) {
             unset( $params['sign'] );
         }
         
-        // 生成签名
+        // 鐢熸垚绛惧悕
         $sign = $this->generate_sign( $params );
         
-        // 比较签名
+        // 姣旇緝绛惧悕
         return $sign === $data['sign'];
     }
     
     /**
-     * 查询订单
+     * 鏌ヨ璁㈠崟
      *
-     * @param string $out_trade_no 商户订单号
-     * @return array|WP_Error 查询结果或错误对象
-     */
+     * @param string $out_trade_no 鍟嗘埛璁㈠崟鍙?     * @return array|WP_Error 鏌ヨ缁撴灉鎴栭敊璇璞?     */
     public function query_order( $out_trade_no ) {
-        // 检查支付配置是否完整
-        if ( ! $this->is_config_valid() ) {
-            return new WP_Error( 'payment_config_invalid', __( '支付配置不完整', 'sut-wechat-mini' ) );
+        // 妫€鏌ユ敮浠橀厤缃槸鍚﹀畬鏁?        if ( ! $this->is_config_valid() ) {
+            return new WP_Error( 'payment_config_invalid', __( '鏀粯閰嶇疆涓嶅畬鏁?, 'sut-wechat-mini' ) );
         }
         
-        // 构建查询参数
+        // 鏋勫缓鏌ヨ鍙傛暟
         $nonce_str = $this->generate_nonce_str();
         
         $params = array(
@@ -262,33 +249,31 @@ class SUT_WeChat_Mini_Pay {
             'nonce_str' => $nonce_str,
         );
         
-        // 添加沙箱模式参数
+        // 娣诲姞娌欑妯″紡鍙傛暟
         if ( $this->config['sandbox'] ) {
             $params['sandbox_signkey'] = $this->get_sandbox_signkey();
         }
         
-        // 生成签名
+        // 鐢熸垚绛惧悕
         $sign = $this->generate_sign( $params );
         $params['sign'] = $sign;
         
-        // 转换为XML
+        // 杞崲涓篨ML
         $xml = $this->array_to_xml( $params );
         
-        // 发送请求到微信支付服务器
-        $gateway_url = $this->get_gateway_url( 'orderquery' );
+        // 鍙戦€佽姹傚埌寰俊鏀粯鏈嶅姟鍣?        $gateway_url = $this->get_gateway_url( 'orderquery' );
         $response = $this->send_request( $gateway_url, $xml );
         
-        // 解析XML响应
+        // 瑙ｆ瀽XML鍝嶅簲
         $result = $this->xml_to_array( $response );
         
-        // 检查响应结果
-        if ( ! $result || $result['return_code'] != 'SUCCESS' ) {
-            $error_msg = isset( $result['return_msg'] ) ? $result['return_msg'] : __( '查询失败', 'sut-wechat-mini' );
+        // 妫€鏌ュ搷搴旂粨鏋?        if ( ! $result || $result['return_code'] != 'SUCCESS' ) {
+            $error_msg = isset( $result['return_msg'] ) ? $result['return_msg'] : __( '鏌ヨ澶辫触', 'sut-wechat-mini' );
             return new WP_Error( 'query_failed', $error_msg );
         }
         
         if ( $result['result_code'] != 'SUCCESS' ) {
-            $error_msg = isset( $result['err_code_des'] ) ? $result['err_code_des'] : __( '业务处理失败', 'sut-wechat-mini' );
+            $error_msg = isset( $result['err_code_des'] ) ? $result['err_code_des'] : __( '涓氬姟澶勭悊澶辫触', 'sut-wechat-mini' );
             return new WP_Error( 'query_business_failed', $error_msg );
         }
         
@@ -296,18 +281,15 @@ class SUT_WeChat_Mini_Pay {
     }
     
     /**
-     * 关闭订单
+     * 鍏抽棴璁㈠崟
      *
-     * @param string $out_trade_no 商户订单号
-     * @return array|WP_Error 关闭结果或错误对象
-     */
+     * @param string $out_trade_no 鍟嗘埛璁㈠崟鍙?     * @return array|WP_Error 鍏抽棴缁撴灉鎴栭敊璇璞?     */
     public function close_order( $out_trade_no ) {
-        // 检查支付配置是否完整
-        if ( ! $this->is_config_valid() ) {
-            return new WP_Error( 'payment_config_invalid', __( '支付配置不完整', 'sut-wechat-mini' ) );
+        // 妫€鏌ユ敮浠橀厤缃槸鍚﹀畬鏁?        if ( ! $this->is_config_valid() ) {
+            return new WP_Error( 'payment_config_invalid', __( '鏀粯閰嶇疆涓嶅畬鏁?, 'sut-wechat-mini' ) );
         }
         
-        // 构建关闭参数
+        // 鏋勫缓鍏抽棴鍙傛暟
         $nonce_str = $this->generate_nonce_str();
         
         $params = array(
@@ -317,33 +299,31 @@ class SUT_WeChat_Mini_Pay {
             'nonce_str' => $nonce_str,
         );
         
-        // 添加沙箱模式参数
+        // 娣诲姞娌欑妯″紡鍙傛暟
         if ( $this->config['sandbox'] ) {
             $params['sandbox_signkey'] = $this->get_sandbox_signkey();
         }
         
-        // 生成签名
+        // 鐢熸垚绛惧悕
         $sign = $this->generate_sign( $params );
         $params['sign'] = $sign;
         
-        // 转换为XML
+        // 杞崲涓篨ML
         $xml = $this->array_to_xml( $params );
         
-        // 发送请求到微信支付服务器
-        $gateway_url = $this->get_gateway_url( 'closeorder' );
+        // 鍙戦€佽姹傚埌寰俊鏀粯鏈嶅姟鍣?        $gateway_url = $this->get_gateway_url( 'closeorder' );
         $response = $this->send_request( $gateway_url, $xml );
         
-        // 解析XML响应
+        // 瑙ｆ瀽XML鍝嶅簲
         $result = $this->xml_to_array( $response );
         
-        // 检查响应结果
-        if ( ! $result || $result['return_code'] != 'SUCCESS' ) {
-            $error_msg = isset( $result['return_msg'] ) ? $result['return_msg'] : __( '关闭失败', 'sut-wechat-mini' );
+        // 妫€鏌ュ搷搴旂粨鏋?        if ( ! $result || $result['return_code'] != 'SUCCESS' ) {
+            $error_msg = isset( $result['return_msg'] ) ? $result['return_msg'] : __( '鍏抽棴澶辫触', 'sut-wechat-mini' );
             return new WP_Error( 'close_failed', $error_msg );
         }
         
         if ( $result['result_code'] != 'SUCCESS' ) {
-            $error_msg = isset( $result['err_code_des'] ) ? $result['err_code_des'] : __( '业务处理失败', 'sut-wechat-mini' );
+            $error_msg = isset( $result['err_code_des'] ) ? $result['err_code_des'] : __( '涓氬姟澶勭悊澶辫触', 'sut-wechat-mini' );
             return new WP_Error( 'close_business_failed', $error_msg );
         }
         
@@ -351,26 +331,19 @@ class SUT_WeChat_Mini_Pay {
     }
     
     /**
-     * 申请退款
-     *
-     * @param string $out_trade_no 商户订单号
-     * @param string $out_refund_no 商户退款单号
-     * @param float $total_fee 订单总金额
-     * @param float $refund_fee 退款金额
-     * @return array|WP_Error 退款结果或错误对象
+     * 鐢宠閫€娆?     *
+     * @param string $out_trade_no 鍟嗘埛璁㈠崟鍙?     * @param string $out_refund_no 鍟嗘埛閫€娆惧崟鍙?     * @param float $total_fee 璁㈠崟鎬婚噾棰?     * @param float $refund_fee 閫€娆鹃噾棰?     * @return array|WP_Error 閫€娆剧粨鏋滄垨閿欒瀵硅薄
      */
     public function refund( $out_trade_no, $out_refund_no, $total_fee, $refund_fee ) {
-        // 检查支付配置是否完整
-        if ( ! $this->is_config_valid( true ) ) {
-            return new WP_Error( 'payment_config_invalid', __( '支付配置不完整或证书不存在', 'sut-wechat-mini' ) );
+        // 妫€鏌ユ敮浠橀厤缃槸鍚﹀畬鏁?        if ( ! $this->is_config_valid( true ) ) {
+            return new WP_Error( 'payment_config_invalid', __( '鏀粯閰嶇疆涓嶅畬鏁存垨璇佷功涓嶅瓨鍦?, 'sut-wechat-mini' ) );
         }
         
-        // 转换金额为分
+        // 杞崲閲戦涓哄垎
         $total_fee = intval( $total_fee * 100 );
         $refund_fee = intval( $refund_fee * 100 );
         
-        // 构建退款参数
-        $nonce_str = $this->generate_nonce_str();
+        // 鏋勫缓閫€娆惧弬鏁?        $nonce_str = $this->generate_nonce_str();
         
         $params = array(
             'appid' => $this->config['app_id'],
@@ -380,36 +353,35 @@ class SUT_WeChat_Mini_Pay {
             'out_refund_no' => $out_refund_no,
             'total_fee' => $total_fee,
             'refund_fee' => $refund_fee,
-            'refund_desc' => __( '用户申请退款', 'sut-wechat-mini' ),
+            'refund_desc' => __( '鐢ㄦ埛鐢宠閫€娆?, 'sut-wechat-mini' ),
         );
         
-        // 添加沙箱模式参数
+        // 娣诲姞娌欑妯″紡鍙傛暟
         if ( $this->config['sandbox'] ) {
             $params['sandbox_signkey'] = $this->get_sandbox_signkey();
         }
         
-        // 生成签名
+        // 鐢熸垚绛惧悕
         $sign = $this->generate_sign( $params );
         $params['sign'] = $sign;
         
-        // 转换为XML
+        // 杞崲涓篨ML
         $xml = $this->array_to_xml( $params );
         
-        // 发送请求到微信支付服务器（需要证书）
+        // 鍙戦€佽姹傚埌寰俊鏀粯鏈嶅姟鍣紙闇€瑕佽瘉涔︼級
         $gateway_url = $this->get_gateway_url( 'refund' );
         $response = $this->send_request_with_cert( $gateway_url, $xml );
         
-        // 解析XML响应
+        // 瑙ｆ瀽XML鍝嶅簲
         $result = $this->xml_to_array( $response );
         
-        // 检查响应结果
-        if ( ! $result || $result['return_code'] != 'SUCCESS' ) {
-            $error_msg = isset( $result['return_msg'] ) ? $result['return_msg'] : __( '退款申请失败', 'sut-wechat-mini' );
+        // 妫€鏌ュ搷搴旂粨鏋?        if ( ! $result || $result['return_code'] != 'SUCCESS' ) {
+            $error_msg = isset( $result['return_msg'] ) ? $result['return_msg'] : __( '閫€娆剧敵璇峰け璐?, 'sut-wechat-mini' );
             return new WP_Error( 'refund_failed', $error_msg );
         }
         
         if ( $result['result_code'] != 'SUCCESS' ) {
-            $error_msg = isset( $result['err_code_des'] ) ? $result['err_code_des'] : __( '业务处理失败', 'sut-wechat-mini' );
+            $error_msg = isset( $result['err_code_des'] ) ? $result['err_code_des'] : __( '涓氬姟澶勭悊澶辫触', 'sut-wechat-mini' );
             return new WP_Error( 'refund_business_failed', $error_msg );
         }
         
@@ -417,18 +389,15 @@ class SUT_WeChat_Mini_Pay {
     }
     
     /**
-     * 检查支付配置是否有效
-     *
-     * @param bool $check_cert 是否检查证书
-     * @return bool 配置是否有效
+     * 妫€鏌ユ敮浠橀厤缃槸鍚︽湁鏁?     *
+     * @param bool $check_cert 鏄惁妫€鏌ヨ瘉涔?     * @return bool 閰嶇疆鏄惁鏈夋晥
      */
     private function is_config_valid( $check_cert = false ) {
-        // 检查基本配置
-        if ( empty( $this->config['app_id'] ) || empty( $this->config['mch_id'] ) || empty( $this->config['api_key'] ) ) {
+        // 妫€鏌ュ熀鏈厤缃?        if ( empty( $this->config['app_id'] ) || empty( $this->config['mch_id'] ) || empty( $this->config['api_key'] ) ) {
             return false;
         }
         
-        // 检查证书配置（如果需要）
+        // 妫€鏌ヨ瘉涔﹂厤缃紙濡傛灉闇€瑕侊級
         if ( $check_cert && ( empty( $this->config['cert_path'] ) || empty( $this->config['key_path'] ) || ! file_exists( $this->config['cert_path'] ) || ! file_exists( $this->config['key_path'] ) ) ) {
             return false;
         }
@@ -437,11 +406,8 @@ class SUT_WeChat_Mini_Pay {
     }
     
     /**
-     * 生成随机字符串
-     *
-     * @param int $length 字符串长度
-     * @return string 随机字符串
-     */
+     * 鐢熸垚闅忔満瀛楃涓?     *
+     * @param int $length 瀛楃涓查暱搴?     * @return string 闅忔満瀛楃涓?     */
     private function generate_nonce_str( $length = 32 ) {
         $chars = "abcdefghijklmnopqrstuvwxyz0123456789";
         $str = "";
@@ -452,42 +418,38 @@ class SUT_WeChat_Mini_Pay {
     }
     
     /**
-     * 生成签名
+     * 鐢熸垚绛惧悕
      *
-     * @param array $params 参数数组
-     * @return string 签名
+     * @param array $params 鍙傛暟鏁扮粍
+     * @return string 绛惧悕
      */
     private function generate_sign( $params ) {
-        // 按字典序排序
+        // 鎸夊瓧鍏稿簭鎺掑簭
         ksort( $params );
         
-        // 拼接字符串
-        $string = '';
+        // 鎷兼帴瀛楃涓?        $string = '';
         foreach ( $params as $key => $value ) {
             if ( $value && $key != 'sign' ) {
                 $string .= $key . '=' . $value . '&';
             }
         }
         
-        // 添加API密钥
+        // 娣诲姞API瀵嗛挜
         $string .= 'key=' . $this->config['api_key'];
         
-        // MD5加密并转换为大写
+        // MD5鍔犲瘑骞惰浆鎹负澶у啓
         $sign = strtoupper( md5( $string ) );
         
         return $sign;
     }
     
     /**
-     * 生成支付签名（小程序端使用）
+     * 鐢熸垚鏀粯绛惧悕锛堝皬绋嬪簭绔娇鐢級
      *
-     * @param string $time_stamp 时间戳
-     * @param string $nonce_str 随机字符串
-     * @param string $package 订单包
-     * @return string 支付签名
+     * @param string $time_stamp 鏃堕棿鎴?     * @param string $nonce_str 闅忔満瀛楃涓?     * @param string $package 璁㈠崟鍖?     * @return string 鏀粯绛惧悕
      */
     private function generate_pay_sign( $time_stamp, $nonce_str, $package ) {
-        // 构建签名参数
+        // 鏋勫缓绛惧悕鍙傛暟
         $params = array(
             'appId' => $this->config['app_id'],
             'timeStamp' => $time_stamp,
@@ -496,35 +458,34 @@ class SUT_WeChat_Mini_Pay {
             'signType' => 'MD5',
         );
         
-        // 按字典序排序
+        // 鎸夊瓧鍏稿簭鎺掑簭
         ksort( $params );
         
-        // 拼接字符串
-        $string = '';
+        // 鎷兼帴瀛楃涓?        $string = '';
         foreach ( $params as $key => $value ) {
             $string .= $key . '=' . $value . '&';
         }
         
-        // 添加API密钥
+        // 娣诲姞API瀵嗛挜
         $string .= 'key=' . $this->config['api_key'];
         
-        // MD5加密并转换为大写
+        // MD5鍔犲瘑骞惰浆鎹负澶у啓
         $sign = strtoupper( md5( $string ) );
         
         return $sign;
     }
     
     /**
-     * 获取订单描述
+     * 鑾峰彇璁㈠崟鎻忚堪
      *
-     * @param WC_Order $order 订单对象
-     * @return string 订单描述
+     * @param WC_Order $order 璁㈠崟瀵硅薄
+     * @return string 璁㈠崟鎻忚堪
      */
     private function get_order_description( $order ) {
         $site_name = get_bloginfo( 'name' );
-        $description = sprintf( __( '%s - 订单 %s', 'sut-wechat-mini' ), $site_name, $order->get_order_number() );
+        $description = sprintf( __( '%s - 璁㈠崟 %s', 'sut-wechat-mini' ), $site_name, $order->get_order_number() );
         
-        // 限制描述长度
+        // 闄愬埗鎻忚堪闀垮害
         if ( strlen( $description ) > 127 ) {
             $description = substr( $description, 0, 124 ) . '...';
         }
@@ -533,9 +494,9 @@ class SUT_WeChat_Mini_Pay {
     }
     
     /**
-     * 获取客户端IP地址
+     * 鑾峰彇瀹㈡埛绔疘P鍦板潃
      *
-     * @return string IP地址
+     * @return string IP鍦板潃
      */
     private function get_client_ip() {
         $ip = '';
@@ -547,8 +508,7 @@ class SUT_WeChat_Mini_Pay {
             $ip = $_SERVER['REMOTE_ADDR'];
         }
         
-        // 处理多个IP地址的情况
-        if ( strpos( $ip, ',' ) !== false ) {
+        // 澶勭悊澶氫釜IP鍦板潃鐨勬儏鍐?        if ( strpos( $ip, ',' ) !== false ) {
             $ips = explode( ',', $ip );
             $ip = trim( $ips[0] );
         }
@@ -557,10 +517,10 @@ class SUT_WeChat_Mini_Pay {
     }
     
     /**
-     * 获取微信支付网关URL
+     * 鑾峰彇寰俊鏀粯缃戝叧URL
      *
-     * @param string $api_name API名称
-     * @return string 网关URL
+     * @param string $api_name API鍚嶇О
+     * @return string 缃戝叧URL
      */
     private function get_gateway_url( $api_name ) {
         $base_url = $this->config['sandbox'] ? 'https://api.mch.weixin.qq.com/sandboxnew/' : 'https://api.mch.weixin.qq.com/pay/';
@@ -568,12 +528,12 @@ class SUT_WeChat_Mini_Pay {
     }
     
     /**
-     * 获取沙箱环境的signkey
+     * 鑾峰彇娌欑鐜鐨剆ignkey
      *
-     * @return string 沙箱signkey
+     * @return string 娌欑signkey
      */
     private function get_sandbox_signkey() {
-        // 构建请求参数
+        // 鏋勫缓璇锋眰鍙傛暟
         $nonce_str = $this->generate_nonce_str();
         
         $params = array(
@@ -581,21 +541,20 @@ class SUT_WeChat_Mini_Pay {
             'nonce_str' => $nonce_str,
         );
         
-        // 生成签名
+        // 鐢熸垚绛惧悕
         $sign = $this->generate_sign( $params );
         $params['sign'] = $sign;
         
-        // 转换为XML
+        // 杞崲涓篨ML
         $xml = $this->array_to_xml( $params );
         
-        // 发送请求
-        $url = 'https://api.mch.weixin.qq.com/sandboxnew/pay/getsignkey';
+        // 鍙戦€佽姹?        $url = 'https://api.mch.weixin.qq.com/sandboxnew/pay/getsignkey';
         $response = $this->send_request( $url, $xml );
         
-        // 解析响应
+        // 瑙ｆ瀽鍝嶅簲
         $result = $this->xml_to_array( $response );
         
-        // 返回signkey
+        // 杩斿洖signkey
         if ( $result && $result['return_code'] == 'SUCCESS' && $result['result_code'] == 'SUCCESS' ) {
             return $result['sandbox_signkey'];
         }
@@ -604,11 +563,11 @@ class SUT_WeChat_Mini_Pay {
     }
     
     /**
-     * 发送HTTP请求
+     * 鍙戦€丠TTP璇锋眰
      *
-     * @param string $url 请求URL
-     * @param string $data 请求数据
-     * @return string 响应数据
+     * @param string $url 璇锋眰URL
+     * @param string $data 璇锋眰鏁版嵁
+     * @return string 鍝嶅簲鏁版嵁
      */
     private function send_request( $url, $data ) {
         $ch = curl_init();
@@ -624,7 +583,7 @@ class SUT_WeChat_Mini_Pay {
         $response = curl_exec( $ch );
         
         if ( curl_errno( $ch ) ) {
-            error_log( 'SUT微信小程序支付请求错误: ' . curl_error( $ch ) );
+            error_log( 'SUT寰俊灏忕▼搴忔敮浠樿姹傞敊璇? ' . curl_error( $ch ) );
         }
         
         curl_close( $ch );
@@ -633,11 +592,11 @@ class SUT_WeChat_Mini_Pay {
     }
     
     /**
-     * 发送带证书的HTTP请求
+     * 鍙戦€佸甫璇佷功鐨凥TTP璇锋眰
      *
-     * @param string $url 请求URL
-     * @param string $data 请求数据
-     * @return string 响应数据
+     * @param string $url 璇锋眰URL
+     * @param string $data 璇锋眰鏁版嵁
+     * @return string 鍝嶅簲鏁版嵁
      */
     private function send_request_with_cert( $url, $data ) {
         $ch = curl_init();
@@ -650,7 +609,7 @@ class SUT_WeChat_Mini_Pay {
         curl_setopt( $ch, CURLOPT_SSL_VERIFYHOST, 0 );
         curl_setopt( $ch, CURLOPT_TIMEOUT, 30 );
         
-        // 设置证书
+        // 璁剧疆璇佷功
         curl_setopt( $ch, CURLOPT_SSLCERTTYPE, 'PEM' );
         curl_setopt( $ch, CURLOPT_SSLCERT, $this->config['cert_path'] );
         curl_setopt( $ch, CURLOPT_SSLKEYTYPE, 'PEM' );
@@ -659,7 +618,7 @@ class SUT_WeChat_Mini_Pay {
         $response = curl_exec( $ch );
         
         if ( curl_errno( $ch ) ) {
-            error_log( 'SUT微信小程序支付证书请求错误: ' . curl_error( $ch ) );
+            error_log( 'SUT寰俊灏忕▼搴忔敮浠樿瘉涔﹁姹傞敊璇? ' . curl_error( $ch ) );
         }
         
         curl_close( $ch );
@@ -668,11 +627,10 @@ class SUT_WeChat_Mini_Pay {
     }
     
     /**
-     * 数组转XML
+     * 鏁扮粍杞琗ML
      *
-     * @param array $arr 数组
-     * @return string XML字符串
-     */
+     * @param array $arr 鏁扮粍
+     * @return string XML瀛楃涓?     */
     private function array_to_xml( $arr ) {
         $xml = '<xml>';
         foreach ( $arr as $key => $val ) {
@@ -688,10 +646,8 @@ class SUT_WeChat_Mini_Pay {
     }
     
     /**
-     * XML转数组
-     *
-     * @param string $xml XML字符串
-     * @return array 转换后的数组
+     * XML杞暟缁?     *
+     * @param string $xml XML瀛楃涓?     * @return array 杞崲鍚庣殑鏁扮粍
      */
     private function xml_to_array( $xml ) {
         $obj = simplexml_load_string( $xml, 'SimpleXMLElement', LIBXML_NOCDATA );
@@ -703,8 +659,7 @@ class SUT_WeChat_Mini_Pay {
 }
 
 /**
- * 初始化支付集成
- */
+ * 鍒濆鍖栨敮浠橀泦鎴? */
 function sut_wechat_mini_pay_init() {
     SUT_WeChat_Mini_Pay::get_instance();
 }

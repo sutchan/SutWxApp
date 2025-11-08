@@ -1,37 +1,29 @@
-// 订单确认页面逻辑
+﻿// 璁㈠崟纭椤甸潰閫昏緫
 const app = getApp();
 const { showToast } = app.global;
 
 Page({
   data: {
-    selectedAddress: null, // 选中的地址
-    cartItems: [], // 购物车商品（从购物车页面传入）
-    products: [], // 直接购买的商品（从商品详情页传入）
-    coupon: null, // 选中的优惠券
-    totalPrice: 0, // 商品总价
-    totalCount: 0, // 商品总数量
-    shippingFee: 0, // 运费
-    discount: 0, // 优惠金额
-    finalPrice: 0, // 最终价格
-    remark: '', // 订单备注
-    loading: false, // 加载状态
-    submitting: false // 提交状态
-  },
+    selectedAddress: null, // 閫変腑鐨勫湴鍧€
+    cartItems: [], // 璐墿杞﹀晢鍝侊紙浠庤喘鐗╄溅椤甸潰浼犲叆锛?    products: [], // 鐩存帴璐拱鐨勫晢鍝侊紙浠庡晢鍝佽鎯呴〉浼犲叆锛?    coupon: null, // 閫変腑鐨勪紭鎯犲埜
+    totalPrice: 0, // 鍟嗗搧鎬讳环
+    totalCount: 0, // 鍟嗗搧鎬绘暟閲?    shippingFee: 0, // 杩愯垂
+    discount: 0, // 浼樻儬閲戦
+    finalPrice: 0, // 鏈€缁堜环鏍?    remark: '', // 璁㈠崟澶囨敞
+    loading: false, // 鍔犺浇鐘舵€?    submitting: false // 鎻愪氦鐘舵€?  },
 
   /**
-   * 生命周期函数--监听页面加载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
    */
   onLoad: function(options) {
-    // 记录页面访问事件
+    // 璁板綍椤甸潰璁块棶浜嬩欢
     app.analyticsService.track('page_view', {
       page: 'order_confirm'
     });
     
-    // 检查是否登录
-    if (!app.isLoggedIn()) {
-      showToast('请先登录', 'none');
-      // 延迟跳转登录页
-      setTimeout(() => {
+    // 妫€鏌ユ槸鍚︾櫥褰?    if (!app.isLoggedIn()) {
+      showToast('璇峰厛鐧诲綍', 'none');
+      // 寤惰繜璺宠浆鐧诲綍椤?      setTimeout(() => {
         wx.navigateTo({
           url: '/pages/user/login/login'
         });
@@ -39,19 +31,19 @@ Page({
       return;
     }
     
-    // 获取页面参数
+    // 鑾峰彇椤甸潰鍙傛暟
     const cartItemsStr = options.cartItems;
     const productStr = options.product;
     
     if (cartItemsStr) {
-      // 从购物车页面跳转过来
+      // 浠庤喘鐗╄溅椤甸潰璺宠浆杩囨潵
       try {
-        // 首先尝试从全局数据获取
+        // 棣栧厛灏濊瘯浠庡叏灞€鏁版嵁鑾峰彇
         if (app.globalData.tempOrderItems) {
           this.setData({
             cartItems: app.globalData.tempOrderItems
           });
-          // 清空临时数据
+          // 娓呯┖涓存椂鏁版嵁
           app.globalData.tempOrderItems = null;
         } else if (cartItemsStr) {
           const cartItems = JSON.parse(decodeURIComponent(cartItemsStr));
@@ -60,33 +52,33 @@ Page({
           });
         }
       } catch (e) {
-        console.error('解析购物车数据失败', e);
+        console.error('瑙ｆ瀽璐墿杞︽暟鎹け璐?, e);
       }
     } else if (productStr) {
-      // 从商品详情页直接购买跳转过来
+      // 浠庡晢鍝佽鎯呴〉鐩存帴璐拱璺宠浆杩囨潵
       try {
         const product = JSON.parse(decodeURIComponent(productStr));
         this.setData({
           products: [product]
         });
       } catch (e) {
-        console.error('解析商品数据失败', e);
+        console.error('瑙ｆ瀽鍟嗗搧鏁版嵁澶辫触', e);
       }
     }
     
-    // 计算价格
+    // 璁＄畻浠锋牸
     this.calculatePrice();
     
-    // 加载默认地址
+    // 鍔犺浇榛樿鍦板潃
     this.loadDefaultAddress();
   },
 
   /**
-   * 加载默认地址
+   * 鍔犺浇榛樿鍦板潃
    */
   async loadDefaultAddress() {
     try {
-      // 使用addressService获取默认地址
+      // 浣跨敤addressService鑾峰彇榛樿鍦板潃
       const res = await app.services.address.getDefaultAddress();
       if (res) {
         this.setData({
@@ -94,12 +86,12 @@ Page({
         });
       }
     } catch (err) {
-      console.error('获取默认地址失败', err);
+      console.error('鑾峰彇榛樿鍦板潃澶辫触', err);
     }
   },
 
   /**
-   * 选择地址
+   * 閫夋嫨鍦板潃
    */
   onSelectAddress: function() {
     wx.navigateTo({
@@ -108,28 +100,25 @@ Page({
   },
 
   /**
-   * 选择优惠券
-   */
+   * 閫夋嫨浼樻儬鍒?   */
   onSelectCoupon: function() {
-    // 记录优惠券选择事件
+    // 璁板綍浼樻儬鍒搁€夋嫨浜嬩欢
     if (app.analyticsService) {
       app.analyticsService.track('coupon_selection_attempted');
     }
     
-    // 检查是否登录
-    if (!app.isLoggedIn()) {
-      showToast('请先登录', 'none');
+    // 妫€鏌ユ槸鍚︾櫥褰?    if (!app.isLoggedIn()) {
+      showToast('璇峰厛鐧诲綍', 'none');
       return;
     }
     
-    // 构建优惠券选择所需的参数
-    const params = {
+    // 鏋勫缓浼樻儬鍒搁€夋嫨鎵€闇€鐨勫弬鏁?    const params = {
       total_amount: this.data.totalPrice,
       product_ids: [],
       current_coupon_id: this.data.coupon ? this.data.coupon.id : ''
     };
     
-    // 收集所有商品ID
+    // 鏀堕泦鎵€鏈夊晢鍝両D
     this.data.cartItems.forEach(item => {
       params.product_ids.push(item.productId);
     });
@@ -138,20 +127,20 @@ Page({
       params.product_ids.push(item.id);
     });
     
-    // 跳转到优惠券选择页面并建立事件通道
+    // 璺宠浆鍒颁紭鎯犲埜閫夋嫨椤甸潰骞跺缓绔嬩簨浠堕€氶亾
     wx.navigateTo({
       url: `/pages/user/coupon/select?params=${encodeURIComponent(JSON.stringify(params))}`,
       events: {
-        // 监听优惠券选择结果
+        // 鐩戝惉浼樻儬鍒搁€夋嫨缁撴灉
         selectCoupon: (data) => {
           if (data && data.coupon) {
-            // 设置选中的优惠券
+            // 璁剧疆閫変腑鐨勪紭鎯犲埜
             this.setData({
               coupon: data.coupon
             });
-            // 重新计算价格
+            // 閲嶆柊璁＄畻浠锋牸
             this.calculatePrice();
-            // 记录优惠券选择成功事件
+            // 璁板綍浼樻儬鍒搁€夋嫨鎴愬姛浜嬩欢
             if (app.analyticsService) {
               app.analyticsService.track('coupon_selected', {
                 coupon_id: data.coupon.id,
@@ -159,14 +148,12 @@ Page({
               });
             }
           } else if (data && data.clearCoupon) {
-            // 清空优惠券
-            this.setData({
+            // 娓呯┖浼樻儬鍒?            this.setData({
               coupon: null
             });
-            // 重新计算价格
+            // 閲嶆柊璁＄畻浠锋牸
             this.calculatePrice();
-            // 记录取消优惠券事件
-            if (app.analyticsService) {
+            // 璁板綍鍙栨秷浼樻儬鍒镐簨浠?            if (app.analyticsService) {
               app.analyticsService.track('coupon_cleared');
             }
           }
@@ -176,7 +163,7 @@ Page({
   },
 
   /**
-   * 输入订单备注
+   * 杈撳叆璁㈠崟澶囨敞
    */
   onRemarkInput: function(e) {
     this.setData({
@@ -185,35 +172,31 @@ Page({
   },
 
   /**
-   * 计算价格
+   * 璁＄畻浠锋牸
    */
   calculatePrice: function() {
     let totalPrice = 0;
     let totalCount = 0;
     
-    // 计算购物车商品总价和数量
-    this.data.cartItems.forEach(item => {
+    // 璁＄畻璐墿杞﹀晢鍝佹€讳环鍜屾暟閲?    this.data.cartItems.forEach(item => {
       totalPrice += item.price * item.quantity;
       totalCount += item.quantity;
     });
     
-    // 计算直接购买商品总价和数量
-    this.data.products.forEach(item => {
+    // 璁＄畻鐩存帴璐拱鍟嗗搧鎬讳环鍜屾暟閲?    this.data.products.forEach(item => {
       totalPrice += item.price * item.quantity;
       totalCount += item.quantity;
     });
     
-    // 设置运费（这里简化为订单满88元免运费）
-    let shippingFee = totalPrice >= 88 ? 0 : 10;
+    // 璁剧疆杩愯垂锛堣繖閲岀畝鍖栦负璁㈠崟婊?8鍏冨厤杩愯垂锛?    let shippingFee = totalPrice >= 88 ? 0 : 10;
     
-    // 计算优惠金额
+    // 璁＄畻浼樻儬閲戦
     let discount = 0;
     if (this.data.coupon && app.services.coupon) {
       discount = app.services.coupon.calculateDiscount(this.data.coupon, totalPrice);
     }
     
-    // 计算最终价格
-    let finalPrice = Math.max(0, totalPrice + shippingFee - discount);
+    // 璁＄畻鏈€缁堜环鏍?    let finalPrice = Math.max(0, totalPrice + shippingFee - discount);
     
     this.setData({
       totalPrice: totalPrice,
@@ -225,12 +208,11 @@ Page({
   },
 
   /**
-   * 提交订单
+   * 鎻愪氦璁㈠崟
    */
   async onSubmitOrder() {
-    // 检查是否登录
-    if (!app.isLoggedIn()) {
-      showToast('请先登录', 'none');
+    // 妫€鏌ユ槸鍚︾櫥褰?    if (!app.isLoggedIn()) {
+      showToast('璇峰厛鐧诲綍', 'none');
       setTimeout(() => {
         wx.navigateTo({
           url: '/pages/user/login/login'
@@ -239,27 +221,26 @@ Page({
       return;
     }
     
-    // 检查是否选择了地址
+    // 妫€鏌ユ槸鍚﹂€夋嫨浜嗗湴鍧€
     if (!this.data.selectedAddress) {
-      showToast('请选择收货地址', 'none');
+      showToast('璇烽€夋嫨鏀惰揣鍦板潃', 'none');
       return;
     }
     
-    // 检查是否有商品
+    // 妫€鏌ユ槸鍚︽湁鍟嗗搧
     if (this.data.cartItems.length === 0 && this.data.products.length === 0) {
-      showToast('请选择要购买的商品', 'none');
+      showToast('璇烽€夋嫨瑕佽喘涔扮殑鍟嗗搧', 'none');
       return;
     }
     
-    // 构建订单数据
+    // 鏋勫缓璁㈠崟鏁版嵁
     const orderData = {
       addressId: this.data.selectedAddress.id,
       remark: this.data.remark,
       items: []
     };
     
-    // 添加购物车商品
-    this.data.cartItems.forEach(item => {
+    // 娣诲姞璐墿杞﹀晢鍝?    this.data.cartItems.forEach(item => {
       orderData.items.push({
         productId: item.productId,
         skuId: item.skuId,
@@ -268,8 +249,7 @@ Page({
       });
     });
     
-    // 添加直接购买的商品
-    this.data.products.forEach(item => {
+    // 娣诲姞鐩存帴璐拱鐨勫晢鍝?    this.data.products.forEach(item => {
       orderData.items.push({
         productId: item.id,
         skuId: item.selectedSkuId,
@@ -283,28 +263,27 @@ Page({
     });
     
     try {
-      // 使用orderService创建订单
+      // 浣跨敤orderService鍒涘缓璁㈠崟
       const res = await app.services.order.createOrder(orderData);
       const orderId = res.orderId;
       
-      // 记录订单创建事件
+      // 璁板綍璁㈠崟鍒涘缓浜嬩欢
       app.analyticsService.track('order_created', {
         order_id: orderId,
         total_amount: this.data.finalPrice,
         item_count: orderData.items.length
       });
       
-      // 显示成功提示
-      showToast('订单创建成功', 'success');
+      // 鏄剧ず鎴愬姛鎻愮ず
+      showToast('璁㈠崟鍒涘缓鎴愬姛', 'success');
       
-      // 延迟跳转到支付页面
-      setTimeout(() => {
+      // 寤惰繜璺宠浆鍒版敮浠橀〉闈?      setTimeout(() => {
         wx.navigateTo({
           url: `/pages/order/pay?orderId=${orderId}`
         });
       }, 1500);
     } catch (err) {
-      showToast(err.message || '订单创建失败，请重试', 'none');
+      showToast(err.message || '璁㈠崟鍒涘缓澶辫触锛岃閲嶈瘯', 'none');
     } finally {
       this.setData({
         submitting: false
@@ -313,36 +292,35 @@ Page({
   },
 
   /**
-   * 生命周期函数--监听页面显示
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
    */
   onShow: function() {
-    // 检查是否从地址选择页面返回
+    // 妫€鏌ユ槸鍚︿粠鍦板潃閫夋嫨椤甸潰杩斿洖
     const pages = getCurrentPages();
     if (pages.length > 1) {
-      // 获取上一个页面的数据
+      // 鑾峰彇涓婁竴涓〉闈㈢殑鏁版嵁
       const prevPage = pages[pages.length - 2];
       
-      // 检查是否选择了地址
+      // 妫€鏌ユ槸鍚﹂€夋嫨浜嗗湴鍧€
       if (prevPage && prevPage.data.selectedAddressId) {
-        // 如果有选中的地址ID，则获取地址详情
+        // 濡傛灉鏈夐€変腑鐨勫湴鍧€ID锛屽垯鑾峰彇鍦板潃璇︽儏
         this.loadAddressDetail(prevPage.data.selectedAddressId);
-        // 清除上一页的选择状态
-        delete prevPage.data.selectedAddressId;
+        // 娓呴櫎涓婁竴椤电殑閫夋嫨鐘舵€?        delete prevPage.data.selectedAddressId;
       }
     }
     
-    // 使用事件通道接收优惠券选择结果
+    // 浣跨敤浜嬩欢閫氶亾鎺ユ敹浼樻儬鍒搁€夋嫨缁撴灉
     const eventChannel = this.getOpenerEventChannel();
     if (eventChannel) {
       eventChannel.on('selectCoupon', (data) => {
         if (data && data.coupon) {
-          // 设置选中的优惠券
+          // 璁剧疆閫変腑鐨勪紭鎯犲埜
           this.setData({
             coupon: data.coupon
           });
-          // 重新计算价格
+          // 閲嶆柊璁＄畻浠锋牸
           this.calculatePrice();
-          // 记录优惠券选择成功事件
+          // 璁板綍浼樻儬鍒搁€夋嫨鎴愬姛浜嬩欢
           if (app.analyticsService) {
             app.analyticsService.track('coupon_selected', {
               coupon_id: data.coupon.id,
@@ -350,14 +328,12 @@ Page({
             });
           }
         } else if (data && data.clearCoupon) {
-          // 清空优惠券
-          this.setData({
+          // 娓呯┖浼樻儬鍒?          this.setData({
             coupon: null
           });
-          // 重新计算价格
+          // 閲嶆柊璁＄畻浠锋牸
           this.calculatePrice();
-          // 记录取消优惠券事件
-          if (app.analyticsService) {
+          // 璁板綍鍙栨秷浼樻儬鍒镐簨浠?          if (app.analyticsService) {
             app.analyticsService.track('coupon_cleared');
           }
         }
@@ -366,7 +342,7 @@ Page({
   },
   
   /**
-   * 加载地址详情
+   * 鍔犺浇鍦板潃璇︽儏
    */
   async loadAddressDetail(addressId) {
     try {
@@ -375,7 +351,7 @@ Page({
         selectedAddress: address
       });
     } catch (err) {
-      console.error('加载地址详情失败', err);
+      console.error('鍔犺浇鍦板潃璇︽儏澶辫触', err);
     }
   }
 });

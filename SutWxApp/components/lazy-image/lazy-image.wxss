@@ -1,9 +1,9 @@
-/* lazy-image.wxss - 图片懒加载组件样式 */
+﻿/* lazy-image.wxss - 鍥剧墖鎳掑姞杞界粍浠舵牱寮?*/
 
 .lazy-image-container {
   position: relative;
   overflow: hidden;
-  /* 默认宽高比例 */
+  /* 榛樿瀹介珮姣斾緥 */
   width: 100%;
   min-height: 120rpx;
   cursor: pointer;
@@ -25,7 +25,7 @@
   display: block;
 }
 
-/* 渐进式加载动画效果 */
+/* 娓愯繘寮忓姞杞藉姩鐢绘晥鏋?*/
 .lazy-image-container:not(.loaded) .lazy-image {
   filter: blur(10px);
   transition: filter 0.5s ease-in-out, opacity 0.3s ease-in-out;
@@ -35,7 +35,7 @@
   filter: blur(0);
 }
 
-/* 加载动画 */
+/* 鍔犺浇鍔ㄧ敾 */
 .loading-indicator {
   position: absolute;
   top: 0;
@@ -67,7 +67,7 @@
   }
 }
 
-/* 加载失败提示 */
+/* 鍔犺浇澶辫触鎻愮ず */
 .error-indicator {
   position: absolute;
   top: 0;
@@ -93,7 +93,7 @@
   padding: 10rpx;
 }
 
-/* 辅助样式类 */
+/* 杈呭姪鏍峰紡绫?*/
 .no-transition .lazy-image {
   transition: none;
 }
