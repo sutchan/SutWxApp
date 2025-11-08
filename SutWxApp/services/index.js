@@ -98,3 +98,4 @@ exports.services = serviceRegistry;
   services: serviceRegistry,
   ...serviceRegistry
 };
+\n

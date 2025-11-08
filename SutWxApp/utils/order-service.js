@@ -702,4 +702,4 @@ export const getOrderTracking = async (orderId) => {
   buyAgain,
   rateOrder,
   getOrderTracking
-};
+};\n

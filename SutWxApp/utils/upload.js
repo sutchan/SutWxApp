@@ -199,4 +199,4 @@ export function previewImage(urls, current = 0) {
   uploadImages,
   chooseAndUploadImage,
   previewImage
-};
+};\n

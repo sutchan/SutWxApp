@@ -137,4 +137,4 @@ Page({
     
     this.setData({ faqs });
   }
-});
+});\n

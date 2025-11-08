@@ -1750,4 +1750,4 @@ function sut_wechat_mini_woocommerce_init() {
     SUT_WeChat_Mini_WooCommerce::get_instance();
 }
 
-add_action( 'plugins_loaded', 'sut_wechat_mini_woocommerce_init' );
+add_action( 'plugins_loaded', 'sut_wechat_mini_woocommerce_init' );\n

@@ -46,4 +46,4 @@
       <text class="action-link" bind:tap="onBackToOrderList">杩斿洖璁㈠崟鍒楄〃</text>
     </view>
   </view>
-</view>
+</view>\n

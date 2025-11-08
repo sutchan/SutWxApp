@@ -410,4 +410,4 @@ describe('AppInitializer', () => {
       expect(onCompleteCallback).toHaveBeenCalledWith(false);
     });
   });
-});
+});\n

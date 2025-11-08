@@ -664,4 +664,4 @@ function sut_wechat_mini_pay_init() {
     SUT_WeChat_Mini_Pay::get_instance();
 }
 
-add_action( 'plugins_loaded', 'sut_wechat_mini_pay_init' );
+add_action( 'plugins_loaded', 'sut_wechat_mini_pay_init' );\n

@@ -186,4 +186,4 @@
 
   <!-- 閬僵灞?-->
   <view class="overlay" wx:if="{{logisticsVisible}}" bindtap="closeLogistics"></view>
-</view>
+</view>\n

@@ -42,4 +42,4 @@
     <view class="company-name">{{companyName}}</view>
     <view class="copyright-text">{{copyright}}</view>
   </view>
-</view>
+</view>\n

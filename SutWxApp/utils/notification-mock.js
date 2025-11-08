@@ -274,4 +274,4 @@ const NotificationMockService = {
   }
 };
 
-module.exports = NotificationMockService;
+module.exports = NotificationMockService;\n

@@ -86,4 +86,4 @@
   <view class="version-info">
     <text>鐗堟湰 {{appVersion}}</text>
   </view>
-</view>
+</view>\n

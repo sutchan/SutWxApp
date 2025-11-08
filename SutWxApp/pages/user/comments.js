@@ -200,4 +200,4 @@ Page({
   retryLoad: function() {
     this.loadCommentsData(true);
   }
-});
+});\n

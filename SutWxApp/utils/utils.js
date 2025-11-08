@@ -217,4 +217,4 @@ export const getRelativeTime = (time) => {
   uniqueArray,
   getDaysDiff,
   getRelativeTime
-};
+};\n

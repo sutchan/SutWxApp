@@ -875,4 +875,4 @@ class SUT_WeChat_Mini_Messages {
         
         error_log( 'SUT寰俊灏忕▼搴忔秷鎭帹閫? ' . json_encode( $log_data ) );
     }
-}
+}\n

@@ -809,4 +809,4 @@ msgid "娣诲姞鏂伴〉闈㈡ā鏉?
 msgstr "Add New Page Template"
 
 msgid "鏂伴〉闈㈡ā鏉垮悕绉?
-msgstr "New Page Template Name"
+msgstr "New Page Template Name"\n

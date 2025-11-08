@@ -82,4 +82,4 @@ msgstr "璇风◢鍚庡啀鏌ョ湅"
 msgstr "绉垎鏄庣粏"
 
 #: pages/user/points-tasks.wxmlmsgid "retry"
-msgstr "閲嶈瘯"
+msgstr "閲嶈瘯"\n

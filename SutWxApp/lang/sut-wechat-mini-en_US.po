@@ -464,4 +464,4 @@ msgid "points_exchange_history_failed"
 msgstr "Failed"
 
 msgid "points_exchange_history_processing"
-msgstr "Processing"
+msgstr "Processing"\n

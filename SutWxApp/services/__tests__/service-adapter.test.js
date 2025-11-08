@@ -220,4 +220,4 @@ describe('Service Adapter Extension', () => {
     expect(result).toBe('overridden result');
     expect(sourceService.methodToOverride).not.toHaveBeenCalled();
   });
-});
+});\n

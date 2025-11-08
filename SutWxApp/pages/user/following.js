@@ -257,4 +257,4 @@ Page({
   onReachBottom: function() {
     this.loadMore();
   }
-});
+});\n

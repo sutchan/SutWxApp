@@ -639,4 +639,4 @@ class SUT_WeChat_Mini_Cache {
         
         return $data;
     }
-}
+}\n

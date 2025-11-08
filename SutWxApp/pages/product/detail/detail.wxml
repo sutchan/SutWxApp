@@ -100,4 +100,4 @@
       <button class="buy-btn" bindtap="buyNow">绔嬪嵆璐拱</button>
     </view>
   </view>
-</view>
+</view>\n

@@ -164,4 +164,4 @@ Page({
     
     this.loadPrivacySettings();
   }
-});
+});\n

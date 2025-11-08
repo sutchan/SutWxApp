@@ -323,3 +323,4 @@ module.exports = {
   registerServiceAdapters,
   serviceManager
 };
+\n

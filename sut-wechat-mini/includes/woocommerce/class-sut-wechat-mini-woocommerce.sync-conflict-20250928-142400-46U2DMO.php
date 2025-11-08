@@ -1554,4 +1554,4 @@ class SUT_WeChat_Mini_WooCommerce {
             'payment_method' => $order->get_payment_method(),
             'payment_method_title' => $order->get_payment_method_title(),
             'date_created' => $order->get_date_created() ? $order->get_date_created()->format( 'Y-m-d H:i:s' ) : '',
-            'date_modified' => $order->get_date_modified() ? $order->get_date_modified()->format( 'Y-m-d H:i:s' ) : '',
+            'date_modified' => $order->get_date_modified() ? $order->get_date_modified()->format( 'Y-m-d H:i:s' ) : '',\n

@@ -370,3 +370,4 @@ module.exports = {
     appInitializer.shutdown();
   }
 };
+\n

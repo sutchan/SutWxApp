@@ -289,4 +289,4 @@ export const checkFavoriteStatus = async (productId) => {
   favoriteProduct,
   unfavoriteProduct,
   checkFavoriteStatus
-};
+};\n

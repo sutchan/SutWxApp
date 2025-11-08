@@ -1006,4 +1006,4 @@ class SUT_WeChat_Mini_Install {
         
         return $statistics;
     }
-}
+}\n

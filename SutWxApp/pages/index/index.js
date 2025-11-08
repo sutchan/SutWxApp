@@ -377,4 +377,4 @@ Page({
       imageUrl: this.data.bannerList && this.data.bannerList.length > 0 ? this.data.bannerList[0].image_url : ''
     };
   }
-});
+});\n

@@ -207,4 +207,4 @@
 .no-more-text {
   color: #ccc;
   font-size: 26rpx;
-}
+}\n

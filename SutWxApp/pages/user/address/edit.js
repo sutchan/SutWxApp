@@ -196,4 +196,4 @@ Page({
       this.setData({ submitting: false });
     }
   }
-});
+});\n

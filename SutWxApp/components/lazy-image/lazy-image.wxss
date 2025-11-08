@@ -104,4 +104,4 @@
 
 .rectangle {
   aspect-ratio: 16/9;
-}
+}\n

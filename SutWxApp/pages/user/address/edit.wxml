@@ -44,4 +44,4 @@
     <!-- 鎻愪氦鎸夐挳 -->
     <button class="submit-btn" form-type="submit" loading="{{submitting}}" disabled="{{submitting}}">{{mode === 'add' ? '淇濆瓨' : '淇濆瓨淇敼'}}</button>
   </form>
-</view>
+</view>\n

@@ -130,3 +130,4 @@ Page({
     this.loadProducts(true);
   }
 });
+\n

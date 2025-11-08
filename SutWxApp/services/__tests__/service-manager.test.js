@@ -168,4 +168,4 @@ describe('ServiceManager', () => {
       expect(services).toContain(serviceB);
     });
   });
-});
+});\n

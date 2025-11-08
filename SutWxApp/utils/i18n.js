@@ -179,4 +179,4 @@ export default {
   loadTranslations,
   t,
   getSupportedLanguages
-};
+};\n

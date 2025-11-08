@@ -195,4 +195,4 @@ Page({
     
     this.loadAddressList();
   }
-});
+});\n

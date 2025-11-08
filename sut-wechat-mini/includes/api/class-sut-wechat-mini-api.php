@@ -470,4 +470,4 @@ class SUT_WeChat_Mini_API {
         
         return $data;
     }
-}
+}\n

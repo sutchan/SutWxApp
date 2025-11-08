@@ -553,4 +553,4 @@ export const checkFavoriteStatus = async (postId) => {
   increaseViewCount,
   getCategories,
   clearArticleCache
-};
+};\n

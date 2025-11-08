@@ -82,4 +82,4 @@ msgstr ""
 msgstr ""
 
 #: pages/user/points-tasks.wxmlmsgid "retry"
-msgstr ""
+msgstr ""\n

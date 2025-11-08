@@ -338,4 +338,4 @@ Page({
       imageUrl: this.data.images[0] || ''
     };
   }
-});
+});\n

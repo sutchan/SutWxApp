@@ -1,4 +1,4 @@
-﻿// 寰俊灏忕▼搴忓叆鍙ｆ枃浠?// 瀵煎叆鏈嶅姟妯″潡
+// 寰俊灏忕▼搴忓叆鍙ｆ枃浠?// 瀵煎叆鏈嶅姟妯″潡
 import api from './utils/api';
 import authService from './utils/auth-service';
 import articleService from './utils/article-service';
@@ -463,4 +463,4 @@ App({
       return {};
     }
   }
-});
+});\n

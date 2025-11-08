@@ -311,4 +311,4 @@ Page({
   backToCart: function () {
     wx.navigateBack();
   }
-});
+});\n

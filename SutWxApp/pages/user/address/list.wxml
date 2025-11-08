@@ -50,4 +50,4 @@
     <!-- 娣诲姞鍦板潃鎸夐挳 -->
     <button class="add-address-btn" bind:tap="onAddAddress" wx:if="{{addressList.length > 0 && !selectMode}}">+ 娣诲姞鏂板湴鍧€</button>
   </view>
-</view>
+</view>\n

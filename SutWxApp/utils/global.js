@@ -260,4 +260,4 @@ export function getPageParams() {
   debounce,
   throttle,
   getPageParams
-};
+};\n

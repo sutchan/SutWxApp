@@ -270,4 +270,4 @@ export const filterCommentContent = (content) => {
   getUserComments,
   updateComment,
   filterCommentContent
-};
+};\n

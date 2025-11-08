@@ -342,4 +342,4 @@ describe('ServiceIntegration', () => {
       expect(service).toBeNull();
     });
   });
-});
+});\n

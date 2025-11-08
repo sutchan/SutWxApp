@@ -98,4 +98,4 @@
     <button class="retry-button" bindtap="onRetry">閲嶈瘯</button>
     <text class="error-note">褰撳墠鏄剧ず鐨勬槸榛樿瑙勫垯锛岃閲嶈瘯鑾峰彇鏈€鏂拌鍒?/text>
   </view>
-</view>
+</view>\n

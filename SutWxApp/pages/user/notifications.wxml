@@ -78,4 +78,4 @@
   <view class="mark-all-read" wx:if="{{unreadCount > 0}}" bindtap="markAllAsRead">
     鍏ㄩ儴宸茶
   </view>
-</view>
+</view>\n

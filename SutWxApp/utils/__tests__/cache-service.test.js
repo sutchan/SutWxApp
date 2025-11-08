@@ -323,4 +323,4 @@ describe('缂撳瓨棰勭儹鍔熻兘', () => {
     expect(results[0].success).toBe(false);
     expect(results[0].error).toBe('Failed');
   });
-});
+});\n

@@ -162,4 +162,4 @@ Page({
     
     this.loadUserSettings();
   }
-});
+});\n

@@ -366,4 +366,4 @@
   .result-amount {
     font-size: 40rpx;
   }
-}
+}\n

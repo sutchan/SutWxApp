@@ -121,4 +121,4 @@
       {{submitting ? '鎻愪氦涓?..' : '鎻愪氦璇勪环'}}
     </button>
   </view>
-</view>
+</view>\n

@@ -94,4 +94,4 @@
   <view class="no-more" wx:if="{{!loading && !error && !hasMore && productList.length > 0}}">
     <text>娌℃湁鏇村浜?/text>
   </view>
-</view>
+</view>\n

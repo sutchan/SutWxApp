@@ -312,4 +312,4 @@ Page({
       this.loadNotifications(false);
     }
   }
-});
+});\n

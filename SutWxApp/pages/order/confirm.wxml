@@ -89,4 +89,4 @@
     </view>
     <button class="submit-btn" bind:tap="onSubmitOrder" loading="{{submitting}}" disabled="{{submitting}}">鎻愪氦璁㈠崟</button>
   </view>
-</view>
+</view>\n

@@ -13,4 +13,4 @@ module.exports = [
       'quotes': ['error', 'single']
     }
   }
-];
+];\n

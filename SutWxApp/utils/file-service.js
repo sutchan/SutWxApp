@@ -335,4 +335,4 @@ const fileService = new FileService();
 } = fileService;
 
 // 榛樿瀵煎嚭鏂囦欢鏈嶅姟瀹炰緥
-export default fileService;
+export default fileService;\n

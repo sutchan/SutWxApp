@@ -379,4 +379,4 @@
 .checkout-btn[disabled] {
   background-color: #cccccc;
   color: #ffffff;
-}
+}\n

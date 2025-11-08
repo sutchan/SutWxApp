@@ -471,4 +471,4 @@ Page({
       url: '/pages/product/detail?id=' + productId
     });
   }
-});
+});\n

@@ -818,4 +818,4 @@ class SUT_WeChat_Mini_Points {
             );
         }
     }
-}
+}\n

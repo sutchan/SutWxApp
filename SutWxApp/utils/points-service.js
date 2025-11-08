@@ -1,4 +1,4 @@
-﻿// points-service.js - 绉垎绯荤粺鐩稿叧鏈嶅姟妯″潡
+// points-service.js - 绉垎绯荤粺鐩稿叧鏈嶅姟妯″潡
 // 澶勭悊绉垎鏌ヨ銆佺Н鍒嗕换鍔°€佺Н鍒嗗厬鎹㈢瓑鍔熻兘
 // 绉垎鐩稿叧鏈嶅姟妯″潡
 const api = require('./api');
@@ -965,3 +965,4 @@ module.exports.checkIn = pointsService.signIn;
 module.exports.doUserSignIn = pointsService.signIn;
 module.exports.getSignInRecords = pointsService.getUserSignInRecords;
 module.exports.getCheckInHistory = pointsService.getUserSignInRecords;
+\n

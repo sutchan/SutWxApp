@@ -316,4 +316,4 @@ export const trackError = async (errorMessage, errorInfo = {}) => {
   endSession,
   getDeviceInfo,
   trackError
-};
+};\n

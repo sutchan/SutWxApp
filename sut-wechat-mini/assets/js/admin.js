@@ -710,4 +710,4 @@ jQuery(document).ready(function($) {
         }, 30000);
     });
     
-});
+});\n

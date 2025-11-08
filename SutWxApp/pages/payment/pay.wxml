@@ -133,4 +133,4 @@
     </view>
     <button class="pay-btn" bindtap="initiatePayment" loading="{{loading}}">纭鏀粯</button>
   </view>
-</view>
+</view>\n

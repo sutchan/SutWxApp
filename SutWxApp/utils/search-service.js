@@ -285,4 +285,4 @@ export const searchAll = async (keyword, params = {}) => {
   deleteSearchHistoryItem,
   getHotSearchTerms,
   searchAll
-};
+};\n

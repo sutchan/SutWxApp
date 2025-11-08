@@ -453,4 +453,4 @@ export const formatExpireTime = (expireTime) => {
   calculateDiscount,
   getCouponTypeText,
   formatExpireTime
-};
+};\n

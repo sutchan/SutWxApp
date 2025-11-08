@@ -361,4 +361,4 @@ module.exports.setToken = setToken;
 module.exports.cancelRequest = cancelRequest;
 module.exports.cancelAllRequests = cancelAllRequests;
 module.exports.clearCache = clearCache;
-module.exports.clearAllCache = clearAllCache;
+module.exports.clearAllCache = clearAllCache;\n

@@ -350,4 +350,4 @@ Page({
     });
     this.loadCategories();
   }
-});
+});\n

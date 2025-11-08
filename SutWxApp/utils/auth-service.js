@@ -435,4 +435,4 @@ module.exports.bindWordPressAccount = bindWordPressAccount;
 module.exports.getSignInStatus = getSignInStatus;
 module.exports.signIn = signIn;
 module.exports.bindPhoneNumber = bindPhoneNumber;
-module.exports.refreshToken = refreshToken;
+module.exports.refreshToken = refreshToken;\n

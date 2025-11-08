@@ -269,4 +269,4 @@ export const formatAddress = (address) => {
   chooseWechatAddress,
   validateAddress,
   formatAddress
-};
+};\n

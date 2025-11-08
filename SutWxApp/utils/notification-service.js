@@ -373,4 +373,4 @@ export const clearNotificationCache = () => {
   getNotificationSettings,
   handleNotificationClick,
   clearNotificationCache
-};
+};\n

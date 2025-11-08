@@ -58,4 +58,4 @@
     <text class="error-text">{{error}}</text>
     <button class="retry-button" bindtap="checkLoginStatus">閲嶈瘯</button>
   </view>
-</view>
+</view>\n

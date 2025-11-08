@@ -235,4 +235,4 @@ Page({
   onRetry: function() {
     this.loadProductList();
   }
-});
+});\n

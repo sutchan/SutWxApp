@@ -82,4 +82,4 @@ msgstr "Please check again later"
 msgstr "Points Records"
 
 #: pages/user/points-tasks.wxmlmsgid "retry"
-msgstr "Retry"
+msgstr "Retry"\n

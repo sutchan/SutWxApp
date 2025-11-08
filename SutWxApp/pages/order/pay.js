@@ -180,4 +180,4 @@ Page({
       url: '/pages/order/list/list'
     });
   }
-});
+});\n

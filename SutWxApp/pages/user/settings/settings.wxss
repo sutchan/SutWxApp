@@ -116,4 +116,4 @@
 
 .dark-mode .settings-item:active {
   background-color: #444444;
-}
+}\n

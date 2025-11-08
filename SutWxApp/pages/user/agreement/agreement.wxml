@@ -28,4 +28,4 @@
       <button class="copy-button" bindtap="copyContent">澶嶅埗鍐呭</button>
     </view>
   </view>
-</view>
+</view>\n

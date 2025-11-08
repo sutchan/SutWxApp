@@ -357,4 +357,4 @@ const feedbackService = new FeedbackService();
 } = feedbackService;
 
 // 榛樿瀵煎嚭鍙嶉鏈嶅姟瀹炰緥
-export default feedbackService;
+export default feedbackService;\n

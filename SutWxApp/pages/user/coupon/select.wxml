@@ -67,4 +67,4 @@
   <view class="bottom-tip" wx:if="{{coupons.length > 0}}">
     <text class="tip-text">* 姣忓紶璁㈠崟浠呴檺浣跨敤涓€寮犱紭鎯犲埜</text>
   </view>
-</view>
+</view>\n

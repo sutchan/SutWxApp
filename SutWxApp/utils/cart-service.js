@@ -556,4 +556,4 @@ module.exports = {
   syncCart,
   clearCartCache,
   getCartCountFromCache
-};
+};\n

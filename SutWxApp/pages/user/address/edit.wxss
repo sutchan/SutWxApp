@@ -93,4 +93,4 @@ checkbox {
   padding: 24rpx 0;
   border-radius: 10rpx;
   box-shadow: 0 4rpx 20rpx rgba(255, 107, 129, 0.3);
-}
+}\n

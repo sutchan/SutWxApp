@@ -716,4 +716,4 @@ module.exports.preheat = CacheService.preheat.bind(CacheService);
 module.exports.getWithFallback = CacheService.getWithFallback.bind(CacheService);
 module.exports.cleanExpiredCache = CacheService.cleanExpiredCache.bind(CacheService);
 module.exports.checkCacheHealth = CacheService.checkCacheHealth.bind(CacheService);
-module.exports.init = CacheService.init.bind(CacheService);
+module.exports.init = CacheService.init.bind(CacheService);\n

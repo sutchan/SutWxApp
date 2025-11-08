@@ -28,4 +28,4 @@ console.log('鎵€鏈夌Н鍒嗕换鍔″姛鑳藉拰澶氳瑷€鏀寔�
 console.log('=============================');
 
 // 妯℃嫙娴嬭瘯閫氳繃
-process.exit(0);
+process.exit(0);\n

@@ -131,4 +131,4 @@
     <view class="empty-text">鏆傛棤璁㈠崟</view>
     <button class="btn-primary" bindtap="backToHome">鍘婚€涢€?/button>
   </view>
-</view>
+</view>\n

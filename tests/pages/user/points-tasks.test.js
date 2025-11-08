@@ -271,4 +271,4 @@ describe('Points Tasks Page', () => {
       });
     });
   });
-});
+});\n

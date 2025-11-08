@@ -931,4 +931,4 @@ class SUT_WeChat_Mini_Users {
      */
     private function award_signin_points( $user_id, $continuous_days ) {
         // 杩欓噷鍙互鏍规嵁杩炵画绛惧埌澶╂暟璁剧疆涓嶅悓鐨勭Н鍒嗗鍔?        // 渚嬪锛氳繛缁?澶╁鍔?绉垎锛岃繛缁?澶╁鍔?0绉垎锛岃繛缁?澶╁鍔?0绉垎绛?        // 杩欎釜鍔熻兘闇€瑕佺Н鍒嗙郴缁熸敮鎸侊紝鍙互鏍规嵁瀹為檯闇€姹傚疄鐜?    }
-}
+}\n

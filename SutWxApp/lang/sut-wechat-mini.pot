@@ -167,4 +167,4 @@ msgid "server_error"
 msgstr ""
 
 msgid "please_wait"
-msgstr ""
+msgstr ""\n

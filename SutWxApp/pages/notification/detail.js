@@ -356,4 +356,4 @@ Page({
     wx.navigateBack();
     return true;
   }
-});
+});\n

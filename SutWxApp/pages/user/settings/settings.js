@@ -233,4 +233,4 @@ Page({
     const app = getApp();
     app.checkUpdate();
   }
-});
+});\n

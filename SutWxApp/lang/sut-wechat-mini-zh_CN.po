@@ -464,4 +464,4 @@ msgid "points_exchange_history_failed"
 msgstr "澶辫触"
 
 msgid "points_exchange_history_processing"
-msgstr "澶勭悊涓?
+msgstr "澶勭悊涓?\n
