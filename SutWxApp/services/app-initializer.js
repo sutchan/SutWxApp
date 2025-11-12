@@ -1,373 +1,332 @@
-﻿// services/app-initializer.js - 搴旂敤绋嬪簭鍒濆鍖栨ā鍧?// 璐熻矗鍦ㄥ簲鐢ㄥ惎鍔ㄦ椂鍒濆鍖栨湇鍔″眰鍜屽叾浠栨牳蹇冪粍浠?
-/**
- * 搴旂敤绋嬪簭鍒濆鍖栨ā鍧? * 鎻愪緵搴旂敤鍚姩鏃剁殑鍒濆鍖栨祦绋嬬鐞? */
-
-const { initializeServices, serviceIntegrator } = require('./service-integration');
+// services/app-initializer.js - 应用初始化管理器
+// 用于管理应用的初始化流程和服务注册
 
 /**
- * 搴旂敤鍒濆鍖栧櫒绫? * 绠＄悊搴旂敤绋嬪簭鐨勫垵濮嬪寲娴佺▼
+ * 应用初始化管理器
+ * 负责协调整个应用的初始化流程
  */
 class AppInitializer {
-  constructor() {
-    this.initialized = false;
+  constructor(config = {}) {
+    this.config = config;
     this.initializationSteps = [];
-    this.config = null;
     this.logger = null;
   }
 
   /**
-   * 鍒濆鍖栧簲鐢ㄧ▼搴?   * @param {Object} config - 搴旂敤閰嶇疆
-   * @returns {Promise<boolean>} 鍒濆鍖栨槸鍚︽垚鍔?   */
+   * 初始化应用
+   * 配置环境并启动初始化流程
+   * @param {Object} config - 应用配置
+   * @returns {Promise<boolean>} 初始化是否成功
+   */
   async initialize(config = {}) {
-    if (this.initialized) {
-      console.warn('搴旂敤鍒濆鍖栧櫒宸茬粡鍒濆鍖?);
-      return true;
-    }
-
+    // 合并配置
+    this.config = { ...this.config, ...config };
+    
     try {
-      // 瀛樺偍閰嶇疆
-      this.config = { ...this._getDefaultConfig(), ...config };
+      // 初始化日志系统
+      this._initializeLogger();
       
-      // 鍒濆鍖栨棩蹇楃郴缁?      this._initializeLogger();
+      // 注册初始化步骤
+      this._registerInitializationSteps();
       
-      // 娉ㄥ唽鍒濆鍖栨楠?      this._registerInitializationSteps();
+      // 执行初始化流程
+      await this._executeInitializationSteps();
       
-      // 鎵ц鍒濆鍖栨楠?      await this._executeInitializationSteps();
-      
-      this.initialized = true;
-      this.logger?.info('搴旂敤绋嬪簭鍒濆鍖栨垚鍔?);
+      this.logger?.info('应用初始化完成');
       return true;
     } catch (error) {
-      this.logger?.error('搴旂敤绋嬪簭鍒濆鍖栧け璐?', error);
-      console.error('搴旂敤绋嬪簭鍒濆鍖栧け璐?', error);
+      this.logger?.error('应用初始化失败', error);
+      console.error('应用初始化失败', error);
       return false;
     }
   }
 
   /**
-   * 閲嶆柊鍒濆鍖栧簲鐢ㄧ▼搴?   * @returns {Promise<boolean>} 閲嶆柊鍒濆鍖栨槸鍚︽垚鍔?   */
-  async reinitialize() {
-    this.initialized = false;
-    return this.initialize(this.config);
-  }
-
-  /**
-   * 鍏抽棴搴旂敤绋嬪簭
+   * 重新初始化应用
+   * @returns {Promise<boolean>} 重新初始化是否成功
    */
-  shutdown() {
+  async reinitialize() {
     try {
-      // 鍏抽棴鏈嶅姟闆嗘垚鍣?      serviceIntegrator.shutdown();
-      
-      // 鎵ц娓呯悊鎿嶄綔
-      this._cleanup();
-      
-      this.initialized = false;
-      this.logger?.info('搴旂敤绋嬪簭宸插叧闂?);
+      return await this.initialize();
     } catch (error) {
-      console.error('搴旂敤绋嬪簭鍏抽棴澶辫触:', error);
+      console.error('重新初始化失败:', error);
+      return false;
     }
   }
 
   /**
-   * 鑾峰彇搴旂敤绋嬪簭鐘舵€?   * @returns {Object} 搴旂敤鐘舵€佷俊鎭?   */
-  getStatus() {
-    return {
-      initialized: this.initialized,
-      serviceStatus: serviceIntegrator.getStatus(),
-      config: this.config
-    };
+   * 关闭应用
+   */
+  shutdown() {
+    // 关闭日志系统
+    if (this.logger && typeof this.logger.close === 'function') {
+      this.logger.close();
+    }
+    
+    this.logger?.info('应用初始化器关闭');
+    
+    try {
+      // 关闭服务集成器
+      const { getServiceIntegrator } = require('./service-integration');
+      const serviceIntegrator = getServiceIntegrator();
+      if (serviceIntegrator) {
+        serviceIntegrator.shutdown();
+      }
+    } catch (error) {
+      console.error('应用关闭失败:', error);
+    }
   }
 
   /**
-   * 鍐呴儴鏂规硶锛氳幏鍙栭粯璁ら厤缃?   * @private
-   * @returns {Object} 榛樿閰嶇疆
+   * 默认配置常量
+   * @private
    */
-  _getDefaultConfig() {
+  get DEFAULT_CONFIG() {
     return {
-      // 鏈嶅姟閰嶇疆
-      services: {
-        useAdapters: true,
-        enableCache: true,
-        enableRetry: true,
-        retryAttempts: 3,
-        retryDelay: 1000
-      },
-      
-      // 缂撳瓨閰嶇疆
+      environment: 'development',
+      debug: true,
       cache: {
-        defaultExpireTime: 3600000, // 1灏忔椂
-        shortExpireTime: 300000,     // 5鍒嗛挓
-        longExpireTime: 86400000     // 24灏忔椂
-      },
-      
-      // API閰嶇疆
-      api: {
-        baseUrl: '',
-        timeout: 30000,
-        headers: {}
-      },
-      
-      // 鏃ュ織閰嶇疆
-      logging: {
         enabled: true,
-        level: 'info'
+        defaultExpireTime: 3600000, // 1小时
+        shortExpireTime: 300000,     // 5分钟
+        longExpireTime: 86400000     // 24小时
+      },
+      services: {
+        autoInitialize: true,
+        useAdapters: true
       }
     };
   }
 
   /**
-   * 鍐呴儴鏂规硶锛氬垵濮嬪寲鏃ュ織绯荤粺
+   * 初始化日志系统
    * @private
    */
   _initializeLogger() {
-    const loggingConfig = this.config.logging || {};
-    
-    // 鍒涘缓绠€鍗曠殑鏃ュ織璁板綍鍣?    this.logger = {
-      info: (...args) => {
-        if (loggingConfig.enabled && loggingConfig.level !== 'error') {
-          console.log('[INFO]', ...args);
+    // 创建简单的日志记录器
+    this.logger = {
+      info: (message) => {
+        if (this.config.debug) {
+          console.log(`[INFO] ${message}`);
         }
       },
-      warn: (...args) => {
-        if (loggingConfig.enabled && loggingConfig.level !== 'error') {
-          console.warn('[WARN]', ...args);
-        }
+      warn: (message) => {
+        console.warn(`[WARN] ${message}`);
       },
-      error: (...args) => {
-        if (loggingConfig.enabled) {
-          console.error('[ERROR]', ...args);
-        }
+      error: (message, error) => {
+        console.error(`[ERROR] ${message}`, error);
       },
-      debug: (...args) => {
-        if (loggingConfig.enabled && loggingConfig.level === 'debug') {
-          console.debug('[DEBUG]', ...args);
+      debug: (message) => {
+        if (this.config.debug) {
+          console.debug(`[DEBUG] ${message}`);
         }
       }
     };
   }
 
   /**
-   * 鍐呴儴鏂规硶锛氭敞鍐屽垵濮嬪寲姝ラ
+   * 注册初始化步骤
    * @private
    */
   _registerInitializationSteps() {
-    // 娉ㄥ唽鏍稿績鍒濆鍖栨楠?    this.initializationSteps = [
+    // 清空现有步骤
+    this.initializationSteps = [
       {
-        name: '鍒濆鍖栨湇鍔″眰',
-        execute: async () => {
-          return await this._initializeServiceLayer();
-        }
+        name: '环境配置',
+        execute: this._initializeEnvironment.bind(this)
       },
       {
-        name: '鍔犺浇搴旂敤閰嶇疆',
-        execute: async () => {
-          return await this._loadAppConfig();
-        }
+        name: '加载配置文件',
+        execute: this._loadConfigurations.bind(this)
       },
       {
-        name: '鍒濆鍖栫紦瀛樼瓥鐣?,
-        execute: async () => {
-          return await this._initializeCachePolicies();
-        }
+        name: '初始化服务层',
+        execute: this._initializeServices.bind(this)
       },
       {
-        name: '娉ㄥ唽鍏ㄥ眬閿欒澶勭悊',
-        execute: async () => {
-          return await this._registerErrorHandlers();
-        }
-      },
-      {
-        name: '鎵ц鑷畾涔夊垵濮嬪寲',
-        execute: async () => {
-          return await this._executeCustomInitialization();
-        }
+        name: '自定义初始化',
+        execute: this._customInitialization.bind(this)
       }
     ];
   }
 
   /**
-   * 鍐呴儴鏂规硶锛氭墽琛屽垵濮嬪寲姝ラ
+   * 执行初始化步骤
    * @private
-   * @returns {Promise<void>}
    */
   async _executeInitializationSteps() {
     for (const step of this.initializationSteps) {
+      this.logger?.info(`开始执行初始化步骤: ${step.name}`);
       try {
-        this.logger?.info(`鎵ц鍒濆鍖栨楠? ${step.name}`);
-        const result = await step.execute();
-        
-        if (result !== true) {
-          throw new Error(`${step.name} 澶辫触`);
-        }
-        
-        this.logger?.info(`鍒濆鍖栨楠ゅ畬鎴? ${step.name}`);
+        await step.execute();
+        this.logger?.info(`初始化步骤完成: ${step.name}`);
       } catch (error) {
-        this.logger?.error(`鍒濆鍖栨楠ゅけ璐? ${step.name}`, error);
+        this.logger?.error(`初始化步骤失败: ${step.name}`, error);
         throw error;
       }
     }
   }
 
   /**
-   * 鍐呴儴鏂规硶锛氬垵濮嬪寲鏈嶅姟灞?   * @private
-   * @returns {Promise<boolean>}
+   * 初始化运行环境
+   * @private
    */
-  async _initializeServiceLayer() {
-    const servicesConfig = this.config.services || {};
+  async _initializeEnvironment() {
+    // 设置全局环境变量
+    this.logger?.info('设置应用环境:', this.config.environment);
     
-    // 鍒濆鍖栨湇鍔￠泦鎴愬櫒
-    return await initializeServices({
-      useAdapters: servicesConfig.useAdapters,
-      enableCache: servicesConfig.enableCache,
-      retryConfig: {
-        enabled: servicesConfig.enableRetry,
-        attempts: servicesConfig.retryAttempts,
-        delay: servicesConfig.retryDelay
-      },
-      apiConfig: this.config.api
-    });
+    // 处理不同环境的特殊配置
+    if (this.config.environment === 'production') {
+      this.config.debug = false;
+    }
   }
 
   /**
-   * 鍐呴儴鏂规硶锛氬姞杞藉簲鐢ㄩ厤缃?   * @private
-   * @returns {Promise<boolean>}
+   * 加载配置文件
+   * @private
    */
-  async _loadAppConfig() {
+  async _loadConfigurations() {
     try {
-      const configService = serviceIntegrator.getService('config');
+      // 延迟导入以避免循环依赖
+      const { initializeServiceLayer } = require('./service-integration');
       
-      if (configService && configService.load) {
-        // 鍔犺浇鍩虹閰嶇疆
+      // 先初始化基本服务层，以便加载配置
+      await initializeServiceLayer({ minimal: true });
+      
+      // 加载配置服务
+      const { getService } = require('./service-integration');
+      const configService = getService('config');
+      
+      if (configService) {
+        // 加载基础配置
         await configService.load('base');
         
-        // 鍔犺浇涓婚閰嶇疆
+        // 加载主题配置
         await configService.load('theme');
         
-        // 鍔犺浇鍔熻兘寮€鍏抽厤缃?        await configService.load('features');
+        // 加载功能配置
+        await configService.load('features');
       }
-      
-      return true;
     } catch (error) {
-      this.logger?.error('鍔犺浇搴旂敤閰嶇疆澶辫触:', error);
-      // 閰嶇疆鍔犺浇澶辫触涓嶅簲璇ラ樆姝㈠簲鐢ㄥ惎鍔?      return true;
+      this.logger?.error('加载配置文件失败:', error);
+      // 配置加载失败不应阻止应用启动
     }
   }
 
   /**
-   * 鍐呴儴鏂规硶锛氬垵濮嬪寲缂撳瓨绛栫暐
+   * 初始化服务层
    * @private
-   * @returns {Promise<boolean>}
    */
-  async _initializeCachePolicies() {
+  async _initializeServices() {
     try {
-      const cacheService = serviceIntegrator.getService('cache');
-      const config = this.config.cache || {};
+      // 延迟导入以避免循环依赖
+      const { initializeServiceLayer } = require('./service-integration');
       
-      if (cacheService) {
-        // 璁剧疆缂撳瓨绛栫暐
-        cacheService.setDefaultExpireTime(config.defaultExpireTime || 3600000);
-        
-        // 棰勫姞杞藉父鐢ㄧ紦瀛?        if (cacheService.preload) {
-          await cacheService.preload(['config', 'categories']);
-        }
-      }
-      
-      return true;
+      // 初始化完整服务层
+      await initializeServiceLayer({
+        useAdapters: this.config.services.useAdapters,
+        environment: this.config.environment
+      });
     } catch (error) {
-      this.logger?.error('鍒濆鍖栫紦瀛樼瓥鐣ュけ璐?', error);
-      // 缂撳瓨鍒濆鍖栧け璐ヤ笉搴旇闃绘搴旂敤鍚姩
-      return true;
+      this.logger?.error('初始化服务层失败:', error);
+      // 服务初始化失败视为严重错误，应用无法正常运行
+      throw error;
     }
   }
 
   /**
-   * 鍐呴儴鏂规硶锛氭敞鍐屽叏灞€閿欒澶勭悊
+   * 初始化应用生命周期
    * @private
-   * @returns {Promise<boolean>}
    */
-  async _registerErrorHandlers() {
-    try {
-      // 娉ㄥ唽鍏ㄥ眬鏈崟鑾峰紓甯稿鐞?      if (typeof process !== 'undefined' && process.on) {
-        process.on('uncaughtException', (error) => {
-          this.logger?.error('鏈崟鑾风殑寮傚父:', error);
-          // 杩欓噷鍙互娣诲姞涓婃姤閫昏緫
-        });
-        
-        process.on('unhandledRejection', (reason, promise) => {
-          this.logger?.error('鏈鐞嗙殑Promise鎷掔粷:', reason);
-          // 杩欓噷鍙互娣诲姞涓婃姤閫昏緫
-        });
-      }
+  _initializeAppLifecycle() {
+    // 监听小程序生命周期事件
+    if (typeof wx !== 'undefined') {
+      // 监听小程序显示
+      wx.onAppShow(() => {
+        this.logger?.info('小程序显示');
+      });
       
-      // 鍦ㄥ井淇″皬绋嬪簭鐜涓敞鍐岄敊璇鐞?      if (typeof wx !== 'undefined') {
-        wx.onError((error) => {
-          this.logger?.error('寰俊灏忕▼搴忛敊璇?', error);
-          // 杩欓噷鍙互娣诲姞涓婃姤閫昏緫
-        });
-      }
+      // 监听小程序隐藏
+      wx.onAppHide(() => {
+        this.logger?.info('小程序隐藏');
+      });
       
-      return true;
-    } catch (error) {
-      this.logger?.error('娉ㄥ唽鍏ㄥ眬閿欒澶勭悊澶辫触:', error);
-      // 閿欒澶勭悊娉ㄥ唽澶辫触涓嶅簲璇ラ樆姝㈠簲鐢ㄥ惎鍔?      return true;
+      // 监听小程序错误
+      wx.onError((error) => {
+        this.logger?.error('小程序发生错误:', error);
+      });
     }
+    
+    // 应用生命周期初始化成功
+    return true;
   }
 
   /**
-   * 鍐呴儴鏂规硶锛氭墽琛岃嚜瀹氫箟鍒濆鍖?   * @private
-   * @returns {Promise<boolean>}
+   * 自定义初始化逻辑
+   * @private
    */
-  async _executeCustomInitialization() {
-    try {
-      // 鎵ц閰嶇疆涓寚瀹氱殑鑷畾涔夊垵濮嬪寲鍑芥暟
-      if (this.config.customInitialization && typeof this.config.customInitialization === 'function') {
-        await this.config.customInitialization(serviceIntegrator);
+  async _customInitialization() {
+    // 执行用户自定义初始化逻辑
+    if (this.config.customInitialization && typeof this.config.customInitialization === 'function') {
+      try {
+        await this.config.customInitialization(this);
+      } catch (error) {
+        this.logger?.error('自定义初始化失败:', error);
+        // 自定义初始化失败不应阻止应用启动
       }
-      
-      return true;
-    } catch (error) {
-      this.logger?.error('鎵ц鑷畾涔夊垵濮嬪寲澶辫触:', error);
-      // 鑷畾涔夊垵濮嬪寲澶辫触涓嶅簲璇ラ樆姝㈠簲鐢ㄥ惎鍔?      return true;
     }
+    
+    // 自定义初始化成功
+    return true;
   }
 
   /**
-   * 鍐呴儴鏂规硶锛氭墽琛屾竻鐞嗘搷浣?   * @private
+   * 获取服务实例
+   * @param {string} serviceName - 服务名称
+   * @returns {Object|null} 服务实例或null
    */
-  _cleanup() {
-    // 娓呯悊璧勬簮
-    this.initializationSteps = [];
-    this.logger = null;
+  getService(serviceName) {
+    try {
+      const { getService } = require('./service-integration');
+      return getService(serviceName);
+    } catch (error) {
+      this.logger?.error(`获取服务[${serviceName}]失败:`, error);
+      return null;
+    }
   }
 }
 
-// 鍒涘缓骞跺鍑哄崟渚嬪疄渚?const appInitializer = new AppInitializer();
+// 创建全局应用初始化器实例
+const appInitializer = new AppInitializer();
 
 /**
- * 瀵煎嚭搴旂敤鍒濆鍖栧櫒鍜屼究鎹锋柟娉? */
+ * 导出应用初始化器实例
+ */
 module.exports = {
+  AppInitializer,
   appInitializer,
-  AppInitializer, // 瀵煎嚭绫讳緵娴嬭瘯浣跨敤
   
   /**
-   * 鍒濆鍖栧簲鐢ㄧ殑渚挎嵎鏂规硶
-   * @param {Object} config - 搴旂敤閰嶇疆
-   * @returns {Promise<boolean>} 鍒濆鍖栨槸鍚︽垚鍔?   */
+   * 初始化应用
+   * @param {Object} config - 应用配置
+   * @returns {Promise<boolean>} 初始化是否成功
+   */
   async initializeApp(config = {}) {
     return appInitializer.initialize(config);
   },
   
   /**
-   * 鑾峰彇搴旂敤鐘舵€佺殑渚挎嵎鏂规硶
-   * @returns {Object} 搴旂敤鐘舵€?   */
-  getAppStatus() {
-    return appInitializer.getStatus();
+   * 关闭应用
+   */
+  shutdownApp() {
+    appInitializer.shutdown();
   },
   
   /**
-   * 鍏抽棴搴旂敤鐨勪究鎹锋柟娉?   */
-  shutdownApp() {
-    appInitializer.shutdown();
+   * 获取应用初始化器实例
+   * @returns {AppInitializer} 应用初始化器实例
+   */
+  getAppInitializer() {
+    return appInitializer;
   }
 };
-\n

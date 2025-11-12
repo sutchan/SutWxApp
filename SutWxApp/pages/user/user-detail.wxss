@@ -1,11 +1,11 @@
-﻿/* 鐢ㄦ埛璇︽儏椤甸潰鏍峰紡 */
+锘?* 閻劍鍩涚拠锔藉剰妞ょ敻娼伴弽宄扮础 */
 .user-detail-container {
   min-height: 100vh;
   background-color: #f5f5f5;
   padding-bottom: 20rpx;
 }
 
-/* 鍔犺浇鐘舵€?*/
+/* 閸旂姾娴囬悩鑸碘偓?*/
 .loading-container {
   display: flex;
   justify-content: center;
@@ -59,7 +59,7 @@
   }
 }
 
-/* 閿欒鐘舵€?*/
+/* 闁挎瑨顕ら悩鑸碘偓?*/
 .error-container {
   display: flex;
   flex-direction: column;
@@ -94,12 +94,12 @@
   opacity: 0.8;
 }
 
-/* 鐢ㄦ埛淇℃伅 */
+/* 閻劍鍩涙穱鈩冧紖 */
 .user-info-container {
   background-color: #fff;
 }
 
-/* 鐢ㄦ埛澶撮儴淇℃伅 */
+/* 閻劍鍩涙径鎾劥娣団剝浼?*/
 .user-header {
   padding: 40rpx 30rpx;
   border-bottom: 1rpx solid #eee;
@@ -148,7 +148,7 @@
   margin-bottom: 20rpx;
 }
 
-/* 鐢ㄦ埛缁熻淇℃伅 */
+/* 閻劍鍩涚紒鐔活吀娣団剝浼?*/
 .user-stats {
   display: flex;
   margin-top: 20rpx;
@@ -183,7 +183,7 @@
   margin: 0 20rpx;
 }
 
-/* 鎿嶄綔鎸夐挳 */
+/* 閹垮秳缍旈幐澶愭尦 */
 .action-buttons {
   padding: 30rpx;
   display: flex;
@@ -223,7 +223,7 @@
   opacity: 0.8;
 }
 
-/* 鐢ㄦ埛鍏朵粬淇℃伅 */
+/* 閻劍鍩涢崗鏈电铂娣団剝浼?*/
 .user-other-info {
   padding: 30rpx;
   background-color: #fff;
@@ -250,7 +250,7 @@
   flex: 1;
 }
 
-/* 绌虹姸鎬?*/
+/* 缁岃櫣濮搁幀?*/
 .empty-container {
   display: flex;
   flex-direction: column;
@@ -271,7 +271,7 @@
   color: #999;
 }
 
-/* 鍝嶅簲寮忚璁?*/
+/* 閸濆秴绨插蹇氼啎鐠?*/
 @media (min-width: 768px) {
   .user-header {
     padding: 40rpx;

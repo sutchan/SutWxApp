@@ -1,6 +1,6 @@
-﻿/* list.wxss - 璁㈠崟鍒楄〃椤甸潰鏍峰紡 */
+锘?* list.wxss - 鐠併垹宕熼崚妤勩€冩い鐢告桨閺嶅嘲绱?*/
 
-/* 椤甸潰瀹瑰櫒 */
+/* 妞ょ敻娼扮€圭懓娅?*/
 .order-list-container {
   display: flex;
   flex-direction: column;
@@ -8,7 +8,7 @@
   background-color: #f8f8f8;
 }
 
-/* 椤堕儴瀵艰埅 */
+/* 妞ゅ爼鍎寸€佃壈鍩?*/
 .nav-bar {
   display: flex;
   align-items: center;
@@ -26,7 +26,7 @@
   color: #333333;
 }
 
-/* 鏍囩鍒囨崲 */
+/* 閺嶅洨顒烽崚鍥ㄥ床 */
 .tabs {
   display: flex;
   background-color: #ffffff;
@@ -65,12 +65,12 @@
   background-color: #ff6b6b;
 }
 
-/* 璁㈠崟鍒楄〃 */
+/* 鐠併垹宕熼崚妤勩€?*/
 .order-list {
   flex: 1;
 }
 
-/* 璁㈠崟椤?*/
+/* 鐠併垹宕熸い?*/
 .order-item {
   margin-bottom: 10px;
   background-color: #ffffff;
@@ -78,7 +78,7 @@
   overflow: hidden;
 }
 
-/* 璁㈠崟澶撮儴 */
+/* 鐠併垹宕熸径鎾劥 */
 .order-header {
   display: flex;
   justify-content: space-between;
@@ -97,7 +97,7 @@
   font-weight: 500;
 }
 
-/* 璁㈠崟鐘舵€侀鑹?*/
+/* 鐠併垹宕熼悩鑸碘偓渚€顤侀懝?*/
 .order-status.pending_payment {
   color: #ff6b6b;
 }
@@ -122,7 +122,7 @@
   color: #ffbe0b;
 }
 
-/* 璁㈠崟鍟嗗搧 */
+/* 鐠併垹宕熼崯鍡楁惂 */
 .order-goods {
   padding: 12px 16px;
 }
@@ -192,7 +192,7 @@
   color: #666666;
 }
 
-/* 璁㈠崟閲戦 */
+/* 鐠併垹宕熼柌鎴︻杺 */
 .order-amount {
   display: flex;
   justify-content: flex-end;
@@ -214,7 +214,7 @@
   margin-left: 4px;
 }
 
-/* 璁㈠崟鎿嶄綔鎸夐挳 */
+/* 鐠併垹宕熼幙宥勭稊閹稿鎸?*/
 .order-actions {
   display: flex;
   justify-content: flex-end;
@@ -249,7 +249,7 @@
   line-height: 24px;
 }
 
-/* 鍔犺浇鏇村 */
+/* 閸旂姾娴囬弴鏉戭樋 */
 .load-more {
   padding: 16px;
   text-align: center;
@@ -276,7 +276,7 @@
   color: #999999;
 }
 
-/* 鍔犺浇涓姸鎬?*/
+/* 閸旂姾娴囨稉顓犲Ц閹?*/
 .loading-container {
   display: flex;
   justify-content: center;
@@ -284,7 +284,7 @@
   height: 200px;
 }
 
-/* 绌虹姸鎬?*/
+/* 缁岃櫣濮搁幀?*/
 .empty-container {
   display: flex;
   flex-direction: column;
@@ -311,7 +311,7 @@
   margin-bottom: 20px;
 }
 
-/* 鍝嶅簲寮忚璁?*/
+/* 閸濆秴绨插蹇氼啎鐠?*/
 @media (min-width: 768px) {
   .order-list-container {
     max-width: 768px;

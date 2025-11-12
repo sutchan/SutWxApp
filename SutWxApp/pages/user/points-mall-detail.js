@@ -1,10 +1,10 @@
-﻿// 绉垎鍟嗗煄鍟嗗搧璇︽儏椤甸潰閫昏緫
+锘?/ 缁夘垰鍨庨崯鍡楃厔閸熷棗鎼х拠锔藉剰妞ょ敻娼伴柅鏄忕帆
 const app = getApp();
 const { showToast, showLoading, hideLoading, showModal } = app.global;
 
 Page({
   /**
-   * 椤甸潰鐨勫垵濮嬫暟鎹?   */
+   * 妞ょ敻娼伴惃鍕灥婵鏆熼幑?   */
   data: {
     productId: '',
     product: null,
@@ -15,30 +15,29 @@ Page({
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸旂姾娴?   */
   onLoad: function(options) {
     if (options.id) {
       this.setData({ productId: options.id });
-      // 璁板綍椤甸潰璁块棶浜嬩欢
+      // 鐠佹澘缍嶆い鐢告桨鐠佸潡妫舵禍瀣╂
       app.analyticsService.track('page_view', {
         page: 'points_mall_detail',
         product_id: options.id
       });
       
-      // 鍔犺浇鍟嗗搧璇︽儏鍜岀敤鎴风Н鍒?      this.loadProductDetail();
+      // 閸旂姾娴囬崯鍡楁惂鐠囷附鍎忛崪宀€鏁ら幋椋幮濋崚?      this.loadProductDetail();
     } else {
-      this.setData({ error: '鍟嗗搧涓嶅瓨鍦?, loading: false });
+      this.setData({ error: '閸熷棗鎼ф稉宥呯摠閸?, loading: false });
     }
   },
 
   /**
-   * 鍔犺浇鍟嗗搧璇︽儏鍜岀敤鎴风Н鍒?   */
+   * 閸旂姾娴囬崯鍡楁惂鐠囷附鍎忛崪宀€鏁ら幋椋幮濋崚?   */
   async loadProductDetail() {
     try {
       this.setData({ loading: true, error: null });
       
-      // 骞惰璇锋眰鍟嗗搧璇︽儏鍜岀敤鎴风Н鍒嗕俊鎭?      const [productResult, userPointsResult] = await Promise.all([
+      // 楠炴儼顢戠拠閿嬬湴閸熷棗鎼х拠锔藉剰閸滃瞼鏁ら幋椋幮濋崚鍡曚繆閹?      const [productResult, userPointsResult] = await Promise.all([
         app.services.points.getPointsMallProductDetail(this.data.productId),
         app.services.points.getUserPointsInfo()
       ]);
@@ -49,8 +48,8 @@ Page({
         error: null
       });
     } catch (err) {
-      console.error('鍔犺浇鍟嗗搧璇︽儏澶辫触:', err);
-      let errorMsg = '鑾峰彇鍟嗗搧璇︽儏澶辫触';
+      console.error('閸旂姾娴囬崯鍡楁惂鐠囷附鍎忔径杈Е:', err);
+      let errorMsg = '閼惧嘲褰囬崯鍡楁惂鐠囷附鍎忔径杈Е';
       if (err.message) {
         errorMsg = err.message;
       }
@@ -63,49 +62,47 @@ Page({
   },
 
   /**
-   * 绉垎鍏戞崲鍟嗗搧
-   */
+   * 缁夘垰鍨庨崗鎴炲床閸熷棗鎼?   */
   async exchangeProduct() {
-    // 妫€鏌ョН鍒嗘槸鍚﹁冻澶?    if (this.data.userPoints < this.data.product.points) {
-      showToast({ title: '绉垎涓嶈冻锛屾棤娉曞厬鎹?, icon: 'none' });
+    // 濡偓閺屻儳袧閸掑棙妲搁崥锕佸喕婢?    if (this.data.userPoints < this.data.product.points) {
+      showToast({ title: '缁夘垰鍨庢稉宥堝喕閿涘本妫ゅ▔鏇炲幀閹?, icon: 'none' });
       return;
     }
 
-    // 纭鍏戞崲
+    // 绾喛顓婚崗鎴炲床
     showModal({
-      title: '纭鍏戞崲',
-      content: `纭畾瑕佽姳璐?{this.data.product.points}绉垎鍏戞崲姝ゅ晢鍝佸悧锛焋,
+      title: '绾喛顓婚崗鎴炲床',
+      content: `绾喖鐣剧憰浣藉С鐠?{this.data.product.points}缁夘垰鍨庨崗鎴炲床濮濄倕鏅㈤崫浣告偋閿涚剫,
       success: async (res) => {
         if (res.confirm) {
           try {
             this.setData({ exchangeLoading: true });
             
-            // 璋冪敤鍏戞崲鎺ュ彛
-            const result = await app.services.points.exchangePointsProduct({
+            // 鐠嬪啰鏁ら崗鎴炲床閹恒儱褰?            const result = await app.services.points.exchangePointsProduct({
               productId: this.data.productId
             });
             
             if (result.success) {
-              showToast({ title: '鍏戞崲鎴愬姛' });
+              showToast({ title: '閸忔垶宕查幋鎰' });
               
-              // 璁板綍鍏戞崲鎴愬姛浜嬩欢
+              // 鐠佹澘缍嶉崗鎴炲床閹存劕濮涙禍瀣╂
               app.analyticsService.track('points_exchange_success', {
                 product_id: this.data.productId,
                 product_name: this.data.product.title,
                 points_spent: this.data.product.points
               });
               
-              // 寤惰繜鍚庤烦杞?              setTimeout(() => {
+              // 瀵ゆ儼绻滈崥搴ょ儲鏉?              setTimeout(() => {
                 wx.navigateTo({
                   url: '/pages/user/points-exchange-records'
                 });
               }, 1500);
             } else {
-              showToast({ title: result.message || '鍏戞崲澶辫触', icon: 'none' });
+              showToast({ title: result.message || '閸忔垶宕叉径杈Е', icon: 'none' });
             }
           } catch (err) {
-            console.error('鍏戞崲鍟嗗搧澶辫触:', err);
-            showToast({ title: '鍏戞崲澶辫触锛岃閲嶈瘯', icon: 'none' });
+            console.error('閸忔垶宕查崯鍡楁惂婢惰精瑙?', err);
+            showToast({ title: '閸忔垶宕叉径杈Е閿涘矁顕柌宥堢槸', icon: 'none' });
           } finally {
             this.setData({ exchangeLoading: false });
           }
@@ -115,15 +112,14 @@ Page({
   },
 
   /**
-   * 閲嶈瘯鍔犺浇
+   * 闁插秷鐦崝鐘烘祰
    */
   onRetry: function() {
     this.loadProductDetail();
   },
 
   /**
-   * 鏌ョ湅绉垎瑙勫垯
-   */
+   * 閺屻儳婀呯粔顖氬瀻鐟欏嫬鍨?   */
   navigateToPointsRules: function() {
     wx.navigateTo({
       url: '/pages/user/points-rules'
@@ -131,8 +127,7 @@ Page({
   },
 
   /**
-   * 鏌ョ湅绉垎鏄庣粏
-   */
+   * 閺屻儳婀呯粔顖氬瀻閺勫海绮?   */
   navigateToPointsHistory: function() {
     wx.navigateTo({
       url: '/pages/user/points'

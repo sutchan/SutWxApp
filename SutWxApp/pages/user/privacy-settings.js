@@ -1,60 +1,50 @@
-﻿// 鐢ㄦ埛闅愮璁剧疆椤甸潰閫昏緫
-const app = getApp();
+锘?/ 閻劍鍩涢梾鎰潌鐠佸墽鐤嗘い鐢告桨闁槒绶?const app = getApp();
 const { showToast } = app.global;
 
 Page({
   /**
-   * 椤甸潰鐨勫垵濮嬫暟鎹?   */
+   * 妞ょ敻娼伴惃鍕灥婵鏆熼幑?   */
   data: {
     privacySettings: {
-      allowComments: true, // 鍏佽璇勮
-      allowFollow: true, // 鍏佽鍏虫敞
-      showActivity: true, // 鏄剧ず娲诲姩
-      receiveNotifications: true, // 鎺ユ敹閫氱煡
-      showLocation: false, // 鏄剧ず浣嶇疆淇℃伅
-      shareDataWithPartners: false // 涓庡悎浣滀紮浼村叡浜暟鎹?    },
-    loading: true, // 鏄惁姝ｅ湪鍔犺浇
-    saving: false, // 鏄惁姝ｅ湪淇濆瓨
-    error: false, // 鏄惁鍔犺浇澶辫触
-    saveSuccess: false // 淇濆瓨鏄惁鎴愬姛
-  },
+      allowComments: true, // 閸忎浇顔忕拠鍕啈
+      allowFollow: true, // 閸忎浇顔忛崗铏暈
+      showActivity: true, // 閺勫墽銇氬ú璇插З
+      receiveNotifications: true, // 閹恒儲鏁归柅姘辩叀
+      showLocation: false, // 閺勫墽銇氭担宥囩枂娣団剝浼?      shareDataWithPartners: false // 娑撳骸鎮庢担婊€绱导鏉戝彙娴滎偅鏆熼幑?    },
+    loading: true, // 閺勵垰鎯佸锝呮躬閸旂姾娴?    saving: false, // 閺勵垰鎯佸锝呮躬娣囨繂鐡?    error: false, // 閺勵垰鎯侀崝鐘烘祰婢惰精瑙?    saveSuccess: false // 娣囨繂鐡ㄩ弰顖氭儊閹存劕濮?  },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸旂姾娴?   */
   onLoad: function(options) {
-    // 璁板綍椤甸潰璁块棶浜嬩欢
+    // 鐠佹澘缍嶆い鐢告桨鐠佸潡妫舵禍瀣╂
     app.analyticsService.track('page_view', {
       page: 'privacy_settings'
     });
     
-    // 鍔犺浇闅愮璁剧疆
-    this.loadPrivacySettings();
+    // 閸旂姾娴囬梾鎰潌鐠佸墽鐤?    this.loadPrivacySettings();
   },
 
   /**
-   * 鍔犺浇闅愮璁剧疆
-   */
+   * 閸旂姾娴囬梾鎰潌鐠佸墽鐤?   */
   async loadPrivacySettings() {
     try {
-      // 鏄剧ず鍔犺浇鐘舵€?      this.setData({
+      // 閺勫墽銇氶崝鐘烘祰閻樿埖鈧?      this.setData({
         loading: true,
         error: false
       });
 
-      // 妫€鏌ョ櫥褰曠姸鎬?      if (!app.isLoggedIn()) {
+      // 濡偓閺屻儳娅ヨぐ鏇犲Ц閹?      if (!app.isLoggedIn()) {
         this.setData({
           loading: false,
           error: true
         });
-        showToast('璇峰厛鐧诲綍', 'none');
+        showToast('鐠囧嘲鍘涢惂璇茬秿', 'none');
         return;
       }
 
-      // 浣跨敤userService鑾峰彇闅愮璁剧疆
-      const result = await app.services.user.getUserPrivacySettings();
+      // 娴ｈ法鏁serService閼惧嘲褰囬梾鎰潌鐠佸墽鐤?      const result = await app.services.user.getUserPrivacySettings();
       
-      // 鏇存柊闅愮璁剧疆鏁版嵁
+      // 閺囧瓨鏌婇梾鎰潌鐠佸墽鐤嗛弫鐗堝祦
       this.setData({
         privacySettings: result || this.data.privacySettings,
         loading: false,
@@ -65,16 +55,14 @@ Page({
         loading: false,
         error: true
       });
-      console.error('鍔犺浇闅愮璁剧疆澶辫触:', err);
+      console.error('閸旂姾娴囬梾鎰潌鐠佸墽鐤嗘径杈Е:', err);
     }
   },
 
   /**
-   * 澶勭悊璇锋眰閿欒
-   * @param {Object} err 閿欒瀵硅薄
-   */
+   * 婢跺嫮鎮婄拠閿嬬湴闁挎瑨顕?   * @param {Object} err 闁挎瑨顕ょ€电钖?   */
   handleRequestError(err) {
-    let errorMsg = '璇锋眰澶辫触';
+    let errorMsg = '鐠囬攱鐪版径杈Е';
     
     if (err.message) {
       errorMsg = err.message;
@@ -92,20 +80,19 @@ Page({
   },
 
   /**
-   * 鍒囨崲璁剧疆椤?   * @param {Object} e 浜嬩欢瀵硅薄
-   */
+   * 閸掑洦宕茬拋鍓х枂妞?   * @param {Object} e 娴滃娆㈢€电钖?   */
   toggleSetting(e) {
     const { setting } = e.currentTarget.dataset;
     const { privacySettings } = this.data;
     const previousValue = privacySettings[setting];
     
-    // 鏇存柊璁剧疆鍊?    privacySettings[setting] = !previousValue;
+    // 閺囧瓨鏌婄拋鍓х枂閸?    privacySettings[setting] = !previousValue;
     
     this.setData({
       privacySettings,
-      saveSuccess: false // 閲嶇疆淇濆瓨鎴愬姛鐘舵€?    });
+      saveSuccess: false // 闁插秶鐤嗘穱婵嗙摠閹存劕濮涢悩鑸碘偓?    });
     
-    // 璁板綍璁剧疆鍙樻洿浜嬩欢
+    // 鐠佹澘缍嶇拋鍓х枂閸欐ɑ娲挎禍瀣╂
     app.analyticsService.track('privacy_setting_toggled', {
       setting: setting,
       value: privacySettings[setting]
@@ -113,51 +100,49 @@ Page({
   },
 
   /**
-   * 淇濆瓨闅愮璁剧疆
-   */
+   * 娣囨繂鐡ㄩ梾鎰潌鐠佸墽鐤?   */
   async savePrivacySettings() {
     try {
-      // 鏄剧ず淇濆瓨鐘舵€?      this.setData({
+      // 閺勫墽銇氭穱婵嗙摠閻樿埖鈧?      this.setData({
         saving: true,
         saveSuccess: false
       });
 
-      // 妫€鏌ョ櫥褰曠姸鎬?      if (!app.isLoggedIn()) {
+      // 濡偓閺屻儳娅ヨぐ鏇犲Ц閹?      if (!app.isLoggedIn()) {
         this.setData({
           saving: false
         });
-        showToast('璇峰厛鐧诲綍', 'none');
+        showToast('鐠囧嘲鍘涢惂璇茬秿', 'none');
         return;
       }
 
-      // 璁板綍淇濆瓨璁剧疆浜嬩欢
+      // 鐠佹澘缍嶆穱婵嗙摠鐠佸墽鐤嗘禍瀣╂
       app.analyticsService.track('privacy_settings_saved', {
         settings: this.data.privacySettings
       });
       
-      // 浣跨敤userService淇濆瓨闅愮璁剧疆
-      await app.services.user.updateUserPrivacySettings(this.data.privacySettings);
+      // 娴ｈ法鏁serService娣囨繂鐡ㄩ梾鎰潌鐠佸墽鐤?      await app.services.user.updateUserPrivacySettings(this.data.privacySettings);
       
       this.setData({
         saving: false,
         saveSuccess: true
       });
       
-      // 鏄剧ず淇濆瓨鎴愬姛鎻愮ず
-      showToast('璁剧疆淇濆瓨鎴愬姛', 'success');
+      // 閺勫墽銇氭穱婵嗙摠閹存劕濮涢幓鎰仛
+      showToast('鐠佸墽鐤嗘穱婵嗙摠閹存劕濮?, 'success');
     } catch (err) {
       this.setData({
         saving: false
       });
-      showToast(err.message || '淇濆瓨澶辫触锛岃閲嶈瘯', 'none');
+      showToast(err.message || '娣囨繂鐡ㄦ径杈Е閿涘矁顕柌宥堢槸', 'none');
     }
   },
 
   /**
-   * 閲嶈瘯鍔犺浇
+   * 闁插秷鐦崝鐘烘祰
    */
   retryLoad: function() {
-    // 璁板綍閲嶈瘯鍔犺浇浜嬩欢
+    // 鐠佹澘缍嶉柌宥堢槸閸旂姾娴囨禍瀣╂
     app.analyticsService.track('retry_loading', {
       page: 'privacy_settings'
     });

@@ -1,4 +1,4 @@
-﻿/* 绉垎瑙勫垯椤甸潰鏍峰紡 */
+锘?* 缁夘垰鍨庣憴鍕灟妞ょ敻娼伴弽宄扮础 */
 .rules-container {
   padding: 20rpx;
   background-color: #f5f5f5;
@@ -6,7 +6,7 @@
   box-sizing: border-box;
 }
 
-/* 閫氱敤鍖哄潡鏍峰紡 */
+/* 闁氨鏁ら崠鍝勬健閺嶅嘲绱?*/
 .section {
   margin-bottom: 20rpx;
   background-color: #fff;
@@ -26,9 +26,9 @@
   color: #333;
 }
 
-/* 瑙勫垯鍒楄〃 */
+/* 鐟欏嫬鍨崚妤勩€?*/
 .rules-list {
-  /* 瑙勫垯鍒楄〃瀹瑰櫒 */
+  /* 鐟欏嫬鍨崚妤勩€冪€圭懓娅?*/
 }
 
 .rule-item {
@@ -41,7 +41,7 @@
 }
 
 .rule-content {
-  /* 瑙勫垯鍐呭 */
+  /* 鐟欏嫬鍨崘鍛啇 */
 }
 
 .rule-limit {
@@ -57,9 +57,9 @@
   line-height: 1.5;
 }
 
-/* 甯歌闂 */
+/* 鐢瓕顫嗛梻顕€顣?*/
 .faq-list {
-  /* 甯歌闂鍒楄〃瀹瑰櫒 */
+  /* 鐢瓕顫嗛梻顕€顣介崚妤勩€冪€圭懓娅?*/
 }
 
 .faq-item {
@@ -105,7 +105,7 @@
   line-height: 1.6;
 }
 
-/* 鍔犺浇鐘舵€?*/
+/* 閸旂姾娴囬悩鑸碘偓?*/
 .loading-container {
   display: flex;
   flex-direction: column;
@@ -134,7 +134,7 @@
   font-size: 24rpx;
 }
 
-/* 閿欒鎻愮ず */
+/* 闁挎瑨顕ら幓鎰仛 */
 .error-container {
   display: flex;
   flex-direction: column;

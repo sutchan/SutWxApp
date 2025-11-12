@@ -1,6 +1,6 @@
-﻿<!-- 浼樻儬鍒稿垪琛ㄩ〉闈㈡ā鏉?-->
+锘?!-- 娴兼ɑ鍎崚绋垮灙鐞涖劑銆夐棃銏∧侀弶?-->
 <view class="coupon-list-page">
-  <!-- 鏍囩鏍?-->
+  <!-- 閺嶅洨顒烽弽?-->
   <view class="tab-bar">
     <view 
       wx:for="{{tabs}}" 
@@ -13,19 +13,19 @@
     </view>
   </view>
 
-  <!-- 鍔犺浇鐘舵€?-->
+  <!-- 閸旂姾娴囬悩鑸碘偓?-->
   <view class="loading-container" wx:if="{{loading}}">
     <view class="loading-icon"></view>
-    <text class="loading-text">鍔犺浇涓?..</text>
+    <text class="loading-text">閸旂姾娴囨稉?..</text>
   </view>
 
-  <!-- 鏃犱紭鎯犲埜鎻愮ず -->
+  <!-- 閺冪姳绱幆鐘插煖閹绘劗銇?-->
   <view class="empty-container" wx:if="{{!loading && noCoupons}}">
     <image class="empty-icon" src="../../../images/empty.svg" mode="aspectFit"></image>
-    <text class="empty-text">鏆傛棤浼樻儬鍒?/text>
+    <text class="empty-text">閺嗗倹妫ゆ导妯诲劕閸?/text>
   </view>
 
-  <!-- 浼樻儬鍒稿垪琛?-->
+  <!-- 娴兼ɑ鍎崚绋垮灙鐞?-->
   <view class="coupon-list" wx:if="{{!loading && !noCoupons}}">
     <view 
       wx:for="{{coupons}}" 
@@ -34,7 +34,7 @@
       bindtap="onViewCouponDetail"
       data-id="{{item.id}}"
     >
-      <!-- 浼樻儬鍒稿唴瀹?-->
+      <!-- 娴兼ɑ鍎崚绋垮敶鐎?-->
       <view class="coupon-content">
         <view class="coupon-left">
           <text class="coupon-value">{{formatCoupon(item).valueText}}</text>
@@ -45,7 +45,7 @@
           <view class="coupon-header">
             <text class="coupon-name">{{item.name}}</text>
             <text class="coupon-status" wx:if="{{activeTab !== 'available'}}">
-              {{activeTab === 'used' ? '宸蹭娇鐢? : '宸茶繃鏈?}}
+              {{activeTab === 'used' ? '瀹歌弓濞囬悽? : '瀹歌尪绻冮張?}}
             </text>
           </view>
           
@@ -53,20 +53,20 @@
           
           <view class="coupon-footer">
             <text class="coupon-condition">{{formatCoupon(item).conditionText}}</text>
-            <text class="coupon-expire">鏈夋晥鏈熻嚦锛歿{formatCoupon(item).expireText}}</text>
+            <text class="coupon-expire">閺堝鏅ラ張鐔诲殾閿涙{formatCoupon(item).expireText}}</text>
           </view>
         </view>
       </view>
       
-      <!-- 鍙充晶瑁呴グ -->
+      <!-- 閸欏厖鏅剁憗鍛淬偘 -->
       <view class="coupon-border"></view>
     </view>
   </view>
 
-  <!-- 宸蹭娇鐢ㄤ紭鎯犲埜棰濆淇℃伅 -->
+  <!-- 瀹歌弓濞囬悽銊ょ喘閹姴鍩滄０婵嗩樆娣団剝浼?-->
   <view class="used-info" wx:if="{{item.status === 'used' && item.used_time}}">
-    <text class="used-time">浣跨敤鏃堕棿锛歿{item.used_time}}</text>
-    <text class="order-id">璁㈠崟鍙凤細{{item.order_id}}</text>
+    <text class="used-time">娴ｈ法鏁ら弮鍫曟？閿涙{item.used_time}}</text>
+    <text class="order-id">鐠併垹宕熼崣鍑ょ窗{{item.order_id}}</text>
   </view>
 </view>
 \n

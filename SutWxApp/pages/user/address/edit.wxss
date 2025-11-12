@@ -1,11 +1,11 @@
-﻿/* 鍦板潃缂栬緫椤甸潰鏍峰紡 */
+锘?* 閸︽澘娼冪紓鏍帆妞ょ敻娼伴弽宄扮础 */
 .container {
   background-color: #f8f8f8;
   min-height: 100vh;
   padding-bottom: 40rpx;
 }
 
-/* 鍔犺浇鐘舵€佹牱寮?*/
+/* 閸旂姾娴囬悩鑸碘偓浣圭壉瀵?*/
 .loading {
   padding: 60rpx;
   text-align: center;
@@ -13,13 +13,13 @@
   color: #999999;
 }
 
-/* 琛ㄥ崟鏍峰紡 */
+/* 鐞涖劌宕熼弽宄扮础 */
 .address-form {
   background-color: #ffffff;
   margin-top: 20rpx;
 }
 
-/* 琛ㄥ崟椤规牱寮?*/
+/* 鐞涖劌宕熸い瑙勭壉瀵?*/
 .form-item {
   display: flex;
   align-items: center;
@@ -44,7 +44,7 @@
   color: #cccccc;
 }
 
-/* 鍦板尯閫夋嫨鍣ㄦ牱寮?*/
+/* 閸︽澘灏柅澶嬪閸ｃ劍鐗卞?*/
 .picker {
   flex: 1;
 }
@@ -58,7 +58,7 @@
   color: #cccccc;
 }
 
-/* 璇︾粏鍦板潃杈撳叆妗嗘牱寮?*/
+/* 鐠囷妇绮忛崷鏉挎絻鏉堟挸鍙嗗鍡樼壉瀵?*/
 .textarea {
   flex: 1;
   font-size: 30rpx;
@@ -72,7 +72,7 @@
   color: #cccccc;
 }
 
-/* 澶嶉€夋鏍峰紡 */
+/* 婢跺秹鈧顢嬮弽宄扮础 */
 .checkbox-item {
   background-color: #ffffff;
   margin-top: 20rpx;
@@ -84,7 +84,7 @@ checkbox {
   margin-right: 10rpx;
 }
 
-/* 鎻愪氦鎸夐挳鏍峰紡 */
+/* 閹绘劒姘﹂幐澶愭尦閺嶅嘲绱?*/
 .submit-btn {
   margin: 40rpx 30rpx 0;
   background-color: #ff6b81;

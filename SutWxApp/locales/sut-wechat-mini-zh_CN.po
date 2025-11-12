@@ -16,10 +16,70 @@ msgstr "任务已完成"
 msgstr "恭喜获得{{points}}积分"
 
 #: pages/user/points-tasks.jsmsgid "share_task_description"
-msgstr "分享完成后将自动获得积分奖励"
+msgstr "请将小程序分享给好友完成任务"
+
+msgid "share_task_title"
+msgstr "分享任务"
+
+msgid "processing"
+msgstr "处理中..."
+
+msgid "points_unit"
+msgstr "积分"
+
+msgid "task_completed"
+msgstr "任务已完成"
+
+msgid "operation_failed"
+msgstr "操作失败"
+
+msgid "claim_reward_failed"
+msgstr "领取奖励失败"
+
+msgid "task_not_found"
+msgstr "任务不存在"
+
+msgid "signin_task"
+msgstr "签到任务"
+
+msgid "comment_task"
+msgstr "评论任务"
+
+msgid "review_task"
+msgstr "评价任务"
+
+msgid "profile_task"
+msgstr "完善资料任务"
+
+msgid "purchase_task"
+msgstr "购买任务"
+
+msgid "order_task"
+msgstr "下单任务"
+
+msgid "follow_task"
+msgstr "关注任务"
+
+msgid "favorite_task"
+msgstr "收藏任务"
+
+msgid "navigation_failed"
+msgstr "页面导航失败"
+
+msgid "task_progress_update_success"
+msgstr "任务进度更新成功"
+
+msgid "submit_task_progress_failed"
+msgstr "提交任务进度失败"
+
+msgid "unnamed_task"
+msgstr "未命名任务"
+
+msgid "new_rewards_available"
+msgstr "有新奖励可领取"
 
 #: pages/user/points-tasks.jsmsgid "app_slogan"
-msgstr "思特微信小程序，让生活更美好"
+msgstr "Sut微信小程序，您的生活助手"
 
 #: pages/user/points-tasks.wxmlmsgid "points_tasks_page_title"
 msgstr "积分任务"
@@ -81,5 +141,70 @@ msgstr "请稍后再查看"
 #: pages/user/points-tasks.wxmlmsgid "points_records"
 msgstr "积分明细"
 
-#: pages/user/points-tasks.wxmlmsgid "retry"
-msgstr "重试"\n
+#: pages/user/points-tasks.wxml
+msgid "retry"
+msgstr "重试"
+
+#: pages/user/points-tasks.js
+msgid "get_task_detail_failed"
+msgstr "获取任务详情失败"
+
+#: pages/user/points-tasks.js
+msgid "task_progress_update_success"
+msgstr "任务进度更新成功"
+
+#: pages/user/points-tasks.js
+msgid "submit_task_progress_failed"
+msgstr "提交任务进度失败"
+
+#: pages/user/points-tasks.js
+msgid "claim_reward_failed"
+msgstr "领取奖励失败"
+
+#: pages/user/points-tasks.wxml
+msgid "all_tasks"
+msgstr "全部任务"
+
+#: pages/user/points-tasks.wxml
+msgid "newbie_tasks"
+msgstr "新手任务"
+
+#: pages/user/points-tasks.wxml
+msgid "daily_tasks"
+msgstr "每日任务"
+
+#: pages/user/points-tasks.wxml
+msgid "weekly_tasks"
+msgstr "每周任务"
+
+#: pages/user/points-tasks.wxml
+msgid "monthly_tasks"
+msgstr "每月任务"
+
+#: pages/user/points-tasks.wxml
+msgid "completed"
+msgstr "已完成"
+
+#: pages/user/points-tasks.wxml
+msgid "claim_reward"
+msgstr "领取奖励"
+
+#: pages/user/points-tasks.wxml
+msgid "go_do"
+msgstr "去完成"
+
+#: pages/user/points-tasks.wxml
+msgid "no_tasks"
+msgstr "暂无任务"
+
+#: pages/user/points-tasks.js
+msgid "points_records"
+msgstr "积分记录"
+
+#: pages/user/points-tasks.js
+msgid "points_rules"
+msgstr "积分规则"
+
+#: pages/user/points-tasks.js
+msgid "points_mall"
+msgstr "积分商城"\n

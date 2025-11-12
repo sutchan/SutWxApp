@@ -1,8 +1,14 @@
-﻿{
-  "navigationBarTitleText": "涓汉涓績",
+{
+  "navigationBarTitleText": "个人主页",
   "navigationBarBackgroundColor": "#ffffff",
   "navigationBarTextStyle": "black",
   "backgroundColor": "#f8f8f8",
+  "usingComponents": {
+    "user-card": "../../../components/user-card/user-card",
+    "stat-item": "../../../components/stat-item/stat-item",
+    "setting-item": "../../../components/setting-item/setting-item",
+    "avatar-upload": "../../../components/avatar-upload/avatar-upload"
+  },
   "enablePullDownRefresh": true,
   "disableScroll": false
-}\n
+}

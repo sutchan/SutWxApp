@@ -1,23 +1,23 @@
-﻿<!-- pages/user/settings/settings.wxml -->
+锘?!-- pages/user/settings/settings.wxml -->
 <view class="settings-container">
-  <!-- 璁剧疆鍒嗙粍锛氱敤鎴蜂俊鎭?-->
+  <!-- 鐠佸墽鐤嗛崚鍡欑矋閿涙氨鏁ら幋铚備繆閹?-->
   <view class="settings-section">
-    <view class="section-title">鐢ㄦ埛淇℃伅</view>
+    <view class="section-title">閻劍鍩涙穱鈩冧紖</view>
     <view class="settings-item">
-      <view class="settings-label">鐢ㄦ埛鍚?/view>
-      <view class="settings-value">{{userInfo ? userInfo.nickname : '鏈櫥褰?}}</view>
+      <view class="settings-label">閻劍鍩涢崥?/view>
+      <view class="settings-value">{{userInfo ? userInfo.nickname : '閺堫亞娅ヨぐ?}}</view>
     </view>
     <view class="settings-item">
-      <view class="settings-label">鐢ㄦ埛ID</view>
+      <view class="settings-label">閻劍鍩汭D</view>
       <view class="settings-value">{{userInfo ? userInfo.id : 'N/A'}}</view>
     </view>
   </view>
 
-  <!-- 璁剧疆鍒嗙粍锛氶€氱煡璁剧疆 -->
+  <!-- 鐠佸墽鐤嗛崚鍡欑矋閿涙岸鈧氨鐓＄拋鍓х枂 -->
   <view class="settings-section">
-    <view class="section-title">閫氱煡璁剧疆</view>
+    <view class="section-title">闁氨鐓＄拋鍓х枂</view>
     <view class="settings-item">
-      <view class="settings-label">鎺ㄩ€侀€氱煡</view>
+      <view class="settings-label">閹恒劑鈧線鈧氨鐓?/view>
       <switch 
         class="settings-switch" 
         checked="{{notificationEnabled}}" 
@@ -26,7 +26,7 @@
       />
     </view>
     <view class="settings-item">
-      <view class="settings-label">鑷姩鎾斁</view>
+      <view class="settings-label">閼奉亜濮╅幘顓熸杹</view>
       <switch 
         class="settings-switch" 
         checked="{{autoPlayEnabled}}" 
@@ -35,7 +35,7 @@
       />
     </view>
     <view class="settings-item">
-      <view class="settings-label">娣辫壊妯″紡</view>
+      <view class="settings-label">濞ｈ精澹婂Ο鈥崇础</view>
       <switch 
         class="settings-switch" 
         checked="{{darkModeEnabled}}" 
@@ -45,45 +45,45 @@
     </view>
   </view>
 
-  <!-- 璁剧疆鍒嗙粍锛氬瓨鍌ㄧ鐞?-->
+  <!-- 鐠佸墽鐤嗛崚鍡欑矋閿涙艾鐡ㄩ崒銊ь吀閻?-->
   <view class="settings-section">
-    <view class="section-title">瀛樺偍绠＄悊</view>
+    <view class="section-title">鐎涙ê鍋嶇粻锛勬倞</view>
     <view class="settings-item" bindtap="clearCache">
-      <view class="settings-label">娓呴櫎缂撳瓨</view>
+      <view class="settings-label">濞撳懘娅庣紓鎾崇摠</view>
       <view class="settings-value-container">
         <text class="settings-value">{{cacheSize}}</text>
-        <text class="settings-arrow">鈥?/text>
+        <text class="settings-arrow">閳?/text>
       </view>
     </view>
   </view>
 
-  <!-- 璁剧疆鍒嗙粍锛氬叧浜?-->
+  <!-- 鐠佸墽鐤嗛崚鍡欑矋閿涙艾鍙ф禍?-->
   <view class="settings-section">
-    <view class="section-title">鍏充簬</view>
+    <view class="section-title">閸忓厖绨?/view>
     <view class="settings-item" bindtap="viewUserAgreement">
-      <view class="settings-label">鐢ㄦ埛鍗忚</view>
-      <text class="settings-arrow">鈥?/text>
+      <view class="settings-label">閻劍鍩涢崡蹇氼唴</view>
+      <text class="settings-arrow">閳?/text>
     </view>
     <view class="settings-item" bindtap="viewPrivacyPolicy">
-      <view class="settings-label">闅愮鏀跨瓥</view>
-      <text class="settings-arrow">鈥?/text>
+      <view class="settings-label">闂呮劗顫嗛弨璺ㄧ摜</view>
+      <text class="settings-arrow">閳?/text>
     </view>
     <view class="settings-item" bindtap="contactService">
-      <view class="settings-label">鑱旂郴瀹㈡湇</view>
-      <text class="settings-arrow">鈥?/text>
+      <view class="settings-label">閼辨梻閮寸€广垺婀?/view>
+      <text class="settings-arrow">閳?/text>
     </view>
     <view class="settings-item" bindtap="viewAbout">
-      <view class="settings-label">鍏充簬鎴戜滑</view>
-      <text class="settings-arrow">鈥?/text>
+      <view class="settings-label">閸忓厖绨幋鎴滄粦</view>
+      <text class="settings-arrow">閳?/text>
     </view>
     <view class="settings-item" bindtap="checkForUpdates">
-      <view class="settings-label">妫€鏌ユ洿鏂?/view>
-      <text class="settings-arrow">鈥?/text>
+      <view class="settings-label">濡偓閺屻儲娲块弬?/view>
+      <text class="settings-arrow">閳?/text>
     </view>
   </view>
 
-  <!-- 鐗堟湰淇℃伅 -->
+  <!-- 閻楀牊婀版穱鈩冧紖 -->
   <view class="version-info">
-    <text>鐗堟湰 {{appVersion}}</text>
+    <text>閻楀牊婀?{{appVersion}}</text>
   </view>
 </view>\n

@@ -1,11 +1,11 @@
-﻿/* 閫氱煡涓績椤甸潰鏍峰紡 */
+锘?* 闁氨鐓℃稉顓炵妇妞ょ敻娼伴弽宄扮础 */
 .container {
   padding: 0;
   background-color: #f8f8f8;
   min-height: 100vh;
 }
 
-/* 椤堕儴绛涢€夋爮 */
+/* 妞ゅ爼鍎寸粵娑⑩偓澶嬬埉 */
 .filter-bar {
   background-color: #ffffff;
   padding: 10rpx 0;
@@ -45,10 +45,10 @@
   border-radius: 2rpx;
 }
 
-/* 閫氱煡鍒楄〃 */
+/* 闁氨鐓￠崚妤勩€?*/
 .notification-list {
   width: 100%;
-  margin-top: 90rpx; /* 涓哄浐瀹氱瓫閫夋爮鐣欏嚭绌洪棿 */
+  margin-top: 90rpx; /* 娑撳搫娴愮€规氨鐡柅澶嬬埉閻ｆ瑥鍤粚娲？ */
 }
 
 .notification-item {
@@ -79,7 +79,7 @@
   background-color: #ff6b6b;
 }
 
-/* 閫氱煡澶撮儴 */
+/* 闁氨鐓℃径鎾劥 */
 .notification-header {
   display: flex;
   flex-direction: row;
@@ -104,7 +104,7 @@
   margin-left: 20rpx;
 }
 
-/* 閫氱煡鍐呭 */
+/* 闁氨鐓￠崘鍛啇 */
 .notification-content {
   font-size: 28rpx;
   color: #666666;
@@ -117,7 +117,7 @@
   margin-bottom: 15rpx;
 }
 
-/* 閫氱煡搴曢儴 */
+/* 闁氨鐓℃惔鏇㈠劥 */
 .notification-footer {
   display: flex;
   flex-direction: row;
@@ -133,7 +133,7 @@
   border-radius: 16rpx;
 }
 
-/* 涓嶅悓绫诲瀷閫氱煡鐨勬牱寮?*/
+/* 娑撳秴鎮撶猾璇茬€烽柅姘辩叀閻ㄥ嫭鐗卞?*/
 .notification-type-system {
   background-color: #e0f7fa;
   color: #006064;
@@ -164,7 +164,7 @@
   color: #1565c0;
 }
 
-/* 绌虹姸鎬?*/
+/* 缁岃櫣濮搁幀?*/
 .empty-state {
   display: flex;
   flex-direction: column;
@@ -185,7 +185,7 @@
   font-size: 28rpx;
 }
 
-/* 鍔犺浇鏇村 */
+/* 閸旂姾娴囬弴鏉戭樋 */
 .load-more {
   text-align: center;
   padding: 30rpx 0;
@@ -193,7 +193,7 @@
   font-size: 24rpx;
 }
 
-/* 鏍囪宸茶鎸夐挳 */
+/* 閺嶅洩顔囧鑼额嚢閹稿鎸?*/
 .mark-all-read {
   position: fixed;
   bottom: 40rpx;
@@ -211,7 +211,7 @@
   z-index: 10;
 }
 
-/* 鍔犺浇鐘舵€?*/
+/* 閸旂姾娴囬悩鑸碘偓?*/
 .loading {
   padding: 60rpx 0;
   display: flex;

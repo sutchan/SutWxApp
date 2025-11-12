@@ -1,70 +1,70 @@
-﻿<!-- 浼樻儬鍒搁€夋嫨椤甸潰缁撴瀯 -->
+锘?!-- 娴兼ɑ鍎崚鎼佲偓澶嬪妞ょ敻娼扮紒鎾寸€?-->
 <view class="container">
-  <!-- 椤甸潰鏍囬 -->
+  <!-- 妞ょ敻娼伴弽鍥暯 -->
   <view class="page-header">
-    <text class="page-title">閫夋嫨浼樻儬鍒?/text>
-    <view class="close-btn" bind:tap="onNoUseCoupon">鍏抽棴</view>
+    <text class="page-title">闁瀚ㄦ导妯诲劕閸?/text>
+    <view class="close-btn" bind:tap="onNoUseCoupon">閸忔娊妫?/view>
   </view>
 
-  <!-- 鎻愮ず淇℃伅 -->
+  <!-- 閹绘劗銇氭穱鈩冧紖 -->
   <view class="tip-section">
-    <text class="tip-text">璇烽€夋嫨鍙娇鐢ㄧ殑浼樻儬鍒革紝鑻ヤ笉浣跨敤璇风偣鍑?涓嶄娇鐢ㄤ紭鎯犲埜"</text>
+    <text class="tip-text">鐠囩兘鈧瀚ㄩ崣顖欏▏閻劎娈戞导妯诲劕閸掗潻绱濋懟銉ょ瑝娴ｈ法鏁ょ拠椋庡仯閸?娑撳秳濞囬悽銊ょ喘閹姴鍩?</text>
   </view>
 
-  <!-- 鍔犺浇鐘舵€?-->
+  <!-- 閸旂姾娴囬悩鑸碘偓?-->
   <view class="loading-section" wx:if="{{loading}}">
     <view class="loading-spinner"></view>
-    <text class="loading-text">鍔犺浇浼樻儬鍒镐腑...</text>
+    <text class="loading-text">閸旂姾娴囨导妯诲劕閸掗晲鑵?..</text>
   </view>
 
-  <!-- 鏃犱紭鎯犲埜鎻愮ず -->
+  <!-- 閺冪姳绱幆鐘插煖閹绘劗銇?-->
   <view class="empty-section" wx:elif="{{noCoupons}}">
     <view class="empty-icon"></view>
-    <text class="empty-text">鏆傛棤鍙敤浼樻儬鍒?/text>
-    <button class="empty-btn" bind:tap="onNoUseCoupon">涓嶄娇鐢ㄤ紭鎯犲埜</button>
+    <text class="empty-text">閺嗗倹妫ら崣顖滄暏娴兼ɑ鍎崚?/text>
+    <button class="empty-btn" bind:tap="onNoUseCoupon">娑撳秳濞囬悽銊ょ喘閹姴鍩?/button>
   </view>
 
-  <!-- 浼樻儬鍒稿垪琛?-->
+  <!-- 娴兼ɑ鍎崚绋垮灙鐞?-->
   <view class="coupon-list" wx:else>
-    <!-- 涓嶄娇鐢ㄤ紭鎯犲埜閫夐」 -->
+    <!-- 娑撳秳濞囬悽銊ょ喘閹姴鍩滈柅澶愩€?-->
     <view class="no-coupon-item" bind:tap="onNoUseCoupon">
       <view class="no-coupon-content">
-        <view class="no-coupon-icon">鉁?/view>
-        <view class="no-coupon-text">涓嶄娇鐢ㄤ紭鎯犲埜</view>
+        <view class="no-coupon-icon">閴?/view>
+        <view class="no-coupon-text">娑撳秳濞囬悽銊ょ喘閹姴鍩?/view>
       </view>
       <radio class="coupon-radio" checked="{{!selectedCoupon}}"></radio>
     </view>
 
-    <!-- 浼樻儬鍒稿垪琛?-->
+    <!-- 娴兼ɑ鍎崚绋垮灙鐞?-->
     <view class="coupon-item" 
           wx:for="{{coupons}}" 
           wx:key="id" 
           bind:tap="onSelectCoupon"
           data-id="{{item.id}}">
-      <!-- 浼樻儬鍒稿乏渚ч噾棰濆尯鍩?-->
+      <!-- 娴兼ɑ鍎崚绋夸箯娓氀囧櫨妫版繂灏崺?-->
       <view class="coupon-left">
         <text class="coupon-value">
-          {{item.type === 'cash' ? '楼' : ''}}{{item.type === 'percent' ? (item.value/10) : item.value}}
-          {{item.type === 'percent' ? '鎶? : ''}}
+          {{item.type === 'cash' ? '妤? : ''}}{{item.type === 'percent' ? (item.value/10) : item.value}}
+          {{item.type === 'percent' ? '閹? : ''}}
         </text>
         <text class="coupon-min-amount" wx:if="{{item.min_amount > 0}}">
-          婊{item.min_amount}}鍏冨彲鐢?        </text>
+          濠婎攣{item.min_amount}}閸忓啫褰查悽?        </text>
       </view>
 
-      <!-- 浼樻儬鍒稿彸渚т俊鎭尯鍩?-->
+      <!-- 娴兼ɑ鍎崚绋垮礁娓氀備繆閹垰灏崺?-->
       <view class="coupon-right">
         <view class="coupon-name">{{item.name}}</view>
         <view class="coupon-description">{{item.description}}</view>
-        <view class="coupon-expire">鏈夋晥鏈熻嚦锛歿{item.end_time ? (new Date(item.end_time).getFullYear() + '.' + (new Date(item.end_time).getMonth()+1).toString().padStart(2, '0') + '.' + new Date(item.end_time).getDate().toString().padStart(2, '0')) : ''}}</view>
+        <view class="coupon-expire">閺堝鏅ラ張鐔诲殾閿涙{item.end_time ? (new Date(item.end_time).getFullYear() + '.' + (new Date(item.end_time).getMonth()+1).toString().padStart(2, '0') + '.' + new Date(item.end_time).getDate().toString().padStart(2, '0')) : ''}}</view>
       </view>
 
-      <!-- 閫変腑鐘舵€?-->
+      <!-- 闁鑵戦悩鑸碘偓?-->
       <radio class="coupon-radio" checked="{{selectedCoupon && selectedCoupon.id === item.id}}"></radio>
     </view>
   </view>
 
-  <!-- 搴曢儴鎻愮ず -->
+  <!-- 鎼存洟鍎撮幓鎰仛 -->
   <view class="bottom-tip" wx:if="{{coupons.length > 0}}">
-    <text class="tip-text">* 姣忓紶璁㈠崟浠呴檺浣跨敤涓€寮犱紭鎯犲埜</text>
+    <text class="tip-text">* 濮ｅ繐绱剁拋銏犲礋娴犲懘妾烘担璺ㄦ暏娑撯偓瀵姳绱幆鐘插煖</text>
   </view>
 </view>\n

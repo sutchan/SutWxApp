@@ -1,4 +1,4 @@
-﻿/* 鐢ㄦ埛绉垎椤甸潰鏍峰紡 */
+锘?* 閻劍鍩涚粔顖氬瀻妞ょ敻娼伴弽宄扮础 */
 .points-container {
   padding: 20rpx;
   background-color: #f5f5f5;
@@ -6,7 +6,7 @@
   box-sizing: border-box;
 }
 
-/* 绉垎淇℃伅鍗＄墖 */
+/* 缁夘垰鍨庢穱鈩冧紖閸楋紕澧?*/
 .points-card {
   background: linear-gradient(135deg, #ff9500 0%, #ff6600 100%);
   border-radius: 16rpx;
@@ -55,7 +55,7 @@
   opacity: 0.9;
 }
 
-/* 绉垎璇︽儏淇℃伅 */
+/* 缁夘垰鍨庣拠锔藉剰娣団剝浼?*/
 .points-details {
   display: flex;
   justify-content: space-around;
@@ -102,7 +102,7 @@
   margin-left: 8rpx;
 }
 
-/* 绉垎鎿嶄綔鎸夐挳缁?*/
+/* 缁夘垰鍨庨幙宥勭稊閹稿鎸崇紒?*/
 .points-operations {
   display: flex;
   justify-content: space-between;
@@ -145,7 +145,7 @@
   font-size: 24rpx;
 }
 
-/* 绉垎鍘嗗彶璁板綍 */
+/* 缁夘垰鍨庨崢鍡楀蕉鐠佹澘缍?*/
 .history-section {
   background-color: #fff;
   border-radius: 16rpx;
@@ -185,7 +185,7 @@
 }
 
 .history-list {
-  /* 鍘嗗彶璁板綍鍒楄〃 */
+  /* 閸樺棗褰剁拋鏉跨秿閸掓銆?*/
 }
 
 .history-item {
@@ -237,7 +237,7 @@
   color: #666;
 }
 
-/* 鍔犺浇鏇村 */
+/* 閸旂姾娴囬弴鏉戭樋 */
 .loading-more {
   text-align: center;
   padding: 20rpx;
@@ -246,7 +246,7 @@
   background-color: #f5f5f5;
 }
 
-/* 娌℃湁鏇村鏁版嵁 */
+/* 濞屸剝婀侀弴鏉戭樋閺佺増宓?*/
 .no-more {
   text-align: center;
   padding: 30rpx;
@@ -255,7 +255,7 @@
   background-color: #f5f5f5;
 }
 
-/* 绌虹姸鎬?*/
+/* 缁岃櫣濮搁幀?*/
 .empty {
   display: flex;
   flex-direction: column;
@@ -278,7 +278,7 @@
   color: #999;
 }
 
-/* 鍔犺浇鐘舵€?*/
+/* 閸旂姾娴囬悩鑸碘偓?*/
 .loading-container {
   display: flex;
   flex-direction: column;
@@ -307,7 +307,7 @@
   font-size: 28rpx;
 }
 
-/* 閿欒鎻愮ず */
+/* 闁挎瑨顕ら幓鎰仛 */
 .error-container {
   display: flex;
   flex-direction: column;
@@ -340,7 +340,7 @@
   border-radius: 20rpx;
 }
 
-/* 绛涢€夊脊绐楁牱寮?*/
+/* 缁涙盯鈧鑴婄粣妤佺壉瀵?*/
 .filter-modal {
   position: fixed;
   top: 0;

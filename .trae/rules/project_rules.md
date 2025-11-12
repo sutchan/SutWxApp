@@ -1,4 +1,4 @@
-﻿# SutWxApp 寰俊灏忕▼搴忛」鐩鍒?
+# SutWxApp 寰俊灏忕▼搴忛」鐩鍒?
 \n## 1. 椤圭洰姒傝堪\n\n- **椤圭洰鍚嶇О**: 鑻忕壒寰俊灏忕▼搴?(SutWxApp)\n- **椤圭洰浠撳簱**: https://github.com/sutchan\n- **榛樿缃插悕**: Sut\n- **寮€鍙戠幆澧?*: Windows\n\n## 2. 鏂囦欢缁撴瀯瑙勮寖\n\n### 2.1 涓昏鐩綍缁撴瀯\n\n```\nSutWxApp/\n鈹溾攢鈹€ app.js              # 灏忕▼搴忓叆鍙ｆ枃浠?
 鈹溾攢鈹€ app.json            # 鍏ㄥ眬閰嶇疆\n鈹溾攢鈹€ app.wxss            # 鍏ㄥ眬鏍峰紡\n鈹溾攢鈹€ assets/             # 闈欐€佽祫婧?
 鈹?  鈹斺攢鈹€ images/         # 鍥剧墖璧勬簮\n鈹溾攢鈹€ components/         # 鑷畾涔夌粍浠?

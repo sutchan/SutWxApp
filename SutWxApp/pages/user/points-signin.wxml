@@ -1,31 +1,31 @@
-﻿<!-- 姣忔棩绛惧埌椤甸潰 -->
+锘?!-- 濮ｅ繑妫╃粵鎯у煂妞ょ敻娼?-->
 <view class="signin-container">
-  <!-- 椤甸潰鏍囬 -->
+  <!-- 妞ょ敻娼伴弽鍥暯 -->
   <view class="page-header">
-    <text class="page-title">姣忔棩绛惧埌</text>
+    <text class="page-title">濮ｅ繑妫╃粵鎯у煂</text>
   </view>
 
-  <!-- 鍔犺浇鐘舵€?-->
+  <!-- 閸旂姾娴囬悩鑸碘偓?-->
   <view class="loading-container" wx:if="{{loading}}">
     <view class="loading-icon"></view>
-    <text class="loading-text">鍔犺浇涓?..</text>
+    <text class="loading-text">閸旂姾娴囨稉?..</text>
   </view>
 
-  <!-- 閿欒鎻愮ず -->
+  <!-- 闁挎瑨顕ら幓鎰仛 -->
   <view class="error-container" wx:if="{{error}}">
-    <view class="error-icon">鈿狅笍</view>
+    <view class="error-icon">閳跨媴绗?/view>
     <text class="error-text">{{error}}</text>
-    <button class="retry-button" bindtap="onRetry">閲嶈瘯</button>
+    <button class="retry-button" bindtap="onRetry">闁插秷鐦?/button>
   </view>
 
-  <!-- 绛惧埌鍐呭 -->
+  <!-- 缁涙儳鍩岄崘鍛啇 -->
   <view class="signin-content" wx:if="{{!loading && !error}}">
-    <!-- 绛惧埌鎸夐挳鍖哄煙 -->
+    <!-- 缁涙儳鍩岄幐澶愭尦閸栧搫鐓?-->
     <view class="signin-section">
       <view class="signin-card">
         <view class="signin-status">
-          <text class="status-text">{{todaySigned ? '浠婃棩宸茬鍒? : '姣忔棩绛惧埌'}}</text>
-          <text class="points-tip">绛惧埌鍙幏寰楃Н鍒嗗鍔?/text>
+          <text class="status-text">{{todaySigned ? '娴犲﹥妫╁鑼劮閸? : '濮ｅ繑妫╃粵鎯у煂'}}</text>
+          <text class="points-tip">缁涙儳鍩岄崣顖濆箯瀵版袧閸掑棗顨涢崝?/text>
         </view>
         
         <button 
@@ -34,45 +34,45 @@
           loading="{{signing}}"
           disabled="{{todaySigned || signing}}"
         >
-          {{todaySigned ? '宸茬鍒? : '绔嬪嵆绛惧埌'}}
+          {{todaySigned ? '瀹歌尙顒烽崚? : '缁斿宓嗙粵鎯у煂'}}
         </button>
       </view>
     </view>
 
-    <!-- 绛惧埌缁熻 -->
+    <!-- 缁涙儳鍩岀紒鐔活吀 -->
     <view class="stats-section">
       <view class="stats-card">
         <view class="stat-item">
           <text class="stat-value">{{consecutiveDays}}</text>
-          <text class="stat-label">杩炵画绛惧埌(澶?</text>
+          <text class="stat-label">鏉╃偟鐢荤粵鎯у煂(婢?</text>
         </view>
         <view class="stat-item">
           <text class="stat-value">{{monthlySignedDays}}</text>
-          <text class="stat-label">鏈湀绛惧埌(澶?</text>
+          <text class="stat-label">閺堫剚婀€缁涙儳鍩?婢?</text>
         </view>
         <view class="stat-item">
           <text class="stat-value">{{totalSignedDays}}</text>
-          <text class="stat-label">绱绛惧埌(澶?</text>
+          <text class="stat-label">缁鳖垵顓哥粵鎯у煂(婢?</text>
         </view>
       </view>
     </view>
 
-    <!-- 绛惧埌鏃ュ巻 -->
+    <!-- 缁涙儳鍩岄弮銉ュ坊 -->
     <view class="calendar-section">
-      <view class="section-title">鏈湀绛惧埌璁板綍</view>
+      <view class="section-title">閺堫剚婀€缁涙儳鍩岀拋鏉跨秿</view>
       <view class="calendar-grid">
-        <!-- 鏄熸湡鏍囬 -->
+        <!-- 閺勭喐婀￠弽鍥暯 -->
         <view class="calendar-weekdays">
-          <view class="weekday-item">鏃?/view>
-          <view class="weekday-item">涓€</view>
-          <view class="weekday-item">浜?/view>
-          <view class="weekday-item">涓?/view>
-          <view class="weekday-item">鍥?/view>
-          <view class="weekday-item">浜?/view>
-          <view class="weekday-item">鍏?/view>
+          <view class="weekday-item">閺?/view>
+          <view class="weekday-item">娑撯偓</view>
+          <view class="weekday-item">娴?/view>
+          <view class="weekday-item">娑?/view>
+          <view class="weekday-item">閸?/view>
+          <view class="weekday-item">娴?/view>
+          <view class="weekday-item">閸?/view>
         </view>
         
-        <!-- 鏃ユ湡鏍煎瓙 -->
+        <!-- 閺冦儲婀￠弽鐓庣摍 -->
         <view class="calendar-days">
           <view 
             wx:for="{{calendarData}}" 
@@ -80,24 +80,24 @@
             class="day-item {{item.isSigned ? 'signed' : ''}} {{item.isToday ? 'today' : ''}}"
           >
             <text class="day-number">{{item.day}}</text>
-            <view class="signed-mark" wx:if="{{item.isSigned}}">鉁?/view>
+            <view class="signed-mark" wx:if="{{item.isSigned}}">閴?/view>
           </view>
         </view>
       </view>
     </view>
 
-    <!-- 绉垎瑙勫垯鎻愮ず -->
+    <!-- 缁夘垰鍨庣憴鍕灟閹绘劗銇?-->
     <view class="rules-tip">
-      <text class="tip-text">馃摑 绉垎瑙勫垯锛氳繛缁鍒板ぉ鏁拌秺澶氾紝鑾峰緱鐨勭Н鍒嗗鍔辫秺澶?/text>
+      <text class="tip-text">棣冩憫 缁夘垰鍨庣憴鍕灟閿涙俺绻涚紒顓狀劮閸掓澘銇夐弫鎷岀Ш婢舵熬绱濋懢宄扮繁閻ㄥ嫮袧閸掑棗顨涢崝杈Ш婢?/text>
     </view>
 
-    <!-- 蹇€熷叆鍙?-->
+    <!-- 韫囶偊鈧喎鍙嗛崣?-->
     <view class="quick-actions">
       <view class="action-card">
-        <text class="action-title">蹇€熷叆鍙?/text>
+        <text class="action-title">韫囶偊鈧喎鍙嗛崣?/text>
         <view class="action-buttons">
-          <button class="action-button" bindtap="navigateToPointsHistory">鏌ョ湅绉垎鏄庣粏</button>
-          <button class="action-button" bindtap="navigateToPointsMall">鍓嶅線绉垎鍟嗗煄</button>
+          <button class="action-button" bindtap="navigateToPointsHistory">閺屻儳婀呯粔顖氬瀻閺勫海绮?/button>
+          <button class="action-button" bindtap="navigateToPointsMall">閸撳秴绶氱粔顖氬瀻閸熷棗鐓?/button>
         </view>
       </view>
     </view>

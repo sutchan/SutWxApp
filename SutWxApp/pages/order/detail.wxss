@@ -1,6 +1,6 @@
-﻿/* detail.wxss - 璁㈠崟璇︽儏椤甸潰鏍峰紡 */
+锘?* detail.wxss - 鐠併垹宕熺拠锔藉剰妞ょ敻娼伴弽宄扮础 */
 
-/* 椤甸潰瀹瑰櫒 */
+/* 妞ょ敻娼扮€圭懓娅?*/
 .order-detail-container {
   display: flex;
   flex-direction: column;
@@ -8,7 +8,7 @@
   background-color: #f8f8f8;
 }
 
-/* 椤堕儴瀵艰埅 */
+/* 妞ゅ爼鍎寸€佃壈鍩?*/
 .nav-bar {
   display: flex;
   align-items: center;
@@ -38,7 +38,7 @@
   width: 60px;
 }
 
-/* 鍔犺浇涓姸鎬?*/
+/* 閸旂姾娴囨稉顓犲Ц閹?*/
 .loading-container {
   display: flex;
   justify-content: center;
@@ -51,7 +51,7 @@
   color: #999999;
 }
 
-/* 閿欒鐘舵€?*/
+/* 闁挎瑨顕ら悩鑸碘偓?*/
 .error-container {
   display: flex;
   flex-direction: column;
@@ -68,7 +68,7 @@
   text-align: center;
 }
 
-/* 璁㈠崟鐘舵€佸尯鍩?*/
+/* 鐠併垹宕熼悩鑸碘偓浣稿隘閸?*/
 .order-status-section {
   padding: 20px 16px;
   color: #ffffff;
@@ -85,7 +85,7 @@
   opacity: 0.9;
 }
 
-/* 閫氱敤鍖哄潡鏍峰紡 */
+/* 闁氨鏁ら崠鍝勬健閺嶅嘲绱?*/
 .section {
   background-color: #ffffff;
   margin-top: 10px;
@@ -99,7 +99,7 @@
   margin-bottom: 12px;
 }
 
-/* 鍦板潃鍖哄潡 */
+/* 閸︽澘娼冮崠鍝勬健 */
 .address-section {
   display: flex;
   flex-direction: column;
@@ -133,7 +133,7 @@
   line-height: 20px;
 }
 
-/* 鍟嗗搧鍒楄〃 */
+/* 閸熷棗鎼ч崚妤勩€?*/
 .goods-list {
   padding: 0 -8px;
 }
@@ -204,7 +204,7 @@
   color: #666666;
 }
 
-/* 璁㈠崟淇℃伅 */
+/* 鐠併垹宕熸穱鈩冧紖 */
 .order-info-section .info-item {
   display: flex;
   justify-content: space-between;
@@ -230,7 +230,7 @@
   font-size: 14px;
 }
 
-/* 璐圭敤鏄庣粏 */
+/* 鐠愬湱鏁ら弰搴ｇ矎 */
 .cost-section .cost-item {
   display: flex;
   justify-content: space-between;
@@ -260,7 +260,7 @@
   font-weight: 600;
 }
 
-/* 鎿嶄綔鎸夐挳鍖哄煙 */
+/* 閹垮秳缍旈幐澶愭尦閸栧搫鐓?*/
 .action-bar {
   position: fixed;
   bottom: 0;
@@ -304,7 +304,7 @@
   line-height: 24px;
 }
 
-/* 鐗╂祦淇℃伅寮圭獥 */
+/* 閻椻晜绁︽穱鈩冧紖瀵湱鐛?*/
 .logistics-popup {
   position: fixed;
   bottom: 0;
@@ -427,7 +427,7 @@
   font-size: 14px;
 }
 
-/* 閬僵灞?*/
+/* 闁喚鍍电仦?*/
 .overlay {
   position: fixed;
   top: 0;
@@ -438,7 +438,7 @@
   z-index: 100;
 }
 
-/* 鍝嶅簲寮忚璁?*/
+/* 閸濆秴绨插蹇氼啎鐠?*/
 @media (min-width: 768px) {
   .order-detail-container {
     max-width: 768px;

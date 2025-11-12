@@ -1,12 +1,34 @@
-﻿{
-  "description": "SUT寰俊灏忕▼搴?,
+{
+  "description": "Sut微信小程序",
   "packOptions": {
-    "ignore": [],
-    "include": []
+    "ignore": [
+      {
+        "type": "folder",
+        "value": "__pycache__"
+      },
+      {
+        "type": "suffix",
+        "value": ".pyc"
+      },
+      {
+        "type": "suffix",
+        "value": ".pyo"
+      },
+      {
+        "type": "suffix",
+        "value": ".DS_Store"
+      },
+      {
+        "type": "suffix",
+        "value": ".git"
+      },
+      {
+        "type": "suffix",
+        "value": ".svn"
+      }
+    ]
   },
   "setting": {
-    "bundle": false,
-    "userConfirmedBundleSwitch": false,
     "urlCheck": true,
     "es6": true,
     "enhance": true,
@@ -18,69 +40,161 @@
     "nodeModules": false,
     "autoAudits": false,
     "showShadowRootInWxmlPanel": true,
-    "uglifyFileName": true,
-    "showES6CompileOption": false,
-    "useCompilerPlugins": [
-      "typescript"
-    ],
-    "useIsolateContext": true,
+    "uglifyFileName": false,
+    "uploadWithSourceMap": true,
+    "compileHotReLoad": false,
     "useMultiFrameRuntime": true,
     "useApiHook": true,
-    "useApiHostProcess": true,
-    "showShadowRootInWxmlPanel": true,
-    "useCompileHotReLoad": false,
-    "showAllSubPackages": true,
-    "minifyWXSS": true
+    "useApiHostProcess": false,
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    },
+    "enableEngineNative": false,
+    "bundle": false,
+    "useIsolateContext": true,
+    "userConfirmedBundleSwitch": false,
+    "useCompilerPlugins": false
   },
   "compileType": "miniprogram",
-  "libVersion": "2.19.4",
+  "libVersion": "2.29.0",
   "appid": "wx1234567890abcdef",
-  "projectname": "SUT寰俊灏忕▼搴?,
+  "projectname": "SutWxApp",
+  "debugOptions": {
+    "hidedInDevtools": []
+  },
+  "isGameTourist": false,
+  "isGameTourist": false,
+  "simulatorType": "wechat",
+  "simulatorPluginLibVersion": {},
+  "cloudfunctionTemplateRoot": "cloudfunctionTemplate",
+  "packOptions": {
+    "ignore": [
+      {
+        "type": "suffix",
+        "value": ".pyc"
+      },
+      {
+        "type": "suffix",
+        "value": ".pyo"
+      },
+      {
+        "type": "suffix",
+        "value": ".DS_Store"
+      },
+      {
+        "type": "folder",
+        "value": "__pycache__"
+      }
+    ]
+  },
+  "setting": {
+    "urlCheck": true,
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "preloadBackgroundData": false,
+    "minified": true,
+    "newFeature": true,
+    "coverView": true,
+    "nodeModules": false,
+    "autoAudits": false,
+    "showShadowRootInWxmlPanel": true,
+    "uglifyFileName": false,
+    "uploadWithSourceMap": true,
+    "compileHotReLoad": false,
+    "useMultiFrameRuntime": true,
+    "useApiHook": true,
+    "useApiHostProcess": false,
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    },
+    "enableEngineNative": false,
+    "bundle": false,
+    "useIsolateContext": true,
+    "userConfirmedBundleSwitch": false,
+    "useCompilerPlugins": false,
+    "useRunModeCompensate": false,
+    "useIsolateContextForPlugin": true,
+    "useNewFeatureCompile": true,
+    "userConfirmedUseNewFeatureCompile": true
+  },
+  "compileType": "miniprogram",
+  "libVersion": "2.29.0",
+  "appid": "wx1234567890abcdef",
+  "projectname": "SutWxApp",
   "debugOptions": {
     "hidedInDevtools": []
   },
   "isGameTourist": false,
   "simulatorType": "wechat",
   "simulatorPluginLibVersion": {},
-  "condition": {
-    "search": {
-      "current": -1,
-      "list": []
+  "cloudfunctionTemplateRoot": "cloudfunctionTemplate",
+  "packOptions": {
+    "ignore": [
+      {
+        "type": "suffix",
+        "value": ".pyc"
+      },
+      {
+        "type": "suffix",
+        "value": ".pyo"
+      },
+      {
+        "type": "suffix",
+        "value": ".DS_Store"
+      },
+      {
+        "type": "folder",
+        "value": "__pycache__"
+      }
+    ]
+  },
+  "setting": {
+    "urlCheck": true,
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "preloadBackgroundData": false,
+    "minified": true,
+    "newFeature": true,
+    "coverView": true,
+    "nodeModules": false,
+    "autoAudits": false,
+    "showShadowRootInWxmlPanel": true,
+    "uglifyFileName": false,
+    "uploadWithSourceMap": true,
+    "compileHotReLoad": false,
+    "useMultiFrameRuntime": true,
+    "useApiHook": true,
+    "useApiHostProcess": false,
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
     },
-    "conversation": {
-      "current": -1,
-      "list": []
-    },
-    "plugin": {
-      "current": -1,
-      "list": []
-    },
-    "game": {
-      "current": -1,
-      "list": []
-    },
-    "miniprogram": {
-      "current": 0,
-      "list": [
-        {
-          "id": -1,
-          "name": "棣栭〉",
-          "pathName": "pages/index/index",
-          "query": ""
-        },
-        {
-          "id": -1,
-          "name": "鍒嗙被",
-          "pathName": "pages/category/category",
-          "query": ""
-        },
-        {
-          "id": -1,
-          "name": "鎴戠殑",
-          "pathName": "pages/user/profile/profile",
-          "query": ""
-        }
-      ]
-    }
-  }
-}\n
+    "enableEngineNative": false,
+    "bundle": false,
+    "useIsolateContext": true,
+    "userConfirmedBundleSwitch": false,
+    "useCompilerPlugins": false,
+    "useRunModeCompensate": false,
+    "useIsolateContextForPlugin": true,
+    "useNewFeatureCompile": true,
+    "userConfirmedUseNewFeatureCompile": true
+  },
+  "compileType": "miniprogram",
+  "libVersion": "2.29.0",
+  "appid": "wx1234567890abcdef",
+  "projectname": "SutWxApp",
+  "debugOptions": {
+    "hidedInDevtools": []
+  },
+  "isGameTourist": false,
+  "simulatorType": "wechat",
+  "simulatorPluginLibVersion": {},
+  "cloudfunctionTemplateRoot": "cloudfunctionTemplate"
+}

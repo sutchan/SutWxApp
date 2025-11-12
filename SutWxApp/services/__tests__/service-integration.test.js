@@ -1,13 +1,12 @@
-﻿// 鏈嶅姟闆嗘垚妯″潡鍗曞厓娴嬭瘯
+锘?/ 閺堝秴濮熼梿鍡樺灇濡€虫健閸楁洖鍘撳ù瀣槸
 const { ServiceIntegrator, getService } = require('../service-integration');
 const { ServiceManager } = require('../service-manager');
 const { registerServiceAdapters } = require('../service-adapter');
 
-// 妯℃嫙鎵€鏈変緷璧栨ā鍧楋紝閬垮厤瀹為檯瀵煎叆
-jest.mock('../service-manager');
+// 濡剝瀚欓幍鈧張澶夌贩鐠ф牗膩閸ф绱濋柆鍨帳鐎圭偤妾€电厧鍙?jest.mock('../service-manager');
 jest.mock('../service-adapter');
 
-// 妯℃嫙utils鐩綍涓嬬殑鎵€鏈夋ā鍧楀鍏?jest.mock('../../utils/api', () => ({
+// 濡剝瀚檜tils閻╊喖缍嶆稉瀣畱閹碘偓閺堝膩閸ф顕遍崗?jest.mock('../../utils/api', () => ({
   default: {
     get: jest.fn(),
     post: jest.fn(),
@@ -35,7 +34,7 @@ jest.mock('../../utils/cache-service', () => ({
   }
 }));
 
-// 妯℃嫙浣跨敤ES妯″潡璇硶鐨勬湇鍔?jest.mock('../../utils/article-service', () => ({
+// 濡剝瀚欐担璺ㄦ暏ES濡€虫健鐠囶厽纭堕惃鍕箛閸?jest.mock('../../utils/article-service', () => ({
   default: {
     getArticles: jest.fn(),
     getArticleById: jest.fn()
@@ -84,7 +83,7 @@ jest.mock('../../utils/user-service', () => ({
   }
 }));
 
-// 鐢靛晢鐩稿叧鏈嶅姟mock
+// 閻㈤潧鏅㈤惄绋垮彠閺堝秴濮焟ock
 jest.mock('../../utils/product-service', () => ({
   default: {
     getProducts: jest.fn()
@@ -133,7 +132,7 @@ jest.mock('../../utils/feedback-service', () => ({
   }
 }));
 
-// 鍩虹宸ュ叿mock
+// 閸╄櫣顢呭銉ュ徔mock
 jest.mock('../../utils/cache', () => ({
   getCache: jest.fn(),
   setCache: jest.fn(),
@@ -144,8 +143,7 @@ jest.mock('../../utils/cache', () => ({
   }
 }));
 
-// 鍒涘缓妯℃嫙鏈嶅姟
-const mockServices = {
+// 閸掓稑缂撳Ο鈩冨珯閺堝秴濮?const mockServices = {
   api: { name: 'api', initialize: jest.fn() },
   auth: { name: 'auth', initialize: jest.fn() },
   user: { name: 'user', initialize: jest.fn() },
@@ -157,11 +155,10 @@ describe('ServiceIntegration', () => {
   let mockServiceManager;
 
   beforeEach(() => {
-    // 閲嶇疆鎵€鏈塵ock
+    // 闁插秶鐤嗛幍鈧張濉祇ck
     jest.clearAllMocks();
     
-    // 鍒涘缓妯℃嫙鐨凷erviceManager瀹炰緥
-    mockServiceManager = {
+    // 閸掓稑缂撳Ο鈩冨珯閻ㄥ嚪erviceManager鐎圭偘绶?    mockServiceManager = {
       registerService: jest.fn(),
       initializeServices: jest.fn().mockResolvedValue(true),
       getService: jest.fn((name) => mockServices[name] || null),
@@ -169,18 +166,16 @@ describe('ServiceIntegration', () => {
       sortServicesByDependencies: jest.fn(() => Object.values(mockServices))
     };
     
-    // 璁㏒erviceManager鏋勯€犲嚱鏁拌繑鍥炴ā鎷熷疄渚?    ServiceManager.mockImplementation(() => mockServiceManager);
+    // 鐠併彃erviceManager閺嬪嫰鈧姴鍤遍弫鎷岀箲閸ョ偞膩閹风喎鐤勬笟?    ServiceManager.mockImplementation(() => mockServiceManager);
     
-    // 妯℃嫙鏈嶅姟閫傞厤鍣ㄦ敞鍐?    registerServiceAdapters.mockImplementation((manager) => {
-      // 娉ㄥ唽涓€浜涘熀纭€鏈嶅姟
-      manager.registerService(mockServices.api, []);
+    // 濡剝瀚欓張宥呭闁倿鍘ら崳銊︽暈閸?    registerServiceAdapters.mockImplementation((manager) => {
+      // 濞夈劌鍞芥稉鈧禍娑樼唨绾偓閺堝秴濮?      manager.registerService(mockServices.api, []);
       manager.registerService(mockServices.auth, ['api']);
       manager.registerService(mockServices.user, ['auth']);
       manager.registerService(mockServices.article, ['api']);
     });
     
-    // 鍒涘缓ServiceIntegrator瀹炰緥
-    serviceIntegrator = new ServiceIntegrator();
+    // 閸掓稑缂揝erviceIntegrator鐎圭偘绶?    serviceIntegrator = new ServiceIntegrator();
   });
 
   describe('initialize', () => {
@@ -197,14 +192,14 @@ describe('ServiceIntegration', () => {
       
       const result = await serviceIntegrator.initialize(config);
       
-      // 楠岃瘉鍒濆鍖栬繃绋?      expect(ServiceManager).toHaveBeenCalled();
+      // 妤犲矁鐦夐崚婵嗩潗閸栨牞绻冪粙?      expect(ServiceManager).toHaveBeenCalled();
       expect(registerServiceAdapters).toHaveBeenCalledWith(mockServiceManager);
       expect(mockServiceManager.initializeServices).toHaveBeenCalled();
       expect(result).toBe(true);
     });
 
     test('should handle initialization failure', async () => {
-      // 璁剧疆妯℃嫙鎶涘嚭閿欒
+      // 鐠佸墽鐤嗗Ο鈩冨珯閹舵稑鍤柨娆掝嚖
       mockServiceManager.initializeServices.mockRejectedValue(new Error('Initialization failed'));
       
       const config = {
@@ -292,7 +287,7 @@ describe('ServiceIntegration', () => {
       
       const result = await serviceIntegrator.reinitialize(config);
       
-      expect(ServiceManager).toHaveBeenCalledTimes(2); // 绗竴娆″湪鏋勯€犲嚱鏁帮紝绗簩娆″湪reinitialize
+      expect(ServiceManager).toHaveBeenCalledTimes(2); // 缁楊兛绔村▎鈥虫躬閺嬪嫰鈧姴鍤遍弫甯礉缁楊兛绨╁▎鈥虫躬reinitialize
       expect(registerServiceAdapters).toHaveBeenCalledTimes(2);
       expect(result).toBe(true);
     });
@@ -324,8 +319,7 @@ describe('ServiceIntegration', () => {
 
   describe('Static getService function', () => {
     test('should return service from default integrator', () => {
-      // 璁剧疆榛樿鐨剆erviceIntegrator瀹炰緥
-      ServiceIntegrator.defaultIntegrator = serviceIntegrator;
+      // 鐠佸墽鐤嗘妯款吇閻ㄥ墕erviceIntegrator鐎圭偘绶?      ServiceIntegrator.defaultIntegrator = serviceIntegrator;
       serviceIntegrator.serviceManager = mockServiceManager;
       
       const apiService = getService('api');
@@ -334,7 +328,7 @@ describe('ServiceIntegration', () => {
     });
 
     test('should return null if no default integrator', () => {
-      // 娓呴櫎榛樿鐨剆erviceIntegrator
+      // 濞撳懘娅庢妯款吇閻ㄥ墕erviceIntegrator
       ServiceIntegrator.defaultIntegrator = null;
       
       const service = getService('api');

@@ -1,8 +1,8 @@
-﻿<?php
+锘??php
 /**
- * SUT寰俊灏忕▼搴忕Н鍒嗙郴缁熺被
+ * SUT瀵邦喕淇婄亸蹇曗柤鎼村繒袧閸掑棛閮寸紒鐔鸿
  *
- * 璐熻矗寰俊灏忕▼搴忕殑浼氬憳绉垎绠＄悊銆佺Н鍒嗚鍒欒缃€佺Н鍒嗗厬鎹㈢瓑鍔熻兘
+ * 鐠愮喕鐭楀顔讳繆鐏忓繒鈻兼惔蹇曟畱娴兼艾鎲崇粔顖氬瀻缁狅紕鎮婇妴浣盒濋崚鍡氼潐閸掓瑨顔曠純顔衡偓浣盒濋崚鍡楀幀閹广垻鐡戦崝鐔诲厴
  *
  * @package SUT_WeChat_Mini
  */
@@ -12,26 +12,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * SUT_WeChat_Mini_Points 绫? */
+ * SUT_WeChat_Mini_Points 缁? */
 class SUT_WeChat_Mini_Points {
     
     /**
-     * 鍗曚緥瀹炰緥
-     *
+     * 閸楁洑绶ョ€圭偘绶?     *
      * @var SUT_WeChat_Mini_Points
      */
     private static $instance = null;
     
     /**
-     * 鏋勯€犲嚱鏁?     */
+     * 閺嬪嫰鈧姴鍤遍弫?     */
     private function __construct() {
-        // 娉ㄥ唽閽╁瓙
+        // 濞夈劌鍞介柦鈺佺摍
         $this->register_hooks();
     }
     
     /**
-     * 鑾峰彇鍗曚緥瀹炰緥
-     *
+     * 閼惧嘲褰囬崡鏇氱伐鐎圭偘绶?     *
      * @return SUT_WeChat_Mini_Points
      */
     public static function get_instance() {
@@ -43,32 +41,31 @@ class SUT_WeChat_Mini_Points {
     }
     
     /**
-     * 娉ㄥ唽閽╁瓙
+     * 濞夈劌鍞介柦鈺佺摍
      */
     private function register_hooks() {
-        // 璁㈠崟瀹屾垚鏃跺鍔犵Н鍒?        add_action( 'woocommerce_order_status_completed', array( $this, 'on_order_completed' ), 10, 1 );
+        // 鐠併垹宕熺€瑰本鍨氶弮璺侯杻閸旂姷袧閸?        add_action( 'woocommerce_order_status_completed', array( $this, 'on_order_completed' ), 10, 1 );
         
-        // 鐢ㄦ埛绛惧埌鏃跺鍔犵Н鍒?        add_action( 'sut_wechat_mini_user_checked_in', array( $this, 'on_user_checked_in' ), 10, 1 );
+        // 閻劍鍩涚粵鎯у煂閺冭泛顤冮崝鐘敌濋崚?        add_action( 'sut_wechat_mini_user_checked_in', array( $this, 'on_user_checked_in' ), 10, 1 );
         
-        // 鐢ㄦ埛璇勮鏃跺鍔犵Н鍒?        add_action( 'comment_post', array( $this, 'on_comment_post' ), 10, 3 );
+        // 閻劍鍩涚拠鍕啈閺冭泛顤冮崝鐘敌濋崚?        add_action( 'comment_post', array( $this, 'on_comment_post' ), 10, 3 );
         
-        // 鐢ㄦ埛鍒嗕韩鏃跺鍔犵Н鍒?        add_action( 'sut_wechat_mini_user_shared', array( $this, 'on_user_shared' ), 10, 2 );
+        // 閻劍鍩涢崚鍡曢煩閺冭泛顤冮崝鐘敌濋崚?        add_action( 'sut_wechat_mini_user_shared', array( $this, 'on_user_shared' ), 10, 2 );
         
-        // 姣忔棩棣栨鐧诲綍鏃跺鍔犵Н鍒?        add_action( 'sut_wechat_mini_user_logged_in', array( $this, 'on_user_logged_in' ), 10, 1 );
+        // 濮ｅ繑妫╂＃鏍偧閻ц缍嶉弮璺侯杻閸旂姷袧閸?        add_action( 'sut_wechat_mini_user_logged_in', array( $this, 'on_user_logged_in' ), 10, 1 );
         
-        // 娉ㄥ唽绉垎瑙勫垯璁剧疆
+        // 濞夈劌鍞界粔顖氬瀻鐟欏嫬鍨拋鍓х枂
         add_filter( 'sut_wechat_mini_admin_settings', array( $this, 'add_points_settings' ), 10, 1 );
         
-        // 绉垎鍏戞崲鍟嗗搧娣诲姞鍒拌鍗曢」鐩?        add_action( 'woocommerce_add_order_item_meta', array( $this, 'add_order_item_points_meta' ), 10, 3 );
+        // 缁夘垰鍨庨崗鎴炲床閸熷棗鎼уǎ璇插閸掓媽顓归崡鏇€嶉惄?        add_action( 'woocommerce_add_order_item_meta', array( $this, 'add_order_item_points_meta' ), 10, 3 );
         
-        // 璁㈠崟鏀粯鎴愬姛鍚庢墸闄ょН鍒?        add_action( 'woocommerce_payment_complete', array( $this, 'on_payment_complete' ), 10, 1 );
+        // 鐠併垹宕熼弨顖欑帛閹存劕濮涢崥搴㈠⒏闂勩倗袧閸?        add_action( 'woocommerce_payment_complete', array( $this, 'on_payment_complete' ), 10, 1 );
     }
     
     /**
-     * 鑾峰彇鐢ㄦ埛绉垎
-     *
-     * @param int $user_id 鐢ㄦ埛ID
-     * @return int 鐢ㄦ埛绉垎
+     * 閼惧嘲褰囬悽銊﹀煕缁夘垰鍨?     *
+     * @param int $user_id 閻劍鍩汭D
+     * @return int 閻劍鍩涚粔顖氬瀻
      */
     public function get_user_points( $user_id ) {
         global $wpdb;
@@ -80,26 +77,24 @@ class SUT_WeChat_Mini_Points {
     }
     
     /**
-     * 澧炲姞鐢ㄦ埛绉垎
-     *
-     * @param int $user_id 鐢ㄦ埛ID
-     * @param int $points 绉垎鏁伴噺
-     * @param string $source 绉垎鏉ユ簮
-     * @param array $meta 鍏冩暟鎹?     * @return bool 鎿嶄綔缁撴灉
+     * 婢х偛濮為悽銊﹀煕缁夘垰鍨?     *
+     * @param int $user_id 閻劍鍩汭D
+     * @param int $points 缁夘垰鍨庨弫浼村櫤
+     * @param string $source 缁夘垰鍨庨弶銉︾爱
+     * @param array $meta 閸忓啯鏆熼幑?     * @return bool 閹垮秳缍旂紒鎾寸亯
      */
     public function add_user_points( $user_id, $points, $source = 'system', $meta = array() ) {
         global $wpdb;
         
-        // 妫€鏌ョ敤鎴锋槸鍚﹀瓨鍦?        $user = get_user_by( 'id', $user_id );
+        // 濡偓閺屻儳鏁ら幋閿嬫Ц閸氾箑鐡ㄩ崷?        $user = get_user_by( 'id', $user_id );
         
         if ( ! $user ) {
             return false;
         }
         
-        // 寮€濮嬩簨鍔?        $wpdb->query( 'START TRANSACTION' );
+        // 瀵偓婵绨ㄩ崝?        $wpdb->query( 'START TRANSACTION' );
         
-        // 鏇存柊鐢ㄦ埛绉垎
-        $result = $wpdb->query( $wpdb->prepare( 
+        // 閺囧瓨鏌婇悽銊﹀煕缁夘垰鍨?        $result = $wpdb->query( $wpdb->prepare( 
             "UPDATE {$wpdb->prefix}sut_wechat_mini_users SET points = points + %d WHERE user_id = %d", 
             $points, 
             $user_id 
@@ -110,7 +105,7 @@ class SUT_WeChat_Mini_Points {
             return false;
         }
         
-        // 璁板綍绉垎鍙樺姩鏃ュ織
+        // 鐠佹澘缍嶇粔顖氬瀻閸欐ê濮╅弮銉ョ箶
         $log_id = 'point_' . date( 'YmdHis' ) . '_' . wp_generate_password( 8, false );
         
         $log_result = $wpdb->insert(
@@ -131,76 +126,72 @@ class SUT_WeChat_Mini_Points {
             return false;
         }
         
-        // 鎻愪氦浜嬪姟
+        // 閹绘劒姘︽禍瀣
         $wpdb->query( 'COMMIT' );
         
-        // 瑙﹀彂绉垎澧炲姞閽╁瓙
+        // 鐟欙箑褰傜粔顖氬瀻婢х偛濮為柦鈺佺摍
         do_action( 'sut_wechat_mini_user_points_added', $user_id, $points, $source );
         
         return true;
     }
     
     /**
-     * 鍑忓皯鐢ㄦ埛绉垎
-     *
-     * @param int $user_id 鐢ㄦ埛ID
-     * @param int $points 绉垎鏁伴噺
-     * @param string $source 绉垎鏉ユ簮
-     * @param array $meta 鍏冩暟鎹?     * @return bool 鎿嶄綔缁撴灉
+     * 閸戝繐鐨悽銊﹀煕缁夘垰鍨?     *
+     * @param int $user_id 閻劍鍩汭D
+     * @param int $points 缁夘垰鍨庨弫浼村櫤
+     * @param string $source 缁夘垰鍨庨弶銉︾爱
+     * @param array $meta 閸忓啯鏆熼幑?     * @return bool 閹垮秳缍旂紒鎾寸亯
      */
     public function reduce_user_points( $user_id, $points, $source = 'system', $meta = array() ) {
-        // 妫€鏌ョН鍒嗘槸鍚﹁冻澶?        $current_points = $this->get_user_points( $user_id );
+        // 濡偓閺屻儳袧閸掑棙妲搁崥锕佸喕婢?        $current_points = $this->get_user_points( $user_id );
         
         if ( $current_points < $points ) {
             return false;
         }
         
-        // 璋冪敤澧炲姞鐢ㄦ埛绉垎鍑芥暟锛屼絾浣跨敤璐熸暟
+        // 鐠嬪啰鏁ゆ晶鐐插閻劍鍩涚粔顖氬瀻閸戣姤鏆熼敍灞肩稻娴ｈ法鏁ょ拹鐔告殶
         return $this->add_user_points( $user_id, -$points, $source, $meta );
     }
     
     /**
-     * 璁剧疆鐢ㄦ埛绉垎
-     *
-     * @param int $user_id 鐢ㄦ埛ID
-     * @param int $points 绉垎鏁伴噺
-     * @param string $source 绉垎鏉ユ簮
-     * @param array $meta 鍏冩暟鎹?     * @return bool 鎿嶄綔缁撴灉
+     * 鐠佸墽鐤嗛悽銊﹀煕缁夘垰鍨?     *
+     * @param int $user_id 閻劍鍩汭D
+     * @param int $points 缁夘垰鍨庨弫浼村櫤
+     * @param string $source 缁夘垰鍨庨弶銉︾爱
+     * @param array $meta 閸忓啯鏆熼幑?     * @return bool 閹垮秳缍旂紒鎾寸亯
      */
     public function set_user_points( $user_id, $points, $source = 'system', $meta = array() ) {
         global $wpdb;
         
-        // 妫€鏌ョ敤鎴锋槸鍚﹀瓨鍦?        $user = get_user_by( 'id', $user_id );
+        // 濡偓閺屻儳鏁ら幋閿嬫Ц閸氾箑鐡ㄩ崷?        $user = get_user_by( 'id', $user_id );
         
         if ( ! $user ) {
             return false;
         }
         
-        // 鑾峰彇褰撳墠绉垎
-        $current_points = $this->get_user_points( $user_id );
+        // 閼惧嘲褰囪ぐ鎾冲缁夘垰鍨?        $current_points = $this->get_user_points( $user_id );
         
-        // 璁＄畻绉垎鍙樺姩閲?        $points_change = $points - $current_points;
+        // 鐠侊紕鐣荤粔顖氬瀻閸欐ê濮╅柌?        $points_change = $points - $current_points;
         
         if ( $points_change == 0 ) {
             return true;
         }
         
         if ( $points_change > 0 ) {
-            // 澧炲姞绉垎
+            // 婢х偛濮炵粔顖氬瀻
             return $this->add_user_points( $user_id, $points_change, $source, $meta );
         } else {
-            // 鍑忓皯绉垎
+            // 閸戝繐鐨粔顖氬瀻
             return $this->reduce_user_points( $user_id, abs( $points_change ), $source, $meta );
         }
     }
     
     /**
-     * 鑾峰彇绉垎鍙樺姩鏃ュ織
+     * 閼惧嘲褰囩粔顖氬瀻閸欐ê濮╅弮銉ョ箶
      *
-     * @param int $user_id 鐢ㄦ埛ID
-     * @param array $args 鏌ヨ鍙傛暟
-     * @return array 绉垎鏃ュ織鍒楄〃
-     */
+     * @param int $user_id 閻劍鍩汭D
+     * @param array $args 閺屻儴顕楅崣鍌涙殶
+     * @return array 缁夘垰鍨庨弮銉ョ箶閸掓銆?     */
     public function get_points_logs( $user_id, $args = array() ) {
         global $wpdb;
         
@@ -216,7 +207,7 @@ class SUT_WeChat_Mini_Points {
         
         $args = wp_parse_args( $args, $defaults );
         
-        // 鏋勫缓鏌ヨ鏉′欢
+        // 閺嬪嫬缂撻弻銉嚄閺夆€叉
         $where = "WHERE user_id = %d";
         $query_args = array( $user_id );
         
@@ -235,28 +226,26 @@ class SUT_WeChat_Mini_Points {
             $query_args[] = $args['end_date'];
         }
         
-        // 鏋勫缓鎺掑簭
+        // 閺嬪嫬缂撻幒鎺戠碍
         $orderby = esc_sql( $args['orderby'] );
         $order = esc_sql( $args['order'] );
         
-        // 鏋勫缓闄愬埗
+        // 閺嬪嫬缂撻梽鎰煑
         $limit = intval( $args['limit'] );
         $offset = intval( $args['offset'] );
         
-        // 鎵ц鏌ヨ
-        $sql = "SELECT * FROM {$wpdb->prefix}sut_wechat_mini_points_log {$where} ORDER BY {$orderby} {$order} LIMIT %d OFFSET %d";
+        // 閹笛嗩攽閺屻儴顕?        $sql = "SELECT * FROM {$wpdb->prefix}sut_wechat_mini_points_log {$where} ORDER BY {$orderby} {$order} LIMIT %d OFFSET %d";
         $query_args = array_merge( $query_args, array( $limit, $offset ) );
         
         $logs = $wpdb->get_results( $wpdb->prepare( $sql, $query_args ), ARRAY_A );
         
-        // 鏍煎紡鍖栧厓鏁版嵁
-        foreach ( $logs as &$log ) {
+        // 閺嶇厧绱￠崠鏍у帗閺佺増宓?        foreach ( $logs as &$log ) {
             if ( ! empty( $log['meta'] ) ) {
                 $log['meta'] = json_decode( $log['meta'], true );
             }
         }
         
-        // 鑾峰彇鎬绘暟
+        // 閼惧嘲褰囬幀缁樻殶
         $total_sql = "SELECT COUNT(*) FROM {$wpdb->prefix}sut_wechat_mini_points_log {$where}";
         $total = $wpdb->get_var( $wpdb->prepare( $total_sql, array_slice( $query_args, 0, -2 ) ) );
         
@@ -269,49 +258,45 @@ class SUT_WeChat_Mini_Points {
     }
     
     /**
-     * 绉垎鍏戞崲鍟嗗搧
-     *
-     * @param int $user_id 鐢ㄦ埛ID
-     * @param int $product_id 鍟嗗搧ID
-     * @param int $quantity 鏁伴噺
-     * @return array 鍏戞崲缁撴灉
+     * 缁夘垰鍨庨崗鎴炲床閸熷棗鎼?     *
+     * @param int $user_id 閻劍鍩汭D
+     * @param int $product_id 閸熷棗鎼D
+     * @param int $quantity 閺佷即鍣?     * @return array 閸忔垶宕茬紒鎾寸亯
      */
     public function exchange_points_for_product( $user_id, $product_id, $quantity = 1 ) {
-        // 鑾峰彇鍟嗗搧
+        // 閼惧嘲褰囬崯鍡楁惂
         $product = wc_get_product( $product_id );
         
         if ( ! $product || ! $product->is_purchasable() ) {
             return array(
                 'success' => false,
-                'error' => __( '鍟嗗搧涓嶅瓨鍦ㄦ垨涓嶅彲璐拱', 'sut-wechat-mini' )
+                'error' => __( '閸熷棗鎼ф稉宥呯摠閸︺劍鍨ㄦ稉宥呭讲鐠愵厺鎷?, 'sut-wechat-mini' )
             );
         }
         
-        // 鑾峰彇鍟嗗搧鎵€闇€绉垎
-        $points_required = get_post_meta( $product_id, '_points_required', true );
+        // 閼惧嘲褰囬崯鍡楁惂閹碘偓闂団偓缁夘垰鍨?        $points_required = get_post_meta( $product_id, '_points_required', true );
         
         if ( ! $points_required || $points_required <= 0 ) {
             return array(
                 'success' => false,
-                'error' => __( '璇ュ晢鍝佷笉鑳界敤绉垎鍏戞崲', 'sut-wechat-mini' )
+                'error' => __( '鐠囥儱鏅㈤崫浣风瑝閼崇晫鏁ょ粔顖氬瀻閸忔垶宕?, 'sut-wechat-mini' )
             );
         }
         
-        // 璁＄畻鎬荤Н鍒嗛渶姹?        $total_points_required = $points_required * $quantity;
+        // 鐠侊紕鐣婚幀鑽ば濋崚鍡涙付濮?        $total_points_required = $points_required * $quantity;
         
-        // 妫€鏌ョ敤鎴风Н鍒嗘槸鍚﹁冻澶?        $current_points = $this->get_user_points( $user_id );
+        // 濡偓閺屻儳鏁ら幋椋幮濋崚鍡樻Ц閸氾箒鍐绘径?        $current_points = $this->get_user_points( $user_id );
         
         if ( $current_points < $total_points_required ) {
             return array(
                 'success' => false,
-                'error' => __( '绉垎涓嶈冻', 'sut-wechat-mini' ),
+                'error' => __( '缁夘垰鍨庢稉宥堝喕', 'sut-wechat-mini' ),
                 'current_points' => $current_points,
                 'required_points' => $total_points_required
             );
         }
         
-        // 鍒涘缓绉垎璁㈠崟
-        $order = wc_create_order( array(
+        // 閸掓稑缂撶粔顖氬瀻鐠併垹宕?        $order = wc_create_order( array(
             'customer_id' => $user_id,
             'status' => 'pending'
         ) );
@@ -319,21 +304,21 @@ class SUT_WeChat_Mini_Points {
         if ( ! $order ) {
             return array(
                 'success' => false,
-                'error' => __( '鍒涘缓璁㈠崟澶辫触', 'sut-wechat-mini' )
+                'error' => __( '閸掓稑缂撶拋銏犲礋婢惰精瑙?, 'sut-wechat-mini' )
             );
         }
         
-        // 娣诲姞鍟嗗搧鍒拌鍗?        $order->add_product( $product, $quantity );
+        // 濞ｈ濮為崯鍡楁惂閸掓媽顓归崡?        $order->add_product( $product, $quantity );
         
-        // 璁剧疆璁㈠崟涓虹Н鍒嗗厬鎹?        $order->update_meta_data( '_payment_method', 'points' );
-        $order->update_meta_data( '_payment_method_title', __( '绉垎鍏戞崲', 'sut-wechat-mini' ) );
+        // 鐠佸墽鐤嗙拋銏犲礋娑撹櫣袧閸掑棗鍘幑?        $order->update_meta_data( '_payment_method', 'points' );
+        $order->update_meta_data( '_payment_method_title', __( '缁夘垰鍨庨崗鎴炲床', 'sut-wechat-mini' ) );
         $order->update_meta_data( '_points_exchange', true );
         $order->update_meta_data( '_points_used', $total_points_required );
         
-        // 璁＄畻璁㈠崟鎬讳环锛堜负0锛?        $order->set_total( 0 );
+        // 鐠侊紕鐣荤拋銏犲礋閹鐜敍鍫滆礋0閿?        $order->set_total( 0 );
         $order->save();
         
-        // 澶勭悊璁㈠崟
+        // 婢跺嫮鎮婄拋銏犲礋
         $order->payment_complete();
         
         return array(
@@ -344,11 +329,9 @@ class SUT_WeChat_Mini_Points {
     }
     
     /**
-     * 鑾峰彇绉垎鍏戞崲鍟嗗搧鍒楄〃
-     *
-     * @param array $args 鏌ヨ鍙傛暟
-     * @return array 鍟嗗搧鍒楄〃
-     */
+     * 閼惧嘲褰囩粔顖氬瀻閸忔垶宕查崯鍡楁惂閸掓銆?     *
+     * @param array $args 閺屻儴顕楅崣鍌涙殶
+     * @return array 閸熷棗鎼ч崚妤勩€?     */
     public function get_points_products( $args = array() ) {
         $defaults = array(
             'category' => '',
@@ -415,10 +398,9 @@ class SUT_WeChat_Mini_Points {
     }
     
     /**
-     * 鑾峰彇绉垎瑙勫垯璁剧疆
+     * 閼惧嘲褰囩粔顖氬瀻鐟欏嫬鍨拋鍓х枂
      *
-     * @return array 绉垎瑙勫垯璁剧疆
-     */
+     * @return array 缁夘垰鍨庣憴鍕灟鐠佸墽鐤?     */
     public function get_points_rules() {
         $settings = get_option( 'sut_wechat_mini_settings', array() );
         
@@ -433,28 +415,26 @@ class SUT_WeChat_Mini_Points {
             'points_expire_days' => 365
         );
         
-        // 鍚堝苟榛樿瑙勫垯鍜岃缃鍒?        $rules = array_merge( $default_rules, isset( $settings['points_rules'] ) ? $settings['points_rules'] : array() );
+        // 閸氬牆鑻熸妯款吇鐟欏嫬鍨崪宀冾啎缂冾喛顫夐崚?        $rules = array_merge( $default_rules, isset( $settings['points_rules'] ) ? $settings['points_rules'] : array() );
         
         return $rules;
     }
     
     /**
-     * 妫€鏌ョ敤鎴蜂粖鏃ョН鍒嗘槸鍚﹀凡杈句笂闄?     *
-     * @param int $user_id 鐢ㄦ埛ID
-     * @return bool 鏄惁宸茶揪涓婇檺
-     */
+     * 濡偓閺屻儳鏁ら幋铚傜矕閺冦儳袧閸掑棙妲搁崥锕€鍑℃潏鍙ョ瑐闂?     *
+     * @param int $user_id 閻劍鍩汭D
+     * @return bool 閺勵垰鎯佸鑼舵彧娑撳﹪妾?     */
     public function is_user_points_reached_daily_limit( $user_id ) {
         $rules = $this->get_points_rules();
         
-        // 濡傛灉鏈惎鐢ㄧН鍒嗙郴缁熸垨鏈缃瘡鏃ヤ笂闄愶紝杩斿洖false
+        // 婵″倹鐏夐張顏勬儙閻劎袧閸掑棛閮寸紒鐔稿灗閺堫亣顔曠純顔界槨閺冦儰绗傞梽鎰剁礉鏉╂柨娲杅alse
         if ( ! $rules['enabled'] || $rules['max_points_per_day'] <= 0 ) {
             return false;
         }
         
         global $wpdb;
         
-        // 鑾峰彇浠婃棩绉垎鑾峰彇鎬婚噺
-        $today = date( 'Y-m-d' );
+        // 閼惧嘲褰囨禒濠冩）缁夘垰鍨庨懢宄板絿閹鍣?        $today = date( 'Y-m-d' );
         $tomorrow = date( 'Y-m-d', strtotime( '+1 day' ) );
         
         $sql = "SELECT SUM(points) FROM {$wpdb->prefix}sut_wechat_mini_points_log WHERE user_id = %d AND points > 0 AND create_time >= %s AND create_time < %s";
@@ -466,8 +446,8 @@ class SUT_WeChat_Mini_Points {
     }
     
     /**
-     * 澶勭悊璁㈠崟瀹屾垚浜嬩欢锛屽鍔犵Н鍒?     *
-     * @param int $order_id 璁㈠崟ID
+     * 婢跺嫮鎮婄拋銏犲礋鐎瑰本鍨氭禍瀣╂閿涘苯顤冮崝鐘敌濋崚?     *
+     * @param int $order_id 鐠併垹宕烮D
      */
     public function on_order_completed( $order_id ) {
         $order = wc_get_order( $order_id );
@@ -476,34 +456,32 @@ class SUT_WeChat_Mini_Points {
             return;
         }
         
-        // 妫€鏌ユ槸鍚︽槸绉垎鍏戞崲璁㈠崟
-        $is_points_exchange = $order->get_meta( '_points_exchange', true );
+        // 濡偓閺屻儲妲搁崥锔芥Ц缁夘垰鍨庨崗鎴炲床鐠併垹宕?        $is_points_exchange = $order->get_meta( '_points_exchange', true );
         
         if ( $is_points_exchange ) {
             return;
         }
         
-        // 鑾峰彇鐢ㄦ埛ID
+        // 閼惧嘲褰囬悽銊﹀煕ID
         $user_id = $order->get_user_id();
         
         if ( $user_id <= 0 ) {
             return;
         }
         
-        // 鑾峰彇绉垎瑙勫垯
-        $rules = $this->get_points_rules();
+        // 閼惧嘲褰囩粔顖氬瀻鐟欏嫬鍨?        $rules = $this->get_points_rules();
         
-        // 濡傛灉鏈惎鐢ㄧН鍒嗙郴缁熸垨璁㈠崟绉垎姣斾緥涓?锛岀洿鎺ヨ繑鍥?        if ( ! $rules['enabled'] || $rules['order_points_rate'] <= 0 ) {
+        // 婵″倹鐏夐張顏勬儙閻劎袧閸掑棛閮寸紒鐔稿灗鐠併垹宕熺粔顖氬瀻濮ｆ柧绶ユ稉?閿涘瞼娲块幒銉ㄧ箲閸?        if ( ! $rules['enabled'] || $rules['order_points_rate'] <= 0 ) {
             return;
         }
         
-        // 妫€鏌ユ槸鍚﹀凡缁忎负璇ヨ鍗曟坊鍔犵Н鍒?        $points_added = $order->get_meta( '_points_added', true );
+        // 濡偓閺屻儲妲搁崥锕€鍑＄紒蹇庤礋鐠囥儴顓归崡鏇熷潑閸旂姷袧閸?        $points_added = $order->get_meta( '_points_added', true );
         
         if ( $points_added ) {
             return;
         }
         
-        // 璁＄畻璁㈠崟搴斿緱绉垎
+        // 鐠侊紕鐣荤拋銏犲礋鎼存柨绶辩粔顖氬瀻
         $order_total = $order->get_total();
         $points = round( $order_total * $rules['order_points_rate'] );
         
@@ -511,8 +489,7 @@ class SUT_WeChat_Mini_Points {
             return;
         }
         
-        // 澧炲姞鐢ㄦ埛绉垎
-        $result = $this->add_user_points( 
+        // 婢х偛濮為悽銊﹀煕缁夘垰鍨?        $result = $this->add_user_points( 
             $user_id, 
             $points, 
             'order', 
@@ -520,74 +497,69 @@ class SUT_WeChat_Mini_Points {
         );
         
         if ( $result ) {
-            // 鏍囪璁㈠崟宸叉坊鍔犵Н鍒?            $order->update_meta_data( '_points_added', true );
+            // 閺嶅洩顔囩拋銏犲礋瀹稿弶鍧婇崝鐘敌濋崚?            $order->update_meta_data( '_points_added', true );
             $order->update_meta_data( '_points_added_amount', $points );
             $order->save();
         }
     }
     
     /**
-     * 澶勭悊鐢ㄦ埛绛惧埌浜嬩欢锛屽鍔犵Н鍒?     *
-     * @param int $user_id 鐢ㄦ埛ID
+     * 婢跺嫮鎮婇悽銊﹀煕缁涙儳鍩屾禍瀣╂閿涘苯顤冮崝鐘敌濋崚?     *
+     * @param int $user_id 閻劍鍩汭D
      */
     public function on_user_checked_in( $user_id ) {
-        // 鑾峰彇绉垎瑙勫垯
-        $rules = $this->get_points_rules();
+        // 閼惧嘲褰囩粔顖氬瀻鐟欏嫬鍨?        $rules = $this->get_points_rules();
         
-        // 濡傛灉鏈惎鐢ㄧН鍒嗙郴缁熸垨绛惧埌绉垎鏈缃紝鐩存帴杩斿洖
+        // 婵″倹鐏夐張顏勬儙閻劎袧閸掑棛閮寸紒鐔稿灗缁涙儳鍩岀粔顖氬瀻閺堫亣顔曠純顕嗙礉閻╁瓨甯存潻鏂挎礀
         if ( ! $rules['enabled'] || $rules['checkin_points'] <= 0 ) {
             return;
         }
         
-        // 妫€鏌ユ槸鍚﹀凡杈惧埌姣忔棩涓婇檺
+        // 濡偓閺屻儲妲搁崥锕€鍑℃潏鎯у煂濮ｅ繑妫╂稉濠囨
         if ( $this->is_user_points_reached_daily_limit( $user_id ) ) {
             return;
         }
         
-        // 澧炲姞鐢ㄦ埛绉垎
-        $this->add_user_points( $user_id, $rules['checkin_points'], 'checkin' );
+        // 婢х偛濮為悽銊﹀煕缁夘垰鍨?        $this->add_user_points( $user_id, $rules['checkin_points'], 'checkin' );
     }
     
     /**
-     * 澶勭悊鐢ㄦ埛璇勮浜嬩欢锛屽鍔犵Н鍒?     *
-     * @param int $comment_id 璇勮ID
-     * @param int $comment_approved 璇勮鏄惁琚壒鍑?     * @param array $commentdata 璇勮鏁版嵁
+     * 婢跺嫮鎮婇悽銊﹀煕鐠囧嫯顔戞禍瀣╂閿涘苯顤冮崝鐘敌濋崚?     *
+     * @param int $comment_id 鐠囧嫯顔慖D
+     * @param int $comment_approved 鐠囧嫯顔戦弰顖氭儊鐞氼偅澹掗崙?     * @param array $commentdata 鐠囧嫯顔戦弫鐗堝祦
      */
     public function on_comment_post( $comment_id, $comment_approved, $commentdata ) {
-        // 濡傛灉璇勮鏈鎵瑰噯锛屼笉澧炲姞绉垎
-        if ( $comment_approved != 1 ) {
+        // 婵″倹鐏夌拠鍕啈閺堫亣顫﹂幍鐟板櫙閿涘奔绗夋晶鐐插缁夘垰鍨?        if ( $comment_approved != 1 ) {
             return;
         }
         
-        // 鑾峰彇璇勮
+        // 閼惧嘲褰囩拠鍕啈
         $comment = get_comment( $comment_id );
         
         if ( ! $comment ) {
             return;
         }
         
-        // 鑾峰彇鐢ㄦ埛ID
+        // 閼惧嘲褰囬悽銊﹀煕ID
         $user_id = $comment->user_id;
         
         if ( $user_id <= 0 ) {
             return;
         }
         
-        // 鑾峰彇绉垎瑙勫垯
-        $rules = $this->get_points_rules();
+        // 閼惧嘲褰囩粔顖氬瀻鐟欏嫬鍨?        $rules = $this->get_points_rules();
         
-        // 濡傛灉鏈惎鐢ㄧН鍒嗙郴缁熸垨璇勮绉垎鏈缃紝鐩存帴杩斿洖
+        // 婵″倹鐏夐張顏勬儙閻劎袧閸掑棛閮寸紒鐔稿灗鐠囧嫯顔戠粔顖氬瀻閺堫亣顔曠純顕嗙礉閻╁瓨甯存潻鏂挎礀
         if ( ! $rules['enabled'] || $rules['comment_points'] <= 0 ) {
             return;
         }
         
-        // 妫€鏌ユ槸鍚﹀凡杈惧埌姣忔棩涓婇檺
+        // 濡偓閺屻儲妲搁崥锕€鍑℃潏鎯у煂濮ｅ繑妫╂稉濠囨
         if ( $this->is_user_points_reached_daily_limit( $user_id ) ) {
             return;
         }
         
-        // 澧炲姞鐢ㄦ埛绉垎
-        $this->add_user_points( 
+        // 婢х偛濮為悽銊﹀煕缁夘垰鍨?        $this->add_user_points( 
             $user_id, 
             $rules['comment_points'], 
             'comment', 
@@ -596,43 +568,40 @@ class SUT_WeChat_Mini_Points {
     }
     
     /**
-     * 澶勭悊鐢ㄦ埛鍒嗕韩浜嬩欢锛屽鍔犵Н鍒?     *
-     * @param int $user_id 鐢ㄦ埛ID
-     * @param array $meta 鍏冩暟鎹?     */
+     * 婢跺嫮鎮婇悽銊﹀煕閸掑棔闊╂禍瀣╂閿涘苯顤冮崝鐘敌濋崚?     *
+     * @param int $user_id 閻劍鍩汭D
+     * @param array $meta 閸忓啯鏆熼幑?     */
     public function on_user_shared( $user_id, $meta = array() ) {
-        // 鑾峰彇绉垎瑙勫垯
-        $rules = $this->get_points_rules();
+        // 閼惧嘲褰囩粔顖氬瀻鐟欏嫬鍨?        $rules = $this->get_points_rules();
         
-        // 濡傛灉鏈惎鐢ㄧН鍒嗙郴缁熸垨鍒嗕韩绉垎鏈缃紝鐩存帴杩斿洖
+        // 婵″倹鐏夐張顏勬儙閻劎袧閸掑棛閮寸紒鐔稿灗閸掑棔闊╃粔顖氬瀻閺堫亣顔曠純顕嗙礉閻╁瓨甯存潻鏂挎礀
         if ( ! $rules['enabled'] || $rules['share_points'] <= 0 ) {
             return;
         }
         
-        // 妫€鏌ユ槸鍚﹀凡杈惧埌姣忔棩涓婇檺
+        // 濡偓閺屻儲妲搁崥锕€鍑℃潏鎯у煂濮ｅ繑妫╂稉濠囨
         if ( $this->is_user_points_reached_daily_limit( $user_id ) ) {
             return;
         }
         
-        // 澧炲姞鐢ㄦ埛绉垎
-        $this->add_user_points( $user_id, $rules['share_points'], 'share', $meta );
+        // 婢х偛濮為悽銊﹀煕缁夘垰鍨?        $this->add_user_points( $user_id, $rules['share_points'], 'share', $meta );
     }
     
     /**
-     * 澶勭悊鐢ㄦ埛鐧诲綍浜嬩欢锛屽鍔犵Н鍒?     *
-     * @param int $user_id 鐢ㄦ埛ID
+     * 婢跺嫮鎮婇悽銊﹀煕閻ц缍嶆禍瀣╂閿涘苯顤冮崝鐘敌濋崚?     *
+     * @param int $user_id 閻劍鍩汭D
      */
     public function on_user_logged_in( $user_id ) {
-        // 鑾峰彇绉垎瑙勫垯
-        $rules = $this->get_points_rules();
+        // 閼惧嘲褰囩粔顖氬瀻鐟欏嫬鍨?        $rules = $this->get_points_rules();
         
-        // 濡傛灉鏈惎鐢ㄧН鍒嗙郴缁熸垨鐧诲綍绉垎鏈缃紝鐩存帴杩斿洖
+        // 婵″倹鐏夐張顏勬儙閻劎袧閸掑棛閮寸紒鐔稿灗閻ц缍嶇粔顖氬瀻閺堫亣顔曠純顕嗙礉閻╁瓨甯存潻鏂挎礀
         if ( ! $rules['enabled'] || $rules['daily_login_points'] <= 0 ) {
             return;
         }
         
         global $wpdb;
         
-        // 妫€鏌ヤ粖鏃ユ槸鍚﹀凡缁忚幏鍙栫櫥褰曠Н鍒?        $today = date( 'Y-m-d' );
+        // 濡偓閺屻儰绮栭弮銉︽Ц閸氾箑鍑＄紒蹇氬箯閸欐牜娅ヨぐ鏇犘濋崚?        $today = date( 'Y-m-d' );
         $tomorrow = date( 'Y-m-d', strtotime( '+1 day' ) );
         
         $sql = "SELECT COUNT(*) FROM {$wpdb->prefix}sut_wechat_mini_points_log WHERE user_id = %d AND source = 'login' AND create_time >= %s AND create_time < %s";
@@ -642,88 +611,86 @@ class SUT_WeChat_Mini_Points {
             return;
         }
         
-        // 妫€鏌ユ槸鍚﹀凡杈惧埌姣忔棩涓婇檺
+        // 濡偓閺屻儲妲搁崥锕€鍑℃潏鎯у煂濮ｅ繑妫╂稉濠囨
         if ( $this->is_user_points_reached_daily_limit( $user_id ) ) {
             return;
         }
         
-        // 澧炲姞鐢ㄦ埛绉垎
-        $this->add_user_points( $user_id, $rules['daily_login_points'], 'login' );
+        // 婢х偛濮為悽銊﹀煕缁夘垰鍨?        $this->add_user_points( $user_id, $rules['daily_login_points'], 'login' );
     }
     
     /**
-     * 娣诲姞绉垎璁剧疆椤?     *
-     * @param array $settings 鍘熸湁璁剧疆
-     * @return array 鏇存柊鍚庣殑璁剧疆
-     */
+     * 濞ｈ濮炵粔顖氬瀻鐠佸墽鐤嗘い?     *
+     * @param array $settings 閸樼喐婀佺拋鍓х枂
+     * @return array 閺囧瓨鏌婇崥搴ｆ畱鐠佸墽鐤?     */
     public function add_points_settings( $settings ) {
         $points_rules = $this->get_points_rules();
         
         $settings['points'] = array(
-            'title' => __( '绉垎璁剧疆', 'sut-wechat-mini' ),
+            'title' => __( '缁夘垰鍨庣拋鍓х枂', 'sut-wechat-mini' ),
             'sections' => array(
                 array(
-                    'title' => __( '鍩虹璁剧疆', 'sut-wechat-mini' ),
+                    'title' => __( '閸╄櫣顢呯拋鍓х枂', 'sut-wechat-mini' ),
                     'fields' => array(
                         array(
                             'name' => 'points_rules[enabled]',
-                            'label' => __( '鍚敤绉垎绯荤粺', 'sut-wechat-mini' ),
+                            'label' => __( '閸氼垳鏁ょ粔顖氬瀻缁崵绮?, 'sut-wechat-mini' ),
                             'type' => 'checkbox',
                             'value' => isset( $points_rules['enabled'] ) ? $points_rules['enabled'] : 1
                         ),
                         array(
                             'name' => 'points_rules[max_points_per_day]',
-                            'label' => __( '姣忔棩鏈€澶хН鍒嗚幏鍙栭噺', 'sut-wechat-mini' ),
+                            'label' => __( '濮ｅ繑妫╅張鈧径褏袧閸掑棜骞忛崣鏍櫤', 'sut-wechat-mini' ),
                             'type' => 'number',
                             'value' => isset( $points_rules['max_points_per_day'] ) ? $points_rules['max_points_per_day'] : 50,
-                            'description' => __( '璁剧疆涓?琛ㄧず涓嶉檺鍒?, 'sut-wechat-mini' )
+                            'description' => __( '鐠佸墽鐤嗘稉?鐞涖劎銇氭稉宥夋閸?, 'sut-wechat-mini' )
                         ),
                         array(
                             'name' => 'points_rules[points_expire_days]',
-                            'label' => __( '绉垎鏈夋晥鏈?澶?', 'sut-wechat-mini' ),
+                            'label' => __( '缁夘垰鍨庨張澶嬫櫏閺?婢?', 'sut-wechat-mini' ),
                             'type' => 'number',
                             'value' => isset( $points_rules['points_expire_days'] ) ? $points_rules['points_expire_days'] : 365,
-                            'description' => __( '璁剧疆涓?琛ㄧず姘镐笉杩囨湡', 'sut-wechat-mini' )
+                            'description' => __( '鐠佸墽鐤嗘稉?鐞涖劎銇氬闀愮瑝鏉╁洦婀?, 'sut-wechat-mini' )
                         )
                     )
                 ),
                 array(
-                    'title' => __( '绉垎鑾峰彇瑙勫垯', 'sut-wechat-mini' ),
+                    'title' => __( '缁夘垰鍨庨懢宄板絿鐟欏嫬鍨?, 'sut-wechat-mini' ),
                     'fields' => array(
                         array(
                             'name' => 'points_rules[order_points_rate]',
-                            'label' => __( '璁㈠崟绉垎姣斾緥', 'sut-wechat-mini' ),
+                            'label' => __( '鐠併垹宕熺粔顖氬瀻濮ｆ柧绶?, 'sut-wechat-mini' ),
                             'type' => 'number',
                             'value' => isset( $points_rules['order_points_rate'] ) ? $points_rules['order_points_rate'] : 1,
-                            'description' => __( '姣忔秷璐?鍏冭幏寰楃殑绉垎鏁伴噺', 'sut-wechat-mini' )
+                            'description' => __( '濮ｅ繑绉风拹?閸忓啳骞忓妤冩畱缁夘垰鍨庨弫浼村櫤', 'sut-wechat-mini' )
                         ),
                         array(
                             'name' => 'points_rules[checkin_points]',
-                            'label' => __( '绛惧埌绉垎', 'sut-wechat-mini' ),
+                            'label' => __( '缁涙儳鍩岀粔顖氬瀻', 'sut-wechat-mini' ),
                             'type' => 'number',
                             'value' => isset( $points_rules['checkin_points'] ) ? $points_rules['checkin_points'] : 5,
-                            'description' => __( '姣忔棩绛惧埌鑾峰緱鐨勭Н鍒嗘暟閲?, 'sut-wechat-mini' )
+                            'description' => __( '濮ｅ繑妫╃粵鎯у煂閼惧嘲绶遍惃鍕濋崚鍡樻殶闁?, 'sut-wechat-mini' )
                         ),
                         array(
                             'name' => 'points_rules[comment_points]',
-                            'label' => __( '璇勮绉垎', 'sut-wechat-mini' ),
+                            'label' => __( '鐠囧嫯顔戠粔顖氬瀻', 'sut-wechat-mini' ),
                             'type' => 'number',
                             'value' => isset( $points_rules['comment_points'] ) ? $points_rules['comment_points'] : 2,
-                            'description' => __( '鍙戣〃璇勮鑾峰緱鐨勭Н鍒嗘暟閲?, 'sut-wechat-mini' )
+                            'description' => __( '閸欐垼銆冪拠鍕啈閼惧嘲绶遍惃鍕濋崚鍡樻殶闁?, 'sut-wechat-mini' )
                         ),
                         array(
                             'name' => 'points_rules[share_points]',
-                            'label' => __( '鍒嗕韩绉垎', 'sut-wechat-mini' ),
+                            'label' => __( '閸掑棔闊╃粔顖氬瀻', 'sut-wechat-mini' ),
                             'type' => 'number',
                             'value' => isset( $points_rules['share_points'] ) ? $points_rules['share_points'] : 3,
-                            'description' => __( '鍒嗕韩鍐呭鑾峰緱鐨勭Н鍒嗘暟閲?, 'sut-wechat-mini' )
+                            'description' => __( '閸掑棔闊╅崘鍛啇閼惧嘲绶遍惃鍕濋崚鍡樻殶闁?, 'sut-wechat-mini' )
                         ),
                         array(
                             'name' => 'points_rules[daily_login_points]',
-                            'label' => __( '姣忔棩鐧诲綍绉垎', 'sut-wechat-mini' ),
+                            'label' => __( '濮ｅ繑妫╅惂璇茬秿缁夘垰鍨?, 'sut-wechat-mini' ),
                             'type' => 'number',
                             'value' => isset( $points_rules['daily_login_points'] ) ? $points_rules['daily_login_points'] : 1,
-                            'description' => __( '姣忔棩棣栨鐧诲綍鑾峰緱鐨勭Н鍒嗘暟閲?, 'sut-wechat-mini' )
+                            'description' => __( '濮ｅ繑妫╂＃鏍偧閻ц缍嶉懢宄扮繁閻ㄥ嫮袧閸掑棙鏆熼柌?, 'sut-wechat-mini' )
                         )
                     )
                 )
@@ -734,23 +701,22 @@ class SUT_WeChat_Mini_Points {
     }
     
     /**
-     * 娣诲姞璁㈠崟椤圭洰鐨勭Н鍒嗗厓鏁版嵁
-     *
-     * @param int $item_id 璁㈠崟椤笽D
-     * @param object $item 璁㈠崟椤瑰璞?     * @param int $order_id 璁㈠崟ID
+     * 濞ｈ濮炵拋銏犲礋妞ゅ湱娲伴惃鍕濋崚鍡楀帗閺佺増宓?     *
+     * @param int $item_id 鐠併垹宕熸い绗紻
+     * @param object $item 鐠併垹宕熸い鐟邦嚠鐠?     * @param int $order_id 鐠併垹宕烮D
      */
     public function add_order_item_points_meta( $item_id, $item, $order_id ) {
         $product_id = $item->get_product_id();
         $points_required = get_post_meta( $product_id, '_points_required', true );
         
         if ( $points_required && $points_required > 0 ) {
-            wc_add_order_item_meta( $item_id, __( '鎵€闇€绉垎', 'sut-wechat-mini' ), $points_required );
+            wc_add_order_item_meta( $item_id, __( '閹碘偓闂団偓缁夘垰鍨?, 'sut-wechat-mini' ), $points_required );
         }
     }
     
     /**
-     * 澶勭悊鏀粯瀹屾垚浜嬩欢锛屾墸闄ょН鍒?     *
-     * @param int $order_id 璁㈠崟ID
+     * 婢跺嫮鎮婇弨顖欑帛鐎瑰本鍨氭禍瀣╂閿涘本澧搁梽銈囆濋崚?     *
+     * @param int $order_id 鐠併垹宕烮D
      */
     public function on_payment_complete( $order_id ) {
         $order = wc_get_order( $order_id );
@@ -759,29 +725,27 @@ class SUT_WeChat_Mini_Points {
             return;
         }
         
-        // 妫€鏌ユ槸鍚︽槸绉垎鍏戞崲璁㈠崟
-        $is_points_exchange = $order->get_meta( '_points_exchange', true );
+        // 濡偓閺屻儲妲搁崥锔芥Ц缁夘垰鍨庨崗鎴炲床鐠併垹宕?        $is_points_exchange = $order->get_meta( '_points_exchange', true );
         
         if ( ! $is_points_exchange ) {
             return;
         }
         
-        // 鑾峰彇鐢ㄦ埛ID
+        // 閼惧嘲褰囬悽銊﹀煕ID
         $user_id = $order->get_user_id();
         
         if ( $user_id <= 0 ) {
             return;
         }
         
-        // 鑾峰彇闇€瑕佹墸闄ょ殑绉垎
+        // 閼惧嘲褰囬棁鈧憰浣瑰⒏闂勩倗娈戠粔顖氬瀻
         $points_used = $order->get_meta( '_points_used', true );
         
         if ( ! $points_used || $points_used <= 0 ) {
             return;
         }
         
-        // 鎵ｉ櫎鐢ㄦ埛绉垎
-        $this->reduce_user_points( 
+        // 閹碉綁娅庨悽銊﹀煕缁夘垰鍨?        $this->reduce_user_points( 
             $user_id, 
             $points_used, 
             'exchange', 
@@ -790,26 +754,22 @@ class SUT_WeChat_Mini_Points {
     }
     
     /**
-     * 娓呯悊杩囨湡绉垎
-     */
+     * 濞撳懐鎮婃潻鍥ㄦ埂缁夘垰鍨?     */
     public function cleanup_expired_points() {
         global $wpdb;
         
-        // 鑾峰彇绉垎瑙勫垯
-        $rules = $this->get_points_rules();
+        // 閼惧嘲褰囩粔顖氬瀻鐟欏嫬鍨?        $rules = $this->get_points_rules();
         
-        // 濡傛灉鏈惎鐢ㄧН鍒嗙郴缁熸垨绉垎姘镐笉杩囨湡锛岀洿鎺ヨ繑鍥?        if ( ! $rules['enabled'] || $rules['points_expire_days'] <= 0 ) {
+        // 婵″倹鐏夐張顏勬儙閻劎袧閸掑棛閮寸紒鐔稿灗缁夘垰鍨庡闀愮瑝鏉╁洦婀￠敍宀€娲块幒銉ㄧ箲閸?        if ( ! $rules['enabled'] || $rules['points_expire_days'] <= 0 ) {
             return;
         }
         
-        // 璁＄畻杩囨湡鏃ユ湡
-        $expire_date = date( 'Y-m-d', strtotime( '-' . $rules['points_expire_days'] . ' days' ) );
+        // 鐠侊紕鐣绘潻鍥ㄦ埂閺冦儲婀?        $expire_date = date( 'Y-m-d', strtotime( '-' . $rules['points_expire_days'] . ' days' ) );
         
-        // 鑾峰彇鎵€鏈夌敤鎴风Н鍒嗘棩蹇?        $sql = "SELECT user_id, SUM(points) as total_points FROM {$wpdb->prefix}sut_wechat_mini_points_log WHERE points > 0 AND create_time < %s GROUP BY user_id";
+        // 閼惧嘲褰囬幍鈧張澶屾暏閹撮袧閸掑棙妫╄箛?        $sql = "SELECT user_id, SUM(points) as total_points FROM {$wpdb->prefix}sut_wechat_mini_points_log WHERE points > 0 AND create_time < %s GROUP BY user_id";
         $expired_points = $wpdb->get_results( $wpdb->prepare( $sql, $expire_date ), ARRAY_A );
         
-        // 鎵ｉ櫎杩囨湡绉垎
-        foreach ( $expired_points as $item ) {
+        // 閹碉綁娅庢潻鍥ㄦ埂缁夘垰鍨?        foreach ( $expired_points as $item ) {
             $this->reduce_user_points( 
                 $item['user_id'], 
                 $item['total_points'], 

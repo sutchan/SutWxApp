@@ -1,36 +1,33 @@
-﻿// 浼樻儬鍒稿垪琛ㄩ〉闈㈤€昏緫
+锘?/ 娴兼ɑ鍎崚绋垮灙鐞涖劑銆夐棃銏も偓鏄忕帆
 const app = getApp();
 import { showToast, showLoading, hideLoading } from '../../../../utils/global';
 
 Page({
   data: {
     tabs: [
-      { key: 'available', name: '鍙敤' },
-      { key: 'used', name: '宸蹭娇鐢? },
-      { key: 'expired', name: '宸茶繃鏈? }
+      { key: 'available', name: '閸欘垳鏁? },
+      { key: 'used', name: '瀹歌弓濞囬悽? },
+      { key: 'expired', name: '瀹歌尪绻冮張? }
     ],
-    activeTab: 'available', // 褰撳墠閫変腑鐨勬爣绛?    coupons: [], // 浼樻儬鍒稿垪琛?    loading: true, // 鍔犺浇鐘舵€?    noCoupons: false, // 鏄惁鏃犱紭鎯犲埜
-    page: 1, // 褰撳墠椤电爜
-    hasMore: true // 鏄惁鏈夋洿澶氭暟鎹?  },
+    activeTab: 'available', // 瑜版挸澧犻柅澶夎厬閻ㄥ嫭鐖ｇ粵?    coupons: [], // 娴兼ɑ鍎崚绋垮灙鐞?    loading: true, // 閸旂姾娴囬悩鑸碘偓?    noCoupons: false, // 閺勵垰鎯侀弮鐘辩喘閹姴鍩?    page: 1, // 瑜版挸澧犳い鐢电垳
+    hasMore: true // 閺勵垰鎯侀張澶嬫纯婢舵碍鏆熼幑?  },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸旂姾娴?   */
   onLoad: function(options) {
-    // 鍔犺浇浼樻儬鍒告暟鎹?    this.loadCoupons();
+    // 閸旂姾娴囨导妯诲劕閸掑憡鏆熼幑?    this.loadCoupons();
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閺勫墽銇?   */
   onShow: function() {
-    // 濡傛灉鏄粠鍏朵粬椤甸潰杩斿洖锛屽埛鏂板綋鍓嶆爣绛剧殑鏁版嵁
+    // 婵″倹鐏夐弰顖欑矤閸忔湹绮い鐢告桨鏉╂柨娲栭敍灞藉煕閺傛澘缍嬮崜宥嗙垼缁涘墽娈戦弫鐗堝祦
     this.setData({ page: 1, hasMore: true });
     this.loadCoupons(true);
   },
 
   /**
-   * 鍒囨崲鏍囩
+   * 閸掑洦宕查弽鍥╊劮
    */
   onTabChange(e) {
     const tabKey = e.currentTarget.dataset.key;
@@ -43,7 +40,7 @@ Page({
   },
 
   /**
-   * 鍔犺浇浼樻儬鍒告暟鎹?   * @param {boolean} reset 鏄惁閲嶇疆鏁版嵁锛堢敤浜庡垏鎹㈡爣绛炬垨鍒锋柊锛?   */
+   * 閸旂姾娴囨导妯诲劕閸掑憡鏆熼幑?   * @param {boolean} reset 閺勵垰鎯侀柌宥囩枂閺佺増宓侀敍鍫㈡暏娴滃骸鍨忛幑銏＄垼缁涚偓鍨ㄩ崚閿嬫煀閿?   */
   async loadCoupons(reset = false) {
     try {
       if (reset) {
@@ -52,19 +49,18 @@ Page({
         showLoading();
       }
 
-      // 妫€鏌ユ槸鍚︽湁浼樻儬鍒告湇鍔?      if (!app.services || !app.services.coupon) {
-        throw new Error('浼樻儬鍒告湇鍔℃湭鍒濆鍖?);
+      // 濡偓閺屻儲妲搁崥锔芥箒娴兼ɑ鍎崚鍛婃箛閸?      if (!app.services || !app.services.coupon) {
+        throw new Error('娴兼ɑ鍎崚鍛婃箛閸斺剝婀崚婵嗩潗閸?);
       }
 
-      // 濡傛灉娌℃湁鏇村鏁版嵁锛岀洿鎺ヨ繑鍥?      if (!this.data.hasMore && !reset) {
+      // 婵″倹鐏夊▽鈩冩箒閺囨潙顦块弫鐗堝祦閿涘瞼娲块幒銉ㄧ箲閸?      if (!this.data.hasMore && !reset) {
         hideLoading();
         return;
       }
 
-      // 璋冪敤浼樻儬鍒告湇鍔¤幏鍙栦紭鎯犲埜鍒楄〃
-      const coupons = await app.services.coupon.getUserCoupons(this.data.activeTab);
+      // 鐠嬪啰鏁ゆ导妯诲劕閸掑憡婀囬崝陇骞忛崣鏍︾喘閹姴鍩滈崚妤勩€?      const coupons = await app.services.coupon.getUserCoupons(this.data.activeTab);
       
-      // 妯℃嫙鏁版嵁锛堝綋API涓嶅彲鐢ㄦ椂浣跨敤锛?      // const coupons = this.getMockCoupons(this.data.activeTab);
+      // 濡剝瀚欓弫鐗堝祦閿涘牆缍婣PI娑撳秴褰查悽銊︽娴ｈ法鏁ら敍?      // const coupons = this.getMockCoupons(this.data.activeTab);
 
       let newCoupons = coupons;
       if (!reset && coupons.length > 0) {
@@ -75,22 +71,22 @@ Page({
         coupons: newCoupons,
         loading: false,
         noCoupons: newCoupons.length === 0,
-        hasMore: coupons.length >= 10, // 鍋囪姣忛〉10鏉?        page: reset ? 1 : this.data.page + 1
+        hasMore: coupons.length >= 10, // 閸嬪洩顔曞В蹇涖€?0閺?        page: reset ? 1 : this.data.page + 1
       });
     } catch (err) {
-      console.error('鍔犺浇浼樻儬鍒稿け璐?, err);
+      console.error('閸旂姾娴囨导妯诲劕閸掔銇戠拹?, err);
       this.setData({
         loading: false,
         noCoupons: reset ? true : this.data.noCoupons
       });
-      showToast('鑾峰彇浼樻儬鍒稿け璐?, 'none');
+      showToast('閼惧嘲褰囨导妯诲劕閸掔銇戠拹?, 'none');
     } finally {
       hideLoading();
     }
   },
 
   /**
-   * 涓嬫媺鍒锋柊
+   * 娑撳濯洪崚閿嬫煀
    */
   onPullDownRefresh() {
     this.setData({ page: 1, hasMore: true });
@@ -100,8 +96,7 @@ Page({
   },
 
   /**
-   * 涓婃媺鍔犺浇鏇村
-   */
+   * 娑撳﹥濯洪崝鐘烘祰閺囨潙顦?   */
   onReachBottom() {
     if (this.data.hasMore && !this.data.loading) {
       this.loadCoupons();
@@ -109,53 +104,49 @@ Page({
   },
 
   /**
-   * 鏌ョ湅浼樻儬鍒歌鎯?   */
+   * 閺屻儳婀呮导妯诲劕閸掓瓕顕涢幆?   */
   onViewCouponDetail(e) {
     const couponId = e.currentTarget.dataset.id;
     
-    // 杩欓噷鍙互璺宠浆鍒颁紭鎯犲埜璇︽儏椤甸潰
-    wx.navigateTo({
+    // 鏉╂瑩鍣烽崣顖欎簰鐠哄疇娴嗛崚棰佺喘閹姴鍩滅拠锔藉剰妞ょ敻娼?    wx.navigateTo({
       url: `/pages/user/coupon/detail?id=${couponId}`
     });
   },
 
   /**
-   * 鏍煎紡鍖栦紭鎯犲埜淇℃伅
+   * 閺嶇厧绱￠崠鏍︾喘閹姴鍩滄穱鈩冧紖
    */
   formatCoupon(coupon) {
     if (!coupon) return {};
 
-    // 鏍煎紡鍖栦紭鎯犲埜绫诲瀷鏂囨湰
+    // 閺嶇厧绱￠崠鏍︾喘閹姴鍩滅猾璇茬€烽弬鍥ㄦ拱
     let typeText = '';
     let valueText = '';
 
     if (app.services && app.services.coupon) {
       typeText = app.services.coupon.getCouponTypeText(coupon.type);
     } else {
-      // 澶囩敤閫昏緫
+      // 婢跺洨鏁ら柅鏄忕帆
       const typeMap = {
-        'cash': '鐜伴噾鍒?,
-        'percent': '鎶樻墸鍒?,
-        'shipping': '杩愯垂鍒?
+        'cash': '閻滀即鍣鹃崚?,
+        'percent': '閹舵ɑ澧搁崚?,
+        'shipping': '鏉╂劘鍨傞崚?
       };
-      typeText = typeMap[coupon.type] || '浼樻儬鍒?;
+      typeText = typeMap[coupon.type] || '娴兼ɑ鍎崚?;
     }
 
-    // 鏍煎紡鍖栦紭鎯犲埜閲戦/鎶樻墸
-    if (coupon.type === 'cash') {
-      valueText = `楼${coupon.value}`;
+    // 閺嶇厧绱￠崠鏍︾喘閹姴鍩滈柌鎴︻杺/閹舵ɑ澧?    if (coupon.type === 'cash') {
+      valueText = `妤?{coupon.value}`;
     } else if (coupon.type === 'percent') {
-      valueText = `${coupon.value}鎶榒;
+      valueText = `${coupon.value}閹舵;
     }
 
-    // 鏍煎紡鍖栨湁鏁堟湡
-    let expireText = '';
+    // 閺嶇厧绱￠崠鏍ㄦ箒閺佸牊婀?    let expireText = '';
     if (coupon.end_time) {
       if (app.services && app.services.coupon) {
         expireText = app.services.coupon.formatExpireTime(coupon.end_time);
       } else {
-        // 澶囩敤鏍煎紡鍖栭€昏緫
-        const date = new Date(coupon.end_time);
+        // 婢跺洨鏁ら弽鐓庣础閸栨牠鈧槒绶?        const date = new Date(coupon.end_time);
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const day = String(date.getDate()).padStart(2, '0');
@@ -163,7 +154,7 @@ Page({
       }
     }
 
-    // 鏍煎紡鍖栦娇鐢ㄦ潯浠?    const conditionText = coupon.min_amount > 0 ? `婊?{coupon.min_amount}鍏冨彲鐢╜ : '鏃犻棬妲?;
+    // 閺嶇厧绱￠崠鏍﹀▏閻劍娼禒?    const conditionText = coupon.min_amount > 0 ? `濠?{coupon.min_amount}閸忓啫褰查悽鈺?: '閺冪娀妫Σ?;
 
     return {
       ...coupon,
@@ -175,24 +166,24 @@ Page({
   },
 
   /**
-   * 妯℃嫙浼樻儬鍒告暟鎹紙娴嬭瘯鐢級
+   * 濡剝瀚欐导妯诲劕閸掑憡鏆熼幑顕嗙礄濞村鐦悽顭掔礆
    */
   getMockCoupons(status) {
     const baseCoupons = [
       {
         id: '1',
-        name: '鏂颁汉涓撲韩鍒?,
+        name: '閺傞姹夋稉鎾查煩閸?,
         type: 'cash',
         value: 10,
         min_amount: 50,
         start_time: '2024-01-01T00:00:00Z',
         end_time: '2024-12-31T23:59:59Z',
         status: 'available',
-        description: '鏂扮敤鎴蜂笓浜紝璁㈠崟婊?0鍏冨彲鐢?
+        description: '閺傛壆鏁ら幋铚傜瑩娴滎偓绱濈拋銏犲礋濠?0閸忓啫褰查悽?
       },
       {
         id: '2',
-        name: '鍏ㄥ満閫氱敤鎶樻墸鍒?,
+        name: '閸忋劌婧€闁氨鏁ら幎妯诲⒏閸?,
         type: 'percent',
         value: 90,
         min_amount: 0,
@@ -200,7 +191,7 @@ Page({
         start_time: '2024-01-01T00:00:00Z',
         end_time: '2024-12-31T23:59:59Z',
         status: 'available',
-        description: '鍏ㄥ満閫氱敤锛屾渶楂樹紭鎯?0鍏?
+        description: '閸忋劌婧€闁氨鏁ら敍灞炬付妤傛ü绱幆?0閸?
       }
     ];
 
@@ -208,7 +199,7 @@ Page({
       return [
         {
           id: '3',
-          name: '婊″噺鍒?,
+          name: '濠娾€冲櫤閸?,
           type: 'cash',
           value: 20,
           min_amount: 100,
@@ -217,21 +208,21 @@ Page({
           status: 'used',
           used_time: '2024-06-15T10:30:00Z',
           order_id: '10086',
-          description: '璁㈠崟婊?00鍏冨彲鐢?
+          description: '鐠併垹宕熷?00閸忓啫褰查悽?
         }
       ];
     } else if (status === 'expired') {
       return [
         {
           id: '4',
-          name: '闄愭椂鐗规儬鍒?,
+          name: '闂勬劖妞傞悧瑙勫劕閸?,
           type: 'cash',
           value: 15,
           min_amount: 0,
           start_time: '2024-01-01T00:00:00Z',
           end_time: '2024-05-31T23:59:59Z',
           status: 'expired',
-          description: '闄愭椂鐗规儬锛屾棤闂ㄦ浣跨敤'
+          description: '闂勬劖妞傞悧瑙勫劕閿涘本妫ら梻銊︻潬娴ｈ法鏁?
         }
       ];
     }

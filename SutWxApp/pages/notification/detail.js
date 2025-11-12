@@ -1,21 +1,19 @@
-﻿// 閫氱煡璇︽儏椤甸潰閫昏緫
+锘?/ 闁氨鐓＄拠锔藉剰妞ょ敻娼伴柅鏄忕帆
 const app = getApp();
 
 Page({
   /**
-   * 椤甸潰鐨勫垵濮嬫暟鎹?   */
+   * 妞ょ敻娼伴惃鍕灥婵鏆熼幑?   */
   data: {
-    notification: {}, // 閫氱煡璇︽儏
-    loading: true, // 鍔犺浇鐘舵€?    error: '', // 閿欒淇℃伅
-    relatedContent: [], // 鐩稿叧鍐呭
-    showActions: false, // 鏄惁鏄剧ず鎿嶄綔鎸夐挳
-    primaryActionName: '', // 涓昏鎿嶄綔鏂规硶鍚?    primaryActionText: '', // 涓昏鎿嶄綔鏂囨湰
-    secondaryActionName: '', // 娆¤鎿嶄綔鏂规硶鍚?    secondaryActionText: '' // 娆¤鎿嶄綔鏂囨湰
+    notification: {}, // 闁氨鐓＄拠锔藉剰
+    loading: true, // 閸旂姾娴囬悩鑸碘偓?    error: '', // 闁挎瑨顕ゆ穱鈩冧紖
+    relatedContent: [], // 閻╃鍙ч崘鍛啇
+    showActions: false, // 閺勵垰鎯侀弰鍓с仛閹垮秳缍旈幐澶愭尦
+    primaryActionName: '', // 娑撴槒顩﹂幙宥勭稊閺傝纭堕崥?    primaryActionText: '', // 娑撴槒顩﹂幙宥勭稊閺傚洦婀?    secondaryActionName: '', // 濞喡ゎ洣閹垮秳缍旈弬瑙勭《閸?    secondaryActionText: '' // 濞喡ゎ洣閹垮秳缍旈弬鍥ㄦ拱
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸旂姾娴?   */
   onLoad: function (options) {
     if (options.id) {
       this.notificationId = options.id;
@@ -23,14 +21,13 @@ Page({
     } else {
       this.setData({
         loading: false,
-        error: '閫氱煡ID涓嶅瓨鍦?
+        error: '闁氨鐓D娑撳秴鐡ㄩ崷?
       });
     }
   },
 
   /**
-   * 鍔犺浇閫氱煡璇︽儏
-   */
+   * 閸旂姾娴囬柅姘辩叀鐠囷附鍎?   */
   loadNotificationDetail: function () {
     this.setData({
       loading: true,
@@ -39,30 +36,28 @@ Page({
 
     app.services.notification.getNotificationDetail(this.notificationId)
       .then(notification => {
-        // 鏍囪涓哄凡璇?        if (!notification.is_read) {
+        // 閺嶅洩顔囨稉鍝勫嚒鐠?        if (!notification.is_read) {
           app.services.notification.markAsRead(this.notificationId)
             .then(() => {
-              // 鏇存柊閫氱煡鐘舵€?              notification.is_read = true;
+              // 閺囧瓨鏌婇柅姘辩叀閻樿埖鈧?              notification.is_read = true;
               
-              // 鏇存柊鏈湴瀛樺偍涓殑鏈鏁伴噺
+              // 閺囧瓨鏌婇張顒€婀寸€涙ê鍋嶆稉顓犳畱閺堫亣顕伴弫浼村櫤
               const unreadCount = wx.getStorageSync('unreadNotificationCount') || 0;
               if (unreadCount > 0) {
                 wx.setStorageSync('unreadNotificationCount', unreadCount - 1);
               }
             })
             .catch(err => {
-              console.error('鏍囪宸茶澶辫触:', err);
+              console.error('閺嶅洩顔囧鑼额嚢婢惰精瑙?', err);
             });
         }
         
-        // 鏍煎紡鍖栭€氱煡鏁版嵁
-        const formattedNotification = this.formatNotification(notification);
+        // 閺嶇厧绱￠崠鏍偓姘辩叀閺佺増宓?        const formattedNotification = this.formatNotification(notification);
         
-        // 鏍规嵁閫氱煡绫诲瀷鍔犺浇鐩稿叧鍐呭
+        // 閺嶈宓侀柅姘辩叀缁鐎烽崝鐘烘祰閻╃鍙ч崘鍛啇
         this.loadRelatedContent(notification);
         
-        // 璁剧疆鎿嶄綔鎸夐挳
-        this.setupActions(notification);
+        // 鐠佸墽鐤嗛幙宥勭稊閹稿鎸?        this.setupActions(notification);
         
         this.setData({
           notification: formattedNotification,
@@ -70,23 +65,21 @@ Page({
         });
       })
       .catch(err => {
-        console.error('鑾峰彇閫氱煡璇︽儏澶辫触:', err);
+        console.error('閼惧嘲褰囬柅姘辩叀鐠囷附鍎忔径杈Е:', err);
         this.setData({
           loading: false,
-          error: '鑾峰彇閫氱煡璇︽儏澶辫触锛岃閲嶈瘯'
+          error: '閼惧嘲褰囬柅姘辩叀鐠囷附鍎忔径杈Е閿涘矁顕柌宥堢槸'
         });
       });
   },
 
   /**
-   * 鏍煎紡鍖栭€氱煡鏁版嵁
-   * @param {Object} notification - 鍘熷閫氱煡鏁版嵁
-   * @returns {Object} 鏍煎紡鍖栧悗鐨勯€氱煡鏁版嵁
+   * 閺嶇厧绱￠崠鏍偓姘辩叀閺佺増宓?   * @param {Object} notification - 閸樼喎顫愰柅姘辩叀閺佺増宓?   * @returns {Object} 閺嶇厧绱￠崠鏍ф倵閻ㄥ嫰鈧氨鐓￠弫鐗堝祦
    */
   formatNotification: function (notification) {
-    // 鏍煎紡鍖栨椂闂?    const timeAgo = this.formatTimeAgo(notification.created_at);
+    // 閺嶇厧绱￠崠鏍ㄦ闂?    const timeAgo = this.formatTimeAgo(notification.created_at);
     
-    // 鑾峰彇閫氱煡绫诲瀷鏂囨湰
+    // 閼惧嘲褰囬柅姘辩叀缁鐎烽弬鍥ㄦ拱
     const typeText = this.getNotificationTypeText(notification.type);
     
     return {
@@ -97,9 +90,7 @@ Page({
   },
 
   /**
-   * 鏍煎紡鍖栨椂闂翠负鐩稿鏃堕棿
-   * @param {string} time - 鏃堕棿瀛楃涓?   * @returns {string} 鐩稿鏃堕棿鏂囨湰
-   */
+   * 閺嶇厧绱￠崠鏍ㄦ闂傜繝璐熼惄绋款嚠閺冨爼妫?   * @param {string} time - 閺冨爼妫跨€涙顑佹稉?   * @returns {string} 閻╃顕弮鍫曟？閺傚洦婀?   */
   formatTimeAgo: function (time) {
     const now = new Date();
     const past = new Date(time);
@@ -110,94 +101,89 @@ Page({
     const diffDays = Math.floor(diffHours / 24);
 
     if (diffSecs < 60) {
-      return '鍒氬垰';
+      return '閸掓艾鍨?;
     } else if (diffMins < 60) {
-      return `${diffMins}鍒嗛挓鍓峘;
+      return `${diffMins}閸掑棝鎸撻崜宄?
     } else if (diffHours < 24) {
-      return `${diffHours}灏忔椂鍓峘;
+      return `${diffHours}鐏忓繑妞傞崜宄?
     } else if (diffDays < 7) {
-      return `${diffDays}澶╁墠`;
+      return `${diffDays}婢垛晛澧燻;
     } else {
       return past.toLocaleDateString();
     }
   },
 
   /**
-   * 鑾峰彇閫氱煡绫诲瀷鏂囨湰
-   * @param {string} type - 閫氱煡绫诲瀷
-   * @returns {string} 绫诲瀷鏂囨湰
+   * 閼惧嘲褰囬柅姘辩叀缁鐎烽弬鍥ㄦ拱
+   * @param {string} type - 闁氨鐓＄猾璇茬€?   * @returns {string} 缁鐎烽弬鍥ㄦ拱
    */
   getNotificationTypeText: function (type) {
     const typeMap = {
-      system: '绯荤粺閫氱煡',
-      comment: '璇勮閫氱煡',
-      follow: '鍏虫敞閫氱煡',
-      like: '鐐硅禐閫氱煡',
-      point: '绉垎閫氱煡',
-      order: '璁㈠崟閫氱煡'
+      system: '缁崵绮洪柅姘辩叀',
+      comment: '鐠囧嫯顔戦柅姘辩叀',
+      follow: '閸忚櫕鏁為柅姘辩叀',
+      like: '閻愮绂愰柅姘辩叀',
+      point: '缁夘垰鍨庨柅姘辩叀',
+      order: '鐠併垹宕熼柅姘辩叀'
     };
-    return typeMap[type] || '鍏朵粬';
+    return typeMap[type] || '閸忔湹绮?;
   },
 
   /**
-   * 鍔犺浇鐩稿叧鍐呭
-   * @param {Object} notification - 閫氱煡鏁版嵁
+   * 閸旂姾娴囬惄绋垮彠閸愬懎顔?   * @param {Object} notification - 闁氨鐓￠弫鐗堝祦
    */
   loadRelatedContent: function (notification) {
     const relatedContent = [];
     
-    // 鏍规嵁閫氱煡绫诲瀷鍔犺浇鐩稿叧鍐呭
+    // 閺嶈宓侀柅姘辩叀缁鐎烽崝鐘烘祰閻╃鍙ч崘鍛啇
     switch (notification.type) {
       case 'comment':
-        // 娣诲姞鐩稿叧鏂囩珷
-        if (notification.post_id) {
+        // 濞ｈ濮為惄绋垮彠閺傚洨鐝?        if (notification.post_id) {
           relatedContent.push({
             id: notification.post_id,
             type: 'article',
-            title: '鏌ョ湅鐩稿叧鏂囩珷',
+            title: '閺屻儳婀呴惄绋垮彠閺傚洨鐝?,
             time_ago: this.formatTimeAgo(notification.created_at)
           });
         }
-        // 娣诲姞璇勮鑰呬俊鎭?        if (notification.user_id) {
+        // 濞ｈ濮炵拠鍕啈閼板懍淇婇幁?        if (notification.user_id) {
           relatedContent.push({
             id: notification.user_id,
             type: 'user',
-            title: '鏌ョ湅璇勮鑰呬俊鎭?,
+            title: '閺屻儳婀呯拠鍕啈閼板懍淇婇幁?,
             time_ago: this.formatTimeAgo(notification.created_at)
           });
         }
         break;
       
       case 'follow':
-        // 娣诲姞鍏虫敞鑰呬俊鎭?        if (notification.follower_id) {
+        // 濞ｈ濮為崗铏暈閼板懍淇婇幁?        if (notification.follower_id) {
           relatedContent.push({
             id: notification.follower_id,
             type: 'user',
-            title: '鏌ョ湅鍏虫敞鑰呬富椤?,
+            title: '閺屻儳婀呴崗铏暈閼板懍瀵屾い?,
             time_ago: this.formatTimeAgo(notification.created_at)
           });
         }
         break;
       
       case 'like':
-        // 娣诲姞鐩稿叧鍐呭
-        if (notification.post_id) {
+        // 濞ｈ濮為惄绋垮彠閸愬懎顔?        if (notification.post_id) {
           relatedContent.push({
             id: notification.post_id,
             type: 'article',
-            title: '鏌ョ湅琚偣璧炲唴瀹?,
+            title: '閺屻儳婀呯悮顐ゅ仯鐠х偛鍞寸€?,
             time_ago: this.formatTimeAgo(notification.created_at)
           });
         }
         break;
       
       case 'order':
-        // 娣诲姞璁㈠崟淇℃伅
-        if (notification.order_id) {
+        // 濞ｈ濮炵拋銏犲礋娣団剝浼?        if (notification.order_id) {
           relatedContent.push({
             id: notification.order_id,
             type: 'order',
-            title: '鏌ョ湅璁㈠崟璇︽儏',
+            title: '閺屻儳婀呯拋銏犲礋鐠囷附鍎?,
             time_ago: this.formatTimeAgo(notification.created_at)
           });
         }
@@ -210,18 +196,17 @@ Page({
   },
 
   /**
-   * 璁剧疆鎿嶄綔鎸夐挳
-   * @param {Object} notification - 閫氱煡鏁版嵁
+   * 鐠佸墽鐤嗛幙宥勭稊閹稿鎸?   * @param {Object} notification - 闁氨鐓￠弫鐗堝祦
    */
   setupActions: function (notification) {
-    // 鏍规嵁閫氱煡绫诲瀷璁剧疆涓嶅悓鐨勬搷浣滄寜閽?    switch (notification.type) {
+    // 閺嶈宓侀柅姘辩叀缁鐎风拋鍓х枂娑撳秴鎮撻惃鍕惙娴ｆ粍瀵滈柦?    switch (notification.type) {
       case 'follow':
         this.setData({
           showActions: true,
           primaryActionName: 'followBack',
-          primaryActionText: '鍥炲叧',
+          primaryActionText: '閸ョ偛鍙?,
           secondaryActionName: 'ignoreFollow',
-          secondaryActionText: '蹇界暐'
+          secondaryActionText: '韫囩晫鏆?
         });
         break;
       
@@ -229,18 +214,18 @@ Page({
         this.setData({
           showActions: true,
           primaryActionName: 'replyComment',
-          primaryActionText: '鍥炲',
+          primaryActionText: '閸ョ偛顦?,
           secondaryActionName: '',
           secondaryActionText: ''
         });
         break;
       
       case 'point':
-        // 绉垎鍙樺姩閫氱煡鍙兘鏈夌浉鍏虫搷浣?        if (notification.action && notification.action.link) {
+        // 缁夘垰鍨庨崣妯哄З闁氨鐓￠崣顖濆厴閺堝娴夐崗铏惙娴?        if (notification.action && notification.action.link) {
           this.setData({
             showActions: true,
             primaryActionName: 'goToAction',
-            primaryActionText: notification.action.text || '鏌ョ湅璇︽儏',
+            primaryActionText: notification.action.text || '閺屻儳婀呯拠锔藉剰',
             secondaryActionName: '',
             secondaryActionText: ''
           });
@@ -255,26 +240,25 @@ Page({
   },
 
   /**
-   * 鍥炲叧鐢ㄦ埛
+   * 閸ョ偛鍙ч悽銊﹀煕
    */
   followBack: function () {
     if (this.data.notification.follower_id) {
-      // 璋冪敤鍏虫敞鏈嶅姟
-      app.services.following.followUser(this.data.notification.follower_id)
+      // 鐠嬪啰鏁ら崗铏暈閺堝秴濮?      app.services.following.followUser(this.data.notification.follower_id)
         .then(() => {
           wx.showToast({
-            title: '鍥炲叧鎴愬姛',
+            title: '閸ョ偛鍙ч幋鎰',
             icon: 'success'
           });
           
-          // 鏇存柊鎿嶄綔鎸夐挳鐘舵€?          this.setData({
+          // 閺囧瓨鏌婇幙宥勭稊閹稿鎸抽悩鑸碘偓?          this.setData({
             showActions: false
           });
         })
         .catch(err => {
-          console.error('鍥炲叧澶辫触:', err);
+          console.error('閸ョ偛鍙ф径杈Е:', err);
           wx.showToast({
-            title: '鍥炲叧澶辫触锛岃閲嶈瘯',
+            title: '閸ョ偛鍙ф径杈Е閿涘矁顕柌宥堢槸',
             icon: 'none'
           });
         });
@@ -282,19 +266,18 @@ Page({
   },
 
   /**
-   * 蹇界暐鍏虫敞璇锋眰
-   */
+   * 韫囩晫鏆愰崗铏暈鐠囬攱鐪?   */
   ignoreFollow: function () {
     wx.showModal({
-      title: '纭蹇界暐',
-      content: '纭畾瑕佸拷鐣ヨ繖涓叧娉ㄨ姹傚悧锛?,
+      title: '绾喛顓昏箛鐣屾殣',
+      content: '绾喖鐣剧憰浣告嫹閻ｃ儴绻栨稉顏勫彠濞夈劏顕Ч鍌氭偋閿?,
       success: (res) => {
         if (res.confirm) {
           this.setData({
             showActions: false
           });
           wx.showToast({
-            title: '宸插拷鐣?,
+            title: '瀹告彃鎷烽悾?,
             icon: 'success'
           });
         }
@@ -303,7 +286,7 @@ Page({
   },
 
   /**
-   * 鍥炲璇勮
+   * 閸ョ偛顦茬拠鍕啈
    */
   replyComment: function () {
     if (this.data.notification.post_id && this.data.notification.comment_id) {
@@ -314,7 +297,7 @@ Page({
   },
 
   /**
-   * 璺宠浆鍒扮浉鍏虫搷浣滈〉闈?   */
+   * 鐠哄疇娴嗛崚鎵祲閸忚櫕鎼锋担婊堛€夐棃?   */
   goToAction: function () {
     if (this.data.notification.action && this.data.notification.action.link) {
       wx.navigateTo({
@@ -324,8 +307,7 @@ Page({
   },
 
   /**
-   * 鐐瑰嚮鐩稿叧鍐呭
-   */
+   * 閻愮懓鍤惄绋垮彠閸愬懎顔?   */
   onRelatedItemClick: function (e) {
     const { id, type } = e.currentTarget.dataset;
     
@@ -351,7 +333,7 @@ Page({
   },
 
   /**
-   * 杩斿洖涓婁竴椤?   */
+   * 鏉╂柨娲栨稉濠佺妞?   */
   onBackPress: function () {
     wx.navigateBack();
     return true;

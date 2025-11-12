@@ -1,4 +1,4 @@
-﻿msgid ""msgstr """Project-Id-Version: Sut WeChat Mini 1.0.0\n""Report-Msgid-Bugs-To: \n""POT-Creation-Date: 2024-03-20\n""PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n""Last-Translator: FULL NAME <EMAIL@ADDRESS>\n""Language-Team: LANGUAGE <LL@li.org>\n""Language: \n""MIME-Version: 1.0\n""Content-Type: text/plain; charset=UTF-8\n""Content-Transfer-Encoding: 8bit\n""Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+msgid ""msgstr """Project-Id-Version: Sut WeChat Mini 1.0.0\n""Report-Msgid-Bugs-To: \n""POT-Creation-Date: 2024-03-20\n""PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n""Last-Translator: FULL NAME <EMAIL@ADDRESS>\n""Language-Team: LANGUAGE <LL@li.org>\n""Language: \n""MIME-Version: 1.0\n""Content-Type: text/plain; charset=UTF-8\n""Content-Transfer-Encoding: 8bit\n""Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
 #: pages/user/points-tasks.jsmsgid "loading"
 msgstr ""
@@ -18,7 +18,72 @@ msgstr ""
 #: pages/user/points-tasks.jsmsgid "share_task_description"
 msgstr ""
 
-#: pages/user/points-tasks.jsmsgid "app_slogan"
+msgid "share_task_title"
+msgstr ""
+
+msgid "processing"
+msgstr ""
+
+msgid "points_unit"
+msgstr ""
+
+msgid "task_completed"
+msgstr ""
+
+msgid "operation_failed"
+msgstr ""
+
+msgid "claim_reward_failed"
+msgstr ""
+
+msgid "task_not_found"
+msgstr ""
+
+msgid "signin_task"
+msgstr ""
+
+msgid "comment_task"
+msgstr ""
+
+msgid "review_task"
+msgstr ""
+
+msgid "profile_task"
+msgstr ""
+
+msgid "purchase_task"
+msgstr ""
+
+msgid "order_task"
+msgstr ""
+
+msgid "follow_task"
+msgstr ""
+
+msgid "favorite_task"
+msgstr ""
+
+msgid "navigation_failed"
+msgstr ""
+
+msgid "task_progress_update_success"
+msgstr ""
+
+msgid "submit_task_progress_failed"
+msgstr ""
+
+msgid "unnamed_task"
+msgstr ""
+
+msgid "new_rewards_available"
+msgstr ""
+
+#: pages/user/points-tasks.js
+msgid "app_slogan"
+msgstr ""
+
+#: pages/user/points-tasks.js
+msgid "share_task_description"
 msgstr ""
 
 #: pages/user/points-tasks.wxmlmsgid "points_tasks_page_title"
@@ -81,5 +146,70 @@ msgstr ""
 #: pages/user/points-tasks.wxmlmsgid "points_records"
 msgstr ""
 
-#: pages/user/points-tasks.wxmlmsgid "retry"
+#: pages/user/points-tasks.wxml
+msgid "retry"
+msgstr ""
+
+#: pages/user/points-tasks.js
+msgid "get_task_detail_failed"
+msgstr ""
+
+#: pages/user/points-tasks.js
+msgid "task_progress_update_success"
+msgstr ""
+
+#: pages/user/points-tasks.js
+msgid "submit_task_progress_failed"
+msgstr ""
+
+#: pages/user/points-tasks.js
+msgid "claim_reward_failed"
+msgstr ""
+
+#: pages/user/points-tasks.wxml
+msgid "all_tasks"
+msgstr ""
+
+#: pages/user/points-tasks.wxml
+msgid "newbie_tasks"
+msgstr ""
+
+#: pages/user/points-tasks.wxml
+msgid "daily_tasks"
+msgstr ""
+
+#: pages/user/points-tasks.wxml
+msgid "weekly_tasks"
+msgstr ""
+
+#: pages/user/points-tasks.wxml
+msgid "monthly_tasks"
+msgstr ""
+
+#: pages/user/points-tasks.wxml
+msgid "completed"
+msgstr ""
+
+#: pages/user/points-tasks.wxml
+msgid "claim_reward"
+msgstr ""
+
+#: pages/user/points-tasks.wxml
+msgid "go_do"
+msgstr ""
+
+#: pages/user/points-tasks.wxml
+msgid "no_tasks"
+msgstr ""
+
+#: pages/user/points-tasks.js
+msgid "points_records"
+msgstr ""
+
+#: pages/user/points-tasks.js
+msgid "points_rules"
+msgstr ""
+
+#: pages/user/points-tasks.js
+msgid "points_mall"
 msgstr ""\n

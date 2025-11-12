@@ -1,11 +1,11 @@
-﻿/* 璁㈠崟璇︽儏椤甸潰鏍峰紡 */
+锘?* 鐠併垹宕熺拠锔藉剰妞ょ敻娼伴弽宄扮础 */
 .container {
   background-color: #f8f8f8;
   min-height: 100vh;
-  padding-bottom: 120rpx; /* 涓哄簳閮ㄦ搷浣滄爮鐣欏嚭绌洪棿 */
+  padding-bottom: 120rpx; /* 娑撳搫绨抽柈銊︽惙娴ｆ粍鐖悾娆忓毉缁屾椽妫?*/
 }
 
-/* 鍔犺浇鐘舵€佹牱寮?*/
+/* 閸旂姾娴囬悩鑸碘偓浣圭壉瀵?*/
 .loading {
   padding: 60rpx;
   text-align: center;
@@ -13,7 +13,7 @@
   color: #999999;
 }
 
-/* 閿欒鐘舵€佹牱寮?*/
+/* 闁挎瑨顕ら悩鑸碘偓浣圭壉瀵?*/
 .error {
   padding: 60rpx 20rpx;
   text-align: center;
@@ -42,7 +42,7 @@
   margin: 0 10rpx;
 }
 
-/* 璁㈠崟鐘舵€佸崱鐗囨牱寮?*/
+/* 鐠併垹宕熼悩鑸碘偓浣稿幢閻楀洦鐗卞?*/
 .status-card {
   background-color: #ffffff;
   padding: 40rpx 30rpx;
@@ -55,7 +55,7 @@
   font-weight: bold;
 }
 
-/* 鍦板潃鍗＄墖鏍峰紡 */
+/* 閸︽澘娼冮崡锛勫閺嶅嘲绱?*/
 .address-card {
   background-color: #ffffff;
   padding: 30rpx;
@@ -87,7 +87,7 @@
   line-height: 36rpx;
 }
 
-/* 鍟嗗搧鍗＄墖鏍峰紡 */
+/* 閸熷棗鎼ч崡锛勫閺嶅嘲绱?*/
 .products-card,
 .order-info-card,
 .price-card {
@@ -148,7 +148,7 @@
   color: #999999;
 }
 
-/* 璁㈠崟淇℃伅鏍峰紡 */
+/* 鐠併垹宕熸穱鈩冧紖閺嶅嘲绱?*/
 .info-item {
   display: flex;
   justify-content: space-between;
@@ -173,7 +173,7 @@
   text-align: right;
 }
 
-/* 浠锋牸淇℃伅鏍峰紡 */
+/* 娴犻攱鐗告穱鈩冧紖閺嶅嘲绱?*/
 .price-item {
   display: flex;
   justify-content: space-between;
@@ -200,7 +200,7 @@
   margin-left: 8rpx;
 }
 
-/* 搴曢儴鎿嶄綔鏍忔牱寮?*/
+/* 鎼存洟鍎撮幙宥勭稊閺嶅繑鐗卞?*/
 .bottom-bar {
   position: fixed;
   bottom: 0;

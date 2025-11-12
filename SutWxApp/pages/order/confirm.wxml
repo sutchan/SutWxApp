@@ -1,6 +1,6 @@
-﻿<!-- 璁㈠崟纭椤甸潰缁撴瀯 -->
+锘?!-- 鐠併垹宕熺涵顔款吇妞ょ敻娼扮紒鎾寸€?-->
 <view class="container">
-  <!-- 鍦板潃妯″潡 -->
+  <!-- 閸︽澘娼冨Ο鈥虫健 -->
   <view class="address-section" bind:tap="onSelectAddress">
     <view class="address-content" wx:if="{{selectedAddress}}">
       <view class="address-header">
@@ -12,81 +12,81 @@
       </view>
     </view>
     <view class="no-address" wx:else>
-      <text>璇烽€夋嫨鏀惰揣鍦板潃</text>
+      <text>鐠囩兘鈧瀚ㄩ弨鎯版彛閸︽澘娼?/text>
     </view>
     <view class="arrow-right"></view>
   </view>
   
-  <!-- 鍟嗗搧鍒楄〃妯″潡 -->
+  <!-- 閸熷棗鎼ч崚妤勩€冨Ο鈥虫健 -->
   <view class="product-section">
-    <view class="section-title">鍟嗗搧淇℃伅</view>
+    <view class="section-title">閸熷棗鎼ф穱鈩冧紖</view>
     
-    <!-- 璐墿杞﹀晢鍝?-->
+    <!-- 鐠愵厾澧挎潪锕€鏅㈤崫?-->
     <view class="product-item" wx:for="{{cartItems}}" wx:key="id" wx:for-item="item">
       <image class="product-image" src="{{item.image || '/images/default-post.svg'}}" mode="aspectFit"></image>
       <view class="product-info">
         <view class="product-title">{{item.title}}</view>
         <view class="product-sku" wx:if="{{item.skuName}}">{{item.skuName}}</view>
         <view class="product-price-quantity">
-          <view class="product-price">楼{{item.price.toFixed(2)}}</view>
+          <view class="product-price">妤納{item.price.toFixed(2)}}</view>
           <view class="product-quantity">x{{item.quantity}}</view>
         </view>
       </view>
     </view>
     
-    <!-- 鐩存帴璐拱鐨勫晢鍝?-->
+    <!-- 閻╁瓨甯寸拹顓濇嫳閻ㄥ嫬鏅㈤崫?-->
     <view class="product-item" wx:for="{{products}}" wx:key="id" wx:for-item="item">
       <image class="product-image" src="{{item.image || '/images/default-post.svg'}}" mode="aspectFit"></image>
       <view class="product-info">
         <view class="product-title">{{item.title}}</view>
         <view class="product-sku" wx:if="{{item.selectedSkuName}}">{{item.selectedSkuName}}</view>
         <view class="product-price-quantity">
-          <view class="product-price">楼{{item.price.toFixed(2)}}</view>
+          <view class="product-price">妤納{item.price.toFixed(2)}}</view>
           <view class="product-quantity">x{{item.quantity}}</view>
         </view>
       </view>
     </view>
   </view>
   
-  <!-- 浼樻儬鍒告ā鍧?-->
+  <!-- 娴兼ɑ鍎崚鍛娔侀崸?-->
   <view class="coupon-section" bind:tap="onSelectCoupon">
-    <view class="coupon-label">浼樻儬鍒?/view>
+    <view class="coupon-label">娴兼ɑ鍎崚?/view>
     <view class="coupon-value">
       <text wx:if="{{coupon}}">{{coupon.name}}</text>
-      <text class="placeholder" wx:else>璇烽€夋嫨浼樻儬鍒?/text>
+      <text class="placeholder" wx:else>鐠囩兘鈧瀚ㄦ导妯诲劕閸?/text>
     </view>
     <view class="arrow-right"></view>
   </view>
   
-  <!-- 璁㈠崟澶囨敞妯″潡 -->
+  <!-- 鐠併垹宕熸径鍥ㄦ暈濡€虫健 -->
   <view class="remark-section">
-    <view class="remark-label">璁㈠崟澶囨敞</view>
-    <input class="remark-input" placeholder="閫夊～锛岃杈撳叆璁㈠崟澶囨敞淇℃伅" value="{{remark}}" bindinput="onRemarkInput" />
+    <view class="remark-label">鐠併垹宕熸径鍥ㄦ暈</view>
+    <input class="remark-input" placeholder="闁锝為敍宀冾嚞鏉堟挸鍙嗙拋銏犲礋婢跺洦鏁炴穱鈩冧紖" value="{{remark}}" bindinput="onRemarkInput" />
   </view>
   
-  <!-- 浠锋牸鏄庣粏妯″潡 -->
+  <!-- 娴犻攱鐗搁弰搴ｇ矎濡€虫健 -->
   <view class="price-section">
     <view class="price-item">
-      <view class="price-label">鍟嗗搧鎬讳环</view>
-      <view class="price-value">楼{{totalPrice.toFixed(2)}}</view>
+      <view class="price-label">閸熷棗鎼ч幀璁崇幆</view>
+      <view class="price-value">妤納{totalPrice.toFixed(2)}}</view>
     </view>
     <view class="price-item">
-      <view class="price-label">杩愯垂</view>
-      <view class="price-value" wx:if="{{shippingFee > 0}}">楼{{shippingFee.toFixed(2)}}</view>
-      <view class="price-value free" wx:else>鍏嶈繍璐?/view>
+      <view class="price-label">鏉╂劘鍨?/view>
+      <view class="price-value" wx:if="{{shippingFee > 0}}">妤納{shippingFee.toFixed(2)}}</view>
+      <view class="price-value free" wx:else>閸忓秷绻嶇拹?/view>
     </view>
     <view class="price-item" wx:if="{{discount > 0}}">
-      <view class="price-label">浼樻儬</view>
-      <view class="price-value discount">-楼{{discount.toFixed(2)}}</view>
+      <view class="price-label">娴兼ɑ鍎?/view>
+      <view class="price-value discount">-妤納{discount.toFixed(2)}}</view>
     </view>
   </view>
   
-  <!-- 搴曢儴缁撶畻鏍?-->
+  <!-- 鎼存洟鍎寸紒鎾剁暬閺?-->
   <view class="bottom-bar">
     <view class="total-price">
-      <text class="price-label">鍚堣锛?/text>
-      <text class="price-value">楼{{finalPrice.toFixed(2)}}</text>
+      <text class="price-label">閸氬牐顓搁敍?/text>
+      <text class="price-value">妤納{finalPrice.toFixed(2)}}</text>
     </view>
-    <button class="submit-btn" bind:tap="onSubmitOrder" loading="{{submitting}}" disabled="{{submitting}}">鎻愪氦璁㈠崟</button>
+    <button class="submit-btn" bind:tap="onSubmitOrder" loading="{{submitting}}" disabled="{{submitting}}">閹绘劒姘︾拋銏犲礋</button>
   </view>
 </view>\n

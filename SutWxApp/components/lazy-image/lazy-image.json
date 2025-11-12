@@ -1,6 +1,6 @@
-﻿{
+锘縶
   "component": true,
-  "description": "楂樻€ц兘鍥剧墖鎳掑姞杞界粍浠讹紝鏀寔娓愯繘寮忓姞杞姐€侀敊璇鐞嗗拰鑷畾涔夋牱寮?,
+  "description": "妤傛ɑ鈧嗗厴閸ュ墽澧栭幊鎺戝鏉炵晫绮嶆禒璁圭礉閺€顖涘瘮濞撴劘绻樺蹇撳鏉炲鈧線鏁婄拠顖氼槱閻炲棗鎷伴懛顏勭暰娑斿鐗卞?,
   "usingComponents": {},
   "styleIsolation": "isolated",
   "multipleSlots": false,
@@ -13,7 +13,7 @@
   "behaviors": [],
   "options": {
     "virtualHost": false,
-    "pureDataPattern": /^_/, // 浠寮€澶寸殑data瀛楁灏嗕笉琚嚜鍔ㄧ粦瀹氬埌wxml
+    "pureDataPattern": /^_/, // 娴狀櫏瀵偓婢跺娈慸ata鐎涙顔岀亸鍡曠瑝鐞氼偉鍤滈崝銊х拨鐎规艾鍩寃xml
     "multipleSlots": false
   }
 }\n

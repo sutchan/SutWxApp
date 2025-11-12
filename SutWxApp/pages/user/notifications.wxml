@@ -1,38 +1,34 @@
-﻿<!-- 閫氱煡椤甸潰 -->
+锘?!-- 闁氨鐓℃い鐢告桨 -->
 <view class="container">
-  <!-- 绛涢€夋爮 -->
+  <!-- 缁涙盯鈧鐖?-->
   <view class="filter-bar">
     <view 
       class="filter-item {{activeFilter === 'all' ? 'active' : ''}}" 
       data-filter="all" 
       bindtap="changeFilter"
     >
-      鍏ㄩ儴
-    </view>
+      閸忋劑鍎?    </view>
     <view 
       class="filter-item {{activeFilter === 'unread' ? 'active' : ''}}" 
       data-filter="unread" 
       bindtap="changeFilter"
     >
-      鏈
-    </view>
+      閺堫亣顕?    </view>
     <view 
       class="filter-item {{activeFilter === 'system' ? 'active' : ''}}" 
       data-filter="system" 
       bindtap="changeFilter"
     >
-      绯荤粺
-    </view>
+      缁崵绮?    </view>
     <view 
       class="filter-item {{activeFilter === 'comment' ? 'active' : ''}}" 
       data-filter="comment" 
       bindtap="changeFilter"
     >
-      璇勮
-    </view>
+      鐠囧嫯顔?    </view>
   </view>
 
-  <!-- 閫氱煡鍒楄〃 -->
+  <!-- 闁氨鐓￠崚妤勩€?-->
   <view class="notification-list" wx:if="{{notifications.length > 0}}">
     <view 
       wx:for="{{notifications}}" 
@@ -41,41 +37,40 @@
       data-id="{{item.id}}"
       bindtap="onNotificationClick"
     >
-      <!-- 鏈鏍囪 -->
+      <!-- 閺堫亣顕伴弽鍥唶 -->
       <view class="unread-dot" wx:if="{{!item.is_read}}"></view>
       
-      <!-- 閫氱煡澶撮儴 -->
+      <!-- 闁氨鐓℃径鎾劥 -->
       <view class="notification-header">
         <text class="notification-title">{{item.title}}</text>
         <text class="notification-time">{{item.time_ago}}</text>
       </view>
       
-      <!-- 閫氱煡鍐呭 -->
+      <!-- 闁氨鐓￠崘鍛啇 -->
       <text class="notification-content">{{item.content}}</text>
       
-      <!-- 閫氱煡搴曢儴 -->
+      <!-- 闁氨鐓℃惔鏇㈠劥 -->
       <view class="notification-footer">
         <view class="notification-type notification-type-{{item.type}}">{{item.type_text}}</view>
       </view>
     </view>
   </view>
   
-  <!-- 绌虹姸鎬?-->
+  <!-- 缁岃櫣濮搁幀?-->
   <view class="empty-state" wx:elif="{{!loading}}">
     <image class="empty-icon" src="/assets/images/empty-notification.png" mode="aspectFit"></image>
-    <text class="empty-text">鏆傛棤閫氱煡</text>
+    <text class="empty-text">閺嗗倹妫ら柅姘辩叀</text>
   </view>
   
-  <!-- 鍔犺浇鏇村 -->
+  <!-- 閸旂姾娴囬弴鏉戭樋 -->
   <view class="load-more" wx:if="{{hasMore && notifications.length > 0}}">
-    {{loadingMore ? '鍔犺浇涓?..' : '涓婃媺鍔犺浇鏇村'}}
+    {{loadingMore ? '閸旂姾娴囨稉?..' : '娑撳﹥濯洪崝鐘烘祰閺囨潙顦?}}
   </view>
   <view class="load-more" wx:elif="{{!hasMore && notifications.length > 0}}">
-    宸插姞杞藉叏閮ㄩ€氱煡
-  </view>
+    瀹告彃濮炴潪钘夊弿闁劑鈧氨鐓?  </view>
 
-  <!-- 鏍囪鍏ㄩ儴宸茶鎸夐挳 -->
+  <!-- 閺嶅洩顔囬崗銊╁劥瀹歌尪顕伴幐澶愭尦 -->
   <view class="mark-all-read" wx:if="{{unreadCount > 0}}" bindtap="markAllAsRead">
-    鍏ㄩ儴宸茶
+    閸忋劑鍎村鑼额嚢
   </view>
 </view>\n

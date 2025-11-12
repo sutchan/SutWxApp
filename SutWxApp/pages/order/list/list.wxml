@@ -1,6 +1,6 @@
-﻿<!-- 璁㈠崟鍒楄〃椤甸潰 -->
+锘?!-- 鐠併垹宕熼崚妤勩€冩い鐢告桨 -->
 <view class="container">
-  <!-- 璁㈠崟鐘舵€侀€夐」鍗?-->
+  <!-- 鐠併垹宕熼悩鑸碘偓渚€鈧銆嶉崡?-->
   <view class="status-tabs">
     <view 
       class="status-tab {{currentStatus === option.id ? 'active' : ''}}" 
@@ -13,38 +13,38 @@
     </view>
   </view>
 
-  <!-- 鍔犺浇涓姸鎬?-->
+  <!-- 閸旂姾娴囨稉顓犲Ц閹?-->
   <view class="loading" wx:if="{{loading}}">
-    <text>鍔犺浇涓?..</text>
+    <text>閸旂姾娴囨稉?..</text>
   </view>
 
-  <!-- 閿欒鐘舵€?-->
+  <!-- 闁挎瑨顕ら悩鑸碘偓?-->
   <view class="error" wx:if="{{error}}">
     <image src="/images/error.svg" class="error-icon"></image>
     <text class="error-text">{{errorMsg}}</text>
-    <button class="retry-btn" bindtap="onRetry">閲嶈瘯</button>
+    <button class="retry-btn" bindtap="onRetry">闁插秷鐦?/button>
   </view>
 
-  <!-- 鏈櫥褰曠姸鎬?-->
+  <!-- 閺堫亞娅ヨぐ鏇犲Ц閹?-->
   <view class="not-logged-in" wx:if="{{!loading && !error && !wx.getApp().isLoggedIn()}}">
     <image src="/images/empty.svg" class="empty-icon"></image>
-    <text class="empty-text">璇峰厛鐧诲綍鏌ョ湅璁㈠崟</text>
-    <button class="login-btn" bindtap="onLogin">鍘荤櫥褰?/button>
+    <text class="empty-text">鐠囧嘲鍘涢惂璇茬秿閺屻儳婀呯拋銏犲礋</text>
+    <button class="login-btn" bindtap="onLogin">閸樿崵娅ヨぐ?/button>
   </view>
 
-  <!-- 绌鸿鍗曠姸鎬?-->
+  <!-- 缁岄缚顓归崡鏇犲Ц閹?-->
   <view class="empty-order" wx:if="{{!loading && !error && wx.getApp().isLoggedIn() && empty}}">
     <image src="/images/empty.svg" class="empty-icon"></image>
-    <text class="empty-text">鏆傛棤璁㈠崟</text>
-    <button class="shopping-btn" bindtap="onGoShopping">鍘婚€涢€?/button>
+    <text class="empty-text">閺嗗倹妫ょ拋銏犲礋</text>
+    <button class="shopping-btn" bindtap="onGoShopping">閸樺鈧盯鈧?/button>
   </view>
 
-  <!-- 璁㈠崟鍒楄〃 -->
+  <!-- 鐠併垹宕熼崚妤勩€?-->
   <view class="order-list" wx:if="{{!loading && !error && !empty && orderList.length > 0}}">
     <view class="order-item" wx:for="{{orderList}}" wx:key="id" bindtap="onOrderTap" data-id="{{item.id}}">
-      <!-- 璁㈠崟澶撮儴 -->
+      <!-- 鐠併垹宕熸径鎾劥 -->
       <view class="order-header">
-        <view class="order-no">璁㈠崟鍙凤細{{item.orderNo}}</view>
+        <view class="order-no">鐠併垹宕熼崣鍑ょ窗{{item.orderNo}}</view>
         <view class="order-status" wx:if="{{item.status === 'pending_payment'}}" style="color: #ff6b81;">{{item.statusText}}</view>
         <view class="order-status" wx:elif="{{item.status === 'pending_shipping'}}" style="color: #ff9500;">{{item.statusText}}</view>
         <view class="order-status" wx:elif="{{item.status === 'pending_receipt'}}" style="color: #007aff;">{{item.statusText}}</view>
@@ -52,30 +52,30 @@
         <view class="order-status" wx:else style="color: #999999;">{{item.statusText}}</view>
       </view>
 
-      <!-- 璁㈠崟鍟嗗搧鍒楄〃 -->
+      <!-- 鐠併垹宕熼崯鍡楁惂閸掓銆?-->
       <view class="order-products">
         <view class="product-item" wx:for="{{item.products}}" wx:for-item="product" wx:for-index="productIndex" wx:key="id">
           <image class="product-image" src="{{product.image}}" mode="aspectFill"></image>
           <view class="product-info">
             <view class="product-title">{{product.title}}</view>
             <view class="product-bottom">
-              <view class="product-price">楼{{product.price}}</view>
+              <view class="product-price">妤納{product.price}}</view>
               <view class="product-quantity">x{{product.quantity}}</view>
             </view>
           </view>
         </view>
       </view>
 
-      <!-- 璁㈠崟搴曢儴 -->
+      <!-- 鐠併垹宕熸惔鏇㈠劥 -->
       <view class="order-footer">
         <view class="order-time">{{item.createTime}}</view>
         <view class="order-total">
-          <text>鍏眥{item.totalCount}}浠跺晢鍝侊紝鍚堣锛?/text>
-          <text class="total-price">楼{{item.totalPrice}}</text>
+          <text>閸忕湧{item.totalCount}}娴犺泛鏅㈤崫渚婄礉閸氬牐顓搁敍?/text>
+          <text class="total-price">妤納{item.totalPrice}}</text>
         </view>
       </view>
 
-      <!-- 璁㈠崟鎿嶄綔鎸夐挳 -->
+      <!-- 鐠併垹宕熼幙宥勭稊閹稿鎸?-->
       <view class="order-actions">
         <button 
           class="action-btn secondary" 
@@ -84,7 +84,7 @@
           data-id="{{item.id}}" 
           data-index="{{index}}"
         >
-          鍙栨秷璁㈠崟
+          閸欐牗绉风拋銏犲礋
         </button>
         <button 
           class="action-btn primary" 
@@ -92,7 +92,7 @@
           bindtap="onPayOrder" 
           data-id="{{item.id}}"
         >
-          鍘绘敮浠?        </button>
+          閸樼粯鏁禒?        </button>
         <button 
           class="action-btn primary" 
           wx:if="{{item.status === 'pending_receipt'}}" 
@@ -100,7 +100,7 @@
           data-id="{{item.id}}" 
           data-index="{{index}}"
         >
-          纭鏀惰揣
+          绾喛顓婚弨鎯版彛
         </button>
         <button 
           class="action-btn secondary" 
@@ -108,16 +108,16 @@
           bindtap="onReviewOrder" 
           data-id="{{item.id}}"
         >
-          鍘昏瘎浠?        </button>
+          閸樻槒鐦庢禒?        </button>
       </view>
     </view>
 
-    <!-- 鍔犺浇鏇村 -->
+    <!-- 閸旂姾娴囬弴鏉戭樋 -->
     <view class="load-more" wx:if="{{hasMore}}">
-      <text>涓婃媺鍔犺浇鏇村</text>
+      <text>娑撳﹥濯洪崝鐘烘祰閺囨潙顦?/text>
     </view>
     <view class="no-more" wx:else>
-      <text>娌℃湁鏇村浜?/text>
+      <text>濞屸剝婀侀弴鏉戭樋娴?/text>
     </view>
   </view>
 </view>\n

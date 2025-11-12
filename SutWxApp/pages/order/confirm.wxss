@@ -1,11 +1,11 @@
-﻿/* 璁㈠崟纭椤甸潰鏍峰紡 */
+锘?* 鐠併垹宕熺涵顔款吇妞ょ敻娼伴弽宄扮础 */
 .container {
   background-color: #f8f8f8;
   min-height: 100vh;
-  padding-bottom: 120rpx; /* 涓哄簳閮ㄧ粨绠楁爮鐣欏嚭绌洪棿 */
+  padding-bottom: 120rpx; /* 娑撳搫绨抽柈銊х波缁犳鐖悾娆忓毉缁屾椽妫?*/
 }
 
-/* 鍦板潃妯″潡鏍峰紡 */
+/* 閸︽澘娼冨Ο鈥虫健閺嶅嘲绱?*/
 .address-section {
   background-color: #ffffff;
   padding: 30rpx;
@@ -62,7 +62,7 @@
   margin-left: 20rpx;
 }
 
-/* 鍟嗗搧鍒楄〃妯″潡鏍峰紡 */
+/* 閸熷棗鎼ч崚妤勩€冨Ο鈥虫健閺嶅嘲绱?*/
 .product-section {
   background-color: #ffffff;
   margin-bottom: 20rpx;
@@ -130,7 +130,7 @@
   color: #666666;
 }
 
-/* 浼樻儬鍒告ā鍧楁牱寮?*/
+/* 娴兼ɑ鍎崚鍛娔侀崸妤佺壉瀵?*/
 .coupon-section {
   background-color: #ffffff;
   padding: 30rpx;
@@ -159,7 +159,7 @@
   color: #999999;
 }
 
-/* 璁㈠崟澶囨敞妯″潡鏍峰紡 */
+/* 鐠併垹宕熸径鍥ㄦ暈濡€虫健閺嶅嘲绱?*/
 .remark-section {
   background-color: #ffffff;
   padding: 30rpx;
@@ -185,7 +185,7 @@
   color: #cccccc;
 }
 
-/* 浠锋牸鏄庣粏妯″潡鏍峰紡 */
+/* 娴犻攱鐗搁弰搴ｇ矎濡€虫健閺嶅嘲绱?*/
 .price-section {
   background-color: #ffffff;
   padding: 20rpx 30rpx;
@@ -217,7 +217,7 @@
   color: #ff6b81;
 }
 
-/* 搴曢儴缁撶畻鏍忔牱寮?*/
+/* 鎼存洟鍎寸紒鎾剁暬閺嶅繑鐗卞?*/
 .bottom-bar {
   position: fixed;
   bottom: 0;

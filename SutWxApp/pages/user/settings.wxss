@@ -1,11 +1,11 @@
-﻿/* 鐢ㄦ埛璁剧疆椤甸潰鏍峰紡 */
+锘?* 閻劍鍩涚拋鍓х枂妞ょ敻娼伴弽宄扮础 */
 .settings-container {
   min-height: 100vh;
   background-color: #f5f5f5;
   padding-bottom: 50rpx;
 }
 
-/* 閫氱敤鍖哄潡鏍峰紡 */
+/* 闁氨鏁ら崠鍝勬健閺嶅嘲绱?*/
 .section {
   margin-bottom: 30rpx;
   background-color: #fff;
@@ -23,9 +23,9 @@
   color: #666;
 }
 
-/* 璁剧疆鍒楄〃 */
+/* 鐠佸墽鐤嗛崚妤勩€?*/
 .settings-list {
-  /* 璁剧疆鍒楄〃瀹瑰櫒 */
+  /* 鐠佸墽鐤嗛崚妤勩€冪€圭懓娅?*/
 }
 
 .setting-item {
@@ -66,7 +66,7 @@
   height: 30rpx;
 }
 
-/* 鐗堟湰淇℃伅 */
+/* 閻楀牊婀版穱鈩冧紖 */
 .version-info {
   padding: 30rpx 0;
   text-align: center;
@@ -77,7 +77,7 @@
   color: #999;
 }
 
-/* 鍔犺浇鐘舵€?*/
+/* 閸旂姾娴囬悩鑸碘偓?*/
 .loading-container {
   position: fixed;
   top: 50%;
@@ -112,7 +112,7 @@
   font-size: 28rpx;
 }
 
-/* 閿欒鎻愮ず */
+/* 闁挎瑨顕ら幓鎰仛 */
 .error-container {
   padding: 100rpx 0;
   text-align: center;

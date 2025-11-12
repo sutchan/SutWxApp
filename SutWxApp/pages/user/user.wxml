@@ -1,61 +1,150 @@
-﻿<!-- 鐢ㄦ埛涓績椤甸潰 -->
-<view class="user-container">
-  <!-- 鐢ㄦ埛淇℃伅鍖哄煙 -->
+<!-- 个人中心页面 -->
+<view class="page-container">
+  <!-- 用户信息区域 -->
   <view class="user-info-section">
-    <view class="user-info" bindtap="{{userInfo.isLoggedIn ? '' : 'onWechatLogin'}}">
-      <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill" aria-label="鐢ㄦ埛澶村儚"></image>
-      <view class="user-details">
-        <text class="nickname">{{userInfo.nickName}}</text>
-        <text class="login-hint" wx:if="!userInfo.isLoggedIn">鐐瑰嚮鐧诲綍</text>
-        <text class="login-hint" wx:else>{{userInfo.isLoggedIn ? '宸茬櫥褰? : ''}}</text>
+    <view class="user-info" bindtap="onUserInfoTap">
+      <!-- 头像 -->
+      <view class="avatar">
+        <image src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
       </view>
-      <image class="arrow" src="/images/arrow-right.svg" wx:if="userInfo.isLoggedIn" mode="aspectFit"></image>
+      
+      <!-- 用户信息文字 -->
+      <view class="user-text-info">
+        <text class="nickname">{{userInfo.nickName}}</text>
+        <text class="login-hint">{{userInfo.isLoggedIn ? '点击查看详细资料' : '点击登录'}}</text>
+      </view>
+      
+      <!-- 登录按钮 -->
+      <view wx:if="!userInfo.isLoggedIn" class="login-btn" bindtap="onWechatLogin">
+        登录
+      </view>
+    </view>
+  </view>
+  
+  <!-- 菜单列表 -->
+  <view class="menu-list">
+    <!-- 通知消息 -->
+    <view class="menu-item" data-id="notifications" bindtap="onMenuClick">
+      <view class="menu-icon">
+        <image src="/images/notification.svg" mode="aspectFit"></image>
+      </view>
+      <view class="menu-title">通知消息</view>
+      <view wx:if="menuList[0].badge" class="badge">{{menuList[0].badge}}</view>
+      <view class="menu-arrow">
+        <image src="/images/arrow-right.png" mode="aspectFit"></image>
+      </view>
     </view>
     
-    <!-- 缁戝畾WordPress璐﹀彿鎸夐挳 -->
-    <view class="bind-account" wx:if="userInfo.isLoggedIn">
-      <button class="bind-button" bindtap="bindWordPressAccount" type="default">
-        缁戝畾WordPress璐﹀彿
-      </button>
+    <!-- 评论回复 -->
+    <view class="menu-item" data-id="comments" bindtap="onMenuClick">
+      <view class="menu-icon">
+        <image src="/images/comment.png" mode="aspectFit"></image>
+      </view>
+      <view class="menu-title">评论回复</view>
+      <view wx:if="menuList[1].badge" class="badge">{{menuList[1].badge}}</view>
+      <view class="menu-arrow">
+        <image src="/images/arrow-right.png" mode="aspectFit"></image>
+      </view>
     </view>
-  </view>
-
-  <!-- 鑿滃崟鍒楄〃 -->
-  <view class="menu-section">
-    <view class="menu-group">
-      <view 
-        wx:for="{{menuList}}" 
-        wx:key="id" 
-        class="menu-item" 
-        bindtap="onMenuClick" 
-        data-id="{{item.id}}"
-        aria-label="{{item.title}}">
-        <view class="menu-icon">
-          <image src="{{item.icon}}" mode="aspectFit"></image>
-        </view>
-        <view class="menu-content">
-          <text class="menu-title">{{item.title}}</text>
-          <text class="menu-badge" wx:if="item.badge">{{item.badge}}</text>
-        </view>
-        <image class="menu-arrow" src="/images/arrow-right.svg" mode="aspectFit"></image>
+    
+    <!-- 我的收藏 -->
+    <view class="menu-item" data-id="favorites" bindtap="onMenuClick">
+      <view class="menu-icon">
+        <image src="/images/favorite.png" mode="aspectFit"></image>
+      </view>
+      <view class="menu-title">我的收藏</view>
+      <view wx:if="menuList[2].badge" class="badge">{{menuList[2].badge}}</view>
+      <view class="menu-arrow">
+        <image src="/images/arrow-right.png" mode="aspectFit"></image>
+      </view>
+    </view>
+    
+    <!-- 优惠券 -->
+    <view class="menu-item" data-id="coupon" bindtap="onMenuClick">
+      <view class="menu-icon">
+        <image src="/images/coupon.svg" mode="aspectFit"></image>
+      </view>
+      <view class="menu-title">优惠券</view>
+      <view wx:if="menuList[3].badge" class="badge">{{menuList[3].badge}}</view>
+      <view class="menu-arrow">
+        <image src="/images/arrow-right.png" mode="aspectFit"></image>
+      </view>
+    </view>
+    
+    <!-- 我的关注 -->
+    <view class="menu-item" data-id="following" bindtap="onMenuClick">
+      <view class="menu-icon">
+        <image src="/images/following.png" mode="aspectFit"></image>
+      </view>
+      <view class="menu-title">我的关注</view>
+      <view wx:if="menuList[4].badge" class="badge">{{menuList[4].badge}}</view>
+      <view class="menu-arrow">
+        <image src="/images/arrow-right.png" mode="aspectFit"></image>
+      </view>
+    </view>
+    
+    <!-- 我的粉丝 -->
+    <view class="menu-item" data-id="followers" bindtap="onMenuClick">
+      <view class="menu-icon">
+        <image src="/images/followers.svg" mode="aspectFit"></image>
+      </view>
+      <view class="menu-title">我的粉丝</view>
+      <view wx:if="menuList[5].badge" class="badge">{{menuList[5].badge}}</view>
+      <view class="menu-arrow">
+        <image src="/images/arrow-right.png" mode="aspectFit"></image>
+      </view>
+    </view>
+    
+    <!-- 积分中心 -->
+    <view class="menu-item" data-id="points" bindtap="onMenuClick">
+      <view class="menu-icon">
+        <image src="/images/points.png" mode="aspectFit"></image>
+      </view>
+      <view class="menu-title">积分中心</view>
+      <view wx:if="menuList[6].badge" class="badge">{{menuList[6].badge}}</view>
+      <view class="menu-arrow">
+        <image src="/images/arrow-right.png" mode="aspectFit"></image>
+      </view>
+    </view>
+    
+    <!-- 设置 -->
+    <view class="menu-item" data-id="settings" bindtap="onMenuClick">
+      <view class="menu-icon">
+        <image src="/images/settings.png" mode="aspectFit"></image>
+      </view>
+      <view class="menu-title">设置</view>
+      <view class="menu-arrow">
+        <image src="/images/arrow-right.png" mode="aspectFit"></image>
       </view>
     </view>
   </view>
-
-  <!-- 閫€鍑虹櫥褰曟寜閽?-->
-  <view class="logout-section" wx:if="userInfo.isLoggedIn">
-    <button class="logout-button" bindtap="logout" type="warn">閫€鍑虹櫥褰?/button>
+  
+  <!-- 操作区域 -->
+  <view class="action-section" wx:if="userInfo.isLoggedIn">
+    <!-- 绑定WordPress账户 -->
+    <view class="action-btn bind-btn" bindtap="bindWordPressAccount">
+      绑定WordPress账户
+    </view>
+    
+    <!-- 退出登录 -->
+    <view class="action-btn logout-btn" bindtap="logout">
+      退出登录
+    </view>
   </view>
-
-  <!-- 鍔犺浇鐘舵€?-->
-  <view class="loading-container" wx:if="isLoading">
-    <view class="loading"></view>
-    <text class="loading-text">鍔犺浇涓?..</text>
+  
+  <!-- 加载动画 -->
+  <view class="loading" wx:if="isLoading">
+    <text>加载中...</text>
   </view>
-
-  <!-- 閿欒鎻愮ず -->
-  <view class="error-container" wx:if="error">
-    <text class="error-text">{{error}}</text>
-    <button class="retry-button" bindtap="checkLoginStatus">閲嶈瘯</button>
+  
+  <!-- 错误提示 -->
+  <view class="error-message" wx:if="error">
+    {{error}}
   </view>
-</view>\n
+  
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="!userInfo.isLoggedIn">
+    <image class="empty-state-icon" src="/images/empty-user.png" mode="aspectFit"></image>
+    <text class="empty-state-text">登录后查看更多内容</text>
+  </view>
+</view>

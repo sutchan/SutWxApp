@@ -1,8 +1,8 @@
-﻿<?php
+锘??php
 /**
- * SUT寰俊灏忕▼搴忔敮浠橀泦鎴愮被
+ * SUT瀵邦喕淇婄亸蹇曗柤鎼村繑鏁禒姗€娉﹂幋鎰
  *
- * 澶勭悊寰俊鏀粯鐩稿叧鍔熻兘锛屽寘鎷敮浠樺垱寤恒€佸洖璋冨鐞嗙瓑
+ * 婢跺嫮鎮婂顔讳繆閺€顖欑帛閻╃鍙ч崝鐔诲厴閿涘苯瀵橀幏顒佹暜娴犳ê鍨卞鎭掆偓浣告礀鐠嬪啫顦╅悶鍡欑搼
  *
  * @package SUT_WeChat_Mini
  */
@@ -12,32 +12,29 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * SUT_WeChat_Mini_Pay 绫? */
+ * SUT_WeChat_Mini_Pay 缁? */
 class SUT_WeChat_Mini_Pay {
     
     /**
-     * 鏀粯闆嗘垚瀹炰緥
-     *
+     * 閺€顖欑帛闂嗗棙鍨氱€圭偘绶?     *
      * @var SUT_WeChat_Mini_Pay
      */
     private static $instance = null;
     
     /**
-     * 寰俊鏀粯閰嶇疆
-     *
+     * 瀵邦喕淇婇弨顖欑帛闁板秶鐤?     *
      * @var array
      */
     private $config = array();
     
     /**
-     * 鏋勯€犲嚱鏁?     */
+     * 閺嬪嫰鈧姴鍤遍弫?     */
     public function __construct() {
         $this->init();
     }
     
     /**
-     * 鑾峰彇鍗曚緥瀹炰緥
-     *
+     * 閼惧嘲褰囬崡鏇氱伐鐎圭偘绶?     *
      * @return SUT_WeChat_Mini_Pay
      */
     public static function get_instance() {
@@ -49,10 +46,9 @@ class SUT_WeChat_Mini_Pay {
     }
     
     /**
-     * 鍒濆鍖栨敮浠橀厤缃?     */
+     * 閸掓繂顫愰崠鏍ㄦ暜娴犳﹢鍘ょ純?     */
     private function init() {
-        // 鑾峰彇鏀粯閰嶇疆
-        $this->config = array(
+        // 閼惧嘲褰囬弨顖欑帛闁板秶鐤?        $this->config = array(
             'app_id' => get_option( 'sut_wechat_mini_app_id', '' ),
             'mch_id' => get_option( 'sut_wechat_mini_mch_id', '' ),
             'api_key' => get_option( 'sut_wechat_mini_api_key', '' ),
@@ -62,54 +58,51 @@ class SUT_WeChat_Mini_Pay {
             'sandbox' => get_option( 'sut_wechat_mini_pay_sandbox', false ),
         );
         
-        // 娉ㄥ唽鏀粯鐩稿叧鐨勮缃」
-        add_filter( 'sut_wechat_mini_settings', array( $this, 'add_payment_settings' ) );
+        // 濞夈劌鍞介弨顖欑帛閻╃鍙ч惃鍕啎缂冾噣銆?        add_filter( 'sut_wechat_mini_settings', array( $this, 'add_payment_settings' ) );
         
-        // 娉ㄥ唽鏀粯鐩稿叧鐨凙PI璺敱
-        add_filter( 'sut_wechat_mini_api_routes', array( $this, 'add_payment_routes' ) );
+        // 濞夈劌鍞介弨顖欑帛閻╃鍙ч惃鍑橮I鐠侯垳鏁?        add_filter( 'sut_wechat_mini_api_routes', array( $this, 'add_payment_routes' ) );
     }
     
     /**
-     * 娣诲姞鏀粯鐩稿叧鐨勮缃」
-     *
-     * @param array $settings 鐜版湁璁剧疆椤?     * @return array 淇敼鍚庣殑璁剧疆椤?     */
+     * 濞ｈ濮為弨顖欑帛閻╃鍙ч惃鍕啎缂冾噣銆?     *
+     * @param array $settings 閻滅増婀佺拋鍓х枂妞?     * @return array 娣囶喗鏁奸崥搴ｆ畱鐠佸墽鐤嗘い?     */
     public function add_payment_settings( $settings ) {
         $payment_settings = array(
-            'title' => __( '鏀粯璁剧疆', 'sut-wechat-mini' ),
+            'title' => __( '閺€顖欑帛鐠佸墽鐤?, 'sut-wechat-mini' ),
             'fields' => array(
                 array(
                     'id' => 'mch_id',
-                    'title' => __( '鍟嗘埛ID', 'sut-wechat-mini' ),
+                    'title' => __( '閸熷棙鍩汭D', 'sut-wechat-mini' ),
                     'type' => 'text',
-                    'desc' => __( '寰俊鏀粯鍟嗘埛ID', 'sut-wechat-mini' ),
+                    'desc' => __( '瀵邦喕淇婇弨顖欑帛閸熷棙鍩汭D', 'sut-wechat-mini' ),
                     'default' => '',
                 ),
                 array(
                     'id' => 'api_key',
-                    'title' => __( 'API瀵嗛挜', 'sut-wechat-mini' ),
+                    'title' => __( 'API鐎靛棝鎸?, 'sut-wechat-mini' ),
                     'type' => 'text',
-                    'desc' => __( '寰俊鏀粯API瀵嗛挜', 'sut-wechat-mini' ),
+                    'desc' => __( '瀵邦喕淇婇弨顖欑帛API鐎靛棝鎸?, 'sut-wechat-mini' ),
                     'default' => '',
                 ),
                 array(
                     'id' => 'cert_path',
-                    'title' => __( '璇佷功璺緞', 'sut-wechat-mini' ),
+                    'title' => __( '鐠囦椒鍔熺捄顖氱窞', 'sut-wechat-mini' ),
                     'type' => 'text',
-                    'desc' => __( '寰俊鏀粯璇佷功璺緞锛堢粷瀵硅矾寰勶級', 'sut-wechat-mini' ),
+                    'desc' => __( '瀵邦喕淇婇弨顖欑帛鐠囦椒鍔熺捄顖氱窞閿涘牏绮风€电鐭惧鍕剁礆', 'sut-wechat-mini' ),
                     'default' => '',
                 ),
                 array(
                     'id' => 'key_path',
-                    'title' => __( '瀵嗛挜璺緞', 'sut-wechat-mini' ),
+                    'title' => __( '鐎靛棝鎸滅捄顖氱窞', 'sut-wechat-mini' ),
                     'type' => 'text',
-                    'desc' => __( '寰俊鏀粯瀵嗛挜璺緞锛堢粷瀵硅矾寰勶級', 'sut-wechat-mini' ),
+                    'desc' => __( '瀵邦喕淇婇弨顖欑帛鐎靛棝鎸滅捄顖氱窞閿涘牏绮风€电鐭惧鍕剁礆', 'sut-wechat-mini' ),
                     'default' => '',
                 ),
                 array(
                     'id' => 'pay_sandbox',
-                    'title' => __( '娌欑妯″紡', 'sut-wechat-mini' ),
+                    'title' => __( '濞屾瑧顔堝Ο鈥崇础', 'sut-wechat-mini' ),
                     'type' => 'checkbox',
-                    'desc' => __( '寮€鍚矙绠辨祴璇曟ā寮?, 'sut-wechat-mini' ),
+                    'desc' => __( '瀵偓閸氼垱鐭欑粻杈ㄧゴ鐠囨洘膩瀵?, 'sut-wechat-mini' ),
                     'default' => false,
                 ),
             ),
@@ -121,37 +114,33 @@ class SUT_WeChat_Mini_Pay {
     }
     
     /**
-     * 娣诲姞鏀粯鐩稿叧鐨凙PI璺敱
-     *
-     * @param array $routes 鐜版湁璺敱
-     * @return array 淇敼鍚庣殑璺敱
-     */
+     * 濞ｈ濮為弨顖欑帛閻╃鍙ч惃鍑橮I鐠侯垳鏁?     *
+     * @param array $routes 閻滅増婀佺捄顖滄暠
+     * @return array 娣囶喗鏁奸崥搴ｆ畱鐠侯垳鏁?     */
     public function add_payment_routes( $routes ) {
-        // 鏀粯鐩稿叧API璺敱宸茬粡鍦╓ooCommerce闆嗘垚绫讳腑娣诲姞
-        return $routes;
+        // 閺€顖欑帛閻╃鍙PI鐠侯垳鏁卞鑼病閸︹晸ooCommerce闂嗗棙鍨氱猾璁宠厬濞ｈ濮?        return $routes;
     }
     
     /**
-     * 鍒涘缓鏀粯
+     * 閸掓稑缂撻弨顖欑帛
      *
-     * @param WC_Order $order 璁㈠崟瀵硅薄
-     * @param int $user_id 鐢ㄦ埛ID
-     * @return array|WP_Error 鏀粯鍙傛暟鎴栭敊璇璞?     */
+     * @param WC_Order $order 鐠併垹宕熺€电钖?     * @param int $user_id 閻劍鍩汭D
+     * @return array|WP_Error 閺€顖欑帛閸欏倹鏆熼幋鏍晩鐠囶垰顕挒?     */
     public function create_payment( $order, $user_id ) {
-        // 妫€鏌ユ敮浠橀厤缃槸鍚﹀畬鏁?        if ( ! $this->is_config_valid() ) {
-            return new WP_Error( 'payment_config_invalid', __( '鏀粯閰嶇疆涓嶅畬鏁?, 'sut-wechat-mini' ) );
+        // 濡偓閺屻儲鏁禒姗€鍘ょ純顔芥Ц閸氾箑鐣弫?        if ( ! $this->is_config_valid() ) {
+            return new WP_Error( 'payment_config_invalid', __( '閺€顖欑帛闁板秶鐤嗘稉宥呯暚閺?, 'sut-wechat-mini' ) );
         }
         
-        // 鑾峰彇鐢ㄦ埛鐨刼penid
+        // 閼惧嘲褰囬悽銊﹀煕閻ㄥ埣penid
         $openid = get_user_meta( $user_id, '_sut_wechat_mini_openid', true );
         
         if ( empty( $openid ) ) {
-            return new WP_Error( 'openid_not_found', __( '鐢ㄦ埛寰俊淇℃伅鏈壘鍒?, 'sut-wechat-mini' ) );
+            return new WP_Error( 'openid_not_found', __( '閻劍鍩涘顔讳繆娣団剝浼呴張顏呭閸?, 'sut-wechat-mini' ) );
         }
         
-        // 鏋勫缓缁熶竴涓嬪崟鍙傛暟
+        // 閺嬪嫬缂撶紒鐔剁娑撳宕熼崣鍌涙殶
         $nonce_str = $this->generate_nonce_str();
-        $total_fee = intval( $order->get_total() * 100 ); // 杞崲涓哄垎
+        $total_fee = intval( $order->get_total() * 100 ); // 鏉烆剚宕叉稉鍝勫瀻
         
         $params = array(
             'appid' => $this->config['app_id'],
@@ -166,35 +155,33 @@ class SUT_WeChat_Mini_Pay {
             'openid' => $openid,
         );
         
-        // 娣诲姞娌欑妯″紡鍙傛暟
-        if ( $this->config['sandbox'] ) {
+        // 濞ｈ濮炲▽娆戭唸濡€崇础閸欏倹鏆?        if ( $this->config['sandbox'] ) {
             $params['sandbox_signkey'] = $this->get_sandbox_signkey();
         }
         
-        // 鐢熸垚绛惧悕
+        // 閻㈢喐鍨氱粵鎯ф倳
         $sign = $this->generate_sign( $params );
         $params['sign'] = $sign;
         
-        // 杞崲涓篨ML
+        // 鏉烆剚宕叉稉绡∕L
         $xml = $this->array_to_xml( $params );
         
-        // 鍙戦€佽姹傚埌寰俊鏀粯鏈嶅姟鍣?        $gateway_url = $this->get_gateway_url( 'unifiedorder' );
+        // 閸欐垿鈧浇顕Ч鍌氬煂瀵邦喕淇婇弨顖欑帛閺堝秴濮熼崳?        $gateway_url = $this->get_gateway_url( 'unifiedorder' );
         $response = $this->send_request( $gateway_url, $xml );
         
-        // 瑙ｆ瀽XML鍝嶅簲
-        $result = $this->xml_to_array( $response );
+        // 鐟欙絾鐎絏ML閸濆秴绨?        $result = $this->xml_to_array( $response );
         
-        // 妫€鏌ュ搷搴旂粨鏋?        if ( ! $result || $result['return_code'] != 'SUCCESS' ) {
-            $error_msg = isset( $result['return_msg'] ) ? $result['return_msg'] : __( '璇锋眰澶辫触', 'sut-wechat-mini' );
+        // 濡偓閺屻儱鎼锋惔鏃傜波閺?        if ( ! $result || $result['return_code'] != 'SUCCESS' ) {
+            $error_msg = isset( $result['return_msg'] ) ? $result['return_msg'] : __( '鐠囬攱鐪版径杈Е', 'sut-wechat-mini' );
             return new WP_Error( 'payment_request_failed', $error_msg );
         }
         
         if ( $result['result_code'] != 'SUCCESS' ) {
-            $error_msg = isset( $result['err_code_des'] ) ? $result['err_code_des'] : __( '涓氬姟澶勭悊澶辫触', 'sut-wechat-mini' );
+            $error_msg = isset( $result['err_code_des'] ) ? $result['err_code_des'] : __( '娑撴艾濮熸径鍕倞婢惰精瑙?, 'sut-wechat-mini' );
             return new WP_Error( 'payment_business_failed', $error_msg );
         }
         
-        // 鐢熸垚灏忕▼搴忔敮浠樺弬鏁?        $time_stamp = (string) time();
+        // 閻㈢喐鍨氱亸蹇曗柤鎼村繑鏁禒妯哄棘閺?        $time_stamp = (string) time();
         $package = 'prepay_id=' . $result['prepay_id'];
         $pay_sign = $this->generate_pay_sign( $time_stamp, $nonce_str, $package );
         
@@ -211,36 +198,34 @@ class SUT_WeChat_Mini_Pay {
     }
     
     /**
-     * 楠岃瘉鏀粯鍥炶皟绛惧悕
+     * 妤犲矁鐦夐弨顖欑帛閸ョ偠鐨熺粵鎯ф倳
      *
-     * @param array $data 鍥炶皟鏁版嵁
-     * @return bool 楠岃瘉缁撴灉
+     * @param array $data 閸ョ偠鐨熼弫鐗堝祦
+     * @return bool 妤犲矁鐦夌紒鎾寸亯
      */
     public function verify_notify_sign( $data ) {
-        // 澶嶅埗鏁版嵁锛岀Щ闄ign瀛楁
-        $params = $data;
+        // 婢跺秴鍩楅弫鐗堝祦閿涘瞼些闂勵槞ign鐎涙顔?        $params = $data;
         if ( isset( $params['sign'] ) ) {
             unset( $params['sign'] );
         }
         
-        // 鐢熸垚绛惧悕
+        // 閻㈢喐鍨氱粵鎯ф倳
         $sign = $this->generate_sign( $params );
         
-        // 姣旇緝绛惧悕
+        // 濮ｆ棁绶濈粵鎯ф倳
         return $sign === $data['sign'];
     }
     
     /**
-     * 鏌ヨ璁㈠崟
+     * 閺屻儴顕楃拋銏犲礋
      *
-     * @param string $out_trade_no 鍟嗘埛璁㈠崟鍙?     * @return array|WP_Error 鏌ヨ缁撴灉鎴栭敊璇璞?     */
+     * @param string $out_trade_no 閸熷棙鍩涚拋銏犲礋閸?     * @return array|WP_Error 閺屻儴顕楃紒鎾寸亯閹存牠鏁婄拠顖氼嚠鐠?     */
     public function query_order( $out_trade_no ) {
-        // 妫€鏌ユ敮浠橀厤缃槸鍚﹀畬鏁?        if ( ! $this->is_config_valid() ) {
-            return new WP_Error( 'payment_config_invalid', __( '鏀粯閰嶇疆涓嶅畬鏁?, 'sut-wechat-mini' ) );
+        // 濡偓閺屻儲鏁禒姗€鍘ょ純顔芥Ц閸氾箑鐣弫?        if ( ! $this->is_config_valid() ) {
+            return new WP_Error( 'payment_config_invalid', __( '閺€顖欑帛闁板秶鐤嗘稉宥呯暚閺?, 'sut-wechat-mini' ) );
         }
         
-        // 鏋勫缓鏌ヨ鍙傛暟
-        $nonce_str = $this->generate_nonce_str();
+        // 閺嬪嫬缂撻弻銉嚄閸欏倹鏆?        $nonce_str = $this->generate_nonce_str();
         
         $params = array(
             'appid' => $this->config['app_id'],
@@ -249,31 +234,29 @@ class SUT_WeChat_Mini_Pay {
             'nonce_str' => $nonce_str,
         );
         
-        // 娣诲姞娌欑妯″紡鍙傛暟
-        if ( $this->config['sandbox'] ) {
+        // 濞ｈ濮炲▽娆戭唸濡€崇础閸欏倹鏆?        if ( $this->config['sandbox'] ) {
             $params['sandbox_signkey'] = $this->get_sandbox_signkey();
         }
         
-        // 鐢熸垚绛惧悕
+        // 閻㈢喐鍨氱粵鎯ф倳
         $sign = $this->generate_sign( $params );
         $params['sign'] = $sign;
         
-        // 杞崲涓篨ML
+        // 鏉烆剚宕叉稉绡∕L
         $xml = $this->array_to_xml( $params );
         
-        // 鍙戦€佽姹傚埌寰俊鏀粯鏈嶅姟鍣?        $gateway_url = $this->get_gateway_url( 'orderquery' );
+        // 閸欐垿鈧浇顕Ч鍌氬煂瀵邦喕淇婇弨顖欑帛閺堝秴濮熼崳?        $gateway_url = $this->get_gateway_url( 'orderquery' );
         $response = $this->send_request( $gateway_url, $xml );
         
-        // 瑙ｆ瀽XML鍝嶅簲
-        $result = $this->xml_to_array( $response );
+        // 鐟欙絾鐎絏ML閸濆秴绨?        $result = $this->xml_to_array( $response );
         
-        // 妫€鏌ュ搷搴旂粨鏋?        if ( ! $result || $result['return_code'] != 'SUCCESS' ) {
-            $error_msg = isset( $result['return_msg'] ) ? $result['return_msg'] : __( '鏌ヨ澶辫触', 'sut-wechat-mini' );
+        // 濡偓閺屻儱鎼锋惔鏃傜波閺?        if ( ! $result || $result['return_code'] != 'SUCCESS' ) {
+            $error_msg = isset( $result['return_msg'] ) ? $result['return_msg'] : __( '閺屻儴顕楁径杈Е', 'sut-wechat-mini' );
             return new WP_Error( 'query_failed', $error_msg );
         }
         
         if ( $result['result_code'] != 'SUCCESS' ) {
-            $error_msg = isset( $result['err_code_des'] ) ? $result['err_code_des'] : __( '涓氬姟澶勭悊澶辫触', 'sut-wechat-mini' );
+            $error_msg = isset( $result['err_code_des'] ) ? $result['err_code_des'] : __( '娑撴艾濮熸径鍕倞婢惰精瑙?, 'sut-wechat-mini' );
             return new WP_Error( 'query_business_failed', $error_msg );
         }
         
@@ -281,16 +264,15 @@ class SUT_WeChat_Mini_Pay {
     }
     
     /**
-     * 鍏抽棴璁㈠崟
+     * 閸忔娊妫寸拋銏犲礋
      *
-     * @param string $out_trade_no 鍟嗘埛璁㈠崟鍙?     * @return array|WP_Error 鍏抽棴缁撴灉鎴栭敊璇璞?     */
+     * @param string $out_trade_no 閸熷棙鍩涚拋銏犲礋閸?     * @return array|WP_Error 閸忔娊妫寸紒鎾寸亯閹存牠鏁婄拠顖氼嚠鐠?     */
     public function close_order( $out_trade_no ) {
-        // 妫€鏌ユ敮浠橀厤缃槸鍚﹀畬鏁?        if ( ! $this->is_config_valid() ) {
-            return new WP_Error( 'payment_config_invalid', __( '鏀粯閰嶇疆涓嶅畬鏁?, 'sut-wechat-mini' ) );
+        // 濡偓閺屻儲鏁禒姗€鍘ょ純顔芥Ц閸氾箑鐣弫?        if ( ! $this->is_config_valid() ) {
+            return new WP_Error( 'payment_config_invalid', __( '閺€顖欑帛闁板秶鐤嗘稉宥呯暚閺?, 'sut-wechat-mini' ) );
         }
         
-        // 鏋勫缓鍏抽棴鍙傛暟
-        $nonce_str = $this->generate_nonce_str();
+        // 閺嬪嫬缂撻崗鎶芥４閸欏倹鏆?        $nonce_str = $this->generate_nonce_str();
         
         $params = array(
             'appid' => $this->config['app_id'],
@@ -299,31 +281,29 @@ class SUT_WeChat_Mini_Pay {
             'nonce_str' => $nonce_str,
         );
         
-        // 娣诲姞娌欑妯″紡鍙傛暟
-        if ( $this->config['sandbox'] ) {
+        // 濞ｈ濮炲▽娆戭唸濡€崇础閸欏倹鏆?        if ( $this->config['sandbox'] ) {
             $params['sandbox_signkey'] = $this->get_sandbox_signkey();
         }
         
-        // 鐢熸垚绛惧悕
+        // 閻㈢喐鍨氱粵鎯ф倳
         $sign = $this->generate_sign( $params );
         $params['sign'] = $sign;
         
-        // 杞崲涓篨ML
+        // 鏉烆剚宕叉稉绡∕L
         $xml = $this->array_to_xml( $params );
         
-        // 鍙戦€佽姹傚埌寰俊鏀粯鏈嶅姟鍣?        $gateway_url = $this->get_gateway_url( 'closeorder' );
+        // 閸欐垿鈧浇顕Ч鍌氬煂瀵邦喕淇婇弨顖欑帛閺堝秴濮熼崳?        $gateway_url = $this->get_gateway_url( 'closeorder' );
         $response = $this->send_request( $gateway_url, $xml );
         
-        // 瑙ｆ瀽XML鍝嶅簲
-        $result = $this->xml_to_array( $response );
+        // 鐟欙絾鐎絏ML閸濆秴绨?        $result = $this->xml_to_array( $response );
         
-        // 妫€鏌ュ搷搴旂粨鏋?        if ( ! $result || $result['return_code'] != 'SUCCESS' ) {
-            $error_msg = isset( $result['return_msg'] ) ? $result['return_msg'] : __( '鍏抽棴澶辫触', 'sut-wechat-mini' );
+        // 濡偓閺屻儱鎼锋惔鏃傜波閺?        if ( ! $result || $result['return_code'] != 'SUCCESS' ) {
+            $error_msg = isset( $result['return_msg'] ) ? $result['return_msg'] : __( '閸忔娊妫存径杈Е', 'sut-wechat-mini' );
             return new WP_Error( 'close_failed', $error_msg );
         }
         
         if ( $result['result_code'] != 'SUCCESS' ) {
-            $error_msg = isset( $result['err_code_des'] ) ? $result['err_code_des'] : __( '涓氬姟澶勭悊澶辫触', 'sut-wechat-mini' );
+            $error_msg = isset( $result['err_code_des'] ) ? $result['err_code_des'] : __( '娑撴艾濮熸径鍕倞婢惰精瑙?, 'sut-wechat-mini' );
             return new WP_Error( 'close_business_failed', $error_msg );
         }
         
@@ -331,19 +311,17 @@ class SUT_WeChat_Mini_Pay {
     }
     
     /**
-     * 鐢宠閫€娆?     *
-     * @param string $out_trade_no 鍟嗘埛璁㈠崟鍙?     * @param string $out_refund_no 鍟嗘埛閫€娆惧崟鍙?     * @param float $total_fee 璁㈠崟鎬婚噾棰?     * @param float $refund_fee 閫€娆鹃噾棰?     * @return array|WP_Error 閫€娆剧粨鏋滄垨閿欒瀵硅薄
-     */
+     * 閻㈠疇顕柅鈧▎?     *
+     * @param string $out_trade_no 閸熷棙鍩涚拋銏犲礋閸?     * @param string $out_refund_no 閸熷棙鍩涢柅鈧▎鎯у礋閸?     * @param float $total_fee 鐠併垹宕熼幀濠氬櫨妫?     * @param float $refund_fee 闁偓濞嗛箖鍣炬０?     * @return array|WP_Error 闁偓濞嗗墽绮ㄩ弸婊勫灗闁挎瑨顕ょ€电钖?     */
     public function refund( $out_trade_no, $out_refund_no, $total_fee, $refund_fee ) {
-        // 妫€鏌ユ敮浠橀厤缃槸鍚﹀畬鏁?        if ( ! $this->is_config_valid( true ) ) {
-            return new WP_Error( 'payment_config_invalid', __( '鏀粯閰嶇疆涓嶅畬鏁存垨璇佷功涓嶅瓨鍦?, 'sut-wechat-mini' ) );
+        // 濡偓閺屻儲鏁禒姗€鍘ょ純顔芥Ц閸氾箑鐣弫?        if ( ! $this->is_config_valid( true ) ) {
+            return new WP_Error( 'payment_config_invalid', __( '閺€顖欑帛闁板秶鐤嗘稉宥呯暚閺佸瓨鍨ㄧ拠浣峰姛娑撳秴鐡ㄩ崷?, 'sut-wechat-mini' ) );
         }
         
-        // 杞崲閲戦涓哄垎
-        $total_fee = intval( $total_fee * 100 );
+        // 鏉烆剚宕查柌鎴︻杺娑撳搫鍨?        $total_fee = intval( $total_fee * 100 );
         $refund_fee = intval( $refund_fee * 100 );
         
-        // 鏋勫缓閫€娆惧弬鏁?        $nonce_str = $this->generate_nonce_str();
+        // 閺嬪嫬缂撻柅鈧▎鎯у棘閺?        $nonce_str = $this->generate_nonce_str();
         
         $params = array(
             'appid' => $this->config['app_id'],
@@ -353,35 +331,33 @@ class SUT_WeChat_Mini_Pay {
             'out_refund_no' => $out_refund_no,
             'total_fee' => $total_fee,
             'refund_fee' => $refund_fee,
-            'refund_desc' => __( '鐢ㄦ埛鐢宠閫€娆?, 'sut-wechat-mini' ),
+            'refund_desc' => __( '閻劍鍩涢悽瀹狀嚞闁偓濞?, 'sut-wechat-mini' ),
         );
         
-        // 娣诲姞娌欑妯″紡鍙傛暟
-        if ( $this->config['sandbox'] ) {
+        // 濞ｈ濮炲▽娆戭唸濡€崇础閸欏倹鏆?        if ( $this->config['sandbox'] ) {
             $params['sandbox_signkey'] = $this->get_sandbox_signkey();
         }
         
-        // 鐢熸垚绛惧悕
+        // 閻㈢喐鍨氱粵鎯ф倳
         $sign = $this->generate_sign( $params );
         $params['sign'] = $sign;
         
-        // 杞崲涓篨ML
+        // 鏉烆剚宕叉稉绡∕L
         $xml = $this->array_to_xml( $params );
         
-        // 鍙戦€佽姹傚埌寰俊鏀粯鏈嶅姟鍣紙闇€瑕佽瘉涔︼級
+        // 閸欐垿鈧浇顕Ч鍌氬煂瀵邦喕淇婇弨顖欑帛閺堝秴濮熼崳顭掔礄闂団偓鐟曚浇鐦夋稊锔肩礆
         $gateway_url = $this->get_gateway_url( 'refund' );
         $response = $this->send_request_with_cert( $gateway_url, $xml );
         
-        // 瑙ｆ瀽XML鍝嶅簲
-        $result = $this->xml_to_array( $response );
+        // 鐟欙絾鐎絏ML閸濆秴绨?        $result = $this->xml_to_array( $response );
         
-        // 妫€鏌ュ搷搴旂粨鏋?        if ( ! $result || $result['return_code'] != 'SUCCESS' ) {
-            $error_msg = isset( $result['return_msg'] ) ? $result['return_msg'] : __( '閫€娆剧敵璇峰け璐?, 'sut-wechat-mini' );
+        // 濡偓閺屻儱鎼锋惔鏃傜波閺?        if ( ! $result || $result['return_code'] != 'SUCCESS' ) {
+            $error_msg = isset( $result['return_msg'] ) ? $result['return_msg'] : __( '闁偓濞嗗墽鏁电拠宄般亼鐠?, 'sut-wechat-mini' );
             return new WP_Error( 'refund_failed', $error_msg );
         }
         
         if ( $result['result_code'] != 'SUCCESS' ) {
-            $error_msg = isset( $result['err_code_des'] ) ? $result['err_code_des'] : __( '涓氬姟澶勭悊澶辫触', 'sut-wechat-mini' );
+            $error_msg = isset( $result['err_code_des'] ) ? $result['err_code_des'] : __( '娑撴艾濮熸径鍕倞婢惰精瑙?, 'sut-wechat-mini' );
             return new WP_Error( 'refund_business_failed', $error_msg );
         }
         
@@ -389,16 +365,14 @@ class SUT_WeChat_Mini_Pay {
     }
     
     /**
-     * 妫€鏌ユ敮浠橀厤缃槸鍚︽湁鏁?     *
-     * @param bool $check_cert 鏄惁妫€鏌ヨ瘉涔?     * @return bool 閰嶇疆鏄惁鏈夋晥
-     */
+     * 濡偓閺屻儲鏁禒姗€鍘ょ純顔芥Ц閸氾附婀侀弫?     *
+     * @param bool $check_cert 閺勵垰鎯佸Λ鈧弻銉ㄧ槈娑?     * @return bool 闁板秶鐤嗛弰顖氭儊閺堝鏅?     */
     private function is_config_valid( $check_cert = false ) {
-        // 妫€鏌ュ熀鏈厤缃?        if ( empty( $this->config['app_id'] ) || empty( $this->config['mch_id'] ) || empty( $this->config['api_key'] ) ) {
+        // 濡偓閺屻儱鐔€閺堫剟鍘ょ純?        if ( empty( $this->config['app_id'] ) || empty( $this->config['mch_id'] ) || empty( $this->config['api_key'] ) ) {
             return false;
         }
         
-        // 妫€鏌ヨ瘉涔﹂厤缃紙濡傛灉闇€瑕侊級
-        if ( $check_cert && ( empty( $this->config['cert_path'] ) || empty( $this->config['key_path'] ) || ! file_exists( $this->config['cert_path'] ) || ! file_exists( $this->config['key_path'] ) ) ) {
+        // 濡偓閺屻儴鐦夋稊锕傚帳缂冾噯绱欐俊鍌涚亯闂団偓鐟曚緤绱?        if ( $check_cert && ( empty( $this->config['cert_path'] ) || empty( $this->config['key_path'] ) || ! file_exists( $this->config['cert_path'] ) || ! file_exists( $this->config['key_path'] ) ) ) {
             return false;
         }
         
@@ -406,8 +380,8 @@ class SUT_WeChat_Mini_Pay {
     }
     
     /**
-     * 鐢熸垚闅忔満瀛楃涓?     *
-     * @param int $length 瀛楃涓查暱搴?     * @return string 闅忔満瀛楃涓?     */
+     * 閻㈢喐鍨氶梾蹇旀簚鐎涙顑佹稉?     *
+     * @param int $length 鐎涙顑佹稉鏌ユ毐鎼?     * @return string 闂呭繑婧€鐎涙顑佹稉?     */
     private function generate_nonce_str( $length = 32 ) {
         $chars = "abcdefghijklmnopqrstuvwxyz0123456789";
         $str = "";
@@ -418,39 +392,32 @@ class SUT_WeChat_Mini_Pay {
     }
     
     /**
-     * 鐢熸垚绛惧悕
+     * 閻㈢喐鍨氱粵鎯ф倳
      *
-     * @param array $params 鍙傛暟鏁扮粍
-     * @return string 绛惧悕
-     */
+     * @param array $params 閸欏倹鏆熼弫鎵矋
+     * @return string 缁涙儳鎮?     */
     private function generate_sign( $params ) {
-        // 鎸夊瓧鍏稿簭鎺掑簭
-        ksort( $params );
+        // 閹稿鐡ч崗绋跨碍閹烘帒绨?        ksort( $params );
         
-        // 鎷兼帴瀛楃涓?        $string = '';
+        // 閹峰吋甯寸€涙顑佹稉?        $string = '';
         foreach ( $params as $key => $value ) {
             if ( $value && $key != 'sign' ) {
                 $string .= $key . '=' . $value . '&';
             }
         }
         
-        // 娣诲姞API瀵嗛挜
-        $string .= 'key=' . $this->config['api_key'];
+        // 濞ｈ濮濧PI鐎靛棝鎸?        $string .= 'key=' . $this->config['api_key'];
         
-        // MD5鍔犲瘑骞惰浆鎹负澶у啓
-        $sign = strtoupper( md5( $string ) );
+        // MD5閸旂姴鐦戦獮鎯版祮閹诡澀璐熸径褍鍟?        $sign = strtoupper( md5( $string ) );
         
         return $sign;
     }
     
     /**
-     * 鐢熸垚鏀粯绛惧悕锛堝皬绋嬪簭绔娇鐢級
-     *
-     * @param string $time_stamp 鏃堕棿鎴?     * @param string $nonce_str 闅忔満瀛楃涓?     * @param string $package 璁㈠崟鍖?     * @return string 鏀粯绛惧悕
-     */
+     * 閻㈢喐鍨氶弨顖欑帛缁涙儳鎮曢敍鍫濈毈缁嬪绨粩顖欏▏閻㈩煉绱?     *
+     * @param string $time_stamp 閺冨爼妫块幋?     * @param string $nonce_str 闂呭繑婧€鐎涙顑佹稉?     * @param string $package 鐠併垹宕熼崠?     * @return string 閺€顖欑帛缁涙儳鎮?     */
     private function generate_pay_sign( $time_stamp, $nonce_str, $package ) {
-        // 鏋勫缓绛惧悕鍙傛暟
-        $params = array(
+        // 閺嬪嫬缂撶粵鎯ф倳閸欏倹鏆?        $params = array(
             'appId' => $this->config['app_id'],
             'timeStamp' => $time_stamp,
             'nonceStr' => $nonce_str,
@@ -458,34 +425,29 @@ class SUT_WeChat_Mini_Pay {
             'signType' => 'MD5',
         );
         
-        // 鎸夊瓧鍏稿簭鎺掑簭
-        ksort( $params );
+        // 閹稿鐡ч崗绋跨碍閹烘帒绨?        ksort( $params );
         
-        // 鎷兼帴瀛楃涓?        $string = '';
+        // 閹峰吋甯寸€涙顑佹稉?        $string = '';
         foreach ( $params as $key => $value ) {
             $string .= $key . '=' . $value . '&';
         }
         
-        // 娣诲姞API瀵嗛挜
-        $string .= 'key=' . $this->config['api_key'];
+        // 濞ｈ濮濧PI鐎靛棝鎸?        $string .= 'key=' . $this->config['api_key'];
         
-        // MD5鍔犲瘑骞惰浆鎹负澶у啓
-        $sign = strtoupper( md5( $string ) );
+        // MD5閸旂姴鐦戦獮鎯版祮閹诡澀璐熸径褍鍟?        $sign = strtoupper( md5( $string ) );
         
         return $sign;
     }
     
     /**
-     * 鑾峰彇璁㈠崟鎻忚堪
-     *
-     * @param WC_Order $order 璁㈠崟瀵硅薄
-     * @return string 璁㈠崟鎻忚堪
+     * 閼惧嘲褰囩拋銏犲礋閹诲繗鍫?     *
+     * @param WC_Order $order 鐠併垹宕熺€电钖?     * @return string 鐠併垹宕熼幓蹇氬牚
      */
     private function get_order_description( $order ) {
         $site_name = get_bloginfo( 'name' );
-        $description = sprintf( __( '%s - 璁㈠崟 %s', 'sut-wechat-mini' ), $site_name, $order->get_order_number() );
+        $description = sprintf( __( '%s - 鐠併垹宕?%s', 'sut-wechat-mini' ), $site_name, $order->get_order_number() );
         
-        // 闄愬埗鎻忚堪闀垮害
+        // 闂勬劕鍩楅幓蹇氬牚闂€鍨
         if ( strlen( $description ) > 127 ) {
             $description = substr( $description, 0, 124 ) . '...';
         }
@@ -494,10 +456,8 @@ class SUT_WeChat_Mini_Pay {
     }
     
     /**
-     * 鑾峰彇瀹㈡埛绔疘P鍦板潃
-     *
-     * @return string IP鍦板潃
-     */
+     * 閼惧嘲褰囩€广垺鍩涚粩鐤楶閸︽澘娼?     *
+     * @return string IP閸︽澘娼?     */
     private function get_client_ip() {
         $ip = '';
         if ( isset( $_SERVER['HTTP_CLIENT_IP'] ) ) {
@@ -508,7 +468,7 @@ class SUT_WeChat_Mini_Pay {
             $ip = $_SERVER['REMOTE_ADDR'];
         }
         
-        // 澶勭悊澶氫釜IP鍦板潃鐨勬儏鍐?        if ( strpos( $ip, ',' ) !== false ) {
+        // 婢跺嫮鎮婃径姘嚋IP閸︽澘娼冮惃鍕剰閸?        if ( strpos( $ip, ',' ) !== false ) {
             $ips = explode( ',', $ip );
             $ip = trim( $ips[0] );
         }
@@ -517,10 +477,10 @@ class SUT_WeChat_Mini_Pay {
     }
     
     /**
-     * 鑾峰彇寰俊鏀粯缃戝叧URL
+     * 閼惧嘲褰囧顔讳繆閺€顖欑帛缂冩垵鍙RL
      *
-     * @param string $api_name API鍚嶇О
-     * @return string 缃戝叧URL
+     * @param string $api_name API閸氬秶袨
+     * @return string 缂冩垵鍙RL
      */
     private function get_gateway_url( $api_name ) {
         $base_url = $this->config['sandbox'] ? 'https://api.mch.weixin.qq.com/sandboxnew/' : 'https://api.mch.weixin.qq.com/pay/';
@@ -528,33 +488,32 @@ class SUT_WeChat_Mini_Pay {
     }
     
     /**
-     * 鑾峰彇娌欑鐜鐨剆ignkey
+     * 閼惧嘲褰囧▽娆戭唸閻滎垰顣ㄩ惃鍓唅gnkey
      *
-     * @return string 娌欑signkey
+     * @return string 濞屾瑧顔坰ignkey
      */
     private function get_sandbox_signkey() {
-        // 鏋勫缓璇锋眰鍙傛暟
-        $nonce_str = $this->generate_nonce_str();
+        // 閺嬪嫬缂撶拠閿嬬湴閸欏倹鏆?        $nonce_str = $this->generate_nonce_str();
         
         $params = array(
             'mch_id' => $this->config['mch_id'],
             'nonce_str' => $nonce_str,
         );
         
-        // 鐢熸垚绛惧悕
+        // 閻㈢喐鍨氱粵鎯ф倳
         $sign = $this->generate_sign( $params );
         $params['sign'] = $sign;
         
-        // 杞崲涓篨ML
+        // 鏉烆剚宕叉稉绡∕L
         $xml = $this->array_to_xml( $params );
         
-        // 鍙戦€佽姹?        $url = 'https://api.mch.weixin.qq.com/sandboxnew/pay/getsignkey';
+        // 閸欐垿鈧浇顕Ч?        $url = 'https://api.mch.weixin.qq.com/sandboxnew/pay/getsignkey';
         $response = $this->send_request( $url, $xml );
         
-        // 瑙ｆ瀽鍝嶅簲
+        // 鐟欙絾鐎介崫宥呯安
         $result = $this->xml_to_array( $response );
         
-        // 杩斿洖signkey
+        // 鏉╂柨娲杝ignkey
         if ( $result && $result['return_code'] == 'SUCCESS' && $result['result_code'] == 'SUCCESS' ) {
             return $result['sandbox_signkey'];
         }
@@ -563,11 +522,10 @@ class SUT_WeChat_Mini_Pay {
     }
     
     /**
-     * 鍙戦€丠TTP璇锋眰
-     *
-     * @param string $url 璇锋眰URL
-     * @param string $data 璇锋眰鏁版嵁
-     * @return string 鍝嶅簲鏁版嵁
+     * 閸欐垿鈧笭TTP鐠囬攱鐪?     *
+     * @param string $url 鐠囬攱鐪癠RL
+     * @param string $data 鐠囬攱鐪伴弫鐗堝祦
+     * @return string 閸濆秴绨查弫鐗堝祦
      */
     private function send_request( $url, $data ) {
         $ch = curl_init();
@@ -583,7 +541,7 @@ class SUT_WeChat_Mini_Pay {
         $response = curl_exec( $ch );
         
         if ( curl_errno( $ch ) ) {
-            error_log( 'SUT寰俊灏忕▼搴忔敮浠樿姹傞敊璇? ' . curl_error( $ch ) );
+            error_log( 'SUT瀵邦喕淇婄亸蹇曗柤鎼村繑鏁禒妯款嚞濮瑰倿鏁婄拠? ' . curl_error( $ch ) );
         }
         
         curl_close( $ch );
@@ -592,11 +550,10 @@ class SUT_WeChat_Mini_Pay {
     }
     
     /**
-     * 鍙戦€佸甫璇佷功鐨凥TTP璇锋眰
-     *
-     * @param string $url 璇锋眰URL
-     * @param string $data 璇锋眰鏁版嵁
-     * @return string 鍝嶅簲鏁版嵁
+     * 閸欐垿鈧礁鐢拠浣峰姛閻ㄥ嚗TTP鐠囬攱鐪?     *
+     * @param string $url 鐠囬攱鐪癠RL
+     * @param string $data 鐠囬攱鐪伴弫鐗堝祦
+     * @return string 閸濆秴绨查弫鐗堝祦
      */
     private function send_request_with_cert( $url, $data ) {
         $ch = curl_init();
@@ -609,7 +566,7 @@ class SUT_WeChat_Mini_Pay {
         curl_setopt( $ch, CURLOPT_SSL_VERIFYHOST, 0 );
         curl_setopt( $ch, CURLOPT_TIMEOUT, 30 );
         
-        // 璁剧疆璇佷功
+        // 鐠佸墽鐤嗙拠浣峰姛
         curl_setopt( $ch, CURLOPT_SSLCERTTYPE, 'PEM' );
         curl_setopt( $ch, CURLOPT_SSLCERT, $this->config['cert_path'] );
         curl_setopt( $ch, CURLOPT_SSLKEYTYPE, 'PEM' );
@@ -618,7 +575,7 @@ class SUT_WeChat_Mini_Pay {
         $response = curl_exec( $ch );
         
         if ( curl_errno( $ch ) ) {
-            error_log( 'SUT寰俊灏忕▼搴忔敮浠樿瘉涔﹁姹傞敊璇? ' . curl_error( $ch ) );
+            error_log( 'SUT瀵邦喕淇婄亸蹇曗柤鎼村繑鏁禒妯跨槈娑旓箒顕Ч鍌炴晩鐠? ' . curl_error( $ch ) );
         }
         
         curl_close( $ch );
@@ -627,10 +584,9 @@ class SUT_WeChat_Mini_Pay {
     }
     
     /**
-     * 鏁扮粍杞琗ML
+     * 閺佹壆绮嶆潪鐞桵L
      *
-     * @param array $arr 鏁扮粍
-     * @return string XML瀛楃涓?     */
+     * @param array $arr 閺佹壆绮?     * @return string XML鐎涙顑佹稉?     */
     private function array_to_xml( $arr ) {
         $xml = '<xml>';
         foreach ( $arr as $key => $val ) {
@@ -646,9 +602,8 @@ class SUT_WeChat_Mini_Pay {
     }
     
     /**
-     * XML杞暟缁?     *
-     * @param string $xml XML瀛楃涓?     * @return array 杞崲鍚庣殑鏁扮粍
-     */
+     * XML鏉烆剚鏆熺紒?     *
+     * @param string $xml XML鐎涙顑佹稉?     * @return array 鏉烆剚宕查崥搴ｆ畱閺佹壆绮?     */
     private function xml_to_array( $xml ) {
         $obj = simplexml_load_string( $xml, 'SimpleXMLElement', LIBXML_NOCDATA );
         $json = json_encode( $obj );
@@ -659,7 +614,7 @@ class SUT_WeChat_Mini_Pay {
 }
 
 /**
- * 鍒濆鍖栨敮浠橀泦鎴? */
+ * 閸掓繂顫愰崠鏍ㄦ暜娴犳﹢娉﹂幋? */
 function sut_wechat_mini_pay_init() {
     SUT_WeChat_Mini_Pay::get_instance();
 }

@@ -1,10 +1,9 @@
-﻿// 绉垎鍏戞崲璁板綍椤甸潰閫昏緫
-const app = getApp();
+锘?/ 缁夘垰鍨庨崗鎴炲床鐠佹澘缍嶆い鐢告桨闁槒绶?const app = getApp();
 const { showToast, showLoading, hideLoading } = app.global;
 
 Page({
   /**
-   * 椤甸潰鐨勫垵濮嬫暟鎹?   */
+   * 妞ょ敻娼伴惃鍕灥婵鏆熼幑?   */
   data: {
     records: [],
     loading: true,
@@ -15,38 +14,35 @@ Page({
     refreshing: false,
     tab: 'all', // all, processing, completed, cancelled
     tabs: [
-      { key: 'all', name: '鍏ㄩ儴' },
-      { key: 'processing', name: '澶勭悊涓? },
-      { key: 'completed', name: '宸插畬鎴? },
-      { key: 'cancelled', name: '宸插彇娑? }
+      { key: 'all', name: '閸忋劑鍎? },
+      { key: 'processing', name: '婢跺嫮鎮婃稉? },
+      { key: 'completed', name: '瀹告彃鐣幋? },
+      { key: 'cancelled', name: '瀹告彃褰囧☉? }
     ]
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸旂姾娴?   */
   onLoad: function(options) {
-    // 璁板綍椤甸潰璁块棶浜嬩欢
+    // 鐠佹澘缍嶆い鐢告桨鐠佸潡妫舵禍瀣╂
     app.analyticsService.track('page_view', {
       page: 'points_exchange_records'
     });
     
-    // 鍔犺浇鍏戞崲璁板綍
-    this.loadExchangeRecords();
+    // 閸旂姾娴囬崗鎴炲床鐠佹澘缍?    this.loadExchangeRecords();
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閺勫墽銇?   */
   onShow: function() {
-    // 濡傛灉闇€瑕佸埛鏂帮紝鍒欓噸鏂板姞杞芥暟鎹?    if (this.data.needRefresh) {
+    // 婵″倹鐏夐棁鈧憰浣稿煕閺傚府绱濋崚娆撳櫢閺傛澘濮炴潪鑺ユ殶閹?    if (this.data.needRefresh) {
       this.setData({ needRefresh: false, page: 1, hasMore: true });
       this.loadExchangeRecords(true);
     }
   },
 
   /**
-   * 鍔犺浇绉垎鍏戞崲璁板綍
+   * 閸旂姾娴囩粔顖氬瀻閸忔垶宕茬拋鏉跨秿
    */
   async loadExchangeRecords(refresh = false) {
     try {
@@ -56,8 +52,7 @@ Page({
         this.setData({ loading: true, error: null });
       }
 
-      // 璋冪敤API鑾峰彇鍏戞崲璁板綍
-      const queryParams = {
+      // 鐠嬪啰鏁PI閼惧嘲褰囬崗鎴炲床鐠佹澘缍?      const queryParams = {
         page: this.data.page,
         pageSize: this.data.pageSize,
         status: this.data.tab !== 'all' ? this.data.tab : ''
@@ -73,8 +68,8 @@ Page({
         error: null
       });
     } catch (err) {
-      console.error('鍔犺浇鍏戞崲璁板綍澶辫触:', err);
-      let errorMsg = '鑾峰彇鍏戞崲璁板綍澶辫触';
+      console.error('閸旂姾娴囬崗鎴炲床鐠佹澘缍嶆径杈Е:', err);
+      let errorMsg = '閼惧嘲褰囬崗鎴炲床鐠佹澘缍嶆径杈Е';
       if (err.message) {
         errorMsg = err.message;
       }
@@ -87,7 +82,7 @@ Page({
   },
 
   /**
-   * 鍒囨崲鏍囩椤?   */
+   * 閸掑洦宕查弽鍥╊劮妞?   */
   onTabChange: function(e) {
     const tab = e.currentTarget.dataset.tab;
     if (tab !== this.data.tab) {
@@ -97,8 +92,7 @@ Page({
   },
 
   /**
-   * 鍔犺浇鏇村璁板綍
-   */
+   * 閸旂姾娴囬弴鏉戭樋鐠佹澘缍?   */
   onLoadMore: function() {
     if (this.data.hasMore && !this.data.loading && !this.data.refreshing) {
       this.setData({ page: this.data.page + 1 });
@@ -107,7 +101,7 @@ Page({
   },
 
   /**
-   * 涓嬫媺鍒锋柊
+   * 娑撳濯洪崚閿嬫煀
    */
   onPullDownRefresh: function() {
     this.setData({ refreshing: true, page: 1, hasMore: true });
@@ -116,33 +110,32 @@ Page({
   },
 
   /**
-   * 閲嶈瘯鍔犺浇
+   * 闁插秷鐦崝鐘烘祰
    */
   onRetry: function() {
     this.loadExchangeRecords(true);
   },
 
   /**
-   * 鑾峰彇璁㈠崟鐘舵€佹枃鏈?   */
+   * 閼惧嘲褰囩拋銏犲礋閻樿埖鈧焦鏋冮張?   */
   getStatusText: function(status) {
     const statusMap = {
-      'processing': '澶勭悊涓?,
-      'completed': '宸插畬鎴?,
-      'cancelled': '宸插彇娑?
+      'processing': '婢跺嫮鎮婃稉?,
+      'completed': '瀹告彃鐣幋?,
+      'cancelled': '瀹告彃褰囧☉?
     };
-    return statusMap[status] || '鏈煡鐘舵€?;
+    return statusMap[status] || '閺堫亞鐓￠悩鑸碘偓?;
   },
 
   /**
-   * 鑾峰彇璁㈠崟鐘舵€佹牱寮忕被
+   * 閼惧嘲褰囩拋銏犲礋閻樿埖鈧焦鐗卞蹇曡
    */
   getStatusClass: function(status) {
     return `status-${status}`;
   },
 
   /**
-   * 鍓嶅線绉垎鍟嗗煄
-   */
+   * 閸撳秴绶氱粔顖氬瀻閸熷棗鐓?   */
   navigateToMall: function() {
     wx.navigateTo({
       url: '/pages/user/points-mall'

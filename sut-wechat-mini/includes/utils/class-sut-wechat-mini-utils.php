@@ -1,8 +1,7 @@
-﻿<?php
+锘??php
 /**
- * SUT寰俊灏忕▼搴忓伐鍏峰嚱鏁扮被
- *
- * 鍖呭惈鍚勭閫氱敤鐨勫伐鍏峰嚱鏁? *
+ * SUT瀵邦喕淇婄亸蹇曗柤鎼村繐浼愰崗宄板毐閺佹壆琚? *
+ * 閸栧懎鎯堥崥鍕潚闁氨鏁ら惃鍕紣閸忓嘲鍤遍弫? *
  * @package SUT_WeChat_Mini
  */
 
@@ -11,26 +10,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * SUT_WeChat_Mini_Utils 绫? */
+ * SUT_WeChat_Mini_Utils 缁? */
 class SUT_WeChat_Mini_Utils {
     
     /**
-     * 鐢熸垚鍞竴ID
+     * 閻㈢喐鍨氶崬顖欑ID
      *
-     * @param string $prefix 鍓嶇紑
-     * @return string 鍞竴ID
+     * @param string $prefix 閸撳秶绱?     * @return string 閸烆垯绔碔D
      */
     public static function generate_unique_id( $prefix = '' ) {
         return $prefix . uniqid() . '-' . substr( md5( microtime() . rand() ), 0, 8 );
     }
     
     /**
-     * 鍔犲瘑鏁版嵁
+     * 閸旂姴鐦戦弫鐗堝祦
      *
-     * @param string $data 瑕佸姞瀵嗙殑鏁版嵁
-     * @param string $key 鍔犲瘑瀵嗛挜
-     * @return string 鍔犲瘑鍚庣殑鏁版嵁
-     */
+     * @param string $data 鐟曚礁濮炵€靛棛娈戦弫鐗堝祦
+     * @param string $key 閸旂姴鐦戠€靛棝鎸?     * @return string 閸旂姴鐦戦崥搴ｆ畱閺佺増宓?     */
     public static function encrypt( $data, $key ) {
         if ( ! function_exists( 'openssl_encrypt' ) ) {
             return $data;
@@ -44,12 +40,10 @@ class SUT_WeChat_Mini_Utils {
     }
     
     /**
-     * 瑙ｅ瘑鏁版嵁
+     * 鐟欙絽鐦戦弫鐗堝祦
      *
-     * @param string $data 瑕佽В瀵嗙殑鏁版嵁
-     * @param string $key 瑙ｅ瘑瀵嗛挜
-     * @return string 瑙ｅ瘑鍚庣殑鏁版嵁
-     */
+     * @param string $data 鐟曚浇袙鐎靛棛娈戦弫鐗堝祦
+     * @param string $key 鐟欙絽鐦戠€靛棝鎸?     * @return string 鐟欙絽鐦戦崥搴ｆ畱閺佺増宓?     */
     public static function decrypt( $data, $key ) {
         if ( ! function_exists( 'openssl_decrypt' ) ) {
             return $data;
@@ -65,16 +59,14 @@ class SUT_WeChat_Mini_Utils {
     }
     
     /**
-     * 鐢熸垚绛惧悕
+     * 閻㈢喐鍨氱粵鎯ф倳
      *
-     * @param array $params 鍙傛暟鏁扮粍
-     * @param string $key 瀵嗛挜
-     * @return string 绛惧悕
-     */
+     * @param array $params 閸欏倹鏆熼弫鎵矋
+     * @param string $key 鐎靛棝鎸?     * @return string 缁涙儳鎮?     */
     public static function generate_signature( $params, $key ) {
-        // 鎸夊弬鏁板悕ASCII鐮佷粠灏忓埌澶ф帓搴?        ksort( $params );
+        // 閹稿寮弫鏉挎倳ASCII閻椒绮犵亸蹇撳煂婢堆勫笓鎼?        ksort( $params );
         
-        // 鎷兼帴鍙傛暟
+        // 閹峰吋甯撮崣鍌涙殶
         $str = '';
         foreach ( $params as $k => $v ) {
             if ( $v !== '' && $k !== 'sign' ) {
@@ -82,19 +74,17 @@ class SUT_WeChat_Mini_Utils {
             }
         }
         
-        // 娣诲姞瀵嗛挜骞禡D5鍔犲瘑
-        $str .= 'key=' . $key;
+        // 濞ｈ濮炵€靛棝鎸滈獮绂5閸旂姴鐦?        $str .= 'key=' . $key;
         $sign = strtoupper( md5( $str ) );
         
         return $sign;
     }
     
     /**
-     * 楠岃瘉绛惧悕
+     * 妤犲矁鐦夌粵鎯ф倳
      *
-     * @param array $params 鍙傛暟鏁扮粍
-     * @param string $key 瀵嗛挜
-     * @return bool 楠岃瘉缁撴灉
+     * @param array $params 閸欏倹鏆熼弫鎵矋
+     * @param string $key 鐎靛棝鎸?     * @return bool 妤犲矁鐦夌紒鎾寸亯
      */
     public static function verify_signature( $params, $key ) {
         if ( ! isset( $params['sign'] ) ) {
@@ -108,12 +98,10 @@ class SUT_WeChat_Mini_Utils {
     }
     
     /**
-     * 鍙戦€丠TTP璇锋眰
-     *
-     * @param string $url 璇锋眰URL
-     * @param array $params 璇锋眰鍙傛暟
-     * @param array $options 璇锋眰閫夐」
-     * @return array 鍝嶅簲缁撴灉
+     * 閸欐垿鈧笭TTP鐠囬攱鐪?     *
+     * @param string $url 鐠囬攱鐪癠RL
+     * @param array $params 鐠囬攱鐪伴崣鍌涙殶
+     * @param array $options 鐠囬攱鐪伴柅澶愩€?     * @return array 閸濆秴绨茬紒鎾寸亯
      */
     public static function send_request( $url, $params = array(), $options = array() ) {
         $default_options = array(
@@ -126,13 +114,13 @@ class SUT_WeChat_Mini_Utils {
         $options = wp_parse_args( $options, $default_options );
         $options['method'] = strtoupper( $options['method'] );
         
-        // 鏋勫缓璇锋眰
+        // 閺嬪嫬缂撶拠閿嬬湴
         if ( $options['method'] === 'GET' && ! empty( $params ) ) {
             $url = add_query_arg( $params, $url );
         } elseif ( in_array( $options['method'], array( 'POST', 'PUT', 'DELETE' ) ) && ! empty( $params ) ) {
             $body = '';
             
-            // 妫€鏌ontent-Type
+            // 濡偓閺岊檳ontent-Type
             $content_type = isset( $options['headers']['Content-Type'] ) ? $options['headers']['Content-Type'] : '';
             
             if ( $content_type === 'application/json' ) {
@@ -144,9 +132,9 @@ class SUT_WeChat_Mini_Utils {
             $options['body'] = $body;
         }
         
-        // 鍙戦€佽姹?        $response = wp_remote_request( $url, $options );
+        // 閸欐垿鈧浇顕Ч?        $response = wp_remote_request( $url, $options );
         
-        // 妫€鏌ラ敊璇?        if ( is_wp_error( $response ) ) {
+        // 濡偓閺屻儵鏁婄拠?        if ( is_wp_error( $response ) ) {
             return array(
                 'success' => false,
                 'error' => $response->get_error_message(),
@@ -154,12 +142,12 @@ class SUT_WeChat_Mini_Utils {
             );
         }
         
-        // 瑙ｆ瀽鍝嶅簲
+        // 鐟欙絾鐎介崫宥呯安
         $code = wp_remote_retrieve_response_code( $response );
         $body = wp_remote_retrieve_body( $response );
         $headers = wp_remote_retrieve_headers( $response );
         
-        // 灏濊瘯瑙ｆ瀽JSON
+        // 鐏忔繆鐦憴锝嗙€絁SON
         $data = null;
         $content_type = $headers['content-type'] ?? '';
         
@@ -177,12 +165,10 @@ class SUT_WeChat_Mini_Utils {
     }
     
     /**
-     * 鍙戦€丟ET璇锋眰
-     *
-     * @param string $url 璇锋眰URL
-     * @param array $params 璇锋眰鍙傛暟
-     * @param array $options 璇锋眰閫夐」
-     * @return array 鍝嶅簲缁撴灉
+     * 閸欐垿鈧笩ET鐠囬攱鐪?     *
+     * @param string $url 鐠囬攱鐪癠RL
+     * @param array $params 鐠囬攱鐪伴崣鍌涙殶
+     * @param array $options 鐠囬攱鐪伴柅澶愩€?     * @return array 閸濆秴绨茬紒鎾寸亯
      */
     public static function send_get_request( $url, $params = array(), $options = array() ) {
         $options['method'] = 'GET';
@@ -190,12 +176,10 @@ class SUT_WeChat_Mini_Utils {
     }
     
     /**
-     * 鍙戦€丳OST璇锋眰
-     *
-     * @param string $url 璇锋眰URL
-     * @param array $params 璇锋眰鍙傛暟
-     * @param array $options 璇锋眰閫夐」
-     * @return array 鍝嶅簲缁撴灉
+     * 閸欐垿鈧赋OST鐠囬攱鐪?     *
+     * @param string $url 鐠囬攱鐪癠RL
+     * @param array $params 鐠囬攱鐪伴崣鍌涙殶
+     * @param array $options 鐠囬攱鐪伴柅澶愩€?     * @return array 閸濆秴绨茬紒鎾寸亯
      */
     public static function send_post_request( $url, $params = array(), $options = array() ) {
         $options['method'] = 'POST';
@@ -203,10 +187,8 @@ class SUT_WeChat_Mini_Utils {
     }
     
     /**
-     * 鑾峰彇瀹㈡埛绔疘P鍦板潃
-     *
-     * @return string IP鍦板潃
-     */
+     * 閼惧嘲褰囩€广垺鍩涚粩鐤楶閸︽澘娼?     *
+     * @return string IP閸︽澘娼?     */
     public static function get_client_ip() {
         if ( isset( $_SERVER['HTTP_CLIENT_IP'] ) ) {
             $ip = $_SERVER['HTTP_CLIENT_IP'];
@@ -216,7 +198,7 @@ class SUT_WeChat_Mini_Utils {
             $ip = $_SERVER['REMOTE_ADDR'];
         }
         
-        // 澶勭悊澶氫釜IP鍦板潃鐨勬儏鍐?        if ( strpos( $ip, ',' ) !== false ) {
+        // 婢跺嫮鎮婃径姘嚋IP閸︽澘娼冮惃鍕剰閸?        if ( strpos( $ip, ',' ) !== false ) {
             $ips = explode( ',', $ip );
             $ip = trim( $ips[0] );
         }
@@ -225,9 +207,8 @@ class SUT_WeChat_Mini_Utils {
     }
     
     /**
-     * 妫€鏌P鏄惁鍦ㄧ櫧鍚嶅崟涓?     *
-     * @param string $ip IP鍦板潃
-     * @param array $whitelist IP鐧藉悕鍗?     * @return bool 妫€鏌ョ粨鏋?     */
+     * 濡偓閺岊檹P閺勵垰鎯侀崷銊ф閸氬秴宕熸稉?     *
+     * @param string $ip IP閸︽澘娼?     * @param array $whitelist IP閻ц棄鎮曢崡?     * @return bool 濡偓閺屻儳绮ㄩ弸?     */
     public static function is_ip_whitelisted( $ip, $whitelist ) {
         if ( empty( $whitelist ) ) {
             return true;
@@ -236,13 +217,12 @@ class SUT_WeChat_Mini_Utils {
         foreach ( $whitelist as $whitelisted_ip ) {
             $whitelisted_ip = trim( $whitelisted_ip );
             
-            // 妫€鏌ユ槸鍚︽槸瀹屽叏鍖归厤
+            // 濡偓閺屻儲妲搁崥锔芥Ц鐎瑰苯鍙忛崠褰掑帳
             if ( $ip === $whitelisted_ip ) {
                 return true;
             }
             
-            // 妫€鏌ユ槸鍚︽槸CIDR鏍煎紡
-            if ( strpos( $whitelisted_ip, '/' ) !== false ) {
+            // 濡偓閺屻儲妲搁崥锔芥ЦCIDR閺嶇厧绱?            if ( strpos( $whitelisted_ip, '/' ) !== false ) {
                 list( $subnet, $mask ) = explode( '/', $whitelisted_ip, 2 );
                 
                 if ( self::ip_in_range( $ip, $subnet, $mask ) ) {
@@ -255,12 +235,10 @@ class SUT_WeChat_Mini_Utils {
     }
     
     /**
-     * 妫€鏌P鏄惁鍦ㄦ寚瀹氬瓙缃戣寖鍥村唴
-     *
-     * @param string $ip IP鍦板潃
-     * @param string $subnet 瀛愮綉鍦板潃
-     * @param int $mask 瀛愮綉鎺╃爜
-     * @return bool 妫€鏌ョ粨鏋?     */
+     * 濡偓閺岊檹P閺勵垰鎯侀崷銊﹀瘹鐎规艾鐡欑純鎴ｅ瘱閸ユ潙鍞?     *
+     * @param string $ip IP閸︽澘娼?     * @param string $subnet 鐎涙劗缍夐崷鏉挎絻
+     * @param int $mask 鐎涙劗缍夐幒鈺冪垳
+     * @return bool 濡偓閺屻儳绮ㄩ弸?     */
     private static function ip_in_range( $ip, $subnet, $mask ) {
         $ip = ip2long( $ip );
         $subnet = ip2long( $subnet );
@@ -270,9 +248,9 @@ class SUT_WeChat_Mini_Utils {
     }
     
     /**
-     * 鏍煎紡鍖栨椂闂?     *
-     * @param string|int $timestamp 鏃堕棿鎴?     * @param string $format 鏃堕棿鏍煎紡
-     * @return string 鏍煎紡鍖栧悗鐨勬椂闂?     */
+     * 閺嶇厧绱￠崠鏍ㄦ闂?     *
+     * @param string|int $timestamp 閺冨爼妫块幋?     * @param string $format 閺冨爼妫块弽鐓庣础
+     * @return string 閺嶇厧绱￠崠鏍ф倵閻ㄥ嫭妞傞梻?     */
     public static function format_time( $timestamp, $format = 'Y-m-d H:i:s' ) {
         if ( is_numeric( $timestamp ) ) {
             return date( $format, $timestamp );
@@ -282,9 +260,8 @@ class SUT_WeChat_Mini_Utils {
     }
     
     /**
-     * 鑾峰彇鐩稿鏃堕棿
-     *
-     * @param string|int $timestamp 鏃堕棿鎴?     * @return string 鐩稿鏃堕棿
+     * 閼惧嘲褰囬惄绋款嚠閺冨爼妫?     *
+     * @param string|int $timestamp 閺冨爼妫块幋?     * @return string 閻╃顕弮鍫曟？
      */
     public static function get_relative_time( $timestamp ) {
         if ( is_numeric( $timestamp ) ) {
@@ -297,26 +274,25 @@ class SUT_WeChat_Mini_Utils {
         $diff = $now - $time;
         
         if ( $diff < 60 ) {
-            return sprintf( __( '%d绉掑墠', 'sut-wechat-mini' ), $diff );
+            return sprintf( __( '%d缁夋帒澧?, 'sut-wechat-mini' ), $diff );
         } elseif ( $diff < 3600 ) {
             $minutes = floor( $diff / 60 );
-            return sprintf( __( '%d鍒嗛挓鍓?, 'sut-wechat-mini' ), $minutes );
+            return sprintf( __( '%d閸掑棝鎸撻崜?, 'sut-wechat-mini' ), $minutes );
         } elseif ( $diff < 86400 ) {
             $hours = floor( $diff / 3600 );
-            return sprintf( __( '%d灏忔椂鍓?, 'sut-wechat-mini' ), $hours );
+            return sprintf( __( '%d鐏忓繑妞傞崜?, 'sut-wechat-mini' ), $hours );
         } elseif ( $diff < 2592000 ) {
             $days = floor( $diff / 86400 );
-            return sprintf( __( '%d澶╁墠', 'sut-wechat-mini' ), $days );
+            return sprintf( __( '%d婢垛晛澧?, 'sut-wechat-mini' ), $days );
         } else {
             return self::format_time( $time, 'Y-m-d' );
         }
     }
     
     /**
-     * 鎴彇瀛楃涓?     *
-     * @param string $str 鍘熷瀛楃涓?     * @param int $length 鎴彇闀垮害
-     * @param string $suffix 鍚庣紑
-     * @return string 鎴彇鍚庣殑瀛楃涓?     */
+     * 閹搭亜褰囩€涙顑佹稉?     *
+     * @param string $str 閸樼喎顫愮€涙顑佹稉?     * @param int $length 閹搭亜褰囬梹鍨
+     * @param string $suffix 閸氬海绱?     * @return string 閹搭亜褰囬崥搴ｆ畱鐎涙顑佹稉?     */
     public static function truncate_string( $str, $length = 100, $suffix = '...' ) {
         if ( mb_strlen( $str, 'UTF-8' ) <= $length ) {
             return $str;
@@ -326,11 +302,8 @@ class SUT_WeChat_Mini_Utils {
     }
     
     /**
-     * 娓呯悊HTML鏍囩
-     *
-     * @param string $html HTML鍐呭
-     * @param array $allowed_tags 鍏佽鐨勬爣绛?     * @return string 娓呯悊鍚庣殑鍐呭
-     */
+     * 濞撳懐鎮奌TML閺嶅洨顒?     *
+     * @param string $html HTML閸愬懎顔?     * @param array $allowed_tags 閸忎浇顔忛惃鍕垼缁?     * @return string 濞撳懐鎮婇崥搴ｆ畱閸愬懎顔?     */
     public static function clean_html( $html, $allowed_tags = array() ) {
         if ( empty( $allowed_tags ) ) {
             $allowed_tags = array(
@@ -371,14 +344,11 @@ class SUT_WeChat_Mini_Utils {
     }
     
     /**
-     * 杞崲HTML鍒癕arkdown
+     * 鏉烆剚宕睭TML閸掔檿arkdown
      *
-     * @param string $html HTML鍐呭
-     * @return string Markdown鍐呭
-     */
+     * @param string $html HTML閸愬懎顔?     * @return string Markdown閸愬懎顔?     */
     public static function html_to_markdown( $html ) {
-        // 绠€鍖栫殑HTML鍒癕arkdown杞崲
-        $html = str_replace( '<h1>', '# ', $html );
+        // 缁犫偓閸栨牜娈慔TML閸掔檿arkdown鏉烆剚宕?        $html = str_replace( '<h1>', '# ', $html );
         $html = str_replace( '</h1>', '\n\n', $html );
         $html = str_replace( '<h2>', '## ', $html );
         $html = str_replace( '</h2>', '\n\n', $html );
@@ -396,84 +366,75 @@ class SUT_WeChat_Mini_Utils {
         $html = str_replace( '<blockquote>', '> ', $html );
         $html = str_replace( '</blockquote>', '\n\n', $html );
         
-        // 澶勭悊閾炬帴
+        // 婢跺嫮鎮婇柧鐐复
         $html = preg_replace( '/<a\s+href="([^"]+)"[^>]*>(.*?)<\/a>/i', '[\2](\1)', $html );
         
-        // 澶勭悊鍥剧墖
+        // 婢跺嫮鎮婇崶鍓у
         $html = preg_replace( '/<img\s+src="([^"]+)"[^>]*alt="([^"]*)"[^>]*>/i', '![\2](\1)', $html );
-        $html = preg_replace( '/<img\s+src="([^"]+)"[^>]*>/i', '![鍥剧墖](\1)', $html );
+        $html = preg_replace( '/<img\s+src="([^"]+)"[^>]*>/i', '![閸ュ墽澧朷(\1)', $html );
         
-        // 澶勭悊鏃犲簭鍒楄〃
-        $html = str_replace( '<ul>', '\n\n', $html );
+        // 婢跺嫮鎮婇弮鐘茬碍閸掓銆?        $html = str_replace( '<ul>', '\n\n', $html );
         $html = str_replace( '</ul>', '\n\n', $html );
         $html = str_replace( '<li>', '- ', $html );
         $html = str_replace( '</li>', '\n', $html );
         
-        // 澶勭悊鏈夊簭鍒楄〃
-        $html = str_replace( '<ol>', '\n\n', $html );
+        // 婢跺嫮鎮婇張澶婄碍閸掓銆?        $html = str_replace( '<ol>', '\n\n', $html );
         $html = str_replace( '</ol>', '\n\n', $html );
         
-        // 澶勭悊浠ｇ爜鍧?        $html = str_replace( '<pre><code>', '```\n', $html );
+        // 婢跺嫮鎮婃禒锝囩垳閸?        $html = str_replace( '<pre><code>', '```\n', $html );
         $html = str_replace( '</code></pre>', '\n```\n\n', $html );
         $html = str_replace( '<code>', '`', $html );
         $html = str_replace( '</code>', '`', $html );
         
-        // 绉婚櫎鍓╀綑鐨凥TML鏍囩
-        $html = strip_tags( $html );
+        // 缁夊娅庨崜鈺€缍戦惃鍑ML閺嶅洨顒?        $html = strip_tags( $html );
         
-        // 娓呯悊澶氫綑鐨勭┖琛?        $html = preg_replace( '/\n{3,}/', '\n\n', $html );
+        // 濞撳懐鎮婃径姘稇閻ㄥ嫮鈹栫悰?        $html = preg_replace( '/\n{3,}/', '\n\n', $html );
         
         return trim( $html );
     }
     
     /**
-     * 杞崲HTML涓哄皬绋嬪簭鏀寔鐨勬牸寮?     *
-     * @param string $html HTML鍐呭
-     * @return array 杞崲鍚庣殑鍐呭鏁扮粍
+     * 鏉烆剚宕睭TML娑撳搫鐨粙瀣碍閺€顖涘瘮閻ㄥ嫭鐗稿?     *
+     * @param string $html HTML閸愬懎顔?     * @return array 鏉烆剚宕查崥搴ｆ畱閸愬懎顔愰弫鎵矋
      */
     public static function html_to_mini_program( $html ) {
-        // 娓呯悊HTML鏍囩
-        $html = self::clean_html( $html );
+        // 濞撳懐鎮奌TML閺嶅洨顒?        $html = self::clean_html( $html );
         
-        // 杞崲鍥剧墖璺緞
-        $html = preg_replace_callback( '/<img\s+src="([^"]+)"([^>]*)>/i', function( $matches ) {
+        // 鏉烆剚宕查崶鍓у鐠侯垰绶?        $html = preg_replace_callback( '/<img\s+src="([^"]+)"([^>]*)>/i', function( $matches ) {
             $src = $matches[1];
             $attrs = $matches[2];
             
-            // 纭繚鍥剧墖璺緞鏄粷瀵硅矾寰?            if ( strpos( $src, 'http' ) !== 0 ) {
+            // 绾喕绻氶崶鍓у鐠侯垰绶為弰顖滅卜鐎电鐭惧?            if ( strpos( $src, 'http' ) !== 0 ) {
                 $src = home_url( $src );
             }
             
             return '<img src="' . $src . '"' . $attrs . ' />';
         }, $html );
         
-        // 杞崲閾炬帴
+        // 鏉烆剚宕查柧鐐复
         $html = preg_replace_callback( '/<a\s+href="([^"]+)"([^>]*)>(.*?)<\/a>/i', function( $matches ) {
             $href = $matches[1];
             $attrs = $matches[2];
             $text = $matches[3];
             
-            // 纭繚閾炬帴鏄粷瀵硅矾寰?            if ( strpos( $href, 'http' ) !== 0 ) {
+            // 绾喕绻氶柧鐐复閺勵垳绮风€电鐭惧?            if ( strpos( $href, 'http' ) !== 0 ) {
                 $href = home_url( $href );
             }
             
             return '<a href="' . $href . '"' . $attrs . '>' . $text . '</a>';
         }, $html );
         
-        // 鍒嗗壊鍐呭涓烘钀?        $segments = array();
+        // 閸掑棗澹婇崘鍛啇娑撶儤顔岄拃?        $segments = array();
         $dom = new DOMDocument();
         
-        // 娣诲姞鏍瑰厓绱犱互纭繚HTML鏈夋晥
-        $wrapper = '<div id="content-wrapper">' . $html . '</div>';
+        // 濞ｈ濮為弽鐟板帗缁辩姳浜掔涵顔荤箽HTML閺堝鏅?        $wrapper = '<div id="content-wrapper">' . $html . '</div>';
         
-        // 澶勭悊HTML瀹炰綋鍜孶TF-8缂栫爜
-        $wrapper = mb_convert_encoding( $wrapper, 'HTML-ENTITIES', 'UTF-8' );
+        // 婢跺嫮鎮奌TML鐎圭偘缍嬮崪瀛禩F-8缂傛牜鐖?        $wrapper = mb_convert_encoding( $wrapper, 'HTML-ENTITIES', 'UTF-8' );
         
-        // 鍔犺浇HTML
+        // 閸旂姾娴嘓TML
         @$dom->loadHTML( $wrapper );
         
-        // 鑾峰彇鎵€鏈変竴绾у瓙鍏冪礌
-        $wrapper_element = $dom->getElementById( 'content-wrapper' );
+        // 閼惧嘲褰囬幍鈧張澶夌缁狙冪摍閸忓啰绀?        $wrapper_element = $dom->getElementById( 'content-wrapper' );
         if ( $wrapper_element ) {
             $children = $wrapper_element->childNodes;
             
@@ -483,7 +444,7 @@ class SUT_WeChat_Mini_Utils {
                     $content = trim( $dom->saveHTML( $child ) );
                     
                     if ( ! empty( $content ) ) {
-                        // 鏍规嵁鑺傜偣绫诲瀷娣诲姞鍒版钀芥暟缁?                        switch ( $node_name ) {
+                        // 閺嶈宓侀懞鍌滃仯缁鐎峰ǎ璇插閸掔増顔岄拃鑺ユ殶缂?                        switch ( $node_name ) {
                             case 'p':
                                 $segments[] = array(
                                     'type' => 'paragraph',
@@ -562,7 +523,7 @@ class SUT_WeChat_Mini_Utils {
                                 );
                                 break;
                             default:
-                                // 澶勭悊鏂囨湰鑺傜偣鍜屽叾浠栧厓绱?                                if ( ! empty( $content ) && $node_name !== '#text' ) {
+                                // 婢跺嫮鎮婇弬鍥ㄦ拱閼哄倻鍋ｉ崪灞藉従娴犳牕鍘撶槐?                                if ( ! empty( $content ) && $node_name !== '#text' ) {
                                     $segments[] = array(
                                         'type' => 'paragraph',
                                         'content' => $content,
@@ -583,11 +544,11 @@ class SUT_WeChat_Mini_Utils {
     }
     
     /**
-     * 鑾峰彇鏂囩珷鐗硅壊鍥剧墖
+     * 閼惧嘲褰囬弬鍥╃彿閻楃澹婇崶鍓у
      *
-     * @param int $post_id 鏂囩珷ID
-     * @param string $size 鍥剧墖灏哄
-     * @return array 鍥剧墖淇℃伅
+     * @param int $post_id 閺傚洨鐝稩D
+     * @param string $size 閸ュ墽澧栫亸鍝勵嚟
+     * @return array 閸ュ墽澧栨穱鈩冧紖
      */
     public static function get_post_thumbnail( $post_id, $size = 'medium' ) {
         $thumbnail_id = get_post_thumbnail_id( $post_id );
@@ -611,11 +572,9 @@ class SUT_WeChat_Mini_Utils {
     }
     
     /**
-     * 鏍煎紡鍖栦环鏍?     *
-     * @param float $price 浠锋牸
-     * @param string $currency 璐у竵绗﹀彿
-     * @return string 鏍煎紡鍖栧悗鐨勪环鏍?     */
-    public static function format_price( $price, $currency = '楼' ) {
+     * 閺嶇厧绱￠崠鏍︾幆閺?     *
+     * @param float $price 娴犻攱鐗?     * @param string $currency 鐠愌冪缁楋箑褰?     * @return string 閺嶇厧绱￠崠鏍ф倵閻ㄥ嫪鐜弽?     */
+    public static function format_price( $price, $currency = '妤? ) {
         if ( class_exists( 'WooCommerce' ) ) {
             return wc_price( $price );
         }
@@ -624,11 +583,10 @@ class SUT_WeChat_Mini_Utils {
     }
     
     /**
-     * 楠岃瘉琛ㄥ崟鏁版嵁
-     *
-     * @param array $data 琛ㄥ崟鏁版嵁
-     * @param array $rules 楠岃瘉瑙勫垯
-     * @return array 楠岃瘉缁撴灉
+     * 妤犲矁鐦夌悰銊ュ礋閺佺増宓?     *
+     * @param array $data 鐞涖劌宕熼弫鐗堝祦
+     * @param array $rules 妤犲矁鐦夌憴鍕灟
+     * @return array 妤犲矁鐦夌紒鎾寸亯
      */
     public static function validate_form( $data, $rules ) {
         $errors = array();
@@ -636,59 +594,58 @@ class SUT_WeChat_Mini_Utils {
         foreach ( $rules as $field => $rule ) {
             $value = isset( $data[$field] ) ? $data[$field] : '';
             
-            // 鍒嗗壊瑙勫垯
+            // 閸掑棗澹婄憴鍕灟
             $rule_parts = explode( '|', $rule );
             
             foreach ( $rule_parts as $rule_part ) {
-                // 妫€鏌ユ槸鍚︽湁鍙傛暟
-                $rule_args = explode( ':', $rule_part );
+                // 濡偓閺屻儲妲搁崥锔芥箒閸欏倹鏆?                $rule_args = explode( ':', $rule_part );
                 $rule_name = $rule_args[0];
                 $rule_params = array_slice( $rule_args, 1 );
                 
                 switch ( $rule_name ) {
                     case 'required':
                         if ( empty( $value ) ) {
-                            $errors[$field] = sprintf( __( '%s鏄繀濉」', 'sut-wechat-mini' ), $field );
+                            $errors[$field] = sprintf( __( '%s閺勵垰绻€婵夘偊銆?, 'sut-wechat-mini' ), $field );
                         }
                         break;
                     case 'email':
                         if ( ! empty( $value ) && ! is_email( $value ) ) {
-                            $errors[$field] = __( '璇疯緭鍏ユ湁鏁堢殑閭鍦板潃', 'sut-wechat-mini' );
+                            $errors[$field] = __( '鐠囩柉绶崗銉︽箒閺佸牏娈戦柇顔绢唸閸︽澘娼?, 'sut-wechat-mini' );
                         }
                         break;
                     case 'url':
                         if ( ! empty( $value ) && ! filter_var( $value, FILTER_VALIDATE_URL ) ) {
-                            $errors[$field] = __( '璇疯緭鍏ユ湁鏁堢殑URL鍦板潃', 'sut-wechat-mini' );
+                            $errors[$field] = __( '鐠囩柉绶崗銉︽箒閺佸牏娈慤RL閸︽澘娼?, 'sut-wechat-mini' );
                         }
                         break;
                     case 'min':
                         if ( ! empty( $value ) && strlen( $value ) < $rule_params[0] ) {
-                            $errors[$field] = sprintf( __( '%s闀垮害涓嶈兘灏戜簬%d涓瓧绗?, 'sut-wechat-mini' ), $field, $rule_params[0] );
+                            $errors[$field] = sprintf( __( '%s闂€鍨娑撳秷鍏樼亸鎴滅艾%d娑擃亜鐡х粭?, 'sut-wechat-mini' ), $field, $rule_params[0] );
                         }
                         break;
                     case 'max':
                         if ( ! empty( $value ) && strlen( $value ) > $rule_params[0] ) {
-                            $errors[$field] = sprintf( __( '%s闀垮害涓嶈兘瓒呰繃%d涓瓧绗?, 'sut-wechat-mini' ), $field, $rule_params[0] );
+                            $errors[$field] = sprintf( __( '%s闂€鍨娑撳秷鍏樼搾鍛扮箖%d娑擃亜鐡х粭?, 'sut-wechat-mini' ), $field, $rule_params[0] );
                         }
                         break;
                     case 'numeric':
                         if ( ! empty( $value ) && ! is_numeric( $value ) ) {
-                            $errors[$field] = sprintf( __( '%s蹇呴』鏄暟瀛?, 'sut-wechat-mini' ), $field );
+                            $errors[$field] = sprintf( __( '%s韫囧懘銆忛弰顖涙殶鐎?, 'sut-wechat-mini' ), $field );
                         }
                         break;
                     case 'integer':
                         if ( ! empty( $value ) && ! filter_var( $value, FILTER_VALIDATE_INT ) ) {
-                            $errors[$field] = sprintf( __( '%s蹇呴』鏄暣鏁?, 'sut-wechat-mini' ), $field );
+                            $errors[$field] = sprintf( __( '%s韫囧懘銆忛弰顖涙殻閺?, 'sut-wechat-mini' ), $field );
                         }
                         break;
                     case 'equals':
                         if ( isset( $data[$rule_params[0]] ) && $value !== $data[$rule_params[0]] ) {
-                            $errors[$field] = sprintf( __( '%s鍜?s蹇呴』鐩稿悓', 'sut-wechat-mini' ), $field, $rule_params[0] );
+                            $errors[$field] = sprintf( __( '%s閸?s韫囧懘銆忛惄绋挎倱', 'sut-wechat-mini' ), $field, $rule_params[0] );
                         }
                         break;
                     case 'regex':
                         if ( ! empty( $value ) && ! preg_match( $rule_params[0], $value ) ) {
-                            $errors[$field] = sprintf( __( '%s鏍煎紡涓嶆纭?, 'sut-wechat-mini' ), $field );
+                            $errors[$field] = sprintf( __( '%s閺嶇厧绱℃稉宥嗩劀绾?, 'sut-wechat-mini' ), $field );
                         }
                         break;
                 }
@@ -702,9 +659,8 @@ class SUT_WeChat_Mini_Utils {
     }
     
     /**
-     * 鑾峰彇鏂囦欢澶у皬鐨勫彲璇诲舰寮?     *
-     * @param int $bytes 鏂囦欢澶у皬锛堝瓧鑺傦級
-     * @return string 鍙鐨勬枃浠跺ぇ灏?     */
+     * 閼惧嘲褰囬弬鍥︽婢堆冪毈閻ㄥ嫬褰茬拠璇茶埌瀵?     *
+     * @param int $bytes 閺傚洣娆㈡径褍鐨敍鍫濈摟閼哄偊绱?     * @return string 閸欘垵顕伴惃鍕瀮娴犺泛銇囩亸?     */
     public static function format_file_size( $bytes ) {
         if ( $bytes < 1024 ) {
             return $bytes . ' B';
@@ -718,8 +674,8 @@ class SUT_WeChat_Mini_Utils {
     }
     
     /**
-     * 鑾峰彇鐢ㄦ埛娴忚鍣ㄤ俊鎭?     *
-     * @return array 娴忚鍣ㄤ俊鎭?     */
+     * 閼惧嘲褰囬悽銊﹀煕濞村繗顫嶉崳銊や繆閹?     *
+     * @return array 濞村繗顫嶉崳銊や繆閹?     */
     public static function get_browser_info() {
         if ( ! isset( $_SERVER['HTTP_USER_AGENT'] ) ) {
             return array(
@@ -734,7 +690,7 @@ class SUT_WeChat_Mini_Utils {
         $version = 'Unknown';
         $platform = 'Unknown';
         
-        // 鑾峰彇骞冲彴
+        // 閼惧嘲褰囬獮鍐插酱
         if ( strpos( $user_agent, 'Windows' ) !== false ) {
             $platform = 'Windows';
         } elseif ( strpos( $user_agent, 'Macintosh' ) !== false ) {
@@ -749,7 +705,7 @@ class SUT_WeChat_Mini_Utils {
             $platform = 'Android';
         }
         
-        // 鑾峰彇娴忚鍣?        if ( strpos( $user_agent, 'Edge' ) !== false ) {
+        // 閼惧嘲褰囧ù蹇氼潔閸?        if ( strpos( $user_agent, 'Edge' ) !== false ) {
             $browser = 'Edge';
             preg_match( '/Edge\/(\d+\.\d+)/', $user_agent, $matches );
             if ( isset( $matches[1] ) ) {
@@ -789,8 +745,8 @@ class SUT_WeChat_Mini_Utils {
     }
     
     /**
-     * 妫€娴嬫槸鍚︽槸寰俊娴忚鍣?     *
-     * @return bool 妫€娴嬬粨鏋?     */
+     * 濡偓濞村妲搁崥锔芥Ц瀵邦喕淇婂ù蹇氼潔閸?     *
+     * @return bool 濡偓濞村绮ㄩ弸?     */
     public static function is_wechat_browser() {
         if ( ! isset( $_SERVER['HTTP_USER_AGENT'] ) ) {
             return false;
@@ -801,9 +757,9 @@ class SUT_WeChat_Mini_Utils {
     }
     
     /**
-     * 妫€娴嬫槸鍚︽槸绉诲姩璁惧
+     * 濡偓濞村妲搁崥锔芥Ц缁夎濮╃拋鎯ь槵
      *
-     * @return bool 妫€娴嬬粨鏋?     */
+     * @return bool 濡偓濞村绮ㄩ弸?     */
     public static function is_mobile_device() {
         if ( ! isset( $_SERVER['HTTP_USER_AGENT'] ) ) {
             return false;
@@ -825,9 +781,8 @@ class SUT_WeChat_Mini_Utils {
     }
     
     /**
-     * 鑾峰彇鎻掍欢璁剧疆
-     *
-     * @param string $key 璁剧疆閿?     * @param mixed $default 榛樿鍊?     * @return mixed 璁剧疆鍊?     */
+     * 閼惧嘲褰囬幓鎺嶆鐠佸墽鐤?     *
+     * @param string $key 鐠佸墽鐤嗛柨?     * @param mixed $default 姒涙顓婚崐?     * @return mixed 鐠佸墽鐤嗛崐?     */
     public static function get_setting( $key, $default = null ) {
         $settings = get_option( 'sut_wechat_mini_settings', array() );
         
@@ -839,9 +794,8 @@ class SUT_WeChat_Mini_Utils {
     }
     
     /**
-     * 鏇存柊鎻掍欢璁剧疆
-     *
-     * @param string $key 璁剧疆閿?     * @param mixed $value 璁剧疆鍊?     * @return bool 鏇存柊缁撴灉
+     * 閺囧瓨鏌婇幓鎺嶆鐠佸墽鐤?     *
+     * @param string $key 鐠佸墽鐤嗛柨?     * @param mixed $value 鐠佸墽鐤嗛崐?     * @return bool 閺囧瓨鏌婄紒鎾寸亯
      */
     public static function update_setting( $key, $value ) {
         $settings = get_option( 'sut_wechat_mini_settings', array() );
@@ -851,9 +805,8 @@ class SUT_WeChat_Mini_Utils {
     }
     
     /**
-     * 鍒犻櫎鎻掍欢璁剧疆
-     *
-     * @param string $key 璁剧疆閿?     * @return bool 鍒犻櫎缁撴灉
+     * 閸掔娀娅庨幓鎺嶆鐠佸墽鐤?     *
+     * @param string $key 鐠佸墽鐤嗛柨?     * @return bool 閸掔娀娅庣紒鎾寸亯
      */
     public static function delete_setting( $key ) {
         $settings = get_option( 'sut_wechat_mini_settings', array() );
@@ -867,10 +820,10 @@ class SUT_WeChat_Mini_Utils {
     }
     
     /**
-     * 缂撳瓨绠＄悊 - 璁剧疆缂撳瓨
+     * 缂傛挸鐡ㄧ粻锛勬倞 - 鐠佸墽鐤嗙紓鎾崇摠
      *
-     * @param string $key 缂撳瓨閿?     * @param mixed $data 缂撳瓨鏁版嵁
-     * @param int $expire 杩囨湡鏃堕棿锛堢锛?     * @return bool 璁剧疆缁撴灉
+     * @param string $key 缂傛挸鐡ㄩ柨?     * @param mixed $data 缂傛挸鐡ㄩ弫鐗堝祦
+     * @param int $expire 鏉╁洦婀￠弮鍫曟？閿涘牏顫楅敍?     * @return bool 鐠佸墽鐤嗙紒鎾寸亯
      */
     public static function set_cache( $key, $data, $expire = 3600 ) {
         $cache_key = 'sut_wechat_mini_' . $key;
@@ -878,9 +831,9 @@ class SUT_WeChat_Mini_Utils {
     }
     
     /**
-     * 缂撳瓨绠＄悊 - 鑾峰彇缂撳瓨
+     * 缂傛挸鐡ㄧ粻锛勬倞 - 閼惧嘲褰囩紓鎾崇摠
      *
-     * @param string $key 缂撳瓨閿?     * @return mixed 缂撳瓨鏁版嵁
+     * @param string $key 缂傛挸鐡ㄩ柨?     * @return mixed 缂傛挸鐡ㄩ弫鐗堝祦
      */
     public static function get_cache( $key ) {
         $cache_key = 'sut_wechat_mini_' . $key;
@@ -888,9 +841,9 @@ class SUT_WeChat_Mini_Utils {
     }
     
     /**
-     * 缂撳瓨绠＄悊 - 鍒犻櫎缂撳瓨
+     * 缂傛挸鐡ㄧ粻锛勬倞 - 閸掔娀娅庣紓鎾崇摠
      *
-     * @param string $key 缂撳瓨閿?     * @return bool 鍒犻櫎缁撴灉
+     * @param string $key 缂傛挸鐡ㄩ柨?     * @return bool 閸掔娀娅庣紒鎾寸亯
      */
     public static function delete_cache( $key ) {
         $cache_key = 'sut_wechat_mini_' . $key;
@@ -898,22 +851,21 @@ class SUT_WeChat_Mini_Utils {
     }
     
     /**
-     * 缂撳瓨绠＄悊 - 娓呯悊鎵€鏈夌紦瀛?     *
-     * @return bool 娓呯悊缁撴灉
+     * 缂傛挸鐡ㄧ粻锛勬倞 - 濞撳懐鎮婇幍鈧張澶岀处鐎?     *
+     * @return bool 濞撳懐鎮婄紒鎾寸亯
      */
     public static function flush_cache() {
         return wp_cache_flush_group( 'sut-wechat-mini' );
     }
     
     /**
-     * 璁板綍鏃ュ織
+     * 鐠佹澘缍嶉弮銉ョ箶
      *
-     * @param string $message 鏃ュ織娑堟伅
-     * @param string $level 鏃ュ織绾у埆
-     * @param array $context 涓婁笅鏂囦俊鎭?     * @return bool 璁板綍缁撴灉
+     * @param string $message 閺冦儱绻斿☉鍫熶紖
+     * @param string $level 閺冦儱绻旂痪褍鍩?     * @param array $context 娑撳﹣绗呴弬鍥︿繆閹?     * @return bool 鐠佹澘缍嶇紒鎾寸亯
      */
     public static function log( $message, $level = 'info', $context = array() ) {
-        // 妫€鏌ユ槸鍚﹀惎鐢ㄤ簡璋冭瘯妯″紡
+        // 濡偓閺屻儲妲搁崥锕€鎯庨悽銊ょ啊鐠嬪啳鐦Ο鈥崇础
         if ( ! WP_DEBUG ) {
             return false;
         }
@@ -921,51 +873,46 @@ class SUT_WeChat_Mini_Utils {
         $levels = array('debug', 'info', 'notice', 'warning', 'error', 'critical', 'alert', 'emergency');
         $level = strtolower( $level );
         
-        // 楠岃瘉鏃ュ織绾у埆
+        // 妤犲矁鐦夐弮銉ョ箶缁狙冨焼
         if ( ! in_array( $level, $levels ) ) {
             $level = 'info';
         }
         
-        // 鏋勫缓鏃ュ織娑堟伅
-        $timestamp = date( 'Y-m-d H:i:s' );
+        // 閺嬪嫬缂撻弮銉ョ箶濞戝牊浼?        $timestamp = date( 'Y-m-d H:i:s' );
         $log_message = "[$timestamp] [$level] $message";
         
-        // 娣诲姞涓婁笅鏂囦俊鎭?        if ( ! empty( $context ) ) {
+        // 濞ｈ濮炴稉濠佺瑓閺傚洣淇婇幁?        if ( ! empty( $context ) ) {
             $log_message .= ' ' . json_encode( $context );
         }
         
-        // 鍐欏叆鏃ュ織鏂囦欢
-        $log_file = WP_CONTENT_DIR . '/sut-wechat-mini.log';
+        // 閸愭瑥鍙嗛弮銉ョ箶閺傚洣娆?        $log_file = WP_CONTENT_DIR . '/sut-wechat-mini.log';
         
         return error_log( $log_message . "\n", 3, $log_file );
     }
     
     /**
-     * 璁板綍閿欒鏃ュ織
-     *
-     * @param string $message 閿欒娑堟伅
-     * @param array $context 涓婁笅鏂囦俊鎭?     * @return bool 璁板綍缁撴灉
+     * 鐠佹澘缍嶉柨娆掝嚖閺冦儱绻?     *
+     * @param string $message 闁挎瑨顕ゅ☉鍫熶紖
+     * @param array $context 娑撳﹣绗呴弬鍥︿繆閹?     * @return bool 鐠佹澘缍嶇紒鎾寸亯
      */
     public static function log_error( $message, $context = array() ) {
         return self::log( $message, 'error', $context );
     }
     
     /**
-     * 璁板綍璋冭瘯鏃ュ織
-     *
-     * @param string $message 璋冭瘯娑堟伅
-     * @param array $context 涓婁笅鏂囦俊鎭?     * @return bool 璁板綍缁撴灉
+     * 鐠佹澘缍嶇拫鍐槸閺冦儱绻?     *
+     * @param string $message 鐠嬪啳鐦☉鍫熶紖
+     * @param array $context 娑撳﹣绗呴弬鍥︿繆閹?     * @return bool 鐠佹澘缍嶇紒鎾寸亯
      */
     public static function log_debug( $message, $context = array() ) {
         return self::log( $message, 'debug', $context );
     }
     
     /**
-     * 閫掑綊鍒涘缓鐩綍
-     *
-     * @param string $path 鐩綍璺緞
-     * @param int $mode 鐩綍鏉冮檺
-     * @return bool 鍒涘缓缁撴灉
+     * 闁帒缍婇崚娑樼紦閻╊喖缍?     *
+     * @param string $path 閻╊喖缍嶇捄顖氱窞
+     * @param int $mode 閻╊喖缍嶉弶鍐
+     * @return bool 閸掓稑缂撶紒鎾寸亯
      */
     public static function create_directory( $path, $mode = 0755 ) {
         if ( is_dir( $path ) ) {
@@ -976,9 +923,9 @@ class SUT_WeChat_Mini_Utils {
     }
     
     /**
-     * 妫€鏌ョ洰褰曟槸鍚﹀彲鍐?     *
-     * @param string $path 鐩綍璺緞
-     * @return bool 妫€鏌ョ粨鏋?     */
+     * 濡偓閺屻儳娲拌ぐ鏇熸Ц閸氾箑褰查崘?     *
+     * @param string $path 閻╊喖缍嶇捄顖氱窞
+     * @return bool 濡偓閺屻儳绮ㄩ弸?     */
     public static function is_directory_writable( $path ) {
         if ( ! is_dir( $path ) ) {
             return false;
@@ -988,11 +935,10 @@ class SUT_WeChat_Mini_Utils {
     }
     
     /**
-     * 鑾峰彇鐩綍澶у皬
+     * 閼惧嘲褰囬惄顔肩秿婢堆冪毈
      *
-     * @param string $path 鐩綍璺緞
-     * @return int 鐩綍澶у皬锛堝瓧鑺傦級
-     */
+     * @param string $path 閻╊喖缍嶇捄顖氱窞
+     * @return int 閻╊喖缍嶆径褍鐨敍鍫濈摟閼哄偊绱?     */
     public static function get_directory_size( $path ) {
         $size = 0;
         
@@ -1015,8 +961,8 @@ class SUT_WeChat_Mini_Utils {
     }
     
     /**
-     * 鐢熸垚闅忔満瀛楃涓?     *
-     * @param int $length 瀛楃涓查暱搴?     * @param string $chars 瀛楃闆?     * @return string 闅忔満瀛楃涓?     */
+     * 閻㈢喐鍨氶梾蹇旀簚鐎涙顑佹稉?     *
+     * @param int $length 鐎涙顑佹稉鏌ユ毐鎼?     * @param string $chars 鐎涙顑侀梿?     * @return string 闂呭繑婧€鐎涙顑佹稉?     */
     public static function generate_random_string( $length = 16, $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ' ) {
         $chars_length = strlen( $chars );
         $random_string = '';
@@ -1029,10 +975,8 @@ class SUT_WeChat_Mini_Utils {
     }
     
     /**
-     * 娣卞害鍚堝苟鏁扮粍
-     *
-     * @param array $array1 绗竴涓暟缁?     * @param array $array2 绗簩涓暟缁?     * @return array 鍚堝苟鍚庣殑鏁扮粍
-     */
+     * 濞ｅ崬瀹抽崥鍫濊嫙閺佹壆绮?     *
+     * @param array $array1 缁楊兛绔存稉顏呮殶缂?     * @param array $array2 缁楊兛绨╂稉顏呮殶缂?     * @return array 閸氬牆鑻熼崥搴ｆ畱閺佹壆绮?     */
     public static function deep_merge_arrays( $array1, $array2 ) {
         foreach ( $array2 as $key => $value ) {
             if ( is_array( $value ) && isset( $array1[$key] ) && is_array( $array1[$key] ) ) {
@@ -1046,15 +990,15 @@ class SUT_WeChat_Mini_Utils {
     }
     
     /**
-     * 鑾峰彇鏂囦欢鎵╁睍鍚?     *
-     * @param string $filename 鏂囦欢鍚?     * @return string 鏂囦欢鎵╁睍鍚?     */
+     * 閼惧嘲褰囬弬鍥︽閹碘晛鐫嶉崥?     *
+     * @param string $filename 閺傚洣娆㈤崥?     * @return string 閺傚洣娆㈤幍鈺佺潔閸?     */
     public static function get_file_extension( $filename ) {
         return strtolower( pathinfo( $filename, PATHINFO_EXTENSION ) );
     }
     
     /**
-     * 妫€鏌ユ枃浠剁被鍨嬫槸鍚﹀厑璁?     *
-     * @param string $filename 鏂囦欢鍚?     * @param array $allowed_types 鍏佽鐨勬枃浠剁被鍨?     * @return bool 妫€鏌ョ粨鏋?     */
+     * 濡偓閺屻儲鏋冩禒鍓佽閸ㄥ妲搁崥锕€鍘戠拋?     *
+     * @param string $filename 閺傚洣娆㈤崥?     * @param array $allowed_types 閸忎浇顔忛惃鍕瀮娴犲墎琚崹?     * @return bool 濡偓閺屻儳绮ㄩ弸?     */
     public static function is_allowed_file_type( $filename, $allowed_types = array() ) {
         if ( empty( $allowed_types ) ) {
             $allowed_types = array(
@@ -1068,10 +1012,9 @@ class SUT_WeChat_Mini_Utils {
     }
     
     /**
-     * 鑾峰彇鍐呭瓨浣跨敤鎯呭喌
+     * 閼惧嘲褰囬崘鍛摠娴ｈ法鏁ら幆鍛枌
      *
-     * @return array 鍐呭瓨浣跨敤鎯呭喌
-     */
+     * @return array 閸愬懎鐡ㄦ担璺ㄦ暏閹懎鍠?     */
     public static function get_memory_usage() {
         $usage = array(
             'current' => memory_get_usage(),
@@ -1082,10 +1025,9 @@ class SUT_WeChat_Mini_Utils {
     }
     
     /**
-     * 鑾峰彇鎵ц鏃堕棿
+     * 閼惧嘲褰囬幍褑顢戦弮鍫曟？
      *
-     * @return array 鎵ц鏃堕棿
-     */
+     * @return array 閹笛嗩攽閺冨爼妫?     */
     public static function get_execution_time() {
         $time = array(
             'current' => microtime( true ),

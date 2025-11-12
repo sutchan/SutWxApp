@@ -3,3 +3,6 @@ SutWxApp.code-workspace
 /docs
 /node_modules
 /docs_backup_*
+/.trae
+/tests
+/tests

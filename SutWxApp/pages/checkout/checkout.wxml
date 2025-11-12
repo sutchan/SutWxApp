@@ -1,188 +1,52 @@
-﻿<!-- checkout.wxml - 缁撶畻椤甸潰妯℃澘 -->
+<!-- checkout.wxml - 结算页面模板 -->
 
 <view class="checkout-container">
-  <!-- 椤堕儴瀵艰埅 -->
-  <view class="nav-bar">
-    <view class="nav-left" bindtap="backToCart">
-      <image src="/assets/images/back.png" mode="aspectFit"></image>
-    </view>
-    <view class="nav-title">纭璁㈠崟</view>
-    <view class="nav-right"></view>
-  </view>
-
-  <!-- 鏀惰揣鍦板潃 -->
-  <view class="address-section" bindtap="openAddressSelector">
-    <view class="address-icon">
-      <image src="/assets/images/address.png" mode="aspectFit"></image>
-    </view>
-    <view class="address-content">
-      <view wx:if="{{address}}" class="address-info">
-        <view class="address-name">
-          <text>{{address.consignee}}</text>
-          <text class="address-phone">{{address.phone}}</text>
-        </view>
-        <view class="address-detail">{{address.province}}{{address.city}}{{address.district}}{{address.address}}</view>
+  <!-- 地址信息 -->
+  <view class="address-section" bindtap="selectAddress">
+    <view class="address-content" wx:if="{{address}}">
+      <view class="address-header">
+        <text class="user-name">{{address.name}} {{address.phone}}</text>
+        <text class="address-arrow">&gt;</text>
       </view>
-      <view wx:else class="address-placeholder">璇烽€夋嫨鏀惰揣鍦板潃</view>
+      <text class="address-detail">{{address.province}} {{address.city}} {{address.district}} {{address.detail}}</text>
     </view>
-    <view class="address-arrow">
-      <image src="/assets/images/arrow-right.png" mode="aspectFit"></image>
+    <view class="address-empty" wx:else>
+      <text class="empty-text">请选择收货地址</text>
+      <text class="address-arrow">&gt;</text>
     </view>
   </view>
 
-  <!-- 鍟嗗搧鍒楄〃 -->
-  <view class="goods-section">
-    <view class="section-title">鍟嗗搧淇℃伅</view>
-    <view class="goods-list">
-      <view wx:for="{{goodsList}}" wx:key="index" class="goods-item">
-        <view class="goods-image">
-          <image src="{{item.product_image}}" mode="aspectFit"></image>
-        </view>
-        <view class="goods-info">
-          <view class="goods-name">{{item.product_name}}</view>
-          <view wx:if="{{item.specs}}" class="goods-specs">{{item.specs}}</view>
-          <view class="goods-price-quantity">
-            <view class="goods-price">楼{{item.price}}</view>
-            <view class="goods-quantity">x{{item.quantity}}</view>
+  <!-- 商品列表 -->
+  <view class="order-section">
+    <view class="section-title">商品信息</view>
+    <view class="order-items">
+      <view class="order-item" wx:for="{{cartItems}}" wx:key="index">
+        <image class="item-image" src="{{item.image}}" mode="aspectFill"></image>
+        <view class="item-info">
+          <text class="item-title">{{item.name}}</text>
+          <view class="item-footer">
+            <text class="item-price">¥{{item.price}}</text>
+            <text class="item-quantity">x{{item.quantity}}</text>
           </view>
         </view>
       </view>
     </view>
   </view>
 
-  <!-- 鏀粯鏂瑰紡 -->
-  <view class="payment-section">
-    <view class="section-title">鏀粯鏂瑰紡</view>
-    <view class="payment-methods">
-      <view 
-        wx:for="{{paymentMethods}}" 
-        wx:key="id" 
-        class="payment-method {{item.selected ? 'selected' : ''}}" 
-        bindtap="selectPaymentMethod" 
-        data-id="{{item.id}}"
-      >
-        <view class="payment-icon">
-          <image src="{{item.icon}}" mode="aspectFit"></image>
-        </view>
-        <view class="payment-name">{{item.name}}</view>
-        <view class="payment-check">{{item.selected ? '鉁? : ''}}</view>
-      </view>
-    </view>
-  </view>
-
-  <!-- 浼樻儬鍒?-->
-  <view class="coupon-section" bindtap="openCouponSelector">
-    <view class="coupon-left">
-      <text class="coupon-label">浼樻儬鍒?/text>
-      <text wx:if="{{coupon}}" class="coupon-name">{{coupon.name}}</text>
-      <text wx:else class="coupon-placeholder">鏈娇鐢?/text>
-    </view>
-    <view class="coupon-right">
-      <text wx:if="{{availableCoupons.length > 0}}" class="coupon-count">({{availableCoupons.length}}寮犲彲鐢?</text>
-      <image src="/assets/images/arrow-right.png" mode="aspectFit"></image>
-    </view>
-  </view>
-
-  <!-- 璁㈠崟澶囨敞 -->
+  <!-- 订单备注 -->
   <view class="remark-section">
-    <view class="remark-label">璁㈠崟澶囨敞</view>
-    <input 
-      class="remark-input" 
-      placeholder="閫夊～锛岃杈撳叆璁㈠崟澶囨敞" 
-      value="{{remark}}" 
-      bindinput="inputRemark"
-      maxlength="200"
-    />
+    <text class="section-title">订单备注</text>
+    <input class="remark-input" placeholder="选填，请输入订单备注" bindinput="onRemarkInput" value="{{orderRemark}}" />
   </view>
 
-  <!-- 璐圭敤鏄庣粏 -->
-  <view class="cost-section">
-    <view class="cost-item">
-      <text class="cost-label">鍟嗗搧鎬讳环</text>
-      <text class="cost-value">楼{{subtotal}}</text>
-    </view>
-    <view class="cost-item">
-      <text class="cost-label">杩愯垂</text>
-      <text class="cost-value">{{shippingFee > 0 ? '楼' + shippingFee : '鍏嶈繍璐?}}</text>
-    </view>
-    <view class="cost-item">
-      <text class="cost-label">浼樻儬鍒?/text>
-      <text class="cost-discount">-楼{{discount}}</text>
-    </view>
-  </view>
-
-  <!-- 搴曢儴缁撶畻鏍?-->
+  <!-- 底部结算栏 -->
   <view class="bottom-bar">
     <view class="total-price">
-      <text>鍚堣锛?/text>
-      <text class="price-value">楼{{totalPrice}}</text>
+      <text class="price-label">合计：</text>
+      <text class="price-value">¥{{totalPrice}}</text>
     </view>
-    <view class="submit-btn" bindtap="submitOrder" wx:if="{{!submitting}}">
-      鎻愪氦璁㈠崟
-    </view>
-    <view class="submit-btn submitting" wx:else>
-      鎻愪氦涓?..
-    </view>
+    <button class="submit-btn" type="primary" bindtap="submitOrder" loading="{{submitting}}" disabled="{{submitting || !address || cartItems.length === 0}}">
+      提交订单
+    </button>
   </view>
-
-  <!-- 鍦板潃閫夋嫨鍣ㄥ脊鍑哄眰 -->
-  <view class="popup-container" wx:if="{{addressSelectorVisible}}">
-    <view class="popup-overlay" bindtap="closeAddressSelector"></view>
-    <view class="popup-content address-popup">
-      <view class="popup-header">
-        <text class="popup-title">閫夋嫨鏀惰揣鍦板潃</text>
-        <text class="popup-close" bindtap="closeAddressSelector">脳</text>
-      </view>
-      <view class="popup-body">
-        <view 
-          wx:for="{{addresses}}" 
-          wx:key="id" 
-          class="address-item {{address.id === item.id ? 'selected' : ''}}" 
-          bindtap="selectAddress" 
-          data-id="{{item.id}}"
-        >
-          <view class="address-item-header">
-            <text class="address-item-name">{{item.consignee}}</text>
-            <text class="address-item-phone">{{item.phone}}</text>
-            <text wx:if="{{item.is_default}}" class="address-default">榛樿</text>
-          </view>
-          <view class="address-item-detail">{{item.province}}{{item.city}}{{item.district}}{{item.address}}</view>
-        </view>
-        <view class="add-address-btn" bindtap="addNewAddress">
-          <image src="/assets/images/add.png" mode="aspectFit"></image>
-          <text>娣诲姞鏂板湴鍧€</text>
-        </view>
-      </view>
-    </view>
-  </view>
-
-  <!-- 浼樻儬鍒搁€夋嫨鍣ㄥ脊鍑哄眰 -->
-  <view class="popup-container" wx:if="{{couponSelectorVisible}}">
-    <view class="popup-overlay" bindtap="closeCouponSelector"></view>
-    <view class="popup-content coupon-popup">
-      <view class="popup-header">
-        <text class="popup-title">閫夋嫨浼樻儬鍒?/text>
-        <text class="popup-close" bindtap="closeCouponSelector">脳</text>
-      </view>
-      <view class="popup-body">
-        <view 
-          wx:for="{{availableCoupons}}" 
-          wx:key="id" 
-          class="coupon-item {{coupon.id === item.id ? 'selected' : ''}}" 
-          bindtap="selectCoupon" 
-          data-id="{{item.id}}"
-        >
-          <view class="coupon-left">
-            <text class="coupon-amount">楼{{item.discount_amount}}</text>
-            <text wx:if="{{item.min_amount > 0}}" class="coupon-condition">婊{item.min_amount}}鍙敤</text>
-          </view>
-          <view class="coupon-right">
-            <view class="coupon-name">{{item.name}}</view>
-            <view class="coupon-desc">{{item.description}}</view>
-            <view class="coupon-expire">鏈夋晥鏈熻嚦锛歿{item.end_time}}</view>
-          </view>
-        </view>
-      </view>
-    </view>
-  </view>
-</view>\n
+</view>

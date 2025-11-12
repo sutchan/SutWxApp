@@ -1,11 +1,11 @@
-﻿/* 鍟嗗搧璇︽儏椤甸潰鏍峰紡 */
+锘?* 閸熷棗鎼х拠锔藉剰妞ょ敻娼伴弽宄扮础 */
 .container {
   background-color: #f8f8f8;
   min-height: 100vh;
-  padding-bottom: 100rpx; /* 涓哄簳閮ㄦ搷浣滄爮鐣欏嚭绌洪棿 */
+  padding-bottom: 100rpx; /* 娑撳搫绨抽柈銊︽惙娴ｆ粍鐖悾娆忓毉缁屾椽妫?*/
 }
 
-/* 鍔犺浇鐘舵€佹牱寮?*/
+/* 閸旂姾娴囬悩鑸碘偓浣圭壉瀵?*/
 .loading {
   padding: 60rpx;
   text-align: center;
@@ -13,7 +13,7 @@
   color: #999999;
 }
 
-/* 閿欒鐘舵€佹牱寮?*/
+/* 闁挎瑨顕ら悩鑸碘偓浣圭壉瀵?*/
 .error {
   padding: 60rpx 20rpx;
   text-align: center;
@@ -40,7 +40,7 @@
   border-radius: 30rpx;
 }
 
-/* 鍟嗗搧鍥剧墖杞挱鏍峰紡 */
+/* 閸熷棗鎼ч崶鍓у鏉烆喗鎸遍弽宄扮础 */
 .image-swiper {
   width: 100%;
   height: 600rpx;
@@ -51,7 +51,7 @@
   height: 100%;
 }
 
-/* 鍟嗗搧鍩烘湰淇℃伅鏍峰紡 */
+/* 閸熷棗鎼ч崺鐑樻拱娣団剝浼呴弽宄扮础 */
 .product-info {
   background-color: #ffffff;
   padding: 30rpx;
@@ -86,7 +86,7 @@
   color: #ff6b81;
 }
 
-/* 鍟嗗搧瑙勬牸鏍峰紡 */
+/* 閸熷棗鎼х憴鍕壐閺嶅嘲绱?*/
 .sku-section,
 .quantity-section,
 .description-section,
@@ -137,7 +137,7 @@
   color: #ff6b81;
 }
 
-/* 鏁伴噺鎺у埗鏍峰紡 */
+/* 閺佷即鍣洪幒褍鍩楅弽宄扮础 */
 .quantity-control {
   display: flex;
   align-items: center;
@@ -181,7 +181,7 @@
   border-bottom: 1rpx solid #eeeeee;
 }
 
-/* 鍟嗗搧鎻忚堪鏍峰紡 */
+/* 閸熷棗鎼ч幓蹇氬牚閺嶅嘲绱?*/
 .product-description {
   font-size: 28rpx;
   color: #666666;
@@ -193,7 +193,7 @@
   height: auto !important;
 }
 
-/* 鐩稿叧鍟嗗搧鏍峰紡 */
+/* 閻╃鍙ч崯鍡楁惂閺嶅嘲绱?*/
 .related-list {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -236,7 +236,7 @@
   font-weight: bold;
 }
 
-/* 搴曢儴鎿嶄綔鏍忔牱寮?*/
+/* 鎼存洟鍎撮幙宥勭稊閺嶅繑鐗卞?*/
 .bottom-bar {
   position: fixed;
   bottom: 0;

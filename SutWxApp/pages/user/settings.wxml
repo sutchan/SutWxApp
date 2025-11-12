@@ -1,18 +1,18 @@
-﻿<!-- 鐢ㄦ埛璁剧疆椤甸潰 -->
+锘?!-- 閻劍鍩涚拋鍓х枂妞ょ敻娼?-->
 <view class="settings-container">
-  <!-- 涓汉淇℃伅璁剧疆 -->
+  <!-- 娑擃亙姹夋穱鈩冧紖鐠佸墽鐤?-->
   <view class="section" wx:if="{{!isLoading && !error}}">
     <view class="section-header">
-      <text class="section-title">涓汉淇℃伅</text>
+      <text class="section-title">娑擃亙姹夋穱鈩冧紖</text>
     </view>
     
     <view class="settings-list">
       <view 
         class="setting-item"
         bindtap="navigateToEditProfile"
-        aria-label="缂栬緫涓汉璧勬枡">
+        aria-label="缂傛牞绶稉顏冩眽鐠у嫭鏋?>
         <view class="setting-content">
-          <text class="setting-label">缂栬緫涓汉璧勬枡</text>
+          <text class="setting-label">缂傛牞绶稉顏冩眽鐠у嫭鏋?/text>
         </view>
         <image class="arrow-icon" src="/images/arrow-right.svg" mode="aspectFit"></image>
       </view>
@@ -20,27 +20,27 @@
       <view 
         class="setting-item"
         bindtap="navigateToBindAccount"
-        aria-label="璐﹀彿缁戝畾">
+        aria-label="鐠愶箑褰跨紒鎴濈暰">
         <view class="setting-content">
-          <text class="setting-label">璐﹀彿缁戝畾</text>
-          <text class="setting-value" wx:if="{{userInfo && userInfo.bound_to_wordpress}}">宸茬粦瀹?/text>
-          <text class="setting-value unbound" wx:else>鏈粦瀹?/text>
+          <text class="setting-label">鐠愶箑褰跨紒鎴濈暰</text>
+          <text class="setting-value" wx:if="{{userInfo && userInfo.bound_to_wordpress}}">瀹歌尙绮︾€?/text>
+          <text class="setting-value unbound" wx:else>閺堫亞绮︾€?/text>
         </view>
         <image class="arrow-icon" src="/images/arrow-right.svg" mode="aspectFit"></image>
       </view>
     </view>
   </view>
 
-  <!-- 閫氱煡璁剧疆 -->
+  <!-- 闁氨鐓＄拋鍓х枂 -->
   <view class="section" wx:if="{{!isLoading && !error}}">
     <view class="section-header">
-      <text class="section-title">閫氱煡璁剧疆</text>
+      <text class="section-title">闁氨鐓＄拋鍓х枂</text>
     </view>
     
     <view class="settings-list">
       <view class="setting-item">
         <view class="setting-content">
-          <text class="setting-label">鎺ㄩ€侀€氱煡</text>
+          <text class="setting-label">閹恒劑鈧線鈧氨鐓?/text>
         </view>
         <switch 
           checked="{{notificationSettings.pushEnabled}}"
@@ -52,7 +52,7 @@
       
       <view class="setting-item">
         <view class="setting-content">
-          <text class="setting-label">璇勮鎻愰啋</text>
+          <text class="setting-label">鐠囧嫯顔戦幓鎰板晪</text>
         </view>
         <switch 
           checked="{{notificationSettings.commentEnabled}}"
@@ -64,7 +64,7 @@
       
       <view class="setting-item">
         <view class="setting-content">
-          <text class="setting-label">绯荤粺娑堟伅</text>
+          <text class="setting-label">缁崵绮哄☉鍫熶紖</text>
         </view>
         <switch 
           checked="{{notificationSettings.systemEnabled}}"
@@ -76,15 +76,15 @@
     </view>
   </view>
 
-  <!-- 鍏朵粬璁剧疆 -->
+  <!-- 閸忔湹绮拋鍓х枂 -->
   <view class="section" wx:if="{{!isLoading && !error}}">
     <view class="settings-list">
       <view 
         class="setting-item"
         bindtap="navigateToPrivacySettings"
-        aria-label="闅愮璁剧疆">
+        aria-label="闂呮劗顫嗙拋鍓х枂">
         <view class="setting-content">
-          <text class="setting-label">闅愮璁剧疆</text>
+          <text class="setting-label">闂呮劗顫嗙拋鍓х枂</text>
         </view>
         <image class="arrow-icon" src="/images/arrow-right.svg" mode="aspectFit"></image>
       </view>
@@ -92,9 +92,9 @@
       <view 
         class="setting-item"
         bindtap="clearCache"
-        aria-label="娓呴櫎缂撳瓨">
+        aria-label="濞撳懘娅庣紓鎾崇摠">
         <view class="setting-content">
-          <text class="setting-label">娓呴櫎缂撳瓨</text>
+          <text class="setting-label">濞撳懘娅庣紓鎾崇摠</text>
         </view>
         <image class="arrow-icon" src="/images/arrow-right.svg" mode="aspectFit"></image>
       </view>
@@ -102,30 +102,30 @@
       <view 
         class="setting-item"
         bindtap="navigateToAbout"
-        aria-label="鍏充簬鎴戜滑">
+        aria-label="閸忓厖绨幋鎴滄粦">
         <view class="setting-content">
-          <text class="setting-label">鍏充簬鎴戜滑</text>
+          <text class="setting-label">閸忓厖绨幋鎴滄粦</text>
         </view>
         <image class="arrow-icon" src="/images/arrow-right.svg" mode="aspectFit"></image>
       </view>
     </view>
   </view>
 
-  <!-- 鐗堟湰淇℃伅 -->
+  <!-- 閻楀牊婀版穱鈩冧紖 -->
   <view class="version-info" wx:if="{{!isLoading && !error}}">
-    <text class="version-text">鐗堟湰 1.0.3</text>
+    <text class="version-text">閻楀牊婀?1.0.3</text>
   </view>
 
-  <!-- 鍔犺浇鐘舵€?-->
+  <!-- 閸旂姾娴囬悩鑸碘偓?-->
   <view class="loading-container" wx:if="isLoading">
     <view class="loading"></view>
-    <text class="loading-text">鍔犺浇涓?..</text>
+    <text class="loading-text">閸旂姾娴囨稉?..</text>
   </view>
 
-  <!-- 閿欒鎻愮ず -->
+  <!-- 闁挎瑨顕ら幓鎰仛 -->
   <view class="error-container" wx:if="error">
     <image src="/images/error.svg" class="error-icon"></image>
     <text class="error-text">{{error}}</text>
-    <button class="retry-button" bindtap="onRetry">閲嶈瘯</button>
+    <button class="retry-button" bindtap="onRetry">闁插秷鐦?/button>
   </view>
 </view>\n

@@ -1,0 +1,654 @@
+闁挎娼弫鍥宕稿浣规珝闂佺嗗嫷娈曢柡?* SUT闂備浇濞寸兘寮婵犳艾纾诲鐘叉搐缁愭呮煛閸晛鏋旈柍鐟扮閳规垿鎮幓鎺濅还闂佺粯甯掗敃鎮愶箑鐐婇柕濠忓囬敍鏇閸濆嫯闁稿绻堥悰寮介撶偟楠囬梺鐟版慨鐑芥繝鍌富闁靛牆妫欑亸浼存煙椤旂厧鍧楃嵁閸愰唶闁哄洨鍋涢懓鍨鈹戦悙鍙夐柛鏃鐗犻幃鐢搁崼鐔叉嫽闂佺挎湰濮樸劍鏅堕柆宥嗙厸濞达絿鍎鏀檃Script */
+
+jQuery(document).ready(function($) {
+    
+    // 闂傚倷娴囧畷鍨鎱畷鍥焼濞达綀濞呯姴霉閻樺樊鍎愰柛瀣典邯閺屾盯鍩勯崗锔界矋缁傚秴閸鐔哄幗闂侀潧绻掓慨鐢稿疮閻愮繝绻嗘俊鐐靛帶婵鍌炴煛瀹瀣绉闁糕晪绻濆畷姗宕滆嶆慨濂告娴憡鍟炴蹇旀倐瀹曟儼妞富鍣婅櫣绱掑娲绘濡炪倖娉崶褍鍋?    function initSettingsPage() {
+        // 闂傚倷娴囧畷鍨鎱畷鍥焼濞达綀濞呯姴霉閻樺樊鍎愰柛瀣典邯閺屾盯鍩勯崘妲堢紓浣插亾闁糕剝绋掗悡鏇煃閳轰礁鏆熼柟鍐叉嚇閺岋綁閻戝棗鍓堕梺鍝勭焿缂嶄焦淇婇幖浣肝柕澶樺枙閻娴櫣甯涢柣妤婂幘瀵板鎹勯妸銉亰闂佸壊鐓堥崑渚宕戦崨瀛樼厱闁圭増鍎奸崥鍌炴煕鐎鞍鐎垫澘瀚伴獮鍥閸屻倖孝闂傚倷鐒幃鍫曞磿椤栫偛绀夐悘鐐靛亾閸庣喎鈹戦悩鍙夊勯柍閿嬪灦閵囧嫰骞囬崜浣荷戝炪値鍋呴鍫?        $(document).on('click', '.sut-wechat-mini-settings-tab', function() {
+            var tab = $(this);
+            var sectionId = tab.data('section');
+            var navContainer = tab.closest('.sut-wechat-mini-settings-nav');
+            var contentContainer = navContainer.siblings('.sut-wechat-mini-settings-content');
+            
+            // 缂傚倸鍊搁崐椋庣矆娓氳棟妞牜鍋愰埀绠戦悾锟犲箥閾忔椽鏌熼崗鑲殬闁告柨鐬肩划濠氬閳哄倻鍘撻悷婊勭矒瀹曟粓鎮總澶婃梺鍓茬厛閸嬪嫮娆悙鐑樺甸柨婵嗛告禍鏍霉閻樻瑥娲埛鎴煕濞戞鏀婚柣鎾跺枛閺屾盯寮閸妷闂侀涚閸旀垿鐛閺嶃劍濯撮柛婵勫劤閺?            navContainer.find('.sut-wechat-mini-settings-tab').removeClass('active');
+            contentContainer.find('.sut-wechat-mini-settings-section').removeClass('active');
+            
+            // 婵犵數濮烽弫鎼佸磿閹寸姷绀婇柍褜鍓氶妵鍕寮撮崱妤闁告瑥绻橀弻锝夊箛椤栨粌鐗氭繛瀛樼矊缂嶅寮婚悢鐓庣畾鐟滃秹寮虫潏銊簻闁靛牆鎳忛崳铏圭磼缂佹兼创闁瑰磭濮甸敍鎰鈹戦崱姗嗗敳婵犵數濮甸旀牠宕伴幒妤鐤鹃柣妯跨粻鏍鏌嶉崫鍕鍣洪柛銈呴惀鎮崺浜濈粋?            tab.addClass('active');
+            contentContainer.find('#sut-wechat-mini-section-' + sectionId).addClass('active');
+            
+            // 闂傚倷娴囬曆呮稈鏅濈划娆撳箳濡焦娅旈梻鍌欒兌椤鍫崨鐭撻柣鎴勬呴梺鍦澧楀肩不婵犳碍鐓曢柟閭墯閳绘洟鏌冧壕婵犵數濮烽弫鎼佸磻閻樺吀鐒婃蹇撶墱閺佸鎲告惔銊疄闁靛鏅涢悡娑煕濞戝崬骞栭柛鐐鍔戝婃椽骞栭悙鎻掑夐梺鍝勬噳閺呯姴鐣峰瀣垫晪闁逞屽墴瀵璇测槈閵忕姷闂佸搫鍊归戞瑩寮抽撶偐鏀介柣姗嗗亜娴滅偓绻涢弶鎴濇倯婵炲吋鐟獮鎴醇閺囩喓鍘告繝銏硾鐎涒晝娑甸崼鏇熺厵闁伙絽鑻閳诲牓鏌?            localStorage.setItem('sut-wechat-mini-active-section', sectionId);
+            
+            // 闂傚倷娴囧畷鐢稿窗閹扮増鍋弶鍫氭櫇娑撳秹鏌熸潏鍓濞存粌缍婇弻娑樼暆閳磻閻愬搫鍚瑰鐘插暔娴滄粓鐓閸劍灏妞浚鍋婇弻锟犲幢濡鑽嚒闂佸疇妫勯闈涢掗埢搴倷椤戝劤缁辨挻鎷呴棃娑樜梺鍛婃煥缁夊墎鍒?            $(document).trigger('sut-wechat-mini-settings-tab-changed', [sectionId]);
+        });
+        
+        // 闂傚倷娴囧畷鐢稿磻閻愮數鐭欓煫鍥缁澶愭倶閻愬灚娅曢柡鍡绠撻弻锝夊籍閸屾艾浠樼紓浣哄閺佸氬蓟閻斿吋鐒介柨鏃囨硶閸戝綊姊洪崫銉粶妞富鍨堕垾锔炬崉閵婏箑纾闂佸憡绻傜氶攱瀵奸埀姊?        $('#sut-wechat-mini-settings-form').on('submit', function(e) {
+            // e.preventDefault(); // 濠电姷鏁搁崑鐐哄垂閸鏇炵伴柛婵勫劤閻鎾绘煟閻旂跨彈闁绘梻鍘獮銏繆閵堝拑鏀绘俊妞煎姂濮婃椽妫冨姘辩杽闂佺匡攻椤牓寮椤斿皷妲堥柕蹇婂厖鍖栧鐐舵彧缂嶄礁瑜旈崺妞帊鑳舵晶鎶芥煏閸劌濮堥柟宄版嚇瀹曠兘瑜庨柨銈夋娓氬佳囨偋閸瑦宕查柟鐑樻閻鍡楅懜闈涘堥柛瀣剁到閵嗘帒椤掑鍚闂佺挎捣閹哥腑dPress濠电姷鏁告慨浼村垂閻撳簶鏋栨繛鎴炲焹閸嬫挸閻撳孩鐝濆鐘靛仜閸熸崲濠靛绀嬫鎺嗗亾濞寸姵甯婃椽妫冨杈姼闂佺挎唉娴滃垝閸鈶亾閿濆骸鏋熼柣鎾寸懅缁辨挻鎷呮慨鎴浜濋幈銊礃閳哄倸寮?            
+            var form = $(this);
+            var submitButton = form.find('input[type="submit"]');
+            var saveStatus = form.find('.sut-wechat-mini-save-status');
+            
+            // 闂傚倸鍊风粈渚骞栭愩倐鍋撳樼厧澧闁哄懓鍩栫粋鎺旓綆闄勯幈銊崱妤绠婚梺宕囨嚀缁夌數鎹瀣婵炴垶鐟濡銈夋閸珪濠电偐鍋撻梺鍝勭焿缁插熺亽闂佸壊鐓堥崰姘跺储椤愶附鈷?            saveStatus.text('濠电姷鏁搁崕鎴犲緤閽樺濇椽鏁傞悙搴婇梺绋跨灱閸嬬偤宕戦妶澶嬬厪濠电姴绻愰鏌?..').show();
+            
+            // 缂傚倸鍊搁崐椋庣矆娓氬畷鎰版倻閼恒儱娈戦梺鍓插亝濞叉牠寮告笟閺屾洟宕煎鎰笑缂備胶濮烽弫濠氬蓟閻斿吋鐒介柨鏃囨硶閸戝綊姊洪崫銉粶妞妇鏁诲濠氭偄閾忓湱鐓撳鐐叉涢崑鎾诲煝閸銉拺?            submitButton.prop('disabled', true);
+            
+            // 30缂傚倸鍊搁崐椋庣矆娓氳棟闁规垮枟閺嗘粓鏌熼悜姗嗘當缂佺姵鐗楁穱濠囧閸涙梺鎼炲曢敃銉閸曠杸闁圭偓鍓氭禒濂告偠濮樺崬鏋涙慨濠冩瀹曘劍绻濋崒姘鐦撻梻浣规偠閸斿秵绻涙繝鍌殨妞劧绠戝洿婵犮垼娉涢敃锕傚畝鍕鈷戠憸鐗堝笒娴滄澘霉濠婂嫮绠炵规洦鍓氬板嫰骞囬撶姴骞嶇紓鍌欑侀戝棝濞嗗精鐔煎焵椤掑嫭鈷戦柣鐔哄楅崯鐐测攽閻愯含鐎靛亜椤撳吋寰勬繝鍥暪婵犵數濮磋墝闁稿鎸剧槐鎺楀閵堝懎绁濠碉工椤宄扮暦濮楅姗鎮欓懜鍨姣愬锛勫亼閸婃牕煤閿曞倸绀堟繛鍡樺姈濞呭繘姊绘担渚鐒鹃柡鍫鍓涢幑銏礋椤愩倖鎳冮梻鍌氬风粈渚骞栭愶箑鐤闁瑰墎鐡旈弫濠囨煙闁锕鏋熸?            setTimeout(function() {
+                submitButton.prop('disabled', false);
+                saveStatus.fadeOut();
+            }, 30000);
+        });
+        
+        // 濠电姷濡插懘宕戦崱妯绘珷婵倕鍟閸繈鐓閸劍鈷掗柣婵婃硾閳规垿鎮崣澶婇梺缁樺笩椤曆団捄銊磯濞撴凹鍨伴崜鏉块妶鍛绠為柛搴暬瀵璇测槈閵忊剝娅滈梺鍛婂姂閸斿矂鈥栭崼銉甸悷娆忓鐏忎繆椤愶絿绠撴鏇缍侀姘跺焵椤掗悾閿嬬附缁嬪灝宓嗛梺闈涢梽鍕閸佲拺?        $(document).on('change', '.sut-wechat-mini-color-input', function() {
+            var colorInput = $(this);
+            var colorValue = colorInput.val();
+            var swatch = colorInput.siblings('.sut-wechat-mini-color-swatch');
+            
+            // 闂傚倸鍊风粈渚骞栭愨挌娲濡舵径瀣浠遍梺闈浥堥弲娑嫅閻斿皝鏀介柣妯诲絻閺嬶妇绱掗幉瀣绋荤紒缁樼箖缁绘繈宕掑杈俊鐐鍊戦崕杈崲閹颁罕闂備礁鎼椤倶濠靛垫晜妞帊闄嶆禍?            if (swatch.length) {
+                swatch.css('background-color', colorValue);
+            }
+        });
+        
+        // 婵犵數濮烽弫鎼佸磿閹寸姷绀婇柍褜鍓氶妵鍕寮撮崱妤闁告瑥绻橀弻锝夊箛椤掑倷绮垫繝娈垮灠閵堟悂寮诲銏犵绘俊銈傚亾闁瑰啿绻橀幃妤呴姀锛勫幗闁瑰吋鐣閸氬煀閺囩喆浜滈柕濞垮劜椤垺銇勯姀锛勬噧闁伙絾绻堝畷鐔奸妶鍥瘒濠碉紕鍋戦崐鏍繝姘纾婚柟鎹愮瑜版帗鍋愰梻鍫熺閺嬪懘鎮楀鍨娅橀柛瀣锕悾閿嬬附閸涘浜滈柡澶屽仦濠宕?        $('.sut-wechat-mini-setting-card').hover(
+            function() {
+                $(this).find('.sut-wechat-mini-setting-description').stop(true, true).fadeIn(200);
+            },
+            function() {
+                $(this).find('.sut-wechat-mini-setting-description').stop(true, true).fadeOut(200);
+            }
+        );
+        
+        // 闂傚倷娴囧畷鐢稿磻閻愮數鐭欓煫鍥缁澶愭倶閻愬灚娅曢柡鍡绠撻弻锝夊籍閸屾艾浠樼紓浣哄閺佸氬蓟閻斿吋鐒介柨鏃囨硶閸戝綊姊洪崫銉粶妞妇鏁诲璇测槈濮楀棙鍍靛炪倖甯婇悞锕鐣烽崘娴嬫斀闁绘劘灏欐晶娑煕閵娿儲鍋柣娑卞枤閳秵閸犳牜绮诲娆嶄簻闁瑰搫妫楁禍鎯妶搴簽濠电偐鍋撻梺鍝勭灱閸犳挾妲愰幒鎳崇喖宕閸曞灚缍嶉梻?        $(document).ready(function() {
+            // 婵犵數濮烽钘壩崨鏉戠闁逞屽墴閺屾稓锝庡亝瀹曞矂鏌仦绯曞亾瀹曞洦娈曟繝鐢靛閸熸媽銇愰崠鐤炲鐘垫暩閸嬬偤宕归崼鏇炵归柍鍝勬噹閸屻劑鏌鐚寸礆闁挎繂缁犵懓霉閿濆棛鎽冪悮婵嬫娴懓婵劍閹便劑濡堕崶鈺绗夐梺鍦鍎鍡涙偂濞嗘挻鍊垫繛鎴為忓懏鍙忛柛銉戦弨鑺亜閺冨倹娅曟繛鎻掗埀濞测晝绱炴担鍝殾闁圭儤鍨熷鍫熺箾閸濮柛鐔插亾
+            if (window.location.search.indexOf('settings-updated=true') !== -1) {
+                // 闂傚倸鍊风粈渚骞栭愩倐鍋撳樼厧澧闁哄懓鍩栫粋鎺旓綆闄勯幈銊熼幐搴愮紓浣哄寸紞渚寮婚悢鍏肩劷闁挎洍鍋撳屽枟閵囧嫰閵堝憛锝囩磼缂佹兼创妤犵偛閳规垿宕煎鎰婢戞繝?                var saveStatus = $('#sut-wechat-mini-settings-form .sut-wechat-mini-save-status');
+                if (saveStatus.length) {
+                    saveStatus.text('濠电姷鏁搁崕鎴犲緤閽樺濇椽鏁傞悙搴婇梺绋跨灱閸嬬偤宕戦妶澶嬬厪濠电偟鍋撳鍛绱掗悪鍛绉闁哄瞼鍠栭弻鍥鏁冮埀鏅堕斿愪簻妞劑鍊曢埢鍫煛?).css('color', '#28a745').show();
+                    
+                    // 3缂傚倸鍊搁崐椋庣矆娓氳棟闁规垮枟閺嗘粓鏌熼悜姗嗘當缂佺姵鐗楁穱濠囧閸涙梺鎶芥敱濞茬喖寮婚悢鍏肩劷闁挎洍鍋撻柣蹇婂墲閵囧嫰濡烽敃閻忔挳鏌畝閸犳捇鍩椤掍胶鈯曢柨姘鈹戦斿吋鎼愰柍瑙勫灴椤瑩鎮剧仦鍛婇梻浣哥枃濡鍕藝闂堟稓鏆鍌氭啞閸嬪嫰鏌涢幘鑼跺厡妞?                    setTimeout(function() {
+                        saveStatus.fadeOut();
+                    }, 3000);
+                }
+            }
+        });
+        
+        // 闂傚倸鍊风粈渚骞夐垾鎰佹綎缂備焦蓱閸欏繘鏌熼栵絿浜圭憸鐗堝笒閻愬鏌曟繛褉鍋撻柡瀣鐗楃换婵嬫偨闂堟刀銏煕閻樺啿鍝虹规洘鍨奸宕囩磼缂佹兼创闁瑰磭濮甸敍鎰鈹戦崱姗嗗敳婵犵數濮甸旀牠宕伴幒妤鐤鹃柣妯跨粻姘舵煕閹伴潧鏋涚紒鐎簻闁圭儤鍨甸埀鎮傞幃妯绘綇閳哄啰锛濇繛杈剧到濠鍗灻虹靛摜纾奸柣妯虹婢潧鈹?        var activeSection = localStorage.getItem('sut-wechat-mini-active-section');
+        if (activeSection && $('.sut-wechat-mini-settings-tab[data-section="' + activeSection + '"]').length) {
+            $('.sut-wechat-mini-settings-tab[data-section="' + activeSection + '"]').click();
+        } else {
+            // 濠电姵閸犳冩暜濡啰鐭欓柟鐑樸仜閳畵瀹曞濡烽旇姤娅嶉梺鑽濞诧妇绮婇幘缁鐘查悡鍐鎲稿婂牆绀堟繛鍡樺灥瀵鏌娴搫甯舵娲熷畷鎰板婢跺锛熼梺鐟扮摠缁烘儳危閸銉厵缂備降鍨归悘鐘裁瑰婂懎浜剧紒缁樼洴楠炲鎮欑涙鍓濠电偛鐡划宥囨崲閸銉畺闁靛嗘櫆閺呮煡鏌涢妷銏珚闁?            $('.sut-wechat-mini-settings-tab:first').click();
+        }
+    }
+    
+    // 闂傚倸鍊风粈渚骞夐敍鍕鏆滄俊銈呭暞瀹曟煡鏌涘畝閸庢垹绱為弽鐓欓柣妤鐗婄欢鑼绱掗埀鐣濋崟鍘搁悗骞垮劚妤犲憡鏅舵繝姘鐓曢柣鏃堟敱閹癸絿绱掓潏銊磳鐎规洘锕獮鍡氶柣婵囩箞濮婃椽妫冨娆樻炲炪倧绠撳佳嗙亱闂佸憡鍔崰鏍锝為崨瀛樼厽婵劋閳绘洘绻涚喊鍗炲婵?    if ($('.sut-wechat-mini-settings-container').length) {
+        initSettingsPage();
+    }
+    
+    // 濠电姷濡插懘宕戦崱妯绘珷婵倕鍟閸繈鐓閸劍鈷掗柣婵婃硾閳规垿鎮崣澶婇梺缁樺笩椤曆団捄銊磯濞撴凹鍨伴崜鏉块妶鍛绠為柛搴暬瀵璇测槈閵忊剝娅滈梺鍛婂姂閸斿矂鈥栭崼銉拺闁硅偐鍋涙俊濂告煟韫囨柨鍝烘犵偛鐗撴俊姝岄柛瀣鎹囬弫鎰鎯斿鍫晨婵?    $('.sut-wechat-mini-color-picker').wpColorPicker({
+        change: function(event, ui) {
+            // 濠电姷濡插懘宕戦崱妯绘珷婵倕鍟閸繈鐓閸劍鈷掗柣婵婃硾閳规垿鎮崣澶嬫倷闂佹椿鍘介鍡樼婵犲浂鏁嶆慨姗嗗幗閸庢挸閵堝棙鑲犻柛銉妿閸樻悂姊洪崨濠傚傞柛鏂跨焸閵嗗倿鎼归愩倗闂佸壊鍋嗛崰搴倶鐎电硶鍋撶憴鍕绀闁绘牕銈搁獮鍐枎閹惧磭婵炶揪缍椤曟牠宕閳
+            var color = ui.color.toString();
+            var input = $(event.target).closest('.wp-picker-container').find('.sut-wechat-mini-color-picker');
+            input.trigger('change');
+        },
+        clear: function() {
+            // 婵犵數濮烽弫鎼佸磻閻愬搫绠伴柟闂寸佺粻鐘充繆椤栨縿闁哄绉归獮鏍骞栭撶喓绐欑紓浣瑰敾缁插墽鎹鍥瘈闁稿本渚楀鐐查妶鍐姎缂佺粯锕濠氭晸閻樿尙闂侀潧閸庢椽寮抽姀鐘鏀介柣鎰灏欐晶娑煕閵娿儳浠柣锝囧厴瀹曞寮撮悢灏佸亾閻戣姤鐓曢柟鎹愬皺閸斿秵銇?            var input = $(this).closest('.wp-picker-container').find('.sut-wechat-mini-color-picker');
+            input.trigger('change');
+        }
+    });
+    
+    // 闂傚倸鍊烽悞锕傚箖閸鏇炵閺夊牄鍔嶅鐘绘煠閹鎺戝姕婵炲懐濞閺屸抽崘銊梺宕囩帛閺屻劑鍩為幋锔藉亹閺夊牜鍋勯崢锟犳缂佹濮囬柨鏇邯瀵璇测槈閵忕姷鐫勯梺绋挎湰绾板秹鎮橀崱娑欌拺?    $(document).on('click', '.sut-wechat-mini-upload-image', function(e) {
+        e.preventDefault();
+        
+        var button = $(this);
+        var input = button.siblings('input[type="hidden"]');
+        var preview = button.siblings('.image-preview');
+        var removeButton = button.siblings('.sut-wechat-mini-remove-image');
+        
+        // 闂傚倸鍊风粈渚骞夐敍鍕鏆滄俊銈呭暟閻娆撴煙鐎电啃痪鍙矙閺岀喖鎮欓掍胶绋囬梺鎼炲妽濡鍐寮婚悢鐓庝紶闁告洦鍘滈妶鍥濠泛鑻鐢鍫曟煃閽樺樻妤犵偞缁鐢垫喆閸曞灚姣夌紓鍌氬风粈浣哥暦椤掑嫭鍋夐柣鎾虫捣閺?        var frame = wp.media({
+            title: '闂傚倸鍊搁崐椋庢敓鐘茬闁告洦鍨侀崶绠鏃傛嚀娴滅偓鎱绋垮姎濠靛婚埀濞叉牠鎮悡搴殾婵犲妫濡茶?,
+            button: {
+                text: '濠电姷鏁搁崑鐘诲箵椤忓棛绀婇柍褜鍓氱换娑欏緞鐎悗娈垮櫘閸嬪淇婇懜闈涚窞濠电姴瀚閳仱濮婃椽宕繝鍐樂闂佸憡鍔楅崑鎾承?
+            },
+            multiple: false
+        });
+        
+        // 闂傚倸鍊搁崐椋庢敓鐘茬闁告洦鍨侀崶绠鏃傛嚀娴滅偓鎱绋垮姎濠靛婚埀濞叉牠鎮悡搴殾婵犲妫濡茶查妶蹇曞埌妞厴瀵璇测槈濮楀棙鍍靛炪倖甯婇悞锕鐣烽崘娴嬫斀闁绘劘灏欐晶娑煕閵娿儳浠柣锝囧厴瀹曞寮撮悢灏佸亾閻戣姤鐓曢柟鎹愬皺閸斿秵銇?        frame.on('select', function() {
+            var attachment = frame.state().get('selection').first().toJSON();
+            input.val(attachment.id);
+            preview.html('<img src="' + attachment.url + '" style="max-width: 200px; max-height: 200px;" />');
+            removeButton.show();
+        });
+        
+        // 闂傚倸鍊烽懗鍫曞箠閹剧粯鍊舵慨妯挎硾缁犱即鏌涘鍕鍔滄娲熼弻鐔虹數娴犳粓鏌涢妸锔介柡宀鍠栧畷宕熼撳堝楃槐鎺撳緞鐏炶棄浠橀梺瀹犳勯鐢哥嵁濡鑲閻熸瑥瀚烽弳绱撻崒娆戠规洦鍓熼幃銉偂鎼达絾娈?        frame.open();
+    });
+    
+    // 缂傚倸鍊搁崐椋庣矆娓氳棟妞牜鍋愰埀绠戦悾锟犲箥閾忔椽鏌熼崗鑲殬闁告柨鐭傞幃娆愮節閸劎鍘遍梺鍦鍋撻鍛村窗濮樿泛姹叉鎺戝閳锋垿鏌涘姗堟敾闁抽攱甯弻娑偐閾忛悗?    $(document).on('click', '.sut-wechat-mini-remove-image', function(e) {
+        e.preventDefault();
+        
+        var button = $(this);
+        var input = button.siblings('input[type="hidden"]');
+        var preview = button.siblings('.image-preview');
+        
+        input.val('');
+        preview.html('');
+        button.hide();
+    });
+    
+    // 闂傚倸鍊风粈渚骞夐敍鍕鏆滈柣鎰缁犻箖鏌嶈滈崜姘辨崲濞戙垹宸濇鎾卞灩瀵浼存鐠団虫灆缂佺懄娣囧骞栨担瑙勬珖闂侀炲苯澧撮柟绻濆鎾鎮崹绱俊鐐鍊栭幐鍡涘礃閳哄啩绮氬?    $(document).on('click', '.sut-wechat-mini-delete-user', function(e) {
+        e.preventDefault();
+        
+        var button = $(this);
+        var userId = button.data('id');
+        
+        if (confirm('缂傚倸鍊烽懗鍫曟惞鎼淬劌鐭楅幖娣鍔岀粣妤呮煛瀹骸骞楅柛瀣櫊閺屾盯骞樺鐎氬汲椤愶絿绠鹃弶鍫濆閹鍏笺亜椤撶偟澧柟锕崺锟犲川椤旇勫介梻浣告啞濞插秹寮插銏犵劦妞帊鑳堕妴鎺楁煙楠炲灝鐏茬电矙婵瓕闁哄鐗曢鍐濡堕崨濠碘槅鍋呴悷鈺佺圭姷鐤婵炴垶鐟崢鐢告閸濆嫷妲归柛銊涧鍗卞鐘崇嶉悡娆愩亜閺傝插兼繛璇畵瀵鏌崟鍘介梺鍝勫搁悘婵嬎夎箛娑欑厱闁哄倸鐏濋弳锝夋煛瀹閸犳牕鐣疯鎺濇晩闁归攱锕缁辨洜妲愰幘鎰佸悑闁糕剝菤閹峰湱绱撴担鍓插剰妞富鍨堕妯荤附缁嬪灝绐涘炪倖鎸村鍛村船瑜版帗鈷掑姘亾闁逞屽墯缁嬫垹姘閰弻娑欑節閸愮杽閻庢垮枔閸旀垶鎱埀鏌曢崼婵囧晵?)) {
+            $.ajax({
+                url: ajaxurl,
+                type: 'POST',
+                data: {
+                    action: 'sut_wechat_mini_delete_user',
+                    user_id: userId,
+                    _ajax_nonce: sut_wechat_mini_admin.nonce
+                },
+                beforeSend: function() {
+                    button.addClass('sut-wechat-mini-loading');
+                    button.text('闂傚倸鍊风粈渚骞夐敍鍕鏆滈柣鎰缁犻箖鏌嶈滈崜姘辨崲濞戙垹宸濇鎾跺剱閸斿岀磽?..');
+                },
+                success: function(response) {
+                    if (response.success) {
+                        button.closest('tr').fadeOut(300, function() {
+                            $(this).remove();
+                            
+                            // 婵犵數濮烽钘壩崨鏉戠闁逞屽墴閺屾稓锝庡亝瀹曞矂鏌畝瀣纾垮鐙呭囬幏鐘诲箵閹烘埈娼鐘甸埀鍟跨痪褔鏌熼旂厧鎼佹偩閻戣棄唯闁冲搫鍊瑰鍥箾鏉堝墽绉婵炲拑缍侀娆愭償閵婏腹鎷洪梺鍛婄箓鐎氭櫠閺囩喆浜滈柨鏇炲烽幉鍓垮櫘閸嬪淇婇懜闈涚窞濠电姴瀚烽崥?                            if ($('.sut-wechat-mini-users-wrapper tbody tr').length === 0) {
+                                $('.sut-wechat-mini-users-wrapper').html('<div class="notice notice-info"><p>闂傚倸鍊风粈渚骞栭愨懡娑樜旈崨锛欓梺鑽枑鐎氬牆鈽夐姀鐘栄囨煕濠婄粈浣糕枔椤愩埄娓婚柕鍫濇欓鍡樸亜閺傚尅鍔熼柟骞垮灲瀹曞崬鈽夊蹇婂亾閸鏇犲彄闁搞儯鍔嶇亸鐢电磼閻樺啿鈻曢柡灞界閹风娀骞撻幒鎾虫鐠団崇仭婵兌缁璇测槈閵忕姴宓嗛梺缁樻煥閹诧繝瑜版帗鈷?/p></div>');
+                            }
+                        });
+                    } else {
+                        alert('闂傚倸鍊风粈渚骞夐敍鍕鏆滈柣鎰缁犻箖鏌嶈滈崜姘辨崲濞戙垹宸濇鎾跺剱閸斿愭倵閸凡閻庢凹鍘奸鍥绠涘杈櫇闂侀潧閸旀牕煤閻旂厧钃? + response.data.message);
+                    }
+                },
+                error: function() {
+                    alert('闂傚倸鍊风粈渚骞夐敍鍕鏆滈柣鎰缁犻箖鏌嶈滈崜姘辨崲濞戙垹宸濇鎾跺剱閸斿愭倵閸凡閻庢凹鍘奸鍥绠涘杈櫇闂侀潧閸旀牕煤閻旂厧钃熼柕濞垮劗濡插牊淇婇栨繂浜归柛鏃戝枛椤鍐濡堕崱妯洪梺鍛婃尵閸犳牕閼姐倓娌缂佹稑閹鎴閸撴彃浜栭柛銊悷褔姊?);
+                },
+                complete: function() {
+                    button.removeClass('sut-wechat-mini-loading');
+                    button.text('闂傚倸鍊风粈渚骞夐敍鍕鏆滈柣鎰缁犻箖鏌嶈滈崜姘辨崲?);
+                }
+            });
+        }
+    });
+    
+    // 闂傚倸鍊风粈渚骞栭愩倗鐭撻柡澶嬪殮濞参柍鍝勶攻閺呫垽姊绘担鍝虎妞垵鍟缁傚秴閸鐔叉嫽闂佸壊鍋嗛崰鎾诲煡婢舵劖鐓熼幖缁版澘浠闂佸搫鐬奸崰鏍鎮伴曞畷褰掗崣銉亝婵犵數濮甸旀牠宕板鍛鍎庢鏍鍋涚粻?    $(document).on('click', '.sut-wechat-mini-tab-nav', function() {
+        var tabNav = $(this);
+        var tabId = tabNav.data('tab');
+        var tabsContainer = tabNav.closest('.sut-wechat-mini-tabs');
+        
+        // 缂傚倸鍊搁崐椋庣矆娓氳棟妞牜鍋愰埀绠戦悾锟犲箥閾忔椽鏌熼崗鑲殬闁告柨鐬肩划濠氬閳哄倻鍘撻悷婊勭矒瀹曟粓鎮總澶婃梺鍓茬厛閸嬪嫮娆悙鐑樺甸柨婵嗛告禍鏍霉閻樻瑥娲埛鎴煕濞戞鏀婚柣鎾跺枛閺屾盯寮閸妷闂侀涚閸旀垿鐛閺嶃劍濯撮柛婵勫劤閺?        tabsContainer.find('.sut-wechat-mini-tab-nav').removeClass('active');
+        tabsContainer.find('.sut-wechat-mini-tab-content').removeClass('active');
+        
+        // 婵犵數濮烽弫鎼佸磿閹寸姷绀婇柍褜鍓氶妵鍕寮撮崱妤闁告瑥绻橀弻锝夊箛椤栨粌鐗氭繛瀛樼矊缂嶅寮婚悢鐓庣畾鐟滃秹寮虫潏銊簻闁靛牆鎳忛崳铏圭磼缂佹兼创闁瑰磭濮甸敍鎰鈹戦崱姗嗗敳婵犵數濮甸旀牠宕伴幒妤鐤鹃柣妯跨粻鏍鏌嶉崫鍕鍣洪柛銈呴惀鎮崺浜濈粋?        tabNav.addClass('active');
+        tabsContainer.find('.sut-wechat-mini-tab-content[data-tab="' + tabId + '"]').addClass('active');
+        
+        // 闂傚倷娴囧畷鐢稿窗閹扮増鍋弶鍫氭櫇娑撳秹鏌熸潏鍓濞存粌缍婇弻娑樼暆閳磻閻愬搫鍚瑰鐘插暔娴滄粓鐓閸劍灏妞浚鍋婇弻锟犲幢濡鑽嚒闂佸疇妫勯闈涢掗埢搴倷椤戝劤缁辨挻鎷呴棃娑樜梺鍛婃煥缁夊墎鍒?        $(document).trigger('sut-wechat-mini-tab-changed', [tabId]);
+    });
+    
+    // 闂傚倸鍊烽懗鍫曘佹繝鍥槬闁哄稁鍘介弲鏌悢鍝煂濠勮灋闁告劑鍓濞戙垹绀冩鏃傗拡濞煎姊洪弬銉珔闁哥喍鍗冲畷娆撴晸閻樻枼鎷洪梺鍛婄閿曘儵鍩涢幒妤佺厱闁绘挎珪缁瀣?    $(document).on('click', '.sut-wechat-mini-accordion-header', function() {
+        var header = $(this);
+        var accordionItem = header.closest('.sut-wechat-mini-accordion-item');
+        
+        // 闂傚倸鍊风粈渚骞夐敍鍕鏆滈柟鐑樺殮濞叉櫇闁逞屽墴閹楣冩倻閽樺岄梺纭呴澶娾枍閿濆婄闁绘跨粻鐢告煙鐠団充簼妞劌锕瀵濠氭晲閸涘倻鍠栧畷褰掗幆褍缂氶梻?        accordionItem.toggleClass('active');
+    });
+    
+    // 闂傚倸鍊风粈渚骞夐敍鍕鏆滈柟鐑樺殮濞叉櫇闁逞屽墴閹楣冩倻閽樺岄梺鍦鍎换鍌氣枔閵娾晜鈷戦梺鍋涢懟鏅剁电硶鍋撶憴鍕绀冩銊工閻嘲螖閸涚獩濡炪倖鐗楃划宥夌拠娴嬫斀?    $(document).on('change', '.sut-wechat-mini-toggle input, .sut-wechat-mini-toggle-btn input', function() {
+        var toggle = $(this);
+        var checked = toggle.is(':checked');
+        var relatedInput = toggle.data('related-input');
+        
+        // 濠电姷鏁告慨鐑姐傛禒瀣鐒垫鎺嗗亾闁哥喎娼崺妞巻鍋撶紓宥咃躬楠炲啫螣鐠囪尙绐為梺褰掑亰閸撴瑩鎮靛鑽瘈闁靛骏绲剧涵楣冩煥閺囨娑閹扮増鍋愮紓浣归崢楣冩煛婢跺澧戦柛鏂跨钘熼柛鈩冪懅绾剧厧螞閻楀牏绠撶靛枤閳姗銆冩繝鍐箚闁绘垹鐡旈弫宥嗙節婵犲倹濯兼俊鑼鍏樺婄粯鎷呴崨濠傛殘闁汇埄鍨遍濠囧箖閻戣姤鏅濋柍褜鍓涢崣鍛存缁夊棗瀚峰鏃淇婇愶綇鑰块柡灞稿墲瀵板嫭绻濋崟娈梻?        if (relatedInput) {
+            $('#' + relatedInput).val(checked ? 1 : 0);
+        }
+        
+        // 闂傚倷娴囧畷鐢稿窗閹扮増鍋弶鍫氭櫇娑撳秹鏌熸潏鍓濞存粌缍婇弻娑樼暆閳磻閻愬搫鍚瑰鐘插暔娴滄粓鐓閸劍灏妞浚鍋婇弻锟犲幢濡鑽嚒闂佸疇妫勯闈涢掗埢搴倷椤戝劤缁辨挻鎷呴棃娑樜梺鍛婃煥缁夊墎鍒?        $(document).trigger('sut-wechat-mini-toggle-changed', [toggle, checked]);
+    });
+    
+    // 濠电姷鏁搁崑鐐哄垂閸鏇炵伴柟闂寸贰閺佸嫰鏌涢埄鍏犲垂閺冪换娑橀旇崵鍑归梺鎼炲栧妯兼崲濠靛洨绡闁稿本纰嶅绱撴担鎻掍壕闁诲函缍嗛崰妤呮偂濞嗘劑浜滈柡鍥仦閸懓瑜滈崰鏍婀侀梺缁橈耿濞佳囧煝閸鈶亾濞堝灝娅橀柛瀣锕悾閿嬬附閸涘浜滈柡澶屽仦濠宕?    $('.sut-wechat-mini-dropdown').hover(
+        function() {
+            $(this).find('.sut-wechat-mini-dropdown-content').stop(true, true).fadeIn(200);
+        },
+        function() {
+            $(this).find('.sut-wechat-mini-dropdown-content').stop(true, true).fadeOut(200);
+        }
+    );
+    
+    // 婵犲痉鏉挎佹叏閻戣棄纾婚柣妯荤閺嬪秹鏌崶鈺佇柛銊箞閺屻劑寮村娴滄儳閵堝骸骞戦柛鏂跨焸閿濈偛鈹戠灚鏅梺閫炲苯澧叉?    $(document).on('click', '.sut-wechat-mini-smooth-scroll', function(e) {
+        e.preventDefault();
+        
+        var target = $(this).attr('href');
+        var offset = $(this).data('offset') || 0;
+        
+        $('html, body').animate({
+            scrollTop: $(target).offset().top + offset
+        }, 500);
+    });
+    
+    // 闂傚倸鍊峰鍥妸鈺傚块柨鏇楀亾妞仢椤婊堝焵椤掑嫬绠栧锔藉鍕鎮楃憴鍕绀冪紒璇茬墛娣囧瀹濠冃闂備礁鎼濡鏃堝础閹惰棄钃熼柍鈺佸暞婵鎾鏌涘鍕鍔氭銈傚亾闂?    function animateNumber(element, target, duration) {
+        var start = 0;
+        var increment = target / (duration / 16);
+        var current = start;
+        
+        var timer = setInterval(function() {
+            current += increment;
+            if (current >= target) {
+                clearInterval(timer);
+                current = target;
+            }
+            
+            element.text(Math.floor(current).toLocaleString());
+        }, 16);
+    }
+    
+    // 闂傚倸鍊峰鍥妸鈺傚殑闁肩跨仛濞呯姵淇婇妶鍌氫壕闂佷紮绲介悘姘跺箯閸涘瓨鎯為柛锔诲弿缁辨煡姊绘担铏瑰笡婵濠勬嚀椤鍐宕稿鐟欙箓鏌嶈滈崜鐔峰绠归柣鎰褰冩慨鏇倵鐟欏嫭绀冮柨鏇樺灪娣囧骞橀旇偐濡炪倖妫侀崑鎰八囬愨懇鏀介柣妯肩帛濞懷勪繆椤愬箹妞搐铻栭柛娑卞枤閸?    function initCharts() {
+        if (typeof Chart !== 'undefined') {
+            // 闂傚倸鍊烽悞锕閸劷闁秆勭粈澶屽箍鍎遍寮伴妷锔剧鹃柟瀵稿仧閹冲嫭绻涢崨鈻堥柡宀嬬秮楠炲洭閻撳骸婵犳垮櫙缁查箖宕濆鎾崇畺婵炲樊浜滅粻鎶芥煙閹煎箹闁告挾澧楃换婵嬫偨闂堟稐绮剁紓浣搁幊鎾绘偩閻戣棄閱囬柡鍥仧椤斿愭鐟欏嫬闁哄倷绶氬畷?            var usersChartElement = document.getElementById('users-chart');
+            if (usersChartElement) {
+                // 婵犵數濮烽钘壩崨鏉戝瀭妞繐鐗嗙粈鍫熺節闂堟稓澧愰柛瀣鎸搁婵嬮悩鍐叉珰闂備浇閸犳洜鍒掑鎰绻嗛柟闂寸劍閺呮繈鏌嶈滈崜鐔煎箖閿熺姴鍗抽柕蹇磿閸樺憡绻涙潏鍓埌闁圭鍋婇妴鍌炴嚃閳规儳浜?                var userLabels = [];
+                var userData = [];
+                var today = new Date();
+                
+                // 闂傚倸鍊烽悞锕傛儑瑜版帒鍨傚鐘宠壘缁愭呮煙閻楀牊绶查柛銊归幈銊熼幐搴愰柣搴壘椤敻寮诲牜妾梺鍛婃尰閼归箖鈥?0濠电姷鏁告慨浼村垂瑜版帗鍊堕柛鍎遍悿鐐绻濋棃娑欓柡瀣妫冮弻鐔告綇閸撗呮殸闂佸搫缁舵岸寮婚敐鍛傛棃鍩椤掑嫭鍋嬮柛鈩冪懅閻?                for (var i = 29; i >= 0; i--) {
+                    var date = new Date(today);
+                    date.setDate(date.getDate() - i);
+                    userLabels.push(date.getMonth() + 1 + '/' + date.getDate());
+                    userData.push(Math.floor(Math.random() * 50) + 10);
+                }
+                
+                new Chart(usersChartElement, {
+                    type: 'line',
+                    data: {
+                        labels: userLabels,
+                        datasets: [{
+                            label: '闂傚倸鍊风粈渚骞栭愶箑纾归悷娆忓閻濆爼鏌涢埄鍐鈽夐柡瀣窔閺屾洟宕煎鎰笑缂?,
+                            data: userData,
+                            borderColor: '#0073aa',
+                            backgroundColor: 'rgba(0, 115, 170, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top'
+                            },
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    color: 'rgba(0, 0, 0, 0.05)'
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false
+                                }
+                            }
+                        },
+                        interaction: {
+                            mode: 'nearest',
+                            axis: 'x',
+                            intersect: false
+                        }
+                    }
+                });
+            }
+            
+            // 闂傚倸鍊搁崐椋庣矆娴缚濮抽梺绉寸壕濠氭煙閸撗呭笡闁绘挻娲熼弻锝夊箣濠靛浂妫炲鐐叉噹缁夌敻濡甸崟围闁告侗鍘搁崑鎾寸節濮橀梺鍛婃寙閳磻閹剧粯鏅查幖瀛樼箘閻酣姊哄畷鍥跺劆闁搞劋绮欏璇测槈閵忕姈銊煥閺囨浜剧紓浣插亾闁告劦鍠楅悡?            var salesChartElement = document.getElementById('sales-chart');
+            if (salesChartElement) {
+                // 婵犵數濮烽钘壩崨鏉戝瀭妞繐鐗嗙粈鍫熺節闂堟稓澧愰柛瀣鎸搁婵嬮悩鍐叉珰闂備礁鎼鐞氬礉閹达箑鏄柍褜鍓氶妵鍕骞掗幋婵愪患闂佸吋鐡曢澶愬閸曠睄闁搞儺鐏濋幘瀵哥鹃柛绻勯崺锝夋煛?                var salesLabels = [];
+                var salesData = [];
+                var today = new Date();
+                
+                // 闂傚倸鍊烽悞锕傛儑瑜版帒鍨傚鐘宠壘缁愭呮煙閻楀牊绶查柛銊归幈銊熼幐搴愰柣搴壘椤敻寮诲牜妾梺鍛婃尰閼归箖鈥?0濠电姷鏁告慨浼村垂瑜版帗鍊堕柛鍎遍悿鐐绻濋棃娑欓柡瀣妫冮弻鐔告綇閸撗呮殸闂佸搫缁舵岸寮婚敐鍛傛棃鍩椤掑嫭鍋嬮柛鈩冪懅閻?                for (var i = 29; i >= 0; i--) {
+                    var date = new Date(today);
+                    date.setDate(date.getDate() - i);
+                    salesLabels.push(date.getMonth() + 1 + '/' + date.getDate());
+                    salesData.push(Math.floor(Math.random() * 5000) + 1000);
+                }
+                
+                new Chart(salesChartElement, {
+                    type: 'bar',
+                    data: {
+                        labels: salesLabels,
+                        datasets: [{
+                            label: '闂傚倸鍊搁崐椋庣矆娴缚濮抽梺绉寸壕濠氭煙閸撗呭笡闁绘挻娲熼弻锝夊箣濠靛浂妫炲鐐叉噹缁夌敻濡?,
+                            data: salesData,
+                            backgroundColor: 'rgba(76, 175, 80, 0.6)',
+                            borderColor: '#4caf50',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top'
+                            },
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false,
+                                callbacks: {
+                                    label: function(context) {
+                                        var label = context.dataset.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        label += '濠? + context.raw.toLocaleString();
+                                        return label;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    color: 'rgba(0, 0, 0, 0.05)'
+                                },
+                                ticks: {
+                                    callback: function(value) {
+                                        return '濠? + value.toLocaleString();
+                                    }
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+    }
+    
+    // 闂傚倸鍊风粈渚骞夐敍鍕鏆滄俊銈呭暞瀹曟煡鏌涘畝閸庢垹绱為弽鐓欓柣妤鐗婄欢鑼绱掗埀鐣濋崟鍘搁悗瑙勬惄閸犳牜姘煎櫍閵嗗懘閵忥紕鍘介梺缁樺姉缁绘繄娆柆宥嗙厽闁圭偓鍓氬鐑樹繆閸欏婂囬柍璇查叄楠炲洭閸瑧鏆伴梻鍌欒兌椤鍫嫉椤掑倻鐭欓柟鎯鏌煟閵堝拋鍚榓rt.js闂傚倸鍊风粈渚骞夐敓鐘冲仭妞牜鍋涢崹鍌炴煙閹鐗堥柡瀣窔閺屾洟宕煎鎰效闂?    if (typeof Chart !== 'undefined') {
+        initCharts();
+    } else {
+        // 闂傚倷娴囬曆呮崲閹板床闁瑰稿瀹曟煡鏌涢埄鍐鈯曢柛搴攻閵囧嫰寮介愮捕缂備讲鍋撳埖鍔栭悡蹇撯攽閻樿尙绠洪柛姘鍊块弻娑氾綆鍋呯亸浼存煙瀹勭増鍣界紒鐟埢搴倷椤掗娑娴憡鎯堟锕備憾瀹曟垿鎮悡搴挤濡炪伇鍛鏅縭t.js
+        var script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/chart.js';
+        script.onload = initCharts;
+        document.head.appendChild(script);
+    }
+    
+    // 闂傚倷娴囧畷鐢稿磻閻愮數鐭欓煫鍥缁澶屽箍鍎遍浼村磻鐎厱婵犻潧瀚閸旀粓鏌涚块柟锕幃娆撳级閹存繂袘濠电偛鐡划鎾剁不閺嶈摕婵炴垶鍩冮崑鎾绘晲鎼粹茬敖闂佹椿鍘奸戝愬蓟閿熺姴宸濇鎰灩婵锕傛倵?    $('.sut-wechat-mini-users-wrapper table, .sut-wechat-mini-orders-wrapper table').on('mouseenter', 'tbody tr', function() {
+        $(this).addClass('hover');
+    }).on('mouseleave', 'tbody tr', function() {
+        $(this).removeClass('hover');
+    });
+    
+    // 闂傚倷娴囧畷鐢稿磻閻愮數鐭欓煫鍥缁澶愭倶閻愬灚娅曢柡鍡绠撻弻锝夊棘閸屽鐐茬墢閺呭焵椤掗崢婊堝磻閹剧粯鐓曢柟鏉垮悁缁吋銇?    $('.sut-wechat-mini-form').on('submit', function(e) {
+        var form = $(this);
+        var isValid = true;
+        
+        // 婵犵數濮烽钘壩崨鏉戠闁逞屽墴閺屾稓锝庡亝瀹曞矂鏌畝瀣纾垮鐙呭囬幏鐘诲箵閹烘埈娼涚紓鍌氬烽懗鍫曞磿閻跨闁规儳缁梻鍌氱墛娓氭螣閸銉厱閻庯綆浜滈忔煙椤曠紓姘端囬弻銉厓?        form.find('[required]').each(function() {
+            var field = $(this);
+            var value = field.val().trim();
+            
+            if (value === '') {
+                isValid = false;
+                field.addClass('error');
+                field.siblings('.error-message').show();
+            } else {
+                field.removeClass('error');
+                field.siblings('.error-message').hide();
+            }
+        });
+        
+        // 婵犵數濮烽钘壩崨鏉戠闁逞屽墴閺屾稓锝庡亝瀹曞矂鏌畝瀣纾垮鐙呭囬幏鐘诲箵閹烘嚩鏇娴警鐒炬鎴濇濋幃褍閸涚亰缂傚倷鐒摫缂傚秴娲閺屾洘绻涜嶉崰姘螞閺冨牊鐓?        form.find('input[type="email"]').each(function() {
+            var field = $(this);
+            var value = field.val().trim();
+            var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            
+            if (value !== '' && !emailRegex.test(value)) {
+                isValid = false;
+                field.addClass('error');
+                field.siblings('.error-message').text('闂傚倷娴囧畷鍨鎱弶鎳椽濡搁埡浣芥憰婵犮垼娉涢張閼恒儯浜滈柟鎯船閻忊晝绱掗埀宕掗悙瀵稿帾婵犮垼鍩栭惄椤斿墽纾奸柣妯哄暱濞存煛鐏炵垮闁瑰嘲鎳樺畷濡烽妷銏犲綑濠电姷鏁搁崑娑偋婵犲洤鍨傞柛褎閽冪喖鏌涢妷澧婚柡浣革功缁辨挻鎷呴棃娑氫患闂佽桨绀侀宄板闁冲搫鎳忛庡秴鈹戦悩鐏闁挎碍銇?).show();
+            }
+        });
+        
+        // 婵犵數濮烽钘壩崨鏉戠闁逞屽墴閺屾稓锝庡亝瀹曞矂鏌仦绯曞亾瀹曞洦娈曟繝鐢靛閸熸媽銇愰崠鐤為梻鍌氬风粈渚骞栭愩倗鐭撻柛娲栭崒銊喐韫囨拹?        form.find('input[type="url"]').each(function() {
+            var field = $(this);
+            var value = field.val().trim();
+            var urlRegex = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/;
+            
+            if (value !== '' && !urlRegex.test(value)) {
+                isValid = false;
+                field.addClass('error');
+                field.siblings('.error-message').text('闂傚倷娴囧畷鍨鎱弶鎳椽濡搁埡浣芥憰婵犮垼娉涢張閼恒儯浜滈柟鎯船閻忊晝绱掗埀宕掗悙瀵稿帾婵犮垼鍩栭惄椤斿墽纾奸柣妯哄暱濞存煛鐏炵垮闁瑰嘲鎳樺畷濡烽妷銏犲綑濠电姷鏁搁崑娑偋婵犲洤鐭楅柛鏍鏋闂傚倸鍊风欢姘婵犳碍鈷旈柛鏇亽閻斿棙淇婇栨瑨闁?).show();
+            }
+        });
+        
+        if (!isValid) {
+            e.preventDefault();
+            // 婵犵數濮烽弫鍛婃叏閹炬櫇闁靛嗘櫆閸矂鏌幇闈涘闁告瑥绻橀弻宥夊传閸曟紓浣插亾闁糕剝绋掗悡娆愮箾閸婵堜虎婵炲懏锕弻娑欐償閵忕姷浠撮梺瀹犳勯鐢哥嵁濮楅娑橀愩埄妫滃鐘垫暩閸嬬偤宕归崼鏇炵归柍鍝勫婚鍙夈亜韫囨挾澧曢柡瀣侀埞鎴偐閹绘帩浠鹃柣搴嶇喊宥夊閸曞唨闁靛忓囧銈夋閸珪闁哥姵鍔楅幑?            form.find('.error:first').focus();
+        }
+    });
+    
+    // 闂傚倷绀侀幖藝椤栫偞鍋嬪鐘叉搐缁犱即鏌熼梻瀵搁柣閺屾盯鍩勯崘鐐濠电偛鐡悧鐘诲蓟濞戙垹鐒洪柛鎰鍋撻悾濂告閸濆嫷妲风紒鐟濠氭晸閻樿尙闂侀潧臎閸愬箺闂傚倷鑳剁划绮欓幒妤佸仭鐟滄棃鐛?    $('.sut-wechat-mini-form input, .sut-wechat-mini-form textarea, .sut-wechat-mini-form select').on('input change', function() {
+        var field = $(this);
+        var value = field.val().trim();
+        
+        // 婵犵數濮烽弫鎼佸磻閻愬搫绠伴柟闂寸佺粻鐘充繆椤栨縿闁哄绉归獮鏍菐椤掓俊浠嬫煟閹惧崬鍔滅紒缁樼洴瀹曞崬螣鏉炴澘鍨旈梻浣规偠閸婃牠鎮悩璇茶摕闁挎繂鎲橀悢鐓庡瀭妞梹鍎崇敮鍧楁?        field.removeClass('error');
+        field.siblings('.error-message').hide();
+        
+        // 濠电姴鐥夐弶搴撳亾濡焦鍙忛柟缁枟閸庢銆掑橈絽浜鹃梺璇灟閻掞箑閸曞劅闁挎繂娲垿姊绘担鍛婂暈濞撴碍瀹曪綀绠涢弴鐘甸梺鍝勭閸樹粙宕愰崹绠鹃柟瀵稿仧閹虫劖绻涢崼鐔哥冮柕?        if (field.attr('required') && value === '') {
+            field.addClass('error');
+            field.siblings('.error-message').text('婵犵數濮甸旀牠宕板鍐绱柛褎绾惧綊鏌崶銉仾闁稿楅幉绋挎径濠勫幒闂佽勫礃椤曆呯矆閸屾稒鍙忔繝闈涙涢悘杈亜閿斿灝宓嗘俊鎳橀鏇閳啯鍊烽梻浣烘嚀閸熷潡鏌婇敐澶婃瀬闁规壆澧楅崐閿嬬箾閿濆骸鍘哥紒?).show();
+        }
+        
+        // 濠电姴鐥夐弶搴撳亾濡焦鍙忛柟缁枟閸庢銆掑橈絽浜鹃梺璇灟閻掞箑閸曠疀妞挾濮存慨鐑樹繆閻愭牕婵犳碍鎯為幖娣鍔岄懜?        if (field.attr('type') === 'email' && value !== '') {
+            var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(value)) {
+                field.addClass('error');
+                field.siblings('.error-message').text('闂傚倷娴囧畷鍨鎱弶鎳椽濡搁埡浣芥憰婵犮垼娉涢張閼恒儯浜滈柟鎯船閻忊晝绱掗埀宕掗悙瀵稿帾婵犮垼鍩栭惄椤斿墽纾奸柣妯哄暱濞存煛鐏炵垮闁瑰嘲鎳樺畷濡烽妷銏犲綑濠电姷鏁搁崑娑偋婵犲洤鍨傞柛褎閽冪喖鏌涢妷澧婚柡浣革功缁辨挻鎷呴棃娑氫患闂佽桨绀侀宄板闁冲搫鎳忛庡秴鈹戦悩鐏闁挎碍銇?).show();
+            }
+        }
+        
+        // 濠电姴鐥夐弶搴撳亾濡焦鍙忛柟缁枟閸庢銆掑橈絽浜鹃梺璇灟閻掞妇鎹崨娼柣?        if (field.attr('type') === 'url' && value !== '') {
+            var urlRegex = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/;
+            if (!urlRegex.test(value)) {
+                field.addClass('error');
+                field.siblings('.error-message').text('闂傚倷娴囧畷鍨鎱弶鎳椽濡搁埡浣芥憰婵犮垼娉涢張閼恒儯浜滈柟鎯船閻忊晝绱掗埀宕掗悙瀵稿帾婵犮垼鍩栭惄椤斿墽纾奸柣妯哄暱濞存煛鐏炵垮闁瑰嘲鎳樺畷濡烽妷銏犲綑濠电姷鏁搁崑娑偋婵犲洤鐭楅柛鏍鏋闂傚倸鍊风欢姘婵犳碍鈷旈柛鏇亽閻斿棙淇婇栨瑨闁?).show();
+            }
+        }
+    });
+    
+    // AJAX闂傚倸鍊风粈渚骞夐垾鎰佹綎缂備焦蓱閸欏繘鏌熼栵絿浜圭憸鐗堝笒閻愬銇勯幒鍡椾壕闂佸憡婵炲寮婚埄鍐窞閻庯綆浜為崝绋库攽閳藉棗鐏犳鎴濆璇测槈閵忕姷鐤濡炪倖甯婄粈浣糕枍閿濆拋娓?    $(document).on('click', '.sut-wechat-mini-load-more', function(e) {
+        e.preventDefault();
+        
+        var button = $(this);
+        var container = button.closest('.sut-wechat-mini-load-more-container');
+        var loading = container.find('.sut-wechat-mini-loading');
+        var page = button.data('page') || 1;
+        var action = button.data('action') || '';
+        var nonce = button.data('nonce') || '';
+        
+        // 闂傚倸鍊风粈渚骞栭愩倐鍋撳樼厧澧闁哄懓鍩栫粋鎺旓綆闄勯幈銊熼幐搴愮紓浣插亾濠埖鍔栭悡鐔镐繆椤栨粌甯堕柛鏂跨槐鎺撴媴瀹勬澘绁闂佸搫鐭夌徊鍊熺亽闂佸壊鐓堥崰姘跺储椤愶附鈷?        button.hide();
+        loading.show();
+        
+        // 闂傚倸鍊风粈渚骞夐敓鐘冲仭闁挎洖鍊搁崹鍌炴煕瑜庨鍛存倿閸簻闁硅揪绲剧涵鑸点亜韫囨洦妯圓X闂傚倷娴囧畷鍨鎱弶鎳椽閵忕姷鍝楅梻渚囧墮缁夌敻宕?        $.ajax({
+            url: ajaxurl,
+            type: 'POST',
+            data: {
+                action: action,
+                page: page,
+                _ajax_nonce: nonce
+            },
+            success: function(response) {
+                if (response.success && response.data.html) {
+                    // 婵犵數濮烽弫鎼佸磿閹寸姷绀婇柍褜鍓氶妵鍕寮撮崱妤闁告瑥绻橀弻锝夊箛椤掍焦鍎撳鈽嗗亝閿曘垽寮婚埄鍐窞濠电姴瀚閾忓酣姊烘潪鎵闁绘牕銈搁獮?                    container.before(response.data.html);
+                    
+                    // 闂傚倸鍊风粈渚骞栭愨挌娲濡舵径瀣浠遍梺闈浥堥弲娑嫅閻斿皝鏀介柣妯诲絻閺嗘柨霉濠婂嫮鐭掗柡宀嬬秮婵闁靛繆鍓濆鍕姊?                    button.data('page', page + 1);
+                    
+                    // 濠电姷鏁告慨鐑姐傛禒瀣鐒垫鎺嗗亾闁哥喎娼崺妞巻鍋撶紓宥咃躬楠炲啫螣鐠囪尙绐炴繝鐢靛仧閸嬫捇鎮姀銈嗏拺闁哄倶鍎插鍛存煕閻曚礁鐏紒楠炴帒螖娴搫骞愰梻浣规偠閸庡礉瀹洨绀婇柟瀵稿亼娴滄粓鏌弴妤浜惧鐐茬毞閳閺嗭附鎱炶蹭壕閻庤勬磸閸旀垿銆佸娆炬闂佸搫鎷戠紞浣稿绠伴幖杈剧岛濡插牓姊洪崗鍏笺仧闁搞劏娉涢悾鐤銇愰幒婵囨櫖闂佺粯鍔楃悰銉箰閸曗拺鐟滅増甯掓禍浼存煕閵娾晙鎲鹃挊鐔兼煙鏉堥箖妾闁绘挻娲熼弻锟犲礃閵娿儮鍋撻幖浣洪攱绻濋悽闈涗沪婵炲吋鐟叅妞挾鍎愰崵鏇煙缂併垹鏋涚紒鐙欏洦鐓欓柟纰卞幖楠炴呮煃鐠囧眰鍋慨濠冩瀹曠兘瑜忛崝绋块妶蹇撻柡浣搁悰?                    if (!response.data.has_more) {
+                        button.remove();
+                    } else {
+                        button.show();
+                    }
+                } else {
+                    // 濠电姷鏁告慨鐑姐傛禒瀣鐒垫鎺嗗亾闁哥喎娼崺妞巻鍋撶紓宥咃躬楠炲啫螣鐠囪尙绐炴繝鐢靛仧閸嬫捇鎮姀銈嗏拺闁哄倶鍎插鍛存煕閻曚礁鐏紒楠炴帒螖娴搫骞愰梻浣规偠閸庡礉瀹洨绀婇柟瀵稿亼娴滄粓鏌弴妤浜惧鐐茬毞閳閺嗭附鎱炶蹭壕閻庤勬磸閸旀垿銆佸娆炬闂佸搫鎷戠紞浣稿绠伴幖杈剧岛濡插牓姊洪崗鍏笺仧闁搞劏娉涢悾鐤銇愰幒婵囨櫖闂佺粯鍔楃悰銉箰閸曗拺鐟滅増甯掓禍浼存煕閵娾晙鎲鹃挊鐔兼煙鏉堥箖妾闁绘挻娲熼弻锟犲礃閵娿儮鍋撻幖浣洪攱绻濋悽闈涗沪婵炲吋鐟叅妞挾鍎愰崵鏇煙缂併垹鏋涚紒鐙欏洦鐓欓柟纰卞幖楠炴呮煃鐠囧眰鍋慨濠冩瀹曠兘瑜忛崝绋块妶蹇撻柡浣搁悰?                    button.remove();
+                }
+            },
+            error: function() {
+                // 闂傚倸鍊风粈渚骞栭愩倐鍋撳樼厧澧闁哄懓鍩栫粋鎺旓綆闄勯幈銊熼崹鍘闂佺粯鎸堕崕鑼鎹銏犲耿婵閸掑姊洪幖鐐叉牠鎮鍐床婵炴垯鍨圭粻锝嗙節闂堟稓澧曟銈傚亾婵?                container.after('<div class="notice notice-error"><p>闂傚倸鍊风粈渚骞夐垾鎰佹綎缂備焦蓱閸欏繘鏌熼栵絿浜圭憸鐗堝笒閻愬鏌曟繛鍨鍔紒鎰鍋弻鈩冨緞婵犲嫬鈷堥梺绋块鎶铰烽崒鐐粹拻濞达絿鎳撻曟粎绱掔伌闁规湰缁楃喖鍩椤掑嫨浣告婵囨櫌闂佸憡娲崜娑储閹烘佸垫犵偛鐏濋崝姘舵煟濡换鎰宓勯梺褰掓閻掞箓鎮?/p></div>');
+                button.show();
+            },
+            complete: function() {
+                // 闂傚倸鍊搁崐鎼佸磹閹间礁绠犻煫鍥缁澶嬩繆椤栨瑧绉挎繛鎴為弳鍡涙煕閺囥劌浜炴锔诲櫍濮婅櫣绱掑楀棛鍔烽梺绋跨昂閸婃冨垝婵犲啫閻庢稒閸樿棄鈹戦埥鍡楃仩闁诲繑绻堥幃锟犲箛閻楀牏鍘?                loading.hide();
+            }
+        });
+    });
+    
+    // 闂傚倸鍊烽懗鍫曞箠閹捐茶閻庯綆鍓欓崹婵嬪箹濞肩痪鎯偢閺屾洘绻涢悙鐝旂紓浣插亾濠埖鍔栭悡鐔兼煛閸愩劍绁柛銈嗙懇閺?    $(document).on('keyup', '.sut-wechat-mini-search input', function(e) {
+        // 闂傚倸鍊风粈浣革耿闁宥侊箓宕奸妷瀣娲椤瑩宕滆忛悾鍫曟閸涘澧闁硅勬痚r闂傚倸鍊搁崐鐑芥倿閿曞偆鏁勬繛鍡樻尭缁愭佷繆閵堝倸浜惧炪値浜滈崯鏉戠暦閹烘佸烽柤纰卞墻閸氬鏌悢鍝煁闁搞劌娼俊瀛樼瑹閳嵁鐎櫇闁逞屽墰缁鑽喆閸曠槇婵犵數濮撮崐褰掑闯瑜版帗鐓?        if (e.key === 'Enter') {
+            $(this).closest('.sut-wechat-mini-search').find('.search-button').click();
+        }
+    });
+    
+    $(document).on('click', '.sut-wechat-mini-search .search-button', function() {
+        var searchInput = $(this).closest('.sut-wechat-mini-search').find('input');
+        var searchValue = searchInput.val().trim();
+        
+        if (searchValue) {
+            // 闂傚倸鍊风粈浣革耿闁宥嗗仭闁规儼妫勯獮銏煃閸濆嫬褰掑级閹间焦鈷掑锝囧劋閸梺鍛婅壘椤戝洭宕氶幒鎾村劅闁靛垮劤閿?            $(document).trigger('sut-wechat-mini-search', [searchValue]);
+        }
+    });
+    
+    // 濠电姷鏁告慨浼村垂閻撳簶鏋栨繛鎴炴皑閻鎾绘煙缂併垹鏋涢柡鍕劜娣囧濡堕崨娅紓浣插亾闁糕剝绋掗悡娑樼捄鐚村姛濞寸姰鍨洪妵鍕濡烽妷锕娈楅梺璇枛缂嶅鐛閸晢闁稿本绋掗崰鏍節閻潧袨闁搞劍妞介弫鍐濮閻樺灚娈惧鐘绘涧椤戝棝宕戦崟鍋柛銉妼缁茬粯?    $(document).on('click', '.sut-wechat-mini-copy-to-clipboard', function() {
+        var button = $(this);
+        var text = button.data('text') || '';
+        var originalText = button.text();
+        
+        // 闂傚倸鍊风粈渚骞夐敍鍕鏆滄俊銈呭暟閻娆撴煙鐎电啃痪鍙矙閺岀喖骞嗚滈崵鐔兼煃缂佹闁归埥澶娾枍閾忕伌閽樻繄鎲搁弮鍫濊摕闁跨喓濮寸壕鍏兼叏濮楀棗骞栨锔规櫅閳规垿鎮愬曞鐐存綑閸氬濞嗘垹鐭嗙归崟鍘卞鐘绘涧濡妤呴愶附鐓?        var tempInput = $('<input>');
+        $('body').append(tempInput);
+        tempInput.val(text).select();
+        
+        // 濠电姷鏁告慨浼村垂閻撳簶鏋栨繛鎴炴皑閻鎾绘煙缂併垹鏋涢柡鍕劜娣囧濡堕崨娅鈽嗗亝閿曘垽寮诲銏犖柨婵嗘噹椤澶愭?        try {
+            document.execCommand('copy');
+            button.text('闂備浇濞寸兘骞婇幘璇茬疅闂勫洭濡甸幇鏉跨冩鏂诲灩濞叉繝姘唯闁靛灞拘梻浣藉吹婵宕囩矆娴潻鑰块弶鍫氭櫅椤?);
+            
+            // 3缂傚倸鍊搁崐椋庣矆娓氳棟闁规垮枟閺嗘粓鏌熼悜姗嗘當缂佺姵鐗楁穱濠囧閸涙紓浣哄鐢锟犲蓟閺囷紕鐤闁哄洨鍎愰埀鏈娣囧骞撻幒婵堝悑闂佸搫鐬奸崰鎾跺垝濞嗗繆鏋庨柣鎰靛厴閺嬪懘姊绘担鐑樺殌闁规祴鍓濈换娑欑節閸屻倕娈炪倖甯掔氭倷婵犲洦鐓忓鐘茬箻濡炬倵?            setTimeout(function() {
+                button.text(originalText);
+            }, 3000);
+        } catch (err) {
+            console.error('濠电姷鏁告慨浼村垂閻撳簶鏋栨繛鎴炴皑閻鎾绘煙缂併垹鏋涢柡鍕劜娣囧濡堕崟妲缂備礁澧庨崑銈呴崼鏇為唶妞劦婢閸戜粙鎮?', err);
+            button.text('濠电姷鏁告慨浼村垂閻撳簶鏋栨繛鎴炴皑閻鎾绘煙缂併垹鏋涢柡鍕劜娣囧濡堕崟妲缂備礁澧庨崑銈呴崼鏇為唶妞劦婢閸戜粙鎮?);
+            
+            // 3缂傚倸鍊搁崐椋庣矆娓氳棟闁规垮枟閺嗘粓鏌熼悜姗嗘當缂佺姵鐗楁穱濠囧閸涙紓浣哄鐢锟犲蓟閺囷紕鐤闁哄洨鍎愰埀鏈娣囧骞撻幒婵堝悑闂佸搫鐬奸崰鎾跺垝濞嗗繆鏋庨柣鎰靛厴閺嬪懘姊绘担鐑樺殌闁规祴鍓濈换娑欑節閸屻倕娈炪倖甯掔氭倷婵犲洦鐓忓鐘茬箻濡炬倵?            setTimeout(function() {
+                button.text(originalText);
+            }, 3000);
+        }
+        
+        // 缂傚倸鍊搁崐椋庣矆娓氳棟妞牜鍋愰埀绠戦悾锟犲箥閾忔椽鏌熼崗鑲殬闁搞劌閸垽寮閸鐔峰灚绻涢幋鐑嗕紗闁规叉穿椤綊鏌畝瀣绡鐎规洘甯掗婵嬮悜鍡樞熷鐘垫暩婵宕戦幘瓒佸綊宕楅崗鑲缂備讲鍋撶归崟鍘卞鐘绘涧濡妤呴愶附鐓?        tempInput.remove();
+    });
+    
+    // 闂傚倸鍊风粈渚骞夐敍鍕宕查柛灞剧矌閻鎾绘倵閸憙濠靛閺岀喓绱掑杞板垔闂佹悶鍊栧鐔兼偂椤愶箑鐐婇柕濞垮劜閹娑闁鐐茶嫰婢煕閻斿憡缍戞鏇绲剧粋鎺旓綆鍋勬禍妤呮煙閸忓吋鍎楅柛鐘抽埅鎼佹?    function handleResponsiveTables() {
+        if ($(window).width() < 768) {
+            $('.sut-wechat-mini-responsive-table').each(function() {
+                var table = $(this).find('table');
+                var headerCells = table.find('thead th');
+                var dataCells = table.find('tbody td');
+                
+                // 闂傚倷娴囬曆呮崲閹板床闁归偊鍎靛姗嗙叆闁告儕閵夆晜鐓曢柟鑸鍔嶅鍛绱掗崜浣镐槐闁哄备鍓濆板嫮锝庝簽娴犳挳姊烘潪鎵闁绘牕銈搁獮鍐旈崘鈺佸幑闂佸憡绮堥悞锔剧礊閸銉拺缂佸婃楅崰娑叕椤掑倵鍋撶憴鍕绀冪紒璇茬墦楠炲啴鍩崨闂佸湱鍎弻銊暜閹剧粯鈷掑锝堝閵嗗啴鏌圭姴鐓愰柡鍛版硾铻栭柍褜鍓熼幃楣冨垂椤愩倗鎳濋梺閫炲苯澧闁伙絿鍏橀弫鎾绘偐閹绘帒绁闂備胶绮閸旀牞銇愰崘绠旀慨妯垮煐閳锋垿鏌涘鍡楅弫鍫濃攽閳藉棗浜婵炲嬫礈濡叉劙鎮欓崫鍕鐫勯梺閫炲苯澧扮紒鐟板嫰骞囬撶偐鍋撶紒妯圭箚妞牗绮岀敮鍫曟煟韫囨矮鍚缂?                dataCells.each(function(index) {
+                    var cell = $(this);
+                    var headerIndex = index % headerCells.length;
+                    var headerText = headerCells.eq(headerIndex).text().trim();
+                    
+                    cell.attr('data-label', headerText);
+                });
+            });
+        } else {
+            // 缂傚倸鍊搁崐椋庣矆娓氳棟妞牜鍋愰埀绠戦悾锟犲箥閾忔椽鏌熼崗鑲殬闁告柨鏈鐎靛鎮喊妯轰壕妤犵偛鐏濋崝姘舵煙閾忓夐柍褜鍓涢幊鎾凰囬柆宥呯劦妞帊绶崯蹇涙煕閻樺磭澧遍柟骞垮灲楠炲鏁傞挊澶夊嚱闂備焦瀵换鍌毭洪妸锔轰粴?            $('.sut-wechat-mini-responsive-table td[data-label]').removeAttr('data-label');
+        }
+    }
+    
+    // 闂傚倸鍊风粈渚骞夐敍鍕鏆滄俊銈呭暞瀹曟煡鏌涘畝閸庢垹绱為弽鐓欓柣妤鐗婄欢鑼绱掗埀鐣濋崟鍘搁悗瑙勬惄閸犳牜姘煎弮瀹曟洟濡烽埡鍌滃幍闂佺粯鎸稿鐑藉箺閻樼粯鐓涢悘鐐舵俊鎸庝繆閸欏婂嶉柡浣哥瀹曠喖閳掗幒妤佲拺闂傚牊渚楅悡鈹戦垾铏澶勭紒?    handleResponsiveTables();
+    
+    // 缂傚倸鍊搁崐鐑芥倿閿曞倸绀夐柡宥庡幑閳暣瀹曘劑鎳滈戞寧鐫忔繝鐢靛仦閸墎鍠婂洠鍋撳樼厧澧撮柡灞剧洴楠炲洭濡搁敂鐣屽絾婵犵數鍋涢悧鎰拌旈垾锕傚锤濡柋鍥鏌涢埄鍐炬當闁哄棛鍠愰幈銊晲閸涒叺闂佸搫鐭夌换婵嗙暦濮楁俊姝岄柣鎾跺枛濮婃椽妫冮埡鍐蓱闂佽枛閸婃悂閿濆樻晢闁告洦鍋嗘犲洤鈹戦悙鍙夐柛瀣鎹侀埅鎼佹閸屾瑦绁扮规洜鏁诲畷鎴濃槈濡婊勭铻栭柛娑卞幘椤旀劙姊绘担鍝虎妞垵妫濆畷鏇偄閸忚偐鍘搁梺绋挎湰缁诲啰娑甸崜浣烘妞挻绋戞禍楣冩娴棄鍚归柛瀣鍋熺划娆掔疀濞戞奸悗骞垮劚椤即宕?    $(window).on('resize', handleResponsiveTables);
+    
+    // 闂傚倸鍊风粈渚骞栭愩倐鍋撳樼厧澧闁哄懓鍩栫粋鎺旓綆闄勯幈銊熼崹鍘闂佺粯甯炵划骞堥妸銉庣喐寰勭粙鎸庡創闂備礁鎲悷銏磻閹惧哥瘈闁汇垽娼禒锕傛煕閵娧勬毈闁瑰嫮绡闁告劦鐓堥崵?    window.sutWechatMiniShowNotice = function(type, message, duration) {
+        type = type || 'info';
+        duration = duration || 5000;
+        
+        // 闂傚倸鍊风粈渚骞夐敍鍕鏆滄俊銈呭暟閻娆撴煙鐎电啃痪鍙矙閺岀喖宕滆忕敮娑煟閹烘梻甯涢柟渚垮妼铻墎閹鍫閸涘鎲块柛瀣鎹囧婄粯鎷呮笟鍔哥紓浣虹帛閸旀瑥鐣烽栫偛绠鏂垮閻?        var notice = $('<div class="sut-wechat-mini-notice sut-wechat-mini-fade-in ' + type + '"><p>' + message + '</p></div>');
+        
+        // 婵犵數濮烽弫鎼佸磿閹寸姷绀婇柍褜鍓氶妵鍕寮撮崱妤闁告瑥绻橀弻锝夊箛椤掍焦鍎撶紓浣插亾闁糕剝瑜版帒绀傞柤娴嬫櫆濞堟闁鐐茶嫰婢亜閿曞倹娑摶?        $('body').append(notice);
+        
+        // 闂傚倸鍊烽懗鍫曞储瑜旈妴鍐償閵忋埄娲稿鐘诧工鐎氬矗韫囨稒鐓冮柛婵嗗閸湱绱掗埀宕掗悙瀵稿幍闂佽灡濠块梻浣瑰粙鎺懳涢崘娼栨繛宸浜堕弫鍐鏌鍡樻繛鍫涘濆?        setTimeout(function() {
+            notice.fadeOut(300, function() {
+                $(this).remove();
+            });
+        }, duration);
+        
+        return notice;
+    };
+    
+    // 闂傚倸鍊风粈渚骞栭愩倐鍋撳樼厧澧闁哄懓鍩栫粋鎺旓綆闄勯幈銊熼幐搴愮紓浣插亾濠埖鍔栭悡鐔镐繆椤栨粌甯堕柛鏂跨槐鎺撴媴瀹勬澘绁闂佽枤閸忔閹惧烽柟纰卞幗閿熴儲绻濋悽闈涗沪鐟滄澘鍟撮弫鍐鏁傞悾宀婃祫?    window.sutWechatMiniShowLoading = function() {
+        // 婵犵數濮烽钘壩崨鏉戠闁逞屽墴閺屾稓锝庡亝瀹曞矂鏌畝瀣纾垮鐙呭囬幏鐘诲箵閹烘埈娼鐘甸埀鍟跨痪褔鏌熼旂厧鎼佹偩閻戣棄唯闁冲搫鍊瑰鍥姊洪柅鐐茶嫰婢歌勬礃閻熲晠寮瀹婄嬮柕濞垮劙婢规洖鈹戦悙鏉戠仸妞浚浜椤棃宕熼幆鎵冲亾閹稿簺浜滈煫鍥尵婢洜绱掗埀寰勯幇鍘藉鈽嗗灣閸樠囧礉鐎濞达絽鍢插畵鍡涙煙椤旀儳鍘寸垫尦閹娆撳箹椤撶噦楠忓鐘垫暩閸嬬偠銇愰崘鏅濋柨鏃傛櫕椤?        if ($('.sut-wechat-mini-loading-overlay').length === 0) {
+            var overlay = $('<div class="sut-wechat-mini-loading-overlay"><div class="sut-wechat-mini-loading"></div></div>');
+            $('body').append(overlay);
+        }
+        
+        return $('.sut-wechat-mini-loading-overlay');
+    };
+    
+    // 闂傚倸鍊搁崐鎼佸磹閹间礁绠犻煫鍥缁澶嬩繆椤栨瑧绉挎繛鎴為弳鍡涙煕閺囥劌浜炴锔诲櫍濮婅櫣绱掑楀棛鍔烽梺绋跨昂閸婃冨垝婵犲啫閻庢稒锚娴犳閸濆嫭宸濋柛瀣鍋棢闁绘纾缁犻箖鏌熺紒妯洪嚋闁告梻鍠庨湁?    window.sutWechatMiniHideLoading = function() {
+        $('.sut-wechat-mini-loading-overlay').fadeOut(300, function() {
+            $(this).remove();
+        });
+    };
+    
+    // 闂傚倸鍊烽懗鍫曞磿閻跨柧婵犲鐗嗛崹鍌炴煟閵忋埄鐒剧紒鐘宠壘椤鍧楁嚋闂堟稑闂佸憡鍔忛崑鎾绘娴勫仩闁稿寒鍣鏌煛閸涘炪倖姊婚埛鍫濄掓繝姘鐓忛柛绻嶅瑙勭箾閹冲嘲娲悡鏇煏婵炲灝鍔紒鐘电帛椤儵鎮欓弶鎴犱紝闂佹寧绻勯崑銈夈佸楅幃鈺呭垂椤愭倠濠?    $(document).on('sut-wechat-mini-tab-changed', function(event, tabId) {
+        // 闂傚倷绀侀幖藝椤愶箑鐤炬繝濠傜墛閸嬶繝鏌嶉崫鍕鍣归梻鍌灦閺岋綁骞嬮敐鍡勯梺娲诲幗椤棝濡甸崟鍐闁靛鍕娅忕紓鍌欓檷閸斿孩鏅跺鍐床婵炴垯鍨洪弲鏌煕椤愪簻婵炲牜鍘界换婵嗏枔閸亾闂佺块崐鏇敐鍡欓悗锝庝簽閸婄偤姊洪崘鍙夋儓闁挎洏鍊栭幈銊偋閸婊呯畾闂佺粯鍔禍婊堝焵椤掍胶绠撴娲鍦瑙勬礈椤绮诲妯锋堟俊鈷堥崬褰掓娓氬佳呮崲閹烘挻鍙忛柣銏壕褰掓煟閵忕姵鍟為柣鎾跺枛閺屾洘绻涢崹濮庡炪倕娴氶崜鐔煎蓟濞戙垹围闁糕剝鐟悡鍌炴闁鐐茶嫰婢弶銇勯愩埄妯闁圭焸椤瑩宕滆岀粭澶愭缂佹鈷掓鐗忓銏倷閻戞煎幈闂佸搫娲崝宀勭嵁濡懏鐓曞鐘插娴犺鲸鎱繝鍐仢妞垺娲熼弫鎰板幢閳哄倸浠寸紓?        console.log('闂傚倸鍊风粈渚骞栭愩倗鐭撻柡澶嬪殮濞参柍鍝勶攻閺呫垽姊绘担鍝虎妞垵鍟缁傚秴閸鐔叉嫽闂佸壊鍋嗛崰鎾诲煡婢舵劖鐓熼幖缁版澘浠闂佸搫鐬奸崰鏍鎮伴曞畷褰掗崣銉亝闂?', tabId);
+    });
+    
+    // 闂傚倸鍊烽懗鍫曞磿閻跨柧婵犲鐗嗛崹鍌炴煟閵忋埄鐒剧紒鐘宠壘椤鍧楁嚋闂堟稑缂備讲鍋撻柛鈩冪閻撴洟鏌曟径娑氬埌濠碘炽偢楠炴牠寮堕幋濮涢梺閫炲苯澧妞梹鐗犲畷浼村箳濡壕濠氭煙閸撗呭笡闁绘挻娲熼悡宕堕妸锕纰嶉梺鍝勬滄禍骞夐幖浣哥骇婵炲棛鍋撻埢鍫倵鐟欏嫭绀堝鐐亾閻庢垮枙缁娆撳极閸岀偛绀堢憸搴拠娴嬫斀?    $(document).on('sut-wechat-mini-toggle-changed', function(event, toggle, checked) {
+        // 闂傚倷绀侀幖藝椤愶箑鐤炬繝濠傜墛閸嬶繝鏌嶉崫鍕鍣归梻鍌灦閺岋綁骞嬮敐鍡勯梺娲诲幗椤棝濡甸崟鍐闁靛鍕娅忕紓鍌欓檷閸斿孩鏅跺鍐床婵炴垯鍨洪弲鏌煕椤愪簻婵炲牜鍘界换婵嗏枔閸亾闂佺块崐鏇偩瀹勯偊娼悹楦挎崐鐐烘闂堟侗鐒鹃柛搴含閼洪亶濡烽埡鍌氬灚绻涢崼婵堜虎闁哄鎹囬弻娑氾綆鍋呭畷宀勬煛鐏炲墽缂佺姵鐩楠炴鎼归愶絿妲闂佽崵鍠愮划宥呭楄棟闂傚牊绋撻弳锕傛煟濡娆惧殭闁告劏鍋撻柣鐔哥矊闁帮絽鐣烽幇鐗堝仺闁告稑锕崢浠嬫闂堟侗鐒鹃柛搴憾椤棃閸曞幈闂侀潧鐗嗗娑儗瀹鍕鐓冪憸婊堝礈濠靛剁稏濠埖鍔栭崕妤併亜閺傚灝鈷斿鎾崇閺岋綁寮閸屻倗鍔哥紓浣稿庨崑銈夊蓟濞戙垹鍗抽柕濞垮劚缁犳椽姊虹粙鍖姛闁稿曢蹇撁洪忓秵鏅濋梺鎸庣箓濡閿涘嫮纾?        console.log('闂傚倸鍊风粈渚骞夐敍鍕鏆滈柟鐑樺殮濞叉櫇闁逞屽墴閹楣冩倻閽樺岄梺鍦鍎换鍌氣枔閵娾晜鈷戦梺鍋涢懟鏅剁电硶鍋撶憴鍕绀冩銊嚇閹楣冩倻閽樺屽炲炪値鍓崳绮婚幘璇茶摕闁绘梻鈷堥弫鍕鎮规笟鍘涙俊宸鍣幃宄伴崟鍑炪倧闄勬竟鍡欏垝?', checked);
+    });
+    
+    // 闂傚倸鍊烽懗鍫曞磿閻跨柧婵犲鐗嗛崹鍌炴煟閵忋埄鐒剧紒鐘宠壘椤鍧楁嚋闂堟稑缂備胶濮鹃澶屾崲濠靛洨绡闁稿本绋戝锝夋缁嬫惧剰缂佸嬫尦濠浣糕攽閻樿伐闁哥姵宀稿畷鏇熸償閵忋垻?    $(document).on('sut-wechat-mini-search', function(event, searchValue) {
+        // 闂傚倷绀侀幖藝椤愶箑鐤炬繝濠傜墛閸嬶繝鏌嶉崫鍕鍣归梻鍌灦閺岋綁骞嬮敐鍡勯梺娲诲幗椤棝濡甸崟鍐闁靛鍕娅忕紓鍌欓檷閸斿孩鏅跺鍐床婵炴垯鍨洪弲鏌煕椤愪簻婵炲牜鍘界换婵嗏枔閸亾闂佺块崐婵嬫偘椤曞鍊熼柣鎾卞劦閺屾稑鈽夐崡鐐茬规繛瀛樼矊閻栫厧缂佹肩懝闁搞儜鍌滃嚬婵犵樺啿绾悽鍋涢埢?        console.log('闂傚倸鍊烽懗鍫曞箠閹捐茶閻庯綆鍓欓崹婵嬪箹濞肩痪鎯偢閺屾洘绻涢悙鐝旂紓浣插亾闁稿瞼鍋為悡娆撴煙椤栨稒绶茬悮姘舵閸濆嫭闁烩晩鍨堕獮?', searchValue);
+    });
+    
+    // 闂傚倸鍊峰鍥妸鈺傚块柨鏇楀亾妞仢椤婊堝焵椤掑嫬绠栧锔藉鐓庘攽閻愰潧甯剁紒缁橈耿閻涢埀鐣峰楅獮鎾诲箳閹惧湱鍙戞繝鐢靛椤粙宕滃瀣啴宕撳洦绋戦埞鎴幢閳哄啠鍋撻懜鐢电剧瑰壊鍠曠花鑽磼閳?    $(document).on('keypress', 'input[type="number"]', function(e) {
+        // 闂傚倸鍊风粈渚骞夐敓鐘冲仭妞牗绋撻鍙夌節婵犲倻澧曢柛灞诲姂閺岀喓鐢垫牎婵犳垮灠閸氬骞堥妸銉斀闁糕剝鐟导鍥磽閸屾氨澧曟鍏樺璇测槈濠婂懐鏉搁柣搴缍嗘禍婊勬叏閺囥垺鈷戦柛婵嗗椤娀鏌涢悩铏宕岄柛鈹惧亾濡炪倖甯婇懗鍫曞煀閺囩喆浜滈柕濞垮劜閸洦閻愯尙绠查悗闈涖偢瀵鍫曞箣閻欓崬娲鏌悢鍝煀缂佸屾嚀閻兘宕閸曞孩妫冨畷銊幆褍姹?        if (e.which !== 8 && e.which !== 0 && (e.which < 48 || e.which > 57)) {
+            return false;
+        }
+    });
+    
+    // 闂傚倸鍊搁崐鎼佸磹閹间礁鐤妞劑鍩勯崵鏇煕椤愶絾澶勯柡浣告欑换娑箣閻愭挎殹闂佺块敃銏蓟閺囩喓绠鹃柛鍠栨慨搴磽娴彃浜鹃柣搴缍嗛崰妤呭煕閹达附鐓欑紓浣姑缁椦呮稒绻傞鍐濡惰箛娑欓梺缁樻惈缁绘繈鎮伴曢獮妯兼嫚閼兼澑婵偑鍊曠换鎰板箠鎼淬劌缁?    $('.sut-wechat-mini-form').on('submit', function() {
+        var form = $(this);
+        var submitButton = form.find('input[type="submit"], button[type="submit"]');
+        
+        // 缂傚倸鍊搁崐椋庣矆娓氬畷鎰版倻閼恒儱娈戦梺鍓插亝濞叉牠寮告笟閺屾洟宕煎鎰笑缂備胶濮烽弫濠氬蓟閻斿吋鐒介柨鏃囨硶閸戝綊姊洪崫銉粶妞妇鏁诲濠氭偄閾忓湱鐓撳鐐叉涢崑鎾诲煝閸銉拺?        submitButton.prop('disabled', true);
+        submitButton.addClass('sut-wechat-mini-loading');
+        submitButton.val('闂傚倸鍊风粈浣革耿鏉堚晛鍨濇鏍鍋涚粈澶愭煙閻戞鐒炬繛灏栨櫊閺屻劑寮閸屾稒鐝闂?..');
+        
+        // 30缂傚倸鍊搁崐椋庣矆娓氳棟闁规垮枟閺嗘粓鏌熼悜姗嗘當缂佺姵鐗楁穱濠囧閸涙梺鎼炲曢敃銉閸曠杸闁圭偓鍓氭禒濂告偠濮樺崬鏋涙慨濠冩瀹曘劍绻濋崒姘鐦撻梻浣规偠閸斿秵绻涙繝鍌殨妞劧绠戝洿婵犮垼娉涢敃锕傚畝鍕鈷戠憸鐗堝笒娴滄澘霉濠婂嫮绠炵规洦鍓氬板嫰骞囬撶姴骞嶇紓鍌欑侀戝棝濞嗗精鐔煎焵椤掑嫭鈷戦柣鐔哄楅崯鐐测攽閻愯含鐎靛亜椤撳吋寰勬繝鍥暪婵犵數濮磋墝闁稿鎸剧槐鎺楀閵堝懎绁濠碉工椤宄扮暦濮楅姗鎮欓懜鍨姣愬锛勫亼閸婃牕煤閿曞倸绀堟繛鍡樺姈濞呭繘姊绘担渚鐒鹃柡鍫鍓涢幑銏礋椤愩倖鎳冮梻鍌氬风粈渚骞栭愶箑鐤闁瑰墎鐡旈弫濠囨煙闁锕鏋熸?        setTimeout(function() {
+            submitButton.prop('disabled', false);
+            submitButton.removeClass('sut-wechat-mini-loading');
+            submitButton.val('闂傚倸鍊风粈浣革耿鏉堚晛鍨濇鏍鍋涚粈澶愭煙閻戞鐒炬繛?);
+        }, 30000);
+    });
+    
+});\n

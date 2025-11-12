@@ -1,6 +1,6 @@
-﻿/* review.wxss - 璁㈠崟璇勪环椤甸潰鏍峰紡 */
+锘?* review.wxss - 鐠併垹宕熺拠鍕幆妞ょ敻娼伴弽宄扮础 */
 
-/* 椤甸潰瀹瑰櫒 */
+/* 妞ょ敻娼扮€圭懓娅?*/
 .review-container {
   display: flex;
   flex-direction: column;
@@ -8,7 +8,7 @@
   background-color: #f8f8f8;
 }
 
-/* 椤堕儴瀵艰埅 */
+/* 妞ゅ爼鍎寸€佃壈鍩?*/
 .nav-bar {
   display: flex;
   align-items: center;
@@ -38,7 +38,7 @@
   width: 60px;
 }
 
-/* 鍔犺浇涓姸鎬?*/
+/* 閸旂姾娴囨稉顓犲Ц閹?*/
 .loading-container {
   display: flex;
   justify-content: center;
@@ -51,7 +51,7 @@
   color: #999999;
 }
 
-/* 閿欒鐘舵€?*/
+/* 闁挎瑨顕ら悩鑸碘偓?*/
 .error-container {
   display: flex;
   flex-direction: column;
@@ -68,13 +68,13 @@
   text-align: center;
 }
 
-/* 璇勪环鍐呭 */
+/* 鐠囧嫪鐜崘鍛啇 */
 .review-content {
   flex: 1;
   padding-bottom: 80px;
 }
 
-/* 鍖垮悕璇勪环閫夐」 */
+/* 閸栧灝鎮曠拠鍕幆闁銆?*/
 .anonymous-option {
   display: flex;
   justify-content: space-between;
@@ -93,7 +93,7 @@
   transform: scale(0.8);
 }
 
-/* 鍟嗗搧璇勪环鍒楄〃 */
+/* 閸熷棗鎼х拠鍕幆閸掓銆?*/
 .goods-review-list {
   background-color: #ffffff;
 }
@@ -107,7 +107,7 @@
   border-bottom: none;
 }
 
-/* 鍟嗗搧淇℃伅 */
+/* 閸熷棗鎼ф穱鈩冧紖 */
 .goods-info {
   display: flex;
   margin-bottom: 16px;
@@ -150,7 +150,7 @@
   color: #999999;
 }
 
-/* 璇勫垎鍖哄煙 */
+/* 鐠囧嫬鍨庨崠鍝勭厵 */
 .rating-section {
   margin-bottom: 16px;
 }
@@ -175,7 +175,7 @@
   color: #ffd700;
 }
 
-/* 璇勪环鍐呭鍖哄煙 */
+/* 鐠囧嫪鐜崘鍛啇閸栧搫鐓?*/
 .content-section {
   margin-bottom: 16px;
 }
@@ -205,7 +205,7 @@
   margin-top: 4px;
 }
 
-/* 鍥剧墖涓婁紶鍖哄煙 */
+/* 閸ュ墽澧栨稉濠佺炊閸栧搫鐓?*/
 .image-section {
   margin-bottom: 16px;
 }
@@ -281,7 +281,7 @@
   margin-top: 2px;
 }
 
-/* 鎻愪氦鎸夐挳 */
+/* 閹绘劒姘﹂幐澶愭尦 */
 .submit-bar {
   position: fixed;
   bottom: 0;
@@ -308,7 +308,7 @@
   background-color: #cccccc;
 }
 
-/* 鍝嶅簲寮忚璁?*/
+/* 閸濆秴绨插蹇氼啎鐠?*/
 @media (min-width: 768px) {
   .review-container {
     max-width: 768px;

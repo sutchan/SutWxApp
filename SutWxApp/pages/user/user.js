@@ -1,62 +1,63 @@
-﻿// 鐢ㄦ埛涓績椤甸潰閫昏緫
+// 个人中心页面控制器
 import { showToast } from '../../utils/global';
 
 Page({
   /**
-   * 椤甸潰鐨勫垵濮嬫暟鎹?   */
+   * 页面的初始数据
+   */
   data: {
     userInfo: {
       avatarUrl: '/images/default-avatar.png',
-      nickName: '鏈櫥褰?,
+      nickName: '未登录用户',
       isLoggedIn: false
     },
     menuList: [
       {
         id: 'notifications',
         icon: '/images/notification.svg',
-        title: '閫氱煡涓績',
+        title: '通知消息',
         badge: null
       },
       {
         id: 'comments',
         icon: '/images/comment.png',
-        title: '鎴戠殑璇勮',
+        title: '评论回复',
         badge: null
       },
       {
         id: 'favorites',
         icon: '/images/favorite.png',
-        title: '鎴戠殑鏀惰棌',
+        title: '我的收藏',
         badge: null
       },
       {
         id: 'coupon',
         icon: '/images/coupon.svg',
-        title: '鎴戠殑浼樻儬鍒?,
+        title: '优惠券',
         badge: null
       },
       {
         id: 'following',
         icon: '/images/following.png',
-        title: '鎴戠殑鍏虫敞',
+        title: '我的关注',
         badge: null
       },
       {
         id: 'followers',
         icon: '/images/followers.svg',
-        title: '鎴戠殑绮変笣',
+        title: '我的粉丝',
         badge: null
       },
       {
         id: 'points',
         icon: '/images/points.png',
-        title: '鎴戠殑绉垎',
+        title: '积分中心',
         badge: null
       },
       {
         id: 'settings',
         icon: '/images/settings.png',
-        title: '璁剧疆',
+        title: '设置',
         badge: null
       }
     ],
@@ -65,24 +66,25 @@ Page({
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
+   * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
     this.checkLoginStatus();
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
+   * 生命周期函数--监听页面显示
    */
   onShow: function() {
     this.checkLoginStatus();
   },
 
   /**
-   * 妫€鏌ョ櫥褰曠姸鎬?   */
+   * 检查登录状态
+   */
   checkLoginStatus: function() {
     const app = getApp();
-    
+
     if (app.isLoggedIn()) {
       const userInfo = app.globalData.userInfo;
       this.setData({
@@ -96,16 +98,16 @@ Page({
   },
 
   /**
-   * 鍔犺浇鐢ㄦ埛鏁版嵁
+   * 加载用户数据
    */
   loadUserData: async function() {
     this.setData({ isLoading: true, error: null });
-    
+
     const app = getApp();
     try {
-      // 浣跨敤userService鑾峰彇鐢ㄦ埛璧勬枡
+      // 调用userService获取用户信息
       const userData = await app.services.user.getUserProfile();
-      
+
       this.setData({
         'userInfo.nickName': userData.nickname || this.data.userInfo.nickName,
         'userInfo.avatarUrl': userData.avatar_url || this.data.userInfo.avatarUrl,
@@ -115,81 +117,82 @@ Page({
         'menuList[4].badge': userData.followers_count || null,
         'menuList[5].badge': userData.points || null
       });
-      
-      // 鑾峰彇鏈閫氱煡鏁伴噺
+
+      // 获取未读通知数量
       try {
         const unreadCount = await app.services.notification.getUnreadNotificationCount();
         this.setData({
           'menuList[0].badge': unreadCount > 0 ? (unreadCount > 99 ? '99+' : unreadCount) : null
         });
       } catch (notificationError) {
-        console.error('鑾峰彇鏈閫氱煡鏁伴噺澶辫触:', notificationError);
-      }","},{
-      
-      // 鏇存柊鍏ㄥ眬鐢ㄦ埛淇℃伅
+        console.error('获取未读通知数量失败', notificationError);
+      }
+
+      // 更新全局用户信息
       app.globalData.userInfo = {
         ...app.globalData.userInfo,
         nickName: userData.nickname || app.globalData.userInfo.nickName,
         avatarUrl: userData.avatar_url || app.globalData.userInfo.avatarUrl
       };
     } catch (error) {
-      console.error('鑾峰彇鐢ㄦ埛鏁版嵁澶辫触:', error);
-      this.setData({ error: error.message || '鑾峰彇鐢ㄦ埛鏁版嵁澶辫触' });
+      console.error('加载用户数据失败:', error);
+      this.setData({ error: error.message || '加载用户数据失败' });
     } finally {
       this.setData({ isLoading: false });
     }
   },
 
   /**
-   * 寰俊鐧诲綍
+   * 微信登录
    */
   onWechatLogin: async function() {
     const app = getApp();
     this.setData({ isLoading: true, error: null });
-    
+
     try {
-      // 浣跨敤authService杩涜鐧诲綍
+      // 调用authService进行登录
       const userInfo = await app.services.auth.loginWithWechat();
-      
+
       this.setData({
         'userInfo': {
           ...userInfo,
           isLoggedIn: true
         }
       });
-      
-      showToast('鐧诲綍鎴愬姛', 'success');
+
+      showToast('登录成功', 'success');
       this.loadUserData();
-      
-      // 璁板綍鐧诲綍浜嬩欢
+
+      // 记录登录事件
       app.services.analytics.trackEvent('user_login', {
         login_method: 'wechat'
       });
     } catch (error) {
-      console.error('鐧诲綍澶辫触:', error);
-      this.setData({ error: error.message || '鐧诲綍澶辫触' });
-      showToast(error.message || '鐧诲綍澶辫触', 'none');
+      console.error('登录失败:', error);
+      this.setData({ error: error.message || '登录失败' });
+      showToast(error.message || '登录失败', 'none');
     } finally {
       this.setData({ isLoading: false });
     }
   },
 
   /**
-   * 鑿滃崟鐐瑰嚮澶勭悊
+   * 菜单点击事件
    */
   onMenuClick: function(e) {
     const id = e.currentTarget.dataset.id;
     const app = getApp();
-    
+
     if (!this.data.userInfo.isLoggedIn) {
       this.onWechatLogin();
       return;
     }
-    
-    // 璁板綍鑿滃崟椤圭偣鍑讳簨浠?    app.services.analytics.trackEvent('user_menu_click', {
+
+    // 记录菜单点击事件
+    app.services.analytics.trackEvent('user_menu_click', {
       menu_id: id
     });
-    
+
     switch(id) {
       case 'notifications':
         wx.navigateTo({ url: '/pages/notification/list' });
@@ -219,43 +222,42 @@ Page({
   },
 
   /**
-   * 缁戝畾WordPress璐﹀彿
+   * 绑定WordPress账户
    */
   bindWordPressAccount: function() {
     wx.navigateTo({ url: '/pages/user/bind-account' });
   },
 
   /**
-   * 閫€鍑虹櫥褰?   */
+   * 退出登录
+   */
   logout: function() {
     const app = getApp();
-    
+
     wx.showModal({
-      title: '纭閫€鍑?,
-      content: '纭畾瑕侀€€鍑虹櫥褰曞悧锛?,
+      title: '确认退出',
+      content: '确定要退出登录吗？',
       success: (res) => {
         if (res.confirm) {
           try {
-            // 浣跨敤app鎻愪緵鐨刲ogout鏂规硶
+            // 调用app的logout方法
             app.logout();
-            
+
             this.setData({
               userInfo: {
                 avatarUrl: '/images/default-avatar.png',
-                nickName: '鏈櫥褰?,
+                nickName: '未登录用户',
                 isLoggedIn: false
               }
             });
-            
-            showToast('宸查€€鍑虹櫥褰?, 'success');
-            
-            // 璁板綍閫€鍑虹櫥褰曚簨浠?            app.services.analytics.trackEvent('user_logout');
+
+            showToast('已退出登录', 'success');
           } catch (error) {
-            console.error('閫€鍑虹櫥褰曞け璐?', error);
-            showToast('閫€鍑哄け璐ワ紝璇烽噸璇?, 'none');
+            console.error('退出登录失败:', error);
+            showToast('退出登录失败', 'none');
           }
         }
       }
     });
   }
-});\n
+});

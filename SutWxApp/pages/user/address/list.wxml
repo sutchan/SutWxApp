@@ -1,33 +1,33 @@
-﻿<!-- 鍦板潃鍒楄〃椤甸潰缁撴瀯 -->
+锘?!-- 閸︽澘娼冮崚妤勩€冩い鐢告桨缂佹挻鐎?-->
 <view class="container">
-  <!-- 鍔犺浇鐘舵€?-->
+  <!-- 閸旂姾娴囬悩鑸碘偓?-->
   <view class="loading" wx:if="{{loading}}">
-    <text>鍔犺浇涓?..</text>
+    <text>閸旂姾娴囨稉?..</text>
   </view>
   
-  <!-- 閿欒鐘舵€?-->
+  <!-- 闁挎瑨顕ら悩鑸碘偓?-->
   <view class="error" wx:elif="{{error}}">
     <image class="error-icon" src="/images/error.svg" mode="aspectFit"></image>
-    <text class="error-text">{{errorMsg || '鍔犺浇澶辫触'}}</text>
-    <button class="retry-btn" bind:tap="onRetry" wx:if="{{errorMsg !== '璇峰厛鐧诲綍'}}">閲嶈瘯</button>
-    <button class="login-btn" bind:tap="onLogin" wx:else>鍘荤櫥褰?/button>
+    <text class="error-text">{{errorMsg || '閸旂姾娴囨径杈Е'}}</text>
+    <button class="retry-btn" bind:tap="onRetry" wx:if="{{errorMsg !== '鐠囧嘲鍘涢惂璇茬秿'}}">闁插秷鐦?/button>
+    <button class="login-btn" bind:tap="onLogin" wx:else>閸樿崵娅ヨぐ?/button>
   </view>
   
-  <!-- 鍦板潃鍒楄〃 -->
+  <!-- 閸︽澘娼冮崚妤勩€?-->
   <view class="address-list" wx:else>
-    <!-- 鍦板潃涓虹┖鐘舵€?-->
+    <!-- 閸︽澘娼冩稉铏光敄閻樿埖鈧?-->
     <view class="empty" wx:if="{{addressList.length === 0}}">
-      <text>鏆傛棤鏀惰揣鍦板潃</text>
-      <button class="add-btn" bind:tap="onAddAddress">娣诲姞鍦板潃</button>
+      <text>閺嗗倹妫ら弨鎯版彛閸︽澘娼?/text>
+      <button class="add-btn" bind:tap="onAddAddress">濞ｈ濮為崷鏉挎絻</button>
     </view>
     
-    <!-- 鍦板潃鍒楄〃椤?-->
+    <!-- 閸︽澘娼冮崚妤勩€冩い?-->
     <view class="address-item" wx:for="{{addressList}}" wx:key="id" wx:for-item="address">
       <view class="address-content" bind:tap="{{selectMode ? 'onSelectAddress' : ''}}" data-id="{{address.id}}">
         <view class="address-header">
           <text class="name">{{address.name}}</text>
           <text class="phone">{{address.phone}}</text>
-          <text class="default-tag" wx:if="{{address.isDefault}}">榛樿</text>
+          <text class="default-tag" wx:if="{{address.isDefault}}">姒涙顓?/text>
         </view>
         <view class="address-detail">
           <text>{{address.province}}{{address.city}}{{address.district}}{{address.detail}}</text>
@@ -36,18 +36,18 @@
       
       <view class="address-actions" wx:if="{{!selectMode}}">
         <view class="action-btn edit-btn" bind:tap="onEditAddress" data-id="{{address.id}}">
-          <text>缂栬緫</text>
+          <text>缂傛牞绶?/text>
         </view>
         <view class="action-btn delete-btn" bind:tap="onDeleteAddress" data-id="{{address.id}}">
-          <text>鍒犻櫎</text>
+          <text>閸掔娀娅?/text>
         </view>
         <view class="action-btn default-btn" bind:tap="onSetDefault" data-id="{{address.id}}" wx:if="{{!address.isDefault}}">
-          <text>璁句负榛樿</text>
+          <text>鐠佸彞璐熸妯款吇</text>
         </view>
       </view>
     </view>
     
-    <!-- 娣诲姞鍦板潃鎸夐挳 -->
-    <button class="add-address-btn" bind:tap="onAddAddress" wx:if="{{addressList.length > 0 && !selectMode}}">+ 娣诲姞鏂板湴鍧€</button>
+    <!-- 濞ｈ濮為崷鏉挎絻閹稿鎸?-->
+    <button class="add-address-btn" bind:tap="onAddAddress" wx:if="{{addressList.length > 0 && !selectMode}}">+ 濞ｈ濮為弬鏉挎勾閸р偓</button>
   </view>
 </view>\n

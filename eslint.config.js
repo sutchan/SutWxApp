@@ -1,4 +1,4 @@
-﻿// eslint.config.js
+// eslint.config.js
 module.exports = [
   {
     files: ['**/*.js'],
@@ -13,4 +13,4 @@ module.exports = [
       'quotes': ['error', 'single']
     }
   }
-];\n
+];

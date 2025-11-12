@@ -1,9 +1,9 @@
-﻿/* lazy-image.wxss - 鍥剧墖鎳掑姞杞界粍浠舵牱寮?*/
+锘?* lazy-image.wxss - 閸ュ墽澧栭幊鎺戝鏉炵晫绮嶆禒鑸电壉瀵?*/
 
 .lazy-image-container {
   position: relative;
   overflow: hidden;
-  /* 榛樿瀹介珮姣斾緥 */
+  /* 姒涙顓荤€逛粙鐝В鏂剧伐 */
   width: 100%;
   min-height: 120rpx;
   cursor: pointer;
@@ -25,7 +25,7 @@
   display: block;
 }
 
-/* 娓愯繘寮忓姞杞藉姩鐢绘晥鏋?*/
+/* 濞撴劘绻樺蹇撳鏉炶棄濮╅悽缁樻櫏閺?*/
 .lazy-image-container:not(.loaded) .lazy-image {
   filter: blur(10px);
   transition: filter 0.5s ease-in-out, opacity 0.3s ease-in-out;
@@ -35,7 +35,7 @@
   filter: blur(0);
 }
 
-/* 鍔犺浇鍔ㄧ敾 */
+/* 閸旂姾娴囬崝銊ф暰 */
 .loading-indicator {
   position: absolute;
   top: 0;
@@ -67,7 +67,7 @@
   }
 }
 
-/* 鍔犺浇澶辫触鎻愮ず */
+/* 閸旂姾娴囨径杈Е閹绘劗銇?*/
 .error-indicator {
   position: absolute;
   top: 0;
@@ -93,7 +93,7 @@
   padding: 10rpx;
 }
 
-/* 杈呭姪鏍峰紡绫?*/
+/* 鏉堝懎濮弽宄扮础缁?*/
 .no-transition .lazy-image {
   transition: none;
 }

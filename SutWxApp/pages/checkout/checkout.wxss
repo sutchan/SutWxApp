@@ -1,6 +1,6 @@
-﻿/* checkout.wxss - 缁撶畻椤甸潰鏍峰紡 */
+锘?* checkout.wxss - 缂佹挾鐣绘い鐢告桨閺嶅嘲绱?*/
 
-/* 鍏ㄥ眬鏍峰紡閲嶇疆 */
+/* 閸忋劌鐪弽宄扮础闁插秶鐤?*/
 .checkout-container {
   font-size: 28rpx;
   color: #333;
@@ -9,7 +9,7 @@
   padding-bottom: 120rpx;
 }
 
-/* 椤堕儴瀵艰埅鏍?*/
+/* 妞ゅ爼鍎寸€佃壈鍩呴弽?*/
 .nav-bar {
   display: flex;
   align-items: center;
@@ -37,7 +37,7 @@
   color: #333;
 }
 
-/* 涓讳綋鍐呭 */
+/* 娑撹缍嬮崘鍛啇 */
 .address-section,
 .goods-section,
 .payment-section,
@@ -56,7 +56,7 @@
   padding: 20rpx 30rpx 10rpx;
 }
 
-/* 鍦板潃鍖哄煙 */
+/* 閸︽澘娼冮崠鍝勭厵 */
 .address-section {
   margin-top: 116rpx;
   display: flex;
@@ -109,7 +109,7 @@
   transform: rotate(180deg);
 }
 
-/* 鍟嗗搧鍒楄〃 */
+/* 閸熷棗鎼ч崚妤勩€?*/
 .goods-list {
   padding: 0 30rpx 20rpx;
 }
@@ -180,7 +180,7 @@
   color: #999;
 }
 
-/* 鏀粯鏂瑰紡 */
+/* 閺€顖欑帛閺傜懓绱?*/
 .payment-methods {
   padding: 0 30rpx 20rpx;
 }
@@ -234,7 +234,7 @@
   border-color: #1890ff;
 }
 
-/* 浼樻儬鍒?*/
+/* 娴兼ɑ鍎崚?*/
 .coupon-section {
   display: flex;
   align-items: center;
@@ -280,7 +280,7 @@
   transform: rotate(180deg);
 }
 
-/* 璁㈠崟澶囨敞 */
+/* 鐠併垹宕熸径鍥ㄦ暈 */
 .remark-section {
   padding: 30rpx;
   display: flex;
@@ -307,7 +307,7 @@
   color: #999;
 }
 
-/* 璐圭敤鏄庣粏 */
+/* 鐠愬湱鏁ら弰搴ｇ矎 */
 .cost-section {
   padding: 30rpx;
 }
@@ -338,7 +338,7 @@
   color: #ff4d4f;
 }
 
-/* 搴曢儴缁撶畻鏍?*/
+/* 鎼存洟鍎寸紒鎾剁暬閺?*/
 .bottom-bar {
   position: fixed;
   bottom: 0;
@@ -384,7 +384,7 @@
   color: #fff;
 }
 
-/* 寮瑰嚭灞傛牱寮?*/
+/* 瀵懓鍤仦鍌涚壉瀵?*/
 .popup-container {
   position: fixed;
   top: 0;
@@ -442,7 +442,7 @@
   overflow-y: auto;
 }
 
-/* 鍦板潃閫夋嫨鍣ㄦ牱寮?*/
+/* 閸︽澘娼冮柅澶嬪閸ｃ劍鐗卞?*/
 .address-popup .popup-body {
   padding: 0;
 }
@@ -454,7 +454,7 @@
 }
 
 .address-item.selected::after {
-  content: '鉁?;
+  content: '閴?;
   position: absolute;
   right: 30rpx;
   top: 50%;
@@ -518,7 +518,7 @@
   margin-right: 10rpx;
 }
 
-/* 浼樻儬鍒搁€夋嫨鍣ㄦ牱寮?*/
+/* 娴兼ɑ鍎崚鎼佲偓澶嬪閸ｃ劍鐗卞?*/
 .coupon-popup .popup-body {
   padding: 0;
 }
@@ -531,7 +531,7 @@
 }
 
 .coupon-item.selected::after {
-  content: '鉁?;
+  content: '閴?;
   position: absolute;
   right: 30rpx;
   top: 50%;
@@ -592,7 +592,7 @@
   color: #999;
 }
 
-/* 鍔犺浇鐘舵€?*/
+/* 閸旂姾娴囬悩鑸碘偓?*/
 .loading {
   display: flex;
   align-items: center;
@@ -606,7 +606,7 @@
   margin-left: 20rpx;
 }
 
-/* 鍝嶅簲寮忛€傞厤 */
+/* 閸濆秴绨插蹇涒偓鍌炲帳 */
 @media (max-width: 375px) {
   .goods-image {
     width: 140rpx;

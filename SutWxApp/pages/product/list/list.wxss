@@ -1,10 +1,10 @@
-﻿/* 鍟嗗搧鍒楄〃椤甸潰鏍峰紡 */
+锘?* 閸熷棗鎼ч崚妤勩€冩い鐢告桨閺嶅嘲绱?*/
 .container {
   background-color: #f8f8f8;
   min-height: 100vh;
 }
 
-/* 鎼滅储鏍忔牱寮?*/
+/* 閹兼粎鍌ㄩ弽蹇旂壉瀵?*/
 .search-bar {
   display: flex;
   padding: 10rpx 20rpx;
@@ -43,7 +43,7 @@
   color: #333333;
 }
 
-/* 鎺掑簭鏍忔牱寮?*/
+/* 閹烘帒绨弽蹇旂壉瀵?*/
 .sort-bar {
   display: flex;
   background-color: #ffffff;
@@ -80,7 +80,7 @@
   color: #ff6b81;
 }
 
-/* 鍟嗗搧鍒楄〃鏍峰紡 */
+/* 閸熷棗鎼ч崚妤勩€冮弽宄扮础 */
 .product-list {
   padding: 10rpx;
   display: grid;
@@ -138,7 +138,7 @@
   color: #ff6b81;
 }
 
-/* 鍔犺浇鐘舵€佹牱寮?*/
+/* 閸旂姾娴囬悩鑸碘偓浣圭壉瀵?*/
 .loading {
   padding: 40rpx;
   text-align: center;
@@ -146,7 +146,7 @@
   color: #999999;
 }
 
-/* 閿欒鐘舵€佹牱寮?*/
+/* 闁挎瑨顕ら悩鑸碘偓浣圭壉瀵?*/
 .error {
   padding: 60rpx 20rpx;
   text-align: center;
@@ -173,7 +173,7 @@
   border-radius: 30rpx;
 }
 
-/* 绌虹姸鎬佹牱寮?*/
+/* 缁岃櫣濮搁幀浣圭壉瀵?*/
 .empty {
   padding: 100rpx 20rpx;
   text-align: center;
@@ -191,7 +191,7 @@
   color: #999999;
 }
 
-/* 鍔犺浇鏇村鏍峰紡 */
+/* 閸旂姾娴囬弴鏉戭樋閺嶅嘲绱?*/
 .load-more,
 .no-more {
   padding: 30rpx;

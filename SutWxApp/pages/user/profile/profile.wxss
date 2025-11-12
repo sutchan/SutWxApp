@@ -1,11 +1,11 @@
-﻿/* pages/user/profile/profile.wxss */
+锘?* pages/user/profile/profile.wxss */
 .profile-container {
   width: 100%;
   background-color: #f8f8f8;
   min-height: 100vh;
 }
 
-/* 鏈櫥褰曠姸鎬佹牱寮?*/
+/* 閺堫亞娅ヨぐ鏇犲Ц閹焦鐗卞?*/
 .unlogin-container {
   display: flex;
   justify-content: center;
@@ -44,12 +44,12 @@
   font-size: 16px;
 }
 
-/* 宸茬櫥褰曠姸鎬佹牱寮?*/
+/* 瀹歌尙娅ヨぐ鏇犲Ц閹焦鐗卞?*/
 .logged-container {
   width: 100%;
 }
 
-/* 鐢ㄦ埛淇℃伅澶撮儴鏍峰紡 */
+/* 閻劍鍩涙穱鈩冧紖婢舵挳鍎撮弽宄扮础 */
 .user-header {
   display: flex;
   align-items: center;
@@ -135,7 +135,7 @@
   opacity: 0.8;
 }
 
-/* 绉垎淇℃伅鍗＄墖鏍峰紡 */
+/* 缁夘垰鍨庢穱鈩冧紖閸楋紕澧栭弽宄扮础 */
 .points-card {
   margin: 15px 15px 0;
   padding: 20px;
@@ -161,7 +161,7 @@
   color: #07c160;
 }
 
-/* 绛惧埌鍖哄煙鏍峰紡 */
+/* 缁涙儳鍩岄崠鍝勭厵閺嶅嘲绱?*/
 .signin-card {
   margin: 15px;
   padding: 20px;
@@ -192,7 +192,7 @@
   color: #07c160;
 }
 
-/* 鍔熻兘鍒楄〃鏍峰紡 */
+/* 閸旂喕鍏橀崚妤勩€冮弽宄扮础 */
 .feature-list {
   margin: 15px;
   background-color: #ffffff;
@@ -240,7 +240,7 @@
   margin-right: 10px;
 }
 
-/* 閫€鍑虹櫥褰曟寜閽牱寮?*/
+/* 闁偓閸戣櫣娅ヨぐ鏇熷瘻闁筋喗鐗卞?*/
 .logout-container {
   padding: 20px;
   margin-bottom: 30px;
@@ -256,7 +256,7 @@
   font-size: 16px;
 }
 
-/* 鍔犺浇鐘舵€?*/
+/* 閸旂姾娴囬悩鑸碘偓?*/
 .loading {
   display: flex;
   justify-content: center;
@@ -266,7 +266,7 @@
   color: #999999;
 }
 
-/* 楠ㄦ灦灞忔牱寮?*/
+/* 妤犮劍鐏︾仦蹇旂壉瀵?*/
 .skeleton-container {
   background-color: #f8f8f8;
   padding: 0 30rpx 30rpx;
@@ -470,7 +470,7 @@
   }
 }
 
-/* 閫傞厤iPhone X绛夊垬娴峰睆 */
+/* 闁倿鍘Phone X缁涘鍨ù宄扮潌 */
 .safe-area-top {
   padding-top: env(safe-area-inset-top, 0);
 }

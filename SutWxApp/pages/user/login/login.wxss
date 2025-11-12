@@ -1,4 +1,4 @@
-﻿/* pages/user/login/login.wxss */
+锘?* pages/user/login/login.wxss */
 .login-container {
   display: flex;
   flex-direction: column;
@@ -10,7 +10,7 @@
   box-sizing: border-box;
 }
 
-/* Logo鍖哄煙鏍峰紡 */
+/* Logo閸栧搫鐓欓弽宄扮础 */
 .logo-container {
   display: flex;
   flex-direction: column;
@@ -38,7 +38,7 @@
   color: #999999;
 }
 
-/* 鐧诲綍鎸夐挳鏍峰紡 */
+/* 閻ц缍嶉幐澶愭尦閺嶅嘲绱?*/
 .login-btn-container {
   width: 100%;
   margin-bottom: 30px;
@@ -60,7 +60,7 @@
   background-color: #06ad55;
 }
 
-/* 鍔犺浇鐘舵€佹牱寮?*/
+/* 閸旂姾娴囬悩鑸碘偓浣圭壉瀵?*/
 .loading {
   display: flex;
   flex-direction: column;
@@ -89,7 +89,7 @@
   color: #999999;
 }
 
-/* 鎺堟潈鎻愮ず鏍峰紡 */
+/* 閹哄牊娼堥幓鎰仛閺嶅嘲绱?*/
 .auth-tips {
   margin-bottom: 40px;
 }
@@ -99,7 +99,7 @@
   color: #999999;
 }
 
-/* 鐢ㄦ埛淇℃伅灞曠ず鍖哄煙鏍峰紡 */
+/* 閻劍鍩涙穱鈩冧紖鐏炴洜銇氶崠鍝勭厵閺嶅嘲绱?*/
 .user-info-container {
   margin-bottom: 40px;
 }
@@ -126,7 +126,7 @@
   color: #333333;
 }
 
-/* 鍗忚鏍峰紡 */
+/* 閸楀繗顔呴弽宄扮础 */
 .agreement-container {
   display: flex;
   flex-wrap: wrap;
@@ -142,7 +142,7 @@
   margin: 0 4px;
 }
 
-/* 瀹㈡湇鑱旂郴鏂瑰紡鏍峰紡 */
+/* 鐎广垺婀囬懕鏃傞兇閺傜懓绱￠弽宄扮础 */
 .customer-service {
   position: absolute;
   bottom: 40px;
@@ -158,7 +158,7 @@
   text-decoration: underline;
 }
 
-/* 閲嶈瘯鎸夐挳鏍峰紡 */
+/* 闁插秷鐦幐澶愭尦閺嶅嘲绱?*/
 .retry-btn {
   margin-top: 10px;
   padding: 6px 20px;
@@ -175,7 +175,7 @@
   background-color: #f0f9f4;
 }
 
-/* 楠ㄦ灦灞忔牱寮?*/
+/* 妤犮劍鐏︾仦蹇旂壉瀵?*/
 .skeleton-container {
   position: absolute;
   top: 0;
@@ -249,7 +249,7 @@
   }
 }
 
-/* 閫傞厤iPhone X绛夊垬娴峰睆 */
+/* 闁倿鍘Phone X缁涘鍨ù宄扮潌 */
 .safe-area-top {
   padding-top: env(safe-area-inset-top, 0);
 }

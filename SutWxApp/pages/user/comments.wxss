@@ -1,11 +1,11 @@
-﻿/* 鐢ㄦ埛璇勮椤甸潰鏍峰紡 */
+锘?* 閻劍鍩涚拠鍕啈妞ょ敻娼伴弽宄扮础 */
 .comments-container {
   padding: 20rpx;
   min-height: 100vh;
   background-color: #f5f5f5;
 }
 
-/* 鍔犺浇鐘舵€?*/
+/* 閸旂姾娴囬悩鑸碘偓?*/
 .loading-container {
   display: flex;
   flex-direction: column;
@@ -34,7 +34,7 @@
   font-size: 28rpx;
 }
 
-/* 閿欒鐘舵€?*/
+/* 闁挎瑨顕ら悩鑸碘偓?*/
 .error-container {
   display: flex;
   flex-direction: column;
@@ -70,7 +70,7 @@
   border: none;
 }
 
-/* 绌虹姸鎬?*/
+/* 缁岃櫣濮搁幀?*/
 .empty-container {
   display: flex;
   flex-direction: column;
@@ -91,7 +91,7 @@
   font-size: 28rpx;
 }
 
-/* 璇勮鍒楄〃 */
+/* 鐠囧嫯顔戦崚妤勩€?*/
 .comments-list {
   display: flex;
   flex-direction: column;
@@ -174,7 +174,7 @@
   border: none;
 }
 
-/* 鍔犺浇鏇村 */
+/* 閸旂姾娴囬弴鏉戭樋 */
 .load-more {
   display: flex;
   align-items: center;
@@ -197,7 +197,7 @@
   font-size: 26rpx;
 }
 
-/* 娌℃湁鏇村 */
+/* 濞屸剝婀侀弴鏉戭樋 */
 .no-more {
   display: flex;
   justify-content: center;

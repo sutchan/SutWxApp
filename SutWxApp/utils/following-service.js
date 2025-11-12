@@ -1,116 +1,120 @@
-﻿// 鍏虫敞鏈嶅姟妯″潡
-import api from './api';
+/**
+ * following-service.js - 关注服务模块
+ * 提供用户关注相关的API调用
+ */
+
+const api = require('./api');
 
 /**
- * 鍏虫敞鏈嶅姟锛屽鐞嗙敤鎴峰叧娉ㄧ浉鍏崇殑API璋冪敤
+ * 关注服务对象
  */
 const followingService = {
   /**
-   * 鑾峰彇鐢ㄦ埛鍏虫敞鍒楄〃
-   * @param {Object} params - 璇锋眰鍙傛暟
-   * @param {number} params.page - 椤电爜
-   * @param {number} params.per_page - 姣忛〉鏁伴噺
-   * @returns {Promise<Object>} 鍏虫敞鍒楄〃鏁版嵁
+   * 获取用户关注列表
+   * @param {Object} params - 查询参数
+   * @param {number} params.page - 页码
+   * @param {number} params.per_page - 每页数量
+   * @returns {Promise<Object>} 关注列表响应数据
    */
   async getUserFollowing(params = {}) {
     try {
-      const response = await api.get('/following', {
+      const response = await api.get('/api/following', {
         page: params.page || 1,
         per_page: params.per_page || 10
       });
       
       return response;
     } catch (error) {
-      console.error('鑾峰彇鍏虫敞鍒楄〃澶辫触:', error);
+      console.error('获取用户关注列表失败:', error);
       throw error;
     }
-  }
+  },
 
   /**
-   * 鍏虫敞鐢ㄦ埛
-   * @param {Object} params - 璇锋眰鍙傛暟
-   * @param {number} params.user_id - 瑕佸叧娉ㄧ殑鐢ㄦ埛ID
-   * @returns {Promise<Object>} 鎿嶄綔缁撴灉
+   * 关注用户
+   * @param {Object} params - 查询参数
+   * @param {number} params.user_id - 要关注的用户ID
+   * @returns {Promise<Object>} 操作结果
    */
   async followUser(params = {}) {
     try {
       if (!params.user_id) {
-        throw new Error('鐢ㄦ埛ID涓嶈兘涓虹┖');
+        throw new Error('用户ID不能为空');
       }
       
-      const response = await api.post('/following', {
+      const response = await api.post('/api/following', {
         user_id: params.user_id
       });
       
       return response;
     } catch (error) {
-      console.error('鍏虫敞鐢ㄦ埛澶辫触:', error);
+      console.error('关注用户失败', error);
       throw error;
     }
-  }
+  },
 
   /**
-   * 鍙栨秷鍏虫敞
-   * @param {Object} params - 璇锋眰鍙傛暟
-   * @param {number} params.id - 鍏虫敞璁板綍ID
-   * @returns {Promise<Object>} 鎿嶄綔缁撴灉
+   * 取消关注
+   * @param {Object} params - 查询参数
+   * @param {number} params.id - 关注记录ID
+   * @returns {Promise<Object>} 操作结果
    */
   async unfollowUser(params = {}) {
     try {
       if (!params.id) {
-        throw new Error('鍏虫敞ID涓嶈兘涓虹┖');
+        throw new Error('关注ID不能为空');
       }
       
-      const response = await api.delete(`/following/${params.id}`);
+      const response = await api.delete(`/api/following/${params.id}`);
       
       return response;
     } catch (error) {
-      console.error('鍙栨秷鍏虫敞澶辫触:', error);
+      console.error('取消关注失败', error);
       throw error;
     }
-  }
+  },
 
   /**
-   * 妫€鏌ユ槸鍚﹀凡鍏虫敞鐢ㄦ埛
-   * @param {Object} params - 璇锋眰鍙傛暟
-   * @param {number} params.user_id - 瑕佹鏌ョ殑鐢ㄦ埛ID
-   * @returns {Promise<Object>} 鍏虫敞鐘舵€?   */
+   * 检查当前用户是否关注了指定用户
+   * @param {Object} params - 查询参数
+   * @param {number} params.user_id - 目标用户ID
+   * @returns {Promise<Object>} 关注状态
+   */
   async checkFollowingStatus(params = {}) {
     try {
       if (!params.user_id) {
-        throw new Error('鐢ㄦ埛ID涓嶈兘涓虹┖');
+        throw new Error('用户ID不能为空');
       }
       
-      const response = await api.get(`/following/check/${params.user_id}`);
+      const response = await api.get(`/api/following/check/${params.user_id}`);
       
       return response;
     } catch (error) {
-      console.error('妫€鏌ュ叧娉ㄧ姸鎬佸け璐?', error);
+      console.error('检查关注状态失败', error);
       throw error;
     }
-  }
+  },
 
   /**
-   * 鑾峰彇鎴戠殑绮変笣鍒楄〃
-   * @param {Object} params - 璇锋眰鍙傛暟
-   * @param {number} params.page - 椤电爜
-   * @param {number} params.per_page - 姣忛〉鏁伴噺
-   * @returns {Promise<Object>} 绮変笣鍒楄〃鏁版嵁
+   * 获取我的粉丝列表
+   * @param {Object} params - 查询参数
+   * @param {number} params.page - 页码
+   * @param {number} params.per_page - 每页数量
+   * @returns {Promise<Object>} 粉丝列表响应数据
    */
   async getMyFollowers(params = {}) {
     try {
-      const response = await api.get('/following/followers', {
+      const response = await api.get('/api/following/followers', {
         page: params.page || 1,
         per_page: params.per_page || 10
       });
       
       return response;
     } catch (error) {
-      console.error('鑾峰彇绮変笣鍒楄〃澶辫触:', error);
+      console.error('获取粉丝列表失败:', error);
       throw error;
     }
   }
 };
 
-export default followingService;
-\n
+module.exports = followingService;

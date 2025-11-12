@@ -1,23 +1,28 @@
-﻿// analytics-service.js - 缁熻鍒嗘瀽鐩稿叧鏈嶅姟妯″潡
-// 澶勭悊椤甸潰璁块棶缁熻銆佺敤鎴疯涓哄垎鏋愮瓑鍔熻兘
+/**
+ * analytics-service.js - 数据分析服务模块
+ * 用于收集用户行为数据、页面访问数据等分析指标
+ */
 
-import api from './api';
-import { getStorage, setStorage } from './global';
+const api = require('./api');
+const { getStorage, setStorage } = require('./global');
 
-// 浼氳瘽閰嶇疆
+// 会话相关常量
 const SESSION_KEY = 'analytics_session';
-const SESSION_TIMEOUT = 30 * 60 * 1000; // 30鍒嗛挓
+const SESSION_TIMEOUT = 30 * 60 * 1000; // 30分钟超时
 
 /**
- * 鍒濆鍖栫粺璁′細璇? * @private
+ * 初始化会话数据
+ * @private
  */
 const initSession = () => {
   try {
     let session = getStorage(SESSION_KEY);
     const now = Date.now();
     
-    // 妫€鏌ヤ細璇濇槸鍚﹀瓨鍦ㄦ垨宸茶繃鏈?    if (!session || (now - session.lastActivity > SESSION_TIMEOUT)) {
-      // 鍒涘缓鏂颁細璇?      session = {
+    // 如果会话不存在或已超时，创建新会话
+    if (!session || (now - session.lastActivity > SESSION_TIMEOUT)) {
+      // 创建会话数据
+      session = {
         sessionId: generateSessionId(),
         startTime: now,
         lastActivity: now,
@@ -25,49 +30,56 @@ const initSession = () => {
         events: []
       };
       
-      // 淇濆瓨鏂颁細璇?      setStorage(SESSION_KEY, session);
+      // 保存会话数据
+      setStorage(SESSION_KEY, session);
       
-      // 鍙戦€佷細璇濆紑濮嬩簨浠?      trackEvent('session_start', {
+      // 记录会话开始事件
+      trackEvent('session_start', {
         session_id: session.sessionId,
         timestamp: now
       });
     } else {
-      // 鏇存柊鏈€鍚庢椿鍔ㄦ椂闂?      session.lastActivity = now;
+      // 更新会话最后活动时间
+      session.lastActivity = now;
       setStorage(SESSION_KEY, session);
     }
     
     return session;
   } catch (error) {
-    console.error('鍒濆鍖栫粺璁′細璇濆け璐?', error);
+    console.error('初始化会话数据失败:', error);
     return null;
   }
 };
 
 /**
- * 鐢熸垚浼氳瘽ID
+ * 生成会话ID
  * @private
- * @returns {string} - 鍞竴鐨勪細璇滻D
+ * @returns {string} - 生成的会话ID
  */
 const generateSessionId = () => {
   return 'sess_' + Date.now() + '_' + Math.random().toString(36).substring(2, 10);
 };
 
 /**
- * 璁板綍椤甸潰璁块棶
- * @param {string} pagePath - 椤甸潰璺緞
- * @param {Object} params - 椤甸潰鍙傛暟
- * @param {string} params.title - 椤甸潰鏍囬
- * @param {number} params.duration - 椤甸潰鍋滅暀鏃堕棿锛堟绉掞級
+ * 记录页面访问
+ * @param {string} pagePath - 页面路径
+ * @param {Object} params - 页面参数
+ * @param {string} params.title - 页面标题
+ * @param {number} params.duration - 页面停留时间（毫秒）
+ * @param {string} params.referrer - 来源页面
+ * @param {Object} params.page_params - 页面参数
  */
-export const trackPageView = async (pagePath, params = {}) => {
+const trackPageView = async (pagePath, params = {}) => {
   try {
-    // 鍒濆鍖栦細璇?    const session = initSession();
+    // 初始化会话
+    const session = initSession();
     if (!session) return;
     
-    // 鏇存柊椤甸潰璁块棶鏁?    session.pageViews++;
+    // 更新页面访问次数
+    session.pageViews++;
     setStorage(SESSION_KEY, session);
     
-    // 鏋勫缓椤甸潰璁块棶鏁版嵁
+    // 构建页面访问数据
     const pageData = {
       session_id: session.sessionId,
       page_path: pagePath,
@@ -78,25 +90,27 @@ export const trackPageView = async (pagePath, params = {}) => {
       page_params: params.page_params || {}
     };
     
-    // 寮傛鍙戦€佸埌鏈嶅姟鍣紙涓嶉樆濉炰富娴佺▼锛?    api.post('/analytics/pageview', pageData).catch(err => {
-      console.error('鍙戦€侀〉闈㈣闂粺璁″け璐?', err);
+    // 异步发送页面访问数据
+    api.post('/analytics/pageview', pageData).catch(err => {
+      console.error('发送页面访问数据失败:', err);
     });
   } catch (error) {
-    console.error('璁板綍椤甸潰璁块棶澶辫触:', error);
+    console.error('记录页面访问失败:', error);
   }
 };
 
 /**
- * 璁板綍鐢ㄦ埛浜嬩欢
- * @param {string} eventName - 浜嬩欢鍚嶇О
- * @param {Object} eventData - 浜嬩欢鐩稿叧鏁版嵁
+ * 记录用户事件
+ * @param {string} eventName - 事件名称
+ * @param {Object} eventData - 事件相关数据
  */
-export const trackEvent = async (eventName, eventData = {}) => {
+const trackEvent = async (eventName, eventData = {}) => {
   try {
-    // 鍒濆鍖栦細璇?    const session = initSession();
+    // 初始化会话
+    const session = initSession();
     if (!session) return;
     
-    // 鏋勫缓浜嬩欢鏁版嵁
+    // 构建事件数据
     const event = {
       session_id: session.sessionId,
       event_name: eventName,
@@ -104,208 +118,229 @@ export const trackEvent = async (eventName, eventData = {}) => {
       data: eventData
     };
     
-    // 娣诲姞鍒颁細璇濅簨浠跺垪琛紙鐢ㄤ簬鎵归噺鍙戦€侊級
+    // 添加到事件队列，稍后批量处理
     session.events.push(event);
     setStorage(SESSION_KEY, session);
     
-    // 濡傛灉浜嬩欢鏁伴噺瓒呰繃闃堝€硷紝鎵归噺鍙戦€?    if (session.events.length >= 10) {
-      flushEvents();
+    // 尝试批量发送事件数据
+    if (session.events.length >= 10) {
+      await flushEvents();
+    } else {
+      // 延迟发送，合并更多事件
+      setTimeout(flushEvents, 1000);
     }
-    
-    // 寮傛鍙戦€佸埌鏈嶅姟鍣紙涓嶉樆濉炰富娴佺▼锛?    api.post('/analytics/event', event).catch(err => {
-      console.error('鍙戦€佷簨浠剁粺璁″け璐?', err);
-    });
   } catch (error) {
-    console.error('璁板綍浜嬩欢澶辫触:', error);
+    console.error('记录用户事件失败:', error);
   }
 };
 
 /**
- * 鎵归噺鍙戦€佷簨浠? * @private
+ * 批量发送事件数据
+ * @private
  */
 const flushEvents = async () => {
   try {
     const session = getStorage(SESSION_KEY);
     if (!session || session.events.length === 0) return;
     
-    // 澶嶅埗浜嬩欢鍒楄〃骞舵竻绌?    const eventsToSend = [...session.events];
+    // 复制当前事件队列并清空
+    const eventsToSend = [...session.events];
     session.events = [];
     setStorage(SESSION_KEY, session);
     
-    // 鎵归噺鍙戦€?    await api.post('/analytics/events/batch', {
+    // 发送事件数据
+    const result = await api.post('/analytics/events', {
+      session_id: session.sessionId,
       events: eventsToSend
     });
+    
+    if (result.code !== 200) {
+      // 如果发送失败，将事件放回队列
+      session.events = [...eventsToSend, ...session.events];
+      setStorage(SESSION_KEY, session);
+    }
   } catch (error) {
-    console.error('鎵归噺鍙戦€佷簨浠跺け璐?', error);
-    // 濡傛灉鍙戦€佸け璐ワ紝鍙互鑰冭檻灏嗕簨浠舵斁鍥為槦鍒?  }
+    console.error('发送事件数据失败:', error);
+  }
 };
 
 /**
- * 璁板綍鏂囩珷闃呰杩涘害
- * @param {string} articleId - 鏂囩珷ID
- * @param {number} progress - 闃呰杩涘害锛?-100锛? */
-export const trackArticleProgress = async (articleId, progress) => {
+ * 记录文章阅读进度
+ * @param {string|number} articleId - 文章ID
+ * @param {number} progress - 阅读进度百分比 (0-100)
+ */
+const trackArticleProgress = async (articleId, progress) => {
   try {
-    // 纭繚杩涘害鍦ㄦ湁鏁堣寖鍥村唴
-    const validProgress = Math.max(0, Math.min(100, Math.round(progress)));
+    // 确保进度在有效范围内
+    const validProgress = Math.max(0, Math.min(100, progress));
     
-    // 璁板綍杩涘害浜嬩欢
-    trackEvent('article_progress', {
-      article_id: articleId,
-      progress: validProgress
-    });
+    // 只在特定进度点记录
+    const checkpoints = [25, 50, 75, 100];
+    const shouldTrack = checkpoints.some(checkpoint => Math.floor(validProgress) >= checkpoint);
     
-    // 鐗规畩澶勭悊闃呰瀹屾垚浜嬩欢
-    if (validProgress >= 95) {
-      trackEvent('article_read_complete', {
-        article_id: articleId
+    if (shouldTrack) {
+      await trackEvent('article_progress', {
+        article_id: articleId,
+        progress: validProgress
       });
     }
   } catch (error) {
-    console.error('璁板綍鏂囩珷闃呰杩涘害澶辫触:', error);
+    console.error('记录文章阅读进度失败:', error);
   }
 };
 
 /**
- * 璁板綍鐢ㄦ埛鎼滅储
- * @param {string} keyword - 鎼滅储鍏抽敭璇? * @param {boolean} hasResults - 鏄惁鏈夌粨鏋? */
-export const trackSearch = async (keyword, hasResults = false) => {
+ * 记录搜索行为
+ * @param {string} keyword - 搜索关键词
+ * @param {boolean} hasResults - 是否有搜索结果
+ */
+const trackSearch = async (keyword, hasResults = false) => {
   try {
-    trackEvent('search', {
-      keyword,
+    await trackEvent('search', {
+      keyword: keyword,
       has_results: hasResults
     });
   } catch (error) {
-    console.error('璁板綍鎼滅储澶辫触:', error);
+    console.error('记录搜索行为失败:', error);
   }
 };
 
 /**
- * 璁板綍鍒嗕韩琛屼负
- * @param {string} contentId - 鍒嗕韩鐨勫唴瀹笽D
- * @param {string} contentType - 鍐呭绫诲瀷锛坅rticle, product绛夛級
- * @param {string} shareChannel - 鍒嗕韩娓犻亾
+ * 记录分享行为
+ * @param {string|number} contentId - 分享内容ID
+ * @param {string} contentType - 内容类型 (article, page, etc.)
+ * @param {string} shareChannel - 分享渠道 (wechat, moments, etc.)
  */
-export const trackShare = async (contentId, contentType, shareChannel) => {
+const trackShare = async (contentId, contentType, shareChannel) => {
   try {
-    trackEvent('share', {
+    await trackEvent('share', {
       content_id: contentId,
       content_type: contentType,
-      share_channel: shareChannel
+      channel: shareChannel
     });
   } catch (error) {
-    console.error('璁板綍鍒嗕韩澶辫触:', error);
+    console.error('记录分享行为失败:', error);
   }
 };
 
 /**
- * 璁板綍鐢ㄦ埛鐧诲綍
- * @param {string} loginMethod - 鐧诲綍鏂瑰紡
- * @param {boolean} success - 鏄惁鎴愬姛
+ * 记录登录行为
+ * @param {string} loginMethod - 登录方式 (wechat, phone, etc.)
+ * @param {boolean} success - 是否登录成功
  */
-export const trackLogin = async (loginMethod, success = true) => {
+const trackLogin = async (loginMethod, success = true) => {
   try {
-    trackEvent('login', {
+    await trackEvent('login', {
       method: loginMethod,
-      success
+      success: success
     });
   } catch (error) {
-    console.error('璁板綍鐧诲綍澶辫触:', error);
+    console.error('记录登录行为失败:', error);
   }
 };
 
 /**
- * 璁板綍鐢ㄦ埛娉ㄥ唽
- * @param {string} registerMethod - 娉ㄥ唽鏂瑰紡
- * @param {boolean} success - 鏄惁鎴愬姛
+ * 记录注册行为
+ * @param {string} registerMethod - 注册方式 (wechat, phone, etc.)
+ * @param {boolean} success - 是否注册成功
  */
-export const trackRegister = async (registerMethod, success = true) => {
+const trackRegister = async (registerMethod, success = true) => {
   try {
-    trackEvent('register', {
+    await trackEvent('register', {
       method: registerMethod,
-      success
+      success: success
     });
   } catch (error) {
-    console.error('璁板綍娉ㄥ唽澶辫触:', error);
+    console.error('记录注册行为失败:', error);
   }
 };
 
 /**
- * 缁撴潫褰撳墠浼氳瘽
+ * 结束当前会话
  */
-export const endSession = async () => {
+const endSession = async () => {
   try {
     const session = getStorage(SESSION_KEY);
     if (!session) return;
     
-    const now = Date.now();
-    const sessionDuration = now - session.startTime;
+    // 计算会话时长
+    const sessionDuration = Date.now() - session.startTime;
     
-    // 鍙戦€佷細璇濈粨鏉熶簨浠?    trackEvent('session_end', {
+    // 记录会话结束事件
+    await trackEvent('session_end', {
       session_id: session.sessionId,
       duration: sessionDuration,
       page_views: session.pageViews,
-      events_count: session.events.length
+      event_count: session.events.length
     });
     
-    // 纭繚鎵€鏈変簨浠堕兘宸插彂閫?    flushEvents();
+    // 确保所有事件都被发送
+    await flushEvents();
     
-    // 娓呴櫎浼氳瘽
-    wx.removeStorageSync(SESSION_KEY);
+    // 清除会话数据
+    setStorage(SESSION_KEY, null);
   } catch (error) {
-    console.error('缁撴潫浼氳瘽澶辫触:', error);
+    console.error('结束会话失败:', error);
   }
 };
 
 /**
- * 鑾峰彇鐢ㄦ埛璁惧淇℃伅
- * @returns {Object} - 璁惧淇℃伅
+ * 获取设备信息
+ * @returns {Object} - 设备信息对象
  */
-export const getDeviceInfo = () => {
+const getDeviceInfo = () => {
   try {
+    // 获取系统信息
     const systemInfo = wx.getSystemInfoSync();
-    const networkType = wx.getNetworkTypeSync();
+    
+    // 获取网络信息
+    const networkType = wx.getNetworkTypeSync().networkType;
     
     return {
-      app_version: systemInfo.version,
-      platform: systemInfo.platform,
-      system: systemInfo.system,
-      model: systemInfo.model,
-      network_type: networkType.networkType,
-      screen_width: systemInfo.windowWidth,
-      screen_height: systemInfo.windowHeight,
-      pixel_ratio: systemInfo.pixelRatio
+      app_version: systemInfo.version || '',
+      system_version: systemInfo.system || '',
+      device_model: systemInfo.model || '',
+      screen_width: systemInfo.windowWidth || 0,
+      screen_height: systemInfo.windowHeight || 0,
+      pixel_ratio: systemInfo.pixelRatio || 1,
+      language: systemInfo.language || 'zh-CN',
+      network_type: networkType || 'unknown',
+      platform: systemInfo.platform || ''
     };
   } catch (error) {
-    console.error('鑾峰彇璁惧淇℃伅澶辫触:', error);
+    console.error('获取设备信息失败:', error);
     return {};
   }
 };
 
 /**
- * 璁板綍閿欒淇℃伅
- * @param {string} errorMessage - 閿欒娑堟伅
- * @param {Object} errorInfo - 閿欒璇︽儏
+ * 记录错误信息
+ * @param {string} errorMessage - 错误消息
+ * @param {Object} errorInfo - 错误相关信息
  */
-export const trackError = async (errorMessage, errorInfo = {}) => {
+const trackError = async (errorMessage, errorInfo = {}) => {
   try {
+    // 获取设备信息
+    const deviceInfo = getDeviceInfo();
+    
+    // 构建错误数据
     const errorData = {
       message: errorMessage,
       stack: errorInfo.stack || '',
-      context: errorInfo.context || {},
-      device: getDeviceInfo(),
-      timestamp: Date.now()
+      component: errorInfo.component || '',
+      page_url: errorInfo.page_url || '',
+      device_info: deviceInfo
     };
     
-    // 鍙戦€侀敊璇棩蹇楀埌鏈嶅姟鍣?    api.post('/analytics/error', errorData).catch(err => {
-      console.error('鍙戦€侀敊璇棩蹇楀け璐?', err);
-    });
+    // 发送错误数据到服务器
+    await api.post('/analytics/error', errorData);
   } catch (error) {
-    console.error('璁板綍閿欒澶辫触:', error);
+    console.error('记录错误信息失败:', error);
   }
 };
 
-// 瀵煎嚭鎵€鏈夋柟娉?export default {
+// 导出所有函数
+module.exports = {
   trackPageView,
   trackEvent,
   trackArticleProgress,
@@ -316,4 +351,4 @@ export const trackError = async (errorMessage, errorInfo = {}) => {
   endSession,
   getDeviceInfo,
   trackError
-};\n
+};

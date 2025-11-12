@@ -1,59 +1,55 @@
-﻿// pages/user/followers.js
-// 绮変笣鍒楄〃椤甸潰
+锘?/ pages/user/followers.js
+// 缁绗ｉ崚妤勩€冩い鐢告桨
 import { showToast } from '../../utils/global';
 
 Page({
   /**
-   * 椤甸潰鐨勫垵濮嬫暟鎹?   */
+   * 妞ょ敻娼伴惃鍕灥婵鏆熼幑?   */
   data: {
-    followersList: [], // 绮変笣鍒楄〃
-    loading: false, // 鍔犺浇鐘舵€?    error: null, // 閿欒淇℃伅
-    currentPage: 1, // 褰撳墠椤电爜
-    pageSize: 10, // 姣忛〉鏁伴噺
-    hasMore: true // 鏄惁鏈夋洿澶氭暟鎹?  },
+    followersList: [], // 缁绗ｉ崚妤勩€?    loading: false, // 閸旂姾娴囬悩鑸碘偓?    error: null, // 闁挎瑨顕ゆ穱鈩冧紖
+    currentPage: 1, // 瑜版挸澧犳い鐢电垳
+    pageSize: 10, // 濮ｅ繘銆夐弫浼村櫤
+    hasMore: true // 閺勵垰鎯侀張澶嬫纯婢舵碍鏆熼幑?  },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸旂姾娴?   */
   onLoad: function(options) {
     this.loadFollowersList();
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閺勫墽銇?   */
   onShow: function() {
-    // 椤甸潰鏄剧ず鏃跺埛鏂版暟鎹?    if (this.data.followersList.length > 0) {
+    // 妞ょ敻娼伴弰鍓с仛閺冭泛鍩涢弬鐗堟殶閹?    if (this.data.followersList.length > 0) {
       this.refreshList();
     }
   },
 
   /**
-   * 椤甸潰鐩稿叧浜嬩欢澶勭悊鍑芥暟--鐩戝惉鐢ㄦ埛涓嬫媺鍔ㄤ綔
+   * 妞ょ敻娼伴惄绋垮彠娴滃娆㈡径鍕倞閸戣姤鏆?-閻╂垵鎯夐悽銊﹀煕娑撳濯洪崝銊ょ稊
    */
   onPullDownRefresh: function() {
     this.refreshList();
   },
 
   /**
-   * 鍔犺浇绮変笣鍒楄〃
-   */
+   * 閸旂姾娴囩划澶夌閸掓銆?   */
   loadFollowersList: function(refresh = false) {
     const app = getApp();
     
-    // 妫€鏌ユ槸鍚﹀凡鐧诲綍
+    // 濡偓閺屻儲妲搁崥锕€鍑￠惂璇茬秿
     if (!app.isLoggedIn()) {
       wx.stopPullDownRefresh();
       this.setData({
         loading: false,
-        error: '璇峰厛鐧诲綍',
+        error: '鐠囧嘲鍘涢惂璇茬秿',
         hasMore: false
       });
-      showToast('璇峰厛鐧诲綍', 'none');
+      showToast('鐠囧嘲鍘涢惂璇茬秿', 'none');
       return;
     }
 
-    // 璁剧疆椤电爜
+    // 鐠佸墽鐤嗘い鐢电垳
     if (refresh) {
       this.setData({ currentPage: 1, hasMore: true, error: null });
     } else if (!this.data.hasMore) {
@@ -61,10 +57,9 @@ Page({
       return;
     }
 
-    // 鏄剧ず鍔犺浇鐘舵€?    this.setData({ loading: true });
+    // 閺勫墽銇氶崝鐘烘祰閻樿埖鈧?    this.setData({ loading: true });
 
-    // 璋冪敤鍏虫敞鏈嶅姟鑾峰彇绮変笣鍒楄〃
-    app.services.following.getMyFollowers({
+    // 鐠嬪啰鏁ら崗铏暈閺堝秴濮熼懢宄板絿缁绗ｉ崚妤勩€?    app.services.following.getMyFollowers({
       page: this.data.currentPage,
       per_page: this.data.pageSize
     })
@@ -82,43 +77,42 @@ Page({
           error: null
         });
         
-        // 澧炲姞椤电爜
+        // 婢х偛濮炴い鐢电垳
         if (!refresh && newFollowers.length > 0) {
           this.setData({ currentPage: this.data.currentPage + 1 });
         }
       } else {
         this.setData({
           loading: false,
-          error: res.message || '鑾峰彇绮変笣鍒楄〃澶辫触'
+          error: res.message || '閼惧嘲褰囩划澶夌閸掓銆冩径杈Е'
         });
       }
     })
     .catch(error => {
       wx.stopPullDownRefresh();
-      console.error('鑾峰彇绮変笣鍒楄〃澶辫触:', error);
+      console.error('閼惧嘲褰囩划澶夌閸掓銆冩径杈Е:', error);
       this.setData({
         loading: false,
-        error: '缃戠粶閿欒锛岃閲嶈瘯'
+        error: '缂冩垹绮堕柨娆掝嚖閿涘矁顕柌宥堢槸'
       });
     });
   },
 
   /**
-   * 鍒锋柊鍒楄〃
-   */
+   * 閸掗攱鏌婇崚妤勩€?   */
   refreshList: function() {
     this.loadFollowersList(true);
   },
 
   /**
-   * 閲嶈瘯鍔犺浇
+   * 闁插秷鐦崝鐘烘祰
    */
   retryLoad: function() {
     this.refreshList();
   },
 
   /**
-   * 鍔犺浇鏇村
+   * 閸旂姾娴囬弴鏉戭樋
    */
   loadMore: function() {
     if (!this.data.loading && this.data.hasMore) {
@@ -127,8 +121,7 @@ Page({
   },
 
   /**
-   * 璺宠浆鍒扮敤鎴疯鎯呴〉
-   */
+   * 鐠哄疇娴嗛崚鎵暏閹寸柉顕涢幆鍛淬€?   */
   navigateToUserProfile: function(e) {
     const userId = e.currentTarget.dataset.user_id;
     if (userId) {
@@ -139,35 +132,35 @@ Page({
   },
 
   /**
-   * 鍏虫敞鐢ㄦ埛
+   * 閸忚櫕鏁為悽銊﹀煕
    */
   followUser: function(e) {
     const { id, index } = e.currentTarget.dataset;
     const app = getApp();
     
-    // 鏄剧ず鍔犺浇鐘舵€?    wx.showLoading({ title: '鎿嶄綔涓? });
+    // 閺勫墽銇氶崝鐘烘祰閻樿埖鈧?    wx.showLoading({ title: '閹垮秳缍旀稉? });
     
-    // 璋冪敤鍏虫敞鏈嶅姟杩涜鍏虫敞鎿嶄綔
+    // 鐠嬪啰鏁ら崗铏暈閺堝秴濮熸潻娑滎攽閸忚櫕鏁為幙宥勭稊
     app.services.following.followUser(id)
       .then(res => {
         wx.hideLoading();
         
         if (res.code === 200) {
-          // 鏇存柊绮変笣鍒楄〃涓殑鍏虫敞鐘舵€?          const followersList = [...this.data.followersList];
+          // 閺囧瓨鏌婄划澶夌閸掓銆冩稉顓犳畱閸忚櫕鏁為悩鑸碘偓?          const followersList = [...this.data.followersList];
           if (followersList[index]) {
             followersList[index].is_following = true;
           }
           this.setData({ followersList });
           
-          showToast('鍏虫敞鎴愬姛');
+          showToast('閸忚櫕鏁為幋鎰');
         } else {
-          showToast(res.message || '鍏虫敞澶辫触', 'none');
+          showToast(res.message || '閸忚櫕鏁炴径杈Е', 'none');
         }
       })
       .catch(error => {
         wx.hideLoading();
-        console.error('鍏虫敞鐢ㄦ埛澶辫触:', error);
-        showToast('缃戠粶閿欒锛岃閲嶈瘯', 'none');
+        console.error('閸忚櫕鏁為悽銊﹀煕婢惰精瑙?', error);
+        showToast('缂冩垹绮堕柨娆掝嚖閿涘矁顕柌宥堢槸', 'none');
       });
   }
 });\n

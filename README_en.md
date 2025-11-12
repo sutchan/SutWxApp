@@ -1,4 +1,4 @@
-﻿# SUT WeChat Mini Program Project
+# SUT WeChat Mini Program Project
 
 [![GitHub release](https://img.shields.io/github/release/sutchan/SutWxApp.svg)](https://github.com/sutchan/SutWxApp/releases)
 [![License](https://img.shields.io/github/license/sutchan/SutWxApp.svg)](https://github.com/sutchan/SutWxApp/blob/master/LICENSE)

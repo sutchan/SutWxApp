@@ -1,264 +1,260 @@
-﻿// address-service.js - 鍦板潃绠＄悊鏈嶅姟妯″潡
-// 澶勭悊鏀惰揣鍦板潃鐨勫鍒犳敼鏌ョ瓑鍔熻兘
-
-import api from './api';
-import { showToast, showLoading, hideLoading } from './global';
+/**
+ * address-service.js - 地址服务模块
+ * 用于处理用户收货地址的增删改查等操作
+ */
+const api = require('./api');
+const { showToast, showLoading, hideLoading } = require('./global');
 
 /**
- * 鑾峰彇鍦板潃鍒楄〃
- * @returns {Promise<Array>} - 杩斿洖鍦板潃鍒楄〃
+ * 获取地址列表
+ * @returns {Promise<Array>} - 返回地址列表
  */
-export const getAddresses = async () => {
+const getAddresses = async () => {
   try {
-    const result = await api.get('/addresses');
+    const result = await api.get('/api/addresses');
     return result.addresses || [];
   } catch (error) {
-    console.error('鑾峰彇鍦板潃鍒楄〃澶辫触:', error);
+    console.error('获取地址列表失败:', error);
     return [];
   }
 };
 
 /**
- * 鑾峰彇榛樿鍦板潃
- * @returns {Promise<Object|null>} - 杩斿洖榛樿鍦板潃鎴杗ull
+ * 获取默认地址
+ * @returns {Promise<Object|null>} - 返回默认地址对象或null
  */
-export const getDefaultAddress = async () => {
+const getDefaultAddress = async () => {
   try {
-    const result = await api.get('/addresses/default');
+    const result = await api.get('/api/addresses/default');
     return result.address || null;
   } catch (error) {
-    console.error('鑾峰彇榛樿鍦板潃澶辫触:', error);
+    console.error('获取默认地址失败:', error);
     return null;
   }
 };
 
 /**
- * 鑾峰彇鍦板潃璇︽儏
- * @param {number|string} addressId - 鍦板潃ID
- * @returns {Promise<Object>} - 杩斿洖鍦板潃璇︽儏
+ * 获取地址详情
+ * @param {number|string} addressId - 地址ID
+ * @returns {Promise<Object>} - 返回地址详情
  */
-export const getAddressDetail = async (addressId) => {
+const getAddressDetail = async (addressId) => {
   try {
-    const result = await api.get(`/addresses/${addressId}`);
+    const result = await api.get(`/api/addresses/${addressId}`);
     
     if (result.code === 200 && result.address) {
       return result.address;
     } else {
-      throw new Error(result.message || '鑾峰彇鍦板潃璇︽儏澶辫触');
+      throw new Error(result.message || '获取地址详情失败');
     }
   } catch (error) {
-    console.error('鑾峰彇鍦板潃璇︽儏澶辫触:', error);
+    console.error('获取地址详情失败:', error);
     throw error;
   }
 };
 
 /**
- * 娣诲姞鏂板湴鍧€
- * @param {Object} addressData - 鍦板潃鏁版嵁
- * @param {string} addressData.name - 鏀朵欢浜哄鍚? * @param {string} addressData.phone - 鑱旂郴鐢佃瘽
- * @param {string} addressData.province - 鐪佷唤
- * @param {string} addressData.city - 鍩庡競
- * @param {string} addressData.district - 鍖哄幙
- * @param {string} addressData.detail - 璇︾粏鍦板潃
- * @param {boolean} addressData.is_default - 鏄惁榛樿鍦板潃
- * @returns {Promise<Object>} - 杩斿洖鍒涘缓鐨勫湴鍧€淇℃伅
+ * 添加新地址
+ * @param {Object} addressData - 地址数据
+ * @param {string} addressData.name - 收货人姓名
+ * @param {string} addressData.phone - 联系电话
+ * @param {string} addressData.province - 省份
+ * @param {string} addressData.city - 城市
+ * @param {string} addressData.district - 区县
+ * @param {string} addressData.detail - 详细地址
+ * @param {boolean} addressData.is_default - 是否默认地址
+ * @returns {Promise<Object>} - 返回新增的地址对象
  */
-export const addAddress = async (addressData) => {
+const addAddress = async (addressData) => {
   try {
-    // 楠岃瘉蹇呭～瀛楁
+    // 验证数据
     if (!addressData.name || !addressData.phone || !addressData.detail) {
-      throw new Error('璇峰～鍐欏畬鏁寸殑鍦板潃淇℃伅');
+      throw new Error('请填写完整的地址信息');
     }
     
-    showLoading('淇濆瓨鍦板潃...');
+    showLoading('保存地址...');
     
-    const result = await api.post('/addresses', addressData);
+    const result = await api.post('/api/addresses', addressData);
     
     hideLoading();
     
     if (result.code === 200 && result.address) {
-      showToast('鍦板潃淇濆瓨鎴愬姛', { icon: 'success' });
+      showToast('地址添加成功', 'success');
       return result.address;
     } else {
-      throw new Error(result.message || '淇濆瓨鍦板潃澶辫触');
+      throw new Error(result.message || '保存地址失败');
     }
   } catch (error) {
     hideLoading();
-    console.error('娣诲姞鍦板潃澶辫触:', error);
-    showToast(error.message || '淇濆瓨鍦板潃澶辫触锛岃閲嶈瘯', { icon: 'none' });
+    console.error('添加地址失败', error);
+    showToast(error.message || '保存地址失败，请稍后重试', 'none');
     throw error;
   }
 };
 
 /**
- * 鏇存柊鍦板潃
- * @param {number|string} addressId - 鍦板潃ID
- * @param {Object} addressData - 鍦板潃鏁版嵁
- * @returns {Promise<Object>} - 杩斿洖鏇存柊鍚庣殑鍦板潃淇℃伅
+ * 更新地址
+ * @param {number|string} addressId - 地址ID
+ * @param {Object} addressData - 地址数据
+ * @returns {Promise<Object>} - 返回更新后的地址对象
  */
-export const updateAddress = async (addressId, addressData) => {
+const updateAddress = async (addressId, addressData) => {
   try {
-    // 楠岃瘉蹇呭～瀛楁
+    // 验证数据
     if (!addressData.name || !addressData.phone || !addressData.detail) {
-      throw new Error('璇峰～鍐欏畬鏁寸殑鍦板潃淇℃伅');
+      throw new Error('请填写完整的地址信息');
     }
     
-    showLoading('鏇存柊鍦板潃...');
+    showLoading('更新地址...');
     
-    const result = await api.put(`/addresses/${addressId}`, addressData);
+    const result = await api.put(`/api/addresses/${addressId}`, addressData);
     
     hideLoading();
     
     if (result.code === 200 && result.address) {
-      showToast('鍦板潃鏇存柊鎴愬姛', { icon: 'success' });
+      showToast('地址更新成功', 'success');
       return result.address;
     } else {
-      throw new Error(result.message || '鏇存柊鍦板潃澶辫触');
+      throw new Error(result.message || '更新地址失败');
     }
   } catch (error) {
     hideLoading();
-    console.error('鏇存柊鍦板潃澶辫触:', error);
-    showToast(error.message || '鏇存柊鍦板潃澶辫触锛岃閲嶈瘯', { icon: 'none' });
+    console.error('更新地址失败', error);
+    showToast(error.message || '更新地址失败，请稍后重试', 'none');
     throw error;
   }
 };
 
 /**
- * 鍒犻櫎鍦板潃
- * @param {number|string} addressId - 鍦板潃ID
- * @returns {Promise<boolean>} - 鏄惁鍒犻櫎鎴愬姛
+ * 删除地址
+ * @param {number|string} addressId - 地址ID
+ * @returns {Promise<boolean>} - 是否删除成功
  */
-export const deleteAddress = async (addressId) => {
+const deleteAddress = async (addressId) => {
   try {
-    showLoading('鍒犻櫎鍦板潃...');
+    showLoading('删除地址...');
     
-    const result = await api.delete(`/addresses/${addressId}`);
+    const result = await api.delete(`/api/addresses/${addressId}`);
     
     hideLoading();
     
     if (result.code === 200) {
-      showToast('鍦板潃宸插垹闄?, { icon: 'success' });
+      showToast('地址删除成功', 'success');
       return true;
     } else {
-      throw new Error(result.message || '鍒犻櫎鍦板潃澶辫触');
+      throw new Error(result.message || '删除地址失败');
     }
   } catch (error) {
     hideLoading();
-    console.error('鍒犻櫎鍦板潃澶辫触:', error);
-    showToast(error.message || '鍒犻櫎鍦板潃澶辫触锛岃閲嶈瘯', { icon: 'none' });
-    return false;
+    console.error('删除地址失败', error);
+    showToast(error.message || '删除地址失败，请稍后重试', 'none');
+    throw error;
   }
 };
 
 /**
- * 璁剧疆榛樿鍦板潃
- * @param {number|string} addressId - 鍦板潃ID
- * @returns {Promise<boolean>} - 鏄惁璁剧疆鎴愬姛
+ * 设置默认地址
+ * @param {number|string} addressId - 地址ID
+ * @returns {Promise<Object>} - 返回设置后的默认地址对象
  */
-export const setDefaultAddress = async (addressId) => {
+const setDefaultAddress = async (addressId) => {
   try {
-    showLoading('璁剧疆榛樿鍦板潃...');
+    showLoading('设置默认地址...');
     
-    const result = await api.post(`/addresses/${addressId}/set-default`);
+    const result = await api.post(`/api/addresses/${addressId}/default`);
     
     hideLoading();
     
-    if (result.code === 200) {
-      showToast('榛樿鍦板潃璁剧疆鎴愬姛', { icon: 'success' });
-      return true;
+    if (result.code === 200 && result.address) {
+      showToast('默认地址设置成功', 'success');
+      return result.address;
     } else {
-      throw new Error(result.message || '璁剧疆榛樿鍦板潃澶辫触');
+      throw new Error(result.message || '设置默认地址失败');
     }
   } catch (error) {
     hideLoading();
-    console.error('璁剧疆榛樿鍦板潃澶辫触:', error);
-    showToast(error.message || '璁剧疆榛樿鍦板潃澶辫触锛岃閲嶈瘯', { icon: 'none' });
-    return false;
+    console.error('设置默认地址失败', error);
+    showToast(error.message || '设置默认地址失败，请稍后重试', 'none');
+    throw error;
   }
 };
 
 /**
- * 浣跨敤寰俊鍦板潃API閫夋嫨鍦板潃
- * @returns {Promise<Object|null>} - 杩斿洖閫夋嫨鐨勫湴鍧€淇℃伅鎴杗ull
+ * 选择微信地址
+ * @returns {Promise<Object>} - 返回选择的地址信息
  */
-export const chooseWechatAddress = async () => {
-  try {
-    // 妫€鏌ユ槸鍚︽湁鏉冮檺
-    const setting = await wx.getSetting();
-    
-    if (!setting.authSetting['scope.address']) {
-      // 鐢宠鏉冮檺
-      const authResult = await wx.authorize({ scope: 'scope.address' });
-      
-      if (!authResult) {
-        throw new Error('鐢ㄦ埛鎷掔粷鎺堟潈鍦板潃淇℃伅');
-      }
+const chooseWechatAddress = async () => {
+  return new Promise((resolve, reject) => {
+    try {
+      wx.chooseAddress({
+        success: (res) => {
+          const addressData = {
+            name: res.userName,
+            phone: res.telNumber,
+            province: res.provinceName,
+            city: res.cityName,
+            district: res.countyName,
+            detail: res.detailInfo,
+            is_default: false
+          };
+          resolve(addressData);
+        },
+        fail: (error) => {
+          console.error('选择地址失败:', error);
+          reject(error);
+        }
+      });
+    } catch (error) {
+      console.error('调用微信地址选择失败:', error);
+      reject(error);
     }
-    
-    // 璋冪敤寰俊鍦板潃閫夋嫨
-    const address = await wx.chooseAddress();
-    
-    // 鏍煎紡鍖栧湴鍧€鏁版嵁
-    return {
-      name: address.userName,
-      phone: address.telNumber,
-      province: address.provinceName,
-      city: address.cityName,
-      district: address.countyName,
-      detail: address.detailInfo,
-      is_default: false
-    };
-  } catch (error) {
-    console.error('閫夋嫨鍦板潃澶辫触:', error);
-    
-    // 鐢ㄦ埛鍙栨秷閫夋嫨涓嶇畻閿欒
-    if (!error.errMsg || !error.errMsg.includes('cancel')) {
-      showToast('閫夋嫨鍦板潃澶辫触', { icon: 'none' });
-    }
-    
-    return null;
-  }
+  });
 };
 
 /**
- * 楠岃瘉鍦板潃淇℃伅
- * @param {Object} addressData - 鍦板潃鏁版嵁
- * @returns {Object} - 楠岃瘉缁撴灉 { valid: boolean, message: string }
+ * 验证地址信息
+ * @param {Object} addressData - 地址数据
+ * @returns {Object} - 验证结果 {isValid: boolean, message: string}
  */
-export const validateAddress = (addressData) => {
-  // 楠岃瘉濮撳悕
-  if (!addressData.name || addressData.name.trim().length === 0) {
-    return { valid: false, message: '璇疯緭鍏ユ敹浠朵汉濮撳悕' };
+const validateAddress = (addressData) => {
+  if (!addressData) {
+    return { isValid: false, message: '地址信息不能为空' };
   }
   
-  // 楠岃瘉鎵嬫満鍙凤紙绠€鍗曢獙璇侊級
-  if (!addressData.phone || !/^1[3-9]\d{9}$/.test(addressData.phone)) {
-    return { valid: false, message: '璇疯緭鍏ユ纭殑鎵嬫満鍙? };
+  if (!addressData.name || addressData.name.trim() === '') {
+    return { isValid: false, message: '收货人姓名不能为空' };
   }
   
-  // 楠岃瘉鐪佸競鍖?  if (!addressData.province || !addressData.city || !addressData.district) {
-    return { valid: false, message: '璇烽€夋嫨瀹屾暣鐨勭渷甯傚尯' };
+  if (!addressData.phone) {
+    return { isValid: false, message: '联系电话不能为空' };
   }
   
-  // 楠岃瘉璇︾粏鍦板潃
-  if (!addressData.detail || addressData.detail.trim().length < 5) {
-    return { valid: false, message: '璇疯緭鍏ヨ缁嗗湴鍧€锛堣嚦灏?涓瓧绗︼級' };
+  // 简单的手机号格式验证
+  if (!/^1[3-9]\d{9}$/.test(addressData.phone)) {
+    return { isValid: false, message: '请输入正确的手机号' };
   }
   
-  return { valid: true, message: '楠岃瘉閫氳繃' };
+  if (!addressData.detail || addressData.detail.trim() === '') {
+    return { isValid: false, message: '详细地址不能为空' };
+  }
+  
+  return { isValid: true, message: '验证通过' };
 };
 
 /**
- * 鏍煎紡鍖栧湴鍧€涓哄瓧绗︿覆
- * @param {Object} address - 鍦板潃瀵硅薄
- * @returns {string} - 鏍煎紡鍖栧悗鐨勫湴鍧€瀛楃涓? */
-export const formatAddress = (address) => {
+ * 格式化地址显示
+ * @param {Object} address - 地址对象
+ * @returns {string} - 格式化后的地址字符串
+ */
+const formatAddress = (address) => {
   if (!address) return '';
   
-  return `${address.province || ''}${address.city || ''}${address.district || ''}${address.detail || ''}`;
+  const { province, city, district, detail, name, phone } = address;
+  return `${province}${city}${district}${detail} ${name} ${phone}`;
 };
 
-// 瀵煎嚭鎵€鏈夋柟娉?export default {
+// 导出所有函数
+module.exports = {
   getAddresses,
   getDefaultAddress,
   getAddressDetail,
@@ -269,4 +265,4 @@ export const formatAddress = (address) => {
   chooseWechatAddress,
   validateAddress,
   formatAddress
-};\n
+};

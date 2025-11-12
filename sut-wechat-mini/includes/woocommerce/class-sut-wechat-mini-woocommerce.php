@@ -1,7 +1,7 @@
-﻿<?php
+锘??php
 /**
- * SUT寰俊灏忕▼搴廤ooCommerce闆嗘垚绫? *
- * 澶勭悊WooCommerce浜у搧鐨勬樉绀恒€佽喘鐗╄溅銆佽鍗曠鐞嗙瓑鐢靛晢鍔熻兘
+ * SUT瀵邦喕淇婄亸蹇曗柤鎼村护ooCommerce闂嗗棙鍨氱猾? *
+ * 婢跺嫮鎮奧ooCommerce娴溠冩惂閻ㄥ嫭妯夌粈鎭掆偓浣藉枠閻椻晞婧呴妴浣筋吂閸楁洜顓搁悶鍡欑搼閻㈤潧鏅㈤崝鐔诲厴
  *
  * @package SUT_WeChat_Mini
  */
@@ -11,32 +11,29 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * SUT_WeChat_Mini_WooCommerce 绫? */
+ * SUT_WeChat_Mini_WooCommerce 缁? */
 class SUT_WeChat_Mini_WooCommerce {
     
     /**
-     * WooCommerce闆嗘垚瀹炰緥
-     *
+     * WooCommerce闂嗗棙鍨氱€圭偘绶?     *
      * @var SUT_WeChat_Mini_WooCommerce
      */
     private static $instance = null;
     
     /**
-     * 榛樿姣忛〉鏄剧ず鏁伴噺
-     *
+     * 姒涙顓诲В蹇涖€夐弰鍓с仛閺佷即鍣?     *
      * @var int
      */
     private $default_per_page = 10;
     
     /**
-     * 鏋勯€犲嚱鏁?     */
+     * 閺嬪嫰鈧姴鍤遍弫?     */
     public function __construct() {
         $this->init();
     }
     
     /**
-     * 鑾峰彇鍗曚緥瀹炰緥
-     *
+     * 閼惧嘲褰囬崡鏇氱伐鐎圭偘绶?     *
      * @return SUT_WeChat_Mini_WooCommerce
      */
     public static function get_instance() {
@@ -48,25 +45,21 @@ class SUT_WeChat_Mini_WooCommerce {
     }
     
     /**
-     * 鍒濆鍖朩ooCommerce闆嗘垚
-     */
+     * 閸掓繂顫愰崠鏈﹐oCommerce闂嗗棙鍨?     */
     private function init() {
-        // 娉ㄥ唽WooCommerce鐩稿叧鐨凙PI璺敱
-        add_filter( 'sut_wechat_mini_api_routes', array( $this, 'add_woocommerce_routes' ) );
+        // 濞夈劌鍞絎ooCommerce閻╃鍙ч惃鍑橮I鐠侯垳鏁?        add_filter( 'sut_wechat_mini_api_routes', array( $this, 'add_woocommerce_routes' ) );
         
-        // 纭繚WooCommerce宸叉縺娲?        if ( ! class_exists( 'WooCommerce' ) ) {
+        // 绾喕绻歐ooCommerce瀹稿弶绺哄ú?        if ( ! class_exists( 'WooCommerce' ) ) {
             return;
         }
     }
     
     /**
-     * 娣诲姞WooCommerce鐩稿叧鐨凙PI璺敱
-     *
-     * @param array $routes 鐜版湁璺敱
-     * @return array 淇敼鍚庣殑璺敱
-     */
+     * 濞ｈ濮濿ooCommerce閻╃鍙ч惃鍑橮I鐠侯垳鏁?     *
+     * @param array $routes 閻滅増婀佺捄顖滄暠
+     * @return array 娣囶喗鏁奸崥搴ｆ畱鐠侯垳鏁?     */
     public function add_woocommerce_routes( $routes ) {
-        // 浜у搧鐩稿叧API
+        // 娴溠冩惂閻╃鍙PI
         $routes['products'] = array( 'callback' => array( $this, 'api_get_products' ) );
         $routes['products/([0-9]+)'] = array( 'callback' => array( $this, 'api_get_product' ) );
         $routes['products/search'] = array( 'callback' => array( $this, 'api_search_products' ) );
@@ -76,21 +69,21 @@ class SUT_WeChat_Mini_WooCommerce {
         $routes['products/featured'] = array( 'callback' => array( $this, 'api_get_featured_products' ) );
         $routes['products/sale'] = array( 'callback' => array( $this, 'api_get_sale_products' ) );
         
-        // 璐墿杞︾浉鍏矨PI
+        // 鐠愵厾澧挎潪锔炬祲閸忕煥PI
         $routes['cart'] = array( 'callback' => array( $this, 'api_get_cart' ), 'auth' => true );
         $routes['cart/add'] = array( 'callback' => array( $this, 'api_add_to_cart' ), 'auth' => true );
         $routes['cart/update'] = array( 'callback' => array( $this, 'api_update_cart' ), 'auth' => true );
         $routes['cart/remove'] = array( 'callback' => array( $this, 'api_remove_from_cart' ), 'auth' => true );
         $routes['cart/clear'] = array( 'callback' => array( $this, 'api_clear_cart' ), 'auth' => true );
         
-        // 璁㈠崟鐩稿叧API
+        // 鐠併垹宕熼惄绋垮彠API
         $routes['orders'] = array( 'callback' => array( $this, 'api_get_orders' ), 'auth' => true );
         $routes['orders/([0-9]+)'] = array( 'callback' => array( $this, 'api_get_order' ), 'auth' => true );
         $routes['orders/create'] = array( 'callback' => array( $this, 'api_create_order' ), 'auth' => true );
         $routes['orders/cancel/([0-9]+)'] = array( 'callback' => array( $this, 'api_cancel_order' ), 'auth' => true );
         $routes['orders/confirm/([0-9]+)'] = array( 'callback' => array( $this, 'api_confirm_order' ), 'auth' => true );
         
-        // 鏀粯鐩稿叧API
+        // 閺€顖欑帛閻╃鍙PI
         $routes['payment/create'] = array( 'callback' => array( $this, 'api_create_payment' ), 'auth' => true );
         $routes['payment/notify'] = array( 'callback' => array( $this, 'api_payment_notify' ) );
         
@@ -98,28 +91,24 @@ class SUT_WeChat_Mini_WooCommerce {
     }
     
     /**
-     * 鑾峰彇浜у搧鍒楄〃
-     *
-     * @param array $data 璇锋眰鏁版嵁
-     * @param array $matches 璺敱鍖归厤缁撴灉
-     * @return array 浜у搧鍒楄〃
-     */
+     * 閼惧嘲褰囨禍褍鎼ч崚妤勩€?     *
+     * @param array $data 鐠囬攱鐪伴弫鐗堝祦
+     * @param array $matches 鐠侯垳鏁遍崠褰掑帳缂佹挻鐏?     * @return array 娴溠冩惂閸掓銆?     */
     public function api_get_products( $data, $matches ) {
-        // 妫€鏌ooCommerce鏄惁婵€娲?        if ( ! class_exists( 'WooCommerce' ) ) {
+        // 濡偓閺岊櫇ooCommerce閺勵垰鎯佸┑鈧ú?        if ( ! class_exists( 'WooCommerce' ) ) {
             return array(
                 'code' => 105,
-                'message' => __( 'WooCommerce鏈縺娲?, 'sut-wechat-mini' ),
+                'message' => __( 'WooCommerce閺堫亝绺哄ú?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 鑾峰彇鍒嗛〉鍙傛暟
+        // 閼惧嘲褰囬崚鍡涖€夐崣鍌涙殶
         $page = isset( $data['page'] ) ? intval( $data['page'] ) : 1;
         $per_page = isset( $data['per_page'] ) ? intval( $data['per_page'] ) : $this->default_per_page;
         $offset = ( $page - 1 ) * $per_page;
         
-        // 鏋勫缓鏌ヨ鍙傛暟
-        $args = array(
+        // 閺嬪嫬缂撻弻銉嚄閸欏倹鏆?        $args = array(
             'post_type'      => 'product',
             'post_status'    => 'publish',
             'posts_per_page' => $per_page,
@@ -128,12 +117,11 @@ class SUT_WeChat_Mini_WooCommerce {
             'order'          => 'DESC',
         );
         
-        // 搴旂敤棰濆鐨勬煡璇㈡潯浠?        $args = $this->apply_product_query_filters( $args, $data );
+        // 鎼存梻鏁ゆ０婵嗩樆閻ㄥ嫭鐓＄拠銏℃蒋娴?        $args = $this->apply_product_query_filters( $args, $data );
         
-        // 鎵ц鏌ヨ
-        $query = new WP_Query( $args );
+        // 閹笛嗩攽閺屻儴顕?        $query = new WP_Query( $args );
         
-        // 鏍煎紡鍖栦骇鍝佹暟鎹?        $products = array();
+        // 閺嶇厧绱￠崠鏍﹂獓閸濅焦鏆熼幑?        $products = array();
         foreach ( $query->posts as $post ) {
             $product = wc_get_product( $post->ID );
             if ( $product ) {
@@ -141,10 +129,9 @@ class SUT_WeChat_Mini_WooCommerce {
             }
         }
         
-        // 鏋勫缓杩斿洖鏁版嵁
-        $result = array(
+        // 閺嬪嫬缂撴潻鏂挎礀閺佺増宓?        $result = array(
             'code' => 0,
-            'message' => __( '鎴愬姛', 'sut-wechat-mini' ),
+            'message' => __( '閹存劕濮?, 'sut-wechat-mini' ),
             'data' => array(
                 'list' => $products,
                 'total' => $query->found_posts,
@@ -158,40 +145,36 @@ class SUT_WeChat_Mini_WooCommerce {
     }
     
     /**
-     * 鑾峰彇鍗曚釜浜у搧
+     * 閼惧嘲褰囬崡鏇氶嚋娴溠冩惂
      *
-     * @param array $data 璇锋眰鏁版嵁
-     * @param array $matches 璺敱鍖归厤缁撴灉
-     * @return array 浜у搧璇︽儏
-     */
+     * @param array $data 鐠囬攱鐪伴弫鐗堝祦
+     * @param array $matches 鐠侯垳鏁遍崠褰掑帳缂佹挻鐏?     * @return array 娴溠冩惂鐠囷附鍎?     */
     public function api_get_product( $data, $matches ) {
-        // 妫€鏌ooCommerce鏄惁婵€娲?        if ( ! class_exists( 'WooCommerce' ) ) {
+        // 濡偓閺岊櫇ooCommerce閺勵垰鎯佸┑鈧ú?        if ( ! class_exists( 'WooCommerce' ) ) {
             return array(
                 'code' => 105,
-                'message' => __( 'WooCommerce鏈縺娲?, 'sut-wechat-mini' ),
+                'message' => __( 'WooCommerce閺堫亝绺哄ú?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
         $product_id = $matches[1];
         
-        // 鑾峰彇浜у搧
-        $product = wc_get_product( $product_id );
+        // 閼惧嘲褰囨禍褍鎼?        $product = wc_get_product( $product_id );
         
         if ( ! $product || ! $product->is_published() ) {
             return array(
                 'code' => 104,
-                'message' => __( '浜у搧涓嶅瓨鍦ㄦ垨鏈彂甯?, 'sut-wechat-mini' ),
+                'message' => __( '娴溠冩惂娑撳秴鐡ㄩ崷銊﹀灗閺堫亜褰傜敮?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 鏍煎紡鍖栦骇鍝佹暟鎹?        $formatted_product = $this->format_product( $product, true );
+        // 閺嶇厧绱￠崠鏍﹂獓閸濅焦鏆熼幑?        $formatted_product = $this->format_product( $product, true );
         
-        // 鏋勫缓杩斿洖鏁版嵁
-        $result = array(
+        // 閺嬪嫬缂撴潻鏂挎礀閺佺増宓?        $result = array(
             'code' => 0,
-            'message' => __( '鎴愬姛', 'sut-wechat-mini' ),
+            'message' => __( '閹存劕濮?, 'sut-wechat-mini' ),
             'data' => $formatted_product
         );
         
@@ -199,37 +182,33 @@ class SUT_WeChat_Mini_WooCommerce {
     }
     
     /**
-     * 鎼滅储浜у搧
-     *
-     * @param array $data 璇锋眰鏁版嵁
-     * @param array $matches 璺敱鍖归厤缁撴灉
-     * @return array 鎼滅储缁撴灉
+     * 閹兼粎鍌ㄦ禍褍鎼?     *
+     * @param array $data 鐠囬攱鐪伴弫鐗堝祦
+     * @param array $matches 鐠侯垳鏁遍崠褰掑帳缂佹挻鐏?     * @return array 閹兼粎鍌ㄧ紒鎾寸亯
      */
     public function api_search_products( $data, $matches ) {
-        // 妫€鏌ooCommerce鏄惁婵€娲?        if ( ! class_exists( 'WooCommerce' ) ) {
+        // 濡偓閺岊櫇ooCommerce閺勵垰鎯佸┑鈧ú?        if ( ! class_exists( 'WooCommerce' ) ) {
             return array(
                 'code' => 105,
-                'message' => __( 'WooCommerce鏈縺娲?, 'sut-wechat-mini' ),
+                'message' => __( 'WooCommerce閺堫亝绺哄ú?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 妫€鏌ユ悳绱㈠叧閿瘝
-        if ( ! isset( $data['keyword'] ) || empty( $data['keyword'] ) ) {
+        // 濡偓閺屻儲鎮崇槐銏犲彠闁款喛鐦?        if ( ! isset( $data['keyword'] ) || empty( $data['keyword'] ) ) {
             return array(
                 'code' => 100,
-                'message' => __( '缂哄皯鎼滅储鍏抽敭璇?, 'sut-wechat-mini' ),
+                'message' => __( '缂傚搫鐨幖婊呭偍閸忔娊鏁拠?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 鑾峰彇鍒嗛〉鍙傛暟
+        // 閼惧嘲褰囬崚鍡涖€夐崣鍌涙殶
         $page = isset( $data['page'] ) ? intval( $data['page'] ) : 1;
         $per_page = isset( $data['per_page'] ) ? intval( $data['per_page'] ) : $this->default_per_page;
         $offset = ( $page - 1 ) * $per_page;
         
-        // 鏋勫缓鎼滅储鍙傛暟
-        $args = array(
+        // 閺嬪嫬缂撻幖婊呭偍閸欏倹鏆?        $args = array(
             's'              => $data['keyword'],
             'post_type'      => 'product',
             'post_status'    => 'publish',
@@ -239,10 +218,9 @@ class SUT_WeChat_Mini_WooCommerce {
             'order'          => 'DESC',
         );
         
-        // 鎵ц鎼滅储
-        $query = new WP_Query( $args );
+        // 閹笛嗩攽閹兼粎鍌?        $query = new WP_Query( $args );
         
-        // 鏍煎紡鍖栦骇鍝佹暟鎹?        $products = array();
+        // 閺嶇厧绱￠崠鏍﹂獓閸濅焦鏆熼幑?        $products = array();
         foreach ( $query->posts as $post ) {
             $product = wc_get_product( $post->ID );
             if ( $product ) {
@@ -250,10 +228,9 @@ class SUT_WeChat_Mini_WooCommerce {
             }
         }
         
-        // 鏋勫缓杩斿洖鏁版嵁
-        $result = array(
+        // 閺嬪嫬缂撴潻鏂挎礀閺佺増宓?        $result = array(
             'code' => 0,
-            'message' => __( '鎴愬姛', 'sut-wechat-mini' ),
+            'message' => __( '閹存劕濮?, 'sut-wechat-mini' ),
             'data' => array(
                 'list' => $products,
                 'total' => $query->found_posts,
@@ -267,27 +244,23 @@ class SUT_WeChat_Mini_WooCommerce {
     }
     
     /**
-     * 鑾峰彇浜у搧鍒嗙被鍒楄〃
-     *
-     * @param array $data 璇锋眰鏁版嵁
-     * @param array $matches 璺敱鍖归厤缁撴灉
-     * @return array 浜у搧鍒嗙被鍒楄〃
-     */
+     * 閼惧嘲褰囨禍褍鎼ч崚鍡欒閸掓銆?     *
+     * @param array $data 鐠囬攱鐪伴弫鐗堝祦
+     * @param array $matches 鐠侯垳鏁遍崠褰掑帳缂佹挻鐏?     * @return array 娴溠冩惂閸掑棛琚崚妤勩€?     */
     public function api_get_product_categories( $data, $matches ) {
-        // 妫€鏌ooCommerce鏄惁婵€娲?        if ( ! class_exists( 'WooCommerce' ) ) {
+        // 濡偓閺岊櫇ooCommerce閺勵垰鎯佸┑鈧ú?        if ( ! class_exists( 'WooCommerce' ) ) {
             return array(
                 'code' => 105,
-                'message' => __( 'WooCommerce鏈縺娲?, 'sut-wechat-mini' ),
+                'message' => __( 'WooCommerce閺堫亝绺哄ú?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 鑾峰彇鍙傛暟
+        // 閼惧嘲褰囬崣鍌涙殶
         $parent = isset( $data['parent'] ) ? intval( $data['parent'] ) : 0;
         $hide_empty = isset( $data['hide_empty'] ) ? boolval( $data['hide_empty'] ) : true;
         
-        // 鏋勫缓鏌ヨ鍙傛暟
-        $args = array(
+        // 閺嬪嫬缂撻弻銉嚄閸欏倹鏆?        $args = array(
             'taxonomy'   => 'product_cat',
             'parent'     => $parent,
             'hide_empty' => $hide_empty,
@@ -295,13 +268,12 @@ class SUT_WeChat_Mini_WooCommerce {
             'order'      => 'DESC',
         );
         
-        // 鑾峰彇鍒嗙被
+        // 閼惧嘲褰囬崚鍡欒
         $categories = get_categories( $args );
         
-        // 鏍煎紡鍖栧垎绫绘暟鎹?        $formatted_categories = array();
+        // 閺嶇厧绱￠崠鏍у瀻缁粯鏆熼幑?        $formatted_categories = array();
         foreach ( $categories as $category ) {
-            // 鑾峰彇鍒嗙被鍥剧墖
-            $thumbnail_id = get_term_meta( $category->term_id, 'thumbnail_id', true );
+            // 閼惧嘲褰囬崚鍡欒閸ュ墽澧?            $thumbnail_id = get_term_meta( $category->term_id, 'thumbnail_id', true );
             $thumbnail_url = $thumbnail_id ? wp_get_attachment_url( $thumbnail_id ) : '';
             
             $formatted_categories[] = array(
@@ -315,10 +287,9 @@ class SUT_WeChat_Mini_WooCommerce {
             );
         }
         
-        // 鏋勫缓杩斿洖鏁版嵁
-        $result = array(
+        // 閺嬪嫬缂撴潻鏂挎礀閺佺増宓?        $result = array(
             'code' => 0,
-            'message' => __( '鎴愬姛', 'sut-wechat-mini' ),
+            'message' => __( '閹存劕濮?, 'sut-wechat-mini' ),
             'data' => $formatted_categories
         );
         
@@ -326,39 +297,35 @@ class SUT_WeChat_Mini_WooCommerce {
     }
     
     /**
-     * 鏍规嵁鍒嗙被鑾峰彇浜у搧
-     *
-     * @param array $data 璇锋眰鏁版嵁
-     * @param array $matches 璺敱鍖归厤缁撴灉
-     * @return array 浜у搧鍒楄〃
-     */
+     * 閺嶈宓侀崚鍡欒閼惧嘲褰囨禍褍鎼?     *
+     * @param array $data 鐠囬攱鐪伴弫鐗堝祦
+     * @param array $matches 鐠侯垳鏁遍崠褰掑帳缂佹挻鐏?     * @return array 娴溠冩惂閸掓銆?     */
     public function api_get_products_by_category( $data, $matches ) {
-        // 妫€鏌ooCommerce鏄惁婵€娲?        if ( ! class_exists( 'WooCommerce' ) ) {
+        // 濡偓閺岊櫇ooCommerce閺勵垰鎯佸┑鈧ú?        if ( ! class_exists( 'WooCommerce' ) ) {
             return array(
                 'code' => 105,
-                'message' => __( 'WooCommerce鏈縺娲?, 'sut-wechat-mini' ),
+                'message' => __( 'WooCommerce閺堫亝绺哄ú?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
         $category_id = $matches[1];
         
-        // 妫€鏌ュ垎绫绘槸鍚﹀瓨鍦?        $category = get_term( $category_id, 'product_cat' );
+        // 濡偓閺屻儱鍨庣猾缁樻Ц閸氾箑鐡ㄩ崷?        $category = get_term( $category_id, 'product_cat' );
         if ( ! $category || is_wp_error( $category ) ) {
             return array(
                 'code' => 104,
-                'message' => __( '鍒嗙被涓嶅瓨鍦?, 'sut-wechat-mini' ),
+                'message' => __( '閸掑棛琚稉宥呯摠閸?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 鑾峰彇鍒嗛〉鍙傛暟
+        // 閼惧嘲褰囬崚鍡涖€夐崣鍌涙殶
         $page = isset( $data['page'] ) ? intval( $data['page'] ) : 1;
         $per_page = isset( $data['per_page'] ) ? intval( $data['per_page'] ) : $this->default_per_page;
         $offset = ( $page - 1 ) * $per_page;
         
-        // 鏋勫缓鏌ヨ鍙傛暟
-        $args = array(
+        // 閺嬪嫬缂撻弻銉嚄閸欏倹鏆?        $args = array(
             'post_type'      => 'product',
             'post_status'    => 'publish',
             'posts_per_page' => $per_page,
@@ -375,10 +342,9 @@ class SUT_WeChat_Mini_WooCommerce {
             'order'          => 'DESC',
         );
         
-        // 鎵ц鏌ヨ
-        $query = new WP_Query( $args );
+        // 閹笛嗩攽閺屻儴顕?        $query = new WP_Query( $args );
         
-        // 鏍煎紡鍖栦骇鍝佹暟鎹?        $products = array();
+        // 閺嶇厧绱￠崠鏍﹂獓閸濅焦鏆熼幑?        $products = array();
         foreach ( $query->posts as $post ) {
             $product = wc_get_product( $post->ID );
             if ( $product ) {
@@ -386,10 +352,9 @@ class SUT_WeChat_Mini_WooCommerce {
             }
         }
         
-        // 鏋勫缓杩斿洖鏁版嵁
-        $result = array(
+        // 閺嬪嫬缂撴潻鏂挎礀閺佺増宓?        $result = array(
             'code' => 0,
-            'message' => __( '鎴愬姛', 'sut-wechat-mini' ),
+            'message' => __( '閹存劕濮?, 'sut-wechat-mini' ),
             'data' => array(
                 'list' => $products,
                 'total' => $query->found_posts,
@@ -403,17 +368,15 @@ class SUT_WeChat_Mini_WooCommerce {
     }
     
     /**
-     * 鑾峰彇鐩稿叧浜у搧
+     * 閼惧嘲褰囬惄绋垮彠娴溠冩惂
      *
-     * @param array $data 璇锋眰鏁版嵁
-     * @param array $matches 璺敱鍖归厤缁撴灉
-     * @return array 鐩稿叧浜у搧鍒楄〃
-     */
+     * @param array $data 鐠囬攱鐪伴弫鐗堝祦
+     * @param array $matches 鐠侯垳鏁遍崠褰掑帳缂佹挻鐏?     * @return array 閻╃鍙ф禍褍鎼ч崚妤勩€?     */
     public function api_get_related_products( $data, $matches ) {
-        // 妫€鏌ooCommerce鏄惁婵€娲?        if ( ! class_exists( 'WooCommerce' ) ) {
+        // 濡偓閺岊櫇ooCommerce閺勵垰鎯佸┑鈧ú?        if ( ! class_exists( 'WooCommerce' ) ) {
             return array(
                 'code' => 105,
-                'message' => __( 'WooCommerce鏈縺娲?, 'sut-wechat-mini' ),
+                'message' => __( 'WooCommerce閺堫亝绺哄ú?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
@@ -421,21 +384,20 @@ class SUT_WeChat_Mini_WooCommerce {
         $product_id = $matches[1];
         $number = isset( $data['number'] ) ? intval( $data['number'] ) : 5;
         
-        // 鑾峰彇浜у搧
-        $product = wc_get_product( $product_id );
+        // 閼惧嘲褰囨禍褍鎼?        $product = wc_get_product( $product_id );
         
         if ( ! $product || ! $product->is_published() ) {
             return array(
                 'code' => 104,
-                'message' => __( '浜у搧涓嶅瓨鍦ㄦ垨鏈彂甯?, 'sut-wechat-mini' ),
+                'message' => __( '娴溠冩惂娑撳秴鐡ㄩ崷銊﹀灗閺堫亜褰傜敮?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 鑾峰彇鐩稿叧浜у搧
+        // 閼惧嘲褰囬惄绋垮彠娴溠冩惂
         $related_ids = wc_get_related_products( $product_id, $number );
         
-        // 鏍煎紡鍖栦骇鍝佹暟鎹?        $products = array();
+        // 閺嶇厧绱￠崠鏍﹂獓閸濅焦鏆熼幑?        $products = array();
         foreach ( $related_ids as $related_id ) {
             $related_product = wc_get_product( $related_id );
             if ( $related_product && $related_product->is_published() ) {
@@ -443,10 +405,9 @@ class SUT_WeChat_Mini_WooCommerce {
             }
         }
         
-        // 鏋勫缓杩斿洖鏁版嵁
-        $result = array(
+        // 閺嬪嫬缂撴潻鏂挎礀閺佺増宓?        $result = array(
             'code' => 0,
-            'message' => __( '鎴愬姛', 'sut-wechat-mini' ),
+            'message' => __( '閹存劕濮?, 'sut-wechat-mini' ),
             'data' => $products
         );
         
@@ -454,28 +415,25 @@ class SUT_WeChat_Mini_WooCommerce {
     }
     
     /**
-     * 鑾峰彇鐗硅壊浜у搧
+     * 閼惧嘲褰囬悧纭呭娴溠冩惂
      *
-     * @param array $data 璇锋眰鏁版嵁
-     * @param array $matches 璺敱鍖归厤缁撴灉
-     * @return array 鐗硅壊浜у搧鍒楄〃
-     */
+     * @param array $data 鐠囬攱鐪伴弫鐗堝祦
+     * @param array $matches 鐠侯垳鏁遍崠褰掑帳缂佹挻鐏?     * @return array 閻楃澹婃禍褍鎼ч崚妤勩€?     */
     public function api_get_featured_products( $data, $matches ) {
-        // 妫€鏌ooCommerce鏄惁婵€娲?        if ( ! class_exists( 'WooCommerce' ) ) {
+        // 濡偓閺岊櫇ooCommerce閺勵垰鎯佸┑鈧ú?        if ( ! class_exists( 'WooCommerce' ) ) {
             return array(
                 'code' => 105,
-                'message' => __( 'WooCommerce鏈縺娲?, 'sut-wechat-mini' ),
+                'message' => __( 'WooCommerce閺堫亝绺哄ú?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 鑾峰彇鍙傛暟
+        // 閼惧嘲褰囬崣鍌涙殶
         $page = isset( $data['page'] ) ? intval( $data['page'] ) : 1;
         $per_page = isset( $data['per_page'] ) ? intval( $data['per_page'] ) : $this->default_per_page;
         $offset = ( $page - 1 ) * $per_page;
         
-        // 鏋勫缓鏌ヨ鍙傛暟
-        $args = array(
+        // 閺嬪嫬缂撻弻銉嚄閸欏倹鏆?        $args = array(
             'post_type'      => 'product',
             'post_status'    => 'publish',
             'posts_per_page' => $per_page,
@@ -490,10 +448,9 @@ class SUT_WeChat_Mini_WooCommerce {
             'order'          => 'DESC',
         );
         
-        // 鎵ц鏌ヨ
-        $query = new WP_Query( $args );
+        // 閹笛嗩攽閺屻儴顕?        $query = new WP_Query( $args );
         
-        // 鏍煎紡鍖栦骇鍝佹暟鎹?        $products = array();
+        // 閺嶇厧绱￠崠鏍﹂獓閸濅焦鏆熼幑?        $products = array();
         foreach ( $query->posts as $post ) {
             $product = wc_get_product( $post->ID );
             if ( $product ) {
@@ -501,10 +458,9 @@ class SUT_WeChat_Mini_WooCommerce {
             }
         }
         
-        // 鏋勫缓杩斿洖鏁版嵁
-        $result = array(
+        // 閺嬪嫬缂撴潻鏂挎礀閺佺増宓?        $result = array(
             'code' => 0,
-            'message' => __( '鎴愬姛', 'sut-wechat-mini' ),
+            'message' => __( '閹存劕濮?, 'sut-wechat-mini' ),
             'data' => array(
                 'list' => $products,
                 'total' => $query->found_posts,
@@ -518,28 +474,25 @@ class SUT_WeChat_Mini_WooCommerce {
     }
     
     /**
-     * 鑾峰彇淇冮攢浜у搧
+     * 閼惧嘲褰囨穱鍐敘娴溠冩惂
      *
-     * @param array $data 璇锋眰鏁版嵁
-     * @param array $matches 璺敱鍖归厤缁撴灉
-     * @return array 淇冮攢浜у搧鍒楄〃
-     */
+     * @param array $data 鐠囬攱鐪伴弫鐗堝祦
+     * @param array $matches 鐠侯垳鏁遍崠褰掑帳缂佹挻鐏?     * @return array 娣囧啴鏀㈡禍褍鎼ч崚妤勩€?     */
     public function api_get_sale_products( $data, $matches ) {
-        // 妫€鏌ooCommerce鏄惁婵€娲?        if ( ! class_exists( 'WooCommerce' ) ) {
+        // 濡偓閺岊櫇ooCommerce閺勵垰鎯佸┑鈧ú?        if ( ! class_exists( 'WooCommerce' ) ) {
             return array(
                 'code' => 105,
-                'message' => __( 'WooCommerce鏈縺娲?, 'sut-wechat-mini' ),
+                'message' => __( 'WooCommerce閺堫亝绺哄ú?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 鑾峰彇鍙傛暟
+        // 閼惧嘲褰囬崣鍌涙殶
         $page = isset( $data['page'] ) ? intval( $data['page'] ) : 1;
         $per_page = isset( $data['per_page'] ) ? intval( $data['per_page'] ) : $this->default_per_page;
         $offset = ( $page - 1 ) * $per_page;
         
-        // 鏋勫缓鏌ヨ鍙傛暟
-        $args = array(
+        // 閺嬪嫬缂撻弻銉嚄閸欏倹鏆?        $args = array(
             'post_type'      => 'product',
             'post_status'    => 'publish',
             'posts_per_page' => $per_page,
@@ -563,10 +516,9 @@ class SUT_WeChat_Mini_WooCommerce {
             'order'          => 'DESC',
         );
         
-        // 鎵ц鏌ヨ
-        $query = new WP_Query( $args );
+        // 閹笛嗩攽閺屻儴顕?        $query = new WP_Query( $args );
         
-        // 鏍煎紡鍖栦骇鍝佹暟鎹?        $products = array();
+        // 閺嶇厧绱￠崠鏍﹂獓閸濅焦鏆熼幑?        $products = array();
         foreach ( $query->posts as $post ) {
             $product = wc_get_product( $post->ID );
             if ( $product && $product->is_on_sale() ) {
@@ -574,10 +526,9 @@ class SUT_WeChat_Mini_WooCommerce {
             }
         }
         
-        // 鏋勫缓杩斿洖鏁版嵁
-        $result = array(
+        // 閺嬪嫬缂撴潻鏂挎礀閺佺増宓?        $result = array(
             'code' => 0,
-            'message' => __( '鎴愬姛', 'sut-wechat-mini' ),
+            'message' => __( '閹存劕濮?, 'sut-wechat-mini' ),
             'data' => array(
                 'list' => $products,
                 'total' => $query->found_posts,
@@ -591,25 +542,23 @@ class SUT_WeChat_Mini_WooCommerce {
     }
     
     /**
-     * 鑾峰彇璐墿杞?     *
-     * @param array $data 璇锋眰鏁版嵁
-     * @param array $matches 璺敱鍖归厤缁撴灉
-     * @return array 璐墿杞︽暟鎹?     */
+     * 閼惧嘲褰囩拹顓犲⒖鏉?     *
+     * @param array $data 鐠囬攱鐪伴弫鐗堝祦
+     * @param array $matches 鐠侯垳鏁遍崠褰掑帳缂佹挻鐏?     * @return array 鐠愵厾澧挎潪锔芥殶閹?     */
     public function api_get_cart( $data, $matches ) {
-        // 妫€鏌ooCommerce鏄惁婵€娲?        if ( ! class_exists( 'WooCommerce' ) ) {
+        // 濡偓閺岊櫇ooCommerce閺勵垰鎯佸┑鈧ú?        if ( ! class_exists( 'WooCommerce' ) ) {
             return array(
                 'code' => 105,
-                'message' => __( 'WooCommerce鏈縺娲?, 'sut-wechat-mini' ),
+                'message' => __( 'WooCommerce閺堫亝绺哄ú?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
         $user_id = $data['user_id'];
         
-        // 鑾峰彇鐢ㄦ埛璐墿杞?        $cart = $this->get_user_cart( $user_id );
+        // 閼惧嘲褰囬悽銊﹀煕鐠愵厾澧挎潪?        $cart = $this->get_user_cart( $user_id );
         
-        // 璁＄畻璐墿杞︽€讳环
-        $total_price = 0;
+        // 鐠侊紕鐣荤拹顓犲⒖鏉烇附鈧鐜?        $total_price = 0;
         $total_quantity = 0;
         $cart_items = array();
         
@@ -636,10 +585,9 @@ class SUT_WeChat_Mini_WooCommerce {
             }
         }
         
-        // 鏋勫缓杩斿洖鏁版嵁
-        $result = array(
+        // 閺嬪嫬缂撴潻鏂挎礀閺佺増宓?        $result = array(
             'code' => 0,
-            'message' => __( '鎴愬姛', 'sut-wechat-mini' ),
+            'message' => __( '閹存劕濮?, 'sut-wechat-mini' ),
             'data' => array(
                 'items' => $cart_items,
                 'total_price' => $total_price,
@@ -652,25 +600,24 @@ class SUT_WeChat_Mini_WooCommerce {
     }
     
     /**
-     * 娣诲姞鍟嗗搧鍒拌喘鐗╄溅
+     * 濞ｈ濮為崯鍡楁惂閸掓媽鍠橀悧鈺勬簠
      *
-     * @param array $data 璇锋眰鏁版嵁
-     * @param array $matches 璺敱鍖归厤缁撴灉
-     * @return array 娣诲姞缁撴灉
+     * @param array $data 鐠囬攱鐪伴弫鐗堝祦
+     * @param array $matches 鐠侯垳鏁遍崠褰掑帳缂佹挻鐏?     * @return array 濞ｈ濮炵紒鎾寸亯
      */
     public function api_add_to_cart( $data, $matches ) {
-        // 妫€鏌ooCommerce鏄惁婵€娲?        if ( ! class_exists( 'WooCommerce' ) ) {
+        // 濡偓閺岊櫇ooCommerce閺勵垰鎯佸┑鈧ú?        if ( ! class_exists( 'WooCommerce' ) ) {
             return array(
                 'code' => 105,
-                'message' => __( 'WooCommerce鏈縺娲?, 'sut-wechat-mini' ),
+                'message' => __( 'WooCommerce閺堫亝绺哄ú?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 妫€鏌ュ繀瑕佸弬鏁?        if ( ! isset( $data['product_id'] ) || ! isset( $data['quantity'] ) ) {
+        // 濡偓閺屻儱绻€鐟曚礁寮弫?        if ( ! isset( $data['product_id'] ) || ! isset( $data['quantity'] ) ) {
             return array(
                 'code' => 100,
-                'message' => __( '缂哄皯蹇呰鍙傛暟锛歱roduct_id 鎴?quantity', 'sut-wechat-mini' ),
+                'message' => __( '缂傚搫鐨箛鍛邦洣閸欏倹鏆熼敍姝眗oduct_id 閹?quantity', 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
@@ -681,32 +628,32 @@ class SUT_WeChat_Mini_WooCommerce {
         $variation_id = isset( $data['variation_id'] ) ? $data['variation_id'] : 0;
         $variation = isset( $data['variation'] ) ? $data['variation'] : array();
         
-        // 妫€鏌ヤ骇鍝佹槸鍚﹀瓨鍦?        $product = wc_get_product( $product_id );
+        // 濡偓閺屻儰楠囬崫浣规Ц閸氾箑鐡ㄩ崷?        $product = wc_get_product( $product_id );
         if ( ! $product || ! $product->is_published() ) {
             return array(
                 'code' => 104,
-                'message' => __( '浜у搧涓嶅瓨鍦ㄦ垨鏈彂甯?, 'sut-wechat-mini' ),
+                'message' => __( '娴溠冩惂娑撳秴鐡ㄩ崷銊﹀灗閺堫亜褰傜敮?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 妫€鏌ュ簱瀛?        if ( ! $product->has_enough_stock( $quantity ) ) {
+        // 濡偓閺屻儱绨辩€?        if ( ! $product->has_enough_stock( $quantity ) ) {
             return array(
                 'code' => 103,
-                'message' => __( '搴撳瓨涓嶈冻', 'sut-wechat-mini' ),
+                'message' => __( '鎼存挸鐡ㄦ稉宥堝喕', 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 鑾峰彇鐢ㄦ埛璐墿杞?        $cart = $this->get_user_cart( $user_id );
+        // 閼惧嘲褰囬悽銊﹀煕鐠愵厾澧挎潪?        $cart = $this->get_user_cart( $user_id );
         
-        // 鐢熸垚鍟嗗搧鍞竴ID
+        // 閻㈢喐鍨氶崯鍡楁惂閸烆垯绔碔D
         $item_key = $product_id;
         if ( $variation_id || ! empty( $variation ) ) {
             $item_key .= '-' . md5( json_encode( $variation ) );
         }
         
-        // 娣诲姞鎴栨洿鏂拌喘鐗╄溅
+        // 濞ｈ濮為幋鏍ㄦ纯閺傛媽鍠橀悧鈺勬簠
         if ( isset( $cart[$item_key] ) ) {
             $cart[$item_key]['quantity'] += $quantity;
         } else {
@@ -719,12 +666,11 @@ class SUT_WeChat_Mini_WooCommerce {
             );
         }
         
-        // 淇濆瓨璐墿杞?        $this->save_user_cart( $user_id, $cart );
+        // 娣囨繂鐡ㄧ拹顓犲⒖鏉?        $this->save_user_cart( $user_id, $cart );
         
-        // 鏋勫缓杩斿洖鏁版嵁
-        $result = array(
+        // 閺嬪嫬缂撴潻鏂挎礀閺佺増宓?        $result = array(
             'code' => 0,
-            'message' => __( '娣诲姞鎴愬姛', 'sut-wechat-mini' ),
+            'message' => __( '濞ｈ濮為幋鎰', 'sut-wechat-mini' ),
             'data' => array(
                 'item_id' => $item_key,
                 'quantity' => $cart[$item_key]['quantity']
@@ -735,24 +681,23 @@ class SUT_WeChat_Mini_WooCommerce {
     }
     
     /**
-     * 鏇存柊璐墿杞﹀晢鍝佹暟閲?     *
-     * @param array $data 璇锋眰鏁版嵁
-     * @param array $matches 璺敱鍖归厤缁撴灉
-     * @return array 鏇存柊缁撴灉
+     * 閺囧瓨鏌婄拹顓犲⒖鏉烇箑鏅㈤崫浣规殶闁?     *
+     * @param array $data 鐠囬攱鐪伴弫鐗堝祦
+     * @param array $matches 鐠侯垳鏁遍崠褰掑帳缂佹挻鐏?     * @return array 閺囧瓨鏌婄紒鎾寸亯
      */
     public function api_update_cart( $data, $matches ) {
-        // 妫€鏌ooCommerce鏄惁婵€娲?        if ( ! class_exists( 'WooCommerce' ) ) {
+        // 濡偓閺岊櫇ooCommerce閺勵垰鎯佸┑鈧ú?        if ( ! class_exists( 'WooCommerce' ) ) {
             return array(
                 'code' => 105,
-                'message' => __( 'WooCommerce鏈縺娲?, 'sut-wechat-mini' ),
+                'message' => __( 'WooCommerce閺堫亝绺哄ú?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 妫€鏌ュ繀瑕佸弬鏁?        if ( ! isset( $data['item_id'] ) || ! isset( $data['quantity'] ) ) {
+        // 濡偓閺屻儱绻€鐟曚礁寮弫?        if ( ! isset( $data['item_id'] ) || ! isset( $data['quantity'] ) ) {
             return array(
                 'code' => 100,
-                'message' => __( '缂哄皯蹇呰鍙傛暟锛歩tem_id 鎴?quantity', 'sut-wechat-mini' ),
+                'message' => __( '缂傚搫鐨箛鍛邦洣閸欏倹鏆熼敍姝﹖em_id 閹?quantity', 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
@@ -761,36 +706,34 @@ class SUT_WeChat_Mini_WooCommerce {
         $item_id = $data['item_id'];
         $quantity = intval( $data['quantity'] );
         
-        // 鑾峰彇鐢ㄦ埛璐墿杞?        $cart = $this->get_user_cart( $user_id );
+        // 閼惧嘲褰囬悽銊﹀煕鐠愵厾澧挎潪?        $cart = $this->get_user_cart( $user_id );
         
-        // 妫€鏌ュ晢鍝佹槸鍚﹀湪璐墿杞︿腑
-        if ( ! isset( $cart[$item_id] ) ) {
+        // 濡偓閺屻儱鏅㈤崫浣规Ц閸氾箑婀拹顓犲⒖鏉烇缚鑵?        if ( ! isset( $cart[$item_id] ) ) {
             return array(
                 'code' => 104,
-                'message' => __( '璐墿杞︿腑娌℃湁姝ゅ晢鍝?, 'sut-wechat-mini' ),
+                'message' => __( '鐠愵厾澧挎潪锔胯厬濞屸剝婀佸銈呮櫌閸?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 妫€鏌ュ簱瀛?        $product_id = $cart[$item_id]['product_id'];
+        // 濡偓閺屻儱绨辩€?        $product_id = $cart[$item_id]['product_id'];
         $product = wc_get_product( $product_id );
         if ( $product && ! $product->has_enough_stock( $quantity ) ) {
             return array(
                 'code' => 103,
-                'message' => __( '搴撳瓨涓嶈冻', 'sut-wechat-mini' ),
+                'message' => __( '鎼存挸鐡ㄦ稉宥堝喕', 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 鏇存柊璐墿杞?        $cart[$item_id]['quantity'] = $quantity;
+        // 閺囧瓨鏌婄拹顓犲⒖鏉?        $cart[$item_id]['quantity'] = $quantity;
         $cart[$item_id]['updated_at'] = current_time( 'mysql' );
         
-        // 淇濆瓨璐墿杞?        $this->save_user_cart( $user_id, $cart );
+        // 娣囨繂鐡ㄧ拹顓犲⒖鏉?        $this->save_user_cart( $user_id, $cart );
         
-        // 鏋勫缓杩斿洖鏁版嵁
-        $result = array(
+        // 閺嬪嫬缂撴潻鏂挎礀閺佺増宓?        $result = array(
             'code' => 0,
-            'message' => __( '鏇存柊鎴愬姛', 'sut-wechat-mini' ),
+            'message' => __( '閺囧瓨鏌婇幋鎰', 'sut-wechat-mini' ),
             'data' => array()
         );
         
@@ -798,25 +741,24 @@ class SUT_WeChat_Mini_WooCommerce {
     }
     
     /**
-     * 浠庤喘鐗╄溅绉婚櫎鍟嗗搧
+     * 娴犲氦鍠橀悧鈺勬簠缁夊娅庨崯鍡楁惂
      *
-     * @param array $data 璇锋眰鏁版嵁
-     * @param array $matches 璺敱鍖归厤缁撴灉
-     * @return array 绉婚櫎缁撴灉
+     * @param array $data 鐠囬攱鐪伴弫鐗堝祦
+     * @param array $matches 鐠侯垳鏁遍崠褰掑帳缂佹挻鐏?     * @return array 缁夊娅庣紒鎾寸亯
      */
     public function api_remove_from_cart( $data, $matches ) {
-        // 妫€鏌ooCommerce鏄惁婵€娲?        if ( ! class_exists( 'WooCommerce' ) ) {
+        // 濡偓閺岊櫇ooCommerce閺勵垰鎯佸┑鈧ú?        if ( ! class_exists( 'WooCommerce' ) ) {
             return array(
                 'code' => 105,
-                'message' => __( 'WooCommerce鏈縺娲?, 'sut-wechat-mini' ),
+                'message' => __( 'WooCommerce閺堫亝绺哄ú?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 妫€鏌ュ繀瑕佸弬鏁?        if ( ! isset( $data['item_id'] ) ) {
+        // 濡偓閺屻儱绻€鐟曚礁寮弫?        if ( ! isset( $data['item_id'] ) ) {
             return array(
                 'code' => 100,
-                'message' => __( '缂哄皯蹇呰鍙傛暟锛歩tem_id', 'sut-wechat-mini' ),
+                'message' => __( '缂傚搫鐨箛鍛邦洣閸欏倹鏆熼敍姝﹖em_id', 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
@@ -824,26 +766,24 @@ class SUT_WeChat_Mini_WooCommerce {
         $user_id = $data['user_id'];
         $item_id = $data['item_id'];
         
-        // 鑾峰彇鐢ㄦ埛璐墿杞?        $cart = $this->get_user_cart( $user_id );
+        // 閼惧嘲褰囬悽銊﹀煕鐠愵厾澧挎潪?        $cart = $this->get_user_cart( $user_id );
         
-        // 妫€鏌ュ晢鍝佹槸鍚﹀湪璐墿杞︿腑
-        if ( ! isset( $cart[$item_id] ) ) {
+        // 濡偓閺屻儱鏅㈤崫浣规Ц閸氾箑婀拹顓犲⒖鏉烇缚鑵?        if ( ! isset( $cart[$item_id] ) ) {
             return array(
                 'code' => 104,
-                'message' => __( '璐墿杞︿腑娌℃湁姝ゅ晢鍝?, 'sut-wechat-mini' ),
+                'message' => __( '鐠愵厾澧挎潪锔胯厬濞屸剝婀佸銈呮櫌閸?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 绉婚櫎鍟嗗搧
+        // 缁夊娅庨崯鍡楁惂
         unset( $cart[$item_id] );
         
-        // 淇濆瓨璐墿杞?        $this->save_user_cart( $user_id, $cart );
+        // 娣囨繂鐡ㄧ拹顓犲⒖鏉?        $this->save_user_cart( $user_id, $cart );
         
-        // 鏋勫缓杩斿洖鏁版嵁
-        $result = array(
+        // 閺嬪嫬缂撴潻鏂挎礀閺佺増宓?        $result = array(
             'code' => 0,
-            'message' => __( '绉婚櫎鎴愬姛', 'sut-wechat-mini' ),
+            'message' => __( '缁夊娅庨幋鎰', 'sut-wechat-mini' ),
             'data' => array()
         );
         
@@ -851,28 +791,26 @@ class SUT_WeChat_Mini_WooCommerce {
     }
     
     /**
-     * 娓呯┖璐墿杞?     *
-     * @param array $data 璇锋眰鏁版嵁
-     * @param array $matches 璺敱鍖归厤缁撴灉
-     * @return array 娓呯┖缁撴灉
+     * 濞撳懐鈹栫拹顓犲⒖鏉?     *
+     * @param array $data 鐠囬攱鐪伴弫鐗堝祦
+     * @param array $matches 鐠侯垳鏁遍崠褰掑帳缂佹挻鐏?     * @return array 濞撳懐鈹栫紒鎾寸亯
      */
     public function api_clear_cart( $data, $matches ) {
-        // 妫€鏌ooCommerce鏄惁婵€娲?        if ( ! class_exists( 'WooCommerce' ) ) {
+        // 濡偓閺岊櫇ooCommerce閺勵垰鎯佸┑鈧ú?        if ( ! class_exists( 'WooCommerce' ) ) {
             return array(
                 'code' => 105,
-                'message' => __( 'WooCommerce鏈縺娲?, 'sut-wechat-mini' ),
+                'message' => __( 'WooCommerce閺堫亝绺哄ú?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
         $user_id = $data['user_id'];
         
-        // 娓呯┖璐墿杞?        $this->save_user_cart( $user_id, array() );
+        // 濞撳懐鈹栫拹顓犲⒖鏉?        $this->save_user_cart( $user_id, array() );
         
-        // 鏋勫缓杩斿洖鏁版嵁
-        $result = array(
+        // 閺嬪嫬缂撴潻鏂挎礀閺佺増宓?        $result = array(
             'code' => 0,
-            'message' => __( '璐墿杞﹀凡娓呯┖', 'sut-wechat-mini' ),
+            'message' => __( '鐠愵厾澧挎潪锕€鍑″〒鍛敄', 'sut-wechat-mini' ),
             'data' => array()
         );
         
@@ -880,30 +818,26 @@ class SUT_WeChat_Mini_WooCommerce {
     }
     
     /**
-     * 鑾峰彇鐢ㄦ埛璁㈠崟鍒楄〃
-     *
-     * @param array $data 璇锋眰鏁版嵁
-     * @param array $matches 璺敱鍖归厤缁撴灉
-     * @return array 璁㈠崟鍒楄〃
-     */
+     * 閼惧嘲褰囬悽銊﹀煕鐠併垹宕熼崚妤勩€?     *
+     * @param array $data 鐠囬攱鐪伴弫鐗堝祦
+     * @param array $matches 鐠侯垳鏁遍崠褰掑帳缂佹挻鐏?     * @return array 鐠併垹宕熼崚妤勩€?     */
     public function api_get_orders( $data, $matches ) {
-        // 妫€鏌ooCommerce鏄惁婵€娲?        if ( ! class_exists( 'WooCommerce' ) ) {
+        // 濡偓閺岊櫇ooCommerce閺勵垰鎯佸┑鈧ú?        if ( ! class_exists( 'WooCommerce' ) ) {
             return array(
                 'code' => 105,
-                'message' => __( 'WooCommerce鏈縺娲?, 'sut-wechat-mini' ),
+                'message' => __( 'WooCommerce閺堫亝绺哄ú?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
         $user_id = $data['user_id'];
         
-        // 鑾峰彇鍒嗛〉鍙傛暟
+        // 閼惧嘲褰囬崚鍡涖€夐崣鍌涙殶
         $page = isset( $data['page'] ) ? intval( $data['page'] ) : 1;
         $per_page = isset( $data['per_page'] ) ? intval( $data['per_page'] ) : $this->default_per_page;
         $offset = ( $page - 1 ) * $per_page;
         
-        // 鏋勫缓鏌ヨ鍙傛暟
-        $args = array(
+        // 閺嬪嫬缂撻弻銉嚄閸欏倹鏆?        $args = array(
             'post_type'      => 'shop_order',
             'post_status'    => array_keys( wc_get_order_statuses() ),
             'posts_per_page' => $per_page,
@@ -918,10 +852,9 @@ class SUT_WeChat_Mini_WooCommerce {
             )
         );
         
-        // 鎵ц鏌ヨ
-        $query = new WP_Query( $args );
+        // 閹笛嗩攽閺屻儴顕?        $query = new WP_Query( $args );
         
-        // 鏍煎紡鍖栬鍗曟暟鎹?        $orders = array();
+        // 閺嶇厧绱￠崠鏍吂閸楁洘鏆熼幑?        $orders = array();
         foreach ( $query->posts as $post ) {
             $order = wc_get_order( $post->ID );
             if ( $order ) {
@@ -929,10 +862,9 @@ class SUT_WeChat_Mini_WooCommerce {
             }
         }
         
-        // 鏋勫缓杩斿洖鏁版嵁
-        $result = array(
+        // 閺嬪嫬缂撴潻鏂挎礀閺佺増宓?        $result = array(
             'code' => 0,
-            'message' => __( '鎴愬姛', 'sut-wechat-mini' ),
+            'message' => __( '閹存劕濮?, 'sut-wechat-mini' ),
             'data' => array(
                 'list' => $orders,
                 'total' => $query->found_posts,
@@ -946,17 +878,15 @@ class SUT_WeChat_Mini_WooCommerce {
     }
     
     /**
-     * 鑾峰彇鍗曚釜璁㈠崟
-     *
-     * @param array $data 璇锋眰鏁版嵁
-     * @param array $matches 璺敱鍖归厤缁撴灉
-     * @return array 璁㈠崟璇︽儏
+     * 閼惧嘲褰囬崡鏇氶嚋鐠併垹宕?     *
+     * @param array $data 鐠囬攱鐪伴弫鐗堝祦
+     * @param array $matches 鐠侯垳鏁遍崠褰掑帳缂佹挻鐏?     * @return array 鐠併垹宕熺拠锔藉剰
      */
     public function api_get_order( $data, $matches ) {
-        // 妫€鏌ooCommerce鏄惁婵€娲?        if ( ! class_exists( 'WooCommerce' ) ) {
+        // 濡偓閺岊櫇ooCommerce閺勵垰鎯佸┑鈧ú?        if ( ! class_exists( 'WooCommerce' ) ) {
             return array(
                 'code' => 105,
-                'message' => __( 'WooCommerce鏈縺娲?, 'sut-wechat-mini' ),
+                'message' => __( 'WooCommerce閺堫亝绺哄ú?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
@@ -964,31 +894,30 @@ class SUT_WeChat_Mini_WooCommerce {
         $user_id = $data['user_id'];
         $order_id = $matches[1];
         
-        // 鑾峰彇璁㈠崟
+        // 閼惧嘲褰囩拋銏犲礋
         $order = wc_get_order( $order_id );
         
         if ( ! $order ) {
             return array(
                 'code' => 104,
-                'message' => __( '璁㈠崟涓嶅瓨鍦?, 'sut-wechat-mini' ),
+                'message' => __( '鐠併垹宕熸稉宥呯摠閸?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 妫€鏌ヨ鍗曟槸鍚﹀睘浜庡綋鍓嶇敤鎴?        if ( $order->get_customer_id() != $user_id ) {
+        // 濡偓閺屻儴顓归崡鏇熸Ц閸氾箑鐫樻禍搴＄秼閸撳秶鏁ら幋?        if ( $order->get_customer_id() != $user_id ) {
             return array(
                 'code' => 108,
-                'message' => __( '鏃犳潈璁块棶璇ヨ鍗?, 'sut-wechat-mini' ),
+                'message' => __( '閺冪姵娼堢拋鍧楁６鐠囥儴顓归崡?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 鏍煎紡鍖栬鍗曟暟鎹?        $formatted_order = $this->format_order( $order, true );
+        // 閺嶇厧绱￠崠鏍吂閸楁洘鏆熼幑?        $formatted_order = $this->format_order( $order, true );
         
-        // 鏋勫缓杩斿洖鏁版嵁
-        $result = array(
+        // 閺嬪嫬缂撴潻鏂挎礀閺佺増宓?        $result = array(
             'code' => 0,
-            'message' => __( '鎴愬姛', 'sut-wechat-mini' ),
+            'message' => __( '閹存劕濮?, 'sut-wechat-mini' ),
             'data' => $formatted_order
         );
         
@@ -996,25 +925,24 @@ class SUT_WeChat_Mini_WooCommerce {
     }
     
     /**
-     * 鍒涘缓璁㈠崟
+     * 閸掓稑缂撶拋銏犲礋
      *
-     * @param array $data 璇锋眰鏁版嵁
-     * @param array $matches 璺敱鍖归厤缁撴灉
-     * @return array 鍒涘缓缁撴灉
+     * @param array $data 鐠囬攱鐪伴弫鐗堝祦
+     * @param array $matches 鐠侯垳鏁遍崠褰掑帳缂佹挻鐏?     * @return array 閸掓稑缂撶紒鎾寸亯
      */
     public function api_create_order( $data, $matches ) {
-        // 妫€鏌ooCommerce鏄惁婵€娲?        if ( ! class_exists( 'WooCommerce' ) ) {
+        // 濡偓閺岊櫇ooCommerce閺勵垰鎯佸┑鈧ú?        if ( ! class_exists( 'WooCommerce' ) ) {
             return array(
                 'code' => 105,
-                'message' => __( 'WooCommerce鏈縺娲?, 'sut-wechat-mini' ),
+                'message' => __( 'WooCommerce閺堫亝绺哄ú?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 妫€鏌ュ繀瑕佸弬鏁?        if ( ! isset( $data['address_id'] ) || ! isset( $data['payment_method'] ) ) {
+        // 濡偓閺屻儱绻€鐟曚礁寮弫?        if ( ! isset( $data['address_id'] ) || ! isset( $data['payment_method'] ) ) {
             return array(
                 'code' => 100,
-                'message' => __( '缂哄皯蹇呰鍙傛暟锛歛ddress_id 鎴?payment_method', 'sut-wechat-mini' ),
+                'message' => __( '缂傚搫鐨箛鍛邦洣閸欏倹鏆熼敍姝沝dress_id 閹?payment_method', 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
@@ -1025,57 +953,55 @@ class SUT_WeChat_Mini_WooCommerce {
         $coupon_code = isset( $data['coupon_code'] ) ? $data['coupon_code'] : '';
         $remark = isset( $data['remark'] ) ? $data['remark'] : '';
         
-        // 鑾峰彇鐢ㄦ埛璐墿杞?        $cart = $this->get_user_cart( $user_id );
+        // 閼惧嘲褰囬悽銊﹀煕鐠愵厾澧挎潪?        $cart = $this->get_user_cart( $user_id );
         
         if ( empty( $cart ) ) {
             return array(
                 'code' => 103,
-                'message' => __( '璐墿杞︿负绌?, 'sut-wechat-mini' ),
+                'message' => __( '鐠愵厾澧挎潪锔胯礋缁?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 鑾峰彇鐢ㄦ埛鍦板潃
-        $address = $this->get_user_address( $user_id, $address_id );
+        // 閼惧嘲褰囬悽銊﹀煕閸︽澘娼?        $address = $this->get_user_address( $user_id, $address_id );
         
         if ( ! $address ) {
             return array(
                 'code' => 104,
-                'message' => __( '鍦板潃涓嶅瓨鍦ㄦ垨涓嶅睘浜庤鐢ㄦ埛', 'sut-wechat-mini' ),
+                'message' => __( '閸︽澘娼冩稉宥呯摠閸︺劍鍨ㄦ稉宥呯潣娴滃氦顕氶悽銊﹀煕', 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 鍒涘缓璁㈠崟
+        // 閸掓稑缂撶拋銏犲礋
         $order = wc_create_order();
         
         if ( ! $order ) {
             return array(
                 'code' => 103,
-                'message' => __( '璁㈠崟鍒涘缓澶辫触', 'sut-wechat-mini' ),
+                'message' => __( '鐠併垹宕熼崚娑樼紦婢惰精瑙?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 娣诲姞璁㈠崟椤?        foreach ( $cart as $item_key => $item ) {
+        // 濞ｈ濮炵拋銏犲礋妞?        foreach ( $cart as $item_key => $item ) {
             $product = wc_get_product( $item['product_id'] );
             
             if ( $product && $product->is_published() ) {
-                // 妫€鏌ュ簱瀛?                if ( ! $product->has_enough_stock( $item['quantity'] ) ) {
+                // 濡偓閺屻儱绨辩€?                if ( ! $product->has_enough_stock( $item['quantity'] ) ) {
                     $order->delete();
                     return array(
                         'code' => 103,
-                        'message' => sprintf( __( '%s 搴撳瓨涓嶈冻', 'sut-wechat-mini' ), $product->get_name() ),
+                        'message' => sprintf( __( '%s 鎼存挸鐡ㄦ稉宥堝喕', 'sut-wechat-mini' ), $product->get_name() ),
                         'data' => array()
                     );
                 }
                 
-                // 娣诲姞鍟嗗搧鍒拌鍗?                $order->add_product( $product, $item['quantity'] );
+                // 濞ｈ濮為崯鍡楁惂閸掓媽顓归崡?                $order->add_product( $product, $item['quantity'] );
             }
         }
         
-        // 璁剧疆璁㈠崟鍦板潃
-        $order->set_address( array(
+        // 鐠佸墽鐤嗙拋銏犲礋閸︽澘娼?        $order->set_address( array(
             'first_name' => $address->consignee,
             'last_name' => '',
             'company' => '',
@@ -1103,38 +1029,33 @@ class SUT_WeChat_Mini_WooCommerce {
             'country' => $address->country,
         ), 'shipping' );
         
-        // 璁剧疆鏀粯鏂瑰紡
-        $order->set_payment_method( $payment_method );
+        // 鐠佸墽鐤嗛弨顖欑帛閺傜懓绱?        $order->set_payment_method( $payment_method );
         
-        // 搴旂敤浼樻儬鍒?        if ( ! empty( $coupon_code ) ) {
+        // 鎼存梻鏁ゆ导妯诲劕閸?        if ( ! empty( $coupon_code ) ) {
             $coupon = new WC_Coupon( $coupon_code );
             if ( $coupon->is_valid() ) {
                 $order->apply_coupon( $coupon_code );
             }
         }
         
-        // 璁剧疆璁㈠崟澶囨敞
-        if ( ! empty( $remark ) ) {
+        // 鐠佸墽鐤嗙拋銏犲礋婢跺洦鏁?        if ( ! empty( $remark ) ) {
             $order->add_order_note( $remark );
         }
         
-        // 璁剧疆璁㈠崟鐘舵€佷负寰呬粯娆?        $order->set_status( 'pending' );
+        // 鐠佸墽鐤嗙拋銏犲礋閻樿埖鈧椒璐熷鍛帛濞?        $order->set_status( 'pending' );
         
-        // 璁剧疆璁㈠崟瀹㈡埛
-        $order->set_customer_id( $user_id );
+        // 鐠佸墽鐤嗙拋銏犲礋鐎广垺鍩?        $order->set_customer_id( $user_id );
         
-        // 璁＄畻璁㈠崟鎬讳环
-        $order->calculate_totals();
+        // 鐠侊紕鐣荤拋銏犲礋閹鐜?        $order->calculate_totals();
         
-        // 淇濆瓨璁㈠崟
+        // 娣囨繂鐡ㄧ拋銏犲礋
         $order->save();
         
-        // 娓呯┖璐墿杞?        $this->save_user_cart( $user_id, array() );
+        // 濞撳懐鈹栫拹顓犲⒖鏉?        $this->save_user_cart( $user_id, array() );
         
-        // 鏋勫缓杩斿洖鏁版嵁
-        $result = array(
+        // 閺嬪嫬缂撴潻鏂挎礀閺佺増宓?        $result = array(
             'code' => 0,
-            'message' => __( '璁㈠崟鍒涘缓鎴愬姛', 'sut-wechat-mini' ),
+            'message' => __( '鐠併垹宕熼崚娑樼紦閹存劕濮?, 'sut-wechat-mini' ),
             'data' => array(
                 'order_id' => $order->get_id(),
                 'total_price' => $order->get_total(),
@@ -1146,17 +1067,16 @@ class SUT_WeChat_Mini_WooCommerce {
     }
     
     /**
-     * 鍙栨秷璁㈠崟
+     * 閸欐牗绉风拋銏犲礋
      *
-     * @param array $data 璇锋眰鏁版嵁
-     * @param array $matches 璺敱鍖归厤缁撴灉
-     * @return array 鍙栨秷缁撴灉
+     * @param array $data 鐠囬攱鐪伴弫鐗堝祦
+     * @param array $matches 鐠侯垳鏁遍崠褰掑帳缂佹挻鐏?     * @return array 閸欐牗绉风紒鎾寸亯
      */
     public function api_cancel_order( $data, $matches ) {
-        // 妫€鏌ooCommerce鏄惁婵€娲?        if ( ! class_exists( 'WooCommerce' ) ) {
+        // 濡偓閺岊櫇ooCommerce閺勵垰鎯佸┑鈧ú?        if ( ! class_exists( 'WooCommerce' ) ) {
             return array(
                 'code' => 105,
-                'message' => __( 'WooCommerce鏈縺娲?, 'sut-wechat-mini' ),
+                'message' => __( 'WooCommerce閺堫亝绺哄ú?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
@@ -1164,41 +1084,40 @@ class SUT_WeChat_Mini_WooCommerce {
         $user_id = $data['user_id'];
         $order_id = $matches[1];
         
-        // 鑾峰彇璁㈠崟
+        // 閼惧嘲褰囩拋銏犲礋
         $order = wc_get_order( $order_id );
         
         if ( ! $order ) {
             return array(
                 'code' => 104,
-                'message' => __( '璁㈠崟涓嶅瓨鍦?, 'sut-wechat-mini' ),
+                'message' => __( '鐠併垹宕熸稉宥呯摠閸?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 妫€鏌ヨ鍗曟槸鍚﹀睘浜庡綋鍓嶇敤鎴?        if ( $order->get_customer_id() != $user_id ) {
+        // 濡偓閺屻儴顓归崡鏇熸Ц閸氾箑鐫樻禍搴＄秼閸撳秶鏁ら幋?        if ( $order->get_customer_id() != $user_id ) {
             return array(
                 'code' => 108,
-                'message' => __( '鏃犳潈璁块棶璇ヨ鍗?, 'sut-wechat-mini' ),
+                'message' => __( '閺冪姵娼堢拋鍧楁６鐠囥儴顓归崡?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 妫€鏌ヨ鍗曠姸鎬佹槸鍚﹀彲浠ュ彇娑?        $current_status = $order->get_status();
+        // 濡偓閺屻儴顓归崡鏇犲Ц閹焦妲搁崥锕€褰叉禒銉ュ絿濞?        $current_status = $order->get_status();
         if ( ! in_array( $current_status, array( 'pending', 'processing' ) ) ) {
             return array(
                 'code' => 103,
-                'message' => __( '璇ヨ鍗曠姸鎬佷笉鍏佽鍙栨秷', 'sut-wechat-mini' ),
+                'message' => __( '鐠囥儴顓归崡鏇犲Ц閹椒绗夐崗浣筋啅閸欐牗绉?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 鍙栨秷璁㈠崟
-        $order->update_status( 'cancelled', __( '鐢ㄦ埛鍙栨秷璁㈠崟', 'sut-wechat-mini' ) );
+        // 閸欐牗绉风拋銏犲礋
+        $order->update_status( 'cancelled', __( '閻劍鍩涢崣鏍ㄧХ鐠併垹宕?, 'sut-wechat-mini' ) );
         
-        // 鏋勫缓杩斿洖鏁版嵁
-        $result = array(
+        // 閺嬪嫬缂撴潻鏂挎礀閺佺増宓?        $result = array(
             'code' => 0,
-            'message' => __( '璁㈠崟宸插彇娑?, 'sut-wechat-mini' ),
+            'message' => __( '鐠併垹宕熷鎻掑絿濞?, 'sut-wechat-mini' ),
             'data' => array()
         );
         
@@ -1206,17 +1125,16 @@ class SUT_WeChat_Mini_WooCommerce {
     }
     
     /**
-     * 纭鏀惰揣
+     * 绾喛顓婚弨鎯版彛
      *
-     * @param array $data 璇锋眰鏁版嵁
-     * @param array $matches 璺敱鍖归厤缁撴灉
-     * @return array 纭缁撴灉
+     * @param array $data 鐠囬攱鐪伴弫鐗堝祦
+     * @param array $matches 鐠侯垳鏁遍崠褰掑帳缂佹挻鐏?     * @return array 绾喛顓荤紒鎾寸亯
      */
     public function api_confirm_order( $data, $matches ) {
-        // 妫€鏌ooCommerce鏄惁婵€娲?        if ( ! class_exists( 'WooCommerce' ) ) {
+        // 濡偓閺岊櫇ooCommerce閺勵垰鎯佸┑鈧ú?        if ( ! class_exists( 'WooCommerce' ) ) {
             return array(
                 'code' => 105,
-                'message' => __( 'WooCommerce鏈縺娲?, 'sut-wechat-mini' ),
+                'message' => __( 'WooCommerce閺堫亝绺哄ú?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
@@ -1224,30 +1142,30 @@ class SUT_WeChat_Mini_WooCommerce {
         $user_id = $data['user_id'];
         $order_id = $matches[1];
         
-        // 鑾峰彇璁㈠崟
+        // 閼惧嘲褰囩拋銏犲礋
         $order = wc_get_order( $order_id );
         
         if ( ! $order ) {
             return array(
                 'code' => 104,
-                'message' => __( '璁㈠崟涓嶅瓨鍦?, 'sut-wechat-mini' ),
+                'message' => __( '鐠併垹宕熸稉宥呯摠閸?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 妫€鏌ヨ鍗曟槸鍚﹀睘浜庡綋鍓嶇敤鎴?        if ( $order->get_customer_id() != $user_id ) {
+        // 濡偓閺屻儴顓归崡鏇熸Ц閸氾箑鐫樻禍搴＄秼閸撳秶鏁ら幋?        if ( $order->get_customer_id() != $user_id ) {
             return array(
                 'code' => 108,
-                'message' => __( '鏃犳潈璁块棶璇ヨ鍗?, 'sut-wechat-mini' ),
+                'message' => __( '閺冪姵娼堢拋鍧楁６鐠囥儴顓归崡?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 妫€鏌ヨ鍗曠姸鎬佹槸鍚﹀彲浠ョ‘璁ゆ敹璐?        $current_status = $order->get_status();
+        // 濡偓閺屻儴顓归崡鏇犲Ц閹焦妲搁崥锕€褰叉禒銉р€樼拋銈嗘暪鐠?        $current_status = $order->get_status();
         if ( 'completed' === $current_status ) {
             return array(
                 'code' => 103,
-                'message' => __( '璁㈠崟宸插畬鎴?, 'sut-wechat-mini' ),
+                'message' => __( '鐠併垹宕熷鎻掔暚閹?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
@@ -1255,18 +1173,17 @@ class SUT_WeChat_Mini_WooCommerce {
         if ( 'processing' !== $current_status && 'on-hold' !== $current_status ) {
             return array(
                 'code' => 103,
-                'message' => __( '璇ヨ鍗曠姸鎬佷笉鍏佽纭鏀惰揣', 'sut-wechat-mini' ),
+                'message' => __( '鐠囥儴顓归崡鏇犲Ц閹椒绗夐崗浣筋啅绾喛顓婚弨鎯版彛', 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 纭鏀惰揣
-        $order->update_status( 'completed', __( '鐢ㄦ埛纭鏀惰揣', 'sut-wechat-mini' ) );
+        // 绾喛顓婚弨鎯版彛
+        $order->update_status( 'completed', __( '閻劍鍩涚涵顔款吇閺€鎯版彛', 'sut-wechat-mini' ) );
         
-        // 鏋勫缓杩斿洖鏁版嵁
-        $result = array(
+        // 閺嬪嫬缂撴潻鏂挎礀閺佺増宓?        $result = array(
             'code' => 0,
-            'message' => __( '纭鏀惰揣鎴愬姛', 'sut-wechat-mini' ),
+            'message' => __( '绾喛顓婚弨鎯版彛閹存劕濮?, 'sut-wechat-mini' ),
             'data' => array()
         );
         
@@ -1274,25 +1191,23 @@ class SUT_WeChat_Mini_WooCommerce {
     }
     
     /**
-     * 鍒涘缓鏀粯
+     * 閸掓稑缂撻弨顖欑帛
      *
-     * @param array $data 璇锋眰鏁版嵁
-     * @param array $matches 璺敱鍖归厤缁撴灉
-     * @return array 鏀粯淇℃伅
-     */
+     * @param array $data 鐠囬攱鐪伴弫鐗堝祦
+     * @param array $matches 鐠侯垳鏁遍崠褰掑帳缂佹挻鐏?     * @return array 閺€顖欑帛娣団剝浼?     */
     public function api_create_payment( $data, $matches ) {
-        // 妫€鏌ooCommerce鏄惁婵€娲?        if ( ! class_exists( 'WooCommerce' ) ) {
+        // 濡偓閺岊櫇ooCommerce閺勵垰鎯佸┑鈧ú?        if ( ! class_exists( 'WooCommerce' ) ) {
             return array(
                 'code' => 105,
-                'message' => __( 'WooCommerce鏈縺娲?, 'sut-wechat-mini' ),
+                'message' => __( 'WooCommerce閺堫亝绺哄ú?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 妫€鏌ュ繀瑕佸弬鏁?        if ( ! isset( $data['order_id'] ) ) {
+        // 濡偓閺屻儱绻€鐟曚礁寮弫?        if ( ! isset( $data['order_id'] ) ) {
             return array(
                 'code' => 100,
-                'message' => __( '缂哄皯蹇呰鍙傛暟锛歰rder_id', 'sut-wechat-mini' ),
+                'message' => __( '缂傚搫鐨箛鍛邦洣閸欏倹鏆熼敍姝皉der_id', 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
@@ -1300,43 +1215,43 @@ class SUT_WeChat_Mini_WooCommerce {
         $user_id = $data['user_id'];
         $order_id = $data['order_id'];
         
-        // 鑾峰彇璁㈠崟
+        // 閼惧嘲褰囩拋銏犲礋
         $order = wc_get_order( $order_id );
         
         if ( ! $order ) {
             return array(
                 'code' => 104,
-                'message' => __( '璁㈠崟涓嶅瓨鍦?, 'sut-wechat-mini' ),
+                'message' => __( '鐠併垹宕熸稉宥呯摠閸?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 妫€鏌ヨ鍗曟槸鍚﹀睘浜庡綋鍓嶇敤鎴?        if ( $order->get_customer_id() != $user_id ) {
+        // 濡偓閺屻儴顓归崡鏇熸Ц閸氾箑鐫樻禍搴＄秼閸撳秶鏁ら幋?        if ( $order->get_customer_id() != $user_id ) {
             return array(
                 'code' => 108,
-                'message' => __( '鏃犳潈璁块棶璇ヨ鍗?, 'sut-wechat-mini' ),
+                'message' => __( '閺冪姵娼堢拋鍧楁６鐠囥儴顓归崡?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 妫€鏌ヨ鍗曠姸鎬?        if ( 'pending' !== $order->get_status() ) {
+        // 濡偓閺屻儴顓归崡鏇犲Ц閹?        if ( 'pending' !== $order->get_status() ) {
             return array(
                 'code' => 103,
-                'message' => __( '璁㈠崟鐘舵€佷笉姝ｇ‘', 'sut-wechat-mini' ),
+                'message' => __( '鐠併垹宕熼悩鑸碘偓浣风瑝濮濓絿鈥?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 妫€鏌ヨ鍗曢噾棰?        $total = $order->get_total();
+        // 濡偓閺屻儴顓归崡鏇㈠櫨妫?        $total = $order->get_total();
         if ( $total <= 0 ) {
             return array(
                 'code' => 103,
-                'message' => __( '璁㈠崟閲戦涓嶆纭?, 'sut-wechat-mini' ),
+                'message' => __( '鐠併垹宕熼柌鎴︻杺娑撳秵顒滅涵?, 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 鍒涘缓寰俊鏀粯
+        // 閸掓稑缂撳顔讳繆閺€顖欑帛
         $wechat_pay = SUT_WeChat_Mini_Pay::get_instance();
         $payment_params = $wechat_pay->create_payment( $order, $user_id );
         
@@ -1348,10 +1263,9 @@ class SUT_WeChat_Mini_WooCommerce {
             );
         }
         
-        // 鏋勫缓杩斿洖鏁版嵁
-        $result = array(
+        // 閺嬪嫬缂撴潻鏂挎礀閺佺増宓?        $result = array(
             'code' => 0,
-            'message' => __( '鏀粯鍙傛暟鐢熸垚鎴愬姛', 'sut-wechat-mini' ),
+            'message' => __( '閺€顖欑帛閸欏倹鏆熼悽鐔稿灇閹存劕濮?, 'sut-wechat-mini' ),
             'data' => $payment_params
         );
         
@@ -1359,70 +1273,63 @@ class SUT_WeChat_Mini_WooCommerce {
     }
     
     /**
-     * 鏀粯鍥炶皟
-     *
-     * @param array $data 璇锋眰鏁版嵁
-     * @param array $matches 璺敱鍖归厤缁撴灉
-     * @return array 鍥炶皟缁撴灉
+     * 閺€顖欑帛閸ョ偠鐨?     *
+     * @param array $data 鐠囬攱鐪伴弫鐗堝祦
+     * @param array $matches 鐠侯垳鏁遍崠褰掑帳缂佹挻鐏?     * @return array 閸ョ偠鐨熺紒鎾寸亯
      */
     public function api_payment_notify( $data, $matches ) {
-        // 妫€鏌ooCommerce鏄惁婵€娲?        if ( ! class_exists( 'WooCommerce' ) ) {
-            echo '<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[WooCommerce鏈縺娲籡]></return_msg></xml>';
+        // 濡偓閺岊櫇ooCommerce閺勵垰鎯佸┑鈧ú?        if ( ! class_exists( 'WooCommerce' ) ) {
+            echo '<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[WooCommerce閺堫亝绺哄ú绫></return_msg></xml>';
             exit;
         }
         
-        // 瑙ｆ瀽寰俊鏀粯鍥炶皟鏁版嵁
+        // 鐟欙絾鐎藉顔讳繆閺€顖欑帛閸ョ偠鐨熼弫鐗堝祦
         $xml_data = file_get_contents( 'php://input' );
         $data = $this->xml_to_array( $xml_data );
         
-        // 楠岃瘉绛惧悕
+        // 妤犲矁鐦夌粵鎯ф倳
         $wechat_pay = SUT_WeChat_Mini_Pay::get_instance();
         $is_valid = $wechat_pay->verify_notify_sign( $data );
         
         if ( ! $is_valid ) {
-            echo '<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[绛惧悕楠岃瘉澶辫触]]></return_msg></xml>';
+            echo '<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[缁涙儳鎮曟宀冪槈婢惰精瑙]></return_msg></xml>';
             exit;
         }
         
-        // 鑾峰彇璁㈠崟淇℃伅
-        $order_id = $data['out_trade_no'];
+        // 閼惧嘲褰囩拋銏犲礋娣団剝浼?        $order_id = $data['out_trade_no'];
         $order = wc_get_order( $order_id );
         
         if ( ! $order ) {
-            echo '<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[璁㈠崟涓嶅瓨鍦╙]></return_msg></xml>';
+            echo '<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[鐠併垹宕熸稉宥呯摠閸︹暀]></return_msg></xml>';
             exit;
         }
         
-        // 妫€鏌ヨ鍗曠姸鎬?        if ( 'processing' === $order->get_status() || 'completed' === $order->get_status() ) {
+        // 濡偓閺屻儴顓归崡鏇犲Ц閹?        if ( 'processing' === $order->get_status() || 'completed' === $order->get_status() ) {
             echo '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>';
             exit;
         }
         
-        // 妫€鏌ユ敮浠橀噾棰?        $total_fee = $data['total_fee'] / 100; // 寰俊鏀粯閲戦鏄垎
+        // 濡偓閺屻儲鏁禒姗€鍣炬０?        $total_fee = $data['total_fee'] / 100; // 瀵邦喕淇婇弨顖欑帛闁叉垿顤傞弰顖氬瀻
         if ( $total_fee != $order->get_total() ) {
-            echo '<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[鏀粯閲戦涓嶅尮閰峕]></return_msg></xml>';
+            echo '<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[閺€顖欑帛闁叉垿顤傛稉宥呭爱闁板硶]></return_msg></xml>';
             exit;
         }
         
-        // 鏇存柊璁㈠崟鐘舵€?        $order->update_status( 'processing', __( '寰俊鏀粯鎴愬姛', 'sut-wechat-mini' ) );
+        // 閺囧瓨鏌婄拋銏犲礋閻樿埖鈧?        $order->update_status( 'processing', __( '瀵邦喕淇婇弨顖欑帛閹存劕濮?, 'sut-wechat-mini' ) );
         
-        // 娣诲姞鏀粯淇℃伅
-        $order->add_meta_data( '_wechat_transaction_id', $data['transaction_id'], true );
+        // 濞ｈ濮為弨顖欑帛娣団剝浼?        $order->add_meta_data( '_wechat_transaction_id', $data['transaction_id'], true );
         $order->add_meta_data( '_wechat_pay_time', $data['time_end'], true );
         $order->save();
         
-        // 鍙戦€佹垚鍔熷搷搴?        echo '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>';
+        // 閸欐垿鈧焦鍨氶崝鐔锋惙鎼?        echo '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>';
         exit;
     }
     
     /**
-     * 鏍煎紡鍖栦骇鍝佹暟鎹?     *
-     * @param WC_Product $product 浜у搧瀵硅薄
-     * @param bool $is_detail 鏄惁涓鸿鎯呴〉
-     * @return array 鏍煎紡鍖栧悗鐨勪骇鍝佹暟鎹?     */
+     * 閺嶇厧绱￠崠鏍﹂獓閸濅焦鏆熼幑?     *
+     * @param WC_Product $product 娴溠冩惂鐎电钖?     * @param bool $is_detail 閺勵垰鎯佹稉楦款嚊閹懘銆?     * @return array 閺嶇厧绱￠崠鏍ф倵閻ㄥ嫪楠囬崫浣规殶閹?     */
     private function format_product( $product, $is_detail = false ) {
-        // 鑾峰彇浜у搧鍩烘湰淇℃伅
-        $product_data = array(
+        // 閼惧嘲褰囨禍褍鎼ч崺鐑樻拱娣団剝浼?        $product_data = array(
             'id' => $product->get_id(),
             'name' => $product->get_name(),
             'slug' => $product->get_slug(),
@@ -1442,7 +1349,7 @@ class SUT_WeChat_Mini_WooCommerce {
             'date_modified' => $product->get_date_modified() ? $product->get_date_modified()->format( 'Y-m-d H:i:s' ) : '',
         );
         
-        // 鑾峰彇浜у搧鍥剧墖
+        // 閼惧嘲褰囨禍褍鎼ч崶鍓у
         $images = array();
         $featured_image_id = $product->get_image_id();
         if ( $featured_image_id ) {
@@ -1455,7 +1362,7 @@ class SUT_WeChat_Mini_WooCommerce {
             );
         }
         
-        // 鑾峰彇浜у搧鍥惧簱
+        // 閼惧嘲褰囨禍褍鎼ч崶鎯х氨
         $gallery_image_ids = $product->get_gallery_image_ids();
         foreach ( $gallery_image_ids as $gallery_image_id ) {
             $images[] = array(
@@ -1469,7 +1376,7 @@ class SUT_WeChat_Mini_WooCommerce {
         
         $product_data['images'] = $images;
         
-        // 鑾峰彇浜у搧鍒嗙被
+        // 閼惧嘲褰囨禍褍鎼ч崚鍡欒
         $categories = array();
         $product_categories = get_the_terms( $product->get_id(), 'product_cat' );
         if ( $product_categories && ! is_wp_error( $product_categories ) ) {
@@ -1484,7 +1391,7 @@ class SUT_WeChat_Mini_WooCommerce {
         
         $product_data['categories'] = $categories;
         
-        // 鑾峰彇浜у搧鏍囩
+        // 閼惧嘲褰囨禍褍鎼ч弽鍥╊劮
         $tags = array();
         $product_tags = get_the_terms( $product->get_id(), 'product_tag' );
         if ( $product_tags && ! is_wp_error( $product_tags ) ) {
@@ -1499,8 +1406,8 @@ class SUT_WeChat_Mini_WooCommerce {
         
         $product_data['tags'] = $tags;
         
-        // 濡傛灉鏄鎯呴〉锛屾坊鍔犳洿澶氫俊鎭?        if ( $is_detail ) {
-            // 鑾峰彇浜у搧灞炴€?            $attributes = array();
+        // 婵″倹鐏夐弰顖濐嚊閹懘銆夐敍灞惧潑閸旂姵娲挎径姘繆閹?        if ( $is_detail ) {
+            // 閼惧嘲褰囨禍褍鎼х仦鐐粹偓?            $attributes = array();
             $product_attributes = $product->get_attributes();
             foreach ( $product_attributes as $attribute_name => $attribute ) {
                 $attributes[] = array(
@@ -1511,9 +1418,8 @@ class SUT_WeChat_Mini_WooCommerce {
             
             $product_data['attributes'] = $attributes;
             
-            // 澶勭悊浜у搧绫诲瀷
-            if ( $product->is_type( 'variable' ) ) {
-                // 鑾峰彇浜у搧鍙樹綋
+            // 婢跺嫮鎮婃禍褍鎼х猾璇茬€?            if ( $product->is_type( 'variable' ) ) {
+                // 閼惧嘲褰囨禍褍鎼ч崣妯圭秼
                 $variations = array();
                 $available_variations = $product->get_available_variations();
                 foreach ( $available_variations as $variation ) {
@@ -1535,12 +1441,10 @@ class SUT_WeChat_Mini_WooCommerce {
     }
     
     /**
-     * 鏍煎紡鍖栬鍗曟暟鎹?     *
-     * @param WC_Order $order 璁㈠崟瀵硅薄
-     * @param bool $is_detail 鏄惁涓鸿鎯呴〉
-     * @return array 鏍煎紡鍖栧悗鐨勮鍗曟暟鎹?     */
+     * 閺嶇厧绱￠崠鏍吂閸楁洘鏆熼幑?     *
+     * @param WC_Order $order 鐠併垹宕熺€电钖?     * @param bool $is_detail 閺勵垰鎯佹稉楦款嚊閹懘銆?     * @return array 閺嶇厧绱￠崠鏍ф倵閻ㄥ嫯顓归崡鏇熸殶閹?     */
     private function format_order( $order, $is_detail = false ) {
-        // 鑾峰彇璁㈠崟鍩烘湰淇℃伅
+        // 閼惧嘲褰囩拋銏犲礋閸╃儤婀版穱鈩冧紖
         $order_data = array(
             'id' => $order->get_id(),
             'order_number' => $order->get_order_number(),
@@ -1559,8 +1463,7 @@ class SUT_WeChat_Mini_WooCommerce {
             'date_paid' => $order->get_date_paid() ? $order->get_date_paid()->format( 'Y-m-d H:i:s' ) : '',
         );
         
-        // 鑾峰彇璁㈠崟鍟嗗搧
-        $order_items = array();
+        // 閼惧嘲褰囩拋銏犲礋閸熷棗鎼?        $order_items = array();
         foreach ( $order->get_items() as $item_id => $item ) {
             $product = $item->get_product();
             if ( $product ) {
@@ -1579,7 +1482,7 @@ class SUT_WeChat_Mini_WooCommerce {
         
         $order_data['items'] = $order_items;
         
-        // 鑾峰彇璐﹀崟鍦板潃
+        // 閼惧嘲褰囩拹锕€宕熼崷鏉挎絻
         $billing = $order->get_address( 'billing' );
         $order_data['billing'] = array(
             'first_name' => $billing['first_name'],
@@ -1595,7 +1498,7 @@ class SUT_WeChat_Mini_WooCommerce {
             'phone' => $billing['phone'],
         );
         
-        // 鑾峰彇閰嶉€佸湴鍧€
+        // 閼惧嘲褰囬柊宥夆偓浣告勾閸р偓
         $shipping = $order->get_address( 'shipping' );
         $order_data['shipping'] = array(
             'first_name' => $shipping['first_name'],
@@ -1609,14 +1512,13 @@ class SUT_WeChat_Mini_WooCommerce {
             'country' => $shipping['country'],
         );
         
-        // 濡傛灉鏄鎯呴〉锛屾坊鍔犳洿澶氫俊鎭?        if ( $is_detail ) {
-            // 鑾峰彇璁㈠崟澶囨敞
-            $order_data['notes'] = $order->get_customer_note();
+        // 婵″倹鐏夐弰顖濐嚊閹懘銆夐敍灞惧潑閸旂姵娲挎径姘繆閹?        if ( $is_detail ) {
+            // 閼惧嘲褰囩拋銏犲礋婢跺洦鏁?            $order_data['notes'] = $order->get_customer_note();
             
-            // 鑾峰彇璁㈠崟鎿嶄綔鍘嗗彶
+            // 閼惧嘲褰囩拋銏犲礋閹垮秳缍旈崢鍡楀蕉
             $order_data['order_history'] = $this->get_order_history( $order->get_id() );
             
-            // 鑾峰彇浼樻儬鍒镐俊鎭?            $coupons = array();
+            // 閼惧嘲褰囨导妯诲劕閸掗晲淇婇幁?            $coupons = array();
             foreach ( $order->get_coupon_codes() as $coupon_code ) {
                 $coupons[] = $coupon_code;
             }
@@ -1628,29 +1530,27 @@ class SUT_WeChat_Mini_WooCommerce {
     }
     
     /**
-     * 鑾峰彇鐢ㄦ埛璐墿杞?     *
-     * @param int $user_id 鐢ㄦ埛ID
-     * @return array 璐墿杞︽暟鎹?     */
+     * 閼惧嘲褰囬悽銊﹀煕鐠愵厾澧挎潪?     *
+     * @param int $user_id 閻劍鍩汭D
+     * @return array 鐠愵厾澧挎潪锔芥殶閹?     */
     private function get_user_cart( $user_id ) {
         $cart = get_user_meta( $user_id, '_sut_wechat_mini_cart', true );
         return $cart ? $cart : array();
     }
     
     /**
-     * 淇濆瓨鐢ㄦ埛璐墿杞?     *
-     * @param int $user_id 鐢ㄦ埛ID
-     * @param array $cart 璐墿杞︽暟鎹?     */
+     * 娣囨繂鐡ㄩ悽銊﹀煕鐠愵厾澧挎潪?     *
+     * @param int $user_id 閻劍鍩汭D
+     * @param array $cart 鐠愵厾澧挎潪锔芥殶閹?     */
     private function save_user_cart( $user_id, $cart ) {
         update_user_meta( $user_id, '_sut_wechat_mini_cart', $cart );
     }
     
     /**
-     * 鑾峰彇鐢ㄦ埛鍦板潃
-     *
-     * @param int $user_id 鐢ㄦ埛ID
-     * @param int $address_id 鍦板潃ID
-     * @return object|null 鐢ㄦ埛鍦板潃瀵硅薄
-     */
+     * 閼惧嘲褰囬悽銊﹀煕閸︽澘娼?     *
+     * @param int $user_id 閻劍鍩汭D
+     * @param int $address_id 閸︽澘娼僆D
+     * @return object|null 閻劍鍩涢崷鏉挎絻鐎电钖?     */
     private function get_user_address( $user_id, $address_id ) {
         global $wpdb;
         
@@ -1665,32 +1565,31 @@ class SUT_WeChat_Mini_WooCommerce {
     }
     
     /**
-     * 搴旂敤浜у搧鏌ヨ杩囨护鍣?     *
-     * @param array $args 鏌ヨ鍙傛暟
-     * @param array $data 璇锋眰鏁版嵁
-     * @return array 杩囨护鍚庣殑鏌ヨ鍙傛暟
+     * 鎼存梻鏁ゆ禍褍鎼ч弻銉嚄鏉╁洦鎶ら崳?     *
+     * @param array $args 閺屻儴顕楅崣鍌涙殶
+     * @param array $data 鐠囬攱鐪伴弫鐗堝祦
+     * @return array 鏉╁洦鎶ら崥搴ｆ畱閺屻儴顕楅崣鍌涙殶
      */
     private function apply_product_query_filters( $args, $data ) {
-        // 鎸変环鏍兼帓搴?        if ( isset( $data['sort_by'] ) && 'price' === $data['sort_by'] ) {
+        // 閹稿鐜弽鍏煎笓鎼?        if ( isset( $data['sort_by'] ) && 'price' === $data['sort_by'] ) {
             $args['orderby'] = 'meta_value_num';
             $args['meta_key'] = '_price';
             $args['order'] = isset( $data['sort_order'] ) && 'desc' === $data['sort_order'] ? 'DESC' : 'ASC';
         }
         
-        // 鎸夐攢閲忔帓搴?        if ( isset( $data['sort_by'] ) && 'sales' === $data['sort_by'] ) {
+        // 閹稿鏀㈤柌蹇斿笓鎼?        if ( isset( $data['sort_by'] ) && 'sales' === $data['sort_by'] ) {
             $args['orderby'] = 'meta_value_num';
             $args['meta_key'] = 'total_sales';
             $args['order'] = 'DESC';
         }
         
-        // 鎸夎瘎鍒嗘帓搴?        if ( isset( $data['sort_by'] ) && 'rating' === $data['sort_by'] ) {
+        // 閹稿鐦庨崚鍡樺笓鎼?        if ( isset( $data['sort_by'] ) && 'rating' === $data['sort_by'] ) {
             $args['orderby'] = 'meta_value_num';
             $args['meta_key'] = '_wc_average_rating';
             $args['order'] = 'DESC';
         }
         
-        // 浠锋牸鑼冨洿杩囨护
-        if ( isset( $data['min_price'] ) && isset( $data['max_price'] ) ) {
+        // 娴犻攱鐗搁懠鍐ㄦ纯鏉╁洦鎶?        if ( isset( $data['min_price'] ) && isset( $data['max_price'] ) ) {
             $args['meta_query'][] = array(
                 'key'     => '_price',
                 'value'   => array( floatval( $data['min_price'] ), floatval( $data['max_price'] ) ),
@@ -1703,11 +1602,9 @@ class SUT_WeChat_Mini_WooCommerce {
     }
     
     /**
-     * 鑾峰彇璁㈠崟鍘嗗彶
-     *
-     * @param int $order_id 璁㈠崟ID
-     * @return array 璁㈠崟鍘嗗彶璁板綍
-     */
+     * 閼惧嘲褰囩拋銏犲礋閸樺棗褰?     *
+     * @param int $order_id 鐠併垹宕烮D
+     * @return array 鐠併垹宕熼崢鍡楀蕉鐠佹澘缍?     */
     private function get_order_history( $order_id ) {
         global $wpdb;
         
@@ -1731,9 +1628,8 @@ class SUT_WeChat_Mini_WooCommerce {
     }
     
     /**
-     * XML杞暟缁?     *
-     * @param string $xml XML瀛楃涓?     * @return array 杞崲鍚庣殑鏁扮粍
-     */
+     * XML鏉烆剚鏆熺紒?     *
+     * @param string $xml XML鐎涙顑佹稉?     * @return array 鏉烆剚宕查崥搴ｆ畱閺佹壆绮?     */
     private function xml_to_array( $xml ) {
         $obj = simplexml_load_string( $xml, 'SimpleXMLElement', LIBXML_NOCDATA );
         $json = json_encode( $obj );
@@ -1744,8 +1640,7 @@ class SUT_WeChat_Mini_WooCommerce {
 }
 
 /**
- * 鍒濆鍖朩ooCommerce闆嗘垚
- */
+ * 閸掓繂顫愰崠鏈﹐oCommerce闂嗗棙鍨? */
 function sut_wechat_mini_woocommerce_init() {
     SUT_WeChat_Mini_WooCommerce::get_instance();
 }

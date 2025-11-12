@@ -1,28 +1,28 @@
-﻿<!-- 鐢ㄦ埛绮変笣椤甸潰 -->
+锘?!-- 閻劍鍩涚划澶夌妞ょ敻娼?-->
 <view class="followers-container">
-  <!-- 鍔犺浇鐘舵€?-->
+  <!-- 閸旂姾娴囬悩鑸碘偓?-->
   <view class="loading-container" wx:if="{{loading && followersList.length === 0}}">
     <view class="loading-spinner"></view>
-    <text class="loading-text">鍔犺浇涓?..</text>
+    <text class="loading-text">閸旂姾娴囨稉?..</text>
   </view>
 
-  <!-- 閿欒鐘舵€?-->
+  <!-- 闁挎瑨顕ら悩鑸碘偓?-->
   <view class="error-container" wx:elif="{{error}}">
     <image src="../../images/error.svg" class="error-icon"></image>
     <text class="error-text">{{error}}</text>
-    <button class="retry-button" bindtap="retryLoad">閲嶈瘯</button>
+    <button class="retry-button" bindtap="retryLoad">闁插秷鐦?/button>
   </view>
 
-  <!-- 绌虹姸鎬?-->
+  <!-- 缁岃櫣濮搁幀?-->
   <view class="empty-container" wx:elif="{{followersList.length === 0}}">
     <image src="../../images/empty.svg" class="empty-icon"></image>
-    <text class="empty-text">鏆傛棤绮変笣</text>
+    <text class="empty-text">閺嗗倹妫ょ划澶夌</text>
   </view>
 
-  <!-- 绮変笣鍒楄〃 -->
+  <!-- 缁绗ｉ崚妤勩€?-->
   <view class="followers-list" wx:else>
     <view class="follower-item" wx:for="{{followersList}}" wx:key="id">
-      <!-- 鐢ㄦ埛淇℃伅 -->
+      <!-- 閻劍鍩涙穱鈩冧紖 -->
       <view 
         class="user-info" 
         bindtap="navigateToUserProfile"
@@ -35,11 +35,11 @@
         ></image>
         <view class="user-details">
           <text class="user-name">{{item.nickname || item.name}}</text>
-          <text class="user-desc">{{item.description || item.introduction || '杩欎釜浜哄緢鎳掞紝浠€涔堥兘娌℃湁鐣欎笅'}}</text>
+          <text class="user-desc">{{item.description || item.introduction || '鏉╂瑤閲滄禍鍝勭发閹虫帪绱濇禒鈧稊鍫ュ厴濞屸剝婀侀悾娆庣瑓'}}</text>
         </view>
       </view>
 
-      <!-- 鎿嶄綔鎸夐挳 -->
+      <!-- 閹垮秳缍旈幐澶愭尦 -->
       <view class="follower-actions">
         <button 
           class="follow-button" 
@@ -49,28 +49,27 @@
           data-index="{{index}}"
           wx:if="{{!item.is_following}}"
         >
-          鍏虫敞
-        </button>
+          閸忚櫕鏁?        </button>
         <button 
           class="following-button" 
           size="mini" 
           disabled
           wx:else
         >
-          宸插叧娉?        </button>
+          瀹告彃鍙у▔?        </button>
       </view>
     </view>
 
-    <!-- 鍔犺浇鏇村 -->
+    <!-- 閸旂姾娴囬弴鏉戭樋 -->
     <view class="load-more" wx:if="{{hasMore}}">
       <view class="load-more-spinner" wx:if="{{loading}}"></view>
-      <text class="load-more-text" wx:if="{{loading}}">鍔犺浇鏇村...</text>
-      <text class="load-more-text" wx:else bindtap="loadMore">鐐瑰嚮鍔犺浇鏇村</text>
+      <text class="load-more-text" wx:if="{{loading}}">閸旂姾娴囬弴鏉戭樋...</text>
+      <text class="load-more-text" wx:else bindtap="loadMore">閻愮懓鍤崝鐘烘祰閺囨潙顦?/text>
     </view>
 
-    <!-- 娌℃湁鏇村 -->
+    <!-- 濞屸剝婀侀弴鏉戭樋 -->
     <view class="no-more" wx:elif="{{!hasMore && followersList.length > 0}}">
-      <text class="no-more-text">娌℃湁鏇村浜?/text>
+      <text class="no-more-text">濞屸剝婀侀弴鏉戭樋娴?/text>
     </view>
   </view>
 </view>\n

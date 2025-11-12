@@ -1,7 +1,11 @@
-﻿{
-  "navigationBarTitleText": "鍒嗙被",
+{
+  "navigationBarTitleText": "分类",
+  "usingComponents": {
+    "lazy-image": "../../components/lazy-image/lazy-image"
+  },
   "enablePullDownRefresh": true,
+  "backgroundColor": "#f5f5f5",
   "backgroundTextStyle": "dark",
   "navigationBarBackgroundColor": "#ffffff",
   "navigationBarTextStyle": "black"
-}\n
+}

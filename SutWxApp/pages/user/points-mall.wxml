@@ -1,11 +1,11 @@
-﻿<!-- 绉垎鍟嗗煄椤甸潰 -->
+锘?!-- 缁夘垰鍨庨崯鍡楃厔妞ょ敻娼?-->
 <view class="mall-container">
-  <!-- 椤甸潰鏍囬 -->
+  <!-- 妞ょ敻娼伴弽鍥暯 -->
   <view class="page-header">
-    <text class="page-title">绉垎鍟嗗煄</text>
+    <text class="page-title">缁夘垰鍨庨崯鍡楃厔</text>
   </view>
 
-  <!-- 鏍囩椤?-->
+  <!-- 閺嶅洨顒锋い?-->
   <view class="tabs">
     <view 
       wx:for="{{tabs}}" 
@@ -19,20 +19,20 @@
     </view>
   </view>
 
-  <!-- 鍔犺浇鐘舵€?-->
+  <!-- 閸旂姾娴囬悩鑸碘偓?-->
   <view class="loading-container" wx:if="{{loading && products.length === 0}}">
     <view class="loading-icon"></view>
-    <text class="loading-text">鍔犺浇涓?..</text>
+    <text class="loading-text">閸旂姾娴囨稉?..</text>
   </view>
 
-  <!-- 閿欒鎻愮ず -->
+  <!-- 闁挎瑨顕ら幓鎰仛 -->
   <view class="error-container" wx:if="{{error && products.length === 0}}">
-    <view class="error-icon">鈿狅笍</view>
+    <view class="error-icon">閳跨媴绗?/view>
     <text class="error-text">{{error}}</text>
-    <button class="retry-button" bindtap="onRetry">閲嶈瘯</button>
+    <button class="retry-button" bindtap="onRetry">闁插秷鐦?/button>
   </view>
 
-  <!-- 鍟嗗搧鍒楄〃 -->
+  <!-- 閸熷棗鎼ч崚妤勩€?-->
   <view class="products-list" wx:if="{{products.length > 0}}">
     <view 
       wx:for="{{products}}" 
@@ -41,39 +41,39 @@
       bindtap="navigateToProductDetail"
       data-id="{{item.id}}"
     >
-      <!-- 鍟嗗搧鍥剧墖 -->
+      <!-- 閸熷棗鎼ч崶鍓у -->
       <view class="product-image">
         <image src="{{item.image || '/assets/images/default-product.png'}}" mode="aspectFill"></image>
       </view>
       
-      <!-- 鍟嗗搧淇℃伅 -->
+      <!-- 閸熷棗鎼ф穱鈩冧紖 -->
       <view class="product-info">
         <text class="product-title">{{item.title}}</text>
         <text class="product-desc">{{item.description}}</text>
         
-        <!-- 绉垎浠锋牸 -->
+        <!-- 缁夘垰鍨庢禒閿嬬壐 -->
         <view class="product-price">
-          <text class="points-icon">绉垎</text>
+          <text class="points-icon">缁夘垰鍨?/text>
           <text class="points-value">{{item.points}}</text>
         </view>
       </view>
     </view>
   </view>
 
-  <!-- 绌虹姸鎬?-->
+  <!-- 缁岃櫣濮搁幀?-->
   <view class="empty-container" wx:if="{{!loading && !error && products.length === 0}}">
-    <view class="empty-icon">馃泹锔?/view>
-    <text class="empty-text">鏆傛棤绉垎鍟嗗搧</text>
+    <view class="empty-icon">棣冩彻閿?/view>
+    <text class="empty-text">閺嗗倹妫ょ粔顖氬瀻閸熷棗鎼?/text>
   </view>
 
-  <!-- 鍔犺浇鏇村 -->
+  <!-- 閸旂姾娴囬弴鏉戭樋 -->
   <view class="load-more" wx:if="{{hasMore && products.length > 0}}">
-    <text>{{loading ? '鍔犺浇涓?..' : '涓婃媺鍔犺浇鏇村'}}</text>
+    <text>{{loading ? '閸旂姾娴囨稉?..' : '娑撳﹥濯洪崝鐘烘祰閺囨潙顦?}}</text>
   </view>
 
-  <!-- 宸插姞杞藉叏閮?-->
+  <!-- 瀹告彃濮炴潪钘夊弿闁?-->
   <view class="load-complete" wx:if="{{!hasMore && products.length > 0}}">
-    <text>宸插姞杞藉叏閮?/text>
+    <text>瀹告彃濮炴潪钘夊弿闁?/text>
   </view>
 </view>
 \n

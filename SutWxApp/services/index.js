@@ -1,8 +1,8 @@
-﻿// services/index.js - 鏈嶅姟灞傚叆鍙ｆ枃浠?// 鏁村悎鎵€鏈変笟鍔℃湇鍔★紝鎻愪緵缁熶竴鐨勬湇鍔¤闂帴鍙?
+锘?/ services/index.js - 閺堝秴濮熺仦鍌氬弳閸欙絾鏋冩禒?// 閺佹潙鎮庨幍鈧張澶夌瑹閸斺剝婀囬崝鈽呯礉閹绘劒绶电紒鐔剁閻ㄥ嫭婀囬崝陇顔栭梻顔藉复閸?
 /**
- * 鏈嶅姟灞傚叆鍙ｆā鍧? * 璐熻矗鏁村悎鍜屽鍑烘墍鏈変笟鍔℃湇鍔? */
+ * 閺堝秴濮熺仦鍌氬弳閸欙絾膩閸? * 鐠愮喕鐭楅弫鏉戞値閸滃苯顕遍崙鐑樺閺堝绗熼崝鈩冩箛閸? */
 
-// 瀵煎叆鏍稿績鏈嶅姟妯″潡
+// 鐎电厧鍙嗛弽绋跨妇閺堝秴濮熷Ο鈥虫健
 const apiService = require('../utils/api');
 const authService = require('../utils/auth-service');
 const articleService = require('../utils/article-service');
@@ -25,32 +25,27 @@ const fileService = require('../utils/file-service');
 const feedbackService = require('../utils/feedback-service');
 
 /**
- * 鏈嶅姟娉ㄥ唽涓績
- * 闆嗕腑绠＄悊鎵€鏈変笟鍔℃湇鍔? */
+ * 閺堝秴濮熷▔銊ュ斀娑擃厼绺? * 闂嗗棔鑵戠粻锛勬倞閹碘偓閺堝绗熼崝鈩冩箛閸? */
 const serviceRegistry = {
-  // 鏍稿績鏈嶅姟
+  // 閺嶇绺鹃張宥呭
   api: apiService,
   
-  // 鐢ㄦ埛鐩稿叧鏈嶅姟
-  auth: authService,
+  // 閻劍鍩涢惄绋垮彠閺堝秴濮?  auth: authService,
   user: userService,
   following: followingService,
   
-  // 鍐呭鐩稿叧鏈嶅姟
-  article: articleService,
+  // 閸愬懎顔愰惄绋垮彠閺堝秴濮?  article: articleService,
   category: categoryService,
   comment: commentService,
   
-  // 鐢靛晢鐩稿叧鏈嶅姟
-  product: productService,
+  // 閻㈤潧鏅㈤惄绋垮彠閺堝秴濮?  product: productService,
   cart: cartService,
   order: orderService,
   address: addressService,
   payment: paymentService,
   points: pointsService,
   
-  // 杈呭姪鍔熻兘鏈嶅姟
-  config: configService,
+  // 鏉堝懎濮崝鐔诲厴閺堝秴濮?  config: configService,
   cache: cacheService,
   file: fileService,
   feedback: feedbackService,
@@ -60,40 +55,36 @@ const serviceRegistry = {
 };
 
 /**
- * 鏈嶅姟宸ュ巶绫? * 鎻愪緵鏈嶅姟鐨勮幏鍙栧拰鍒濆鍖栧姛鑳? */
+ * 閺堝秴濮熷銉ュ范缁? * 閹绘劒绶甸張宥呭閻ㄥ嫯骞忛崣鏍ф嫲閸掓繂顫愰崠鏍у閼? */
 class ServiceFactory {
   /**
-   * 鑾峰彇鎸囧畾鐨勬湇鍔″疄渚?   * @param {string} serviceName - 鏈嶅姟鍚嶇О
-   * @returns {Object|null} 鏈嶅姟瀹炰緥鎴杗ull
+   * 閼惧嘲褰囬幐鍥х暰閻ㄥ嫭婀囬崝鈥崇杽娓?   * @param {string} serviceName - 閺堝秴濮熼崥宥囆?   * @returns {Object|null} 閺堝秴濮熺€圭偘绶ラ幋鏉梪ll
    */
   static getService(serviceName) {
     if (serviceRegistry[serviceName]) {
       return serviceRegistry[serviceName];
     }
-    console.error(`鏈嶅姟 ${serviceName} 涓嶅瓨鍦╜);
+    console.error(`閺堝秴濮?${serviceName} 娑撳秴鐡ㄩ崷鈺?;
     return null;
   }
   
   /**
-   * 鑾峰彇鎵€鏈夊凡娉ㄥ唽鐨勬湇鍔?   * @returns {Object} 鎵€鏈夋湇鍔＄殑闆嗗悎
-   */
+   * 閼惧嘲褰囬幍鈧張澶婂嚒濞夈劌鍞介惃鍕箛閸?   * @returns {Object} 閹碘偓閺堝婀囬崝锛勬畱闂嗗棗鎮?   */
   static getAllServices() {
     return { ...serviceRegistry };
   }
   
   /**
-   * 妫€鏌ユ湇鍔℃槸鍚﹀瓨鍦?   * @param {string} serviceName - 鏈嶅姟鍚嶇О
-   * @returns {boolean} 鏈嶅姟鏄惁瀛樺湪
-   */
+   * 濡偓閺屻儲婀囬崝鈩冩Ц閸氾箑鐡ㄩ崷?   * @param {string} serviceName - 閺堝秴濮熼崥宥囆?   * @returns {boolean} 閺堝秴濮熼弰顖氭儊鐎涙ê婀?   */
   static hasService(serviceName) {
     return !!serviceRegistry[serviceName];
   }
 }
 
-// 瀵煎嚭鏈嶅姟宸ュ巶鍜屾墍鏈夋湇鍔?exports.ServiceFactory = ServiceFactory;
+// 鐎电厧鍤張宥呭瀹搞儱宸堕崪灞惧閺堝婀囬崝?exports.ServiceFactory = ServiceFactory;
 exports.services = serviceRegistry;
 
-// 瀵煎嚭鍗曚釜鏈嶅姟浠ヤ究浜庣洿鎺ュ鍏?module.exports = {
+// 鐎电厧鍤崡鏇氶嚋閺堝秴濮熸禒銉ょ┒娴滃海娲块幒銉ヮ嚤閸?module.exports = {
   ServiceFactory,
   services: serviceRegistry,
   ...serviceRegistry

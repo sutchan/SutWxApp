@@ -1,37 +1,34 @@
-﻿// pages/user/agreement/agreement.js
+锘?/ pages/user/agreement/agreement.js
 /**
- * 鍗忚椤甸潰 - 鏄剧ず鐢ㄦ埛鍗忚鎴栭殣绉佹斂绛栧唴瀹? */
+ * 閸楀繗顔呮い鐢告桨 - 閺勫墽銇氶悽銊﹀煕閸楀繗顔呴幋鏍缁変焦鏂傜粵鏍у敶鐎? */
 Page({
   data: {
-    type: 'user', // 'user' 鎴?'privacy'
-    title: '鐢ㄦ埛鍗忚',
+    type: 'user', // 'user' 閹?'privacy'
+    title: '閻劍鍩涢崡蹇氼唴',
     content: '',
     loading: true,
     error: false
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸旂姾娴?   */
   onLoad: function(options) {
-    // 鑾峰彇浼犲叆鐨勫崗璁被鍨?    const type = options.type || 'user';
+    // 閼惧嘲褰囨导鐘插弳閻ㄥ嫬宕楃拋顔捐閸?    const type = options.type || 'user';
     
     this.setData({
       type: type,
-      title: type === 'privacy' ? '闅愮鏀跨瓥' : '鐢ㄦ埛鍗忚'
+      title: type === 'privacy' ? '闂呮劗顫嗛弨璺ㄧ摜' : '閻劍鍩涢崡蹇氼唴'
     });
     
-    // 璁剧疆瀵艰埅鏍忔爣棰?    wx.setNavigationBarTitle({
+    // 鐠佸墽鐤嗙€佃壈鍩呴弽蹇旂垼妫?    wx.setNavigationBarTitle({
       title: this.data.title
     });
     
-    // 鍔犺浇鍗忚鍐呭
-    this.loadAgreementContent();
+    // 閸旂姾娴囬崡蹇氼唴閸愬懎顔?    this.loadAgreementContent();
   },
 
   /**
-   * 鍔犺浇鍗忚鍐呭
-   */
+   * 閸旂姾娴囬崡蹇氼唴閸愬懎顔?   */
   loadAgreementContent: function() {
     const app = getApp();
     const url = this.data.type === 'privacy' ? '/agreement/privacy' : '/agreement/user';
@@ -47,27 +44,27 @@ Page({
             error: false
           });
         } else {
-          console.error('鑾峰彇鍗忚鍐呭澶辫触:', res.message);
+          console.error('閼惧嘲褰囬崡蹇氼唴閸愬懎顔愭径杈Е:', res.message);
           this.setData({
             loading: false,
             error: true,
-            content: res.message || '鍐呭鍔犺浇澶辫触'
+            content: res.message || '閸愬懎顔愰崝鐘烘祰婢惰精瑙?
           });
         }
       },
       fail: (error) => {
-        console.error('缃戠粶璇锋眰澶辫触:', error);
+        console.error('缂冩垹绮剁拠閿嬬湴婢惰精瑙?', error);
         this.setData({
           loading: false,
           error: true,
-          content: '缃戠粶寮傚父锛屽唴瀹瑰姞杞藉け璐?
+          content: '缂冩垹绮跺鍌氱埗閿涘苯鍞寸€圭懓濮炴潪钘夈亼鐠?
         });
       }
     });
   },
 
   /**
-   * 閲嶆柊鍔犺浇
+   * 闁插秵鏌婇崝鐘烘祰
    */
   reloadContent: function() {
     this.setData({
@@ -78,21 +75,20 @@ Page({
   },
 
   /**
-   * 澶嶅埗鍗忚鍐呭
-   */
+   * 婢跺秴鍩楅崡蹇氼唴閸愬懎顔?   */
   copyContent: function() {
     wx.setClipboardData({
       data: this.data.content,
       success: () => {
         wx.showToast({
-          title: '鍐呭宸插鍒?,
+          title: '閸愬懎顔愬鎻掝槻閸?,
           icon: 'success',
           duration: 2000
         });
       },
       fail: () => {
         wx.showToast({
-          title: '澶嶅埗澶辫触',
+          title: '婢跺秴鍩楁径杈Е',
           icon: 'none'
         });
       }

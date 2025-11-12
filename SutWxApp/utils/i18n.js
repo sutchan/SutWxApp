@@ -1,30 +1,31 @@
-// i18n.js - 澶氳瑷€鏀寔妯″潡
-// 鎻愪緵鍥介檯鍖栫炕璇戝姛鑳?
-import { getStorage, setStorage } from './global';
+// i18n.js - 国际化语言翻译工具
+// 用于管理应用的多语言支持和文本翻译
+const { getStorage, setStorage } = require('./global');
 
-// 榛樿璇█璁剧疆
+// 默认语言设置
 const DEFAULT_LANGUAGE = 'zh_CN';
 const SUPPORTED_LANGUAGES = ['zh_CN', 'en_US'];
 
-// 璇█璧勬簮瀛樺偍
+// 存储翻译内容
 let translations = {
   zh_CN: {},
   en_US: {}
 };
 
-// 褰撳墠璇█
+// 当前使用的语言
 let currentLanguage = DEFAULT_LANGUAGE;
 
 /**
- * 鍒濆鍖栧璇█妯″潡
- * 鍔犺浇鐢ㄦ埛棣栭€夎瑷€鍜岀炕璇戣祫婧? */
-export function initI18n() {
-  // 浠庡瓨鍌ㄤ腑鑾峰彇鐢ㄦ埛璇█璁剧疆
+ * 初始化国际化设置
+ * 加载保存的语言设置或使用系统默认语言
+ */
+function initI18n() {
+  // 尝试从本地存储中获取用户保存的语言设置
   const savedLanguage = getStorage('user_language');
   if (savedLanguage && SUPPORTED_LANGUAGES.includes(savedLanguage)) {
     currentLanguage = savedLanguage;
   } else {
-    // 鑾峰彇绯荤粺璇█璁剧疆
+    // 获取系统语言并设置
     const systemLanguage = wx.getSystemInfoSync().language;
     if (systemLanguage === 'en') {
       currentLanguage = 'en_US';
@@ -35,10 +36,10 @@ export function initI18n() {
 }
 
 /**
- * 设置当前语言
+ * 设置当前使用的语言
  * @param {string} langCode - 语言代码，如 'zh_CN', 'en_US'
  */
-export function setLanguage(langCode) {
+function setLanguage(langCode) {
   if (!SUPPORTED_LANGUAGES.includes(langCode)) {
     console.error('Unsupported language:', langCode);
     return;
@@ -49,50 +50,50 @@ export function setLanguage(langCode) {
 }
 
 /**
- * 获取当前语言
+ * 获取当前使用的语言
  * @returns {string} 当前语言代码
  */
-export function getCurrentLanguage() {
+function getCurrentLanguage() {
   return currentLanguage;
 }
 
 /**
- * 加载翻译资源
+ * 加载指定语言的翻译内容
  * @param {string} langCode - 语言代码
- * @param {Object} trans - 翻译资源对象
+ * @param {Object} trans - 翻译内容对象
  */
-export function loadTranslations(langCode, trans) {
+function loadTranslations(langCode, trans) {
   if (SUPPORTED_LANGUAGES.includes(langCode)) {
     translations[langCode] = { ...translations[langCode], ...trans };
   }
 }
 
 /**
- * 翻译文本
+ * 获取翻译文本
  * @param {string} key - 翻译键
  * @param {Object} params - 替换参数
  * @returns {string} 翻译后的文本
  */
-export function t(key, params = {}) {
+function t(key, params = {}) {
   let translation = translations[currentLanguage][key] || translations[DEFAULT_LANGUAGE][key] || key;
   
-  // 鏇挎崲鍙傛暟
+  // 替换参数
   Object.keys(params).forEach(paramKey => {
-    translation = translation.replace(new RegExp(`\{\{${paramKey}\}\}`, 'g'), params[paramKey]);
+    translation = translation.replace(new RegExp(`\\{\\{${paramKey}\\}\\}`, 'g'), params[paramKey]);
   });
   
   return translation;
 }
 
 /**
- * 获取支持的语言列表
- * @returns {Array} 语言列表
+ * 获取所有支持的语言列表
+ * @returns {Array} 语言代码列表
  */
-export function getSupportedLanguages() {
+function getSupportedLanguages() {
   return [...SUPPORTED_LANGUAGES];
 }
 
-// 预加载基础翻译
+// 基础翻译内容
 const baseTranslations = {
   zh_CN: {
     // 积分任务相关
@@ -110,10 +111,10 @@ const baseTranslations = {
     'task_completed': '已完成',
     'task_progress': '进度',
     'points_reward_success': '恭喜获得{{points}}积分',
-    'loading': '加载中..',
+    'loading': '加载中...',
     'retry': '重试',
     'no_tasks': '暂无任务',
-    'network_error': '网络错误，请稍后重试',
+    'network_error': '网络异常，请稍后重试',
     
     // 通用文本
     'points': '积分',
@@ -168,16 +169,16 @@ const baseTranslations = {
   }
 };
 
-// 鍔犺浇鍩虹缈昏瘧
+// 加载基础翻译内容
 loadTranslations('zh_CN', baseTranslations.zh_CN);
 loadTranslations('en_US', baseTranslations.en_US);
 
-// 瀵煎嚭榛樿瀵硅薄
-export default {
+// 导出模块
+module.exports = {
   init: initI18n,
   setLanguage,
   getCurrentLanguage,
   loadTranslations,
   t,
   getSupportedLanguages
-};\n
+};

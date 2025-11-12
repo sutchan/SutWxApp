@@ -1,28 +1,28 @@
-﻿<!-- 鐢ㄦ埛闅愮璁剧疆椤甸潰 -->
+锘?!-- 閻劍鍩涢梾鎰潌鐠佸墽鐤嗘い鐢告桨 -->
 <view class="privacy-settings-container">
-  <!-- 鍔犺浇鐘舵€?-->
+  <!-- 閸旂姾娴囬悩鑸碘偓?-->
   <view class="loading-container" wx:if="{{loading}}">
     <view class="loading-spinner"></view>
-    <text class="loading-text">鍔犺浇涓?..</text>
+    <text class="loading-text">閸旂姾娴囨稉?..</text>
   </view>
 
-  <!-- 閿欒鐘舵€?-->
+  <!-- 闁挎瑨顕ら悩鑸碘偓?-->
   <view class="error-container" wx:elif="{{error}}">
     <image src="../../images/error.svg" class="error-icon"></image>
-    <text class="error-text">鍔犺浇澶辫触</text>
-    <button class="retry-button" bindtap="retryLoad">閲嶈瘯</button>
+    <text class="error-text">閸旂姾娴囨径杈Е</text>
+    <button class="retry-button" bindtap="retryLoad">闁插秷鐦?/button>
   </view>
 
-  <!-- 鍐呭鍖哄煙 -->
+  <!-- 閸愬懎顔愰崠鍝勭厵 -->
   <view class="settings-content" wx:else>
-    <!-- 绀句氦浜掑姩璁剧疆 -->
+    <!-- 缁€鍙ユ唉娴滄帒濮╃拋鍓х枂 -->
     <view class="settings-section">
       <view class="section-header">
-        <text class="section-title">绀句氦浜掑姩</text>
+        <text class="section-title">缁€鍙ユ唉娴滄帒濮?/text>
       </view>
       <view class="settings-list">
         <view class="setting-item">
-          <text class="setting-label">鍏佽浠栦汉璇勮鎴戠殑鍐呭</text>
+          <text class="setting-label">閸忎浇顔忔禒鏍︽眽鐠囧嫯顔戦幋鎴犳畱閸愬懎顔?/text>
           <switch 
             class="setting-switch" 
             checked="{{privacySettings.allowComments}}" 
@@ -31,7 +31,7 @@
           />
         </view>
         <view class="setting-item">
-          <text class="setting-label">鍏佽浠栦汉鍏虫敞鎴?/text>
+          <text class="setting-label">閸忎浇顔忔禒鏍︽眽閸忚櫕鏁為幋?/text>
           <switch 
             class="setting-switch" 
             checked="{{privacySettings.allowFollow}}" 
@@ -40,7 +40,7 @@
           />
         </view>
         <view class="setting-item">
-          <text class="setting-label">鍦ㄥ姩鎬佷腑鏄剧ず鎴戠殑娲诲姩</text>
+          <text class="setting-label">閸︺劌濮╅幀浣疯厬閺勫墽銇氶幋鎴犳畱濞茶濮?/text>
           <switch 
             class="setting-switch" 
             checked="{{privacySettings.showActivity}}" 
@@ -51,14 +51,14 @@
       </view>
     </view>
 
-    <!-- 閫氱煡璁剧疆 -->
+    <!-- 闁氨鐓＄拋鍓х枂 -->
     <view class="settings-section">
       <view class="section-header">
-        <text class="section-title">閫氱煡璁剧疆</text>
+        <text class="section-title">闁氨鐓＄拋鍓х枂</text>
       </view>
       <view class="settings-list">
         <view class="setting-item">
-          <text class="setting-label">鎺ユ敹绯荤粺閫氱煡</text>
+          <text class="setting-label">閹恒儲鏁圭化鑽ょ埠闁氨鐓?/text>
           <switch 
             class="setting-switch" 
             checked="{{privacySettings.receiveNotifications}}" 
@@ -69,14 +69,14 @@
       </view>
     </view>
 
-    <!-- 鏁版嵁闅愮璁剧疆 -->
+    <!-- 閺佺増宓侀梾鎰潌鐠佸墽鐤?-->
     <view class="settings-section">
       <view class="section-header">
-        <text class="section-title">鏁版嵁闅愮</text>
+        <text class="section-title">閺佺増宓侀梾鎰潌</text>
       </view>
       <view class="settings-list">
         <view class="setting-item">
-          <text class="setting-label">鍦ㄦ垜鐨勫唴瀹逛腑鏄剧ず浣嶇疆淇℃伅</text>
+          <text class="setting-label">閸︺劍鍨滈惃鍕敶鐎归€涜厬閺勫墽銇氭担宥囩枂娣団剝浼?/text>
           <switch 
             class="setting-switch" 
             checked="{{privacySettings.showLocation}}" 
@@ -85,7 +85,7 @@
           />
         </view>
         <view class="setting-item">
-          <text class="setting-label">涓庡悎浣滀紮浼村叡浜垜鐨勬暟鎹?/text>
+          <text class="setting-label">娑撳骸鎮庢担婊€绱导鏉戝彙娴滎偅鍨滈惃鍕殶閹?/text>
           <switch 
             class="setting-switch" 
             checked="{{privacySettings.shareDataWithPartners}}" 
@@ -96,7 +96,7 @@
       </view>
     </view>
 
-    <!-- 淇濆瓨鎸夐挳 -->
+    <!-- 娣囨繂鐡ㄩ幐澶愭尦 -->
     <view class="save-container">
       <button 
         class="save-button" 
@@ -104,16 +104,16 @@
         loading="{{saving}}" 
         bindtap="savePrivacySettings"
       >
-        {{saving ? '淇濆瓨涓?..' : '淇濆瓨璁剧疆'}}
+        {{saving ? '娣囨繂鐡ㄦ稉?..' : '娣囨繂鐡ㄧ拋鍓х枂'}}
       </button>
       
-      <!-- 淇濆瓨鎴愬姛鎻愮ず -->
-      <text class="save-success" wx:if="{{saveSuccess}}">鉁?璁剧疆宸蹭繚瀛?/text>
+      <!-- 娣囨繂鐡ㄩ幋鎰閹绘劗銇?-->
+      <text class="save-success" wx:if="{{saveSuccess}}">閴?鐠佸墽鐤嗗韫箽鐎?/text>
     </view>
 
-    <!-- 闅愮璇存槑 -->
+    <!-- 闂呮劗顫嗙拠瀛樻 -->
     <view class="privacy-notice">
-      <text class="notice-text">娉ㄦ剰锛氭偍鐨勯殣绉佽缃彧浼氬奖鍝嶆湭鏉ョ殑鏁版嵁澶勭悊锛屼笉浼氬垹闄ゅ凡瀛樺湪鐨勬暟鎹€?/text>
+      <text class="notice-text">濞夈劍鍓伴敍姘亶閻ㄥ嫰娈ｇ粔浣筋啎缂冾喖褰ф导姘閸濆秵婀弶銉ф畱閺佺増宓佹径鍕倞閿涘奔绗夋导姘灩闂勩倕鍑＄€涙ê婀惃鍕殶閹诡喓鈧?/text>
     </view>
   </view>
 </view>\n

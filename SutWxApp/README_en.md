@@ -1,4 +1,4 @@
-﻿# SUT WeChat Mini Program
+# SUT WeChat Mini Program
 
 This is a WeChat Mini Program frontend project developed based on WordPress, used for displaying and managing content related to SUT (School of Urban Technology), including articles, categories, etc.
 
@@ -6,20 +6,20 @@ This is a WeChat Mini Program frontend project developed based on WordPress, use
 
 ```
 SutWxApp/
-鈹溾攢鈹€ app.js              # Mini Program entry file
-鈹溾攢鈹€ app.json            # Global configuration file
-鈹溾攢鈹€ app.wxss            # Global style file
-鈹溾攢鈹€ images/             # Image resources directory
-鈹?  鈹溾攢鈹€ default-avatar.png    # Default avatar image
-鈹?  鈹斺攢鈹€ tabbar/               # Bottom tabbar icons
-鈹斺攢鈹€ pages/              # Pages directory
-    鈹溾攢鈹€ index/          # Home page
-    鈹溾攢鈹€ category/       # Category page
-    鈹溾攢鈹€ article/        # Article related pages
-    鈹?  鈹斺攢鈹€ detail/     # Article detail page
-    鈹斺攢鈹€ user/           # User related pages
-        鈹溾攢鈹€ login/      # Login page
-        鈹斺攢鈹€ profile/    # User profile page
+├── app.js              # Mini Program entry file
+├── app.json            # Global configuration file
+├── app.wxss            # Global style file
+├── images/             # Image resources directory
+│   ├── default-avatar.png    # Default avatar image
+│   └── tabbar/               # Bottom tabbar icons
+├── pages/              # Pages directory
+    ├── index/          # Home page
+    ├── category/       # Category page
+    ├── article/        # Article related pages
+    │   └── detail/     # Article detail page
+    └── user/           # User related pages
+        ├── login/      # Login page
+        └── profile/    # User profile page
 ```
 
 ## Functional Modules
@@ -48,43 +48,53 @@ SutWxApp/
 
 ### User Module
 - User login (WeChat authorized login)
-- User center (user information display)
-- Favorite management
-- Address management
-- Check-in function
+- User profile management
+- My favorites
+- My comments
+- Message notifications
 
-## Development Environment Configuration
-
-1. Install WeChat Developer Tools
-2. Import the project
-3. Configure Mini Program AppID
-4. Set up server domain name
+## Development Environment
+- WeChat Developer Tools
+- JavaScript
+- WXML (WeChat Markup Language)
+- WXSS (WeChat Style Sheets)
 
 ## API Configuration
-
-Configure the API base address in `app.js`:
+The API endpoints need to be configured in the `config.js` file. The default API endpoint is set to the WordPress REST API.
 
 ```javascript
-App({
-  globalData: {
-    apiBaseUrl: 'https://your-wordpress-site.com/wp-json/sut-wechat-mini/v1'
-  }
-  // ...other configurations
-})
+// API configuration example
+const API_BASE_URL = 'https://example.com/wp-json/sut/v1';
+const API_TIMEOUT = 10000; // 10 seconds
+
+module.exports = {
+  API_BASE_URL,
+  API_TIMEOUT
+};
 ```
 
-## Notes
+## Tech Stack
+- WeChat Mini Program Framework
+- JavaScript
+- WordPress (Backend)
+- RESTful API
 
-1. Ensure that the `sut-wechat-mini` plugin is installed and activated on the WordPress side
-2. Ensure that the server domain name has been configured in the WeChat Developer Tools
-3. Use the test environment during development, switch to the production environment before release
-4. Follow WeChat Mini Program development specifications and design guidelines
+## Development Dependencies
+- WeChat Developer Tools
+- ESLint (for code quality)
+- Prettier (for code formatting)
 
-## Update Log
+## Version
+1.0.16
 
-- v1.0.3: Updated and improved documentation and functions, released on January 15, 2024
-- v1.0.0: Initial version, basic functions implemented
+## Last Updated
+November 1, 2024
 
 ## License
-
 MIT
+
+## Author
+Sut
+
+## Repository
+https://github.com/sutchan

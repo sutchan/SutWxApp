@@ -1,10 +1,9 @@
-﻿// 搴旂敤鍒濆鍖栨ā鍧楀崟鍏冩祴璇?const { AppInitializer, initializeServiceLayer, getService, getServiceLayerStatus } = require('../app-initializer');
+锘?/ 鎼存梻鏁ら崚婵嗩潗閸栨牗膩閸ф宕熼崗鍐╃ゴ鐠?const { AppInitializer, initializeServiceLayer, getService, getServiceLayerStatus } = require('../app-initializer');
 const { ServiceIntegrator } = require('../service-integration');
 
-// 妯℃嫙鎵€鏈変緷璧栨ā鍧楋紝閬垮厤瀹為檯瀵煎叆
-jest.mock('../service-integration');
+// 濡剝瀚欓幍鈧張澶夌贩鐠ф牗膩閸ф绱濋柆鍨帳鐎圭偤妾€电厧鍙?jest.mock('../service-integration');
 
-// 妯℃嫙utils鐩綍涓嬬殑鎵€鏈夋ā鍧楀鍏ワ紝閬垮厤ES6妯″潡鍏煎鎬ч棶棰?jest.mock('../../utils/api', () => ({
+// 濡剝瀚檜tils閻╊喖缍嶆稉瀣畱閹碘偓閺堝膩閸ф顕遍崗銉礉闁灝鍘S6濡€虫健閸忕厧顔愰幀褔妫舵０?jest.mock('../../utils/api', () => ({
   default: {
     get: jest.fn(),
     post: jest.fn(),
@@ -24,7 +23,7 @@ jest.mock('../../utils/config-service', () => ({
   initialize: jest.fn()
 }));
 
-// 妯℃嫙浣跨敤ES妯″潡璇硶鐨勬湇鍔?jest.mock('../../utils/article-service', () => ({
+// 濡剝瀚欐担璺ㄦ暏ES濡€虫健鐠囶厽纭堕惃鍕箛閸?jest.mock('../../utils/article-service', () => ({
   default: {
     getArticles: jest.fn(),
     getArticleById: jest.fn()
@@ -73,7 +72,7 @@ jest.mock('../../utils/user-service', () => ({
   }
 }));
 
-// 鐢靛晢鐩稿叧鏈嶅姟mock
+// 閻㈤潧鏅㈤惄绋垮彠閺堝秴濮焟ock
 jest.mock('../../utils/product-service', () => ({
   default: {
     getProducts: jest.fn()
@@ -122,7 +121,7 @@ jest.mock('../../utils/feedback-service', () => ({
   }
 }));
 
-// 鍩虹宸ュ叿mock
+// 閸╄櫣顢呭銉ュ徔mock
 jest.mock('../../utils/cache', () => ({
   getCache: jest.fn(),
   setCache: jest.fn(),
@@ -146,11 +145,10 @@ describe('AppInitializer', () => {
   let mockServiceIntegrator;
   
   beforeEach(() => {
-    // 閲嶇疆鎵€鏈塵ock
+    // 闁插秶鐤嗛幍鈧張濉祇ck
     jest.clearAllMocks();
     
-    // 鍒涘缓妯℃嫙鐨凷erviceIntegrator瀹炰緥
-    mockServiceIntegrator = {
+    // 閸掓稑缂撳Ο鈩冨珯閻ㄥ嚪erviceIntegrator鐎圭偘绶?    mockServiceIntegrator = {
       initialize: jest.fn().mockResolvedValue(true),
       getService: jest.fn(),
       getInitializationStatus: jest.fn().mockReturnValue({
@@ -162,10 +160,9 @@ describe('AppInitializer', () => {
       getAllServices: jest.fn().mockReturnValue([])
     };
     
-    // 璁㏒erviceIntegrator鏋勯€犲嚱鏁拌繑鍥炴ā鎷熷疄渚?    ServiceIntegrator.mockImplementation(() => mockServiceIntegrator);
+    // 鐠併彃erviceIntegrator閺嬪嫰鈧姴鍤遍弫鎷岀箲閸ョ偞膩閹风喎鐤勬笟?    ServiceIntegrator.mockImplementation(() => mockServiceIntegrator);
     
-    // 鍒涘缓AppInitializer瀹炰緥
-    appInitializer = new AppInitializer();
+    // 閸掓稑缂揂ppInitializer鐎圭偘绶?    appInitializer = new AppInitializer();
   });
 
   describe('initialize', () => {
@@ -179,7 +176,7 @@ describe('AppInitializer', () => {
       
       const result = await appInitializer.initialize(appConfig);
       
-      // 楠岃瘉鍒濆鍖栬繃绋?      expect(ServiceIntegrator).toHaveBeenCalled();
+      // 妤犲矁鐦夐崚婵嗩潗閸栨牞绻冪粙?      expect(ServiceIntegrator).toHaveBeenCalled();
       expect(mockServiceIntegrator.initialize).toHaveBeenCalledWith(appConfig);
       expect(appInitializer.isInitialized).toBe(true);
       expect(result).toBe(true);
@@ -188,7 +185,7 @@ describe('AppInitializer', () => {
     test('should handle initialization failure', async () => {
       const appConfig = { appName: 'TestApp' };
       
-      // 妯℃嫙鍒濆鍖栧け璐?      mockServiceIntegrator.initialize.mockResolvedValue(false);
+      // 濡剝瀚欓崚婵嗩潗閸栨牕銇戠拹?      mockServiceIntegrator.initialize.mockResolvedValue(false);
       
       const result = await appInitializer.initialize(appConfig);
       
@@ -199,7 +196,7 @@ describe('AppInitializer', () => {
     test('should handle initialization exception', async () => {
       const appConfig = { appName: 'TestApp' };
       
-      // 妯℃嫙鍒濆鍖栨姏鍑哄紓甯?      const error = new Error('Initialization failed');
+      // 濡剝瀚欓崚婵嗩潗閸栨牗濮忛崙鍝勭磽鐢?      const error = new Error('Initialization failed');
       mockServiceIntegrator.initialize.mockRejectedValue(error);
       
       const result = await appInitializer.initialize(appConfig);
@@ -212,9 +209,9 @@ describe('AppInitializer', () => {
     test('should handle initialization timeout', async () => {
       const appConfig = { appName: 'TestApp', initializationTimeout: 100 };
       
-      // 妯℃嫙鍒濆鍖栬秴鏃?      mockServiceIntegrator.initialize.mockImplementation(() => {
+      // 濡剝瀚欓崚婵嗩潗閸栨牞绉撮弮?      mockServiceIntegrator.initialize.mockImplementation(() => {
         return new Promise(() => {
-          // 姘歌繙涓峳esolve
+          // 濮樻瓕绻欐稉宄砮solve
         });
       });
       
@@ -229,7 +226,7 @@ describe('AppInitializer', () => {
 
   describe('reinitialize', () => {
     test('should reinitialize app successfully', async () => {
-      // 鍏堝垵濮嬪寲
+      // 閸忓牆鍨垫慨瀣
       appInitializer.isInitialized = true;
       
       const appConfig = { appName: 'TestApp', appVersion: '1.1.0' };
@@ -241,12 +238,12 @@ describe('AppInitializer', () => {
     });
 
     test('should handle reinitialization failure', async () => {
-      // 鍏堝垵濮嬪寲
+      // 閸忓牆鍨垫慨瀣
       appInitializer.isInitialized = true;
       
       const appConfig = { appName: 'TestApp' };
       
-      // 妯℃嫙閲嶆柊鍒濆鍖栧け璐?      mockServiceIntegrator.reinitialize.mockResolvedValue(false);
+      // 濡剝瀚欓柌宥嗘煀閸掓繂顫愰崠鏍с亼鐠?      mockServiceIntegrator.reinitialize.mockResolvedValue(false);
       
       const result = await appInitializer.reinitialize(appConfig);
       
@@ -257,7 +254,7 @@ describe('AppInitializer', () => {
 
   describe('shutdown', () => {
     test('should shutdown app successfully', () => {
-      // 鍏堝垵濮嬪寲
+      // 閸忓牆鍨垫慨瀣
       appInitializer.isInitialized = true;
       appInitializer.serviceIntegrator = mockServiceIntegrator;
       
@@ -341,8 +338,7 @@ describe('AppInitializer', () => {
 
   describe('Static utility functions', () => {
     beforeEach(() => {
-      // 璁剧疆榛樿鐨刟ppInitializer瀹炰緥
-      AppInitializer.defaultInitializer = appInitializer;
+      // 鐠佸墽鐤嗘妯款吇閻ㄥ垷ppInitializer鐎圭偘绶?      AppInitializer.defaultInitializer = appInitializer;
     });
 
     test('initializeServiceLayer should initialize default initializer', async () => {

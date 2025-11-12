@@ -1,40 +1,40 @@
-﻿<!-- review.wxml - 璁㈠崟璇勪环椤甸潰妯℃澘 -->
+锘?!-- review.wxml - 鐠併垹宕熺拠鍕幆妞ょ敻娼板Ο鈩冩緲 -->
 
 <view class="review-container">
-  <!-- 椤堕儴瀵艰埅 -->
+  <!-- 妞ゅ爼鍎寸€佃壈鍩?-->
   <view class="nav-bar">
     <view class="nav-back" bindtap="navigateBack">
-      <text>杩斿洖</text>
+      <text>鏉╂柨娲?/text>
     </view>
-    <view class="nav-title">璇勪环璁㈠崟</view>
+    <view class="nav-title">鐠囧嫪鐜拋銏犲礋</view>
     <view class="nav-placeholder"></view>
   </view>
 
-  <!-- 鍔犺浇涓姸鎬?-->
+  <!-- 閸旂姾娴囨稉顓犲Ц閹?-->
   <view class="loading-container" wx:if="{{loading}}">
     <view class="loading">
-      <text>鍔犺浇涓?..</text>
+      <text>閸旂姾娴囨稉?..</text>
     </view>
   </view>
 
-  <!-- 閿欒鐘舵€?-->
+  <!-- 闁挎瑨顕ら悩鑸碘偓?-->
   <view class="error-container" wx:if="{{error}}">
     <view class="error-message">{{errorMessage}}</view>
-    <button class="btn-primary" bindtap="loadOrderItems">閲嶆柊鍔犺浇</button>
+    <button class="btn-primary" bindtap="loadOrderItems">闁插秵鏌婇崝鐘烘祰</button>
   </view>
 
-  <!-- 璇勪环鍐呭 -->
+  <!-- 鐠囧嫪鐜崘鍛啇 -->
   <view class="review-content" wx:if="{{!loading && !error && reviewData.length > 0}}">
-    <!-- 鍖垮悕璇勪环閫夐」 -->
+    <!-- 閸栧灝鎮曠拠鍕幆闁銆?-->
     <view class="anonymous-option">
-      <text class="anonymous-label">鍖垮悕璇勪环</text>
+      <text class="anonymous-label">閸栧灝鎮曠拠鍕幆</text>
       <switch class="anonymous-switch" checked="{{anonymous}}" bindchange="toggleAnonymous"></switch>
     </view>
 
-    <!-- 鍟嗗搧璇勪环鍒楄〃 -->
+    <!-- 閸熷棗鎼х拠鍕幆閸掓銆?-->
     <view class="goods-review-list">
       <view wx:for="{{reviewData}}" wx:key="index" class="goods-review-item">
-        <!-- 鍟嗗搧淇℃伅 -->
+        <!-- 閸熷棗鎼ф穱鈩冧紖 -->
         <view class="goods-info">
           <view class="goods-image">
             <image src="{{item.product_image}}" mode="aspectFit"></image>
@@ -45,9 +45,9 @@
           </view>
         </view>
 
-        <!-- 璇勫垎 -->
+        <!-- 鐠囧嫬鍨?-->
         <view class="rating-section">
-          <view class="rating-label">璇勫垎</view>
+          <view class="rating-label">鐠囧嫬鍨?/view>
           <view class="rating-stars">
             <view 
               wx:for="[1, 2, 3, 4, 5]" 
@@ -58,16 +58,16 @@
               data-index="{{index}}" 
               data-score="{{star}}"
             >
-              鈽?            </view>
+              閳?            </view>
           </view>
         </view>
 
-        <!-- 璇勪环鍐呭 -->
+        <!-- 鐠囧嫪鐜崘鍛啇 -->
         <view class="content-section">
-          <view class="content-label">璇勪环鍐呭</view>
+          <view class="content-label">鐠囧嫪鐜崘鍛啇</view>
           <textarea 
             class="content-input" 
-            placeholder="璇疯緭鍏ユ偍瀵瑰晢鍝佺殑璇勪环" 
+            placeholder="鐠囩柉绶崗銉﹀亶鐎电懓鏅㈤崫浣烘畱鐠囧嫪鐜? 
             value="{{item.content}}" 
             bindinput="inputContent" 
             data-index="{{index}}"
@@ -76,11 +76,11 @@
           <view class="content-count">{{item.content.length}}/200</view>
         </view>
 
-        <!-- 鍥剧墖涓婁紶 -->
+        <!-- 閸ュ墽澧栨稉濠佺炊 -->
         <view class="image-section">
-          <view class="image-label">涓婁紶鍥剧墖</view>
+          <view class="image-label">娑撳﹣绱堕崶鍓у</view>
           <view class="image-uploader">
-            <!-- 宸蹭笂浼犲浘鐗?-->
+            <!-- 瀹歌弓绗傛导鐘叉禈閻?-->
             <view 
               wx:for="{{item.images}}" 
               wx:for-item="image" 
@@ -92,9 +92,9 @@
               data-image-index="{{imageIndex}}"
             >
               <image src="{{image}}" mode="aspectFit"></image>
-              <view class="image-delete" bindtap="deleteImage" data-index="{{index}}" data-image-index="{{imageIndex}}">脳</view>
+              <view class="image-delete" bindtap="deleteImage" data-index="{{index}}" data-image-index="{{imageIndex}}">鑴?/view>
             </view>
-            <!-- 娣诲姞鍥剧墖鎸夐挳 -->
+            <!-- 濞ｈ濮為崶鍓у閹稿鎸?-->
             <view 
               wx:if="{{item.images.length < 5}}" 
               class="image-add" 
@@ -102,7 +102,7 @@
               data-index="{{index}}"
             >
               <view class="add-icon">+</view>
-              <view class="add-text">娣诲姞鍥剧墖</view>
+              <view class="add-text">濞ｈ濮為崶鍓у</view>
               <view class="add-tip">{{item.images.length}}/5</view>
             </view>
           </view>
@@ -111,14 +111,14 @@
     </view>
   </view>
 
-  <!-- 鎻愪氦鎸夐挳 -->
+  <!-- 閹绘劒姘﹂幐澶愭尦 -->
   <view class="submit-bar" wx:if="{{!loading && !error && reviewData.length > 0}}">
     <button 
       class="btn-submit" 
       bindtap="submitReview" 
       disabled="{{submitting}}"
     >
-      {{submitting ? '鎻愪氦涓?..' : '鎻愪氦璇勪环'}}
+      {{submitting ? '閹绘劒姘︽稉?..' : '閹绘劒姘︾拠鍕幆'}}
     </button>
   </view>
 </view>\n

@@ -1,12 +1,12 @@
-﻿<!-- lazy-image.wxml - 鍥剧墖鎳掑姞杞界粍浠舵ā鏉?-->
+锘?!-- lazy-image.wxml - 閸ュ墽澧栭幊鎺戝鏉炵晫绮嶆禒鑸的侀弶?-->
 <view 
   class="lazy-image-container {{containerClass}}" 
   style="{{containerStyle}}"
   bindtap="onImageTap"
 >
-  <!-- 鍗犱綅鍥炬垨鍔犺浇涓殑缂╃暐鍥?-->
+  <!-- 閸楃姳缍呴崶鐐灗閸旂姾娴囨稉顓犳畱缂傗晝鏆愰崶?-->
   <view class="image-wrapper">
-    <!-- 鏄剧ず鐨勫浘鐗?-->
+    <!-- 閺勫墽銇氶惃鍕禈閻?-->
     <image
       class="lazy-image {{imageClass}}"
       style="{{imgStyle}}"
@@ -17,14 +17,14 @@
       binderror="onImageTap"
     ></image>
     
-    <!-- 鍔犺浇鍔ㄧ敾 -->
+    <!-- 閸旂姾娴囬崝銊ф暰 -->
     <view class="loading-indicator" wx:if="{{isLoading && showLoading}}">
       <view class="loading-spinner"></view>
     </view>
     
-    <!-- 鍔犺浇澶辫触鎻愮ず - 鐜板湪浣跨敤error鐘舵€佹潵鎺у埗 -->
+    <!-- 閸旂姾娴囨径杈Е閹绘劗銇?- 閻滄澘婀担璺ㄦ暏error閻樿埖鈧焦娼甸幒褍鍩?-->
     <view class="error-indicator" wx:if="{{error}}">
-      <text class="error-text">鐐瑰嚮閲嶈瘯</text>
+      <text class="error-text">閻愮懓鍤柌宥堢槸</text>
     </view>
   </view>
 </view>\n

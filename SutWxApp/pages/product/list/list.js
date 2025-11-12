@@ -1,22 +1,20 @@
-﻿// 鍟嗗搧鍒楄〃椤甸潰閫昏緫
-import { showToast } from '../../../utils/global';
+锘?/ 閸熷棗鎼ч崚妤勩€冩い鐢告桨闁槒绶?import { showToast } from '../../../utils/global';
 
 Page({
   data: {
-    productList: [], // 鍟嗗搧鍒楄〃鏁版嵁
-    loading: true, // 鍔犺浇鐘舵€?    error: false, // 閿欒鐘舵€?    errorMsg: '', // 閿欒淇℃伅
-    page: 1, // 褰撳墠椤电爜
-    hasMore: true, // 鏄惁鏈夋洿澶氭暟鎹?    categoryId: '', // 鍒嗙被ID
-    keyword: '', // 鎼滅储鍏抽敭璇?    sort: 'default', // 鎺掑簭鏂瑰紡
-    filters: {} // 绛涢€夋潯浠?  },
+    productList: [], // 閸熷棗鎼ч崚妤勩€冮弫鐗堝祦
+    loading: true, // 閸旂姾娴囬悩鑸碘偓?    error: false, // 闁挎瑨顕ら悩鑸碘偓?    errorMsg: '', // 闁挎瑨顕ゆ穱鈩冧紖
+    page: 1, // 瑜版挸澧犳い鐢电垳
+    hasMore: true, // 閺勵垰鎯侀張澶嬫纯婢舵碍鏆熼幑?    categoryId: '', // 閸掑棛琚獻D
+    keyword: '', // 閹兼粎鍌ㄩ崗鎶芥暛鐠?    sort: 'default', // 閹烘帒绨弬鐟扮础
+    filters: {} // 缁涙盯鈧娼禒?  },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸旂姾娴?   */
   onLoad: function(options) {
     const app = getApp();
     
-    // 浠庨〉闈㈠弬鏁拌幏鍙栧垎绫籌D鍜屽叧閿瘝
+    // 娴犲酣銆夐棃銏犲棘閺佹媽骞忛崣鏍у瀻缁睂D閸滃苯鍙ч柨顔跨槤
     if (options.categoryId) {
       this.setData({
         categoryId: options.categoryId
@@ -30,7 +28,7 @@ Page({
     
     this.loadProductList();
     
-    // 璁板綍椤甸潰璁块棶浜嬩欢
+    // 鐠佹澘缍嶆い鐢告桨鐠佸潡妫舵禍瀣╂
     app.services.analytics.trackPageView('product_list', {
       category_id: options.categoryId || 'all',
       keyword: options.keyword || ''
@@ -38,14 +36,13 @@ Page({
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閺勫墽銇?   */
   onShow: function() {
-    // 椤甸潰鏄剧ず鏃剁殑澶勭悊
+    // 妞ょ敻娼伴弰鍓с仛閺冨墎娈戞径鍕倞
   },
 
   /**
-   * 鐩戝惉鐢ㄦ埛涓嬫媺鍔ㄤ綔
+   * 閻╂垵鎯夐悽銊﹀煕娑撳濯洪崝銊ょ稊
    */
   onPullDownRefresh: function() {
     this.setData({
@@ -57,7 +54,7 @@ Page({
   },
 
   /**
-   * 椤甸潰涓婃媺瑙﹀簳浜嬩欢鐨勫鐞嗗嚱鏁?   */
+   * 妞ょ敻娼版稉濠冨鐟欙箑绨虫禍瀣╂閻ㄥ嫬顦╅悶鍡楀毐閺?   */
   onReachBottom: function() {
     if (this.data.hasMore && !this.data.loading) {
       this.loadMoreProductList();
@@ -65,7 +62,7 @@ Page({
   },
 
   /**
-   * 鍔犺浇鍟嗗搧鍒楄〃鏁版嵁
+   * 閸旂姾娴囬崯鍡楁惂閸掓銆冮弫鐗堝祦
    */
   loadProductList: async function() {
     const app = getApp();
@@ -75,8 +72,7 @@ Page({
     });
 
     try {
-      // 鏋勫缓璇锋眰鍙傛暟
-      const params = {
+      // 閺嬪嫬缂撶拠閿嬬湴閸欏倹鏆?      const params = {
         page: this.data.page,
         category_id: this.data.categoryId,
         keyword: this.data.keyword,
@@ -84,8 +80,7 @@ Page({
         ...this.data.filters
       };
 
-      // 浣跨敤productService鑾峰彇鍟嗗搧鍒楄〃
-      const result = await app.services.product.getProductList(params);
+      // 娴ｈ法鏁roductService閼惧嘲褰囬崯鍡楁惂閸掓銆?      const result = await app.services.product.getProductList(params);
       
       this.setData({
         productList: result.products,
@@ -93,21 +88,20 @@ Page({
         loading: false
       });
     } catch (error) {
-      console.error('鑾峰彇鍟嗗搧鍒楄〃澶辫触:', error);
+      console.error('閼惧嘲褰囬崯鍡楁惂閸掓銆冩径杈Е:', error);
       this.setData({
         loading: false,
         error: true,
-        errorMsg: error.message || '鍔犺浇澶辫触锛岃閲嶈瘯'
+        errorMsg: error.message || '閸旂姾娴囨径杈Е閿涘矁顕柌宥堢槸'
       });
-      showToast('鑾峰彇鍟嗗搧鍒楄〃澶辫触', 'none');
+      showToast('閼惧嘲褰囬崯鍡楁惂閸掓銆冩径杈Е', 'none');
     } finally {
       wx.stopPullDownRefresh();
     }
   },
 
   /**
-   * 鍔犺浇鏇村鍟嗗搧
-   */
+   * 閸旂姾娴囬弴鏉戭樋閸熷棗鎼?   */
   loadMoreProductList: async function() {
     const app = getApp();
     this.setData({
@@ -116,8 +110,7 @@ Page({
     });
 
     try {
-      // 鏋勫缓璇锋眰鍙傛暟
-      const params = {
+      // 閺嬪嫬缂撶拠閿嬬湴閸欏倹鏆?      const params = {
         page: this.data.page,
         category_id: this.data.categoryId,
         keyword: this.data.keyword,
@@ -125,8 +118,7 @@ Page({
         ...this.data.filters
       };
 
-      // 浣跨敤productService鑾峰彇鏇村鍟嗗搧
-      const result = await app.services.product.getProductList(params);
+      // 娴ｈ法鏁roductService閼惧嘲褰囬弴鏉戭樋閸熷棗鎼?      const result = await app.services.product.getProductList(params);
       
       this.setData({
         productList: this.data.productList.concat(result.products),
@@ -134,24 +126,23 @@ Page({
         loading: false
       });
     } catch (error) {
-      console.error('鍔犺浇鏇村鍟嗗搧澶辫触:', error);
+      console.error('閸旂姾娴囬弴鏉戭樋閸熷棗鎼ф径杈Е:', error);
       this.setData({
         loading: false,
         error: true,
-        errorMsg: error.message || '鍔犺浇鏇村澶辫触锛岃閲嶈瘯'
+        errorMsg: error.message || '閸旂姾娴囬弴鏉戭樋婢惰精瑙﹂敍宀冾嚞闁插秷鐦?
       });
-      showToast('鍔犺浇鏇村澶辫触', 'none');
+      showToast('閸旂姾娴囬弴鏉戭樋婢惰精瑙?, 'none');
     }
   },
 
   /**
-   * 鐐瑰嚮鍟嗗搧杩涘叆璇︽儏椤?   */
+   * 閻愮懓鍤崯鍡楁惂鏉╂稑鍙嗙拠锔藉剰妞?   */
   onProductTap: function(e) {
     const productId = e.currentTarget.dataset.id;
     const app = getApp();
     
-    // 璁板綍鐐瑰嚮浜嬩欢
-    app.services.analytics.trackEvent('product_click', {
+    // 鐠佹澘缍嶉悙鐟板毊娴滃娆?    app.services.analytics.trackEvent('product_click', {
       product_id: productId
     });
     
@@ -161,14 +152,13 @@ Page({
   },
 
   /**
-   * 鎼滅储鍟嗗搧
+   * 閹兼粎鍌ㄩ崯鍡楁惂
    */
   onSearch: function(e) {
     const app = getApp();
     const keyword = e.detail.value || '';
     
-    // 璁板綍鎼滅储浜嬩欢
-    app.services.analytics.trackEvent('product_search', {
+    // 鐠佹澘缍嶉幖婊呭偍娴滃娆?    app.services.analytics.trackEvent('product_search', {
       keyword: keyword
     });
     
@@ -182,14 +172,12 @@ Page({
   },
 
   /**
-   * 鍒囨崲鎺掑簭鏂瑰紡
-   */
+   * 閸掑洦宕查幒鎺戠碍閺傜懓绱?   */
   onChangeSort: function(e) {
     const app = getApp();
     const sort = e.currentTarget.dataset.sort;
     
-    // 璁板綍鎺掑簭浜嬩欢
-    app.services.analytics.trackEvent('product_sort_change', {
+    // 鐠佹澘缍嶉幒鎺戠碍娴滃娆?    app.services.analytics.trackEvent('product_sort_change', {
       sort: sort
     });
     
@@ -203,18 +191,18 @@ Page({
   },
 
   /**
-   * 鎵撳紑绛涢€夐潰鏉?   */
+   * 閹垫挸绱戠粵娑⑩偓澶愭桨閺?   */
   openFilterPanel: function() {
     const app = getApp();
     
-    // 绛涢€夐潰鏉块€昏緫
+    // 缁涙盯鈧娼伴弶鍧椻偓鏄忕帆
     wx.showActionSheet({
-      itemList: ['浠锋牸浠庝綆鍒伴珮', '浠锋牸浠庨珮鍒颁綆', '閿€閲忎紭鍏?, '鏈€鏂颁笂鏋?],
+      itemList: ['娴犻攱鐗告禒搴濈秵閸掍即鐝?, '娴犻攱鐗告禒搴ㄧ彯閸掗缍?, '闁库偓闁插繋绱崗?, '閺堚偓閺傞绗傞弸?],
       success: (res) => {
         const sortOptions = ['price_asc', 'price_desc', 'sales', 'newest'];
         const selectedSort = sortOptions[res.tapIndex];
         
-        // 璁板綍绛涢€変簨浠?        app.services.analytics.trackEvent('product_filter_change', {
+        // 鐠佹澘缍嶇粵娑⑩偓澶夌皑娴?        app.services.analytics.trackEvent('product_filter_change', {
           sort: selectedSort
         });
         
@@ -230,7 +218,7 @@ Page({
   },
 
   /**
-   * 閲嶈瘯鍔犺浇
+   * 闁插秷鐦崝鐘烘祰
    */
   onRetry: function() {
     this.loadProductList();

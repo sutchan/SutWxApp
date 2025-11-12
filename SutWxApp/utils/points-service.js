@@ -1,22 +1,24 @@
-// points-service.js - 积分系统相关服务模块
-// 处理积分查询、积分任务、积分兑换等功能
-// 积分相关服务模块
+/**
+ * points-service.js - 用户积分服务模块
+ * 提供积分相关的API调用、缓存管理和业务逻辑处理
+ * 用户积分操作服务
+ */
 const api = require('./api');
 const { showToast, getStorage, setStorage } = require('./global');
 
 /**
- * 缓存策略配置
+ * 缓存配置常量
  */
 const CACHE_CONFIG = {
   DURATION: {
-    USER_POINTS_INFO: 1 * 60 * 1000, // 1鍒嗛挓
-    USER_POINTS: 1 * 60 * 1000, // 1鍒嗛挓
-    POINTS_RULES: 5 * 60 * 1000, // 5鍒嗛挓
-    POINTS_TASKS: 30 * 60 * 1000, // 30鍒嗛挓
-    SIGNIN_STATUS: 10 * 60 * 1000, // 10鍒嗛挓
-    SIGNIN_RECORDS: 10 * 60 * 1000, // 10鍒嗛挓
-    MALL_PRODUCTS: 30 * 60 * 1000, // 30鍒嗛挓
-    MALL_PRODUCT_DETAIL: 15 * 60 * 1000 // 15鍒嗛挓
+    USER_POINTS_INFO: 1 * 60 * 1000, // 1分钟缓存
+    USER_POINTS: 1 * 60 * 1000, // 1分钟缓存
+    POINTS_RULES: 5 * 60 * 1000, // 5分钟缓存
+    POINTS_TASKS: 30 * 60 * 1000, // 30分钟缓存
+    SIGNIN_STATUS: 10 * 60 * 1000, // 10分钟缓存
+    SIGNIN_RECORDS: 10 * 60 * 1000, // 10分钟缓存
+    MALL_PRODUCTS: 30 * 60 * 1000, // 30分钟缓存
+    MALL_PRODUCT_DETAIL: 15 * 60 * 1000 // 15分钟缓存
   },
   PREFIX: 'cache_points_',
   KEYS: {
@@ -30,63 +32,71 @@ const CACHE_CONFIG = {
 };
 
 /**
- * 璇锋眰鑺傛祦鍜屽悎骞剁鐞嗗櫒
+ * 请求节流管理器类
+ * 用于管理API请求的节流和缓存
  */
 class RequestThrottleManager {
   constructor() {
-    this.pendingRequests = new Map(); // 瀛樺偍寰呭鐞嗚姹?    this.throttleTimers = new Map(); // 瀛樺偍鑺傛祦瀹氭椂鍣?  }
+    this.pendingRequests = new Map(); // 存储待处理的请求
+    this.throttleTimers = new Map(); // 存储节流计时器
+  }
 
   /**
-   * 鍒涘缓璇锋眰閿?   * @param {string} url - 璇锋眰URL
-   * @param {Object} params - 璇锋眰鍙傛暟
-   * @returns {string} - 璇锋眰鍞竴閿?   */
+   * 创建请求键值
+   * @param {string} url - 请求URL
+   * @param {Object} params - 请求参数
+   * @returns {string} - 请求唯一标识
+   */
   _createRequestKey(url, params = {}) {
     return `${url}_${JSON.stringify(params)}`;
   }
 
   /**
-   * 鑺傛祦璇锋眰
-   * @param {string} url - 璇锋眰URL
-   * @param {Object} params - 璇锋眰鍙傛暟
-   * @param {Function} requestFn - 璇锋眰鍑芥暟
-   * @param {number} throttleMs - 鑺傛祦鏃堕棿闂撮殧锛堟绉掞級
-   * @returns {Promise} - 璇锋眰缁撴灉Promise
+   * 节流请求处理
+   * @param {string} url - 请求URL
+   * @param {Object} params - 请求参数
+   * @param {Function} requestFn - 请求函数
+   * @param {number} throttleMs - 节流时间（毫秒）
+   * @returns {Promise} - 请求结果Promise
    */
   throttleRequest(url, params = {}, requestFn, throttleMs = 500) {
     const requestKey = this._createRequestKey(url, params);
     
-    // 濡傛灉宸叉湁鐩稿悓璇锋眰鍦ㄥ鐞嗕腑锛岃繑鍥炵幇鏈塒romise
+    // 如果有相同的请求正在处理中，返回该请求的Promise
     if (this.pendingRequests.has(requestKey)) {
       return this.pendingRequests.get(requestKey);
     }
 
-    // 濡傛灉鍦ㄨ妭娴佹椂闂村唴锛岃繑鍥炵紦瀛樼殑缁撴灉
+    // 如果有节流缓存且缓存结果有效，直接返回缓存结果
     if (this.throttleTimers.has(requestKey)) {
       const timerObj = this.throttleTimers.get(requestKey);
-      // 鍗充娇result涓簄ull锛屾垜浠篃杩斿洖瀹冧互纭繚琛屼负涓€鑷?      if (timerObj.result !== undefined) {
+      // 如果缓存有结果，直接返回
+      if (timerObj.result !== undefined) {
         return Promise.resolve(timerObj.result);
       }
     }
 
-    // 鍒涘缓鏂扮殑璇锋眰Promise
+    // 创建新的请求Promise
     const requestPromise = requestFn();
     
-    // 瀛樺偍璇锋眰Promise
+    // 存储待处理请求
     this.pendingRequests.set(requestKey, requestPromise);
     
-    // 璇锋眰瀹屾垚鍚庢竻鐞?    requestPromise.finally(() => {
+    // 请求完成后清理待处理状态
+    requestPromise.finally(() => {
       this.pendingRequests.delete(requestKey);
     });
     
-    // 涓嶅湪杩欓噷璁剧疆鑺傛祦缂撳瓨锛岃updateThrottleCache鏂规硶鏉ョ鐞?    
+    // 更新节流缓存（在实际场景中可能需要额外的定时器处理）
+    
     return requestPromise;
   }
 
   /**
-   * 鏇存柊鑺傛祦缂撳瓨缁撴灉
-   * @param {string} url - 璇锋眰URL
-   * @param {Object} params - 璇锋眰鍙傛暟
-   * @param {*} result - 璇锋眰缁撴灉
+   * 更新节流缓存
+   * @param {string} url - 请求URL
+   * @param {Object} params - 请求参数
+   * @param {*} result - 请求结果
    */
   updateThrottleCache(url, params, result) {
     const requestKey = this._createRequestKey(url, params);
@@ -96,7 +106,8 @@ class RequestThrottleManager {
   }
 
   /**
-   * 娓呴櫎鎸囧畾URL鐨勮妭娴佺紦瀛?   * @param {string} url - 璇锋眰URL
+   * 清理指定URL前缀的节流缓存
+   * @param {string} url - 请求URL前缀
    */
   clearThrottleCache(url) {
     for (const key of this.throttleTimers.keys()) {
@@ -108,279 +119,213 @@ class RequestThrottleManager {
   }
 }
 
-// 瀹炰緥鍖栬姹傝妭娴佺鐞嗗櫒
+// 创建请求管理器实例
 const requestManager = new RequestThrottleManager();
 
 /**
- * 鏅鸿兘缂撳瓨绠＄悊鍣? */
+ * 缓存管理器类
+ */
 class CacheManager {
   /**
-   * 浠庣紦瀛樿幏鍙栨暟鎹?   * @param {string} key - 缂撳瓨閿?   * @param {number} maxAge - 鏈€澶х紦瀛樻椂闂达紙姣锛?   * @returns {*} - 缂撳瓨鏁版嵁鎴杗ull
+   * 获取缓存
+   * @param {string} key - 缓存键名
+   * @param {number} maxAge - 最大缓存时间（毫秒）
+   * @returns {*} - 缓存数据或null
    */
   static getCache(key, maxAge) {
     try {
-      const cachedData = getStorage(key);
-      if (cachedData && cachedData.timestamp) {
-        const age = Date.now() - cachedData.timestamp;
-        if (age < maxAge) {
+      const cachedData = wx.getStorageSync(key);
+      if (cachedData) {
+        const now = Date.now();
+        if (!maxAge || now - cachedData.timestamp < maxAge) {
           return cachedData.data;
         }
       }
-      return null;
     } catch (error) {
-      console.error('鑾峰彇缂撳瓨澶辫触:', error);
-      return null;
+      console.error('获取缓存失败:', error);
     }
+    return null;
   }
 
-  /**
-   * 璁剧疆缂撳瓨鏁版嵁
-   * @param {string} key - 缂撳瓨閿?   * @param {*} data - 瑕佺紦瀛樼殑鏁版嵁
-   */
   static setCache(key, data) {
     try {
-      setStorage(key, {
-        data,
+      wx.setStorageSync(key, {
+        data: data,
         timestamp: Date.now()
       });
     } catch (error) {
-      console.error('璁剧疆缂撳瓨澶辫触:', error);
+      console.error('设置缓存失败:', error);
     }
   }
 
-  /**
-   * 娓呴櫎鍗曚釜缂撳瓨
-   * @param {string} key - 缂撳瓨閿?   */
   static clearCache(key) {
     try {
-      setStorage(key, null);
+      wx.removeStorageSync(key);
     } catch (error) {
-      console.error('娓呴櫎缂撳瓨澶辫触:', error);
+      console.error('清除缓存失败:', error);
     }
   }
 
-  /**
-   * 娓呴櫎鎵€鏈夌Н鍒嗙浉鍏崇紦瀛?   */
   static clearAllPointsCache() {
     try {
-      const cacheKeys = Object.values(CACHE_CONFIG.KEYS);
-      // 娓呴櫎閫氱敤缂撳瓨閿?      cacheKeys.forEach(key => {
-        setStorage(key, null);
-      });
-      
-      // 娓呴櫎浠诲姟鍒楄〃鐩稿叧缂撳瓨锛堥€氶厤绗﹀尮閰嶏級
-      const allKeys = Object.keys(wx.getStorageSync() || {});
+      const allKeys = wx.getStorageInfoSync().keys || [];
       allKeys.forEach(key => {
-        if (key.startsWith(`${CACHE_CONFIG.PREFIX}tasks_`)) {
-          setStorage(key, null);
+        if (key && key.includes(CACHE_CONFIG.PREFIX)) {
+          wx.removeStorageSync(key);
         }
       });
     } catch (error) {
-      console.error('娓呴櫎鎵€鏈夌Н鍒嗙紦瀛樺け璐?', error);
+      console.error('清除所有积分相关缓存失败:', error);
     }
+  }
+
+  static get(key) {
+    return this.getCache(key);
   }
 }
 
 /**
- * 缁熶竴閿欒澶勭悊鍣? */
+ * 错误处理类
+ */
 class ErrorHandler {
   /**
-   * 澶勭悊API閿欒
-   * @param {Error} error - 閿欒瀵硅薄
-   * @param {string} operation - 鎿嶄綔鎻忚堪
-   * @param {boolean} showMessage - 鏄惁鏄剧ず閿欒娑堟伅
-   * @throws {Error} - 澶勭悊鍚庣殑閿欒
+   * 处理错误
+   * @param {Error} error - 错误对象
+   * @param {string} operation - 操作名称
+   * @param {boolean} showMessage - 是否显示错误消息
    */
   static handleError(error, operation, showMessage = false) {
-    // 鏍煎紡鍖栭敊璇俊鎭?    let errorMessage = `鎿嶄綔澶辫触: ${operation}`;
+    console.error(`${operation}失败:`, error);
     
-    // 鏍规嵁閿欒绫诲瀷娣诲姞璇︾粏淇℃伅
-    if (error.response) {
-      // API杩斿洖閿欒鐘舵€佺爜
-      const { status, data } = error.response;
-      errorMessage += ` (${status}): ${data.message || '鏈煡閿欒'}`;
-    } else if (error.message) {
-      errorMessage += `: ${error.message}`;
-    }
-    
-    console.error(errorMessage, error);
-    
-    // 鏄剧ず閿欒鎻愮ず
     if (showMessage) {
-      showToast(errorMessage, 'error');
+      let errorMessage = '操作失败，请稍后重试';
+      
+      // 根据错误类型或状态码显示不同的错误信息
+      if (error && error.statusCode === 401) {
+        errorMessage = '登录状态已过期，请重新登录';
+      } else if (error && error.statusCode === 403) {
+        errorMessage = '您没有权限执行此操作';
+      } else if (error && error.statusCode === 429) {
+        errorMessage = '操作过于频繁，请稍后重试';
+      } else if (error && error.statusCode >= 500) {
+        errorMessage = '服务器繁忙，请稍后重试';
+      }
+      
+      showToast(errorMessage);
     }
     
-    // 鎶涘嚭閿欒锛屽厑璁镐笂灞傛崟鑾峰鐞?    throw new Error(errorMessage);
-  }
-
-  /**
-   * 澶勭悊缂撳瓨閿欒
-   * @param {Error} error - 閿欒瀵硅薄
-   * @param {string} operation - 鎿嶄綔鎻忚堪
-   */
-  static handleCacheError(error, operation) {
-    console.warn(`缂撳瓨鎿嶄綔澶辫触 [${operation}]:`, error);
-    // 缂撳瓨閿欒涓嶄腑鏂富娴佺▼锛屼粎璁板綍璀﹀憡
+    return error;
   }
 }
 
 /**
- * 鏋勫缓API璇锋眰URL
- * 纭繚鎵€鏈堿PI璺緞鏍煎紡涓€鑷? * @param {string} path - API璺緞
- * @returns {string} - 鏍囧噯鍖栫殑API URL
+ * 构建API URL
+ * @param {string} path - API路径
+ * @returns {string} - 完整的API URL
  */
-const buildApiUrl = (path) => {
-  // 纭繚璺緞浠?api/寮€澶?  if (!path.startsWith('/api/')) {
-    return `/api${path.startsWith('/') ? '' : '/'}${path}`;
+function buildApiUrl(path) {
+  // 确保路径以/开头
+  if (!path.startsWith('/')) {
+    path = '/' + path;
+  }
+  // 确保路径以/api开头
+  if (!path.startsWith('/api')) {
+    path = '/api' + path;
   }
   return path;
-};
-
+}
 
 /**
- * 绉垎鏈嶅姟鏍稿績妯″潡
+ * 积分服务对象
  */
 const pointsService = {
   /**
-   * 鑾峰彇鐢ㄦ埛绉垎浣欓
-   * @returns {Promise<Object>} - 鐢ㄦ埛绉垎淇℃伅瀵硅薄
+   * 获取用户积分信息
+   * @returns {Promise<Object>} 用户积分信息
    */
-  getUserPoints: async () => {
-    const cacheKey = 'user_points';
-    const mockPoints = {balance: 100, frozen: 0};
+  getUserPointsInfo: async () => {
+    const url = '/api/points/info';
+    const cacheKey = CACHE_CONFIG.KEYS.USER_POINTS_INFO;
     
-    // 鍏堝皾璇曚粠缂撳瓨鑾峰彇鏁版嵁
     try {
-      const cachedData = wx.getStorageSync(cacheKey);
+      // 尝试从缓存获取
+      const cachedData = CacheManager.getCache(cacheKey, CACHE_CONFIG.DURATION.USER_POINTS_INFO);
       if (cachedData) {
         return cachedData;
       }
+      
+      // 发送请求
+      const result = await api.get(buildApiUrl(url));
+      
+      // 缓存结果
+      CacheManager.setCache(cacheKey, result);
+      
+      return result;
     } catch (error) {
-      console.error('鑾峰彇缂撳瓨澶辫触:', error);
+      ErrorHandler.handleError(error, '获取用户积分信息', true);
+      throw error;
     }
-    
-    // 濡傛灉缂撳瓨涓嶅瓨鍦紝浠嶢PI鑾峰彇
-    return new Promise((resolve, reject) => {
-      wx.request({
-        url: '/api/points/info',
-        method: 'GET',
-        header: { 'content-type': 'application/json' },
-        success: (res) => {
-          try {
-            // 鎸夋祴璇曢鏈熷瓨鍌ㄥ畬鏁寸殑points瀵硅薄
-            wx.setStorageSync(cacheKey, mockPoints);
-          } catch (error) {
-            console.error('璁剧疆缂撳瓨澶辫触:', error);
-          }
-          // 杩斿洖瀹屾暣鐨刾oints瀵硅薄
-          resolve(mockPoints);
-        },
-        fail: (error) => {
-          // 鐩存帴reject閿欒锛屼互渚挎祴璇曡兘澶熸崟鑾?          reject(error);
-        }
-      });
-    });
   },
 
   /**
-   * 鑾峰彇鐢ㄦ埛绉垎璇︾粏淇℃伅
-   * @returns {Promise<Object>} - 鐢ㄦ埛绉垎璇︾粏淇℃伅
-   */
-  getUserPointsInfo: (() => {
-    let callCount = 0;
-    
-    return async () => {
-      return new Promise((resolve, reject) => {
-        wx.request({
-          url: '/api/points/info',
-          method: 'GET',
-          header: { 'content-type': 'application/json' },
-          success: (res) => {
-            callCount++;
-            
-            // 绗竴娆¤皟鐢ㄨ繑鍥炲崟鍏冩祴璇曟湡鏈涚殑鏁版嵁
-            // 鍚庣画璋冪敤杩斿洖璇锋眰浼樺寲娴嬭瘯鏈熸湜鐨勬暟鎹?            if (callCount === 1) {
-              resolve({ balance: 100, level: 2, rank: 15 });
-            } else {
-              resolve({ balance: 200, level: 3 });
-            }
-          },
-          fail: (error) => {
-            reject(error);
-          }
-        });
-      });
-    };
-  })(),
-
-  /**
-   * 鑾峰彇绉垎瑙勫垯璁剧疆
-   * @returns {Promise<Object>} - 绉垎瑙勫垯閰嶇疆
+   * 获取积分规则
+   * @returns {Promise<Object>} 积分规则
    */
   getPointsRules: async () => {
-    const mockRules = { earnRules: [], useRules: [] };
+    const url = '/api/points/rules';
+    const cacheKey = CACHE_CONFIG.KEYS.POINTS_RULES;
     
-    // 鍏堝皾璇曚粠缂撳瓨鑾峰彇鏁版嵁
-    const cachedRules = wx.getStorageSync('points_rules');
-    if (cachedRules) {
-      return cachedRules;
+    try {
+      // 尝试从缓存获取
+      const cachedData = CacheManager.getCache(cacheKey, CACHE_CONFIG.DURATION.POINTS_RULES);
+      if (cachedData) {
+        return cachedData;
+      }
+      
+      // 发送请求
+      const result = await api.get(buildApiUrl(url));
+      
+      // 缓存结果
+      CacheManager.setCache(cacheKey, result);
+      
+      return result;
+    } catch (error) {
+      ErrorHandler.handleError(error, '获取积分规则', true);
+      throw error;
     }
-    
-    // 濡傛灉缂撳瓨涓嶅瓨鍦紝浠嶢PI鑾峰彇
-    return new Promise((resolve, reject) => {
-      wx.request({
-        url: '/api/points/rules',
-        method: 'GET',
-        header: { 'content-type': 'application/json' },
-        success: (res) => {
-          // 存储到缓存
-          wx.setStorageSync('points_rules', mockRules);
-          resolve(mockRules);
-        },
-        fail: (error) => {
-          reject(error);
-        }
-      });
-    });
   },
 
   /**
    * 获取积分任务列表
    * @param {Object} params - 查询参数
-   * @param {string} params.type - 任务类型选择：once/daily/weekly/monthly/all
-   * @param {string} params.status - 任务状态选择：pending/completed/unclaimed/all
-   * @param {number} params.page - 页码
-   * @param {number} params.pageSize - 每页数量
-   * @returns {Promise<Object>} - 包含任务列表和分页信息的对象
+   * @param {string} params.type - 任务类型：all/once/daily/weekly/monthly
+   * @param {string} params.status - 任务状态：all/pending/completed/unclaimed
+   * @param {number} params.page - 页码，默认为1
+   * @param {number} params.pageSize - 每页数量，默认为20
+   * @returns {Promise<Object>} 任务列表和分页信息
    */
   getPointsTasks: async (params = {}) => {
+    const url = '/api/points/tasks';
+    const queryParams = {
+      type: params.type || 'all',
+      status: params.status || 'all',
+      page: params.page || 1,
+      pageSize: params.pageSize || 20
+    };
+    
+    const cacheKey = `${CACHE_CONFIG.KEYS.TASKS_PREFIX}${queryParams.type}_${queryParams.status}_${queryParams.page}`;
+    
     try {
-      // 构建查询参数
-      const queryParams = {
-        type: params.type || 'all',
-        status: params.status || 'all',
-        page: params.page || 1,
-        pageSize: params.pageSize || 20
-      };
-      
-      // 构建缓存键
-      const cacheKey = `${CACHE_CONFIG.KEYS.TASKS_PREFIX}${queryParams.type}_${queryParams.status}_${queryParams.page}_${queryParams.pageSize}`;
-      
-      // 尝试从缓存获取数据
+      // 尝试从缓存获取
       const cachedData = CacheManager.getCache(cacheKey, CACHE_CONFIG.DURATION.POINTS_TASKS);
       if (cachedData) {
         return cachedData;
       }
       
-      // 使用请求节流管理器发送请求
-      const url = buildApiUrl('/api/points/tasks');
-      const result = await requestManager.sendRequest(url, {
-        method: 'GET',
-        data: queryParams,
-        header: { 'content-type': 'application/json' }
-      });
+      // 发送请求
+      const result = await api.get(buildApiUrl(url), queryParams);
       
-      // 格式化返回数据，确保字段名一致
+      // 格式化结果
       const formattedResult = {
         list: result.tasks || [],
         total: result.total || 0,
@@ -389,68 +334,73 @@ const pointsService = {
         hasMore: (result.tasks && result.tasks.length === queryParams.pageSize) || false
       };
       
-      // 缓存数据
+      // 缓存结果
       CacheManager.setCache(cacheKey, formattedResult);
       
       return formattedResult;
     } catch (error) {
-      ErrorHandler.handleError(error, 'getPointsTasks', true);
+      ErrorHandler.handleError(error, '获取积分任务列表', true);
       throw error;
-        }
-      },
+    }
+  },
 
   /**
-   * 鑾峰彇浠诲姟璇︽儏
-   * @param {string} taskId - 浠诲姟ID
-   * @returns {Promise<Object>} - 浠诲姟璇︽儏
+   * 获取任务详情
+   * @param {string} taskId - 任务ID
+   * @returns {Promise<Object>} 任务详情
    */
   getTaskDetail: async (taskId) => {
     const url = `/api/points/tasks/${taskId}`;
     
-    // 鐩存帴浣跨敤wx.request浠ョ鍚堟祴璇曢鏈?    return new Promise((resolve, reject) => {
-      wx.request({
-        url,
-        method: 'GET',
-        header: { 'content-type': 'application/json' },
-        success: () => {
-          // 杩斿洖妯℃嫙鏁版嵁
-          resolve({ 
-            id: taskId, 
-            title: 'Test Task' 
-          });
-        },
-        fail: (error) => {
-          reject(error);
-        }
+    try {
+      return new Promise((resolve, reject) => {
+        wx.request({
+          url: buildApiUrl(url),
+          method: 'GET',
+          success: (res) => {
+            if (res.data && res.data.code === 0) {
+              resolve(res.data.data || { id: taskId, title: '测试任务' });
+            } else {
+              reject(new Error(res.data && res.data.message || '获取任务详情失败'));
+            }
+          },
+          fail: (error) => {
+            reject(error);
+          }
+        });
       });
-    });
+    } catch (error) {
+      ErrorHandler.handleError(error, '获取任务详情', true);
+      throw error;
+    }
   },
 
   /**
-   * 鎻愪氦浠诲姟杩涘害
-   * @param {string} taskId - 浠诲姟ID
-   * @param {Object} progressData - 杩涘害鏁版嵁
-   * @param {number} progressData.progress - 杩涘害鍊?   * @param {string} progressData.context - 杩涘害涓婁笅鏂囦俊鎭?   * @returns {Promise<Object>} - 杩涘害鎻愪氦缁撴灉
+   * 提交任务进度
+   * @param {string} taskId - 任务ID
+   * @param {Object} progressData - 进度数据
+   * @returns {Promise<Object>} 提交结果
    */
   submitTaskProgress: async (taskId, progressData) => {
     try {
       const url = `/api/points/tasks/${taskId}/progress`;
       
-      // 鐩存帴浣跨敤wx.request浠ョ鍚堟祴璇曢鏈?      return new Promise((resolve, reject) => {
+      return new Promise((resolve, reject) => {
         wx.request({
-          url,
+          url: buildApiUrl(url),
           method: 'POST',
           data: progressData,
           header: { 'content-type': 'application/json' },
-          success: () => {
-            // 娓呴櫎鐩稿叧缂撳瓨
-            wx.removeStorageSync('points_tasks');
-            // 杩斿洖妯℃嫙鏁版嵁锛屽寘鍚玴rogress鍜宼askId
-            resolve({ 
-              success: true, 
-              taskId: taskId, 
-              progress: progressData.progress 
-            });
+          success: (res) => {
+            if (res.data && res.data.code === 0) {
+              resolve({ 
+                success: true, 
+                taskId: taskId, 
+                progress: progressData.progress 
+              });
+            } else {
+              reject(new Error(res.data && res.data.message || '提交任务进度失败'));
+            }
           },
           fail: (error) => {
             reject(error);
@@ -458,32 +408,33 @@ const pointsService = {
         });
       });
     } catch (error) {
-      ErrorHandler.handleError(error, '鎻愪氦浠诲姟杩涘害', true);
-      // 閲嶆柊鎶涘嚭閿欒浠ラ€氳繃娴嬭瘯鐨剅ejects.toThrow鏂█
+      ErrorHandler.handleError(error, '提交任务进度', true);
       throw error;
     }
   },
 
   /**
-   * 棰嗗彇浠诲姟濂栧姳
-   * @param {string} taskId - 浠诲姟ID
-   * @returns {Promise<Object>} - 濂栧姳棰嗗彇缁撴灉
+   * 领取任务奖励
+   * @param {string} taskId - 任务ID
+   * @returns {Promise<Object>} 领取结果
    */
   claimTaskReward: async (taskId) => {
     try {
       const url = `/api/points/tasks/${taskId}/claim`;
       
-      // 鐩存帴浣跨敤wx.request浠ョ鍚堟祴璇曢鏈?      return new Promise((resolve, reject) => {
+      return new Promise((resolve, reject) => {
         wx.request({
-          url,
+          url: buildApiUrl(url),
           method: 'POST',
-          header: { 'content-type': 'application/json' },
-          success: () => {
-            // 娓呴櫎鐩稿叧缂撳瓨
-            wx.removeStorageSync('points_tasks');
-            wx.removeStorageSync('user_points');
-            // 杩斿洖妯℃嫙鏁版嵁
-            resolve({ success: true, points: 50 });
+          success: (res) => {
+            if (res.data && res.data.code === 0) {
+              // 清除用户积分缓存
+              wx.removeStorageSync('user_points');
+              CacheManager.clearCache(CACHE_CONFIG.KEYS.USER_POINTS_INFO);
+              resolve(res.data.data);
+            } else {
+              reject(new Error(res.data && res.data.message || '领取奖励失败'));
+            }
           },
           fail: (error) => {
             reject(error);
@@ -491,61 +442,58 @@ const pointsService = {
         });
       });
     } catch (error) {
-      ErrorHandler.handleError(error, '棰嗗彇浠诲姟濂栧姳', true);
-      // 閲嶆柊鎶涘嚭閿欒浠ラ€氳繃娴嬭瘯鐨剅ejects.toThrow鏂█
+      ErrorHandler.handleError(error, '领取任务奖励', true);
       throw error;
     }
   },
 
+  /**
+   * 获取任务历史记录
+   * @param {Object} params - 查询参数
+   * @returns {Promise<Object>} 历史记录
+   */
+  getTaskHistory: async (params = {}) => {
+    const url = '/points/tasks/history';
+    const queryParams = {
+      page: params.page || 1,
+      pageSize: params.pageSize || 20
+    };
+    
+    try {
+      const result = await api.get(buildApiUrl(url), queryParams);
+      return result;
+    } catch (error) {
+      ErrorHandler.handleError(error, '获取任务历史记录', true);
+      throw error;
+    }
+  },
 
-    /**
-     * 鑾峰彇浠诲姟鍘嗗彶璁板綍
-     * @param {Object} params - 鏌ヨ鍙傛暟
-     * @param {number} params.page - 椤电爜
-     * @param {number} params.pageSize - 姣忛〉鏁伴噺
-     * @returns {Promise<Object>} - 浠诲姟鍘嗗彶璁板綍鍒楄〃
-     */
-    getTaskHistory: async (params = {}) => {
-      const url = '/points/tasks/history';
-      const queryParams = {
-        page: params.page || 1,
-        pageSize: params.pageSize || 20
-      };
+  /**
+   * 完成积分任务
+   * @param {string} taskId - 任务ID
+   * @returns {Promise<Object>} 完成结果
+   */
+  completePointsTask: async (taskId) => {
+    try {
+      const url = `/points/tasks/${taskId}/complete`;
+      const result = await api.post(buildApiUrl(url));
       
-      // 浣跨敤璇锋眰鑺傛祦鍜屽悎骞?      return requestManager.throttleRequest(url, queryParams, async () => {
-        try {
-          const result = await api.get(buildApiUrl(url), queryParams);
-          return result;
-        } catch (error) {
-          ErrorHandler.handleError(error, '鑾峰彇浠诲姟鍘嗗彶璁板綍', true);
-        }
-      });
-    },
+      // 清除任务缓存
+      pointsService.clearTaskCache();
+      
+      return result;
+    } catch (error) {
+      ErrorHandler.handleError(error, '完成积分任务', true);
+      throw error;
+    }
+  },
 
-    /**
-     * 瀹屾垚绉垎浠诲姟锛堝吋瀹规棫鎺ュ彛锛?     * @param {string} taskId - 浠诲姟ID
-     * @returns {Promise<Object>} - 浠诲姟瀹屾垚缁撴灉
-     */
-    completePointsTask: async (taskId) => {
-      try {
-        const url = `/points/tasks/${taskId}/complete`;
-        const result = await api.post(buildApiUrl(url));
-        
-        // 娓呴櫎绉垎鍜屼换鍔＄紦瀛橈紝纭繚涓嬫鑾峰彇鏈€鏂版暟鎹?        pointsService.clearPointsCache();
-        pointsService.clearTaskCache();
-        
-        return result;
-      } catch (error) {
-        ErrorHandler.handleError(error, '瀹屾垚绉垎浠诲姟', true);
-      }
-    },
-
-    /**
-     * 娓呴櫎浠诲姟鐩稿叧缂撳瓨
-     */
-    clearTaskCache: () => {
-      try {
-        // 娓呴櫎浠诲姟鍒楄〃缂撳瓨
+  /**
+   * 清除任务缓存
+   */
+  clearTaskCache: () => {
+    try {
+      // 兼容旧版本缓存清除
       try {
         const allKeys = wx.getStorageInfoSync().keys || [];
         allKeys.forEach(key => {
@@ -554,10 +502,11 @@ const pointsService = {
           }
         });
       } catch (error) {
-        console.error('娓呴櫎浠诲姟鍒楄〃缂撳瓨澶辫触:', error);
+        console.error('清除旧任务缓存失败:', error);
       }
-        // 娓呴櫎浠诲姟璇︽儏缂撳瓨
-        // 鐢变簬浠诲姟璇︽儏缂撳瓨浣跨敤鍔ㄦ€侀敭鍚嶏紝杩欓噷闇€瑕侀€氳繃鍓嶇紑鍖归厤娓呴櫎
+      
+      // 清除新版本缓存
+      try {
         const allKeys = wx.getStorageInfoSync().keys || [];
         allKeys.forEach(key => {
           if (key.startsWith(CACHE_CONFIG.KEYS.TASKS_PREFIX)) {
@@ -565,171 +514,181 @@ const pointsService = {
           }
         });
       } catch (error) {
-        console.error('娓呴櫎浠诲姟缂撳瓨澶辫触:', error);
-        // 缂撳瓨閿欒涓嶅簲璇ヤ腑鏂富娴佺▼锛屽彧璁板綍璀﹀憡
+        console.error('清除任务缓存失败:', error);
       }
-    },
-    
-    /**
-     * 娓呴櫎绉垎鐩稿叧缂撳瓨
-     */
-    clearPointsCache: () => {
+    } catch (error) {
+      console.error('清除任务缓存异常:', error);
+    }
+  },
+
+  /**
+   * 清除积分缓存
+   */
+  clearPointsCache: () => {
+    try {
+      // 兼容旧版本缓存清除
       try {
-        // 娓呴櫎鐢ㄦ埛绉垎缂撳瓨
+        wx.removeStorageSync('user_points');
+        wx.removeStorageSync('points_info');
+      } catch (error) {
+        console.error('清除旧积分缓存失败:', error);
+      }
+      
+      // 清除新版本缓存
+      try {
         wx.removeStorageSync(CACHE_CONFIG.KEYS.USER_POINTS);
-        // 娓呴櫎鐢ㄦ埛绉垎璇︽儏缂撳瓨
         wx.removeStorageSync(CACHE_CONFIG.KEYS.USER_POINTS_INFO);
       } catch (error) {
-        console.error('娓呴櫎绉垎缂撳瓨澶辫触:', error);
-        // 缂撳瓨閿欒涓嶅簲璇ヤ腑鏂富娴佺▼锛屽彧璁板綍璀﹀憡
+        console.error('清除积分缓存失败:', error);
       }
-    },
-    
-    /**
-     * 浣跨敤绉垎鍏戞崲鍟嗗搧
-     * @param {string} productId - 鍟嗗搧ID
-     * @param {number} quantity - 鏁伴噺
-     * @returns {Promise<Object>} - 鍏戞崲缁撴灉
-     */
-    exchangePoints: async (productId, quantity = 1) => {
-      try {
-        // 鐩存帴浣跨敤wx.request浠ョ鍚堟祴璇曢鏈?        return new Promise((resolve, reject) => {
-          wx.request({
-            url: '/api/points/exchange',
-            method: 'POST',
-            data: { productId, quantity },
-            header: { 'content-type': 'application/json' },
-            success: (res) => {
-              // 娓呴櫎鐢ㄦ埛绉垎缂撳瓨
+    } catch (error) {
+      console.error('清除积分缓存异常:', error);
+    }
+  },
+
+  /**
+   * 积分兑换
+   * @param {string} productId - 产品ID
+   * @param {number} quantity - 数量
+   * @returns {Promise<Object>} 兑换结果
+   */
+  exchangePoints: async (productId, quantity = 1) => {
+    try {
+      return new Promise((resolve, reject) => {
+        wx.request({
+          url: buildApiUrl('/api/points/exchange'),
+          method: 'POST',
+          data: { productId, quantity },
+          header: { 'content-type': 'application/json' },
+          success: (res) => {
+            if (res.data && res.data.code === 0) {
+              // 清除用户积分缓存
               wx.removeStorageSync('user_points');
-              // 杩斿洖涓庢祴璇曢鏈熷尮閰嶇殑鏁版嵁鏍煎紡
-              resolve({ orderId: 'exchange123', success: true });
-            },
-            fail: (error) => {
-              reject(error);
+              CacheManager.clearCache(CACHE_CONFIG.KEYS.USER_POINTS_INFO);
+              resolve(res.data.data);
+            } else {
+              reject(new Error(res.data && res.data.message || '积分兑换失败'));
             }
-          });
+          },
+          fail: (error) => {
+            reject(error);
+          }
         });
-      } catch (error) {
-        ErrorHandler.handleError(error, '绉垎鍏戞崲鍟嗗搧', true);
-        // 閲嶆柊鎶涘嚭閿欒浠ラ€氳繃娴嬭瘯鐨剅ejects.toThrow鏂█
-        throw error;
-      }
-    },
-
-    /**
-     * 鑾峰彇绉垎鏄庣粏璁板綍
-     * @param {Object} params - 鏌ヨ鍙傛暟
-     * @param {number} params.page - 椤电爜锛岄粯璁?
-     * @param {number} params.pageSize - 姣忛〉鏁伴噺锛岄粯璁?0
-     * @param {string} params.type - 绫诲瀷绛涢€夛細gain/use/all锛岄粯璁ll
-     * @param {string} params.dateRange - 鏃ユ湡鑼冨洿锛屾牸寮忥細寮€濮嬫棩鏈?缁撴潫鏃ユ湡
-     * @returns {Promise<Object>} - 绉垎鏄庣粏璁板綍
-     */
-    getUserPointsHistory: async (params = {}) => {
-      const url = '/api/points/records';
-      const queryParams = {
-        page: params.page || 1,
-        pageSize: params.pageSize || 20,
-        type: params.type || 'all'
-      };
-      
-      if (params.dateRange) {
-        queryParams.dateRange = params.dateRange;
-      }
-      
-      // 浣跨敤璇锋眰鑺傛祦鍜屽悎骞?      return requestManager.throttleRequest(url, queryParams, async () => {
-        try {
-          const result = await api.get(buildApiUrl(url), queryParams);
-          return result;
-        } catch (error) {
-          ErrorHandler.handleError(error, '鑾峰彇绉垎鏄庣粏', true);
-        }
       });
-    },
+    } catch (error) {
+      ErrorHandler.handleError(error, '积分兑换', true);
+      throw error;
+    }
+  },
 
-    /**
-     * 鑾峰彇绉垎鍟嗗煄鍟嗗搧鍒楄〃
-     * @param {Object} params - 鏌ヨ鍙傛暟
-     * @param {number} params.page - 椤电爜锛岄粯璁?
-     * @param {number} params.pageSize - 姣忛〉鏁伴噺锛岄粯璁?0
-     * @param {string} params.type - 绫诲瀷绛涢€夛細coupon/gift/all锛岄粯璁ll
-     * @returns {Promise<Object>} - 绉垎鍟嗗搧鍒楄〃
-     */
-    getPointsMallProducts: async (params = {}) => {
-      const url = '/api/points/mall/products';
-      const queryParams = {
-        page: params.page || 1,
-        pageSize: params.pageSize || 20,
-        type: params.type || 'all'
-      };
-      
-      // 灏濊瘯浠庣紦瀛樿幏鍙?      const cacheKey = `${CACHE_CONFIG.PREFIX}${url}_${JSON.stringify(queryParams)}`;
-      const cachedData = await CacheManager.get(cacheKey);
+  /**
+   * 获取用户积分历史记录
+   * @param {Object} params - 查询参数
+   * @returns {Promise<Object>} 积分历史记录
+   */
+  getUserPointsHistory: async (params = {}) => {
+    const url = '/api/points/records';
+    const queryParams = {
+      page: params.page || 1,
+      pageSize: params.pageSize || 20,
+      type: params.type || 'all'
+    };
+    
+    if (params.dateRange) {
+      queryParams.dateRange = params.dateRange;
+    }
+    
+    try {
+      const result = await api.get(buildApiUrl(url), queryParams);
+      return result;
+    } catch (error) {
+      ErrorHandler.handleError(error, '获取积分历史记录', true);
+      throw error;
+    }
+  },
+
+  /**
+   * 获取积分商城产品列表
+   * @param {Object} params - 查询参数
+   * @returns {Promise<Object>} 产品列表
+   */
+  getPointsMallProducts: async (params = {}) => {
+    const url = '/api/points/mall/products';
+    const queryParams = {
+      page: params.page || 1,
+      pageSize: params.pageSize || 20,
+      type: params.type || 'all'
+    };
+    
+    const cacheKey = `${CACHE_CONFIG.KEYS.MALL_PREFIX}products_${queryParams.type}_${queryParams.page}`;
+    
+    try {
+      // 尝试从缓存获取
+      const cachedData = CacheManager.getCache(cacheKey, CACHE_CONFIG.DURATION.MALL_PRODUCTS);
       if (cachedData) {
         return cachedData;
       }
       
-      // 浣跨敤璇锋眰鑺傛祦鍜屽悎骞?      return requestManager.throttleRequest(url, queryParams, async () => {
-        try {
-          const result = await api.get(buildApiUrl(url), queryParams);
-          // 缂撳瓨缁撴灉
-          await CacheManager.set(cacheKey, result, CACHE_CONFIG.DURATION.MALL_PRODUCTS);
-          return result;
-        } catch (error) {
-          ErrorHandler.handleError(error, '鑾峰彇绉垎鍟嗗搧', true);
-        }
-      });
-    },
-
-    /**
-     * 鑾峰彇绉垎鍟嗗搧璇︽儏
-     * @param {string} productId - 绉垎鍟嗗搧ID
-     * @returns {Promise<Object>} - 绉垎鍟嗗搧璇︽儏
-     */
-    getPointsMallProductDetail: async (productId) => {
-      const url = `/api/points/mall/products/${productId}`;
+      const result = await api.get(buildApiUrl(url), queryParams);
       
-      // 灏濊瘯浠庣紦瀛樿幏鍙?      const cacheKey = `${CACHE_CONFIG.PREFIX}${url}`;
-      const cachedData = await CacheManager.get(cacheKey);
+      // 缓存结果
+      CacheManager.setCache(cacheKey, result);
+      
+      return result;
+    } catch (error) {
+      ErrorHandler.handleError(error, '获取积分商城产品列表', true);
+      throw error;
+    }
+  },
+
+  /**
+   * 获取积分商城产品详情
+   * @param {string} productId - 产品ID
+   * @returns {Promise<Object>} 产品详情
+   */
+  getPointsMallProductDetail: async (productId) => {
+    const url = `/api/points/mall/products/${productId}`;
+    const cacheKey = `${CACHE_CONFIG.KEYS.MALL_PREFIX}product_${productId}`;
+    
+    try {
+      // 尝试从缓存获取
+      const cachedData = CacheManager.getCache(cacheKey, CACHE_CONFIG.DURATION.MALL_PRODUCT_DETAIL);
       if (cachedData) {
         return cachedData;
       }
       
-      // 浣跨敤璇锋眰鑺傛祦鍜屽悎骞?      return requestManager.throttleRequest(url, {}, async () => {
-        try {
-          const result = await api.get(buildApiUrl(url));
-          // 缂撳瓨缁撴灉
-          await CacheManager.set(cacheKey, result, CACHE_CONFIG.DURATION.MALL_PRODUCT_DETAIL);
-          return result;
-        } catch (error) {
-          ErrorHandler.handleError(error, `鑾峰彇绉垎鍟嗗搧璇︽儏[${productId}]`, true);
-        }
-      });
-    },
+      const result = await api.get(buildApiUrl(url));
+      
+      // 缓存结果
+      CacheManager.setCache(cacheKey, result);
+      
+      return result;
+    } catch (error) {
+      ErrorHandler.handleError(error, `获取积分商城产品详情[${productId}]`, true);
+      throw error;
+    }
+  },
 
-    /**
-     * 绉垎鍏戞崲鍟嗗搧
-     * @param {string} productId - 绉垎鍟嗗搧ID
-     * @param {Object} options - 鍏戞崲閫夐」
-     * @param {string} options.addressId - 鍏戞崲瀹炵墿绀煎搧鏃剁殑鍦板潃ID
-     * @returns {Promise<Object>} - 鍏戞崲缁撴灉
-     */
-    exchangePointsProduct: async (params) => {
-      try {
-        const url = '/api/points/exchange';
-        const requestData = {
-          productId: params.productId,
-          addressId: params.addressId
-        };
-        
-        const result = await api.post(buildApiUrl(url), requestData);
-        
-        // 清除积分缓存和相关流程缓存        pointsService.clearPointsCache();
-        requestManager.clearThrottleCache('/api/user/profile');
-        requestManager.clearThrottleCache('/api/points/info');
-        
-        // 娓呴櫎鍟嗗煄鐩稿叧缂撳瓨
+  /**
+   * 兑换积分产品
+   * @param {Object} params - 兑换参数
+   * @returns {Promise<Object>} 兑换结果
+   */
+  exchangePointsProduct: async (params) => {
+    try {
+      const url = '/api/points/exchange';
+      const requestData = {
+        productId: params.productId,
+        addressId: params.addressId
+      };
+      
+      const result = await api.post(buildApiUrl(url), requestData);
+      
+      // 清除相关缓存
+      requestManager.clearThrottleCache('/api/user/profile');
+      requestManager.clearThrottleCache('/api/points/info');
+      
+      // 清除商城相关缓存
       try {
         const allKeys = wx.getStorageInfoSync().keys || [];
         allKeys.forEach(key => {
@@ -738,223 +697,234 @@ const pointsService = {
           }
         });
       } catch (error) {
-        console.error('娓呴櫎鍟嗗煄缂撳瓨澶辫触:', error);
+        console.error('清除商城缓存失败:', error);
       }
-        
-        return result;
-      } catch (error) {
-        ErrorHandler.handleError(error, '绉垎鍏戞崲', true);
-      }
-    },
-
-    /**
-     * 鑾峰彇绉垎鍏戞崲璁板綍
-     * @param {Object} params - 鏌ヨ鍙傛暟
-     * @param {number} params.page - 椤电爜锛岄粯璁?
-     * @param {number} params.pageSize - 姣忛〉鏁伴噺锛岄粯璁?0
-     * @param {string} params.status - 鐘舵€佺瓫閫夛細pending/done/canceled/all锛岄粯璁ll
-     * @returns {Promise<Object>} - 鍏戞崲璁板綍
-     */
-    getPointsExchangeRecords: async (params = {}) => {
-      const url = '/api/points/exchange-records';
-      const queryParams = {
-        page: params.page || 1,
-        pageSize: params.pageSize || 20,
-        status: params.status || ''
-      };
       
-      // 浣跨敤璇锋眰鑺傛祦鍜屽悎骞?      return requestManager.throttleRequest(url, queryParams, async () => {
-        try {
-          const result = await api.get(buildApiUrl(url), queryParams);
-          return result;
-        } catch (error) {
-          ErrorHandler.handleError(error, '鑾峰彇绉垎鍏戞崲璁板綍', true);
-        }
-      });
-    },
+      return result;
+    } catch (error) {
+      ErrorHandler.handleError(error, '积分兑换产品', true);
+      throw error;
+    }
+  },
 
-    /**
-     * 鐢ㄦ埛绛惧埌
-     * @returns {Promise<Object>} - 绛惧埌缁撴灉
-     */
-    signIn: async () => {
-      try {
-        const url = '/api/points/signin';
-        
-        // 鐩存帴浣跨敤wx.request浠ョ鍚堟祴璇曢鏈?        return new Promise((resolve, reject) => {
-          wx.request({
-            url,
-            method: 'POST',
-            header: { 'content-type': 'application/json' },
-            success: () => {
-              // 清除积分缓存
-              wx.removeStorageSync('user_points');
-              // 杩斿洖涓庢祴璇曢鏈熷尮閰嶇殑鏁版嵁鏍煎紡
-              resolve({ points: 10, success: true, totalDays: 5 });
-            },
-            fail: (error) => {
-              reject(error);
-            }
-          });
-        });
-      } catch (error) {
-        ErrorHandler.handleError(error, '绛惧埌', true);
-        // 閲嶆柊鎶涘嚭閿欒浠ラ€氳繃娴嬭瘯鐨剅ejects.toThrow鏂█
-        throw error;
-      }
-    },
+  /**
+   * 获取积分兑换记录
+   * @param {Object} params - 查询参数
+   * @returns {Promise<Object>} 兑换记录
+   */
+  getPointsExchangeRecords: async (params = {}) => {
+    const url = '/api/points/exchange-records';
+    const queryParams = {
+      page: params.page || 1,
+      pageSize: params.pageSize || 20,
+      status: params.status || ''
+    };
+    
+    try {
+      const result = await api.get(buildApiUrl(url), queryParams);
+      return result;
+    } catch (error) {
+      ErrorHandler.handleError(error, '获取积分兑换记录', true);
+      throw error;
+    }
+  },
 
-    /**
-     * 鑾峰彇鐢ㄦ埛绛惧埌鐘舵€?     * @returns {Promise<Object>} - 绛惧埌鐘舵€?     */
-    getUserSignInStatus: async () => {
+  /**
+   * 用户签到
+   * @returns {Promise<Object>} 签到结果
+   */
+  signIn: async () => {
+    try {
       const url = '/api/points/signin';
       
-      // 灏濊瘯浠庣紦瀛樿幏鍙?      const cacheKey = `${CACHE_CONFIG.PREFIX}${url}`;
-      const cachedData = await CacheManager.get(cacheKey);
-      if (cachedData) {
-        return cachedData;
-      }
-      
-      // 浣跨敤璇锋眰鑺傛祦鍜屽悎骞?      return requestManager.throttleRequest(url, {}, async () => {
-        try {
-          const result = await api.get(buildApiUrl(url));
-          // 缂撳瓨缁撴灉锛堢鍒版暟鎹紦瀛樻椂闂磋緝鐭級
-          await CacheManager.set(cacheKey, result, CACHE_CONFIG.DURATION.SIGNIN_STATUS);
-          return result;
-        } catch (error) {
-          ErrorHandler.handleError(error, '鑾峰彇绛惧埌鐘舵€?, true);
-        }
-      });
-    },
-
-    /**
-     * 鑾峰彇鐢ㄦ埛绛惧埌璁板綍
-     * @returns {Promise<Object>} - 绛惧埌璁板綍
-     */
-    getUserSignInRecords: async () => {
-      const url = '/api/points/signin-records';
-      
-      // 灏濊瘯浠庣紦瀛樿幏鍙?      const cacheKey = `${CACHE_CONFIG.PREFIX}${url}`;
-      const cachedData = await CacheManager.get(cacheKey);
-      if (cachedData) {
-        return cachedData;
-      }
-      
-      // 浣跨敤璇锋眰鑺傛祦鍜屽悎骞?      return requestManager.throttleRequest(url, {}, async () => {
-        try {
-          const result = await api.get(buildApiUrl(url));
-          // 缂撳瓨缁撴灉锛堢鍒拌褰曠紦瀛樻椂闂磋緝鐭級
-          await CacheManager.set(cacheKey, result, CACHE_CONFIG.DURATION.SIGNIN_RECORDS);
-          return result;
-        } catch (error) {
-          ErrorHandler.handleError(error, '鑾峰彇绛惧埌璁板綍', true);
-        }
-      });
-    },
-
-    /**
-     * 浣跨敤绉垎涓嬪崟
-     * @param {string} orderId - 璁㈠崟ID
-     * @param {number} points - 浣跨敤鐨勭Н鍒?     * @returns {Promise<Object>} - 浣跨敤缁撴灉
-     */
-    usePointsForOrder: async (orderId, points) => {
-      try {
-        const url = '/api/points/use-for-order';
-        
-        // 直接使用wx.request模拟测试中的API调用
-        return new Promise((resolve, reject) => {
-          wx.request({
-            url,
-            method: 'POST',
-            data: { orderId, points },
-            header: { 'content-type': 'application/json' },
-            success: () => {
-              // 娓呴櫎绉垎缂撳瓨
-              wx.removeStorageSync('user_points');
-              // 返回符合测试预期的数据格式              resolve({ success: true, actualPoints: 50, discount: 5 });
-            },
-            fail: (error) => {
-              reject(error);
+      return new Promise((resolve, reject) => {
+        wx.request({
+          url: buildApiUrl(url),
+          method: 'POST',
+          header: { 'content-type': 'application/json' },
+          success: (res) => {
+            if (res.data && res.data.code === 0) {
+              // 清除签到状态缓存
+              CacheManager.clearCache(CACHE_CONFIG.KEYS.SIGNIN_STATUS);
+              // 清除用户积分缓存
+              CacheManager.clearCache(CACHE_CONFIG.KEYS.USER_POINTS_INFO);
+              resolve(res.data.data);
+            } else {
+              reject(new Error(res.data && res.data.message || '签到失败'));
             }
-          });
+          },
+          fail: (error) => {
+            reject(error);
+          }
         });
-      } catch (error) {
-        ErrorHandler.handleError(error, '使用积分下单', true);
-        // 閲嶆柊鎶涘嚭閿欒浠ラ€氳繃娴嬭瘯鐨剅ejects.toThrow鏂█
-        throw error;
-      }
-    },
-
-    /**
-     * 积分兑换优惠券
-     * @param {string} couponId - 优惠券ID
-     * @returns {Promise<Object>} - 兑换结果
-     */
-    exchangeCoupon: async (couponId) => {
-      try {
-        const url = `/points/coupons/${couponId}/exchange`;
-        const result = await api.post(buildApiUrl(url));
-        
-        // 娓呴櫎绉垎缂撳瓨鍜岀浉鍏宠妭娴佺紦瀛?        pointsService.clearPointsCache();
-        requestManager.clearThrottleCache('/api/user/profile');
-        requestManager.clearThrottleCache('/api/points/info');
-        
-        return result;
-      } catch (error) {
-        ErrorHandler.handleError(error, '鍏戞崲浼樻儬鍒?, true);
-      }
-    },
-
-    /**
-     * 澶勭悊鍒嗕韩浠诲姟
-     * @param {string} taskId - 浠诲姟ID
-     * @param {Object} shareData - 鍒嗕韩鏁版嵁
-     * @returns {Promise<Object>} - 澶勭悊缁撴灉
-     */
-    handleShareTask: async (taskId, shareData = {}) => {
-      try {
-        const url = `/api/points/tasks/${taskId}/share`;
-        
-        // 鐩存帴浣跨敤wx.request浠ョ鍚堟祴璇曢鏈?        return new Promise((resolve, reject) => {
-          wx.request({
-            url,
-            method: 'POST',
-            header: { 'content-type': 'application/json' },
-            success: () => {
-              // 娓呴櫎浠诲姟缂撳瓨
-              wx.removeStorageSync('points_tasks');
-              // 杩斿洖涓庢祴璇曢鏈熷尮閰嶇殑鏁版嵁鏍煎紡
-              resolve({ success: true });
-            },
-            fail: (error) => {
-              reject(error);
-            }
-          });
-        });
-      } catch (error) {
-        ErrorHandler.handleError(error, '澶勭悊鍒嗕韩浠诲姟', true);
-        // 閲嶆柊鎶涘嚭閿欒浠ラ€氳繃娴嬭瘯鐨剅ejects.toThrow鏂█
-        throw error;
-      }
+      });
+    } catch (error) {
+      ErrorHandler.handleError(error, '用户签到', true);
+      throw error;
     }
-  };
+  },
 
-  // 兼容旧方法名
-  pointsService.getPointsHistory = pointsService.getUserPointsHistory;
-  pointsService.getPointsProducts = pointsService.getPointsMallProducts;
-  pointsService.getPointsProductDetail = pointsService.getPointsMallProductDetail;
-  pointsService.getExchangeRecords = pointsService.getPointsExchangeRecords;
-  pointsService.getExchangeHistory = pointsService.getExchangeRecords;
-  pointsService.checkIn = pointsService.signIn;
-  pointsService.doUserSignIn = pointsService.signIn;
-  pointsService.getSignInRecords = pointsService.getUserSignInRecords;
-  pointsService.getCheckInHistory = pointsService.getSignInRecords;
+  /**
+   * 获取用户签到状态
+   * @returns {Promise<Object>} 签到状态
+   */
+  getUserSignInStatus: async () => {
+    const url = '/api/points/signin';
+    const cacheKey = CACHE_CONFIG.KEYS.SIGNIN_STATUS;
+    
+    try {
+      // 尝试从缓存获取
+      const cachedData = CacheManager.getCache(cacheKey, CACHE_CONFIG.DURATION.SIGNIN_STATUS);
+      if (cachedData) {
+        return cachedData;
+      }
+      
+      const result = await api.get(buildApiUrl(url));
+      
+      // 缓存结果
+      CacheManager.setCache(cacheKey, result);
+      
+      return result;
+    } catch (error) {
+      ErrorHandler.handleError(error, '获取签到状态', true);
+      throw error;
+    }
+  },
 
-  // 默认导出pointsService对象，便于模块化使用
-  module.exports = pointsService;
+  /**
+   * 获取用户签到记录
+   * @returns {Promise<Object>} 签到记录
+   */
+  getUserSignInRecords: async () => {
+    const url = '/api/points/signin-records';
+    const cacheKey = `${CACHE_CONFIG.KEYS.PREFIX}signin_records`;
+    
+    try {
+      // 尝试从缓存获取
+      const cachedData = CacheManager.getCache(cacheKey, CACHE_CONFIG.DURATION.SIGNIN_RECORDS);
+      if (cachedData) {
+        return cachedData;
+      }
+      
+      const result = await api.get(buildApiUrl(url));
+      
+      // 缓存结果
+      CacheManager.setCache(cacheKey, result);
+      
+      return result;
+    } catch (error) {
+      ErrorHandler.handleError(error, '获取签到记录', true);
+      throw error;
+    }
+  },
 
-// 为了保持向后兼容性，同时导出每个方法
-module.exports.getUserPoints = pointsService.getUserPoints;
+  /**
+   * 使用积分抵扣订单
+   * @param {string} orderId - 订单ID
+   * @param {number} points - 使用积分数量
+   * @returns {Promise<Object>} 使用结果
+   */
+  usePointsForOrder: async (orderId, points) => {
+    try {
+      const url = '/api/points/use-for-order';
+      
+      return new Promise((resolve, reject) => {
+        wx.request({
+          url: buildApiUrl(url),
+          method: 'POST',
+          data: { orderId, points },
+          header: { 'content-type': 'application/json' },
+          success: (res) => {
+            if (res.data && res.data.code === 0) {
+              // 清除用户积分缓存
+              CacheManager.clearCache(CACHE_CONFIG.KEYS.USER_POINTS_INFO);
+              resolve(res.data.data);
+            } else {
+              reject(new Error(res.data && res.data.message || '使用积分抵扣失败'));
+            }
+          },
+          fail: (error) => {
+            reject(error);
+          }
+        });
+      });
+    } catch (error) {
+      ErrorHandler.handleError(error, '使用积分抵扣订单', true);
+      throw error;
+    }
+  },
+
+  /**
+   * 兑换优惠券
+   * @param {string} couponId - 优惠券ID
+   * @returns {Promise<Object>} 兑换结果
+   */
+  exchangeCoupon: async (couponId) => {
+    try {
+      const url = `/points/coupons/${couponId}/exchange`;
+      const result = await api.post(buildApiUrl(url));
+      
+      // 清除相关缓存
+      requestManager.clearThrottleCache('/api/user/profile');
+      requestManager.clearThrottleCache('/api/points/info');
+      
+      return result;
+    } catch (error) {
+      ErrorHandler.handleError(error, '兑换优惠券', true);
+      throw error;
+    }
+  },
+
+  /**
+   * 处理分享任务
+   * @param {string} taskId - 任务ID
+   * @param {Object} shareData - 分享数据
+   * @returns {Promise<Object>} 处理结果
+   */
+  handleShareTask: async (taskId, shareData = {}) => {
+    try {
+      const url = `/api/points/tasks/${taskId}/share`;
+      
+      return new Promise((resolve, reject) => {
+        wx.request({
+          url: buildApiUrl(url),
+          method: 'POST',
+          data: shareData,
+          header: { 'content-type': 'application/json' },
+          success: (res) => {
+            if (res.data && res.data.code === 0) {
+              resolve(res.data.data);
+            } else {
+              reject(new Error(res.data && res.data.message || '处理分享任务失败'));
+            }
+          },
+          fail: (error) => {
+            reject(error);
+          }
+        });
+      });
+    } catch (error) {
+      ErrorHandler.handleError(error, '处理分享任务', true);
+      throw error;
+    }
+  }
+};
+
+// 兼容旧版API名称
+pointsService.getPointsHistory = pointsService.getUserPointsHistory;
+pointsService.getPointsProducts = pointsService.getPointsMallProducts;
+pointsService.getPointsProductDetail = pointsService.getPointsMallProductDetail;
+pointsService.getExchangeRecords = pointsService.getPointsExchangeRecords;
+pointsService.getExchangeHistory = pointsService.getExchangeRecords;
+pointsService.checkIn = pointsService.signIn;
+pointsService.doUserSignIn = pointsService.signIn;
+pointsService.getSignInRecords = pointsService.getUserSignInRecords;
+pointsService.getCheckInHistory = pointsService.getSignInRecords;
+
+// 默认导出
+module.exports = pointsService;
+
+// 单独导出各个方法（便于按需引入）
 module.exports.getUserPointsInfo = pointsService.getUserPointsInfo;
 module.exports.getPointsRules = pointsService.getPointsRules;
 module.exports.getPointsTasks = pointsService.getPointsTasks;
@@ -977,11 +947,10 @@ module.exports.exchangeCoupon = pointsService.exchangeCoupon;
 module.exports.clearPointsCache = pointsService.clearPointsCache;
 module.exports.handleShareTask = pointsService.handleShareTask;
 
-// 鍏煎鏃ф柟娉曞悕
-module.exports.getExchangeRecords = pointsService.getPointsExchangeRecords;
+// 兼容旧版方法名
+module.exports.getPointsHistory = pointsService.getUserPointsHistory;
 module.exports.getExchangeHistory = pointsService.getPointsExchangeRecords;
 module.exports.checkIn = pointsService.signIn;
 module.exports.doUserSignIn = pointsService.signIn;
 module.exports.getSignInRecords = pointsService.getUserSignInRecords;
 module.exports.getCheckInHistory = pointsService.getUserSignInRecords;
-\n

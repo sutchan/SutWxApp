@@ -1,11 +1,11 @@
-﻿/* pages/article/detail/detail.wxss */
+锘?* pages/article/detail/detail.wxss */
 .article-detail-container {
   width: 100%;
   background-color: #f8f8f8;
   min-height: 100vh;
 }
 
-/* 鍔犺浇鐘舵€佹牱寮?*/
+/* 閸旂姾娴囬悩鑸碘偓浣圭壉瀵?*/
 .loading-container {
   width: 100%;
   height: 100vh;
@@ -25,13 +25,13 @@
   color: #999999;
 }
 
-/* 鏂囩珷鍐呭鍖哄煙鏍峰紡 */
+/* 閺傚洨鐝烽崘鍛啇閸栧搫鐓欓弽宄扮础 */
 .article-content {
   width: 100%;
   padding-bottom: 100px;
 }
 
-/* 鏂囩珷澶撮儴鏍峰紡 */
+/* 閺傚洨鐝锋径鎾劥閺嶅嘲绱?*/
 .article-header {
   padding: 20px;
   background-color: #ffffff;
@@ -72,7 +72,7 @@
   color: #666666;
 }
 
-/* 鏂囩珷鍐呭鏍峰紡 */
+/* 閺傚洨鐝烽崘鍛啇閺嶅嘲绱?*/
 .article-body {
   padding: 20px;
   background-color: #ffffff;
@@ -99,7 +99,7 @@
   font-size: 14px;
 }
 
-/* 閿欒鐘舵€佹牱寮?*/
+/* 闁挎瑨顕ら悩鑸碘偓浣圭壉瀵?*/
 .error-container {
   display: flex;
   flex-direction: column;
@@ -127,7 +127,7 @@
   min-width: 200rpx;
 }
 
-/* 楠ㄦ灦灞忔牱寮?*/
+/* 妤犮劍鐏︾仦蹇旂壉瀵?*/
 .skeleton-container {
   padding: 30rpx;
   background-color: #fff;
@@ -224,7 +224,7 @@
   }
 }
 
-/* 鏂囩珷搴曢儴鎿嶄綔鏍忔牱寮?*/
+/* 閺傚洨鐝锋惔鏇㈠劥閹垮秳缍旈弽蹇旂壉瀵?*/
 .article-actions {
   display: flex;
   justify-content: space-around;
@@ -259,7 +259,7 @@
   margin-top: 2px;
 }
 
-/* 璇勮鍖哄煙鏍峰紡 */
+/* 鐠囧嫯顔戦崠鍝勭厵閺嶅嘲绱?*/
 .comment-section {
   margin-top: 10px;
   background-color: #ffffff;
@@ -362,7 +362,7 @@
   color: #999;
 }
 
-/* 鍔犺浇鏇村鎸夐挳鏍峰紡 */
+/* 閸旂姾娴囬弴鏉戭樋閹稿鎸抽弽宄扮础 */
 .load-more {
   padding: 15px 0;
   text-align: center;
@@ -390,7 +390,7 @@
   color: #999999;
 }
 
-/* 鐩稿叧鎺ㄨ崘鏍峰紡 */
+/* 閻╃鍙ч幒銊ㄥ礃閺嶅嘲绱?*/
 .related-articles {
   margin-top: 10px;
   background-color: #ffffff;
@@ -433,7 +433,7 @@
   text-overflow: ellipsis;
 }
 
-/* 璇勮杈撳叆妗嗘牱寮?*/
+/* 鐠囧嫯顔戞潏鎾冲弳濡楀棙鐗卞?*/
 .comment-input-container {
   position: fixed;
   bottom: 0;

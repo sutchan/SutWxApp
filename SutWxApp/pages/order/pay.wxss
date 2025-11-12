@@ -1,11 +1,11 @@
-﻿/* 鏀粯椤甸潰鏍峰紡 */
+锘?* 閺€顖欑帛妞ょ敻娼伴弽宄扮础 */
 .container {
   background-color: #f8f8f8;
   min-height: 100vh;
   padding-bottom: 40rpx;
 }
 
-/* 鍔犺浇鐘舵€佹牱寮?*/
+/* 閸旂姾娴囬悩鑸碘偓浣圭壉瀵?*/
 .loading {
   padding: 60rpx;
   text-align: center;
@@ -13,12 +13,12 @@
   color: #999999;
 }
 
-/* 鏀粯鍐呭鏍峰紡 */
+/* 閺€顖欑帛閸愬懎顔愰弽宄扮础 */
 .pay-content {
   padding: 40rpx 30rpx;
 }
 
-/* 璁㈠崟閲戦鏍峰紡 */
+/* 鐠併垹宕熼柌鎴︻杺閺嶅嘲绱?*/
 .amount-section {
   background-color: #ffffff;
   padding: 40rpx 0;
@@ -40,7 +40,7 @@
   font-weight: bold;
 }
 
-/* 璁㈠崟淇℃伅鏍峰紡 */
+/* 鐠併垹宕熸穱鈩冧紖閺嶅嘲绱?*/
 .order-info {
   text-align: center;
   margin-bottom: 40rpx;
@@ -51,7 +51,7 @@
   color: #999999;
 }
 
-/* 鏀粯鏂瑰紡鍖哄煙鏍峰紡 */
+/* 閺€顖欑帛閺傜懓绱￠崠鍝勭厵閺嶅嘲绱?*/
 .payment-section {
   background-color: #ffffff;
   border-radius: 10rpx;
@@ -66,7 +66,7 @@
   border-bottom: 2rpx solid #f0f0f0;
 }
 
-/* 鏀粯鏂瑰紡閫夐」鏍峰紡 */
+/* 閺€顖欑帛閺傜懓绱￠柅澶愩€嶉弽宄扮础 */
 .payment-method {
   display: flex;
   justify-content: space-between;
@@ -95,7 +95,7 @@
   color: #333333;
 }
 
-/* 鍗曢€夋寜閽牱寮?*/
+/* 閸楁洟鈧瀵滈柦顔界壉瀵?*/
 .radio {
   width: 32rpx;
   height: 32rpx;
@@ -117,7 +117,7 @@
   border-color: #cccccc;
 }
 
-/* 鏀粯鎸夐挳鏍峰紡 */
+/* 閺€顖欑帛閹稿鎸抽弽宄扮础 */
 .pay-btn {
   background-color: #ff6b81;
   color: #ffffff;
@@ -127,7 +127,7 @@
   box-shadow: 0 4rpx 20rpx rgba(255, 107, 129, 0.3);
 }
 
-/* 搴曢儴鎿嶄綔鏍峰紡 */
+/* 鎼存洟鍎撮幙宥勭稊閺嶅嘲绱?*/
 .bottom-actions {
   display: flex;
   justify-content: space-around;

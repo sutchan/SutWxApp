@@ -1,11 +1,11 @@
-﻿/* 浼樻儬鍒稿垪琛ㄩ〉闈㈡牱寮?*/
+锘?* 娴兼ɑ鍎崚绋垮灙鐞涖劑銆夐棃銏＄壉瀵?*/
 .coupon-list-page {
   padding-bottom: 30rpx;
   background-color: #f5f5f5;
   min-height: 100vh;
 }
 
-/* 鏍囩鏍忔牱寮?*/
+/* 閺嶅洨顒烽弽蹇旂壉瀵?*/
 .tab-bar {
   display: flex;
   background-color: #fff;
@@ -41,7 +41,7 @@
   border-radius: 3rpx;
 }
 
-/* 鍔犺浇鐘舵€佹牱寮?*/
+/* 閸旂姾娴囬悩鑸碘偓浣圭壉瀵?*/
 .loading-container {
   display: flex;
   flex-direction: column;
@@ -70,7 +70,7 @@
   color: #999;
 }
 
-/* 鏃犱紭鎯犲埜鎻愮ず鏍峰紡 */
+/* 閺冪姳绱幆鐘插煖閹绘劗銇氶弽宄扮础 */
 .empty-container {
   display: flex;
   flex-direction: column;
@@ -90,7 +90,7 @@
   color: #999;
 }
 
-/* 浼樻儬鍒稿垪琛ㄦ牱寮?*/
+/* 娴兼ɑ鍎崚绋垮灙鐞涖劍鐗卞?*/
 .coupon-list {
   padding: 20rpx;
 }
@@ -112,7 +112,7 @@
   position: relative;
 }
 
-/* 浼樻儬鍒稿乏渚ч噾棰濆尯鍩?*/
+/* 娴兼ɑ鍎崚绋夸箯娓氀囧櫨妫版繂灏崺?*/
 .coupon-left {
   width: 180rpx;
   text-align: center;
@@ -135,7 +135,7 @@
   color: #999;
 }
 
-/* 浼樻儬鍒稿彸渚т俊鎭尯鍩?*/
+/* 娴兼ɑ鍎崚绋垮礁娓氀備繆閹垰灏崺?*/
 .coupon-right {
   flex: 1;
   padding-left: 20rpx;
@@ -194,14 +194,14 @@
   display: block;
 }
 
-/* 鍙充晶瑁呴グ杈规 */
+/* 閸欏厖鏅剁憗鍛淬偘鏉堣顢?*/
 .coupon-border {
   width: 20rpx;
   background: linear-gradient(to right, #fff 0%, #e5e5e5 100%);
   position: relative;
 }
 
-/* 浼樻儬鍒稿乏渚у崐鍦嗗舰瀛旀礊 */
+/* 娴兼ɑ鍎崚绋夸箯娓氀冨磹閸﹀棗鑸扮€涙梹绀?*/
 .coupon-content::before,
 .coupon-content::after {
   content: '';
@@ -221,7 +221,7 @@
   bottom: -15rpx;
 }
 
-/* 宸蹭娇鐢ㄤ紭鎯犲埜棰濆淇℃伅鏍峰紡 */
+/* 瀹歌弓濞囬悽銊ょ喘閹姴鍩滄０婵嗩樆娣団剝浼呴弽宄扮础 */
 .used-info {
   padding: 10rpx 20rpx 20rpx;
   font-size: 22rpx;
@@ -236,7 +236,7 @@
   margin-bottom: 4rpx;
 }
 
-/* 涓嶅悓鐘舵€佺殑浼樻儬鍒告牱寮忚皟鏁?*/
+/* 娑撳秴鎮撻悩鑸碘偓浣烘畱娴兼ɑ鍎崚鍛婄壉瀵繗鐨熼弫?*/
 .coupon-item {
   opacity: 1;
 }

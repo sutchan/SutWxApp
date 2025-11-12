@@ -1,7 +1,7 @@
-﻿<?php
+锘??php
 /**
- * SUT寰俊灏忕▼搴廇PI鏍稿績绫? *
- * 澶勭悊寰俊灏忕▼搴忕殑鎵€鏈堿PI璇锋眰鍜屽搷搴旓紝鎻愪緵缁熶竴鐨勬帴鍙ｇ鐞? *
+ * SUT瀵邦喕淇婄亸蹇曗柤鎼村粐PI閺嶇绺剧猾? *
+ * 婢跺嫮鎮婂顔讳繆鐏忓繒鈻兼惔蹇曟畱閹碘偓閺堝牽PI鐠囬攱鐪伴崪灞芥惙鎼存棑绱濋幓鎰返缂佺喍绔撮惃鍕复閸欙絿顓搁悶? *
  * @package SUT_WeChat_Mini
  */
 
@@ -10,51 +10,48 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * SUT_WeChat_Mini_API 绫? */
+ * SUT_WeChat_Mini_API 缁? */
 class SUT_WeChat_Mini_API {
     
     /**
-     * API瀹炰緥
-     *
+     * API鐎圭偘绶?     *
      * @var SUT_WeChat_Mini_API
      */
     private static $instance = null;
     
     /**
-     * 璺敱瑙勫垯
+     * 鐠侯垳鏁辩憴鍕灟
      *
      * @var array
      */
     private $routes = array();
     
     /**
-     * 閿欒浠ｇ爜鏄犲皠
-     *
+     * 闁挎瑨顕ゆ禒锝囩垳閺勭姴鐨?     *
      * @var array
      */
     private $error_codes = array(
         0   => 'success',
-        100 => '鍙傛暟閿欒',
-        101 => '鏈巿鏉?,
-        102 => 'Token杩囨湡',
-        103 => '鎿嶄綔澶辫触',
-        104 => '璧勬簮涓嶅瓨鍦?,
-        105 => '鏈嶅姟鍣ㄩ敊璇?,
-        106 => '璇锋眰棰戠巼杩囬珮',
-        107 => '鐧诲綍澶辫触',
-        108 => '鏉冮檺涓嶈冻',
-        109 => '鏁版嵁搴撻敊璇?,
+        100 => '閸欏倹鏆熼柨娆掝嚖',
+        101 => '閺堫亝宸块弶?,
+        102 => 'Token鏉╁洦婀?,
+        103 => '閹垮秳缍旀径杈Е',
+        104 => '鐠у嫭绨稉宥呯摠閸?,
+        105 => '閺堝秴濮熼崳銊╂晩鐠?,
+        106 => '鐠囬攱鐪版０鎴犲芳鏉╁洭鐝?,
+        107 => '閻ц缍嶆径杈Е',
+        108 => '閺夊啴妾烘稉宥堝喕',
+        109 => '閺佺増宓佹惔鎾绘晩鐠?,
     );
     
     /**
-     * 鏋勯€犲嚱鏁?     */
+     * 閺嬪嫰鈧姴鍤遍弫?     */
     public function __construct() {
         $this->init();
     }
     
     /**
-     * 鑾峰彇鍗曚緥瀹炰緥
-     *
+     * 閼惧嘲褰囬崡鏇氱伐鐎圭偘绶?     *
      * @return SUT_WeChat_Mini_API
      */
     public static function get_instance() {
@@ -66,85 +63,77 @@ class SUT_WeChat_Mini_API {
     }
     
     /**
-     * 鍒濆鍖朅PI
+     * 閸掓繂顫愰崠鏈匬I
      */
     private function init() {
-        // 娉ㄥ唽閲嶅啓瑙勫垯
-        add_action( 'init', array( $this, 'register_rewrite_rules' ) );
+        // 濞夈劌鍞介柌宥呭晸鐟欏嫬鍨?        add_action( 'init', array( $this, 'register_rewrite_rules' ) );
         
-        // 澶勭悊API璇锋眰
-        add_action( 'template_redirect', array( $this, 'handle_api_requests' ) );
+        // 婢跺嫮鎮夾PI鐠囬攱鐪?        add_action( 'template_redirect', array( $this, 'handle_api_requests' ) );
         
-        // 娉ㄥ唽API璺敱
-        $this->register_routes();
+        // 濞夈劌鍞紸PI鐠侯垳鏁?        $this->register_routes();
         
-        // 娣诲姞REST API鏀寔
+        // 濞ｈ濮濺EST API閺€顖涘瘮
         add_filter( 'rest_pre_serve_request', array( $this, 'rest_pre_serve_request' ), 10, 4 );
     }
     
     /**
-     * 娉ㄥ唽閲嶅啓瑙勫垯
-     */
+     * 濞夈劌鍞介柌宥呭晸鐟欏嫬鍨?     */
     public function register_rewrite_rules() {
         add_rewrite_rule( '^sut-wxapp-api/([^/]*)/?', 'index.php?sut_wxa_action=$matches[1]', 'top' );
         add_rewrite_tag( '%sut_wxa_action%', '([^&]+)' );
     }
     
     /**
-     * 娉ㄥ唽API璺敱
-     */
+     * 濞夈劌鍞紸PI鐠侯垳鏁?     */
     private function register_routes() {
-        // 鍩虹API
+        // 閸╄櫣顢匒PI
         $this->routes['ping'] = array( 'callback' => array( $this, 'api_ping' ) );
         $this->routes['login'] = array( 'callback' => array( $this, 'api_login' ) );
         
-        // 鐢ㄦ埛鐩稿叧API
+        // 閻劍鍩涢惄绋垮彠API
         $this->routes['user/profile'] = array( 'callback' => array( $this, 'api_user_profile' ), 'auth' => true );
         $this->routes['user/update'] = array( 'callback' => array( $this, 'api_user_update' ), 'auth' => true );
         
-        // 鍐呭鐩稿叧API
+        // 閸愬懎顔愰惄绋垮彠API
         $this->routes['posts'] = array( 'callback' => array( $this, 'api_get_posts' ) );
         $this->routes['posts/([0-9]+)'] = array( 'callback' => array( $this, 'api_get_post' ) );
         $this->routes['categories'] = array( 'callback' => array( $this, 'api_get_categories' ) );
         $this->routes['tags'] = array( 'callback' => array( $this, 'api_get_tags' ) );
         
-        // 鍏佽鍏朵粬妯″潡娣诲姞璺敱
+        // 閸忎浇顔忛崗鏈电铂濡€虫健濞ｈ濮炵捄顖滄暠
         $this->routes = apply_filters( 'sut_wechat_mini_api_routes', $this->routes );
     }
     
     /**
-     * 澶勭悊API璇锋眰
-     */
+     * 婢跺嫮鎮夾PI鐠囬攱鐪?     */
     public function handle_api_requests() {
         global $wp;
         
-        // 妫€鏌ユ槸鍚︿负API璇锋眰
-        if ( ! isset( $wp->query_vars['sut_wxa_action'] ) ) {
+        // 濡偓閺屻儲妲搁崥锔胯礋API鐠囬攱鐪?        if ( ! isset( $wp->query_vars['sut_wxa_action'] ) ) {
             return;
         }
         
         $action = $wp->query_vars['sut_wxa_action'];
         $request_data = $this->get_request_data();
         
-        // 鏌ユ壘鍖归厤鐨勮矾鐢?        $route_matched = false;
+        // 閺屻儲澹橀崠褰掑帳閻ㄥ嫯鐭鹃悽?        $route_matched = false;
         foreach ( $this->routes as $route_pattern => $route_info ) {
             $pattern = '^' . str_replace( '\/', '\\/', $route_pattern ) . '$';
             if ( preg_match( "/$pattern/", $action, $matches ) ) {
                 $route_matched = true;
                 
-                // 妫€鏌ユ槸鍚﹂渶瑕佹巿鏉?                if ( isset( $route_info['auth'] ) && $route_info['auth'] ) {
+                // 濡偓閺屻儲妲搁崥锕傛付鐟曚焦宸块弶?                if ( isset( $route_info['auth'] ) && $route_info['auth'] ) {
                     $user_id = $this->authenticate_request();
                     if ( ! $user_id ) {
-                        $this->send_response( array(), 101, __( '鏈巿鏉?, 'sut-wechat-mini' ) );
+                        $this->send_response( array(), 101, __( '閺堫亝宸块弶?, 'sut-wechat-mini' ) );
                         exit;
                     }
                     $request_data['user_id'] = $user_id;
                 }
                 
-                // 璋冪敤鍥炶皟鍑芥暟
-                $response_data = call_user_func_array( $route_info['callback'], array( $request_data, $matches ) );
+                // 鐠嬪啰鏁ら崶鐐剁殶閸戣姤鏆?                $response_data = call_user_func_array( $route_info['callback'], array( $request_data, $matches ) );
                 
-                // 鍙戦€佸搷搴?                if ( is_array( $response_data ) && isset( $response_data['code'] ) ) {
+                // 閸欐垿鈧礁鎼锋惔?                if ( is_array( $response_data ) && isset( $response_data['code'] ) ) {
                     $this->send_response( $response_data['data'], $response_data['code'], $response_data['message'] );
                 } else {
                     $this->send_response( $response_data );
@@ -154,15 +143,14 @@ class SUT_WeChat_Mini_API {
             }
         }
         
-        // 濡傛灉娌℃湁鍖归厤鐨勮矾鐢?        if ( ! $route_matched ) {
-            $this->send_response( array(), 104, __( '璧勬簮涓嶅瓨鍦?, 'sut-wechat-mini' ) );
+        // 婵″倹鐏夊▽鈩冩箒閸栧綊鍘ら惃鍕熅閻?        if ( ! $route_matched ) {
+            $this->send_response( array(), 104, __( '鐠у嫭绨稉宥呯摠閸?, 'sut-wechat-mini' ) );
             exit;
         }
     }
     
     /**
-     * 鑾峰彇璇锋眰鏁版嵁
-     *
+     * 閼惧嘲褰囩拠閿嬬湴閺佺増宓?     *
      * @return array
      */
     private function get_request_data() {
@@ -172,13 +160,12 @@ class SUT_WeChat_Mini_API {
         if ( 'GET' === $method ) {
             $data = $_GET;
         } elseif ( 'POST' === $method ) {
-            // 灏濊瘯鑾峰彇JSON鏁版嵁
-            $json_data = file_get_contents( 'php://input' );
+            // 鐏忔繆鐦懢宄板絿JSON閺佺増宓?            $json_data = file_get_contents( 'php://input' );
             if ( $json_data ) {
                 $data = json_decode( $json_data, true );
             }
             
-            // 濡傛灉JSON瑙ｆ瀽澶辫触锛屼娇鐢ㄨ〃鍗曟暟鎹?            if ( ! $data ) {
+            // 婵″倹鐏塉SON鐟欙絾鐎芥径杈Е閿涘奔濞囬悽銊ㄣ€冮崡鏇熸殶閹?            if ( ! $data ) {
                 $data = $_POST;
             }
         }
@@ -187,16 +174,16 @@ class SUT_WeChat_Mini_API {
     }
     
     /**
-     * 楠岃瘉璇锋眰
+     * 妤犲矁鐦夌拠閿嬬湴
      *
-     * @return int|false 鐢ㄦ埛ID鎴杅alse
+     * @return int|false 閻劍鍩汭D閹存潊alse
      */
     private function authenticate_request() {
-        // 浠庤姹傚ご涓幏鍙朤oken
+        // 娴犲氦顕Ч鍌氥仈娑擃叀骞忛崣鏈ken
         $headers = getallheaders();
         $token = isset( $headers['Authorization'] ) ? str_replace( 'Bearer ', '', $headers['Authorization'] ) : '';
         
-        // 浠庤姹傚弬鏁颁腑鑾峰彇Token
+        // 娴犲氦顕Ч鍌氬棘閺侀鑵戦懢宄板絿Token
         if ( empty( $token ) ) {
             $token = isset( $_REQUEST['token'] ) ? $_REQUEST['token'] : '';
         }
@@ -205,22 +192,22 @@ class SUT_WeChat_Mini_API {
             return false;
         }
         
-        // 楠岃瘉Token
+        // 妤犲矁鐦塗oken
         $user_id = $this->verify_token( $token );
         
         return $user_id;
     }
     
     /**
-     * 楠岃瘉Token
+     * 妤犲矁鐦塗oken
      *
-     * @param string $token Token鍊?     * @return int|false 鐢ㄦ埛ID鎴杅alse
+     * @param string $token Token閸?     * @return int|false 閻劍鍩汭D閹存潊alse
      */
     private function verify_token( $token ) {
         global $wpdb;
         $table_name = $wpdb->prefix . 'sut_wechat_mini_users';
         
-        // 鏌ユ壘Token瀵瑰簲鐨勭敤鎴?        $user = $wpdb->get_row( $wpdb->prepare( "SELECT user_id FROM $table_name WHERE token = %s", $token ) );
+        // 閺屻儲澹楾oken鐎电懓绨查惃鍕暏閹?        $user = $wpdb->get_row( $wpdb->prepare( "SELECT user_id FROM $table_name WHERE token = %s", $token ) );
         
         if ( $user && $user->user_id ) {
             return $user->user_id;
@@ -230,46 +217,40 @@ class SUT_WeChat_Mini_API {
     }
     
     /**
-     * 鍙戦€丄PI鍝嶅簲
-     *
-     * @param mixed $data 鍝嶅簲鏁版嵁
-     * @param int $code 鐘舵€佺爜
-     * @param string $message 娑堟伅
-     */
+     * 閸欐垿鈧竸PI閸濆秴绨?     *
+     * @param mixed $data 閸濆秴绨查弫鐗堝祦
+     * @param int $code 閻樿埖鈧胶鐖?     * @param string $message 濞戝牊浼?     */
     private function send_response( $data = array(), $code = 0, $message = '' ) {
-        // 璁剧疆鍝嶅簲澶?        header( 'Content-Type: application/json; charset=utf-8' );
+        // 鐠佸墽鐤嗛崫宥呯安婢?        header( 'Content-Type: application/json; charset=utf-8' );
         header( 'Access-Control-Allow-Origin: *' );
         header( 'Access-Control-Allow-Methods: GET, POST, OPTIONS' );
         header( 'Access-Control-Allow-Headers: Content-Type, Authorization' );
         
-        // 濡傛灉娑堟伅涓虹┖锛屼娇鐢ㄩ粯璁ゆ秷鎭?        if ( empty( $message ) && isset( $this->error_codes[$code] ) ) {
+        // 婵″倹鐏夊☉鍫熶紖娑撹櫣鈹栭敍灞煎▏閻劑绮拋銈嗙Х閹?        if ( empty( $message ) && isset( $this->error_codes[$code] ) ) {
             $message = $this->error_codes[$code];
         }
         
-        // 鏋勫缓鍝嶅簲鏁版嵁
-        $response = array(
+        // 閺嬪嫬缂撻崫宥呯安閺佺増宓?        $response = array(
             'code'    => $code,
             'message' => $message,
             'data'    => $data,
             'time'    => time(),
         );
         
-        // 鍙戦€佸搷搴?        echo json_encode( $response, JSON_UNESCAPED_UNICODE );
+        // 閸欐垿鈧礁鎼锋惔?        echo json_encode( $response, JSON_UNESCAPED_UNICODE );
         exit;
     }
     
     /**
-     * REST API鍝嶅簲澶勭悊
+     * REST API閸濆秴绨叉径鍕倞
      *
-     * @param bool $served 鍝嶅簲鏄惁宸插彂閫?     * @param WP_HTTP_Response $result 鍝嶅簲缁撴灉
-     * @param WP_REST_Request $request 璇锋眰瀵硅薄
-     * @param WP_REST_Server $server 鏈嶅姟鍣ㄥ璞?     * @return bool
+     * @param bool $served 閸濆秴绨查弰顖氭儊瀹告彃褰傞柅?     * @param WP_HTTP_Response $result 閸濆秴绨茬紒鎾寸亯
+     * @param WP_REST_Request $request 鐠囬攱鐪扮€电钖?     * @param WP_REST_Server $server 閺堝秴濮熼崳銊ヮ嚠鐠?     * @return bool
      */
     public function rest_pre_serve_request( $served, $result, $request, $server ) {
-        // 妫€鏌ユ槸鍚︿负灏忕▼搴忚姹?        $user_agent = isset( $_SERVER['HTTP_USER_AGENT'] ) ? $_SERVER['HTTP_USER_AGENT'] : '';
+        // 濡偓閺屻儲妲搁崥锔胯礋鐏忓繒鈻兼惔蹇氼嚞濮?        $user_agent = isset( $_SERVER['HTTP_USER_AGENT'] ) ? $_SERVER['HTTP_USER_AGENT'] : '';
         if ( strpos( $user_agent, 'miniProgram' ) !== false ) {
-            // 淇敼鍝嶅簲鏍煎紡
-            $data = $result->get_data();
+            // 娣囶喗鏁奸崫宥呯安閺嶇厧绱?            $data = $result->get_data();
             $code = 0;
             $message = 'success';
             
@@ -286,7 +267,7 @@ class SUT_WeChat_Mini_API {
                 'time'    => time(),
             );
             
-            // 鍙戦€佷慨鏀瑰悗鐨勫搷搴?            header( 'Content-Type: application/json; charset=utf-8' );
+            // 閸欐垿鈧椒鎱ㄩ弨鐟版倵閻ㄥ嫬鎼锋惔?            header( 'Content-Type: application/json; charset=utf-8' );
             echo json_encode( $response, JSON_UNESCAPED_UNICODE );
             
             return true;
@@ -296,44 +277,40 @@ class SUT_WeChat_Mini_API {
     }
     
     /*************************
-     * API鏂规硶瀹炵幇
-     *************************/
+     * API閺傝纭剁€圭偟骞?     *************************/
     
     /**
-     * 娴嬭瘯API杩炴帴
-     *
-     * @param array $data 璇锋眰鏁版嵁
-     * @param array $matches 璺敱鍖归厤缁撴灉
-     * @return array
+     * 濞村鐦疉PI鏉╃偞甯?     *
+     * @param array $data 鐠囬攱鐪伴弫鐗堝祦
+     * @param array $matches 鐠侯垳鏁遍崠褰掑帳缂佹挻鐏?     * @return array
      */
     public function api_ping( $data, $matches ) {
         return array(
             'pong' => time(),
             'version' => SUT_WECHAT_MINI_VERSION,
-            'message' => __( 'API杩炴帴鎴愬姛', 'sut-wechat-mini' )
+            'message' => __( 'API鏉╃偞甯撮幋鎰', 'sut-wechat-mini' )
         );
     }
     
     /**
-     * 鐢ㄦ埛鐧诲綍
+     * 閻劍鍩涢惂璇茬秿
      *
-     * @param array $data 璇锋眰鏁版嵁
-     * @param array $matches 璺敱鍖归厤缁撴灉
-     * @return array
+     * @param array $data 鐠囬攱鐪伴弫鐗堝祦
+     * @param array $matches 鐠侯垳鏁遍崠褰掑帳缂佹挻鐏?     * @return array
      */
     public function api_login( $data, $matches ) {
-        // 妫€鏌ュ繀瑕佸弬鏁?        if ( ! isset( $data['code'] ) ) {
+        // 濡偓閺屻儱绻€鐟曚礁寮弫?        if ( ! isset( $data['code'] ) ) {
             return array(
                 'code' => 100,
-                'message' => __( '鍙傛暟閿欒', 'sut-wechat-mini' ),
+                'message' => __( '閸欏倹鏆熼柨娆掝嚖', 'sut-wechat-mini' ),
                 'data' => array()
             );
         }
         
-        // 鑾峰彇寰俊灏忕▼搴忕敤鎴蜂俊鎭?        $code = $data['code'];
+        // 閼惧嘲褰囧顔讳繆鐏忓繒鈻兼惔蹇曟暏閹磋渹淇婇幁?        $code = $data['code'];
         $user_info = isset( $data['user_info'] ) ? $data['user_info'] : array();
         
-        // 璋冪敤寰俊鐧诲綍鎺ュ彛
+        // 鐠嬪啰鏁ゅ顔讳繆閻ц缍嶉幒銉ュ經
         $wx_user = $this->wechat_login( $code );
         if ( is_wp_error( $wx_user ) ) {
             return array(
@@ -343,19 +320,16 @@ class SUT_WeChat_Mini_API {
             );
         }
         
-        // 澶勭悊鐢ㄦ埛鐧诲綍
-        $sut_wxa_users = SUT_WeChat_Mini_Users::get_instance();
+        // 婢跺嫮鎮婇悽銊﹀煕閻ц缍?        $sut_wxa_users = SUT_WeChat_Mini_Users::get_instance();
         $result = $sut_wxa_users->login_user( $wx_user, $user_info );
         
         return $result;
     }
     
     /**
-     * 鑾峰彇鐢ㄦ埛淇℃伅
-     *
-     * @param array $data 璇锋眰鏁版嵁
-     * @param array $matches 璺敱鍖归厤缁撴灉
-     * @return array
+     * 閼惧嘲褰囬悽銊﹀煕娣団剝浼?     *
+     * @param array $data 鐠囬攱鐪伴弫鐗堝祦
+     * @param array $matches 鐠侯垳鏁遍崠褰掑帳缂佹挻鐏?     * @return array
      */
     public function api_user_profile( $data, $matches ) {
         $user_id = $data['user_id'];
@@ -366,11 +340,9 @@ class SUT_WeChat_Mini_API {
     }
     
     /**
-     * 鏇存柊鐢ㄦ埛淇℃伅
-     *
-     * @param array $data 璇锋眰鏁版嵁
-     * @param array $matches 璺敱鍖归厤缁撴灉
-     * @return array
+     * 閺囧瓨鏌婇悽銊﹀煕娣団剝浼?     *
+     * @param array $data 鐠囬攱鐪伴弫鐗堝祦
+     * @param array $matches 鐠侯垳鏁遍崠褰掑帳缂佹挻鐏?     * @return array
      */
     public function api_user_update( $data, $matches ) {
         $user_id = $data['user_id'];
@@ -383,11 +355,9 @@ class SUT_WeChat_Mini_API {
     }
     
     /**
-     * 鑾峰彇鏂囩珷鍒楄〃
-     *
-     * @param array $data 璇锋眰鏁版嵁
-     * @param array $matches 璺敱鍖归厤缁撴灉
-     * @return array
+     * 閼惧嘲褰囬弬鍥╃彿閸掓銆?     *
+     * @param array $data 鐠囬攱鐪伴弫鐗堝祦
+     * @param array $matches 鐠侯垳鏁遍崠褰掑帳缂佹挻鐏?     * @return array
      */
     public function api_get_posts( $data, $matches ) {
         $sut_wxa_content = SUT_WeChat_Mini_Content::get_instance();
@@ -397,11 +367,9 @@ class SUT_WeChat_Mini_API {
     }
     
     /**
-     * 鑾峰彇鍗曠瘒鏂囩珷
-     *
-     * @param array $data 璇锋眰鏁版嵁
-     * @param array $matches 璺敱鍖归厤缁撴灉
-     * @return array
+     * 閼惧嘲褰囬崡鏇犵槖閺傚洨鐝?     *
+     * @param array $data 鐠囬攱鐪伴弫鐗堝祦
+     * @param array $matches 鐠侯垳鏁遍崠褰掑帳缂佹挻鐏?     * @return array
      */
     public function api_get_post( $data, $matches ) {
         $post_id = $matches[1];
@@ -412,11 +380,9 @@ class SUT_WeChat_Mini_API {
     }
     
     /**
-     * 鑾峰彇鍒嗙被鍒楄〃
-     *
-     * @param array $data 璇锋眰鏁版嵁
-     * @param array $matches 璺敱鍖归厤缁撴灉
-     * @return array
+     * 閼惧嘲褰囬崚鍡欒閸掓銆?     *
+     * @param array $data 鐠囬攱鐪伴弫鐗堝祦
+     * @param array $matches 鐠侯垳鏁遍崠褰掑帳缂佹挻鐏?     * @return array
      */
     public function api_get_categories( $data, $matches ) {
         $sut_wxa_content = SUT_WeChat_Mini_Content::get_instance();
@@ -426,11 +392,9 @@ class SUT_WeChat_Mini_API {
     }
     
     /**
-     * 鑾峰彇鏍囩鍒楄〃
-     *
-     * @param array $data 璇锋眰鏁版嵁
-     * @param array $matches 璺敱鍖归厤缁撴灉
-     * @return array
+     * 閼惧嘲褰囬弽鍥╊劮閸掓銆?     *
+     * @param array $data 鐠囬攱鐪伴弫鐗堝祦
+     * @param array $matches 鐠侯垳鏁遍崠褰掑帳缂佹挻鐏?     * @return array
      */
     public function api_get_tags( $data, $matches ) {
         $sut_wxa_content = SUT_WeChat_Mini_Content::get_instance();
@@ -440,9 +404,9 @@ class SUT_WeChat_Mini_API {
     }
     
     /**
-     * 寰俊鐧诲綍
+     * 瀵邦喕淇婇惂璇茬秿
      *
-     * @param string $code 鐧诲綍鍑瘉
+     * @param string $code 閻ц缍嶉崙顓＄槈
      * @return array|WP_Error
      */
     private function wechat_login( $code ) {
@@ -450,10 +414,10 @@ class SUT_WeChat_Mini_API {
         $appsecret = get_option( 'sut_wechat_mini_appsecret' );
         
         if ( empty( $appid ) || empty( $appsecret ) ) {
-            return new WP_Error( 'wechat_config_error', __( '寰俊灏忕▼搴忛厤缃湭瀹屾垚', 'sut-wechat-mini' ) );
+            return new WP_Error( 'wechat_config_error', __( '瀵邦喕淇婄亸蹇曗柤鎼村繘鍘ょ純顔芥弓鐎瑰本鍨?, 'sut-wechat-mini' ) );
         }
         
-        // 璋冪敤寰俊鐧诲綍鎺ュ彛
+        // 鐠嬪啰鏁ゅ顔讳繆閻ц缍嶉幒銉ュ經
         $url = "https://api.weixin.qq.com/sns/jscode2session?appid={$appid}&secret={$appsecret}&js_code={$code}&grant_type=authorization_code";
         $response = wp_remote_get( $url );
         

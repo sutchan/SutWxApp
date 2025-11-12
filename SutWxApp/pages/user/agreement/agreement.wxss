@@ -1,13 +1,13 @@
-﻿/* pages/user/agreement/agreement.wxss */
+锘?* pages/user/agreement/agreement.wxss */
 
-/* 涓诲鍣?*/
+/* 娑撹顔愰崳?*/
 .agreement-container {
   padding: 20rpx;
   min-height: 100vh;
   background-color: #f5f5f5;
 }
 
-/* 鍔犺浇鐘舵€?*/
+/* 閸旂姾娴囬悩鑸碘偓?*/
 .loading-container {
   display: flex;
   flex-direction: column;
@@ -36,7 +36,7 @@
   color: #666666;
 }
 
-/* 閿欒鐘舵€?*/
+/* 闁挎瑨顕ら悩鑸碘偓?*/
 .error-container {
   display: flex;
   flex-direction: column;
@@ -60,14 +60,14 @@
   font-size: 32rpx;
 }
 
-/* 鍐呭瀹瑰櫒 */
+/* 閸愬懎顔愮€圭懓娅?*/
 .content-container {
   background-color: #ffffff;
   border-radius: 16rpx;
   padding: 30rpx;
 }
 
-/* 鍗忚鍐呭 */
+/* 閸楀繗顔呴崘鍛啇 */
 .agreement-content {
   font-size: 30rpx;
   line-height: 1.8;
@@ -75,7 +75,7 @@
   margin-bottom: 40rpx;
 }
 
-/* rich-text 鍐呭鏍峰紡 */
+/* rich-text 閸愬懎顔愰弽宄扮础 */
 .agreement-content :first-child {
   margin-top: 0;
 }
@@ -110,7 +110,7 @@
   margin: 10rpx 0;
 }
 
-/* 绌哄唴瀹圭姸鎬?*/
+/* 缁屽搫鍞寸€瑰湱濮搁幀?*/
 .empty-container {
   display: flex;
   justify-content: center;
@@ -123,7 +123,7 @@
   color: #999999;
 }
 
-/* 鎿嶄綔鎸夐挳 */
+/* 閹垮秳缍旈幐澶愭尦 */
 .action-buttons {
   margin-top: 40rpx;
   display: flex;
@@ -138,7 +138,7 @@
   padding: 20rpx 80rpx;
 }
 
-/* 澶嶅埗鎸夐挳鎸変笅鏁堟灉 */
+/* 婢跺秴鍩楅幐澶愭尦閹稿绗呴弫鍫熺亯 */
 .copy-button:active {
   background-color: #1976D2;
 }\n

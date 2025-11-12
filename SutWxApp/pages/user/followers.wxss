@@ -1,11 +1,11 @@
-﻿/* 绮変笣椤甸潰鏍峰紡 */
+锘?* 缁绗ｆい鐢告桨閺嶅嘲绱?*/
 .followers-container {
   background-color: #f8f8f8;
   min-height: 100vh;
   padding-bottom: 20rpx;
 }
 
-/* 鍔犺浇鐘舵€?*/
+/* 閸旂姾娴囬悩鑸碘偓?*/
 .loading-container {
   display: flex;
   flex-direction: column;
@@ -33,7 +33,7 @@
   color: #888;
 }
 
-/* 閿欒鐘舵€?*/
+/* 闁挎瑨顕ら悩鑸碘偓?*/
 .error-container {
   display: flex;
   flex-direction: column;
@@ -61,7 +61,7 @@
   padding: 0 60rpx;
 }
 
-/* 绌虹姸鎬?*/
+/* 缁岃櫣濮搁幀?*/
 .empty-container {
   display: flex;
   flex-direction: column;
@@ -81,7 +81,7 @@
   color: #888;
 }
 
-/* 绮変笣鍒楄〃 */
+/* 缁绗ｉ崚妤勩€?*/
 .followers-list {
   background-color: #fff;
 }
@@ -130,7 +130,7 @@
   text-overflow: ellipsis;
 }
 
-/* 鎿嶄綔鎸夐挳 */
+/* 閹垮秳缍旈幐澶愭尦 */
 .follower-actions {
   margin-left: 20rpx;
 }
@@ -153,7 +153,7 @@
   border-radius: 30rpx;
 }
 
-/* 鍔犺浇鏇村 */
+/* 閸旂姾娴囬弴鏉戭樋 */
 .load-more {
   padding: 30rpx 0;
   text-align: center;
@@ -179,7 +179,7 @@
   color: #1aad19;
 }
 
-/* 娌℃湁鏇村 */
+/* 濞屸剝婀侀弴鏉戭樋 */
 .no-more {
   padding: 30rpx 0;
   text-align: center;

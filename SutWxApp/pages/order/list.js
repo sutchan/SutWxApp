@@ -1,68 +1,63 @@
-﻿// list.js - 璁㈠崟鍒楄〃椤甸潰
+锘?/ list.js - 鐠併垹宕熼崚妤勩€冩い鐢告桨
 
-// 瀵煎叆鏈嶅姟鍜屽伐鍏?import orderService from '../../utils/order-service';
+// 鐎电厧鍙嗛張宥呭閸滃苯浼愰崗?import orderService from '../../utils/order-service';
 import { showToast, showLoading, hideLoading, showConfirm } from '../../utils/global';
 
 Page({
   /**
-   * 椤甸潰鐨勫垵濮嬫暟鎹?   */
+   * 妞ょ敻娼伴惃鍕灥婵鏆熼幑?   */
   data: {
-    // 璁㈠崟鐘舵€佹爣绛?    tabs: [
-      { key: 'all', title: '鍏ㄩ儴' },
-      { key: 'pending_payment', title: '寰呬粯娆? },
-      { key: 'pending_shipment', title: '寰呭彂璐? },
-      { key: 'pending_receipt', title: '寰呮敹璐? },
-      { key: 'completed', title: '宸插畬鎴? },
-      { key: 'cancelled', title: '宸插彇娑? }
+    // 鐠併垹宕熼悩鑸碘偓浣圭垼缁?    tabs: [
+      { key: 'all', title: '閸忋劑鍎? },
+      { key: 'pending_payment', title: '瀵板懍绮▎? },
+      { key: 'pending_shipment', title: '瀵板懎褰傜拹? },
+      { key: 'pending_receipt', title: '瀵板懏鏁圭拹? },
+      { key: 'completed', title: '瀹告彃鐣幋? },
+      { key: 'cancelled', title: '瀹告彃褰囧☉? }
     ],
-    // 褰撳墠閫変腑鐨勬爣绛?    activeTab: 'all',
-    // 璁㈠崟鍒楄〃
-    orderList: [],
-    // 鍔犺浇鐘舵€?    loading: false,
-    // 鍔犺浇鏇村鐘舵€?    loadingMore: false,
-    // 鏄惁鏈夋洿澶氭暟鎹?    hasMore: true,
-    // 椤电爜
-    page: 1,
-    // 姣忛〉鏁伴噺
+    // 瑜版挸澧犻柅澶夎厬閻ㄥ嫭鐖ｇ粵?    activeTab: 'all',
+    // 鐠併垹宕熼崚妤勩€?    orderList: [],
+    // 閸旂姾娴囬悩鑸碘偓?    loading: false,
+    // 閸旂姾娴囬弴鏉戭樋閻樿埖鈧?    loadingMore: false,
+    // 閺勵垰鎯侀張澶嬫纯婢舵碍鏆熼幑?    hasMore: true,
+    // 妞ょ數鐖?    page: 1,
+    // 濮ｅ繘銆夐弫浼村櫤
     pageSize: 10,
-    // 绌虹姸鎬?    empty: false,
-    // 涓嬫媺鍒锋柊鐘舵€?    refreshing: false,
-    // 璁㈠崟鐘舵€佹槧灏?    orderStatusMap: {
-      'pending_payment': '寰呬粯娆?,
-      'pending_shipment': '寰呭彂璐?,
-      'pending_receipt': '寰呮敹璐?,
-      'completed': '宸插畬鎴?,
-      'cancelled': '宸插彇娑?,
-      'refunding': '閫€娆句腑'
+    // 缁岃櫣濮搁幀?    empty: false,
+    // 娑撳濯洪崚閿嬫煀閻樿埖鈧?    refreshing: false,
+    // 鐠併垹宕熼悩鑸碘偓浣规Ё鐏?    orderStatusMap: {
+      'pending_payment': '瀵板懍绮▎?,
+      'pending_shipment': '瀵板懎褰傜拹?,
+      'pending_receipt': '瀵板懏鏁圭拹?,
+      'completed': '瀹告彃鐣幋?,
+      'cancelled': '瀹告彃褰囧☉?,
+      'refunding': '闁偓濞嗗彞鑵?
     }
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸旂姾娴?   */
   onLoad: function (options) {
-    // 濡傛灉鏈変紶鍏ヨ鍗曠姸鎬侊紝鍒囨崲鍒板搴旀爣绛?    if (options.status) {
+    // 婵″倹鐏夐張澶夌炊閸忋儴顓归崡鏇犲Ц閹緤绱濋崚鍥ㄥ床閸掓澘顕惔鏃€鐖ｇ粵?    if (options.status) {
       const tab = this.data.tabs.find(t => t.key === options.status);
       if (tab) {
         this.setData({ activeTab: options.status });
       }
     }
     
-    // 鍔犺浇璁㈠崟鍒楄〃
-    this.loadOrders();
+    // 閸旂姾娴囩拋銏犲礋閸掓銆?    this.loadOrders();
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閺勫墽銇?   */
   onShow: function () {
-    // 濡傛灉鏄粠鍏朵粬椤甸潰杩斿洖锛屽埛鏂板綋鍓嶅垪琛?    if (this.data.orderList.length > 0) {
+    // 婵″倹鐏夐弰顖欑矤閸忔湹绮い鐢告桨鏉╂柨娲栭敍灞藉煕閺傛澘缍嬮崜宥呭灙鐞?    if (this.data.orderList.length > 0) {
       this.refreshOrders();
     }
   },
 
   /**
-   * 鍒囨崲鏍囩
+   * 閸掑洦宕查弽鍥╊劮
    */
   switchTab: function (e) {
     const tabKey = e.currentTarget.dataset.key;
@@ -76,53 +71,45 @@ Page({
         empty: false
       });
       
-      // 鍔犺浇瀵瑰簲鐘舵€佺殑璁㈠崟
-      this.loadOrders();
+      // 閸旂姾娴囩€电懓绨查悩鑸碘偓浣烘畱鐠併垹宕?      this.loadOrders();
     }
   },
 
   /**
-   * 鍔犺浇璁㈠崟鍒楄〃
-   */
+   * 閸旂姾娴囩拋銏犲礋閸掓銆?   */
   loadOrders: async function () {
     try {
-      // 濡傛灉娌℃湁鏇村鏁版嵁鎴栨鍦ㄥ姞杞斤紝鍒欎笉缁х画鍔犺浇
-      if (!this.data.hasMore || this.data.loading || this.data.loadingMore) {
+      // 婵″倹鐏夊▽鈩冩箒閺囨潙顦块弫鐗堝祦閹存牗顒滈崷銊ュ鏉炴枻绱濋崚娆庣瑝缂佈呯敾閸旂姾娴?      if (!this.data.hasMore || this.data.loading || this.data.loadingMore) {
         return;
       }
       
-      // 璁剧疆鍔犺浇鐘舵€?      if (this.data.page === 1) {
+      // 鐠佸墽鐤嗛崝鐘烘祰閻樿埖鈧?      if (this.data.page === 1) {
         this.setData({ loading: true });
       } else {
         this.setData({ loadingMore: true });
       }
       
-      // 鏋勫缓璇锋眰鍙傛暟
-      const params = {
+      // 閺嬪嫬缂撶拠閿嬬湴閸欏倹鏆?      const params = {
         page: this.data.page,
         page_size: this.data.pageSize
       };
       
-      // 濡傛灉涓嶆槸鍏ㄩ儴璁㈠崟锛屾坊鍔犵姸鎬佺瓫閫?      if (this.data.activeTab !== 'all') {
+      // 婵″倹鐏夋稉宥嗘Ц閸忋劑鍎寸拋銏犲礋閿涘本鍧婇崝鐘靛Ц閹胶鐡柅?      if (this.data.activeTab !== 'all') {
         params.status = this.data.activeTab;
       }
       
-      // 鑾峰彇璁㈠崟鍒楄〃
-      const result = await orderService.getOrderList(params);
+      // 閼惧嘲褰囩拋銏犲礋閸掓銆?      const result = await orderService.getOrderList(params);
       
       if (result && result.orders) {
-        // 澶勭悊璁㈠崟鏁版嵁
-        const orders = result.orders.map(order => ({
+        // 婢跺嫮鎮婄拋銏犲礋閺佺増宓?        const orders = result.orders.map(order => ({
           ...order,
-          status_text: this.data.orderStatusMap[order.status] || '鏈煡鐘舵€?,
+          status_text: this.data.orderStatusMap[order.status] || '閺堫亞鐓￠悩鑸碘偓?,
           formatted_created_at: this.formatDate(order.created_at)
         }));
         
-        // 鍚堝苟璁㈠崟鍒楄〃
-        const newOrderList = this.data.page === 1 ? orders : [...this.data.orderList, ...orders];
+        // 閸氬牆鑻熺拋銏犲礋閸掓銆?        const newOrderList = this.data.page === 1 ? orders : [...this.data.orderList, ...orders];
         
-        // 鍒ゆ柇鏄惁杩樻湁鏇村鏁版嵁
-        const hasMore = orders.length === this.data.pageSize;
+        // 閸掋倖鏌囬弰顖氭儊鏉╂ɑ婀侀弴鏉戭樋閺佺増宓?        const hasMore = orders.length === this.data.pageSize;
         
         this.setData({
           orderList: newOrderList,
@@ -138,10 +125,10 @@ Page({
       }
       
     } catch (error) {
-      console.error('鍔犺浇璁㈠崟鍒楄〃澶辫触:', error);
-      showToast(error.message || '鍔犺浇璁㈠崟澶辫触锛岃閲嶈瘯', { icon: 'none' });
+      console.error('閸旂姾娴囩拋銏犲礋閸掓銆冩径杈Е:', error);
+      showToast(error.message || '閸旂姾娴囩拋銏犲礋婢惰精瑙﹂敍宀冾嚞闁插秷鐦?, { icon: 'none' });
     } finally {
-      // 娓呴櫎鍔犺浇鐘舵€?      this.setData({ 
+      // 濞撳懘娅庨崝鐘烘祰閻樿埖鈧?      this.setData({ 
         loading: false, 
         loadingMore: false,
         refreshing: false 
@@ -150,8 +137,7 @@ Page({
   },
 
   /**
-   * 鍒锋柊璁㈠崟鍒楄〃
-   */
+   * 閸掗攱鏌婄拋銏犲礋閸掓銆?   */
   refreshOrders: function () {
     this.setData({
       page: 1,
@@ -165,8 +151,7 @@ Page({
   },
 
   /**
-   * 鍔犺浇鏇村璁㈠崟
-   */
+   * 閸旂姾娴囬弴鏉戭樋鐠併垹宕?   */
   loadMoreOrders: function () {
     if (this.data.hasMore && !this.data.loadingMore) {
       this.loadOrders();
@@ -174,22 +159,20 @@ Page({
   },
 
   /**
-   * 涓嬫媺鍒锋柊
+   * 娑撳濯洪崚閿嬫煀
    */
   onPullDownRefresh: function () {
     this.refreshOrders();
   },
 
   /**
-   * 涓婃媺鍔犺浇鏇村
-   */
+   * 娑撳﹥濯洪崝鐘烘祰閺囨潙顦?   */
   onReachBottom: function () {
     this.loadMoreOrders();
   },
 
   /**
-   * 鏌ョ湅璁㈠崟璇︽儏
-   */
+   * 閺屻儳婀呯拋銏犲礋鐠囷附鍎?   */
   viewOrderDetail: function (e) {
     const orderId = e.currentTarget.dataset.id;
     wx.navigateTo({
@@ -198,7 +181,7 @@ Page({
   },
 
   /**
-   * 鍘绘敮浠?   */
+   * 閸樼粯鏁禒?   */
   goToPay: function (e) {
     const order = e.currentTarget.dataset.order;
     wx.navigateTo({
@@ -207,82 +190,79 @@ Page({
   },
 
   /**
-   * 鍙栨秷璁㈠崟
+   * 閸欐牗绉风拋銏犲礋
    */
   cancelOrder: function (e) {
     const orderId = e.currentTarget.dataset.id;
     
-    showConfirm('纭畾瑕佸彇娑堣璁㈠崟鍚楋紵', async (res) => {
+    showConfirm('绾喖鐣剧憰浣稿絿濞戝牐顕氱拋銏犲礋閸氭绱?, async (res) => {
       if (res.confirm) {
         try {
-          showLoading('姝ｅ湪鍙栨秷璁㈠崟...');
+          showLoading('濮濓絽婀崣鏍ㄧХ鐠併垹宕?..');
           await orderService.cancelOrder(orderId);
           hideLoading();
-          showToast('璁㈠崟宸插彇娑?, { icon: 'success' });
+          showToast('鐠併垹宕熷鎻掑絿濞?, { icon: 'success' });
           
-          // 鍒锋柊璁㈠崟鍒楄〃
-          this.refreshOrders();
+          // 閸掗攱鏌婄拋銏犲礋閸掓銆?          this.refreshOrders();
         } catch (error) {
           hideLoading();
-          console.error('鍙栨秷璁㈠崟澶辫触:', error);
-          showToast(error.message || '鍙栨秷璁㈠崟澶辫触锛岃閲嶈瘯', { icon: 'none' });
+          console.error('閸欐牗绉风拋銏犲礋婢惰精瑙?', error);
+          showToast(error.message || '閸欐牗绉风拋銏犲礋婢惰精瑙﹂敍宀冾嚞闁插秷鐦?, { icon: 'none' });
         }
       }
     });
   },
 
   /**
-   * 纭鏀惰揣
+   * 绾喛顓婚弨鎯版彛
    */
   confirmReceipt: function (e) {
     const orderId = e.currentTarget.dataset.id;
     
-    showConfirm('纭宸叉敹鍒板晢鍝佸悧锛?, async (res) => {
+    showConfirm('绾喛顓诲鍙夋暪閸掓澘鏅㈤崫浣告偋閿?, async (res) => {
       if (res.confirm) {
         try {
-          showLoading('姝ｅ湪纭鏀惰揣...');
+          showLoading('濮濓絽婀涵顔款吇閺€鎯版彛...');
           await orderService.confirmReceipt(orderId);
           hideLoading();
-          showToast('纭鏀惰揣鎴愬姛', { icon: 'success' });
+          showToast('绾喛顓婚弨鎯版彛閹存劕濮?, { icon: 'success' });
           
-          // 鍒锋柊璁㈠崟鍒楄〃
-          this.refreshOrders();
+          // 閸掗攱鏌婄拋銏犲礋閸掓銆?          this.refreshOrders();
         } catch (error) {
           hideLoading();
-          console.error('纭鏀惰揣澶辫触:', error);
-          showToast(error.message || '纭鏀惰揣澶辫触锛岃閲嶈瘯', { icon: 'none' });
+          console.error('绾喛顓婚弨鎯版彛婢惰精瑙?', error);
+          showToast(error.message || '绾喛顓婚弨鎯版彛婢惰精瑙﹂敍宀冾嚞闁插秷鐦?, { icon: 'none' });
         }
       }
     });
   },
 
   /**
-   * 鍒犻櫎璁㈠崟
+   * 閸掔娀娅庣拋銏犲礋
    */
   deleteOrder: function (e) {
     const orderId = e.currentTarget.dataset.id;
     
-    showConfirm('纭畾瑕佸垹闄よ璁㈠崟鍚楋紵鍒犻櫎鍚庝笉鍙仮澶嶃€?, async (res) => {
+    showConfirm('绾喖鐣剧憰浣稿灩闂勩倛顕氱拋銏犲礋閸氭绱甸崚鐘绘珟閸氬簼绗夐崣顖涗划婢跺秲鈧?, async (res) => {
       if (res.confirm) {
         try {
-          showLoading('姝ｅ湪鍒犻櫎璁㈠崟...');
+          showLoading('濮濓絽婀崚鐘绘珟鐠併垹宕?..');
           await orderService.deleteOrder(orderId);
           hideLoading();
-          showToast('璁㈠崟宸插垹闄?, { icon: 'success' });
+          showToast('鐠併垹宕熷鎻掑灩闂?, { icon: 'success' });
           
-          // 鍒锋柊璁㈠崟鍒楄〃
-          this.refreshOrders();
+          // 閸掗攱鏌婄拋銏犲礋閸掓銆?          this.refreshOrders();
         } catch (error) {
           hideLoading();
-          console.error('鍒犻櫎璁㈠崟澶辫触:', error);
-          showToast(error.message || '鍒犻櫎璁㈠崟澶辫触锛岃閲嶈瘯', { icon: 'none' });
+          console.error('閸掔娀娅庣拋銏犲礋婢惰精瑙?', error);
+          showToast(error.message || '閸掔娀娅庣拋銏犲礋婢惰精瑙﹂敍宀冾嚞闁插秷鐦?, { icon: 'none' });
         }
       }
     });
   },
 
   /**
-   * 璇勪环璁㈠崟
+   * 鐠囧嫪鐜拋銏犲礋
    */
   reviewOrder: function (e) {
     const orderId = e.currentTarget.dataset.id;
@@ -292,12 +272,12 @@ Page({
   },
 
   /**
-   * 鍐嶆璐拱
+   * 閸愬秵顐肩拹顓濇嫳
    */
   buyAgain: function (e) {
     const order = e.currentTarget.dataset.order;
     
-    // 灏嗚鍗曞晢鍝佹坊鍔犲埌璐墿杞?    if (order.items && order.items.length > 0) {
+    // 鐏忓棜顓归崡鏇炴櫌閸濅焦鍧婇崝鐘插煂鐠愵厾澧挎潪?    if (order.items && order.items.length > 0) {
       const items = order.items.map(item => ({
         product_id: item.product_id,
         quantity: item.quantity,
@@ -311,7 +291,7 @@ Page({
   },
 
   /**
-   * 鏌ョ湅鐗╂祦
+   * 閺屻儳婀呴悧鈺傜ウ
    */
   viewLogistics: function (e) {
     const orderId = e.currentTarget.dataset.id;
@@ -321,7 +301,7 @@ Page({
   },
 
   /**
-   * 鏍煎紡鍖栨棩鏈?   */
+   * 閺嶇厧绱￠崠鏍ㄦ）閺?   */
   formatDate: function (dateString) {
     if (!dateString) return '';
     
@@ -340,8 +320,7 @@ Page({
   },
 
   /**
-   * 杩斿洖棣栭〉
-   */
+   * 鏉╂柨娲栨＃鏍€?   */
   backToHome: function () {
     wx.switchTab({
       url: '/pages/index/index'

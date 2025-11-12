@@ -1,26 +1,26 @@
-﻿<!-- 鏀粯椤甸潰缁撴瀯 -->
+锘?!-- 閺€顖欑帛妞ょ敻娼扮紒鎾寸€?-->
 <view class="container">
-  <!-- 鍔犺浇鐘舵€?-->
+  <!-- 閸旂姾娴囬悩鑸碘偓?-->
   <view class="loading" wx:if="{{loading}}">
-    <text>鍔犺浇涓?..</text>
+    <text>閸旂姾娴囨稉?..</text>
   </view>
   
-  <!-- 鏀粯淇℃伅 -->
+  <!-- 閺€顖欑帛娣団剝浼?-->
   <view class="pay-content" wx:else>
-    <!-- 璁㈠崟閲戦 -->
+    <!-- 鐠併垹宕熼柌鎴︻杺 -->
     <view class="amount-section">
-      <text class="amount-label">鏀粯閲戦</text>
-      <text class="amount">楼{{orderInfo ? orderInfo.totalAmount.toFixed(2) : '0.00'}}</text>
+      <text class="amount-label">閺€顖欑帛闁叉垿顤?/text>
+      <text class="amount">妤納{orderInfo ? orderInfo.totalAmount.toFixed(2) : '0.00'}}</text>
     </view>
     
-    <!-- 璁㈠崟缂栧彿 -->
+    <!-- 鐠併垹宕熺紓鏍у娇 -->
     <view class="order-info">
-      <text>璁㈠崟缂栧彿锛歿{orderInfo ? orderInfo.orderNo : ''}}</text>
+      <text>鐠併垹宕熺紓鏍у娇閿涙{orderInfo ? orderInfo.orderNo : ''}}</text>
     </view>
     
-    <!-- 鏀粯鏂瑰紡 -->
+    <!-- 閺€顖欑帛閺傜懓绱?-->
     <view class="payment-section">
-      <view class="section-title">閫夋嫨鏀粯鏂瑰紡</view>
+      <view class="section-title">闁瀚ㄩ弨顖欑帛閺傜懓绱?/view>
       
       <view class="payment-method" wx:for="{{paymentMethods}}" wx:key="id" wx:for-item="method" 
             bind:tap="onSelectPaymentMethod" data-id="{{method.id}}">
@@ -37,13 +37,13 @@
       </view>
     </view>
     
-    <!-- 鏀粯鎸夐挳 -->
-    <button class="pay-btn" bind:tap="onPay" loading="{{paying}}" disabled="{{paying}}">纭鏀粯</button>
+    <!-- 閺€顖欑帛閹稿鎸?-->
+    <button class="pay-btn" bind:tap="onPay" loading="{{paying}}" disabled="{{paying}}">绾喛顓婚弨顖欑帛</button>
     
-    <!-- 搴曢儴鎿嶄綔 -->
+    <!-- 鎼存洟鍎撮幙宥勭稊 -->
     <view class="bottom-actions">
-      <text class="action-link" bind:tap="onViewOrderDetail">鏌ョ湅璁㈠崟璇︽儏</text>
-      <text class="action-link" bind:tap="onBackToOrderList">杩斿洖璁㈠崟鍒楄〃</text>
+      <text class="action-link" bind:tap="onViewOrderDetail">閺屻儳婀呯拋銏犲礋鐠囷附鍎?/text>
+      <text class="action-link" bind:tap="onBackToOrderList">鏉╂柨娲栫拋銏犲礋閸掓銆?/text>
     </view>
   </view>
 </view>\n

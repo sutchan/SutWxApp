@@ -1,29 +1,22 @@
-﻿// 鍦板潃缂栬緫椤甸潰閫昏緫
+锘?/ 閸︽澘娼冪紓鏍帆妞ょ敻娼伴柅鏄忕帆
 const app = getApp();
 const { showToast } = app.global;
 
 Page({
   data: {
-    mode: 'add', // 妯″紡锛歛dd 娣诲姞锛宔dit 缂栬緫
-    id: '', // 鍦板潃ID锛堢紪杈戞ā寮忎笅浣跨敤锛?    name: '', // 鏀惰揣浜哄鍚?    phone: '', // 鎵嬫満鍙风爜
-    province: '', // 鐪佷唤
-    city: '', // 鍩庡競
-    district: '', // 鍖?鍘?    detail: '', // 璇︾粏鍦板潃
-    isDefault: false, // 鏄惁榛樿鍦板潃
-    loading: false, // 鍔犺浇鐘舵€?    submitting: false // 鎻愪氦鐘舵€?  },
+    mode: 'add', // 濡€崇础閿涙瓫dd 濞ｈ濮為敍瀹攄it 缂傛牞绶?    id: '', // 閸︽澘娼僆D閿涘牏绱潏鎴災佸蹇庣瑓娴ｈ法鏁ら敍?    name: '', // 閺€鎯版彛娴滃搫顫橀崥?    phone: '', // 閹靛婧€閸欓鐖?    province: '', // 閻椒鍞?    city: '', // 閸╁骸绔?    district: '', // 閸?閸?    detail: '', // 鐠囷妇绮忛崷鏉挎絻
+    isDefault: false, // 閺勵垰鎯佹妯款吇閸︽澘娼?    loading: false, // 閸旂姾娴囬悩鑸碘偓?    submitting: false // 閹绘劒姘﹂悩鑸碘偓?  },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸旂姾娴?   */
   onLoad: function(options) {
-    // 璁板綍椤甸潰璁块棶浜嬩欢
+    // 鐠佹澘缍嶆い鐢告桨鐠佸潡妫舵禍瀣╂
     app.analyticsService.track('page_view', {
       page: 'address_edit',
       mode: options.mode || 'add'
     });
     
-    // 鑾峰彇妯″紡鍜孖D鍙傛暟
-    const mode = options.mode || 'add';
+    // 閼惧嘲褰囧Ο鈥崇础閸滃瓥D閸欏倹鏆?    const mode = options.mode || 'add';
     const id = options.id || '';
     
     this.setData({
@@ -31,21 +24,19 @@ Page({
       id: id
     });
     
-    // 濡傛灉鏄紪杈戞ā寮忥紝鍔犺浇鍦板潃璇︽儏
+    // 婵″倹鐏夐弰顖滅椽鏉堟垶膩瀵骏绱濋崝鐘烘祰閸︽澘娼冪拠锔藉剰
     if (mode === 'edit' && id) {
       this.loadAddressDetail(id);
     }
   },
 
   /**
-   * 鍔犺浇鍦板潃璇︽儏
-   */
+   * 閸旂姾娴囬崷鏉挎絻鐠囷附鍎?   */
   async loadAddressDetail(id) {
     try {
       this.setData({ loading: true });
       
-      // 浣跨敤addressService鑾峰彇鍦板潃璇︽儏
-      const address = await app.services.address.getAddressDetail(id);
+      // 娴ｈ法鏁ddressService閼惧嘲褰囬崷鏉挎絻鐠囷附鍎?      const address = await app.services.address.getAddressDetail(id);
       
       this.setData({
         name: address.name || '',
@@ -57,15 +48,15 @@ Page({
         isDefault: address.isDefault || false
       });
     } catch (err) {
-      showToast(err.message || '鍔犺浇澶辫触锛岃閲嶈瘯', 'none');
-      // 杩斿洖鍒板湴鍧€鍒楄〃椤?      wx.navigateBack();
+      showToast(err.message || '閸旂姾娴囨径杈Е閿涘矁顕柌宥堢槸', 'none');
+      // 鏉╂柨娲栭崚鏉挎勾閸р偓閸掓銆冩い?      wx.navigateBack();
     } finally {
       this.setData({ loading: false });
     }
   },
 
   /**
-   * 杈撳叆濮撳悕
+   * 鏉堟挸鍙嗘慨鎾虫倳
    */
   onNameInput: function(e) {
     this.setData({
@@ -74,7 +65,7 @@ Page({
   },
 
   /**
-   * 杈撳叆鎵嬫満鍙?   */
+   * 鏉堟挸鍙嗛幍瀣簚閸?   */
   onPhoneInput: function(e) {
     this.setData({
       phone: e.detail.value
@@ -82,7 +73,7 @@ Page({
   },
 
   /**
-   * 閫夋嫨鍦板尯
+   * 闁瀚ㄩ崷鏉垮隘
    */
   onRegionChange: function(e) {
     const region = e.detail.value;
@@ -94,8 +85,7 @@ Page({
   },
 
   /**
-   * 杈撳叆璇︾粏鍦板潃
-   */
+   * 鏉堟挸鍙嗙拠锔剧矎閸︽澘娼?   */
   onDetailInput: function(e) {
     this.setData({
       detail: e.detail.value
@@ -103,7 +93,7 @@ Page({
   },
 
   /**
-   * 鍒囨崲鏄惁榛樿鍦板潃
+   * 閸掑洦宕查弰顖氭儊姒涙顓婚崷鏉挎絻
    */
   onDefaultChange: function(e) {
     this.setData({
@@ -112,30 +102,29 @@ Page({
   },
 
   /**
-   * 琛ㄥ崟楠岃瘉
+   * 鐞涖劌宕熸宀冪槈
    */
   validateForm() {
     const { name, phone, province, city, district, detail } = this.data;
     
     if (!name.trim()) {
-      showToast('璇疯緭鍏ユ敹璐т汉濮撳悕', 'none');
+      showToast('鐠囩柉绶崗銉︽暪鐠愌傛眽婵挸鎮?, 'none');
       return false;
     }
     
-    // 绠€鍗曠殑鎵嬫満鍙烽獙璇侊紙11浣嶆暟瀛楋級
-    const phoneRegex = /^1[3-9]\d{9}$/;
+    // 缁犫偓閸楁洜娈戦幍瀣簚閸欑兘鐛欑拠渚婄礄11娴ｅ秵鏆熺€涙绱?    const phoneRegex = /^1[3-9]\d{9}$/;
     if (!phone.trim() || !phoneRegex.test(phone)) {
-      showToast('璇疯緭鍏ユ纭殑鎵嬫満鍙风爜', 'none');
+      showToast('鐠囩柉绶崗銉︻劀绾喚娈戦幍瀣簚閸欓鐖?, 'none');
       return false;
     }
     
     if (!province || !city || !district) {
-      showToast('璇烽€夋嫨鎵€鍦ㄥ湴鍖?, 'none');
+      showToast('鐠囩兘鈧瀚ㄩ幍鈧崷銊ユ勾閸?, 'none');
       return false;
     }
     
     if (!detail.trim()) {
-      showToast('璇疯緭鍏ヨ缁嗗湴鍧€', 'none');
+      showToast('鐠囩柉绶崗銉嚊缂佸棗婀撮崸鈧?, 'none');
       return false;
     }
     
@@ -143,10 +132,10 @@ Page({
   },
 
   /**
-   * 鎻愪氦琛ㄥ崟
+   * 閹绘劒姘︾悰銊ュ礋
    */
   async onSubmit() {
-    // 琛ㄥ崟楠岃瘉
+    // 鐞涖劌宕熸宀冪槈
     if (!this.validateForm()) {
       return;
     }
@@ -156,8 +145,7 @@ Page({
       
       this.setData({ submitting: true });
       
-      // 鏋勫缓璇锋眰鍙傛暟
-      const data = {
+      // 閺嬪嫬缂撶拠閿嬬湴閸欏倹鏆?      const data = {
         name: name.trim(),
         phone: phone.trim(),
         province: province,
@@ -167,31 +155,31 @@ Page({
         isDefault: isDefault
       };
       
-      // 鏍规嵁妯″紡閫夋嫨璋冪敤鐨勬湇鍔℃柟娉?      if (mode === 'edit') {
-        // 璁板綍鍦板潃淇敼浜嬩欢
+      // 閺嶈宓佸Ο鈥崇础闁瀚ㄧ拫鍐暏閻ㄥ嫭婀囬崝鈩冩煙濞?      if (mode === 'edit') {
+        // 鐠佹澘缍嶉崷鏉挎絻娣囶喗鏁兼禍瀣╂
         app.analyticsService.track('address_updated', {
           address_id: id
         });
         
         await app.services.address.updateAddress(id, data);
-        showToast('淇敼鎴愬姛', 'success');
+        showToast('娣囶喗鏁奸幋鎰', 'success');
       } else {
-        // 璁板綍鍦板潃娣诲姞浜嬩欢
+        // 鐠佹澘缍嶉崷鏉挎絻濞ｈ濮炴禍瀣╂
         app.analyticsService.track('address_added', {
           province: province,
           is_default: isDefault
         });
         
         await app.services.address.createAddress(data);
-        showToast('娣诲姞鎴愬姛', 'success');
+        showToast('濞ｈ濮為幋鎰', 'success');
       }
       
-      // 寤惰繜杩斿洖鍦板潃鍒楄〃椤?      setTimeout(() => {
+      // 瀵ゆ儼绻滄潻鏂挎礀閸︽澘娼冮崚妤勩€冩い?      setTimeout(() => {
         wx.navigateBack();
       }, 1500);
     } catch (err) {
       const { mode } = this.data;
-      showToast(err.message || (mode === 'add' ? '娣诲姞澶辫触锛岃閲嶈瘯' : '淇敼澶辫触锛岃閲嶈瘯'), 'none');
+      showToast(err.message || (mode === 'add' ? '濞ｈ濮炴径杈Е閿涘矁顕柌宥堢槸' : '娣囶喗鏁兼径杈Е閿涘矁顕柌宥堢槸'), 'none');
     } finally {
       this.setData({ submitting: false });
     }

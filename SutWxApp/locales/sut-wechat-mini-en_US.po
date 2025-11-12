@@ -1,4 +1,4 @@
-﻿msgid ""msgstr """Project-Id-Version: Sut WeChat Mini 1.0.0\n""Report-Msgid-Bugs-To: \n""POT-Creation-Date: 2024-03-20\n""PO-Revision-Date: 2024-03-20\n""Last-Translator: Sut <sut@example.com>\n""Language-Team: English (United States) <en_US@li.org>\n""Language: en_US\n""MIME-Version: 1.0\n""Content-Type: text/plain; charset=UTF-8\n""Content-Transfer-Encoding: 8bit\n""Plural-Forms: nplurals=2; plural=(n != 1);\n"
+msgid ""msgstr """Project-Id-Version: Sut WeChat Mini 1.0.0\n""Report-Msgid-Bugs-To: \n""POT-Creation-Date: 2024-03-20\n""PO-Revision-Date: 2024-03-20\n""Last-Translator: Sut <sut@example.com>\n""Language-Team: English (United States) <en_US@li.org>\n""Language: en_US\n""MIME-Version: 1.0\n""Content-Type: text/plain; charset=UTF-8\n""Content-Transfer-Encoding: 8bit\n""Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: pages/user/points-tasks.jsmsgid "loading"
 msgstr "Loading..."
@@ -16,10 +16,70 @@ msgstr "Task completed"
 msgstr "Congratulations! You've earned {{points}} points"
 
 #: pages/user/points-tasks.jsmsgid "share_task_description"
-msgstr "Points reward will be automatically given after sharing"
+msgstr "Please share the mini-program with friends to complete the task"
+
+msgid "share_task_title"
+msgstr "Share Task"
+
+msgid "processing"
+msgstr "Processing..."
+
+msgid "points_unit"
+msgstr "points"
+
+msgid "task_completed"
+msgstr "Task Completed"
+
+msgid "operation_failed"
+msgstr "Operation Failed"
+
+msgid "claim_reward_failed"
+msgstr "Failed to claim reward"
+
+msgid "task_not_found"
+msgstr "Task not found"
+
+msgid "signin_task"
+msgstr "Sign-in Task"
+
+msgid "comment_task"
+msgstr "Comment Task"
+
+msgid "review_task"
+msgstr "Review Task"
+
+msgid "profile_task"
+msgstr "Profile Completion Task"
+
+msgid "purchase_task"
+msgstr "Purchase Task"
+
+msgid "order_task"
+msgstr "Order Task"
+
+msgid "follow_task"
+msgstr "Follow Task"
+
+msgid "favorite_task"
+msgstr "Favorite Task"
+
+msgid "navigation_failed"
+msgstr "Navigation failed"
+
+msgid "task_progress_update_success"
+msgstr "Task progress updated successfully"
+
+msgid "submit_task_progress_failed"
+msgstr "Failed to submit task progress"
+
+msgid "unnamed_task"
+msgstr "Unnamed Task"
+
+msgid "new_rewards_available"
+msgstr "New rewards available"
 
 #: pages/user/points-tasks.jsmsgid "app_slogan"
-msgstr "Sut WeChat Mini, making life better"
+msgstr "Sut WeChat Mini, Your Life Assistant"
 
 #: pages/user/points-tasks.wxmlmsgid "points_tasks_page_title"
 msgstr "Points Tasks"
@@ -81,5 +141,70 @@ msgstr "Please check again later"
 #: pages/user/points-tasks.wxmlmsgid "points_records"
 msgstr "Points Records"
 
-#: pages/user/points-tasks.wxmlmsgid "retry"
-msgstr "Retry"\n
+#: pages/user/points-tasks.wxml
+msgid "retry"
+msgstr "Retry"
+
+#: pages/user/points-tasks.js
+msgid "get_task_detail_failed"
+msgstr "Failed to get task details"
+
+#: pages/user/points-tasks.js
+msgid "task_progress_update_success"
+msgstr "Task progress updated successfully"
+
+#: pages/user/points-tasks.js
+msgid "submit_task_progress_failed"
+msgstr "Failed to submit task progress"
+
+#: pages/user/points-tasks.js
+msgid "claim_reward_failed"
+msgstr "Failed to claim reward"
+
+#: pages/user/points-tasks.wxml
+msgid "all_tasks"
+msgstr "All Tasks"
+
+#: pages/user/points-tasks.wxml
+msgid "newbie_tasks"
+msgstr "Newbie Tasks"
+
+#: pages/user/points-tasks.wxml
+msgid "daily_tasks"
+msgstr "Daily Tasks"
+
+#: pages/user/points-tasks.wxml
+msgid "weekly_tasks"
+msgstr "Weekly Tasks"
+
+#: pages/user/points-tasks.wxml
+msgid "monthly_tasks"
+msgstr "Monthly Tasks"
+
+#: pages/user/points-tasks.wxml
+msgid "completed"
+msgstr "Completed"
+
+#: pages/user/points-tasks.wxml
+msgid "claim_reward"
+msgstr "Claim Reward"
+
+#: pages/user/points-tasks.wxml
+msgid "go_do"
+msgstr "Go Do"
+
+#: pages/user/points-tasks.wxml
+msgid "no_tasks"
+msgstr "No Tasks Available"
+
+#: pages/user/points-tasks.js
+msgid "points_records"
+msgstr "Points Records"
+
+#: pages/user/points-tasks.js
+msgid "points_rules"
+msgstr "Points Rules"
+
+#: pages/user/points-tasks.js
+msgid "points_mall"
+msgstr "Points Mall"\n

@@ -1,18 +1,15 @@
-﻿// 鍟嗗搧璇︽儏椤甸潰閫昏緫
+锘?/ 閸熷棗鎼х拠锔藉剰妞ょ敻娼伴柅鏄忕帆
 import { showToast } from '../../../utils/global';
 
 Page({
   data: {
-    product: null, // 鍟嗗搧璇︽儏鏁版嵁
-    loading: true, // 鍔犺浇鐘舵€?    error: false, // 閿欒鐘舵€?    errorMsg: '', // 閿欒淇℃伅
-    selectedSku: {}, // 閫変腑鐨勫晢鍝佽鏍?    quantity: 1, // 璐拱鏁伴噺
-    images: [], // 鍟嗗搧鍥剧墖鍒楄〃
-    currentImageIndex: 0, // 褰撳墠鏄剧ず鐨勫浘鐗囩储寮?    isFavorite: false, // 鏄惁宸叉敹钘?    relatedProducts: [] // 鐩稿叧鍟嗗搧
+    product: null, // 閸熷棗鎼х拠锔藉剰閺佺増宓?    loading: true, // 閸旂姾娴囬悩鑸碘偓?    error: false, // 闁挎瑨顕ら悩鑸碘偓?    errorMsg: '', // 闁挎瑨顕ゆ穱鈩冧紖
+    selectedSku: {}, // 闁鑵戦惃鍕櫌閸濅浇顫夐弽?    quantity: 1, // 鐠愵厺鎷遍弫浼村櫤
+    images: [], // 閸熷棗鎼ч崶鍓у閸掓銆?    currentImageIndex: 0, // 瑜版挸澧犻弰鍓с仛閻ㄥ嫬娴橀悧鍥╁偍瀵?    isFavorite: false, // 閺勵垰鎯佸鍙夋暪閽?    relatedProducts: [] // 閻╃鍙ч崯鍡楁惂
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸旂姾娴?   */
   onLoad: function(options) {
     const app = getApp();
     
@@ -20,7 +17,7 @@ Page({
       this.productId = options.id;
       this.loadProductDetail();
       
-      // 璁板綍椤甸潰璁块棶浜嬩欢
+      // 鐠佹澘缍嶆い鐢告桨鐠佸潡妫舵禍瀣╂
       app.services.analytics.trackPageView('product_detail', {
         product_id: options.id
       });
@@ -28,27 +25,26 @@ Page({
       this.setData({
         loading: false,
         error: true,
-        errorMsg: '鍟嗗搧ID涓嶅瓨鍦?
+        errorMsg: '閸熷棗鎼D娑撳秴鐡ㄩ崷?
       });
     }
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閺勫墽銇?   */
   onShow: function() {
-    // 椤甸潰鏄剧ず鏃剁殑澶勭悊
+    // 妞ょ敻娼伴弰鍓с仛閺冨墎娈戞径鍕倞
   },
 
   /**
-   * 鐩戝惉鐢ㄦ埛涓嬫媺鍔ㄤ綔
+   * 閻╂垵鎯夐悽銊﹀煕娑撳濯洪崝銊ょ稊
    */
   onPullDownRefresh: function() {
     this.loadProductDetail();
   },
 
   /**
-   * 鍔犺浇鍟嗗搧璇︽儏鏁版嵁
+   * 閸旂姾娴囬崯鍡楁惂鐠囷附鍎忛弫鐗堝祦
    */
   loadProductDetail: async function() {
     const app = getApp();
@@ -58,8 +54,7 @@ Page({
     });
 
     try {
-      // 浣跨敤productService鑾峰彇鍟嗗搧璇︽儏
-      const product = await app.services.product.getProductDetail(this.productId);
+      // 娴ｈ法鏁roductService閼惧嘲褰囬崯鍡楁惂鐠囷附鍎?      const product = await app.services.product.getProductDetail(this.productId);
       
       this.setData({
         product: product,
@@ -68,32 +63,29 @@ Page({
         loading: false
       });
       
-      // 妫€鏌ュ晢鍝佹槸鍚﹀凡鏀惰棌
+      // 濡偓閺屻儱鏅㈤崫浣规Ц閸氾箑鍑￠弨鎯版
       this.checkFavoriteStatus();
-      // 鍔犺浇鐩稿叧鍟嗗搧
-      this.loadRelatedProducts();
+      // 閸旂姾娴囬惄绋垮彠閸熷棗鎼?      this.loadRelatedProducts();
     } catch (error) {
-      console.error('鑾峰彇鍟嗗搧璇︽儏澶辫触:', error);
+      console.error('閼惧嘲褰囬崯鍡楁惂鐠囷附鍎忔径杈Е:', error);
       this.setData({
         loading: false,
         error: true,
-        errorMsg: error.message || '鍔犺浇澶辫触锛岃閲嶈瘯'
+        errorMsg: error.message || '閸旂姾娴囨径杈Е閿涘矁顕柌宥堢槸'
       });
-      showToast('鑾峰彇鍟嗗搧璇︽儏澶辫触', 'none');
+      showToast('閼惧嘲褰囬崯鍡楁惂鐠囷附鍎忔径杈Е', 'none');
     } finally {
       wx.stopPullDownRefresh();
     }
   },
 
   /**
-   * 鍔犺浇鐩稿叧鍟嗗搧
-   */
+   * 閸旂姾娴囬惄绋垮彠閸熷棗鎼?   */
   loadRelatedProducts: async function() {
     const app = getApp();
     
     try {
-      // 浣跨敤productService鑾峰彇鐩稿叧鍟嗗搧
-      const result = await app.services.product.getRelatedProducts({
+      // 娴ｈ法鏁roductService閼惧嘲褰囬惄绋垮彠閸熷棗鎼?      const result = await app.services.product.getRelatedProducts({
         product_id: this.productId,
         limit: 6
       });
@@ -102,18 +94,18 @@ Page({
         relatedProducts: result.products || []
       });
     } catch (error) {
-      console.error('鑾峰彇鐩稿叧鍟嗗搧澶辫触:', error);
+      console.error('閼惧嘲褰囬惄绋垮彠閸熷棗鎼ф径杈Е:', error);
     }
   },
 
   /**
-   * 妫€鏌ュ晢鍝佹敹钘忕姸鎬?   */
+   * 濡偓閺屻儱鏅㈤崫浣规暪閽樺繒濮搁幀?   */
   checkFavoriteStatus: async function() {
     const app = getApp();
     
     try {
-      // 妫€鏌ョ敤鎴锋槸鍚︾櫥褰?      if (app.isLoggedIn()) {
-        // 浣跨敤favoriteService妫€鏌ユ敹钘忕姸鎬?        const result = await app.services.favorite.checkFavorite({
+      // 濡偓閺屻儳鏁ら幋閿嬫Ц閸氾妇娅ヨぐ?      if (app.isLoggedIn()) {
+        // 娴ｈ法鏁avoriteService濡偓閺屻儲鏁归挊蹇曞Ц閹?        const result = await app.services.favorite.checkFavorite({
           product_id: this.productId
         });
         
@@ -122,12 +114,12 @@ Page({
         });
       }
     } catch (error) {
-      console.error('妫€鏌ユ敹钘忕姸鎬佸け璐?', error);
+      console.error('濡偓閺屻儲鏁归挊蹇曞Ц閹礁銇戠拹?', error);
     }
   },
 
   /**
-   * 鍒囨崲鍥剧墖
+   * 閸掑洦宕查崶鍓у
    */
   onImageChange: function(e) {
     this.setData({
@@ -136,8 +128,7 @@ Page({
   },
 
   /**
-   * 鍒囨崲鍟嗗搧瑙勬牸
-   */
+   * 閸掑洦宕查崯鍡楁惂鐟欏嫭鐗?   */
   onSkuSelect: function(e) {
     const skuId = e.currentTarget.dataset.id;
     const sku = this.data.product.skus.find(s => s.id === skuId);
@@ -149,8 +140,7 @@ Page({
   },
 
   /**
-   * 澧炲姞璐拱鏁伴噺
-   */
+   * 婢х偛濮炵拹顓濇嫳閺佷即鍣?   */
   onIncreaseQuantity: function() {
     const maxQuantity = this.data.selectedSku.stock || this.data.product.stock || 99;
     if (this.data.quantity < maxQuantity) {
@@ -158,13 +148,12 @@ Page({
         quantity: this.data.quantity + 1
       });
     } else {
-      showToast('宸茶揪鍒版渶澶у簱瀛?, 'none');
+      showToast('瀹歌尪鎻崚鐗堟付婢堆冪氨鐎?, 'none');
     }
   },
 
   /**
-   * 鍑忓皯璐拱鏁伴噺
-   */
+   * 閸戝繐鐨拹顓濇嫳閺佷即鍣?   */
   onDecreaseQuantity: function() {
     if (this.data.quantity > 1) {
       this.setData({
@@ -174,13 +163,12 @@ Page({
   },
 
   /**
-   * 娣诲姞鍒拌喘鐗╄溅
-   */
+   * 濞ｈ濮為崚鎷屽枠閻椻晞婧?   */
   addToCart: async function() {
     const app = getApp();
     
-    // 妫€鏌ユ槸鍚︾櫥褰?    if (!app.isLoggedIn()) {
-      showToast('璇峰厛鐧诲綍', 'none');
+    // 濡偓閺屻儲妲搁崥锔炬瑜?    if (!app.isLoggedIn()) {
+      showToast('鐠囧嘲鍘涢惂璇茬秿', 'none');
       wx.navigateTo({
         url: '/pages/user/login/login'
       });
@@ -188,48 +176,47 @@ Page({
     }
     
     try {
-      // 浣跨敤cartService娣诲姞鍒拌喘鐗╄溅
-      await app.services.cart.addToCart({
+      // 娴ｈ法鏁artService濞ｈ濮為崚鎷屽枠閻椻晞婧?      await app.services.cart.addToCart({
         product_id: this.productId,
         sku_id: this.data.selectedSku.id || '',
         quantity: this.data.quantity
       });
       
-      // 璁板綍娣诲姞璐墿杞︿簨浠?      app.services.analytics.trackEvent('add_to_cart', {
+      // 鐠佹澘缍嶅ǎ璇插鐠愵厾澧挎潪锔跨皑娴?      app.services.analytics.trackEvent('add_to_cart', {
         product_id: this.productId,
         quantity: this.data.quantity,
         sku_id: this.data.selectedSku.id || ''
       });
       
-      showToast('娣诲姞鎴愬姛', 'success');
+      showToast('濞ｈ濮為幋鎰', 'success');
     } catch (error) {
-      console.error('娣诲姞鍒拌喘鐗╄溅澶辫触:', error);
-      showToast(error.message || '娣诲姞澶辫触锛岃閲嶈瘯', 'none');
+      console.error('濞ｈ濮為崚鎷屽枠閻椻晞婧呮径杈Е:', error);
+      showToast(error.message || '濞ｈ濮炴径杈Е閿涘矁顕柌宥堢槸', 'none');
     }
   },
 
   /**
-   * 绔嬪嵆璐拱
+   * 缁斿宓嗙拹顓濇嫳
    */
   buyNow: function() {
     const app = getApp();
     
-    // 妫€鏌ユ槸鍚︾櫥褰?    if (!app.isLoggedIn()) {
-      showToast('璇峰厛鐧诲綍', 'none');
+    // 濡偓閺屻儲妲搁崥锔炬瑜?    if (!app.isLoggedIn()) {
+      showToast('鐠囧嘲鍘涢惂璇茬秿', 'none');
       wx.navigateTo({
         url: '/pages/user/login/login'
       });
       return;
     }
     
-    // 璁板綍绔嬪嵆璐拱浜嬩欢
+    // 鐠佹澘缍嶇粩瀣祮鐠愵厺鎷辨禍瀣╂
     app.services.analytics.trackEvent('buy_now', {
       product_id: this.productId,
       quantity: this.data.quantity,
       sku_id: this.data.selectedSku.id || ''
     });
     
-    // 鏋勯€犺鍗曞弬鏁?    const orderItem = {
+    // 閺嬪嫰鈧姾顓归崡鏇炲棘閺?    const orderItem = {
       product_id: this.productId,
       sku_id: this.data.selectedSku.id || '',
       quantity: this.data.quantity,
@@ -237,23 +224,20 @@ Page({
       selectedSku: this.data.selectedSku
     };
     
-    // 淇濆瓨鍒板叏灞€鏁版嵁锛岀敤浜庤鍗曠‘璁ら〉
-    app.globalData.tempOrderItems = [orderItem];
+    // 娣囨繂鐡ㄩ崚鏉垮弿鐏炩偓閺佺増宓侀敍宀€鏁ゆ禍搴ゎ吂閸楁洜鈥樼拋銈夈€?    app.globalData.tempOrderItems = [orderItem];
     
-    // 璺宠浆鍒拌鍗曠‘璁ら〉
-    wx.navigateTo({
+    // 鐠哄疇娴嗛崚鎷岊吂閸楁洜鈥樼拋銈夈€?    wx.navigateTo({
       url: '/pages/order/confirm/confirm'
     });
   },
 
   /**
-   * 鏀惰棌/鍙栨秷鏀惰棌鍟嗗搧
-   */
+   * 閺€鎯版/閸欐牗绉烽弨鎯版閸熷棗鎼?   */
   onToggleFavorite: async function() {
     const app = getApp();
     
-    // 妫€鏌ユ槸鍚︾櫥褰?    if (!app.isLoggedIn()) {
-      showToast('璇峰厛鐧诲綍', 'none');
+    // 濡偓閺屻儲妲搁崥锔炬瑜?    if (!app.isLoggedIn()) {
+      showToast('鐠囧嘲鍘涢惂璇茬秿', 'none');
       wx.navigateTo({
         url: '/pages/user/login/login'
       });
@@ -264,12 +248,12 @@ Page({
     const action = isFavorite ? 'remove' : 'add';
     
     try {
-      // 涔愯鏇存柊UI
+      // 娑旀劘顫囬弴瀛樻煀UI
       this.setData({
         isFavorite: !isFavorite
       });
       
-      // 浣跨敤favoriteService鎿嶄綔鏀惰棌
+      // 娴ｈ法鏁avoriteService閹垮秳缍旈弨鎯版
       if (isFavorite) {
         await app.services.favorite.removeFavorite({
           product_id: this.productId
@@ -280,31 +264,28 @@ Page({
         });
       }
       
-      // 璁板綍鏀惰棌浜嬩欢
-      app.services.analytics.trackEvent(action === 'add' ? 'favorite_add' : 'favorite_remove', {
+      // 鐠佹澘缍嶉弨鎯版娴滃娆?      app.services.analytics.trackEvent(action === 'add' ? 'favorite_add' : 'favorite_remove', {
         product_id: this.productId
       });
       
-      showToast(isFavorite ? '鍙栨秷鏀惰棌鎴愬姛' : '鏀惰棌鎴愬姛', 'success');
+      showToast(isFavorite ? '閸欐牗绉烽弨鎯版閹存劕濮? : '閺€鎯版閹存劕濮?, 'success');
     } catch (error) {
-      console.error('鎿嶄綔鏀惰棌澶辫触:', error);
-      // 澶辫触鏃跺洖婊歎I
+      console.error('閹垮秳缍旈弨鎯版婢惰精瑙?', error);
+      // 婢惰精瑙﹂弮璺烘礀濠婃瓗I
       this.setData({
         isFavorite: isFavorite
       });
-      showToast(error.message || '鎿嶄綔澶辫触锛岃閲嶈瘯', 'none');
+      showToast(error.message || '閹垮秳缍旀径杈Е閿涘矁顕柌宥堢槸', 'none');
     }
   },
 
   /**
-   * 鏌ョ湅鐩稿叧鍟嗗搧
-   */
+   * 閺屻儳婀呴惄绋垮彠閸熷棗鎼?   */
   onRelatedProductTap: function(e) {
     const productId = e.currentTarget.dataset.id;
     const app = getApp();
     
-    // 璁板綍鐐瑰嚮鐩稿叧鍟嗗搧浜嬩欢
-    app.services.analytics.trackEvent('related_product_click', {
+    // 鐠佹澘缍嶉悙鐟板毊閻╃鍙ч崯鍡楁惂娴滃娆?    app.services.analytics.trackEvent('related_product_click', {
       product_id: productId,
       from_product_id: this.productId
     });
@@ -315,25 +296,24 @@ Page({
   },
 
   /**
-   * 閲嶈瘯鍔犺浇
+   * 闁插秷鐦崝鐘烘祰
    */
   onRetry: function() {
     this.loadProductDetail();
   },
 
   /**
-   * 鍒嗕韩鍔熻兘
+   * 閸掑棔闊╅崝鐔诲厴
    */
   onShareAppMessage: function() {
     const app = getApp();
     
-    // 璁板綍鍒嗕韩浜嬩欢
-    app.services.analytics.trackEvent('product_share', {
+    // 鐠佹澘缍嶉崚鍡曢煩娴滃娆?    app.services.analytics.trackEvent('product_share', {
       product_id: this.productId
     });
     
     return {
-      title: this.data.product ? this.data.product.title : '鍟嗗搧璇︽儏',
+      title: this.data.product ? this.data.product.title : '閸熷棗鎼х拠锔藉剰',
       path: '/pages/product/detail/detail?id=' + this.productId,
       imageUrl: this.data.images[0] || ''
     };

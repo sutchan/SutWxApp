@@ -1,36 +1,42 @@
-﻿// file-service.js - 鏂囦欢瀛樺偍鏈嶅姟妯″潡
-// 鍩轰簬鎶€鏈璁℃枃妗ｅ疄鐜扮殑鏂囦欢涓婁紶銆佷笅杞藉拰绠＄悊鏈嶅姟
+/**
+ * file-service.js - 文件服务模块
+ * 提供文件上传、下载、预览等相关功能
+ */
 
-import { request, upload } from './api';
-import { showToast } from './global';
-import { CACHE_KEYS, CACHE_DURATION, CacheManager } from './cache';
+const { request, upload } = require('./api');
+const { showToast } = require('./global');
+const { CACHE_KEYS, CACHE_DURATION, CacheManager } = require('./cache');
 
 /**
- * 鏂囦欢瀛樺偍鏈嶅姟绫? * 鎻愪緵鏂囦欢涓婁紶銆佷笅杞姐€佸垹闄ょ瓑鍔熻兘
+ * 文件服务类
+ * 处理文件上传、下载、预览等操作
  */
 class FileService {
   constructor() {
-    // 鏂囦欢缂撳瓨绠＄悊鍣紝鐢ㄤ簬缂撳瓨涓婁紶鐨勬枃浠朵俊鎭?    this.fileCacheManager = new CacheManager(CACHE_KEYS.FILE_INFO_PREFIX, CACHE_DURATION.MEDIUM);
+    // 初始化文件缓存管理器
+    this.fileCacheManager = new CacheManager(CACHE_KEYS.FILE_INFO_PREFIX, CACHE_DURATION.MEDIUM);
   }
 
   /**
-   * 涓婁紶鍗曚釜鏂囦欢
-   * @param {Object} options - 涓婁紶閫夐」
-   * @param {string} options.filePath - 鏂囦欢璺緞
-   * @param {string} options.name - 涓婁紶鏂囦欢鐨勫悕绉?   * @param {Object} options.formData - 鍏朵粬琛ㄥ崟鏁版嵁
-   * @param {string} options.fileType - 鏂囦欢绫诲瀷锛坕mage, video, audio, file绛夛級
-   * @param {Function} options.onProgressUpdate - 涓婁紶杩涘害鍥炶皟鍑芥暟
-   * @returns {Promise<Object>} 鏂囦欢涓婁紶缁撴灉
+   * 上传单个文件
+   * @param {Object} options - 上传配置
+   * @param {string} options.filePath - 文件本地路径
+   * @param {string} options.name - 上传文件的字段名
+   * @param {Object} options.formData - 额外表单数据
+   * @param {string} options.fileType - 文件类型：image, video, audio, file
+   * @param {Function} options.onProgressUpdate - 上传进度回调函数
+   * @returns {Promise<Object>} 上传结果
    */
   async uploadFile(options = {}) {
     try {
       const { filePath, name = 'file', formData = {}, fileType = 'file', onProgressUpdate } = options;
       
       if (!filePath) {
-        throw new Error('鏂囦欢璺緞涓嶈兘涓虹┖');
+        throw new Error('文件路径不能为空');
       }
 
-      // 鏍规嵁鏂囦欢绫诲瀷閫夋嫨涓嶅悓鐨勪笂浼犳帴鍙?      let uploadUrl = '/api/file/upload';
+      // 根据文件类型选择不同的上传接口
+      let uploadUrl = '/api/file/upload';
       if (fileType === 'image') {
         uploadUrl = '/api/file/upload/image';
       } else if (fileType === 'video') {
@@ -39,7 +45,7 @@ class FileService {
         uploadUrl = '/api/file/upload/audio';
       }
 
-      // 璋冪敤涓婁紶API
+      // 调用上传API
       const result = await upload({
         url: uploadUrl,
         filePath,
@@ -51,30 +57,33 @@ class FileService {
         onProgressUpdate
       });
 
-      // 缂撳瓨鏂囦欢淇℃伅
+      // 缓存文件信息
       if (result.data && result.data.fileId) {
         this.fileCacheManager.set(result.data.fileId, result.data);
       }
 
       return result.data;
     } catch (error) {
-      console.error('鏂囦欢涓婁紶澶辫触:', error);
-      showToast('鏂囦欢涓婁紶澶辫触');
+      console.error('文件上传失败', error);
+      showToast('文件上传失败');
       throw error;
     }
   }
 
   /**
-   * 鎵归噺涓婁紶鏂囦欢
-   * @param {Array} files - 鏂囦欢鏁扮粍锛屾瘡涓枃浠跺寘鍚玣ilePath鍜宯ame灞炴€?   * @param {Object} options - 涓婁紶閫夐」
-   * @returns {Promise<Array>} 鎵€鏈夋枃浠朵笂浼犵粨鏋?   */
+   * 批量上传文件
+   * @param {Array} files - 文件列表，每项包含filePath和name属性
+   * @param {Object} options - 上传配置
+   * @returns {Promise<Array>} 所有文件的上传结果
+   */
   async batchUploadFiles(files, options = {}) {
     if (!Array.isArray(files) || files.length === 0) {
-      throw new Error('鏂囦欢鏁扮粍涓嶈兘涓虹┖');
+      throw new Error('文件列表不能为空');
     }
 
     try {
-      // 骞跺彂涓婁紶鎵€鏈夋枃浠?      const uploadPromises = files.map(file => 
+      // 并行上传所有文件
+      const uploadPromises = files.map(file => 
         this.uploadFile({
           ...options,
           filePath: file.filePath,
@@ -82,257 +91,309 @@ class FileService {
         })
       );
 
-      // 浣跨敤Promise.all绛夊緟鎵€鏈変笂浼犲畬鎴?      const results = await Promise.all(uploadPromises);
+      // 使用Promise.all统一处理结果
+      const results = await Promise.all(uploadPromises);
       return results;
     } catch (error) {
-      console.error('鎵归噺鏂囦欢涓婁紶澶辫触:', error);
-      showToast('鎵归噺鏂囦欢涓婁紶澶辫触');
+      console.error('批量文件上传失败:', error);
+      showToast('批量文件上传失败');
       throw error;
     }
   }
 
   /**
-   * 鑾峰彇鏂囦欢淇℃伅
-   * @param {string} fileId - 鏂囦欢ID
-   * @returns {Promise<Object>} 鏂囦欢淇℃伅
+   * 获取文件信息
+   * @param {string} fileId - 文件ID
+   * @returns {Promise<Object>} 文件信息
    */
   async getFileInfo(fileId) {
     try {
       if (!fileId) {
-        throw new Error('鏂囦欢ID涓嶈兘涓虹┖');
+        throw new Error('文件ID不能为空');
       }
 
-      // 鍏堝皾璇曚粠缂撳瓨鑾峰彇
+      // 优先尝试从缓存获取
       const cachedInfo = this.fileCacheManager.get(fileId);
       if (cachedInfo) {
         return cachedInfo;
       }
 
-      // 缂撳瓨鏈懡涓紝浠庢湇鍔″櫒鑾峰彇
+      // 缓存不存在则请求服务器获取
       const result = await request({
         url: `/api/file/info/${fileId}`,
         method: 'GET'
       });
 
-      // 鏇存柊缂撳瓨
       if (result.data) {
+        // 更新缓存
         this.fileCacheManager.set(fileId, result.data);
+        return result.data;
+      } else {
+        throw new Error('获取文件信息失败');
       }
-
-      return result.data;
     } catch (error) {
-      console.error('鑾峰彇鏂囦欢淇℃伅澶辫触:', error);
+      console.error('获取文件信息失败', error);
+      showToast('获取文件信息失败');
       throw error;
     }
   }
 
   /**
-   * 鑾峰彇鏂囦欢涓嬭浇URL
-   * @param {string} fileId - 鏂囦欢ID
-   * @param {Object} options - 涓嬭浇閫夐」
-   * @returns {Promise<string>} 涓嬭浇URL
+   * 获取文件URL
+   * @param {string} fileId - 文件ID
+   * @param {Object} options - 选项参数
+   * @param {string} options.size - 图片尺寸参数，仅对图片有效
+   * @param {boolean} options.needFullUrl - 是否需要完整URL
+   * @returns {Promise<string>} 文件访问URL
    */
   async getFileUrl(fileId, options = {}) {
     try {
       if (!fileId) {
-        throw new Error('鏂囦欢ID涓嶈兘涓虹┖');
+        throw new Error('文件ID不能为空');
       }
 
-      // 浠庢湇鍔″櫒鑾峰彇涓嬭浇URL
-      const result = await request({
-        url: `/api/file/url/${fileId}`,
-        method: 'GET',
-        data: options
-      });
+      // 尝试从缓存获取文件信息
+      let fileInfo = this.fileCacheManager.get(fileId);
+      
+      // 缓存不存在则请求服务器
+      if (!fileInfo) {
+        fileInfo = await this.getFileInfo(fileId);
+      }
 
-      return result.data.url;
+      // 如果已有url字段，直接返回
+      if (fileInfo && fileInfo.url) {
+        return fileInfo.url;
+      }
+
+      // 构建文件访问URL
+      let url = `/api/file/download/${fileId}`;
+      
+      // 处理图片尺寸参数
+      if (options.size && fileInfo && fileInfo.type === 'image') {
+        url += `?size=${options.size}`;
+      }
+
+      // 如果需要完整URL，添加域名前缀
+      if (options.needFullUrl && fileInfo && fileInfo.fullUrl) {
+        return fileInfo.fullUrl;
+      }
+
+      return url;
     } catch (error) {
-      console.error('鑾峰彇鏂囦欢URL澶辫触:', error);
+      console.error('获取文件URL失败', error);
+      showToast('获取文件URL失败');
       throw error;
     }
   }
 
   /**
-   * 涓嬭浇鏂囦欢
-   * @param {string} fileId - 鏂囦欢ID
-   * @param {Object} options - 涓嬭浇閫夐」
-   * @returns {Promise<Object>} 涓嬭浇缁撴灉
+   * 下载文件
+   * @param {string} fileId - 文件ID
+   * @param {Object} options - 下载选项
+   * @param {string} options.filePath - 保存文件路径，不传则由系统决定
+   * @param {Function} options.onProgressUpdate - 下载进度回调
+   * @returns {Promise<Object>} 下载结果
    */
   async downloadFile(fileId, options = {}) {
     try {
-      // 鑾峰彇鏂囦欢URL
-      const downloadUrl = await this.getFileUrl(fileId, options);
+      if (!fileId) {
+        throw new Error('文件ID不能为空');
+      }
       
-      // 璋冪敤寰俊涓嬭浇API
-      return new Promise((resolve, reject) => {
-        wx.downloadFile({
-          url: downloadUrl,
-          success: (res) => {
-            if (res.statusCode === 200) {
-              resolve({ path: res.tempFilePath });
-            } else {
-              reject(new Error(`涓嬭浇澶辫触: ${res.statusCode}`));
-            }
-          },
-          fail: reject,
-          ...options
-        });
+      const { filePath, onProgressUpdate } = options;
+      
+      // 获取文件下载URL
+      const downloadUrl = await this.getFileUrl(fileId);
+      
+      // 调用下载API
+      const result = await request({
+        url: downloadUrl,
+        method: 'GET',
+        responseType: 'blob',
+        onProgressUpdate,
+        filePath
       });
+      
+      return result;
     } catch (error) {
-      console.error('鏂囦欢涓嬭浇澶辫触:', error);
-      showToast('鏂囦欢涓嬭浇澶辫触');
+      console.error('文件下载失败', error);
+      showToast('文件下载失败');
       throw error;
     }
   }
-
+  
   /**
-   * 鍒犻櫎鏂囦欢
-   * @param {string} fileId - 鏂囦欢ID
-   * @returns {Promise<boolean>} 鍒犻櫎缁撴灉
+   * 删除文件
+   * @param {string} fileId - 文件ID
+   * @returns {Promise<Object>} 删除结果
    */
   async deleteFile(fileId) {
     try {
       if (!fileId) {
-        throw new Error('鏂囦欢ID涓嶈兘涓虹┖');
+        throw new Error('文件ID不能为空');
       }
-
-      // 璋冪敤鍒犻櫎API
-      await request({
+      
+      const result = await request({
         url: `/api/file/delete/${fileId}`,
         method: 'POST'
       });
-
-      // 浠庣紦瀛樹腑绉婚櫎
+      
+      // 删除缓存
       this.fileCacheManager.remove(fileId);
       
-      return true;
+      return result.data;
     } catch (error) {
-      console.error('鏂囦欢鍒犻櫎澶辫触:', error);
-      showToast('鏂囦欢鍒犻櫎澶辫触');
+      console.error('文件删除失败', error);
+      showToast('文件删除失败');
       throw error;
     }
   }
-
+  
   /**
-   * 鑾峰彇鏂囦欢鍒楄〃
-   * @param {Object} params - 鏌ヨ鍙傛暟
-   * @param {number} params.page - 椤电爜
-   * @param {number} params.pageSize - 姣忛〉鏁伴噺
-   * @param {string} params.fileType - 鏂囦欢绫诲瀷
-   * @param {string} params.categoryId - 鍒嗙被ID
-   * @returns {Promise<Object>} 鏂囦欢鍒楄〃鍜屽垎椤典俊鎭?   */
+   * 获取文件列表
+   * @param {Object} params - 查询参数
+   * @param {string} params.fileType - 文件类型筛选
+   * @param {number} params.page - 页码
+   * @param {number} params.pageSize - 每页数量
+   * @returns {Promise<Object>} 文件列表和分页信息
+   */
   async getFileList(params = {}) {
     try {
-      const { page = 1, pageSize = 20, fileType, categoryId } = params;
-
       const result = await request({
         url: '/api/file/list',
         method: 'GET',
-        data: {
-          page,
-          pageSize,
-          fileType,
-          categoryId
-        }
+        data: params
       });
-
+      
       return result.data;
     } catch (error) {
-      console.error('鑾峰彇鏂囦欢鍒楄〃澶辫触:', error);
+      console.error('获取文件列表失败', error);
+      showToast('获取文件列表失败');
       throw error;
     }
   }
-
+  
   /**
-   * 涓婁紶鍥剧墖骞跺帇缂?   * @param {Object} options - 涓婁紶閫夐」
-   * @returns {Promise<Object>} 涓婁紶缁撴灉
+   * 压缩图片并上传
+   * @param {Object} options - 压缩上传选项
+   * @param {string} options.filePath - 图片路径
+   * @param {Object} options.formData - 额外表单数据
+   * @param {Function} options.onProgressUpdate - 上传进度回调
+   * @returns {Promise<Object>} 上传结果
    */
   async uploadImageWithCompression(options = {}) {
     try {
-      const { filePath, quality = 0.8 } = options;
+      const { filePath, formData, onProgressUpdate } = options;
       
       if (!filePath) {
-        throw new Error('鏂囦欢璺緞涓嶈兘涓虹┖');
+        throw new Error('图片路径不能为空');
       }
-
-      // 鍘嬬缉鍥剧墖
-      const compressedPath = await this.compressImage(filePath, quality);
-
-      // 涓婁紶鍘嬬缉鍚庣殑鍥剧墖
+      
+      // 先压缩图片
+      const compressedImage = await this.compressImage({
+        filePath
+      });
+      
+      // 上传压缩后的图片
       return await this.uploadFile({
-        ...options,
-        filePath: compressedPath,
-        fileType: 'image'
+        filePath: compressedImage.tempFilePath,
+        name: 'image',
+        fileType: 'image',
+        formData,
+        onProgressUpdate
       });
     } catch (error) {
-      console.error('鍥剧墖涓婁紶骞跺帇缂╁け璐?', error);
-      showToast('鍥剧墖涓婁紶澶辫触');
+      console.error('压缩图片上传失败', error);
+      showToast('压缩图片上传失败');
       throw error;
     }
   }
-
+  
   /**
-   * 鍘嬬缉鍥剧墖
-   * @param {string} filePath - 鍥剧墖璺緞
-   * @param {number} quality - 鍥剧墖璐ㄩ噺 (0-1)
-   * @returns {Promise<string>} 鍘嬬缉鍚庣殑鍥剧墖璺緞
+   * 压缩图片
+   * @param {Object} options - 压缩选项
+   * @param {string} options.filePath - 图片路径
+   * @param {number} options.quality - 压缩质量(0-1)
+   * @param {number} options.maxWidth - 最大宽度
+   * @returns {Promise<Object>} 压缩结果
    */
-  async compressImage(filePath, quality = 0.8) {
-    return new Promise((resolve, reject) => {
-      wx.compressImage({
+  async compressImage(options = {}) {
+    try {
+      const { filePath, quality = 0.8, maxWidth = 1080 } = options;
+      
+      if (!filePath) {
+        throw new Error('图片路径不能为空');
+      }
+      
+      // 调用小程序API进行图片压缩
+      return await wx.compressImage({
         src: filePath,
-        quality: quality * 100, // 寰俊API瑕佹眰璐ㄩ噺鏄?-100鐨勬暣鏁?        success: (res) => {
-          resolve(res.tempFilePath);
-        },
-        fail: reject
+        quality: Math.floor(quality * 100),
+        success: res => res,
+        fail: err => Promise.reject(err)
       });
-    });
+    } catch (error) {
+      console.error('图片压缩失败', error);
+      showToast('图片压缩失败');
+      throw error;
+    }
   }
-
+  
   /**
-   * 棰勮鍥剧墖
-   * @param {Array} urls - 鍥剧墖URL鏁扮粍
-   * @param {number} current - 褰撳墠鏄剧ず鐨勫浘鐗囩储寮?   * @returns {Promise<void>}
+   * 预览图片
+   * @param {Array} urls - 图片URL列表
+   * @param {number} current - 当前显示图片的索引
    */
   previewImage(urls, current = 0) {
     if (!Array.isArray(urls) || urls.length === 0) {
-      throw new Error('鍥剧墖URL鏁扮粍涓嶈兘涓虹┖');
+      console.error('预览图片失败：图片列表不能为空');
+      return;
     }
-
-    return new Promise((resolve, reject) => {
-      wx.previewImage({
-        urls,
-        current: urls[current] || urls[0],
-        success: resolve,
-        fail: reject
-      });
+    
+    // 确保current在有效范围内
+    const currentIndex = Math.max(0, Math.min(current, urls.length - 1));
+    
+    // 调用小程序预览图片API
+    wx.previewImage({
+      urls: urls,
+      current: urls[currentIndex],
+      success: res => res,
+      fail: err => {
+        console.error('预览图片失败', err);
+        showToast('预览图片失败');
+      }
     });
   }
-
+  
   /**
-   * 娓呴櫎鏂囦欢缂撳瓨
+   * 清除文件缓存
+   * @param {string} fileId - 文件ID，不传则清除所有文件缓存
    */
-  clearFileCache() {
-    this.fileCacheManager.clear();
+  clearFileCache(fileId = null) {
+    if (fileId) {
+      this.fileCacheManager.remove(fileId);
+    } else {
+      this.fileCacheManager.clearAll();
+    }
   }
 }
 
-// 瀵煎嚭鏂囦欢鏈嶅姟瀹炰緥
 const fileService = new FileService();
 
-// 瀵煎嚭鏂囦欢鏈嶅姟鐨勫父鐢ㄦ柟娉?export const {
-  uploadFile,
-  batchUploadFiles,
-  getFileInfo,
-  getFileUrl,
-  downloadFile,
-  deleteFile,
-  getFileList,
-  uploadImageWithCompression,
-  compressImage,
-  previewImage,
-  clearFileCache
-} = fileService;
+// 导出fileService实例
+const fileServiceExports = {
+  uploadFile: fileService.uploadFile.bind(fileService),
+  batchUploadFiles: fileService.batchUploadFiles.bind(fileService),
+  getFileInfo: fileService.getFileInfo.bind(fileService),
+  getFileUrl: fileService.getFileUrl.bind(fileService),
+  downloadFile: fileService.downloadFile.bind(fileService),
+  deleteFile: fileService.deleteFile.bind(fileService),
+  getFileList: fileService.getFileList.bind(fileService),
+  uploadImageWithCompression: fileService.uploadImageWithCompression.bind(fileService),
+  compressImage: fileService.compressImage.bind(fileService),
+  previewImage: fileService.previewImage.bind(fileService),
+  clearFileCache: fileService.clearFileCache.bind(fileService)
+};
 
-// 榛樿瀵煎嚭鏂囦欢鏈嶅姟瀹炰緥
-export default fileService;\n
+module.exports = fileServiceExports;
+module.exports.default = fileService;

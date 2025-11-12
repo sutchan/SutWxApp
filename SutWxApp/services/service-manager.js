@@ -1,40 +1,44 @@
-﻿// services/service-manager.js - 鏈嶅姟绠＄悊鍣?// 鎻愪緵鏈嶅姟鐨勭敓鍛藉懆鏈熺鐞嗐€佷緷璧栨敞鍏ュ拰鍒濆鍖栧姛鑳?
 /**
- * 鏈嶅姟绠＄悊鍣ㄧ被
- * 璐熻矗鏈嶅姟鐨勬敞鍐屻€佸垵濮嬪寲銆佷緷璧栨敞鍏ュ拰鐢熷懡鍛ㄦ湡绠＄悊
+ * 服务管理器
+ * 用于统一管理应用中的各种服务实例
  */
+
 class ServiceManager {
   constructor() {
-    // 鏈嶅姟娉ㄥ唽琛?    this.services = {};
-    // 鏈嶅姟瀹炰緥缂撳瓨
+    // 服务注册表
+    this.serviceRegistry = {};
+    // 服务依赖关系
+    this.dependencies = {};
+    // 已初始化的服务实例
     this.instances = {};
-    // 鏈嶅姟渚濊禆鍏崇郴鍥?    this.dependencies = {};
-    // 鍒濆鍖栫姸鎬?    this.initialized = false;
+    // 是否已初始化
+    this.initialized = false;
   }
 
   /**
-   * 娉ㄥ唽鏈嶅姟
-   * @param {string} name - 鏈嶅姟鍚嶇О
-   * @param {Function|Object} service - 鏈嶅姟鏋勯€犲嚱鏁版垨鏈嶅姟瀵硅薄
-   * @param {Array<string>} deps - 渚濊禆鐨勬湇鍔″悕绉板垪琛?   */
+   * 注册服务
+   * @param {string} name - 服务名称
+   * @param {Function|Object} service - 服务构造函数或对象
+   * @param {Array<string>} deps - 依赖的其他服务列表
+   */
   register(name, service, deps = []) {
-    if (this.services[name]) {
-      console.warn(`鏈嶅姟 ${name} 宸茬粡瀛樺湪锛屽皢琚鐩朻);
+    if (this.initialized && this.instances[name]) {
+      console.warn(`服务 ${name} 已经初始化，重新注册将在下次初始化时生效`);
     }
     
-    this.services[name] = service;
+    this.serviceRegistry[name] = service;
     this.dependencies[name] = deps;
-    
-    // 濡傛灉鏈嶅姟宸茬粡鍒濆鍖栵紝鍒欐敞閿€鏃у疄渚?    if (this.initialized && this.instances[name]) {
-      delete this.instances[name];
-    }
   }
 
   /**
-   * 鎵归噺娉ㄥ唽鏈嶅姟
-   * @param {Object} servicesMap - 鏈嶅姟鏄犲皠瀵硅薄 { name: { service, deps } }
+   * 批量注册服务
+   * @param {Object} servicesMap - 服务映射对象 {name: {service, deps}}
    */
   registerBulk(servicesMap) {
+    if (!servicesMap || typeof servicesMap !== 'object') {
+      return;
+    }
+    
     Object.keys(servicesMap).forEach(name => {
       const { service, deps = [] } = servicesMap[name];
       this.register(name, service, deps);
@@ -42,166 +46,162 @@ class ServiceManager {
   }
 
   /**
-   * 鑾峰彇鏈嶅姟瀹炰緥
-   * @param {string} name - 鏈嶅姟鍚嶇О
-   * @returns {Object} 鏈嶅姟瀹炰緥
-   */
-  get(name) {
-    // 濡傛灉瀹炰緥宸插瓨鍦紝鐩存帴杩斿洖
-    if (this.instances[name]) {
-      return this.instances[name];
-    }
-
-    // 妫€鏌ユ湇鍔℃槸鍚﹀凡娉ㄥ唽
-    if (!this.services[name]) {
-      throw new Error(`鏈嶅姟 ${name} 鏈敞鍐宍);
-    }
-
-    // 瑙ｆ瀽渚濊禆
-    const instance = this._resolveService(name);
-    return instance;
-  }
-
-  /**
-   * 鍒濆鍖栨墍鏈夋湇鍔?   * @returns {Promise<void>}
+   * 初始化所有服务
+   * @returns {Promise<void>}
    */
   async initialize() {
     if (this.initialized) {
-      console.warn('鏈嶅姟绠＄悊鍣ㄥ凡缁忓垵濮嬪寲');
+      console.warn('服务管理器已经初始化');
       return;
     }
 
     try {
-      // 鎸変緷璧栭『搴忓垵濮嬪寲鏈嶅姟
+      // 获取依赖排序后的服务名称列表
       const sortedServices = this._topologicalSort();
       
+      // 按顺序初始化每个服务
       for (const name of sortedServices) {
-        await this._resolveService(name);
+        await this._initializeService(name);
       }
-
+      
       this.initialized = true;
-      console.log('鎵€鏈夋湇鍔″垵濮嬪寲瀹屾垚');
     } catch (error) {
-      console.error('鏈嶅姟鍒濆鍖栧け璐?', error);
+      console.error('服务初始化失败:', error);
       throw error;
     }
   }
 
   /**
-   * 娓呯悊鏈嶅姟瀹炰緥
+   * 获取依赖排序后的服务名称列表
+   * @returns {Array<string>} 排序后的服务名称列表
    */
-  clear() {
-    this.instances = {};
-    this.initialized = false;
+  _topologicalSort() {
+    const visited = new Set();
+    const visiting = new Set();
+    const sorted = [];
+    
+    const visit = (node) => {
+      if (visited.has(node)) return;
+      if (visiting.has(node)) {
+        throw new Error(`服务依赖存在循环引用: ${node}`);
+      }
+      
+      visiting.add(node);
+      
+      // 先访问所有依赖
+      for (const dep of this.dependencies[node] || []) {
+        if (this.serviceRegistry[dep]) {
+          visit(dep);
+        }
+      }
+      
+      visiting.delete(node);
+      visited.add(node);
+      sorted.push(node);
+    };
+    
+    // 对所有服务进行拓扑排序
+    Object.keys(this.serviceRegistry).forEach(serviceName => {
+      visit(serviceName);
+    });
+    
+    return sorted;
   }
 
   /**
-   * 鑾峰彇鎵€鏈夊凡娉ㄥ唽鐨勬湇鍔″悕绉?   * @returns {Array<string>} 鏈嶅姟鍚嶇О鍒楄〃
-   */
-  getRegisteredServices() {
-    return Object.keys(this.services);
-  }
-
-  /**
-   * 鑾峰彇鎵€鏈夊凡鍒濆鍖栫殑鏈嶅姟瀹炰緥
-   * @returns {Object} 鏈嶅姟瀹炰緥鏄犲皠
+   * 获取所有服务实例
+   * @returns {Object} 服务实例映射
    */
   getInstances() {
     return { ...this.instances };
   }
 
   /**
-   * 妫€鏌ユ湇鍔℃槸鍚﹀凡鍒濆鍖?   * @returns {boolean} 鏄惁宸插垵濮嬪寲
+   * 获取指定服务实例
+   * @param {string} name - 服务名称
+   * @returns {*} 服务实例
    */
-  isInitialized() {
-    return this.initialized;
-  }
-
-  /**
-   * 鍐呴儴鏂规硶锛氳В鏋愭湇鍔′緷璧栧苟鍒涘缓瀹炰緥
-   * @private
-   * @param {string} name - 鏈嶅姟鍚嶇О
-   * @returns {Object} 鏈嶅姟瀹炰緥
-   */
-  async _resolveService(name) {
-    // 妫€鏌ュ惊鐜緷璧?    if (!this.instances[name]) {
-      // 鏍囪涓烘鍦ㄥ垵濮嬪寲锛岀敤浜庢娴嬪惊鐜緷璧?      this.instances[name] = '__initializing__';
-
-      try {
-        // 瑙ｆ瀽渚濊禆鏈嶅姟
-        const depsInstances = {};
-        for (const depName of this.dependencies[name]) {
-          if (this.instances[depName] === '__initializing__') {
-            throw new Error(`妫€娴嬪埌寰幆渚濊禆: ${name} -> ${depName}`);
-          }
-          depsInstances[depName] = await this._resolveService(depName);
-        }
-
-        const service = this.services[name];
-        let instance;
-
-        // 鏍规嵁鏈嶅姟绫诲瀷鍒涘缓瀹炰緥
-        if (typeof service === 'function') {
-          // 鏋勯€犲嚱鏁板舰寮?          instance = new service(depsInstances);
-        } else if (typeof service === 'object') {
-          // 瀵硅薄褰㈠紡
-          instance = service;
-        } else {
-          throw new Error(`鏈嶅姟 ${name} 绫诲瀷鏃犳晥`);
-        }
-
-        // 濡傛灉鏈嶅姟鏈夊垵濮嬪寲鏂规硶锛岃皟鐢ㄥ畠
-        if (instance.initialize && typeof instance.initialize === 'function') {
-          await instance.initialize(depsInstances);
-        }
-
-        this.instances[name] = instance;
-      } catch (error) {
-        // 鍒濆鍖栧け璐ワ紝娓呯悊鐘舵€?        delete this.instances[name];
-        throw error;
-      }
+  getService(name) {
+    if (!this.initialized) {
+      throw new Error('服务管理器尚未初始化');
     }
-
+    
+    if (!this.instances[name]) {
+      throw new Error(`服务 ${name} 不存在或未初始化`);
+    }
+    
     return this.instances[name];
   }
 
   /**
-   * 鍐呴儴鏂规硶锛氭嫇鎵戞帓搴忥紝鎸変緷璧栭『搴忔帓鍒楁湇鍔?   * @private
-   * @returns {Array<string>} 鎺掑簭鍚庣殑鏈嶅姟鍚嶇О鍒楄〃
+   * 初始化单个服务
+   * @param {string} name - 服务名称
+   * @returns {Promise<Object>} 服务实例
+   * @private
    */
-  _topologicalSort() {
-    const visited = new Set();
-    const result = [];
-    const tempVisited = new Set(); // 鐢ㄤ簬妫€娴嬪惊鐜緷璧?
-    const visit = (node) => {
-      // 妫€娴嬪惊鐜緷璧?      if (tempVisited.has(node)) {
-        throw new Error(`妫€娴嬪埌寰幆渚濊禆: ${node}`);
-      }
-
-      if (!visited.has(node)) {
-        tempVisited.add(node);
-        
-        // 鍏堣闂緷璧?        for (const dep of this.dependencies[node]) {
-          visit(dep);
-        }
-        
-        tempVisited.delete(node);
-        visited.add(node);
-        result.push(node);
-      }
-    };
-
-    // 璁块棶鎵€鏈夋湭璁块棶鐨勮妭鐐?    for (const node of Object.keys(this.services)) {
-      if (!visited.has(node)) {
-        visit(node);
-      }
+  async _initializeService(name) {
+    // 检查是否正在初始化或已初始化
+    if (this.instances[name] === '__initializing__') {
+      throw new Error(`服务依赖存在循环引用: ${name}`);
     }
+    
+    if (this.instances[name]) {
+      return this.instances[name];
+    }
+    
+    // 标记为正在初始化
+    this.instances[name] = '__initializing__';
+    
+    try {
+      const Service = this.serviceRegistry[name];
+      const deps = this.dependencies[name] || [];
+      
+      // 获取所有依赖的服务实例
+      const dependencyInstances = {};
+      for (const dep of deps) {
+        dependencyInstances[dep] = await this._initializeService(dep);
+      }
+      
+      // 创建服务实例
+      let instance;
+      if (typeof Service === 'function') {
+        // 构造函数方式
+        instance = new Service(dependencyInstances);
+      } else if (typeof Service === 'object') {
+        // 直接对象方式
+        instance = Service;
+      } else {
+        throw new Error(`服务 ${name} 类型无效`);
+      }
+      
+      // 如果服务有初始化方法，调用它
+      if (instance.initialize && typeof instance.initialize === 'function') {
+        await instance.initialize(dependencyInstances);
+      }
+      
+      this.instances[name] = instance;
+      return instance;
+    } catch (error) {
+      console.error(`初始化服务 ${name} 失败:`, error);
+      delete this.instances[name];
+      throw error;
+    }
+  }
 
-    return result;
+  /**
+   * 检查服务是否已注册
+   * @param {string} name - 服务名称
+   * @returns {boolean} 是否已注册
+   */
+  hasService(name) {
+    return !!this.serviceRegistry[name];
   }
 }
 
-// 鍒涘缓骞跺鍑哄崟渚嬪疄渚?const serviceManager = new ServiceManager();
-module.exports = serviceManager;
-module.exports.ServiceManager = ServiceManager; // 瀵煎嚭绫讳緵娴嬭瘯浣跨敤
-\n
+// 导出单例实例
+const serviceManager = new ServiceManager();
+
+module.exports = {
+  ServiceManager,
+  serviceManager
+};

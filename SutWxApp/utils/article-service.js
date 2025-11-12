@@ -1,38 +1,43 @@
-﻿// article-service.js - 鏂囩珷鐩稿叧鏈嶅姟妯″潡
-// 澶勭悊鏂囩珷鍒楄〃銆佹枃绔犺鎯呯瓑鍔熻兘鐨凙PI璋冪敤
+/**
+ * article-service.js - 文章服务模块
+ * 提供文章相关的数据获取和操作功能
+ */
+const { api } = require('./api');
+const { showToast, getStorage, setStorage } = require('./global');
+const cache = require('./cache');
+const CACHE_DURATION = cache.CACHE_DURATION;
+const CACHE_KEYS = cache.CACHE_KEYS;
+const validator = require('./validator');
+const { throttle } = require('./utils');
 
-import { api } from './api';
-import { showToast, getStorage, setStorage } from './global';
-import cache, { CACHE_DURATION, CACHE_KEYS } from './cache';
-import validator from './validator';
-import { throttle } from './utils';
-
-// 缂撳瓨閿父閲?const ARTICLE_LIST_KEY_PREFIX = CACHE_KEYS.ARTICLE_LIST || 'cache_articles';
+// 缓存键名前缀
+const ARTICLE_LIST_KEY_PREFIX = CACHE_KEYS.ARTICLE_LIST || 'cache_articles';
 const ARTICLE_DETAIL_KEY_PREFIX = CACHE_KEYS.ARTICLE_DETAIL || 'cache_article';
 const HOT_ARTICLES_KEY = CACHE_KEYS.HOT_ARTICLES || 'cache_hot_articles';
 const CATEGORIES_KEY = CACHE_KEYS.ARTICLE_CATEGORIES || 'cache_article_categories';
 
-// 缂撳瓨閰嶇疆
+// 缓存配置
 const ARTICLE_CACHE_CONFIG = {
-  ARTICLES: CACHE_DURATION.SHORT || 5 * 60 * 1000, // 5鍒嗛挓
-  ARTICLE_DETAIL: CACHE_DURATION.MEDIUM || 10 * 60 * 1000, // 10鍒嗛挓
-  HOT_ARTICLES: CACHE_DURATION.MEDIUM || 15 * 60 * 1000, // 15鍒嗛挓
-  CATEGORIES: CACHE_DURATION.LONG || 30 * 60 * 1000 // 30鍒嗛挓
+  ARTICLES: CACHE_DURATION.SHORT || 5 * 60 * 1000, // 5分钟缓存
+  ARTICLE_DETAIL: CACHE_DURATION.MEDIUM || 10 * 60 * 1000, // 10分钟缓存
+  HOT_ARTICLES: CACHE_DURATION.MEDIUM || 15 * 60 * 1000, // 15分钟缓存
+  CATEGORIES: CACHE_DURATION.LONG || 30 * 60 * 1000 // 30分钟缓存
 };
 
 /**
- * 鑾峰彇鏂囩珷鍒楄〃
- * @param {Object} params - 鏌ヨ鍙傛暟
- * @param {number} params.page - 椤电爜锛岄粯璁?
- * @param {number} params.per_page - 姣忛〉鏁伴噺锛岄粯璁?0
- * @param {number} params.category - 鍒嗙被ID锛屽彲閫? * @param {string} params.orderby - 鎺掑簭瀛楁锛岄粯璁?date'
- * @param {string} params.order - 鎺掑簭鏂瑰悜锛岄粯璁?desc'
- * @param {boolean} params.ignoreCache - 鏄惁蹇界暐缂撳瓨锛岄粯璁alse
- * @returns {Promise<Array>} - 杩斿洖鏂囩珷鍒楄〃
+ * 获取文章列表
+ * @param {Object} params - 查询参数
+ * @param {number} params.page - 页码
+ * @param {number} params.per_page - 每页数量，默认10
+ * @param {number} params.category - 分类ID
+ * @param {string} params.orderby - 排序字段，默认'date'
+ * @param {string} params.order - 排序方向，默认'desc'
+ * @param {boolean} params.ignoreCache - 是否忽略缓存，默认false
+ * @returns {Promise<Array>} - 文章列表数据
  */
-export const getArticles = async (params = {}) => {
+const getArticles = async (params = {}) => {
   try {
-    // 鏋勫缓榛樿鍙傛暟
+    // 构建查询参数
     const queryParams = {
       page: params.page || 1,
       per_page: params.per_page || 10,
@@ -41,25 +46,28 @@ export const getArticles = async (params = {}) => {
       order: params.order || 'desc'
     };
     
-    // 鍙傛暟楠岃瘉
+    // 参数验证
     if (validator && validator.isValidPagination) {
       if (!validator.isValidPagination(queryParams.page, queryParams.per_page)) {
-        throw new Error('鍒嗛〉鍙傛暟鏃犳晥');
+        throw new Error('分页参数错误');
       }
     }
     
-    // 鐢熸垚缂撳瓨閿?    const cacheKey = `${ARTICLE_LIST_KEY_PREFIX}_${JSON.stringify(queryParams)}`;
+    // 生成缓存键
+    const cacheKey = `${ARTICLE_LIST_KEY_PREFIX}_${JSON.stringify(queryParams)}`;
     
-    // 灏濊瘯浠庣紦瀛樿幏鍙栨暟鎹?    if (!params.ignoreCache) {
-      // 浼樺厛浣跨敤cache.js
+    // 尝试从缓存获取数据
+    if (!params.ignoreCache) {
+      // 优先从cache.js获取
       if (cache && cache.get) {
         const cachedData = await cache.get(cacheKey);
         if (cachedData) {
-          console.log('浠庣紦瀛樿幏鍙栨枃绔犲垪琛?);
+          console.log('从缓存获取文章列表数据');
           return cachedData;
         }
       } 
-      // 闄嶇骇浣跨敤鍏ㄥ眬瀛樺偍锛堜粎绗竴椤靛拰闈炲垎绫婚〉锛?      else if (queryParams.page === 1 && !queryParams.category) {
+      // 降级从global存储获取
+      else if (queryParams.page === 1 && !queryParams.category) {
         const cachedData = getStorage(cacheKey);
         if (cachedData && (Date.now() - cachedData.timestamp < CACHE_DURATION.ARTICLES)) {
           return cachedData.data;
@@ -67,36 +75,35 @@ export const getArticles = async (params = {}) => {
       }
     }
     
-    // 璋冪敤API
-    const articles = await api.get('/posts', queryParams, {
+    // 调用API
+    const articles = await api.get('/api/posts', queryParams, {
       abortKey: `article_list_${queryParams.category || 'all'}_${queryParams.page}`,
       useCache: !params.ignoreCache,
       cacheDuration: ARTICLE_CACHE_CONFIG.ARTICLES
     });
     
-    // API妯″潡宸插鐞嗙紦瀛橈紝鏃犻渶鍦ㄦ閲嶅澶勭悊
-    
+    // API调用成功，返回数据
     return articles;
   } catch (error) {
-    console.error('鑾峰彇鏂囩珷鍒楄〃澶辫触:', error);
+    console.error('获取文章列表失败:', error);
     
-    // 灏濊瘯浣跨敤缂撳瓨鏁版嵁锛堜粎绗竴椤碉級
+    // 尝试从缓存获取默认列表作为降级方案
     if (params.page === 1 && !params.ignoreCache) {
       const cacheKey = `${ARTICLE_LIST_KEY_PREFIX}_${JSON.stringify({ page: 1, per_page: params.per_page || 10, category: '', orderby: 'date', order: 'desc' })}`;
       
-      // 浼樺厛浣跨敤cache.js
+      // 优先从cache.js获取
       if (cache && cache.get) {
         const cachedData = await cache.get(cacheKey);
         if (cachedData) {
-          console.log('浣跨敤缂撳瓨鐨勬枃绔犲垪琛ㄦ暟鎹?);
+          console.log('降级从缓存获取文章列表');
           return cachedData;
         }
       }
-      // 闄嶇骇浣跨敤鍏ㄥ眬瀛樺偍
+      // 降级从global存储获取
       else {
         const cachedData = getStorage(cacheKey);
         if (cachedData) {
-          console.log('浣跨敤缂撳瓨鐨勬枃绔犲垪琛ㄦ暟鎹?);
+          console.log('降级从缓存获取文章列表');
           return cachedData.data;
         }
       }
@@ -107,23 +114,25 @@ export const getArticles = async (params = {}) => {
 };
 
 /**
- * 鑾峰彇鏂囩珷鍒嗙被鍒楄〃
- * @param {boolean} [ignoreCache] - 鏄惁蹇界暐缂撳瓨锛岄粯璁alse
- * @returns {Promise<Array>} 鍒嗙被鍒楄〃
+ * 获取文章分类列表
+ * @param {boolean} [ignoreCache] - 是否忽略缓存，默认false
+ * @returns {Promise<Array>} 分类列表
  */
-export const getCategories = async (ignoreCache = false) => {
+const getCategories = async (ignoreCache = false) => {
   try {
     const cacheKey = CATEGORIES_KEY;
     
-    // 濡傛灉涓嶅拷鐣ョ紦瀛樹笖缂撳瓨瀛樺湪锛屽垯杩斿洖缂撳瓨鏁版嵁
+    // 尝试从缓存获取数据
     if (!ignoreCache) {
+      // 优先从cache.js获取
       if (cache && cache.get) {
         const cachedData = await cache.get(cacheKey);
-        if (cachedData && Array.isArray(cachedData)) {
-          console.log('浠庣紦瀛樿幏鍙栨枃绔犲垎绫?);
+        if (cachedData) {
           return cachedData;
         }
-      } else {
+      }
+      // 降级从global存储获取
+      else {
         const cachedData = getStorage(cacheKey);
         if (cachedData && (Date.now() - cachedData.timestamp < CACHE_DURATION.CATEGORIES)) {
           return cachedData.data;
@@ -131,85 +140,88 @@ export const getCategories = async (ignoreCache = false) => {
       }
     }
     
-    // 璋冪敤API鑾峰彇鍒嗙被鍒楄〃
-    const response = await api.get('/categories', {}, {
+    // 调用API
+    const response = await api.get('/api/categories', {}, {
       useCache: !ignoreCache,
-      cacheDuration: ARTICLE_CACHE_CONFIG.CATEGORIES,
-      abortKey: 'article_categories'
+      cacheDuration: ARTICLE_CACHE_CONFIG.CATEGORIES
     });
     const categories = response.data || response;
     
-    // 楠岃瘉杩斿洖鏁版嵁
+    // 数据验证
     if (!Array.isArray(categories)) {
-      throw new Error('鑾峰彇鏂囩珷鍒嗙被澶辫触锛氳繑鍥炴暟鎹棤鏁?);
+      throw new Error('获取文章分类失败，返回数据格式错误');
     }
-    
-    // API妯″潡宸插鐞嗙紦瀛橈紝鏃犻渶鍦ㄦ閲嶅澶勭悊
     
     return categories;
   } catch (error) {
-    console.error('鑾峰彇鏂囩珷鍒嗙被澶辫触:', error);
-    throw new Error(error.message || '鑾峰彇鏂囩珷鍒嗙被澶辫触');
+    console.error('获取文章分类失败:', error);
+    throw new Error(error.message || '获取文章分类失败');
   }
 };
 
 /**
- * 娓呴櫎鏂囩珷鐩稿叧缂撳瓨
- * @returns {Promise<void>}
+ * 清除文章相关缓存
  */
-export const clearArticleCache = async () => {
+const clearArticleCache = async () => {
   try {
+    // 清除cache.js中的缓存
     if (cache && cache.clear) {
-      // 浣跨敤cache.js娓呴櫎缂撳瓨
-      await cache.clear([ARTICLE_LIST_KEY_PREFIX, ARTICLE_DETAIL_KEY_PREFIX, HOT_ARTICLES_KEY, CATEGORIES_KEY]);
-    } else {
-      // 闄嶇骇娓呴櫎鍏ㄥ眬瀛樺偍涓殑缂撳瓨
-      const keys = wx.getStorageInfoSync().keys;
-      const articleCacheKeys = keys.filter(key => 
-        key.startsWith('cache_articles_') || 
-        key.startsWith('cache_article_') || 
-        key.startsWith('cache_hot_articles') || 
-        key === 'cache_article_categories'
+      // 清除文章列表缓存
+      const keys = await cache.keys();
+      const articleKeys = keys.filter(key => 
+        key.startsWith(ARTICLE_LIST_KEY_PREFIX) ||
+        key.startsWith(ARTICLE_DETAIL_KEY_PREFIX) ||
+        key.startsWith(HOT_ARTICLES_KEY) ||
+        key.startsWith(CATEGORIES_KEY)
       );
       
-      articleCacheKeys.forEach(key => {
-        wx.removeStorageSync(key);
-      });
+      await Promise.all(articleKeys.map(key => cache.delete(key)));
     }
-    console.log('鏂囩珷缂撳瓨宸叉竻闄?);
+    
+    // 清除global存储中的缓存
+    const globalKeys = Object.keys(getStorage());
+    const articleGlobalKeys = globalKeys.filter(key => 
+      key.startsWith(ARTICLE_LIST_KEY_PREFIX) ||
+      key.startsWith(ARTICLE_DETAIL_KEY_PREFIX) ||
+      key.startsWith(HOT_ARTICLES_KEY) ||
+      key.startsWith(CATEGORIES_KEY)
+    );
+    
+    articleGlobalKeys.forEach(key => {
+      wx.removeStorageSync(key);
+    });
+    
   } catch (error) {
-    console.error('娓呴櫎鏂囩珷缂撳瓨澶辫触:', error);
-    throw new Error('娓呴櫎鏂囩珷缂撳瓨澶辫触');
+    console.error('清除文章缓存失败:', error);
   }
 };
 
 /**
- * 鑾峰彇鏂囩珷璇︽儏
- * @param {number|string} id - 鏂囩珷ID
- * @param {boolean} ignoreCache - 鏄惁蹇界暐缂撳瓨锛岄粯璁alse
- * @returns {Promise<Object>} - 杩斿洖鏂囩珷璇︽儏
+ * 获取文章详情
+ * @param {number|string} id - 文章ID
+ * @param {boolean} [ignoreCache] - 是否忽略缓存，默认false
+ * @returns {Promise<Object>} 文章详情数据
  */
-export const getArticleDetail = async (id, ignoreCache = false) => {
+const getArticleDetail = async (id, ignoreCache = false) => {
   try {
-    // 鍙傛暟楠岃瘉
-    if (validator && validator.isValidArticleId) {
-      if (!validator.isValidArticleId(id)) {
-        throw new Error('鏂囩珷ID鏃犳晥');
-      }
+    // 参数验证
+    if (!id) {
+      throw new Error('文章ID不能为空');
     }
     
     const cacheKey = `${ARTICLE_DETAIL_KEY_PREFIX}_${id}`;
     
-    // 灏濊瘯浠庣紦瀛樿幏鍙栨暟鎹?    if (!ignoreCache) {
-      // 浼樺厛浣跨敤cache.js
+    // 尝试从缓存获取数据
+    if (!ignoreCache) {
+      // 优先从cache.js获取
       if (cache && cache.get) {
         const cachedData = await cache.get(cacheKey);
         if (cachedData) {
-          console.log('浠庣紦瀛樿幏鍙栨枃绔犺鎯?);
+          console.log('从缓存获取文章详情');
           return cachedData;
         }
       }
-      // 闄嶇骇浣跨敤鍏ㄥ眬瀛樺偍
+      // 降级从global存储获取
       else {
         const cachedData = getStorage(cacheKey);
         if (cachedData && (Date.now() - cachedData.timestamp < CACHE_DURATION.ARTICLE_DETAIL)) {
@@ -218,72 +230,45 @@ export const getArticleDetail = async (id, ignoreCache = false) => {
       }
     }
     
-    // 璋冪敤API
-    const article = await api.get(`/posts/${id}`, {}, {
+    // 调用API
+    const response = await api.get(`/api/posts/${id}`, {}, {
       useCache: !ignoreCache,
-      cacheDuration: ARTICLE_CACHE_CONFIG.ARTICLE_DETAIL,
-      abortKey: `article_detail_${id}`
+      cacheDuration: ARTICLE_CACHE_CONFIG.ARTICLE_DETAIL
     });
+    const article = response.data || response;
     
-    // API妯″潡宸插鐞嗙紦瀛橈紝鏃犻渶鍦ㄦ閲嶅澶勭悊
+    // 数据验证
+    if (!article || !article.id) {
+      throw new Error('获取文章详情失败，返回数据格式错误');
+    }
     
     return article;
   } catch (error) {
-    console.error('鑾峰彇鏂囩珷璇︽儏澶辫触:', error);
-    
-    // 灏濊瘯浣跨敤缂撳瓨鏁版嵁
-    if (!ignoreCache) {
-      const cacheKey = `${ARTICLE_DETAIL_KEY_PREFIX}_${id}`;
-      
-      // 浼樺厛浣跨敤cache.js
-      if (cache && cache.get) {
-        const cachedData = await cache.get(cacheKey);
-        if (cachedData) {
-          console.log('浣跨敤缂撳瓨鐨勬枃绔犺鎯呮暟鎹?);
-          return cachedData;
-        }
-      }
-      // 闄嶇骇浣跨敤鍏ㄥ眬瀛樺偍
-      else {
-        const cachedData = getStorage(cacheKey);
-        if (cachedData) {
-          console.log('浣跨敤缂撳瓨鐨勬枃绔犺鎯呮暟鎹?);
-          return cachedData.data;
-        }
-      }
-    }
-    
+    console.error('获取文章详情失败:', error);
     throw error;
   }
 };
 
 /**
- * 鑾峰彇鐑棬鏂囩珷
- * @param {number} limit - 鑾峰彇鏁伴噺锛岄粯璁?0
- * @param {boolean} ignoreCache - 鏄惁蹇界暐缂撳瓨锛岄粯璁alse
- * @returns {Promise<Array>} - 杩斿洖鐑棬鏂囩珷鍒楄〃
+ * 获取热门文章
+ * @param {number} limit - 数量限制，默认10
+ * @param {boolean} [ignoreCache] - 是否忽略缓存，默认false
+ * @returns {Promise<Array>} 热门文章列表
  */
-export const getHotArticles = async (limit = 10, ignoreCache = false) => {
+const getHotArticles = async (limit = 10, ignoreCache = false) => {
   try {
-    // 鍙傛暟楠岃瘉
-    if (validator && validator.isValidQuantity) {
-      if (!validator.isValidQuantity(limit, { min: 1, max: 50 })) {
-        throw new Error('鏁伴噺鍙傛暟鏃犳晥');
-      }
-    }
-    
     const cacheKey = `${HOT_ARTICLES_KEY}_${limit}`;
     
-    // 灏濊瘯浠庣紦瀛樿幏鍙栨暟鎹?    if (!ignoreCache) {
-      // 浼樺厛浣跨敤cache.js
+    // 尝试从缓存获取数据
+    if (!ignoreCache) {
+      // 优先从cache.js获取
       if (cache && cache.get) {
         const cachedData = await cache.get(cacheKey);
-        if (cachedData && Array.isArray(cachedData)) {
-          console.log('浠庣紦瀛樿幏鍙栫儹闂ㄦ枃绔?);
+        if (cachedData) {
           return cachedData;
         }
       }
-      // 闄嶇骇浣跨敤鍏ㄥ眬瀛樺偍
+      // 降级从global存储获取
       else {
         const cachedData = getStorage(cacheKey);
         if (cachedData && (Date.now() - cachedData.timestamp < CACHE_DURATION.HOT_ARTICLES)) {
@@ -292,253 +277,268 @@ export const getHotArticles = async (limit = 10, ignoreCache = false) => {
       }
     }
     
-    // 璋冪敤API
-    const articles = await api.get('/posts/hot', { limit }, {
+    // 调用API
+    const response = await api.get('/api/posts/hot', { limit }, {
       useCache: !ignoreCache,
-      cacheDuration: ARTICLE_CACHE_CONFIG.HOT_ARTICLES,
-      abortKey: `hot_articles_${limit}`
+      cacheDuration: ARTICLE_CACHE_CONFIG.HOT_ARTICLES
     });
+    const articles = response.data || response;
     
-    // API妯″潡宸插鐞嗙紦瀛橈紝鏃犻渶鍦ㄦ閲嶅澶勭悊
+    // 数据验证
+    if (!Array.isArray(articles)) {
+      throw new Error('获取热门文章失败，返回数据格式错误');
+    }
     
     return articles;
   } catch (error) {
-    console.error('鑾峰彇鐑棬鏂囩珷澶辫触:', error);
-    
-    // 灏濊瘯浣跨敤缂撳瓨鏁版嵁
-    if (!ignoreCache) {
-      const cacheKey = `${HOT_ARTICLES_KEY}_${limit}`;
-      
-      // 浼樺厛浣跨敤cache.js
-      if (cache && cache.get) {
-        const cachedData = await cache.get(cacheKey);
-        if (cachedData) {
-          console.log('浣跨敤缂撳瓨鐨勭儹闂ㄦ枃绔犳暟鎹?);
-          return cachedData;
-        }
-      }
-      // 闄嶇骇浣跨敤鍏ㄥ眬瀛樺偍
-      else {
-        const cachedData = getStorage(cacheKey);
-        if (cachedData) {
-          console.log('浣跨敤缂撳瓨鐨勭儹闂ㄦ枃绔犳暟鎹?);
-          return cachedData.data;
-        }
-      }
-    }
-    
+    console.error('获取热门文章失败:', error);
     throw error;
   }
 };
 
 /**
- * 鎼滅储鏂囩珷
- * @param {string} keyword - 鎼滅储鍏抽敭璇? * @param {Object} params - 鎼滅储鍙傛暟
- * @param {number} params.page - 椤电爜锛岄粯璁?
- * @param {number} params.per_page - 姣忛〉鏁伴噺锛岄粯璁?0
- * @returns {Promise<Array>} - 杩斿洖鎼滅储缁撴灉
+ * 搜索文章
+ * @param {string} keyword - 搜索关键词
+ * @param {Object} params - 查询参数
+ * @returns {Promise<Array>} 搜索结果
  */
-export const searchArticles = async (keyword, params = {}) => {
+const searchArticles = async (keyword, params = {}) => {
   try {
-    // 鍙傛暟楠岃瘉
+    // 参数验证
     if (!keyword || keyword.trim() === '') {
-      throw new Error('鎼滅储鍏抽敭璇嶄笉鑳戒负绌?);
+      throw new Error('搜索关键词不能为空');
     }
     
-    // 浣跨敤validator杩涜鍏抽敭璇嶉獙璇?    if (validator && validator.isValidString) {
-      if (!validator.isValidString(keyword.trim())) {
-        throw new Error('鎼滅储鍏抽敭璇嶆棤鏁?);
-      }
-    }
-    
-    // 鏋勫缓鎼滅储鍙傛暟
-    const searchParams = {
+    // 构建查询参数
+    const queryParams = {
       keyword: keyword.trim(),
       page: params.page || 1,
-      per_page: params.per_page || 10
+      per_page: params.per_page || 10,
+      ...params
     };
     
-    // 璋冪敤API
-    const results = await api.get('/posts/search', searchParams, {
-      abortKey: `article_search_${encodeURIComponent(keyword)}_${searchParams.page}`
-    });
+    // 调用API
+    const response = await api.get('/api/posts/search', queryParams);
     
-    return results;
+    return response.data || response;
   } catch (error) {
-    console.error('鎼滅储鏂囩珷澶辫触:', error);
+    console.error('搜索文章失败:', error);
     throw error;
   }
 };
 
 /**
- * 鍙栨秷鐐硅禐鏂囩珷
- * @param {number|string} postId - 鏂囩珷ID
- * @returns {Promise<Object>} - 杩斿洖鎿嶄綔缁撴灉
+ * 取消点赞文章
+ * @param {number|string} postId - 文章ID
+ * @returns {Promise<Object>} 操作结果
  */
-export const unlikeArticle = async (postId) => {
+const unlikeArticle = async (postId) => {
   try {
-    // 鍙傛暟楠岃瘉
-    if (validator && validator.isValidArticleId) {
-      if (!validator.isValidArticleId(postId)) {
-        throw new Error('鏂囩珷ID鏃犳晥');
-      }
+    // 参数验证
+    if (!postId) {
+      throw new Error('文章ID不能为空');
     }
     
-    // 璋冪敤API
-    const result = await api.delete(`/posts/${postId}/like`, {}, {
-      abortKey: `unlike_article_${postId}`
-    });
+    // 调用API
+    const response = await api.delete(`/api/posts/${postId}/like`);
     
-    // 娓呴櫎鐩稿叧缂撳瓨
-    api.clearCache(`/posts/${postId}`);
-    
-    return result;
+    return response;
   } catch (error) {
-    console.error('鍙栨秷鐐硅禐鏂囩珷澶辫触:', error);
-    throw new Error(error.message || '鍙栨秷鐐硅禐鏂囩珷澶辫触');
+    console.error('取消点赞失败:', error);
+    throw error;
   }
 };
 
 /**
- * 鑾峰彇鏂囩珷璇勮
- * @param {number|string} postId - 鏂囩珷ID
- * @param {Object} params - 鏌ヨ鍙傛暟
- * @param {number} params.page - 椤电爜锛岄粯璁?
- * @param {number} params.per_page - 姣忛〉鏁伴噺锛岄粯璁?0
- * @returns {Promise<Array>} - 杩斿洖璇勮鍒楄〃
+ * 获取文章评论
+ * @param {number|string} postId - 文章ID
+ * @param {Object} params - 查询参数
+ * @returns {Promise<Array>} 评论列表
  */
-export const getArticleComments = async (postId, params = {}) => {
+const getArticleComments = async (postId, params = {}) => {
   try {
+    // 参数验证
+    if (!postId) {
+      throw new Error('文章ID不能为空');
+    }
+    
+    // 构建查询参数
     const queryParams = {
       page: params.page || 1,
-      per_page: params.per_page || 10
+      per_page: params.per_page || 20,
+      ...params
     };
     
-    return await api.get(`/posts/${postId}/comments`, queryParams, {
-    abortKey: `article_comments_${postId}_${queryParams.page}`
-  });
+    // 调用API
+    const response = await api.get(`/api/posts/${postId}/comments`, queryParams);
+    
+    return response.data || response;
   } catch (error) {
-    console.error('鑾峰彇鏂囩珷璇勮澶辫触:', error);
+    console.error('获取文章评论失败:', error);
     throw error;
   }
 };
 
 /**
- * 鍙戣〃鏂囩珷璇勮
- * @param {number|string} postId - 鏂囩珷ID
- * @param {string} content - 璇勮鍐呭
- * @param {number} parentId - 鐖惰瘎璁篒D锛岀敤浜庡洖澶嶏紝鍙€? * @returns {Promise<Object>} - 杩斿洖璇勮缁撴灉
+ * 提交评论
+ * @param {number|string} postId - 文章ID
+ * @param {string} content - 评论内容
+ * @param {number|string} parentId - 父评论ID，默认为0（顶级评论）
+ * @returns {Promise<Object>} 评论结果
  */
-export const submitComment = async (postId, content, parentId = 0) => {
+const submitComment = async (postId, content, parentId = 0) => {
   try {
+    // 参数验证
+    if (!postId) {
+      throw new Error('文章ID不能为空');
+    }
     if (!content || content.trim() === '') {
-      throw new Error('璇勮鍐呭涓嶈兘涓虹┖');
+      throw new Error('评论内容不能为空');
     }
     
-    const data = {
-      post_id: postId,
+    // 调用API
+    const response = await api.post(`/api/posts/${postId}/comments`, {
       content: content.trim(),
       parent_id: parentId
-    };
+    });
     
-    const result = await api.post('/comments', data, {
-      abortKey: `submit_comment_${postId}`
-    });
-    showToast('璇勮鎴愬姛', { icon: 'success' });
+    // 成功提示
+    if (response.code === 200 || response.success) {
+      showToast('评论成功', 'success');
+    }
     
-    return result;
+    return response;
   } catch (error) {
-    console.error('鍙戣〃璇勮澶辫触:', error);
+    console.error('提交评论失败:', error);
+    showToast(error.message || '评论失败，请稍后重试', 'none');
     throw error;
   }
 };
 
 /**
- * 鐐硅禐鏂囩珷
- * @param {number|string} postId - 鏂囩珷ID
- * @returns {Promise<Object>} - 杩斿洖鐐硅禐缁撴灉
+ * 点赞文章
+ * @param {number|string} postId - 文章ID
+ * @returns {Promise<Object>} 操作结果
  */
-export const likeArticle = async (postId) => {
+const likeArticle = async (postId) => {
   try {
-    const result = await api.post(`/posts/${postId}/like`, {}, {
-      abortKey: `like_article_${postId}`
-    });
-    return result;
+    // 参数验证
+    if (!postId) {
+      throw new Error('文章ID不能为空');
+    }
+    
+    // 调用API
+    const response = await api.post(`/api/posts/${postId}/like`);
+    
+    // 成功提示
+    if (response.code === 200 || response.success) {
+      showToast('点赞成功', 'success');
+    }
+    
+    return response;
   } catch (error) {
-    console.error('鐐硅禐鏂囩珷澶辫触:', error);
+    console.error('点赞失败:', error);
+    showToast(error.message || '点赞失败，请稍后重试', 'none');
     throw error;
   }
 };
 
 /**
- * 鏀惰棌鏂囩珷
- * @param {number|string} postId - 鏂囩珷ID
- * @returns {Promise<Object>} - 杩斿洖鏀惰棌缁撴灉
+ * 收藏文章
+ * @param {number|string} postId - 文章ID
+ * @returns {Promise<Object>} 操作结果
  */
-export const favoriteArticle = async (postId) => {
+const favoriteArticle = async (postId) => {
   try {
-    const result = await api.post(`/posts/${postId}/favorite`, {}, {
-      abortKey: `favorite_article_${postId}`
-    });
-    showToast('鏀惰棌鎴愬姛', { icon: 'success' });
-    return result;
+    // 参数验证
+    if (!postId) {
+      throw new Error('文章ID不能为空');
+    }
+    
+    // 调用API
+    const response = await api.post(`/api/posts/${postId}/favorite`);
+    
+    // 成功提示
+    if (response.code === 200 || response.success) {
+      showToast('收藏成功', 'success');
+    }
+    
+    return response;
   } catch (error) {
-    console.error('鏀惰棌鏂囩珷澶辫触:', error);
+    console.error('收藏失败:', error);
+    showToast(error.message || '收藏失败，请稍后重试', 'none');
     throw error;
   }
 };
 
 /**
- * 鍙栨秷鏀惰棌鏂囩珷
- * @param {number|string} postId - 鏂囩珷ID
- * @returns {Promise<Object>} - 杩斿洖鍙栨秷鏀惰棌缁撴灉
+ * 取消收藏文章
+ * @param {number|string} postId - 文章ID
+ * @returns {Promise<Object>} 操作结果
  */
-export const unfavoriteArticle = async (postId) => {
+const unfavoriteArticle = async (postId) => {
   try {
-    const result = await api.delete(`/posts/${postId}/favorite`, {}, {
-      abortKey: `unfavorite_article_${postId}`
-    });
-    showToast('宸插彇娑堟敹钘?, { icon: 'success' });
-    return result;
+    // 参数验证
+    if (!postId) {
+      throw new Error('文章ID不能为空');
+    }
+    
+    // 调用API
+    const response = await api.delete(`/api/posts/${postId}/favorite`);
+    
+    // 成功提示
+    if (response.code === 200 || response.success) {
+      showToast('已取消收藏', 'success');
+    }
+    
+    return response;
   } catch (error) {
-    console.error('鍙栨秷鏀惰棌澶辫触:', error);
+    console.error('取消收藏失败:', error);
+    showToast(error.message || '操作失败，请稍后重试', 'none');
     throw error;
   }
 };
 
 /**
- * 妫€鏌ユ枃绔犳槸鍚﹀凡鏀惰棌
- * @param {number|string} postId - 鏂囩珷ID
- * @returns {Promise<boolean>} - 鏄惁宸叉敹钘? */
-export const checkFavoriteStatus = async (postId) => {
+ * 检查文章收藏状态
+ * @param {number|string} postId - 文章ID
+ * @returns {Promise<boolean>} 是否已收藏
+ */
+const checkFavoriteStatus = async (postId) => {
   try {
-    const result = await api.get(`/posts/${postId}/favorite/status`, {}, {
-      abortKey: `check_favorite_${postId}`,
-      useCache: true,
-      cacheDuration: CACHE_DURATION.SHORT
-    });
-    return result.is_favorited || false;
+    // 参数验证
+    if (!postId) {
+      throw new Error('文章ID不能为空');
+    }
+    
+    // 调用API
+    const response = await api.get(`/api/posts/${postId}/favorite/status`);
+    
+    return response.favorite || false;
   } catch (error) {
-    console.error('妫€鏌ユ敹钘忕姸鎬佸け璐?', error);
+    console.error('检查收藏状态失败:', error);
     return false;
   }
 };
 
 /**
- * 澧炲姞鏂囩珷闃呰閲? * @param {number|string} postId - 鏂囩珷ID
+ * 增加文章浏览量（节流处理，5秒内只执行一次）
+ * @param {number|string} postId - 文章ID
  */
-// 浣跨敤鑺傛祦鍑芥暟闃叉鐭椂闂村唴閲嶅澧炲姞闃呰閲?export const increaseViewCount = throttle(async (postId) => {
+const increaseViewCount = throttle(async (postId) => {
   try {
-    // 浣跨敤API妯″潡鍙戦€佽姹?    await api.post(`/posts/${postId}/view`, {}, {
-      abortKey: `increase_view_${postId}`,
-      // 鍗充娇璇锋眰澶辫触涔熶笉鎶涘嚭寮傚父锛岄伩鍏嶅奖鍝嶇敤鎴蜂綋楠?      silent: true
-    });
+    if (!postId) return;
+    
+    // 调用API
+    await api.post(`/api/posts/${postId}/view`);
   } catch (error) {
-    // 蹇界暐澧炲姞闃呰閲忓け璐ョ殑閿欒
-    console.error('澧炲姞闃呰閲忓け璐?', error);
+    // 浏览量统计失败不影响用户体验，静默处理错误
+    console.error('增加浏览量失败:', error);
   }
-}, 5000); // 5绉掑唴鍙墽琛屼竴娆?
-// 瀵煎嚭鎵€鏈夋柟娉?export default {
+}, 5000); // 5秒内重复调用只执行一次
+
+// 导出所有函数
+module.exports = {
   getArticles,
   getArticleDetail,
   getHotArticles,
@@ -553,4 +553,4 @@ export const checkFavoriteStatus = async (postId) => {
   increaseViewCount,
   getCategories,
   clearArticleCache
-};\n
+};

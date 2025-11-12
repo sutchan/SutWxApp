@@ -1,6 +1,6 @@
-﻿/* pay.wxss - 鏀粯椤甸潰鏍峰紡 */
+锘?* pay.wxss - 閺€顖欑帛妞ょ敻娼伴弽宄扮础 */
 
-/* 鍏ㄥ眬鏍峰紡閲嶇疆 */
+/* 閸忋劌鐪弽宄扮础闁插秶鐤?*/
 .payment-container {
   font-size: 28rpx;
   color: #333;
@@ -9,7 +9,7 @@
   padding-bottom: 120rpx;
 }
 
-/* 椤堕儴瀵艰埅鏍?*/
+/* 妞ゅ爼鍎寸€佃壈鍩呴弽?*/
 .nav-bar {
   display: flex;
   align-items: center;
@@ -41,7 +41,7 @@
   color: #333;
 }
 
-/* 璁㈠崟淇℃伅鍖哄煙 */
+/* 鐠併垹宕熸穱鈩冧紖閸栧搫鐓?*/
 .order-info {
   background-color: #fff;
   margin-top: 116rpx;
@@ -96,7 +96,7 @@
   margin: 0 10rpx;
 }
 
-/* 鏀粯鏂瑰紡 */
+/* 閺€顖欑帛閺傜懓绱?*/
 .payment-methods {
   background-color: #fff;
   margin-top: 20rpx;
@@ -158,7 +158,7 @@
   height: 24rpx;
 }
 
-/* 璁㈠崟璇︽儏 */
+/* 鐠併垹宕熺拠锔藉剰 */
 .order-detail-section {
   background-color: #fff;
   margin-top: 20rpx;
@@ -200,7 +200,7 @@
   margin-top: 10rpx;
 }
 
-/* 鏀粯缁撴灉 */
+/* 閺€顖欑帛缂佹挻鐏?*/
 .pay-result {
   background-color: #fff;
   margin-top: 116rpx;
@@ -286,7 +286,7 @@
   color: #666;
 }
 
-/* 搴曢儴鏀粯鏍?*/
+/* 鎼存洟鍎撮弨顖欑帛閺?*/
 .bottom-bar {
   position: fixed;
   bottom: 0;
@@ -334,7 +334,7 @@
   background-color: #ff7875;
 }
 
-/* 鍔犺浇鐘舵€?*/
+/* 閸旂姾娴囬悩鑸碘偓?*/
 .loading {
   display: flex;
   align-items: center;
@@ -348,7 +348,7 @@
   margin-left: 20rpx;
 }
 
-/* 鍝嶅簲寮忛€傞厤 */
+/* 閸濆秴绨插蹇涒偓鍌炲帳 */
 @media (max-width: 375px) {
   .amount-value {
     font-size: 50rpx;

@@ -1,9 +1,8 @@
-﻿<?php
+锘??php
 /**
- * SUT寰俊灏忕▼搴忕紦瀛樼鐞嗙被
+ * SUT瀵邦喕淇婄亸蹇曗柤鎼村繒绱︾€涙顓搁悶鍡欒
  *
- * 璐熻矗寰俊灏忕▼搴忕殑缂撳瓨绠＄悊銆佺紦瀛樻竻鐞嗐€佺紦瀛橀鐑瓑鍔熻兘
- *
+ * 鐠愮喕鐭楀顔讳繆鐏忓繒鈻兼惔蹇曟畱缂傛挸鐡ㄧ粻锛勬倞閵嗕胶绱︾€涙ɑ绔婚悶鍡愨偓浣虹处鐎涙﹢顣╅悜顓犵搼閸旂喕鍏? *
  * @package SUT_WeChat_Mini
  */
 
@@ -12,42 +11,39 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * SUT_WeChat_Mini_Cache 绫? */
+ * SUT_WeChat_Mini_Cache 缁? */
 class SUT_WeChat_Mini_Cache {
     
     /**
-     * 鍗曚緥瀹炰緥
-     *
+     * 閸楁洑绶ョ€圭偘绶?     *
      * @var SUT_WeChat_Mini_Cache
      */
     private static $instance = null;
     
     /**
-     * 榛樿缂撳瓨鏃堕棿锛堢锛?     *
+     * 姒涙顓荤紓鎾崇摠閺冨爼妫块敍鍫㈩潡閿?     *
      * @var int
      */
     private $default_ttl = 3600;
     
     /**
-     * 缂撳瓨鍓嶇紑
+     * 缂傛挸鐡ㄩ崜宥囩磻
      *
      * @var string
      */
     private $cache_prefix = 'sut_wechat_mini_';
     
     /**
-     * 鏋勯€犲嚱鏁?     */
+     * 閺嬪嫰鈧姴鍤遍弫?     */
     private function __construct() {
-        // 娉ㄥ唽閽╁瓙
+        // 濞夈劌鍞介柦鈺佺摍
         $this->register_hooks();
         
-        // 璁剧疆缂撳瓨鏃堕棿
-        $this->set_default_ttl();
+        // 鐠佸墽鐤嗙紓鎾崇摠閺冨爼妫?        $this->set_default_ttl();
     }
     
     /**
-     * 鑾峰彇鍗曚緥瀹炰緥
-     *
+     * 閼惧嘲褰囬崡鏇氱伐鐎圭偘绶?     *
      * @return SUT_WeChat_Mini_Cache
      */
     public static function get_instance() {
@@ -59,26 +55,26 @@ class SUT_WeChat_Mini_Cache {
     }
     
     /**
-     * 娉ㄥ唽閽╁瓙
+     * 濞夈劌鍞介柦鈺佺摍
      */
     private function register_hooks() {
-        // 娓呯悊缂撳瓨
+        // 濞撳懐鎮婄紓鎾崇摠
         add_action( 'sut_wechat_mini_clear_cache', array( $this, 'clear_all_cache' ) );
         
-        // 鏂囩珷鏇存柊鏃舵竻鐞嗙浉鍏崇紦瀛?        add_action( 'save_post', array( $this, 'on_post_updated' ), 10, 3 );
+        // 閺傚洨鐝烽弴瀛樻煀閺冭埖绔婚悶鍡欐祲閸忓磭绱︾€?        add_action( 'save_post', array( $this, 'on_post_updated' ), 10, 3 );
         
-        // 鏂囩珷鍒犻櫎鏃舵竻鐞嗙浉鍏崇紦瀛?        add_action( 'delete_post', array( $this, 'on_post_deleted' ), 10, 1 );
+        // 閺傚洨鐝烽崚鐘绘珟閺冭埖绔婚悶鍡欐祲閸忓磭绱︾€?        add_action( 'delete_post', array( $this, 'on_post_deleted' ), 10, 1 );
         
-        // 浜у搧鏇存柊鏃舵竻鐞嗙浉鍏崇紦瀛?        add_action( 'woocommerce_update_product', array( $this, 'on_product_updated' ), 10, 1 );
+        // 娴溠冩惂閺囧瓨鏌婇弮鑸电閻炲棛娴夐崗宕囩处鐎?        add_action( 'woocommerce_update_product', array( $this, 'on_product_updated' ), 10, 1 );
         
-        // 浜у搧鍒犻櫎鏃舵竻鐞嗙浉鍏崇紦瀛?        add_action( 'before_delete_post', array( $this, 'on_product_deleted' ), 10, 1 );
+        // 娴溠冩惂閸掔娀娅庨弮鑸电閻炲棛娴夐崗宕囩处鐎?        add_action( 'before_delete_post', array( $this, 'on_product_deleted' ), 10, 1 );
         
-        // 璁㈠崟鐘舵€佸彉鏇存椂娓呯悊鐩稿叧缂撳瓨
+        // 鐠併垹宕熼悩鑸碘偓浣稿綁閺囧瓨妞傚〒鍛倞閻╃鍙х紓鎾崇摠
         add_action( 'woocommerce_order_status_changed', array( $this, 'on_order_status_changed' ), 10, 3 );
         
-        // 鐢ㄦ埛鏇存柊鏃舵竻鐞嗙浉鍏崇紦瀛?        add_action( 'profile_update', array( $this, 'on_user_updated' ), 10, 2 );
+        // 閻劍鍩涢弴瀛樻煀閺冭埖绔婚悶鍡欐祲閸忓磭绱︾€?        add_action( 'profile_update', array( $this, 'on_user_updated' ), 10, 2 );
         
-        // 姣忔棩瀹氭椂娓呯悊杩囨湡缂撳瓨
+        // 濮ｅ繑妫╃€规碍妞傚〒鍛倞鏉╁洦婀＄紓鎾崇摠
         if ( ! wp_next_scheduled( 'sut_wechat_mini_daily_cleanup' ) ) {
             wp_schedule_event( time(), 'daily', 'sut_wechat_mini_daily_cleanup' );
         }
@@ -87,7 +83,7 @@ class SUT_WeChat_Mini_Cache {
     }
     
     /**
-     * 璁剧疆榛樿缂撳瓨鏃堕棿
+     * 鐠佸墽鐤嗘妯款吇缂傛挸鐡ㄩ弮鍫曟？
      */
     private function set_default_ttl() {
         $settings = get_option( 'sut_wechat_mini_settings', array() );
@@ -98,38 +94,36 @@ class SUT_WeChat_Mini_Cache {
     }
     
     /**
-     * 鐢熸垚缂撳瓨閿?     *
-     * @param string $key 鍘熷閿悕
-     * @param array $args 鍙傛暟鏁扮粍
-     * @return string 瀹屾暣鐨勭紦瀛橀敭
-     */
+     * 閻㈢喐鍨氱紓鎾崇摠闁?     *
+     * @param string $key 閸樼喎顫愰柨顔兼倳
+     * @param array $args 閸欏倹鏆熼弫鎵矋
+     * @return string 鐎瑰本鏆ｉ惃鍕处鐎涙﹢鏁?     */
     private function get_cache_key( $key, $args = array() ) {
-        // 濡傛灉鍙傛暟涓嶄负绌猴紝灏嗗弬鏁板簭鍒楀寲骞舵坊鍔犲埌閿腑
+        // 婵″倹鐏夐崣鍌涙殶娑撳秳璐熺粚鐚寸礉鐏忓棗寮弫鏉跨碍閸掓瀵查獮鑸靛潑閸旂姴鍩岄柨顔昏厬
         if ( ! empty( $args ) ) {
             $key .= '_' . md5( serialize( $args ) );
         }
         
-        // 娣诲姞缂撳瓨鍓嶇紑
-        return $this->cache_prefix . $key;
+        // 濞ｈ濮炵紓鎾崇摠閸撳秶绱?        return $this->cache_prefix . $key;
     }
     
     /**
-     * 鑾峰彇缂撳瓨
+     * 閼惧嘲褰囩紓鎾崇摠
      *
-     * @param string $key 缂撳瓨閿?     * @param array $args 鍙傛暟鏁扮粍
-     * @return mixed 缂撳瓨鏁版嵁鎴杅alse
+     * @param string $key 缂傛挸鐡ㄩ柨?     * @param array $args 閸欏倹鏆熼弫鎵矋
+     * @return mixed 缂傛挸鐡ㄩ弫鐗堝祦閹存潊alse
      */
     public function get( $key, $args = array() ) {
         $cache_key = $this->get_cache_key( $key, $args );
         
-        // 灏濊瘯浠嶹ordPress缂撳瓨鑾峰彇
+        // 鐏忔繆鐦禒宥筼rdPress缂傛挸鐡ㄩ懢宄板絿
         $data = wp_cache_get( $cache_key );
         
         if ( $data !== false ) {
             return $data;
         }
         
-        // 濡傛灉WordPress缂撳瓨鏈懡涓紝灏濊瘯浠庤嚜瀹氫箟琛ㄨ幏鍙?        global $wpdb;
+        // 婵″倹鐏塛ordPress缂傛挸鐡ㄩ張顏勬嚒娑擃叏绱濈亸婵婄槸娴犲氦鍤滅€规矮绠熺悰銊ㄥ箯閸?        global $wpdb;
         
         $sql = "SELECT data, expire_time FROM {$wpdb->prefix}sut_wechat_mini_cache WHERE cache_key = %s";
         $result = $wpdb->get_row( $wpdb->prepare( $sql, $cache_key ), ARRAY_A );
@@ -138,52 +132,47 @@ class SUT_WeChat_Mini_Cache {
             return false;
         }
         
-        // 妫€鏌ョ紦瀛樻槸鍚﹁繃鏈?        $current_time = time();
+        // 濡偓閺屻儳绱︾€涙ɑ妲搁崥锕佺箖閺?        $current_time = time();
         
         if ( $result['expire_time'] > 0 && $current_time > $result['expire_time'] ) {
-            // 鍒犻櫎杩囨湡缂撳瓨
-            $this->delete_cache_from_db( $cache_key );
+            // 閸掔娀娅庢潻鍥ㄦ埂缂傛挸鐡?            $this->delete_cache_from_db( $cache_key );
             return false;
         }
         
-        // 鍙嶅簭鍒楀寲缂撳瓨鏁版嵁
-        $data = maybe_unserialize( $result['data'] );
+        // 閸欏秴绨崚妤€瀵茬紓鎾崇摠閺佺増宓?        $data = maybe_unserialize( $result['data'] );
         
-        // 瀛樺偍鍒癢ordPress缂撳瓨涓?        wp_cache_set( $cache_key, $data, '', $result['expire_time'] > 0 ? $result['expire_time'] - $current_time : 0 );
+        // 鐎涙ê鍋嶉崚鐧rdPress缂傛挸鐡ㄦ稉?        wp_cache_set( $cache_key, $data, '', $result['expire_time'] > 0 ? $result['expire_time'] - $current_time : 0 );
         
         return $data;
     }
     
     /**
-     * 璁剧疆缂撳瓨
+     * 鐠佸墽鐤嗙紓鎾崇摠
      *
-     * @param string $key 缂撳瓨閿?     * @param mixed $data 缂撳瓨鏁版嵁
-     * @param array $args 鍙傛暟鏁扮粍
-     * @param int $ttl 缂撳瓨鏃堕棿锛堢锛?     * @return bool 鎿嶄綔缁撴灉
+     * @param string $key 缂傛挸鐡ㄩ柨?     * @param mixed $data 缂傛挸鐡ㄩ弫鐗堝祦
+     * @param array $args 閸欏倹鏆熼弫鎵矋
+     * @param int $ttl 缂傛挸鐡ㄩ弮鍫曟？閿涘牏顫楅敍?     * @return bool 閹垮秳缍旂紒鎾寸亯
      */
     public function set( $key, $data, $args = array(), $ttl = null ) {
         $cache_key = $this->get_cache_key( $key, $args );
         
-        // 浣跨敤榛樿缂撳瓨鏃堕棿锛堝鏋滄湭鎸囧畾锛?        if ( is_null( $ttl ) ) {
+        // 娴ｈ法鏁ゆ妯款吇缂傛挸鐡ㄩ弮鍫曟？閿涘牆顩ч弸婊勬弓閹稿洤鐣鹃敍?        if ( is_null( $ttl ) ) {
             $ttl = $this->default_ttl;
         }
         
-        // 璁＄畻杩囨湡鏃堕棿
-        $expire_time = $ttl > 0 ? time() + $ttl : 0;
+        // 鐠侊紕鐣绘潻鍥ㄦ埂閺冨爼妫?        $expire_time = $ttl > 0 ? time() + $ttl : 0;
         
-        // 搴忓垪鍖栫紦瀛樻暟鎹?        $serialized_data = maybe_serialize( $data );
+        // 鎼村繐鍨崠鏍处鐎涙ɑ鏆熼幑?        $serialized_data = maybe_serialize( $data );
         
-        // 瀛樺偍鍒癢ordPress缂撳瓨
-        wp_cache_set( $cache_key, $data, '', $ttl );
+        // 鐎涙ê鍋嶉崚鐧rdPress缂傛挸鐡?        wp_cache_set( $cache_key, $data, '', $ttl );
         
-        // 瀛樺偍鍒拌嚜瀹氫箟琛?        global $wpdb;
+        // 鐎涙ê鍋嶉崚鎷屽殰鐎规矮绠熺悰?        global $wpdb;
         
-        // 妫€鏌ョ紦瀛樻槸鍚﹀凡瀛樺湪
-        $sql = "SELECT COUNT(*) FROM {$wpdb->prefix}sut_wechat_mini_cache WHERE cache_key = %s";
+        // 濡偓閺屻儳绱︾€涙ɑ妲搁崥锕€鍑＄€涙ê婀?        $sql = "SELECT COUNT(*) FROM {$wpdb->prefix}sut_wechat_mini_cache WHERE cache_key = %s";
         $count = $wpdb->get_var( $wpdb->prepare( $sql, $cache_key ) );
         
         if ( $count > 0 ) {
-            // 鏇存柊缂撳瓨
+            // 閺囧瓨鏌婄紓鎾崇摠
             $result = $wpdb->update(
                 $wpdb->prefix . 'sut_wechat_mini_cache',
                 array(
@@ -198,7 +187,7 @@ class SUT_WeChat_Mini_Cache {
                 array( '%s' )
             );
         } else {
-            // 鎻掑叆缂撳瓨
+            // 閹绘帒鍙嗙紓鎾崇摠
             $result = $wpdb->insert(
                 $wpdb->prefix . 'sut_wechat_mini_cache',
                 array(
@@ -216,25 +205,24 @@ class SUT_WeChat_Mini_Cache {
     }
     
     /**
-     * 鍒犻櫎缂撳瓨
+     * 閸掔娀娅庣紓鎾崇摠
      *
-     * @param string $key 缂撳瓨閿?     * @param array $args 鍙傛暟鏁扮粍
-     * @return bool 鎿嶄綔缁撴灉
+     * @param string $key 缂傛挸鐡ㄩ柨?     * @param array $args 閸欏倹鏆熼弫鎵矋
+     * @return bool 閹垮秳缍旂紒鎾寸亯
      */
     public function delete( $key, $args = array() ) {
         $cache_key = $this->get_cache_key( $key, $args );
         
-        // 浠嶹ordPress缂撳瓨鍒犻櫎
+        // 娴犲豆ordPress缂傛挸鐡ㄩ崚鐘绘珟
         wp_cache_delete( $cache_key );
         
-        // 浠庤嚜瀹氫箟琛ㄥ垹闄?        return $this->delete_cache_from_db( $cache_key );
+        // 娴犲氦鍤滅€规矮绠熺悰銊ュ灩闂?        return $this->delete_cache_from_db( $cache_key );
     }
     
     /**
-     * 浠庢暟鎹簱鍒犻櫎缂撳瓨
+     * 娴犲孩鏆熼幑顔肩氨閸掔娀娅庣紓鎾崇摠
      *
-     * @param string $cache_key 瀹屾暣鐨勭紦瀛橀敭
-     * @return bool 鎿嶄綔缁撴灉
+     * @param string $cache_key 鐎瑰本鏆ｉ惃鍕处鐎涙﹢鏁?     * @return bool 閹垮秳缍旂紒鎾寸亯
      */
     private function delete_cache_from_db( $cache_key ) {
         global $wpdb;
@@ -251,37 +239,31 @@ class SUT_WeChat_Mini_Cache {
     }
     
     /**
-     * 娓呯悊鎵€鏈夌紦瀛?     */
+     * 濞撳懐鎮婇幍鈧張澶岀处鐎?     */
     public function clear_all_cache() {
-        // 娓呯悊WordPress瀵硅薄缂撳瓨
+        // 濞撳懐鎮奧ordPress鐎电钖勭紓鎾崇摠
         wp_cache_flush();
         
-        // 娓呯悊鑷畾涔夌紦瀛樿〃
-        global $wpdb;
+        // 濞撳懐鎮婇懛顏勭暰娑斿绱︾€涙銆?        global $wpdb;
         
         $wpdb->query( "TRUNCATE TABLE {$wpdb->prefix}sut_wechat_mini_cache" );
     }
     
     /**
-     * 娓呯悊鎸囧畾绫诲瀷鐨勭紦瀛?     *
-     * @param string $cache_type 缂撳瓨绫诲瀷
-     */
+     * 濞撳懐鎮婇幐鍥х暰缁鐎烽惃鍕处鐎?     *
+     * @param string $cache_type 缂傛挸鐡ㄧ猾璇茬€?     */
     public function clear_cache_by_type( $cache_type ) {
-        // 鏋勫缓缂撳瓨閿墠缂€
-        $cache_key_prefix = $this->cache_prefix . $cache_type . '_';
+        // 閺嬪嫬缂撶紓鎾崇摠闁款喖澧犵紓鈧?        $cache_key_prefix = $this->cache_prefix . $cache_type . '_';
         
-        // 娓呯悊WordPress缂撳瓨锛堣繖閲屾棤娉曠簿纭竻鐞嗭紝闇€瑕佸€熷姪绗笁鏂规彃浠舵垨鑷畾涔夊疄鐜帮級
-        
-        // 娓呯悊鑷畾涔夎〃涓寚瀹氱被鍨嬬殑缂撳瓨
-        global $wpdb;
+        // 濞撳懐鎮奧ordPress缂傛挸鐡ㄩ敍鍫ｇ箹闁插本妫ゅ▔鏇犵翱绾喗绔婚悶鍡礉闂団偓鐟曚礁鈧喎濮粭顑跨瑏閺傝褰冩禒鑸靛灗閼奉亜鐣炬稊澶婄杽閻滃府绱?        
+        // 濞撳懐鎮婇懛顏勭暰娑斿銆冩稉顓熷瘹鐎规氨琚崹瀣畱缂傛挸鐡?        global $wpdb;
         
         $sql = $wpdb->prepare( "DELETE FROM {$wpdb->prefix}sut_wechat_mini_cache WHERE cache_key LIKE %s", $cache_key_prefix . '%' );
         $wpdb->query( $sql );
     }
     
     /**
-     * 娓呯悊杩囨湡缂撳瓨
-     */
+     * 濞撳懐鎮婃潻鍥ㄦ埂缂傛挸鐡?     */
     public function clear_expired_cache() {
         global $wpdb;
         
@@ -292,30 +274,29 @@ class SUT_WeChat_Mini_Cache {
     }
     
     /**
-     * 娓呯悊涓庢枃绔犵浉鍏崇殑缂撳瓨
-     *
-     * @param int $post_id 鏂囩珷ID
+     * 濞撳懐鎮婃稉搴㈡瀮缁旂姷娴夐崗宕囨畱缂傛挸鐡?     *
+     * @param int $post_id 閺傚洨鐝稩D
      */
     public function clear_post_cache( $post_id ) {
-        // 娓呯悊鏂囩珷璇︽儏缂撳瓨
+        // 濞撳懐鎮婇弬鍥╃彿鐠囷附鍎忕紓鎾崇摠
         $this->delete( 'post_detail', array( 'id' => $post_id ) );
         
-        // 娓呯悊鐩稿叧鏂囩珷鍒楄〃缂撳瓨
+        // 濞撳懐鎮婇惄绋垮彠閺傚洨鐝烽崚妤勩€冪紓鎾崇摠
         $this->delete( 'related_posts', array( 'post_id' => $post_id ) );
         
-        // 娓呯悊鐑棬鏂囩珷缂撳瓨
+        // 濞撳懐鎮婇悜顓㈡，閺傚洨鐝风紓鎾崇摠
         $this->clear_cache_by_type( 'hot_posts' );
         
-        // 娓呯悊鏈€鏂版枃绔犵紦瀛?        $this->clear_cache_by_type( 'latest_posts' );
+        // 濞撳懐鎮婇張鈧弬鐗堟瀮缁旂姷绱︾€?        $this->clear_cache_by_type( 'latest_posts' );
         
-        // 娓呯悊鍒嗙被鏂囩珷缂撳瓨
+        // 濞撳懐鎮婇崚鍡欒閺傚洨鐝风紓鎾崇摠
         $categories = wp_get_post_categories( $post_id );
         
         foreach ( $categories as $category_id ) {
             $this->delete( 'category_posts', array( 'category_id' => $category_id ) );
         }
         
-        // 娓呯悊鏍囩鏂囩珷缂撳瓨
+        // 濞撳懐鎮婇弽鍥╊劮閺傚洨鐝风紓鎾崇摠
         $tags = wp_get_post_tags( $post_id, array( 'fields' => 'ids' ) );
         
         foreach ( $tags as $tag_id ) {
@@ -324,31 +305,25 @@ class SUT_WeChat_Mini_Cache {
     }
     
     /**
-     * 娓呯悊涓庝骇鍝佺浉鍏崇殑缂撳瓨
-     *
-     * @param int $product_id 浜у搧ID
+     * 濞撳懐鎮婃稉搴濋獓閸濅胶娴夐崗宕囨畱缂傛挸鐡?     *
+     * @param int $product_id 娴溠冩惂ID
      */
     public function clear_product_cache( $product_id ) {
-        // 娓呯悊浜у搧璇︽儏缂撳瓨
-        $this->delete( 'product_detail', array( 'id' => $product_id ) );
+        // 濞撳懐鎮婃禍褍鎼х拠锔藉剰缂傛挸鐡?        $this->delete( 'product_detail', array( 'id' => $product_id ) );
         
-        // 娓呯悊鐩稿叧浜у搧缂撳瓨
-        $this->delete( 'related_products', array( 'product_id' => $product_id ) );
+        // 濞撳懐鎮婇惄绋垮彠娴溠冩惂缂傛挸鐡?        $this->delete( 'related_products', array( 'product_id' => $product_id ) );
         
-        // 娓呯悊鐑棬浜у搧缂撳瓨
-        $this->clear_cache_by_type( 'hot_products' );
+        // 濞撳懐鎮婇悜顓㈡，娴溠冩惂缂傛挸鐡?        $this->clear_cache_by_type( 'hot_products' );
         
-        // 娓呯悊鏈€鏂颁骇鍝佺紦瀛?        $this->clear_cache_by_type( 'latest_products' );
+        // 濞撳懐鎮婇張鈧弬棰侀獓閸濅胶绱︾€?        $this->clear_cache_by_type( 'latest_products' );
         
-        // 娓呯悊鍒嗙被浜у搧缂撳瓨
-        $terms = wp_get_post_terms( $product_id, 'product_cat', array( 'fields' => 'ids' ) );
+        // 濞撳懐鎮婇崚鍡欒娴溠冩惂缂傛挸鐡?        $terms = wp_get_post_terms( $product_id, 'product_cat', array( 'fields' => 'ids' ) );
         
         foreach ( $terms as $term_id ) {
             $this->delete( 'category_products', array( 'category_id' => $term_id ) );
         }
         
-        // 娓呯悊鏍囩浜у搧缂撳瓨
-        $terms = wp_get_post_terms( $product_id, 'product_tag', array( 'fields' => 'ids' ) );
+        // 濞撳懐鎮婇弽鍥╊劮娴溠冩惂缂傛挸鐡?        $terms = wp_get_post_terms( $product_id, 'product_tag', array( 'fields' => 'ids' ) );
         
         foreach ( $terms as $term_id ) {
             $this->delete( 'tag_products', array( 'tag_id' => $term_id ) );
@@ -356,15 +331,14 @@ class SUT_WeChat_Mini_Cache {
     }
     
     /**
-     * 娓呯悊涓庤鍗曠浉鍏崇殑缂撳瓨
-     *
-     * @param int $order_id 璁㈠崟ID
+     * 濞撳懐鎮婃稉搴ゎ吂閸楁洜娴夐崗宕囨畱缂傛挸鐡?     *
+     * @param int $order_id 鐠併垹宕烮D
      */
     public function clear_order_cache( $order_id ) {
-        // 娓呯悊璁㈠崟璇︽儏缂撳瓨
+        // 濞撳懐鎮婄拋銏犲礋鐠囷附鍎忕紓鎾崇摠
         $this->delete( 'order_detail', array( 'id' => $order_id ) );
         
-        // 娓呯悊鐢ㄦ埛璁㈠崟鍒楄〃缂撳瓨
+        // 濞撳懐鎮婇悽銊﹀煕鐠併垹宕熼崚妤勩€冪紓鎾崇摠
         $order = wc_get_order( $order_id );
         
         if ( $order ) {
@@ -377,35 +351,30 @@ class SUT_WeChat_Mini_Cache {
     }
     
     /**
-     * 娓呯悊涓庣敤鎴风浉鍏崇殑缂撳瓨
-     *
-     * @param int $user_id 鐢ㄦ埛ID
+     * 濞撳懐鎮婃稉搴ｆ暏閹撮娴夐崗宕囨畱缂傛挸鐡?     *
+     * @param int $user_id 閻劍鍩汭D
      */
     public function clear_user_cache( $user_id ) {
-        // 娓呯悊鐢ㄦ埛淇℃伅缂撳瓨
+        // 濞撳懐鎮婇悽銊﹀煕娣団剝浼呯紓鎾崇摠
         $this->delete( 'user_info', array( 'id' => $user_id ) );
         
-        // 娓呯悊鐢ㄦ埛璁㈠崟缂撳瓨
+        // 濞撳懐鎮婇悽銊﹀煕鐠併垹宕熺紓鎾崇摠
         $this->delete( 'user_orders', array( 'user_id' => $user_id ) );
         
-        // 娓呯悊鐢ㄦ埛鏀惰棌缂撳瓨
-        $this->delete( 'user_favorites', array( 'user_id' => $user_id ) );
+        // 濞撳懐鎮婇悽銊﹀煕閺€鎯版缂傛挸鐡?        $this->delete( 'user_favorites', array( 'user_id' => $user_id ) );
         
-        // 娓呯悊鐢ㄦ埛绉垎缂撳瓨
+        // 濞撳懐鎮婇悽銊﹀煕缁夘垰鍨庣紓鎾崇摠
         $this->delete( 'user_points', array( 'user_id' => $user_id ) );
         
-        // 娓呯悊鐢ㄦ埛鍦板潃缂撳瓨
+        // 濞撳懐鎮婇悽銊﹀煕閸︽澘娼冪紓鎾崇摠
         $this->delete( 'user_addresses', array( 'user_id' => $user_id ) );
     }
     
     /**
-     * 棰勭儹鏂囩珷缂撳瓨
-     *
-     * @param int $limit 棰勭儹鏂囩珷鏁伴噺
-     */
+     * 妫板嫮鍎归弬鍥╃彿缂傛挸鐡?     *
+     * @param int $limit 妫板嫮鍎归弬鍥╃彿閺佷即鍣?     */
     public function warmup_post_cache( $limit = 100 ) {
-        // 鑾峰彇鏈€鏂扮殑鏂囩珷
-        $args = array(
+        // 閼惧嘲褰囬張鈧弬鎵畱閺傚洨鐝?        $args = array(
             'post_type' => 'post',
             'post_status' => 'publish',
             'posts_per_page' => $limit,
@@ -415,13 +384,13 @@ class SUT_WeChat_Mini_Cache {
         
         $query = new WP_Query( $args );
         
-        // 瀵煎叆SUT_WeChat_Mini_Content绫?        if ( ! class_exists( 'SUT_WeChat_Mini_Content' ) ) {
+        // 鐎电厧鍙哠UT_WeChat_Mini_Content缁?        if ( ! class_exists( 'SUT_WeChat_Mini_Content' ) ) {
             require_once SUT_WECHAT_MINI_PLUGIN_DIR . 'includes/content/class-sut-wechat-mini-content.php';
         }
         
         $content_helper = SUT_WeChat_Mini_Content::get_instance();
         
-        // 棰勭儹姣忕瘒鏂囩珷鐨勭紦瀛?        foreach ( $query->posts as $post ) {
+        // 妫板嫮鍎瑰В蹇曠槖閺傚洨鐝烽惃鍕处鐎?        foreach ( $query->posts as $post ) {
             $post_data = $content_helper->get_post_data( $post->ID );
             
             if ( $post_data ) {
@@ -429,21 +398,21 @@ class SUT_WeChat_Mini_Cache {
             }
         }
         
-        // 閲嶇疆鏌ヨ
+        // 闁插秶鐤嗛弻銉嚄
         wp_reset_postdata();
     }
     
     /**
-     * 棰勭儹浜у搧缂撳瓨
+     * 妫板嫮鍎规禍褍鎼х紓鎾崇摠
      *
-     * @param int $limit 棰勭儹浜у搧鏁伴噺
+     * @param int $limit 妫板嫮鍎规禍褍鎼ч弫浼村櫤
      */
     public function warmup_product_cache( $limit = 100 ) {
-        // 妫€鏌ooCommerce鏄惁婵€娲?        if ( ! class_exists( 'WooCommerce' ) ) {
+        // 濡偓閺岊櫇ooCommerce閺勵垰鎯佸┑鈧ú?        if ( ! class_exists( 'WooCommerce' ) ) {
             return;
         }
         
-        // 鑾峰彇鏈€鏂扮殑浜у搧
+        // 閼惧嘲褰囬張鈧弬鎵畱娴溠冩惂
         $args = array(
             'post_type' => 'product',
             'post_status' => 'publish',
@@ -454,13 +423,13 @@ class SUT_WeChat_Mini_Cache {
         
         $query = new WP_Query( $args );
         
-        // 瀵煎叆SUT_WeChat_Mini_WooCommerce绫?        if ( ! class_exists( 'SUT_WeChat_Mini_WooCommerce' ) ) {
+        // 鐎电厧鍙哠UT_WeChat_Mini_WooCommerce缁?        if ( ! class_exists( 'SUT_WeChat_Mini_WooCommerce' ) ) {
             require_once SUT_WECHAT_MINI_PLUGIN_DIR . 'includes/woocommerce/class-sut-wechat-mini-woocommerce.php';
         }
         
         $wc_helper = SUT_WeChat_Mini_WooCommerce::get_instance();
         
-        // 棰勭儹姣忎釜浜у搧鐨勭紦瀛?        foreach ( $query->posts as $post ) {
+        // 妫板嫮鍎瑰В蹇庨嚋娴溠冩惂閻ㄥ嫮绱︾€?        foreach ( $query->posts as $post ) {
             $product_data = $wc_helper->get_product_data( $post->ID );
             
             if ( $product_data ) {
@@ -468,34 +437,31 @@ class SUT_WeChat_Mini_Cache {
             }
         }
         
-        // 閲嶇疆鏌ヨ
+        // 闁插秶鐤嗛弻銉嚄
         wp_reset_postdata();
     }
     
     /**
-     * 澶勭悊鏂囩珷鏇存柊浜嬩欢
+     * 婢跺嫮鎮婇弬鍥╃彿閺囧瓨鏌婃禍瀣╂
      *
-     * @param int $post_id 鏂囩珷ID
-     * @param WP_Post $post 鏂囩珷瀵硅薄
-     * @param bool $update 鏄惁鏄洿鏂?     */
+     * @param int $post_id 閺傚洨鐝稩D
+     * @param WP_Post $post 閺傚洨鐝风€电钖?     * @param bool $update 閺勵垰鎯侀弰顖涙纯閺?     */
     public function on_post_updated( $post_id, $post, $update ) {
-        // 鍙鐞嗗彂甯冪姸鎬佺殑鏂囩珷
-        if ( $post->post_status !== 'publish' ) {
+        // 閸欘亜顦╅悶鍡楀絺鐢啰濮搁幀浣烘畱閺傚洨鐝?        if ( $post->post_status !== 'publish' ) {
             return;
         }
         
-        // 鍙鐞嗘枃绔犵被鍨?        if ( $post->post_type !== 'post' ) {
+        // 閸欘亜顦╅悶鍡樻瀮缁旂姷琚崹?        if ( $post->post_type !== 'post' ) {
             return;
         }
         
-        // 娓呯悊鐩稿叧缂撳瓨
-        $this->clear_post_cache( $post_id );
+        // 濞撳懐鎮婇惄绋垮彠缂傛挸鐡?        $this->clear_post_cache( $post_id );
     }
     
     /**
-     * 澶勭悊鏂囩珷鍒犻櫎浜嬩欢
+     * 婢跺嫮鎮婇弬鍥╃彿閸掔娀娅庢禍瀣╂
      *
-     * @param int $post_id 鏂囩珷ID
+     * @param int $post_id 閺傚洨鐝稩D
      */
     public function on_post_deleted( $post_id ) {
         $post = get_post( $post_id );
@@ -504,24 +470,20 @@ class SUT_WeChat_Mini_Cache {
             return;
         }
         
-        // 娓呯悊鐩稿叧缂撳瓨
-        $this->clear_post_cache( $post_id );
+        // 濞撳懐鎮婇惄绋垮彠缂傛挸鐡?        $this->clear_post_cache( $post_id );
     }
     
     /**
-     * 澶勭悊浜у搧鏇存柊浜嬩欢
-     *
-     * @param int $product_id 浜у搧ID
+     * 婢跺嫮鎮婃禍褍鎼ч弴瀛樻煀娴滃娆?     *
+     * @param int $product_id 娴溠冩惂ID
      */
     public function on_product_updated( $product_id ) {
-        // 娓呯悊鐩稿叧缂撳瓨
-        $this->clear_product_cache( $product_id );
+        // 濞撳懐鎮婇惄绋垮彠缂傛挸鐡?        $this->clear_product_cache( $product_id );
     }
     
     /**
-     * 澶勭悊浜у搧鍒犻櫎浜嬩欢
-     *
-     * @param int $post_id 浜у搧ID
+     * 婢跺嫮鎮婃禍褍鎼ч崚鐘绘珟娴滃娆?     *
+     * @param int $post_id 娴溠冩惂ID
      */
     public function on_product_deleted( $post_id ) {
         $post = get_post( $post_id );
@@ -530,75 +492,66 @@ class SUT_WeChat_Mini_Cache {
             return;
         }
         
-        // 娓呯悊鐩稿叧缂撳瓨
-        $this->clear_product_cache( $post_id );
+        // 濞撳懐鎮婇惄绋垮彠缂傛挸鐡?        $this->clear_product_cache( $post_id );
     }
     
     /**
-     * 澶勭悊璁㈠崟鐘舵€佸彉鏇翠簨浠?     *
-     * @param int $order_id 璁㈠崟ID
-     * @param string $old_status 鏃х姸鎬?     * @param string $new_status 鏂扮姸鎬?     */
+     * 婢跺嫮鎮婄拋銏犲礋閻樿埖鈧礁褰夐弴缈犵皑娴?     *
+     * @param int $order_id 鐠併垹宕烮D
+     * @param string $old_status 閺冄呭Ц閹?     * @param string $new_status 閺傛壆濮搁幀?     */
     public function on_order_status_changed( $order_id, $old_status, $new_status ) {
-        // 娓呯悊鐩稿叧缂撳瓨
-        $this->clear_order_cache( $order_id );
+        // 濞撳懐鎮婇惄绋垮彠缂傛挸鐡?        $this->clear_order_cache( $order_id );
         
-        // 濡傛灉璁㈠崟鐘舵€佸彉鏇翠細褰卞搷缁熻鏁版嵁锛屾竻鐞嗙粺璁＄紦瀛?        $this->clear_cache_by_type( 'stats' );
+        // 婵″倹鐏夌拋銏犲礋閻樿埖鈧礁褰夐弴缈犵窗瑜板崬鎼风紒鐔活吀閺佺増宓侀敍灞剧閻炲棛绮虹拋锛勭处鐎?        $this->clear_cache_by_type( 'stats' );
     }
     
     /**
-     * 澶勭悊鐢ㄦ埛鏇存柊浜嬩欢
+     * 婢跺嫮鎮婇悽銊﹀煕閺囧瓨鏌婃禍瀣╂
      *
-     * @param int $user_id 鐢ㄦ埛ID
-     * @param WP_User $old_user_data 鏃х敤鎴锋暟鎹?     */
+     * @param int $user_id 閻劍鍩汭D
+     * @param WP_User $old_user_data 閺冄呮暏閹撮攱鏆熼幑?     */
     public function on_user_updated( $user_id, $old_user_data ) {
-        // 娓呯悊鐩稿叧缂撳瓨
-        $this->clear_user_cache( $user_id );
+        // 濞撳懐鎮婇惄绋垮彠缂傛挸鐡?        $this->clear_user_cache( $user_id );
     }
     
     /**
-     * 姣忔棩娓呯悊浠诲姟
-     */
+     * 濮ｅ繑妫╁〒鍛倞娴犺濮?     */
     public function daily_cleanup() {
-        // 娓呯悊杩囨湡缂撳瓨
-        $this->clear_expired_cache();
+        // 濞撳懐鎮婃潻鍥ㄦ埂缂傛挸鐡?        $this->clear_expired_cache();
         
-        // 娓呯悊缂撳瓨琛ㄤ腑鐨勫ぇ閲忔暟鎹?        $this->optimize_cache_table();
+        // 濞撳懐鎮婄紓鎾崇摠鐞涖劋鑵戦惃鍕亣闁插繑鏆熼幑?        $this->optimize_cache_table();
     }
     
     /**
-     * 浼樺寲缂撳瓨琛?     */
+     * 娴兼ê瀵茬紓鎾崇摠鐞?     */
     private function optimize_cache_table() {
         global $wpdb;
         
-        // 妫€鏌ョ紦瀛樿〃澶у皬
-        $sql = "SELECT table_name, data_length + index_length as size FROM information_schema.TABLES WHERE table_schema = DATABASE() AND table_name = '{$wpdb->prefix}sut_wechat_mini_cache'";
+        // 濡偓閺屻儳绱︾€涙銆冩径褍鐨?        $sql = "SELECT table_name, data_length + index_length as size FROM information_schema.TABLES WHERE table_schema = DATABASE() AND table_name = '{$wpdb->prefix}sut_wechat_mini_cache'";
         $table_info = $wpdb->get_row( $sql, ARRAY_A );
         
-        if ( $table_info && $table_info['size'] > 1024 * 1024 * 10 ) { // 濡傛灉琛ㄥぇ灏忚秴杩?0MB
-            // 娓呯悊鎵€鏈夌紦瀛?            $this->clear_all_cache();
+        if ( $table_info && $table_info['size'] > 1024 * 1024 * 10 ) { // 婵″倹鐏夌悰銊ャ亣鐏忓繗绉存潻?0MB
+            // 濞撳懐鎮婇幍鈧張澶岀处鐎?            $this->clear_all_cache();
         }
         
-        // 浼樺寲琛?        $sql = "OPTIMIZE TABLE {$wpdb->prefix}sut_wechat_mini_cache";
+        // 娴兼ê瀵茬悰?        $sql = "OPTIMIZE TABLE {$wpdb->prefix}sut_wechat_mini_cache";
         $wpdb->query( $sql );
     }
     
     /**
-     * 鑾峰彇缂撳瓨缁熻淇℃伅
+     * 閼惧嘲褰囩紓鎾崇摠缂佺喕顓告穱鈩冧紖
      *
-     * @return array 缂撳瓨缁熻淇℃伅
-     */
+     * @return array 缂傛挸鐡ㄧ紒鐔活吀娣団剝浼?     */
     public function get_cache_stats() {
         global $wpdb;
         
-        // 鑾峰彇缂撳瓨鎬绘暟
-        $total_sql = "SELECT COUNT(*) FROM {$wpdb->prefix}sut_wechat_mini_cache";
+        // 閼惧嘲褰囩紓鎾崇摠閹粯鏆?        $total_sql = "SELECT COUNT(*) FROM {$wpdb->prefix}sut_wechat_mini_cache";
         $total = $wpdb->get_var( $total_sql );
         
-        // 鑾峰彇杩囨湡缂撳瓨鏁?        $expired_sql = $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->prefix}sut_wechat_mini_cache WHERE expire_time > 0 AND expire_time < %d", time() );
+        // 閼惧嘲褰囨潻鍥ㄦ埂缂傛挸鐡ㄩ弫?        $expired_sql = $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->prefix}sut_wechat_mini_cache WHERE expire_time > 0 AND expire_time < %d", time() );
         $expired = $wpdb->get_var( $expired_sql );
         
-        // 鑾峰彇涓嶅悓绫诲瀷鐨勭紦瀛樻暟
-        $types = array();
+        // 閼惧嘲褰囨稉宥呮倱缁鐎烽惃鍕处鐎涙ɑ鏆?        $types = array();
         $type_sql = "SELECT SUBSTRING_INDEX(cache_key, '_', 3) as cache_type, COUNT(*) as count FROM {$wpdb->prefix}sut_wechat_mini_cache GROUP BY cache_type";
         $type_results = $wpdb->get_results( $type_sql, ARRAY_A );
         
@@ -614,25 +567,22 @@ class SUT_WeChat_Mini_Cache {
     }
     
     /**
-     * 缂撳瓨鍥炶皟鍑芥暟
-     *
-     * @param string $key 缂撳瓨閿?     * @param callable $callback 鍥炶皟鍑芥暟
-     * @param array $args 鍙傛暟鏁扮粍
-     * @param int $ttl 缂撳瓨鏃堕棿
-     * @return mixed 缂撳瓨鏁版嵁
+     * 缂傛挸鐡ㄩ崶鐐剁殶閸戣姤鏆?     *
+     * @param string $key 缂傛挸鐡ㄩ柨?     * @param callable $callback 閸ョ偠鐨熼崙鑺ユ殶
+     * @param array $args 閸欏倹鏆熼弫鎵矋
+     * @param int $ttl 缂傛挸鐡ㄩ弮鍫曟？
+     * @return mixed 缂傛挸鐡ㄩ弫鐗堝祦
      */
     public function cache_callback( $key, $callback, $args = array(), $ttl = null ) {
-        // 灏濊瘯鑾峰彇缂撳瓨
-        $data = $this->get( $key, $args );
+        // 鐏忔繆鐦懢宄板絿缂傛挸鐡?        $data = $this->get( $key, $args );
         
-        // 濡傛灉缂撳瓨鍛戒腑锛岃繑鍥炵紦瀛樻暟鎹?        if ( $data !== false ) {
+        // 婵″倹鐏夌紓鎾崇摠閸涙垝鑵戦敍宀冪箲閸ョ偟绱︾€涙ɑ鏆熼幑?        if ( $data !== false ) {
             return $data;
         }
         
-        // 璋冪敤鍥炶皟鍑芥暟鑾峰彇鏁版嵁
-        $data = call_user_func( $callback );
+        // 鐠嬪啰鏁ら崶鐐剁殶閸戣姤鏆熼懢宄板絿閺佺増宓?        $data = call_user_func( $callback );
         
-        // 濡傛灉鑾峰彇鍒版暟鎹紝璁剧疆缂撳瓨
+        // 婵″倹鐏夐懢宄板絿閸掔増鏆熼幑顕嗙礉鐠佸墽鐤嗙紓鎾崇摠
         if ( $data !== false && $data !== null ) {
             $this->set( $key, $data, $args, $ttl );
         }

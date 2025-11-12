@@ -1,298 +1,368 @@
-﻿/* pages/category/category.wxss */
+/**
+ * 分类页面样式
+ */
+
+/* 页面容器 */
 .category-container {
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  background-color: #f8f8f8;
-}
-
-/* 鍔犺浇鐘舵€佹牱寮?*/
-.loading-container {
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #ffffff;
-}
-
-.loading {
-  padding: 20px;
-  text-align: center;
-}
-
-.loading text {
-  font-size: 14px;
-  color: #999999;
-}
-
-/* 楠ㄦ灦灞忔牱寮?*/
-.skeleton-container {
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  position: absolute;
-  top: 0;
-  left: 0;
-  background-color: #ffffff;
-  z-index: 999;
-}
-
-.skeleton-left {
-  width: 180rpx;
-  height: 100vh;
+  padding: 16rpx;
   background-color: #f5f5f5;
+  min-height: 100vh;
+  box-sizing: border-box;
 }
 
-.skeleton-category-item {
-  height: 120rpx;
-  margin: 10rpx;
-  background-color: #e0e0e0;
+/* 骨架屏样式 */
+.skeleton {
+  background-color: #e9e9e9;
+  animation: skeleton-loading 1.5s infinite;
   border-radius: 8rpx;
-  animation: pulse 1.5s infinite;
 }
 
-.skeleton-right {
-  flex: 1;
-  margin-left: 180rpx;
-  display: flex;
-  flex-direction: column;
-}
-
-.skeleton-sub-category {
-  height: 80rpx;
-  margin: 20rpx;
-  background-color: #e0e0e0;
-  border-radius: 8rpx;
-  animation: pulse 1.5s infinite;
-}
-
-.skeleton-article-item {
-  display: flex;
-  padding: 20rpx;
-  border-bottom: 1rpx solid #f0f0f0;
-}
-
-.skeleton-article-image {
-  width: 200rpx;
-  height: 150rpx;
-  background-color: #e0e0e0;
-  border-radius: 8rpx;
-  animation: pulse 1.5s infinite;
-}
-
-.skeleton-article-content {
-  flex: 1;
-  margin-left: 20rpx;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.skeleton-article-title {
-  height: 36rpx;
-  margin-bottom: 20rpx;
-  background-color: #e0e0e0;
-  border-radius: 8rpx;
-  animation: pulse 1.5s infinite;
-}
-
-.skeleton-article-meta {
-  height: 28rpx;
-  background-color: #e0e0e0;
-  width: 70%;
-  border-radius: 8rpx;
-  animation: pulse 1.5s infinite;
-}
-
-@keyframes pulse {
-  0% {
-    opacity: 0.6;
+@keyframes skeleton-loading {
+  0%, 100% {
+    opacity: 0.4;
   }
   50% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0.6;
+    opacity: 0.8;
   }
 }
 
-/* 鍒嗙被鍐呭鍖哄煙鏍峰紡 */
-.category-content {
-  width: 100%;
-  display: flex;
-  height: 100vh;
-  overflow: hidden;
-}
-
-/* 宸︿晶涓诲垎绫诲鑸牱寮?*/
-.category-left {
-  width: 180rpx;
-  height: 100vh;
-  background-color: #f5f5f5;
-  position: fixed;
-  left: 0;
-  top: 0;
-  z-index: 10;
-}
-
-.category-scroll {
-  height: 100vh;
-  width: 100%;
-}
-
-.category-item {
-  height: 120rpx;
+/* 加载状态样式 */
+.loading {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 30rpx 0;
+  color: #888;
   font-size: 28rpx;
-  color: #666666;
-  border-bottom: 1rpx solid #e0e0e0;
 }
 
-.category-item.active {
-  background-color: #ffffff;
-  color: #07c160;
-  font-weight: 600;
-  border-left: 6rpx solid #07c160;
+.loading-spinner {
+  display: inline-block;
+  width: 32rpx;
+  height: 32rpx;
+  margin-right: 16rpx;
+  border: 3rpx solid #f3f3f3;
+  border-top: 3rpx solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
 }
 
-/* 鍙充晶鍐呭鍖哄煙鏍峰紡 */
-.category-right {
-  flex: 1;
-  margin-left: 180rpx;
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 错误提示样式 */
+.error-message {
+  padding: 30rpx;
+  text-align: center;
+  color: #e74c3c;
+  font-size: 28rpx;
+  background-color: #fff;
+  border-radius: 8rpx;
+  margin: 20rpx 0;
+}
+
+.retry-button {
+  background-color: #3498db;
+  color: white;
+  padding: 16rpx 32rpx;
+  border-radius: 6rpx;
+  margin-top: 20rpx;
+  font-size: 28rpx;
+}
+
+.retry-button:active {
+  opacity: 0.8;
+}
+
+/* 文章列表容器 */
+.article-list {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  background-color: #ffffff;
+  gap: 16rpx;
+  margin-top: 16rpx;
 }
 
-/* 瀛愬垎绫诲鑸牱寮?*/
-.sub-category-container {
-  padding: 20rpx 0;
-  background-color: #ffffff;
-  border-bottom: 1rpx solid #f0f0f0;
-  position: sticky;
-  top: 0;
-  z-index: 5;
-}
-
-.sub-category-scroll {
-  white-space: nowrap;
-  padding: 0 20rpx;
-}
-
-.sub-category-item {
-  display: inline-block;
-  padding: 10rpx 20rpx;
-  margin-right: 20rpx;
-  font-size: 26rpx;
-  color: #666666;
-}
-
-.sub-category-item.active {
-  color: #07c160;
-  font-weight: 600;
-  border-bottom: 2rpx solid #07c160;
-}
-  border-radius: 40rpx;
-}
-
-.sub-category-item.active {
-  background-color: #07c160;
-  color: #ffffff;
-}
-
-/* 鏂囩珷鍒楄〃鍖哄煙鏍峰紡 */
-.articles-container {
-  flex: 1;
-  overflow: hidden;
-}
-
-.articles-scroll {
-  height: 100%;
-  padding: 20rpx;
-}
-
-/* 鏂囩珷椤规牱寮?*/
-.article-item {
-  display: flex;
-  padding: 20rpx 0;
-  border-bottom: 1rpx solid #f0f0f0;
-}
-
-.article-image {
-  width: 200rpx;
-  height: 140rpx;
-  margin-right: 20rpx;
+/* 文章卡片样式 */
+.article-card {
+  background-color: #fff;
   border-radius: 8rpx;
   overflow: hidden;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
 }
 
-.article-image image {
-  width: 100%;
-  height: 100%;
+.article-card:active {
+  transform: scale(0.98);
 }
 
+/* 文章内容区域 */
 .article-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  padding: 24rpx;
+  position: relative;
 }
 
+/* 文章标题 */
 .article-title {
-  font-size: 30rpx;
-  color: #333333;
-  line-height: 44rpx;
-  margin-bottom: 10rpx;
+  font-size: 34rpx;
+  font-weight: 500;
+  color: #333;
+  line-height: 1.4;
+  margin-bottom: 12rpx;
   display: -webkit-box;
-  -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
+  text-overflow: ellipsis;
 }
 
+/* 文章摘要 */
+.article-excerpt {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.5;
+  margin-bottom: 16rpx;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 文章标签 */
+.article-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-bottom: 16rpx;
+}
+
+.tag {
+  background-color: #f0f0f0;
+  color: #666;
+  padding: 4rpx 16rpx;
+  border-radius: 16rpx;
+  font-size: 22rpx;
+}
+
+/* 文章元信息 */
 .article-meta {
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-size: 22rpx;
-  color: #999999;
+  color: #999;
 }
 
-.article-category {
-  padding: 2rpx 16rpx;
-  background-color: #f5f5f5;
-  border-radius: 12rpx;
-  margin-right: 10rpx;
+/* 阅读量、评论数等信息 */
+.meta-item {
+  display: flex;
+  align-items: center;
+  margin-right: 24rpx;
 }
 
-/* 娌℃湁鏇村鏁版嵁鎻愮ず鏍峰紡 */
-.no-more {
-  padding: 40rpx 0;
+.meta-icon {
+  width: 24rpx;
+  height: 24rpx;
+  margin-right: 6rpx;
+}
+
+/* 时间信息 */
+.time-info {
+  font-size: 22rpx;
+  color: #999;
+}
+
+/* 加载更多按钮 */
+.load-more {
   text-align: center;
+  padding: 30rpx 0;
   font-size: 26rpx;
-  color: #999999;
+  color: #666;
+  background-color: #fff;
+  border-radius: 8rpx;
+  margin-top: 16rpx;
 }
 
-/* 绌虹姸鎬佹牱寮?*/
+.load-more:active {
+  background-color: #f5f5f5;
+}
+
+/* 没有更多内容提示 */
+.no-more {
+  text-align: center;
+  padding: 30rpx 0;
+  font-size: 26rpx;
+  color: #999;
+}
+
+/* 空状态样式 */
 .empty-state {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   padding: 100rpx 0;
+  color: #999;
 }
 
-.empty-state image {
-  width: 200rpx;
-  height: 200rpx;
+.empty-icon {
+  width: 160rpx;
+  height: 160rpx;
+  margin-bottom: 30rpx;
   opacity: 0.5;
-  margin-bottom: 20rpx;
 }
 
-.empty-state text {
+.empty-text {
   font-size: 28rpx;
-  color: #999999;
-}\n
+  text-align: center;
+}
+
+/* 分类选择器样式 */
+.category-selector {
+  background-color: #fff;
+  border-radius: 8rpx;
+  padding: 16rpx;
+  margin-bottom: 16rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+.category-tabs {
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+  padding-bottom: 8rpx;
+}
+
+.category-tabs::-webkit-scrollbar {
+  display: none; /* Chrome/Safari/Opera */
+}
+
+.category-tab {
+  padding: 12rpx 24rpx;
+  margin-right: 16rpx;
+  white-space: nowrap;
+  border-radius: 6rpx;
+  font-size: 26rpx;
+  color: #666;
+  background-color: #f5f5f5;
+}
+
+.category-tab.active {
+  color: #fff;
+  background-color: #3498db;
+}
+
+/* 子分类样式 */
+.subcategory-selector {
+  background-color: #fff;
+  border-radius: 8rpx;
+  padding: 16rpx;
+  margin-bottom: 16rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+.subcategory-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.subcategory-item {
+  padding: 8rpx 20rpx;
+  border-radius: 4rpx;
+  font-size: 24rpx;
+  color: #666;
+  background-color: #f5f5f5;
+}
+
+.subcategory-item.active {
+  color: #fff;
+  background-color: #3498db;
+}
+
+/* 响应式调整 */
+@media screen and (min-width: 768px) {
+  .category-container {
+    max-width: 768px;
+    margin: 0 auto;
+  }
+  
+  .article-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16rpx;
+  }
+}
+
+/* 深色模式适配 */
+@media (prefers-color-scheme: dark) {
+  .category-container {
+    background-color: #1a1a1a;
+  }
+  
+  .article-card {
+    background-color: #252525;
+    box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.2);
+  }
+  
+  .article-title {
+    color: #e0e0e0;
+  }
+  
+  .article-excerpt {
+    color: #a0a0a0;
+  }
+  
+  .tag {
+    background-color: #333;
+    color: #a0a0a0;
+  }
+  
+  .meta-item, .time-info {
+    color: #888;
+  }
+  
+  .loading, .no-more {
+    color: #888;
+  }
+  
+  .error-message {
+    color: #ff6b6b;
+    background-color: #252525;
+  }
+  
+  .category-selector, .subcategory-selector {
+    background-color: #252525;
+    box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.2);
+  }
+  
+  .category-tab {
+    color: #a0a0a0;
+    background-color: #333;
+  }
+  
+  .subcategory-item {
+    color: #a0a0a0;
+    background-color: #333;
+  }
+  
+  .load-more {
+    background-color: #252525;
+    color: #a0a0a0;
+  }
+  
+  .load-more:active {
+    background-color: #333;
+  }
+  
+  .empty-text {
+    color: #888;
+  }
+  
+  .skeleton {
+    background-color: #333;
+  }
+}

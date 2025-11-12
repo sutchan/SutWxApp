@@ -1,56 +1,56 @@
-﻿<!-- 璐墿杞﹂〉闈?-->
+锘?!-- 鐠愵厾澧挎潪锕傘€夐棃?-->
 <view class="container">
-  <!-- 鍔犺浇涓姸鎬?-->
+  <!-- 閸旂姾娴囨稉顓犲Ц閹?-->
   <view class="loading" wx:if="{{loading}}">
-    <text>鍔犺浇涓?..</text>
+    <text>閸旂姾娴囨稉?..</text>
   </view>
 
-  <!-- 绌鸿喘鐗╄溅鐘舵€?-->
+  <!-- 缁岄缚鍠橀悧鈺勬簠閻樿埖鈧?-->
   <view class="empty-cart" wx:if="{{!loading && cartItems.length === 0}}">
     <image src="/images/empty.svg" class="empty-icon"></image>
-    <text class="empty-text">璐墿杞﹁繕鏄┖鐨?/text>
-    <button class="shopping-btn" bindtap="navigateToHome">鍘婚€涢€?/button>
+    <text class="empty-text">鐠愵厾澧挎潪锕佺箷閺勵垳鈹栭惃?/text>
+    <button class="shopping-btn" bindtap="navigateToHome">閸樺鈧盯鈧?/button>
   </view>
 
-  <!-- 璐墿杞﹀晢鍝佸垪琛?-->
+  <!-- 鐠愵厾澧挎潪锕€鏅㈤崫浣稿灙鐞?-->
   <view class="cart-list" wx:if="{{!loading && cartItems.length > 0}}">
-    <!-- 鍟嗗搧椤?-->
+    <!-- 閸熷棗鎼фい?-->
     <view class="cart-item" wx:for="{{cartItems}}" wx:key="id">
-      <!-- 閫夋嫨妗?-->
+      <!-- 闁瀚ㄥ?-->
       <view class="checkbox" bindtap="toggleItemSelected" data-index="{{index}}" wx:if="{{!item.unavailable && !item.outOfStock}}">
         <view class="checkbox-inner {{item.selected ? 'selected' : ''}}">
           <icon wx:if="{{item.selected}}" type="success" size="20"></icon>
         </view>
       </view>
 
-      <!-- 鍟嗗搧淇℃伅 -->
+      <!-- 閸熷棗鎼ф穱鈩冧紖 -->
       <view class="item-content" bindtap="navigateToProductDetail" data-product-id="{{item.product_id}}">
         <image class="product-image" src="{{item.images[0] || '/images/default-post.svg'}}" mode="aspectFill"></image>
         <view class="product-info">
           <view class="product-title">{{item.name}}</view>
           <view class="product-sku" wx:if="{{item.sku_name}}">{{item.sku_name}}</view>
           
-          <!-- 鍟嗗搧鐘舵€佹彁绀?-->
+          <!-- 閸熷棗鎼ч悩鑸碘偓浣瑰絹缁€?-->
           <view class="product-status" wx:if="{{item.unavailable || item.outOfStock}}" wx:class="{{item.unavailable ? 'status-unavailable' : 'status-outofstock'}}">
             {{item.unavailableReason}}
           </view>
           
-          <!-- 搴撳瓨涓嶈冻鎻愮ず -->
+          <!-- 鎼存挸鐡ㄦ稉宥堝喕閹绘劗銇?-->
           <view class="stock-warning" wx:if="{{item.overStock}}">
-            <text>搴撳瓨浠呭墿{{item.availableQuantity}}浠?/text>
+            <text>鎼存挸鐡ㄦ禒鍛⒖{{item.availableQuantity}}娴?/text>
           </view>
           
           <view class="item-bottom">
-            <view class="product-price">楼{{item.price}}</view>
+            <view class="product-price">妤納{item.price}}</view>
             
-            <!-- 鏁伴噺鎺у埗 -->
+            <!-- 閺佷即鍣洪幒褍鍩?-->
             <view class="quantity-control" wx:if="{{!item.unavailable && !item.outOfStock}}">
               <button class="quantity-btn" disabled="{{item.quantity <= 1}}" bindtap="decreaseQuantity" data-index="{{index}}">-</button>
               <view class="quantity-value">{{item.quantity}}</view>
               <button class="quantity-btn" disabled="{{item.quantity >= item.stock}}" bindtap="increaseQuantity" data-index="{{index}}">+</button>
             </view>
             
-            <!-- 涓嶅彲閫夌姸鎬?-->
+            <!-- 娑撳秴褰查柅澶屽Ц閹?-->
             <view class="quantity-control disabled" wx:if="{{item.unavailable || item.outOfStock}}">
               <view class="quantity-value">{{item.quantity}}</view>
             </view>
@@ -58,14 +58,14 @@
         </view>
       </view>
 
-      <!-- 鎿嶄綔鎸夐挳鍖哄煙 -->
+      <!-- 閹垮秳缍旈幐澶愭尦閸栧搫鐓?-->
       <view class="item-actions">
-        <!-- 鍒犻櫎鎸夐挳 -->
+        <!-- 閸掔娀娅庨幐澶愭尦 -->
         <view class="delete-btn" bindtap="deleteCartItem" data-index="{{index}}">
-          <text>{{isEditing ? '鍒犻櫎' : '脳'}}</text>
+          <text>{{isEditing ? '閸掔娀娅? : '鑴?}}</text>
         </view>
         
-        <!-- 绉昏嚦鏀惰棌鎸夐挳 (闈炵紪杈戞ā寮? -->
+        <!-- 缁夋槒鍤﹂弨鎯版閹稿鎸?(闂堢偟绱潏鎴災佸? -->
         <view class="favorite-btn" bindtap="moveToFavorite" data-index="{{index}}" wx:if="{{!isEditing && !item.unavailable && !item.outOfStock}}">
           <icon type="star" size="20"></icon>
         </view>
@@ -73,37 +73,37 @@
     </view>
   </view>
 
-  <!-- 搴曢儴鎿嶄綔鏍?-->
+  <!-- 鎼存洟鍎撮幙宥勭稊閺?-->
   <view class="bottom-bar" wx:if="{{!loading && cartItems.length > 0}}">
-    <!-- 鍏ㄩ€?-->
+    <!-- 閸忋劑鈧?-->
     <view class="all-select" bindtap="toggleAllSelected">
       <view class="checkbox-inner {{allSelected ? 'selected' : ''}}">
         <icon wx:if="{{allSelected}}" type="success" size="20"></icon>
       </view>
-      <text>鍏ㄩ€?/text>
+      <text>閸忋劑鈧?/text>
     </view>
 
-    <!-- 缂栬緫妯″紡 -->
+    <!-- 缂傛牞绶Ο鈥崇础 -->
     <view class="edit-mode" wx:if="{{!isEditing}}">
-      <button class="edit-btn" bindtap="toggleEditMode">缂栬緫</button>
+      <button class="edit-btn" bindtap="toggleEditMode">缂傛牞绶?/button>
     </view>
     
-    <!-- 缂栬緫妯″紡鎿嶄綔 -->
+    <!-- 缂傛牞绶Ο鈥崇础閹垮秳缍?-->
     <view class="edit-actions" wx:if="{{isEditing}}">
-      <button class="delete-selected-btn" bindtap="deleteSelectedItems">鍒犻櫎閫変腑</button>
-      <button class="cancel-edit-btn" bindtap="toggleEditMode">鍙栨秷</button>
+      <button class="delete-selected-btn" bindtap="deleteSelectedItems">閸掔娀娅庨柅澶夎厬</button>
+      <button class="cancel-edit-btn" bindtap="toggleEditMode">閸欐牗绉?/button>
     </view>
 
-    <!-- 鍚堣涓庣粨绠?-->
+    <!-- 閸氬牐顓告稉搴ｇ波缁?-->
     <view class="total-section" wx:if="{{!isEditing}}">
       <view class="total-info">
-        <text class="total-label">鍚堣锛?/text>
-        <text class="total-price">楼{{totalPrice}}</text>
+        <text class="total-label">閸氬牐顓搁敍?/text>
+        <text class="total-price">妤納{totalPrice}}</text>
       </view>
 
-      <!-- 缁撶畻鎸夐挳 -->
+      <!-- 缂佹挾鐣婚幐澶愭尦 -->
       <button class="checkout-btn" bindtap="checkout" disabled="{{selectedCount === 0 || submitting}}">
-        <text>缁撶畻({{selectedCount}})</text>
+        <text>缂佹挾鐣?{{selectedCount}})</text>
       </button>
     </view>
   </view>

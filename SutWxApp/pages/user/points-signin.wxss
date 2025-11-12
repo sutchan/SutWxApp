@@ -1,11 +1,11 @@
-﻿/* 姣忔棩绛惧埌椤甸潰鏍峰紡 */
+锘?* 濮ｅ繑妫╃粵鎯у煂妞ょ敻娼伴弽宄扮础 */
 .signin-container {
   min-height: 100vh;
   background-color: #f5f5f5;
   padding-bottom: 40rpx;
 }
 
-/* 椤甸潰鏍囬 */
+/* 妞ょ敻娼伴弽鍥暯 */
 .page-header {
   background: linear-gradient(135deg, #ff6600 0%, #ff9933 100%);
   padding: 30rpx 0;
@@ -19,7 +19,7 @@
   font-weight: 600;
 }
 
-/* 鍔犺浇鐘舵€?*/
+/* 閸旂姾娴囬悩鑸碘偓?*/
 .loading-container {
   display: flex;
   flex-direction: column;
@@ -48,7 +48,7 @@
   color: #999;
 }
 
-/* 閿欒鎻愮ず */
+/* 闁挎瑨顕ら幓鎰仛 */
 .error-container {
   display: flex;
   flex-direction: column;
@@ -79,12 +79,12 @@
   line-height: 1.8;
 }
 
-/* 绛惧埌鍐呭 */
+/* 缁涙儳鍩岄崘鍛啇 */
 .signin-content {
   padding: 20rpx;
 }
 
-/* 绛惧埌鎸夐挳鍖哄煙 */
+/* 缁涙儳鍩岄幐澶愭尦閸栧搫鐓?*/
 .signin-section {
   margin-bottom: 20rpx;
 }
@@ -129,7 +129,7 @@
   color: #999;
 }
 
-/* 绛惧埌缁熻 */
+/* 缁涙儳鍩岀紒鐔活吀 */
 .stats-section {
   margin-bottom: 20rpx;
 }
@@ -161,7 +161,7 @@
   color: #666;
 }
 
-/* 绛惧埌鏃ュ巻 */
+/* 缁涙儳鍩岄弮銉ュ坊 */
 .calendar-section {
   margin-bottom: 20rpx;
 }
@@ -243,7 +243,7 @@
   justify-content: center;
 }
 
-/* 绉垎瑙勫垯鎻愮ず */
+/* 缁夘垰鍨庣憴鍕灟閹绘劗銇?*/
 .rules-tip {
   margin-bottom: 20rpx;
 }
@@ -258,7 +258,7 @@
   line-height: 1.5;
 }
 
-/* 蹇€熷叆鍙?*/
+/* 韫囶偊鈧喎鍙嗛崣?*/
 .quick-actions {
   margin-bottom: 20rpx;
 }

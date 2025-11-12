@@ -1,26 +1,29 @@
-﻿// auth-service.js - 鐢ㄦ埛璁よ瘉鏈嶅姟妯″潡
-// 澶勭悊寰俊鐧诲綍銆佺敤鎴蜂俊鎭巿鏉冪瓑鍔熻兘
+/**
+ * auth-service.js - 身份认证服务模块
+ * 负责用户登录、获取用户信息、绑定手机等认证相关功能
+ */
 
 const { api } = require('./api');
 const { showToast, showLoading, hideLoading } = require('./global');
 const { CACHE_KEYS, CACHE_DURATION, CacheManager, setCache, getCache, removeCache } = require('./cache');
 const validator = require('./validator');
 
-// 鐧诲綍鐘舵€佺紦瀛橀敭
+// 登录相关常量定义
 const LOGIN_TOKEN_KEY = CACHE_KEYS.TOKEN || 'user_token';
 const USER_INFO_KEY = CACHE_KEYS.USER_INFO;
 
-// 鍒涘缓缂撳瓨绠＄悊鍣?const cacheManager = new CacheManager();
+// 缓存管理器实例
+const cacheManager = new CacheManager();
 
 /**
- * 寰俊鐧诲綍
- * @returns {Promise<Object>} - 杩斿洖鐧诲綍缁撴灉
+ * 微信登录
+ * @returns {Promise<Object>} - 返回登录结果对象
  */
-export const wechatLogin = async () => {
+const wechatLogin = async () => {
   try {
-    showLoading('鐧诲綍涓?..');
+    showLoading('登录中...');
     
-    // 1. 鑾峰彇寰俊鐧诲綍code
+    // 1. 获取微信登录code
     const wxLoginResult = await new Promise((resolve, reject) => {
       wx.login({
         success: resolve,
@@ -29,26 +32,28 @@ export const wechatLogin = async () => {
     });
 
     if (!wxLoginResult.code || !validator.isValidString(wxLoginResult.code)) {
-      throw new Error('鑾峰彇鐧诲綍鍑瘉澶辫触');
+      throw new Error('获取登录code失败');
     }
 
-    // 2. 鍙戦€乧ode鍒版湇鍔″櫒鎹㈠彇token鍜岀敤鎴蜂俊鎭?    const { code } = wxLoginResult;
-    const loginResult = await api.post('/auth/login', { 
+    // 2. 发送code到服务器获取token
+    const { code } = wxLoginResult;
+    const loginResult = await api.post('/api/auth/login', { 
       code, 
       platform: 'wechat'
     }, { abortKey: 'auth_login' });
 
-    // 3. 淇濆瓨token鍜岀敤鎴蜂俊鎭?    if (loginResult.token && validator.isValidString(loginResult.token)) {
-      // 浣跨敤缂撳瓨绠＄悊鍣ㄥ瓨鍌紝骞朵繚鐣欏師鏈夌殑瀛樺偍鏂瑰紡浠ュ吋瀹规棫浠ｇ爜
+    // 3. 保存token和用户信息
+    if (loginResult.token && validator.isValidString(loginResult.token)) {
+      // 同时通过缓存管理器和原生存储保存信息
       await cacheManager.set(LOGIN_TOKEN_KEY, loginResult.token, CACHE_DURATION.LONG);
       await cacheManager.set(USER_INFO_KEY, loginResult.user || {}, CACHE_DURATION.LONG);
       
-      // 鍏煎涓ょtoken瀛樺偍鏂瑰紡
+      // 兼容旧版存储方式
       wx.setStorageSync('userToken', loginResult.token);
       wx.setStorageSync('jwt_token', loginResult.token);
       wx.setStorageSync('userInfo', loginResult.user || {});
       
-      // 璁剧疆API璇锋眰鐨勯粯璁oken
+      // 设置API请求的token
       api.setToken(loginResult.token);
     }
 
@@ -56,50 +61,53 @@ export const wechatLogin = async () => {
     return loginResult;
   } catch (error) {
     hideLoading();
-    console.error('寰俊鐧诲綍澶辫触:', error);
-    // 鐧诲綍澶辫触锛屾竻闄ゆ湰鍦扮紦瀛樼殑鐧诲綍鐘舵€?    logout();
+    console.error('微信登录失败', error);
+    // 登录失败时执行退出登录操作
+    logout();
     throw error;
   }
 };
 
 /**
- * 鑾峰彇鐢ㄦ埛鎺堟潈淇℃伅
- * @param {boolean} forceRefresh - 鏄惁寮哄埗鍒锋柊鐢ㄦ埛淇℃伅
- * @returns {Promise<Object>} - 杩斿洖鐢ㄦ埛淇℃伅
+ * 获取用户资料信息
+ * @param {boolean} forceRefresh - 是否强制刷新用户资料
+ * @returns {Promise<Object>} - 返回用户资料信息
  */
-export const getUserProfile = async (forceRefresh = false) => {
+const getUserProfile = async (forceRefresh = false) => {
   try {
-    // 濡傛灉涓嶅己鍒跺埛鏂颁笖鏈湴宸叉湁鐢ㄦ埛淇℃伅锛屽垯鐩存帴杩斿洖
-  if (!forceRefresh) {
-    const cachedUserInfo = await cacheManager.get(USER_INFO_KEY);
-    if (cachedUserInfo && typeof cachedUserInfo === 'object') {
-      return cachedUserInfo;
+    // 首先尝试从缓存获取用户信息
+    if (!forceRefresh) {
+      const cachedUserInfo = await cacheManager.get(USER_INFO_KEY);
+      if (cachedUserInfo && typeof cachedUserInfo === 'object') {
+        return cachedUserInfo;
+      }
+      
+      // 兼容旧版缓存获取
+      const legacyUserInfo = wx.getStorageSync('userInfo');
+      if (legacyUserInfo && typeof legacyUserInfo === 'object') {
+        // 更新到新的缓存系统
+        await cacheManager.set(USER_INFO_KEY, legacyUserInfo, CACHE_DURATION.LONG);
+        return legacyUserInfo;
+      }
     }
-    
-    // 涔熸鏌ヤ紶缁熷瓨鍌ㄦ柟寮?    const legacyUserInfo = wx.getStorageSync('userInfo');
-    if (legacyUserInfo && typeof legacyUserInfo === 'object') {
-      // 杩佺Щ鍒扮紦瀛樼鐞嗗櫒
-      await cacheManager.set(USER_INFO_KEY, legacyUserInfo, CACHE_DURATION.LONG);
-      return legacyUserInfo;
-    }
-  }
 
-    // 妫€鏌ョ櫥褰曠姸鎬?    if (!await isLoggedIn()) {
-      throw new Error('璇峰厛鐧诲綍');
+    // 验证是否已登录
+    if (!await isLoggedIn()) {
+      throw new Error('请先登录');
     }
     
-    // 1. 鑾峰彇鐢ㄦ埛鎺堟潈
+    // 1. 获取用户资料
     const userProfile = await new Promise((resolve, reject) => {
       wx.getUserProfile({
-        desc: '鐢ㄤ簬瀹屽杽鐢ㄦ埛璧勬枡',
+        desc: '用于完善用户资料信息',
         success: resolve,
         fail: reject
       });
     });
 
-    // 2. 鏇存柊鐢ㄦ埛淇℃伅鍒版湇鍔″櫒
+    // 2. 更新用户资料到服务器
     const { userInfo } = userProfile;
-    await api.post('/auth/update-profile', {
+    await api.post('/api/auth/update-profile', {
       nickname: userInfo.nickName,
       avatar_url: userInfo.avatarUrl,
       gender: userInfo.gender,
@@ -109,182 +117,172 @@ export const getUserProfile = async (forceRefresh = false) => {
       country: userInfo.country
     }, { abortKey: 'auth_update_profile' });
 
-    // 3. 鏇存柊鏈湴瀛樺偍鐨勭敤鎴蜂俊鎭?    const currentUser = wx.getStorageSync('userInfo') || {};
+    // 3. 获取当前用户信息
+    const currentUser = await getUserInfo();
+    // 合并新的用户资料
     const updatedUser = { ...currentUser, ...userInfo };
-    
-    // 鍚屾椂鏇存柊缂撳瓨绠＄悊鍣ㄥ拰浼犵粺瀛樺偍
+    // 更新缓存和存储
     await cacheManager.set(USER_INFO_KEY, updatedUser, CACHE_DURATION.LONG);
     wx.setStorageSync('userInfo', updatedUser);
 
     return updatedUser;
   } catch (error) {
-    console.error('鑾峰彇鐢ㄦ埛淇℃伅澶辫触:', error);
-    
-    // 濡傛灉鏄湭鎺堟潈閿欒锛屾竻闄ょ櫥褰曠姸鎬?    if (error.message?.includes('鏈巿鏉?) || error.status === 401) {
+    console.error('获取用户资料失败:', error);
+    // 如果是登录状态失效，执行退出登录
+    if (error.message.includes('登录') || error.message.includes('token')) {
       await logout();
     }
-    
     throw error;
   }
 };
 
 /**
- * 鑾峰彇鐢ㄦ埛淇℃伅锛堝吋瀹规柊鐗圓PI锛? * @returns {Promise<Object>} - 杩斿洖鐢ㄦ埛淇℃伅
+ * 获取用户信息
+ * @returns {Promise<Object>} - 返回用户信息对象
  */
-export const getUserInfo = async () => {
+const getUserInfo = async () => {
   try {
-    // 妫€鏌ユ槸鍚﹀凡鎺堟潈
-    const authSetting = wx.getStorageSync('authSetting') || {};
-    
-    if (authSetting['scope.userInfo']) {
-      // 濡傛灉宸茬粡鎺堟潈锛岀洿鎺ヨ幏鍙栫敤鎴蜂俊鎭?      const userInfo = wx.getStorageSync('userInfo');
-      if (userInfo) {
-        return userInfo;
-      }
+    // 先尝试从缓存获取
+    const cachedUserInfo = await cacheManager.get(USER_INFO_KEY);
+    if (cachedUserInfo && typeof cachedUserInfo === 'object') {
+      return cachedUserInfo;
     }
     
-    // 浣跨敤鏂扮増API鑾峰彇鐢ㄦ埛淇℃伅
-    const { userInfo } = await wx.getUserProfile({
-      desc: '鐢ㄤ簬瀹屽杽浼氬憳璧勬枡'
-    });
+    // 尝试从原生存储获取
+    const legacyUserInfo = wx.getStorageSync('userInfo');
+    if (legacyUserInfo && typeof legacyUserInfo === 'object') {
+      // 更新到新的缓存系统
+      await cacheManager.set(USER_INFO_KEY, legacyUserInfo, CACHE_DURATION.LONG);
+      return legacyUserInfo;
+    }
     
-    // 淇濆瓨鎺堟潈鐘舵€?    wx.setStorageSync('authSetting', {
-      ...authSetting,
-      'scope.userInfo': true
-    });
+    // 验证登录状态
+    if (!await isLoggedIn()) {
+      throw new Error('请先登录');
+    }
     
-    // 淇濆瓨鐢ㄦ埛淇℃伅
+    // 从服务器获取用户信息
+    const userInfo = await api.get('/api/auth/user-info', { abortKey: 'auth_user_info' });
+    
+    // 更新缓存和存储
+    await cacheManager.set(USER_INFO_KEY, userInfo, CACHE_DURATION.LONG);
     wx.setStorageSync('userInfo', userInfo);
     
     return userInfo;
   } catch (error) {
-    console.error('鑾峰彇鐢ㄦ埛淇℃伅澶辫触:', error);
+    console.error('获取用户信息失败:', error);
     throw error;
   }
 };
 
 /**
- * 妫€鏌ョ敤鎴锋槸鍚﹀凡鐧诲綍
- * @returns {boolean} - 鏄惁宸茬櫥褰? */
-export const isLoggedIn = async () => {
+ * 检查用户是否已登录
+ * @returns {Promise<boolean>} - 返回登录状态
+ */
+const isLoggedIn = async () => {
   try {
-    // 浠庣紦瀛樼鐞嗗櫒鑾峰彇token
-    const token = await cacheManager.get(LOGIN_TOKEN_KEY);
+    // 检查缓存中的token
+    const cachedToken = await cacheManager.get(LOGIN_TOKEN_KEY);
+    if (cachedToken && validator.isValidString(cachedToken)) {
+      // 确保API请求使用正确的token
+      if (api.token !== cachedToken) {
+        api.setToken(cachedToken);
+      }
+      return true;
+    }
     
-    // 鍚屾椂妫€鏌ヤ紶缁熷瓨鍌ㄦ柟寮?    if (!token) {
-      const legacyToken = wx.getStorageSync('userToken') || wx.getStorageSync('jwt_token');
-      if (legacyToken && validator.isValidString(legacyToken)) {
-        // 濡傛灉鍙戠幇浼犵粺瀛樺偍鐨則oken锛岃縼绉诲埌缂撳瓨绠＄悊鍣?        await cacheManager.set(LOGIN_TOKEN_KEY, legacyToken, CACHE_DURATION.LONG);
+    // 兼容检查旧版存储
+    const legacyToken = wx.getStorageSync('userToken') || wx.getStorageSync('jwt_token');
+    if (legacyToken && validator.isValidString(legacyToken)) {
+      // 更新到新的缓存系统
+      await cacheManager.set(LOGIN_TOKEN_KEY, legacyToken, CACHE_DURATION.LONG);
+      // 确保API请求使用正确的token
+      if (api.token !== legacyToken) {
         api.setToken(legacyToken);
-        return true;
       }
-      return false;
+      return true;
     }
     
-    // 妫€鏌oken鏄惁鏈夋晥
-    if (!validator.isValidString(token)) {
-      return false;
-    }
-    
-    // 璁剧疆API璇锋眰鐨則oken
-    api.setToken(token);
-    
-    // 妫€鏌oken鏄惁杩囨湡锛堝彲閫夛細杩欓噷鍙互娣诲姞token鏈夋晥鎬ф鏌ワ級
-    const tokenExpiry = getCache('token_expiry');
-    if (tokenExpiry && Date.now() > tokenExpiry) {
-      // token宸茶繃鏈燂紝灏濊瘯鍒锋柊
-      try {
-        await refreshToken();
-        return true;
-      } catch (error) {
-        // 鍒锋柊澶辫触锛岀櫥褰曠姸鎬佹棤鏁?        await logout();
-        return false;
-      }
-    }
-    
-    return true;
+    return false;
   } catch (error) {
-    console.error('妫€鏌ョ櫥褰曠姸鎬佸け璐?', error);
+    console.error('检查登录状态失败:', error);
     return false;
   }
 };
 
 /**
- * 妫€鏌ュ苟寮哄埗鐧诲綍
- * @returns {Promise<boolean>} - 鏄惁鐧诲綍鎴愬姛
+ * 检查并执行登录
+ * @returns {Promise<Object>} - 返回登录结果
  */
-export const checkAndLogin = async () => {
-  if (await isLoggedIn()) {
-    return true;
-  }
-  
+const checkAndLogin = async () => {
   try {
-    await wechatLogin();
-    return true;
+    const isLogin = await isLoggedIn();
+    if (!isLogin) {
+      // 执行微信登录
+      return await wechatLogin();
+    }
+    // 已登录状态下，刷新用户信息
+    return await getUserInfo();
   } catch (error) {
-    showToast('鐧诲綍澶辫触锛岃閲嶈瘯', { icon: 'none' });
-    return false;
+    console.error('检查并登录失败:', error);
+    // 登录失败时清除本地状态
+    await logout();
+    throw error;
   }
 };
 
 /**
- * 鐢ㄦ埛鐧诲嚭
+ * 退出登录
+ * @returns {Promise<void>}
  */
-export const logout = async () => {
+const logout = async () => {
   try {
-    // 鍙栨秷鎵€鏈夎繘琛屼腑鐨勮璇佺浉鍏宠姹?    api.cancelRequest('auth_login');
-    api.cancelRequest('auth_refresh_token');
-    api.cancelRequest('auth_update_profile');
-    
-    // 璋冪敤鍚庣鐧诲嚭鎺ュ彛锛堝彲閫夛級
-    try {
-      await api.post('/auth/logout', {}, { abortKey: 'auth_logout' });
-    } catch (error) {
-      // 鍗充娇鍚庣鐧诲嚭澶辫触锛屼篃缁х画鎵ц鏈湴鐧诲嚭閫昏緫
-      console.warn('鍚庣鐧诲嚭澶辫触锛岀户缁墽琛屾湰鍦扮櫥鍑?', error);
-    }
-    
-    // 浣跨敤缂撳瓨绠＄悊鍣ㄦ竻闄ょ櫥褰曠姸鎬?    await cacheManager.remove(LOGIN_TOKEN_KEY);
+    // 清除缓存中的token和用户信息
+    await cacheManager.remove(LOGIN_TOKEN_KEY);
     await cacheManager.remove(USER_INFO_KEY);
-    await cacheManager.clearByPrefix('auth_');
     
-    // 娓呴櫎浼犵粺瀛樺偍鏁版嵁
+    // 清除本地存储中的用户相关数据
     wx.removeStorageSync('userToken');
     wx.removeStorageSync('jwt_token');
     wx.removeStorageSync('userInfo');
-    wx.removeStorageSync('authSetting');
-    removeCache('token_expiry');
+    wx.removeStorageSync('phoneNumber');
+    wx.removeStorageSync('session_key');
     
-    // 娓呴櫎API璇锋眰鐨則oken
-    api.setToken('');
+    // 清除API请求中的token
+    api.setToken(null);
     
-    // 娓呴櫎璁よ瘉鐩稿叧鐨凙PI缂撳瓨
-    api.clearCacheByPrefix('user_');
-    api.clearCacheByPrefix('auth_');
-    
-    // 璺宠浆鍒伴椤?    wx.reLaunch({ url: '/pages/index/index' });
+    console.log('退出登录成功');
   } catch (error) {
-    console.error('鐧诲嚭澶辫触:', error);
-    showToast('鐧诲嚭澶辫触锛岃閲嶈瘯', { icon: 'none' });
+    console.error('退出登录失败:', error);
+    // 即使出错也要尝试清除关键数据
+    try {
+      wx.removeStorageSync('userToken');
+      wx.removeStorageSync('jwt_token');
+      api.setToken(null);
+    } catch (e) {
+      // 忽略嵌套错误
+    }
   }
 };
 
 /**
- * 缁戝畾鎵嬫満鍙? * @param {Object} data - 鍖呭惈encryptedData鍜宨v鐨勫璞? * @returns {Promise<Object>} - 缁戝畾缁撴灉
+ * 绑定手机号
+ * @param {Object} data - 手机号绑定数据
+ * @returns {Promise<Object>} - 返回绑定结果
  */
-export const bindPhoneNumber = async (data) => {
+const bindPhoneNumber = async (data) => {
   try {
+    // 验证登录状态
     if (!await isLoggedIn()) {
-      throw new Error('璇峰厛鐧诲綍');
+      throw new Error('请先登录');
     }
     
-    if (!data || !data.encryptedData || !data.iv) {
-      throw new Error('鎵嬫満鍙锋暟鎹笉瀹屾暣');
-    }
+    // 发送绑定请求
+    const result = await api.post('/api/auth/bind-phone', data, { 
+      abortKey: 'auth_bind_phone' 
+    });
     
-    const result = await api.post('/auth/bind-phone', data, { abortKey: 'auth_bind_phone' });
-    
-    // 鏇存柊鐢ㄦ埛淇℃伅
+    // 更新用户信息缓存
     if (result.user) {
       await cacheManager.set(USER_INFO_KEY, result.user, CACHE_DURATION.LONG);
       wx.setStorageSync('userInfo', result.user);
@@ -292,126 +290,133 @@ export const bindPhoneNumber = async (data) => {
     
     return result;
   } catch (error) {
-    console.error('缁戝畾鎵嬫満鍙峰け璐?', error);
-    showToast('缁戝畾鎵嬫満鍙峰け璐?, { icon: 'none' });
+    console.error('绑定手机号失败:', error);
     throw error;
   }
 };
 
 /**
- * 鍒锋柊token
- * @returns {Promise<Object>} - 鍒锋柊缁撴灉
+ * 刷新Token
+ * @returns {Promise<Object>} - 返回刷新结果
  */
-export const refreshToken = async () => {
+const refreshToken = async () => {
   try {
+    // 获取当前token
     const currentToken = await cacheManager.get(LOGIN_TOKEN_KEY) || 
                         wx.getStorageSync('userToken') || 
                         wx.getStorageSync('jwt_token');
     
     if (!currentToken) {
-      throw new Error('鏈壘鍒皌oken');
+      throw new Error('没有找到可用的token');
     }
     
-    const result = await api.post('/auth/refresh-token', {
+    // 发送刷新请求
+    const result = await api.post('/api/auth/refresh-token', {
       token: currentToken
     }, { abortKey: 'auth_refresh_token' });
     
-    if (result.token && validator.isValidString(result.token)) {
-      // 鏇存柊token
+    // 更新token
+    if (result.token) {
       await cacheManager.set(LOGIN_TOKEN_KEY, result.token, CACHE_DURATION.LONG);
       wx.setStorageSync('userToken', result.token);
       wx.setStorageSync('jwt_token', result.token);
-      
-      // 瀛樺偍token杩囨湡鏃堕棿锛堝鏋滃悗绔彁渚涳級
-      if (result.expires_in) {
-        const expiryTime = Date.now() + (result.expires_in * 1000);
-        setCache('token_expiry', expiryTime, CACHE_DURATION.LONG);
-      }
-      
-      // 鏇存柊API璇锋眰鐨則oken
       api.setToken(result.token);
     }
     
     return result;
   } catch (error) {
-    console.error('鍒锋柊token澶辫触:', error);
-    
-    // 鍒锋柊澶辫触锛屽彲鑳芥槸token宸茶繃鏈熸垨鏃犳晥锛屾竻闄ょ櫥褰曠姸鎬?    await logout();
-    
+    console.error('刷新token失败:', error);
+    // 刷新失败时退出登录
+    await logout();
     throw error;
   }
 };
 
 /**
- * 缁戝畾WordPress璐﹀彿
- * @param {string} username - WordPress鐢ㄦ埛鍚? * @param {string} password - WordPress瀵嗙爜
- * @returns {Promise<Object>} - 杩斿洖缁戝畾缁撴灉
+ * 绑定WordPress账号
+ * @param {string} username - WordPress用户名
+ * @param {string} password - WordPress密码
+ * @returns {Promise<Object>} - 返回绑定结果
  */
-export const bindWordPressAccount = async (username, password) => {
+const bindWordPressAccount = async (username, password) => {
   try {
-    showLoading('缁戝畾涓?..');
+    // 验证登录状态
+    if (!await isLoggedIn()) {
+      throw new Error('请先登录');
+    }
     
-    const result = await api.post('/auth/bind-wordpress', {
-      username, 
+    // 验证参数
+    if (!validator.isValidString(username) || !validator.isValidString(password)) {
+      throw new Error('请输入有效的用户名和密码');
+    }
+    
+    // 发送绑定请求
+    const result = await api.post('/api/auth/bind-wordpress', {
+      username,
       password
     }, { abortKey: 'auth_bind_wordpress' });
     
-    hideLoading();
-    showToast('缁戝畾鎴愬姛', { icon: 'success' });
-    
-    // 鏇存柊鐢ㄦ埛淇℃伅
+    // 更新用户信息缓存
     if (result.user) {
-      const currentUser = wx.getStorageSync('userInfo') || {};
-      const updatedUser = { ...currentUser, ...result.user };
-      wx.setStorageSync('userInfo', updatedUser);
+      await cacheManager.set(USER_INFO_KEY, result.user, CACHE_DURATION.LONG);
+      wx.setStorageSync('userInfo', result.user);
     }
     
     return result;
   } catch (error) {
-    hideLoading();
-    console.error('缁戝畾WordPress璐﹀彿澶辫触:', error);
+    console.error('绑定WordPress账号失败:', error);
     throw error;
   }
 };
 
 /**
- * 鑾峰彇鐢ㄦ埛绛惧埌鐘舵€? * @returns {Promise<Object>} - 杩斿洖绛惧埌鐘舵€? */
-export const getSignInStatus = async () => {
-  try {
-    // 鑾峰彇绛惧埌鐘舵€侊紝浣跨敤鐭椂闂寸紦瀛?    return await api.get('/user/signin/status', {}, { 
-      useCache: true, 
-      cacheDuration: CACHE_DURATION.SHORT 
-    });
-  } catch (error) {
-    console.error('鑾峰彇绛惧埌鐘舵€佸け璐?', error);
-    return { signed: false, consecutive_days: 0 };
-  }
-};
-
-/**
- * 鐢ㄦ埛绛惧埌
- * @returns {Promise<Object>} - 杩斿洖绛惧埌缁撴灉
+ * 获取签到状态
+ * @returns {Promise<Object>} - 返回签到状态信息
  */
-export const signIn = async () => {
+const getSignInStatus = async () => {
   try {
-    showLoading('绛惧埌涓?..');
+    // 验证登录状态
+    if (!await isLoggedIn()) {
+      throw new Error('请先登录');
+    }
     
-    const result = await api.post('/user/signin', {}, { abortKey: 'user_signin' });
-    
-    // 绛惧埌鎴愬姛鍚庢竻闄ょ鍒扮姸鎬佺紦瀛?    api.clearCache('/user/signin/status');
-    
-    hideLoading();
-    showToast('绛惧埌鎴愬姛锛岃幏寰? + result.points + '绉垎', { icon: 'success' });
+    // 获取签到状态
+    const result = await api.get('/api/auth/sign-in-status', {
+      abortKey: 'auth_sign_in_status'
+    });
     
     return result;
   } catch (error) {
-    hideLoading();
-    console.error('绛惧埌澶辫触:', error);
+    console.error('获取签到状态失败:', error);
     throw error;
   }
 };
 
-// 瀵煎嚭鎵€鏈夋柟娉?module.exports = {
+/**
+ * 执行签到
+ * @returns {Promise<Object>} - 返回签到结果
+ */
+const signIn = async () => {
+  try {
+    // 验证登录状态
+    if (!await isLoggedIn()) {
+      throw new Error('请先登录');
+    }
+    
+    // 执行签到
+    const result = await api.post('/api/auth/sign-in', {}, {
+      abortKey: 'auth_sign_in'
+    });
+    
+    return result;
+  } catch (error) {
+    console.error('签到失败:', error);
+    throw error;
+  }
+};
+
+// 导出模块
+module.exports = {
   wechatLogin,
   getUserProfile,
   getUserInfo,
@@ -424,15 +429,3 @@ export const signIn = async () => {
   bindPhoneNumber,
   refreshToken
 };
-
-// 鍚屾椂瀵煎嚭鏂规硶浠ヤ究浜庡崟鐙鍏?module.exports.wechatLogin = wechatLogin;
-module.exports.getUserProfile = getUserProfile;
-module.exports.getUserInfo = getUserInfo;
-module.exports.isLoggedIn = isLoggedIn;
-module.exports.checkAndLogin = checkAndLogin;
-module.exports.logout = logout;
-module.exports.bindWordPressAccount = bindWordPressAccount;
-module.exports.getSignInStatus = getSignInStatus;
-module.exports.signIn = signIn;
-module.exports.bindPhoneNumber = bindPhoneNumber;
-module.exports.refreshToken = refreshToken;\n

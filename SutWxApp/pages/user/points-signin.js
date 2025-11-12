@@ -1,10 +1,10 @@
-﻿// 姣忔棩绛惧埌椤甸潰閫昏緫
+锘?/ 濮ｅ繑妫╃粵鎯у煂妞ょ敻娼伴柅鏄忕帆
 const app = getApp();
 const { showToast, showLoading, hideLoading } = app.global;
 
 Page({
   /**
-   * 椤甸潰鐨勫垵濮嬫暟鎹?   */
+   * 妞ょ敻娼伴惃鍕灥婵鏆熼幑?   */
   data: {
     todaySigned: false,
     consecutiveDays: 0,
@@ -18,39 +18,36 @@ Page({
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸旂姾娴?   */
   onLoad: function(options) {
-    // 璁板綍椤甸潰璁块棶浜嬩欢
+    // 鐠佹澘缍嶆い鐢告桨鐠佸潡妫舵禍瀣╂
     app.analyticsService.track('page_view', {
       page: 'points_signin'
     });
     
-    // 鍔犺浇绛惧埌鏁版嵁
-    this.loadSignInData();
+    // 閸旂姾娴囩粵鎯у煂閺佺増宓?    this.loadSignInData();
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閺勫墽銇?   */
   onShow: function() {
-    // 姣忔鏄剧ず椤甸潰鏃堕兘閲嶆柊鍔犺浇鏁版嵁锛岀‘淇濇樉绀烘渶鏂扮姸鎬?    this.loadSignInData();
+    // 濮ｅ繑顐奸弰鍓с仛妞ょ敻娼伴弮鍫曞厴闁插秵鏌婇崝鐘烘祰閺佺増宓侀敍宀€鈥樻穱婵囨▔缁€鐑樻付閺傛壆濮搁幀?    this.loadSignInData();
   },
 
   /**
-   * 鍔犺浇绛惧埌鐩稿叧鏁版嵁
+   * 閸旂姾娴囩粵鎯у煂閻╃鍙ч弫鐗堝祦
    */
   async loadSignInData() {
     try {
       this.setData({ loading: true, error: null });
       
-      // 骞惰璇锋眰绛惧埌鐘舵€佸拰绛惧埌璁板綍
+      // 楠炴儼顢戠拠閿嬬湴缁涙儳鍩岄悩鑸碘偓浣告嫲缁涙儳鍩岀拋鏉跨秿
       const [statusResult, recordsResult] = await Promise.all([
         app.services.points.getUserSignInStatus(),
         app.services.points.getUserSignInRecords()
       ]);
       
-      // 鏇存柊绛惧埌鐘舵€?      this.setData({
+      // 閺囧瓨鏌婄粵鎯у煂閻樿埖鈧?      this.setData({
         todaySigned: statusResult.todaySigned || false,
         consecutiveDays: statusResult.consecutiveDays || 0,
         totalSignedDays: statusResult.totalDays || 0,
@@ -59,11 +56,10 @@ Page({
         error: null
       });
       
-      // 鐢熸垚鏃ュ巻鏁版嵁
-      this.generateCalendarData();
+      // 閻㈢喐鍨氶弮銉ュ坊閺佺増宓?      this.generateCalendarData();
     } catch (err) {
-      console.error('鍔犺浇绛惧埌鏁版嵁澶辫触:', err);
-      let errorMsg = '鑾峰彇绛惧埌淇℃伅澶辫触';
+      console.error('閸旂姾娴囩粵鎯у煂閺佺増宓佹径杈Е:', err);
+      let errorMsg = '閼惧嘲褰囩粵鎯у煂娣団剝浼呮径杈Е';
       if (err.message) {
         errorMsg = err.message;
       }
@@ -76,8 +72,7 @@ Page({
   },
 
   /**
-   * 鐢熸垚鏃ュ巻鏁版嵁
-   */
+   * 閻㈢喐鍨氶弮銉ュ坊閺佺増宓?   */
   generateCalendarData() {
     const today = new Date();
     const year = today.getFullYear();
@@ -86,7 +81,7 @@ Page({
     
     const calendarData = [];
     
-    // 鐢熸垚褰撴湀鏃ユ湡鏁版嵁
+    // 閻㈢喐鍨氳ぐ鎾存箑閺冦儲婀￠弫鐗堝祦
     for (let day = 1; day <= daysInMonth; day++) {
       const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
       const isSigned = this.data.signInRecords.some(record => 
@@ -106,77 +101,69 @@ Page({
   },
 
   /**
-   * 鎵ц绛惧埌
-   */
+   * 閹笛嗩攽缁涙儳鍩?   */
   async doSignIn() {
-    // 闃叉閲嶅绛惧埌鎴栨鍦ㄧ鍒颁腑鐨勯噸澶嶇偣鍑?    if (this.data.todaySigned || this.data.signing) {
+    // 闂冨弶顒涢柌宥咁槻缁涙儳鍩岄幋鏍劀閸︺劎顒烽崚棰佽厬閻ㄥ嫰鍣告径宥囧仯閸?    if (this.data.todaySigned || this.data.signing) {
       return;
     }
     
     try {
-      // 璁剧疆绛惧埌涓姸鎬侊紝闃叉閲嶅鎻愪氦
-      this.setData({ signing: true });
+      // 鐠佸墽鐤嗙粵鎯у煂娑擃厾濮搁幀渚婄礉闂冨弶顒涢柌宥咁槻閹绘劒姘?      this.setData({ signing: true });
       
-      // 璋冪敤绛惧埌鎺ュ彛
-      const result = await app.services.points.doUserSignIn();
+      // 鐠嬪啰鏁ょ粵鎯у煂閹恒儱褰?      const result = await app.services.points.doUserSignIn();
       
-      // 澶勭悊绛惧埌鎴愬姛鎯呭喌
+      // 婢跺嫮鎮婄粵鎯у煂閹存劕濮涢幆鍛枌
       if (result.success) {
-        // 鏇存柊绛惧埌鐘舵€?        this.setData({
+        // 閺囧瓨鏌婄粵鎯у煂閻樿埖鈧?        this.setData({
           todaySigned: true,
           consecutiveDays: result.consecutiveDays || 0,
           totalSignedDays: result.totalDays || 0,
           monthlySignedDays: result.monthlyDays || 0
         });
         
-        // 閲嶆柊鑾峰彇绛惧埌璁板綍浠ユ洿鏂扮晫闈?        const recordsResult = await app.services.points.getUserSignInRecords();
+        // 闁插秵鏌婇懢宄板絿缁涙儳鍩岀拋鏉跨秿娴犮儲娲块弬鎵櫕闂?        const recordsResult = await app.services.points.getUserSignInRecords();
         this.setData({
           signInRecords: recordsResult.list || []
         });
         
-        // 鏇存柊鏃ュ巻鏄剧ず
-        this.generateCalendarData();
+        // 閺囧瓨鏌婇弮銉ュ坊閺勫墽銇?        this.generateCalendarData();
         
-        // 鏄剧ず绛惧埌鎴愬姛鎻愮ず淇℃伅
-        showToast({
-          title: `绛惧埌鎴愬姛锛岃幏寰?{result.pointsRewarded || 0}绉垎`,
+        // 閺勫墽銇氱粵鎯у煂閹存劕濮涢幓鎰仛娣団剝浼?        showToast({
+          title: `缁涙儳鍩岄幋鎰閿涘矁骞忓?{result.pointsRewarded || 0}缁夘垰鍨巂,
           icon: 'success'
         });
         
-        // 璁板綍绛惧埌鎴愬姛浜嬩欢鐢ㄤ簬鏁版嵁鍒嗘瀽
-        app.analyticsService.track('points_signin_success', {
+        // 鐠佹澘缍嶇粵鎯у煂閹存劕濮涙禍瀣╂閻劋绨弫鐗堝祦閸掑棙鐎?        app.analyticsService.track('points_signin_success', {
           consecutive_days: result.consecutiveDays || 0,
           points_rewarded: result.pointsRewarded || 0
         });
       } else {
-        // 澶勭悊绛惧埌澶辫触鎯呭喌锛堟帴鍙ｈ繑鍥炲け璐ワ級
+        // 婢跺嫮鎮婄粵鎯у煂婢惰精瑙﹂幆鍛枌閿涘牊甯撮崣锝堢箲閸ョ偛銇戠拹銉礆
         showToast({ 
-          title: result.message || '绛惧埌澶辫触', 
+          title: result.message || '缁涙儳鍩屾径杈Е', 
           icon: 'none' 
         });
       }
     } catch (err) {
-      // 澶勭悊寮傚父鎯呭喌
-      console.error('绛惧埌澶辫触:', err);
+      // 婢跺嫮鎮婂鍌氱埗閹懎鍠?      console.error('缁涙儳鍩屾径杈Е:', err);
       showToast({ 
-        title: '绛惧埌澶辫触锛岃閲嶈瘯', 
+        title: '缁涙儳鍩屾径杈Е閿涘矁顕柌宥堢槸', 
         icon: 'none' 
       });
     } finally {
-      // 鏃犺鎴愬姛澶辫触锛岄兘闇€瑕侀噸缃鍒颁腑鐘舵€?      this.setData({ signing: false });
+      // 閺冪姾顔戦幋鎰婢惰精瑙﹂敍宀勫厴闂団偓鐟曚線鍣哥純顔绢劮閸掗鑵戦悩鑸碘偓?      this.setData({ signing: false });
     }
   },
 
   /**
-   * 閲嶈瘯鍔犺浇
+   * 闁插秷鐦崝鐘烘祰
    */
   onRetry: function() {
     this.loadSignInData();
   },
 
   /**
-   * 鏌ョ湅绉垎鏄庣粏
-   */
+   * 閺屻儳婀呯粔顖氬瀻閺勫海绮?   */
   navigateToPointsHistory: function() {
     wx.navigateTo({
       url: '/pages/user/points'
@@ -184,8 +171,7 @@ Page({
   },
 
   /**
-   * 鏌ョ湅绉垎鍟嗗煄
-   */
+   * 閺屻儳婀呯粔顖氬瀻閸熷棗鐓?   */
   navigateToPointsMall: function() {
     wx.navigateTo({
       url: '/pages/user/points-mall'

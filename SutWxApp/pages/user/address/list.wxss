@@ -1,11 +1,11 @@
-﻿/* 鍦板潃鍒楄〃椤甸潰鏍峰紡 */
+锘?* 閸︽澘娼冮崚妤勩€冩い鐢告桨閺嶅嘲绱?*/
 .container {
   background-color: #f8f8f8;
   min-height: 100vh;
   padding-bottom: 30rpx;
 }
 
-/* 鍔犺浇鐘舵€佹牱寮?*/
+/* 閸旂姾娴囬悩鑸碘偓浣圭壉瀵?*/
 .loading {
   padding: 60rpx;
   text-align: center;
@@ -13,7 +13,7 @@
   color: #999999;
 }
 
-/* 閿欒鐘舵€佹牱寮?*/
+/* 闁挎瑨顕ら悩鑸碘偓浣圭壉瀵?*/
 .error {
   padding: 60rpx 20rpx;
   text-align: center;
@@ -44,12 +44,12 @@
   display: block;
 }
 
-/* 鍦板潃鍒楄〃鏍峰紡 */
+/* 閸︽澘娼冮崚妤勩€冮弽宄扮础 */
 .address-list {
   padding: 20rpx 0;
 }
 
-/* 绌虹姸鎬佹牱寮?*/
+/* 缁岃櫣濮搁幀浣圭壉瀵?*/
 .empty {
   text-align: center;
   padding: 80rpx 0;
@@ -62,7 +62,7 @@
   margin-bottom: 30rpx;
 }
 
-/* 鍦板潃椤规牱寮?*/
+/* 閸︽澘娼冩い瑙勭壉瀵?*/
 .address-item {
   background-color: #ffffff;
   margin: 0 20rpx 20rpx;
@@ -109,7 +109,7 @@
   padding-left: 2rpx;
 }
 
-/* 鍦板潃鎿嶄綔鎸夐挳鏍峰紡 */
+/* 閸︽澘娼冮幙宥勭稊閹稿鎸抽弽宄扮础 */
 .address-actions {
   display: flex;
   border-top: 2rpx solid #f0f0f0;
@@ -134,7 +134,7 @@
   color: #ff6b81;
 }
 
-/* 娣诲姞鍦板潃鎸夐挳鏍峰紡 */
+/* 濞ｈ濮為崷鏉挎絻閹稿鎸抽弽宄扮础 */
 .add-address-btn {
   position: fixed;
   bottom: 40rpx;
@@ -149,7 +149,7 @@
   box-shadow: 0 4rpx 20rpx rgba(255, 107, 129, 0.3);
 }
 
-/* 閫夋嫨妯″紡涓嬬殑鏍峰紡 */
+/* 闁瀚ㄥΟ鈥崇础娑撳娈戦弽宄扮础 */
 .address-content:active {
   background-color: rgba(0, 0, 0, 0.02);
 }\n

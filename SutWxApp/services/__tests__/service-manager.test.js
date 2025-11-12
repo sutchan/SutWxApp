@@ -1,10 +1,13 @@
-﻿// 鏈嶅姟绠＄悊鍣ㄥ崟鍏冩祴璇?const { ServiceManager } = require('../service-manager');
+/**
+ * ServiceManager测试用例
+ */
+const { ServiceManager } = require('../service-manager');
 
 describe('ServiceManager', () => {
   let serviceManager;
 
   beforeEach(() => {
-    // 鍒涘缓涓€涓柊鐨凷erviceManager瀹炰緥鐢ㄤ簬姣忎釜娴嬭瘯
+    // 每个测试用例前初始化serviceManager实例
     serviceManager = new ServiceManager();
   });
 
@@ -13,7 +16,8 @@ describe('ServiceManager', () => {
       const mockService = { name: 'testService', initialize: jest.fn() };
       serviceManager.registerService(mockService, []);
       
-      // 楠岃瘉鏈嶅姟宸叉敞鍐?      expect(serviceManager.serviceRegistry.testService).toBeDefined();
+      // 验证服务是否成功注册
+      expect(serviceManager.serviceRegistry.testService).toBeDefined();
       expect(serviceManager.serviceRegistry.testService.service).toBe(mockService);
     });
 
@@ -32,7 +36,7 @@ describe('ServiceManager', () => {
       
       expect(() => {
         serviceManager.registerService(mockService, ['nonExistentDependency']);
-      }).toThrow('渚濊禆鏈嶅姟 nonExistentDependency 鏈敞鍐?);
+      }).toThrow('服务依赖 nonExistentDependency 不存在');
     });
   });
 
@@ -70,7 +74,8 @@ describe('ServiceManager', () => {
       
       await serviceManager.initializeServices();
       
-      // 楠岃瘉鍒濆鍖栭『搴?      expect(initOrder).toEqual(['dependency1', 'dependency2', 'testService']);
+      // 验证初始化顺序
+      expect(initOrder).toEqual(['dependency1', 'dependency2', 'testService']);
       expect(dependency1.initialize).toHaveBeenCalled();
       expect(dependency2.initialize).toHaveBeenCalled();
       expect(service.initialize).toHaveBeenCalled();
@@ -83,7 +88,7 @@ describe('ServiceManager', () => {
       serviceManager.registerService(serviceA, ['serviceB']);
       serviceManager.registerService(serviceB, ['serviceA']);
       
-      expect(serviceManager.initializeServices()).rejects.toThrow('妫€娴嬪埌寰幆渚濊禆');
+      expect(serviceManager.initializeServices()).rejects.toThrow('检测到循环依赖');
     });
 
     test('should handle initialization errors', async () => {
@@ -131,7 +136,7 @@ describe('ServiceManager', () => {
       
       expect(() => {
         serviceManager.resolveDependencies('testService');
-      }).toThrow('渚濊禆鏈嶅姟 nonExistentDependency 鏈壘鍒?);
+      }).toThrow('服务依赖 nonExistentDependency 不存在');
     });
   });
 
@@ -148,7 +153,7 @@ describe('ServiceManager', () => {
       const sorted = serviceManager.sortServicesByDependencies();
       const sortedNames = sorted.map(s => s.name);
       
-      // 楠岃瘉鎺掑簭缁撴灉婊¤冻渚濊禆鍏崇郴
+      // 验证服务是否按依赖顺序排序
       expect(sortedNames.indexOf('serviceA')).toBeLessThan(sortedNames.indexOf('serviceB'));
       expect(sortedNames.indexOf('serviceB')).toBeLessThan(sortedNames.indexOf('serviceC'));
     });
@@ -168,4 +173,4 @@ describe('ServiceManager', () => {
       expect(services).toContain(serviceB);
     });
   });
-});\n
+});

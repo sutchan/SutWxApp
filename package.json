@@ -1,6 +1,6 @@
-﻿{
+{
   "name": "sut-wx-app",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "Sut WeChat Mini Program",
   "main": "index.js",
   "scripts": {
@@ -17,5 +17,4 @@
     "eslint": "^8.56.0",
     "jest": "^30.2.0"
   }
-}
-\n
+}\n
