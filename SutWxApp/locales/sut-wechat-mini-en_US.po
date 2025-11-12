@@ -1,164 +1,161 @@
-msgid ""msgstr """Project-Id-Version: Sut WeChat Mini 1.0.0\n""Report-Msgid-Bugs-To: \n""POT-Creation-Date: 2024-03-20\n""PO-Revision-Date: 2024-03-20\n""Last-Translator: Sut <sut@example.com>\n""Language-Team: English (United States) <en_US@li.org>\n""Language: en_US\n""MIME-Version: 1.0\n""Content-Type: text/plain; charset=UTF-8\n""Content-Transfer-Encoding: 8bit\n""Plural-Forms: nplurals=2; plural=(n != 1);\n"
+msgid ""msgstr """Project-Id-Version: Sut WeChat Mini 1.0.12
+""Report-Msgid-Bugs-To: \n""POT-Creation-Date: 2024-03-20\n""PO-Revision-Date: 2024-03-20\n""Last-Translator: Sut <sut@example.com>\n""Language-Team: English (United States) <en_US@li.org>\n""Language: en_US\n""MIME-Version: 1.0\n""Content-Type: text/plain; charset=UTF-8\n""Content-Transfer-Encoding: 8bit\n""Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: pages/user/points-tasks.jsmsgid "loading"
+#: pages/user/points-tasks.js msgid "loading"
 msgstr "Loading..."
 
-#: pages/user/points-tasks.jsmsgid "network_error"
+#: pages/user/points-tasks.js msgid "network_error"
 msgstr "Network error, please try again later"
 
-#: pages/user/points-tasks.jsmsgid "login_required"
+#: pages/user/points-tasks.js msgid "login_required"
 msgstr "Please login first"
 
-#: pages/user/points-tasks.jsmsgid "task_completed"
+#: pages/user/points-tasks.js 
 msgstr "Task completed"
 
-#: pages/user/points-tasks.jsmsgid "points_reward_success"
+#: pages/user/points-tasks.js msgid "points_reward_success"
 msgstr "Congratulations! You've earned {{points}} points"
 
-#: pages/user/points-tasks.jsmsgid "share_task_description"
+#: pages/user/points-tasks.js msgid "share_task_description"
 msgstr "Please share the mini-program with friends to complete the task"
 
-msgid "share_task_title"
+#: pages/user/points-tasks.js msgid "share_task_title"
 msgstr "Share Task"
 
-msgid "processing"
+#: pages/user/points-tasks.js msgid "processing"
 msgstr "Processing..."
 
-msgid "points_unit"
+#: pages/user/points-tasks.js msgid "points_unit"
 msgstr "points"
 
 msgid "task_completed"
 msgstr "Task Completed"
 
-msgid "operation_failed"
+#: pages/user/points-tasks.js msgid "operation_failed"
 msgstr "Operation Failed"
 
-msgid "claim_reward_failed"
+#: pages/user/points-tasks.js msgid "claim_reward_failed"
 msgstr "Failed to claim reward"
 
-msgid "task_not_found"
+#: pages/user/points-tasks.js msgid "task_not_found"
 msgstr "Task not found"
 
-msgid "signin_task"
+#: pages/user/points-tasks.js msgid "signin_task"
 msgstr "Sign-in Task"
 
-msgid "comment_task"
+#: pages/user/points-tasks.js msgid "comment_task"
 msgstr "Comment Task"
 
-msgid "review_task"
+#: pages/user/points-tasks.js msgid "review_task"
 msgstr "Review Task"
 
-msgid "profile_task"
+#: pages/user/points-tasks.js msgid "profile_task"
 msgstr "Profile Completion Task"
 
-msgid "purchase_task"
+#: pages/user/points-tasks.js msgid "purchase_task"
 msgstr "Purchase Task"
 
-msgid "order_task"
+#: pages/user/points-tasks.js msgid "order_task"
 msgstr "Order Task"
 
-msgid "follow_task"
+#: pages/user/points-tasks.js msgid "follow_task"
 msgstr "Follow Task"
 
-msgid "favorite_task"
+#: pages/user/points-tasks.js msgid "favorite_task"
 msgstr "Favorite Task"
 
-msgid "navigation_failed"
+#: pages/user/points-tasks.js msgid "navigation_failed"
 msgstr "Navigation failed"
 
-msgid "task_progress_update_success"
+#: pages/user/points-tasks.js msgid "task_progress_update_success"
 msgstr "Task progress updated successfully"
 
-msgid "submit_task_progress_failed"
+#: pages/user/points-tasks.js msgid "submit_task_progress_failed"
 msgstr "Failed to submit task progress"
 
-msgid "unnamed_task"
+#: pages/user/points-tasks.js msgid "unnamed_task"
 msgstr "Unnamed Task"
 
-msgid "new_rewards_available"
+#: pages/user/points-tasks.js msgid "new_rewards_available"
 msgstr "New rewards available"
 
-#: pages/user/points-tasks.jsmsgid "app_slogan"
+#: pages/user/points-tasks.js msgid "app_slogan"
 msgstr "Sut WeChat Mini, Your Life Assistant"
 
-#: pages/user/points-tasks.wxmlmsgid "points_tasks_page_title"
+#: pages/user/points-tasks.wxml msgid "points_tasks_page_title"
 msgstr "Points Tasks"
 
-#: pages/user/points-tasks.wxmlmsgid "points_rules"
+#: pages/user/points-tasks.wxml msgid "points_rules"
 msgstr "Points Rules"
 
-#: pages/user/points-tasks.wxmlmsgid "points_mall"
+#: pages/user/points-tasks.wxml msgid "points_mall"
 msgstr "Points Mall"
 
-#: pages/user/points-tasks.wxmlmsgid "task_type_all"
+#: pages/user/points-tasks.wxml msgid "task_type_all"
 msgstr "All"
 
-#: pages/user/points-tasks.wxmlmsgid "task_type_once"
+#: pages/user/points-tasks.wxml msgid "task_type_once"
 msgstr "Newcomer"
 
-#: pages/user/points-tasks.wxmlmsgid "task_type_daily"
+#: pages/user/points-tasks.wxml msgid "task_type_daily"
 msgstr "Daily"
 
-#: pages/user/points-tasks.wxmlmsgid "task_type_weekly"
+#: pages/user/points-tasks.wxml msgid "task_type_weekly"
 msgstr "Weekly"
 
-#: pages/user/points-tasks.wxmlmsgid "task_type_monthly"
+#: pages/user/points-tasks.wxml msgid "task_type_monthly"
 msgstr "Monthly"
 
-#: pages/user/points-tasks.wxmlmsgid "task_once_desc"
+#: pages/user/points-tasks.wxml msgid "task_once_desc"
 msgstr "One-time completion, permanently effective"
 
-#: pages/user/points-tasks.wxmlmsgid "task_daily_desc"
+#: pages/user/points-tasks.wxml msgid "task_daily_desc"
 msgstr "Refreshes daily, rewards every day"
 
-#: pages/user/points-tasks.wxmlmsgid "task_weekly_desc"
+#: pages/user/points-tasks.wxml msgid "task_weekly_desc"
 msgstr "Refreshes weekly, more generous points"
 
-#: pages/user/points-tasks.wxmlmsgid "task_monthly_desc"
+#: pages/user/points-tasks.wxml msgid "task_monthly_desc"
 msgstr "Refreshes monthly, high rewards waiting for you"
 
-#: pages/user/points-tasks.wxmlmsgid "points"
+#: pages/user/points-tasks.wxml msgid "points"
 msgstr "points"
 
-#: pages/user/points-tasks.wxmlmsgid "task_claim_reward"
+#: pages/user/points-tasks.wxml msgid "task_claim_reward"
 msgstr "Claim Reward"
 
-#: pages/user/points-tasks.wxmlmsgid "task_complete_now"
+#: pages/user/points-tasks.wxml msgid "task_complete_now"
 msgstr "Complete Now"
 
-#: pages/user/points-tasks.wxmlmsgid "task_go_complete"
+#: pages/user/points-tasks.wxml msgid "task_go_complete"
 msgstr "Go Complete"
 
-#: pages/user/points-tasks.wxmlmsgid "task_progress"
+#: pages/user/points-tasks.wxml msgid "task_progress"
 msgstr "Progress"
 
-#: pages/user/points-tasks.wxmlmsgid "no_points_tasks"
+#: pages/user/points-tasks.wxml msgid "no_points_tasks"
 msgstr "No points tasks available"
 
-#: pages/user/points-tasks.wxmlmsgid "please_check_later"
+#: pages/user/points-tasks.wxml msgid "please_check_later"
 msgstr "Please check again later"
 
-#: pages/user/points-tasks.wxmlmsgid "points_records"
+#: pages/user/points-tasks.wxml msgid "points_records"
 msgstr "Points Records"
 
 #: pages/user/points-tasks.wxml
 msgid "retry"
 msgstr "Retry"
 
-#: pages/user/points-tasks.js
-msgid "get_task_detail_failed"
+#: pages/user/points-tasks.js msgid "get_task_detail_failed"
 msgstr "Failed to get task details"
 
-#: pages/user/points-tasks.js
-msgid "task_progress_update_success"
+
 msgstr "Task progress updated successfully"
 
-#: pages/user/points-tasks.js
-msgid "submit_task_progress_failed"
+
 msgstr "Failed to submit task progress"
 
-#: pages/user/points-tasks.js
-msgid "claim_reward_failed"
+
 msgstr "Failed to claim reward"
 
 #: pages/user/points-tasks.wxml
@@ -197,14 +194,11 @@ msgstr "Go Do"
 msgid "no_tasks"
 msgstr "No Tasks Available"
 
-#: pages/user/points-tasks.js
-msgid "points_records"
+
 msgstr "Points Records"
 
-#: pages/user/points-tasks.js
-msgid "points_rules"
+
 msgstr "Points Rules"
 
-#: pages/user/points-tasks.js
-msgid "points_mall"
+
 msgstr "Points Mall"\n

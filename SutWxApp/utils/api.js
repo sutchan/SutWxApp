@@ -7,7 +7,7 @@ const { showToast, handleApiResponse } = require('./global');
 const { CACHE_KEYS, CACHE_DURATION, setCache, getCache, removeCache, clearCacheByPrefix } = require('./cache');
 
 // API基础URL配置
-const baseURL = 'https://api.example.com/api';
+let baseURL = 'https://api.example.com/api';
 
 // 默认请求头
 const defaultHeaders = {
@@ -188,6 +188,16 @@ const setToken = (token) => {
 };
 
 /**
+ * 设置API基础URL
+ * @param {string} url - API基础URL
+ */
+const setBaseUrl = (url) => {
+  if (url && typeof url === 'string') {
+    baseURL = url;
+  }
+};
+
+/**
  * 取消请求
  * @param {string} abortKey - 请求标识
  */
@@ -350,6 +360,7 @@ const apiModule = {
   
   // 工具方法
   setToken,
+  setBaseUrl,
   cancelRequest,
   cancelAllRequests,
   clearCache,
@@ -357,9 +368,14 @@ const apiModule = {
 };
 
 // 导出模块
-module.exports = apiModule;
+module.exports = {
+  ...apiModule,
+  setBaseUrl
+};
+
 // 为了兼容性，额外导出单个方法
 module.exports.setToken = setToken;
+module.exports.setBaseUrl = setBaseUrl;
 module.exports.cancelRequest = cancelRequest;
 module.exports.cancelAllRequests = cancelAllRequests;
 module.exports.clearCache = clearCache;

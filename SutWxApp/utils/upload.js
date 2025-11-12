@@ -1,4 +1,4 @@
-﻿/**
+/**
  * upload.js - 文件上传工具模块
  * 提供图片选择、上传、预览等功能
  * 支持文件验证、错误重试、进度跟踪等增强特性
@@ -6,6 +6,7 @@
 
 // 导入工具函数
 const utils = require('./utils');
+const api = require('./api');
 
 // 配置常量
 const MAX_RETRY_COUNT = 3; // 最大重试次数
@@ -83,7 +84,7 @@ function uploadImage(filePath, options = {}, retryCount = 0) {
 
     function performUpload() {
       wx.uploadFile({
-        url: `${app.globalData.apiBaseUrl}/api/upload/image`,
+        url: `${api.getBaseUrl()}/api/upload/image`,
         filePath: filePath,
         name: 'file',
         header: {
@@ -454,4 +455,4 @@ module.exports = {
 /**
  * 模块版本信息
  */
-module.exports.version = '1.0.0';
+module.exports.version = '1.0.12';

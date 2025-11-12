@@ -21,7 +21,8 @@ import configService from './utils/config-service';
 import { setStorage, getStorage } from './utils/global';
 
 App({
-  // 全局服务配置，初始化后在整个应用中可用  services: {
+  // 全局服务配置，初始化后在整个应用中可用
+  services: {
     api,
     auth: authService,
     article: articleService,
@@ -198,7 +199,8 @@ App({
     }
   },
 
-  // checkUpdate方法在后面已定义，这里不再重复  /**
+  // checkUpdate方法在后面已定义，这里不再重复
+  /**
    * 用户登录方法
    * @param {Object} userInfo - 用户信息对象
    * @returns {Promise} - 登录结果Promise对象   */
@@ -419,6 +421,20 @@ App({
     }
   },
 
+  /**
+   * 获取服务实例
+   * @param {string} serviceName - 服务名称
+   * @returns {Object|null} 服务实例或null
+   */
+  getService: function(serviceName) {
+    try {
+      return this.services[serviceName] || null;
+    } catch (e) {
+      console.error('获取服务失败:', e);
+      return null;
+    }
+  },
+  
   /**
    * 获取设备信息
    * @returns {Object} 设备信息对象   */

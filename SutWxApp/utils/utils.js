@@ -68,6 +68,7 @@ const debounce = (func, wait) => {
       }, wait);
     });
   };
+};
 
 /**
  * 格式化时间戳
