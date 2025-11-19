@@ -1,8 +1,7 @@
 *.code-workspace
-SutWxApp.code-workspace
-/docs
-/node_modules
-/docs_backup_*
 /.trae
+/docs_backup_*
+/node_modules
 /tests
-/tests
+SutWxApp.code-workspace
+test_fixes.js

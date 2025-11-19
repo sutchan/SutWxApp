@@ -1,162 +1,208 @@
-msgid ""msgstr """Project-Id-Version: Sut WeChat Mini 1.0.12
-""Report-Msgid-Bugs-To: \n""POT-Creation-Date: 2024-03-20\n""PO-Revision-Date: 2024-03-20\n""Last-Translator: Sut <sut@example.com>\n""Language-Team: Chinese (China) <zh_CN@li.org>\n""Language: zh_CN\n""MIME-Version: 1.0\n""Content-Type: text/plain; charset=UTF-8\n""Content-Transfer-Encoding: 8bit\n""Plural-Forms: nplurals=1; plural=0;\n"
+msgid ""
+msgstr ""
+"Project-Id-Version: Sut WeChat Mini 1.0.16\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-03-20\n"
+"PO-Revision-Date: 2024-03-20\n"
+"Last-Translator: Sut <sut@example.com>\n"
+"Language-Team: Chinese (China) <zh_CN@li.org>\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
-#: pages/user/points-tasks.js msgid "loading"
-msgstr "加载中.."
+#: pages/user/points-tasks.js
+msgid "loading"
+msgstr "加载中..."
 
-#: pages/user/points-tasks.js msgid "network_error"
-msgstr "网络错误，请稍后重试"
+#: pages/user/points-tasks.js
+msgid "network_error"
+msgstr "网络错误"
 
-#: pages/user/points-tasks.js msgid "login_required"
+#: pages/user/points-tasks.js
+msgid "login_required"
 msgstr "请先登录"
 
-#: pages/user/points-tasks.js 
-msgstr "任务已完成"
-
-#: pages/user/points-tasks.js msgid "points_reward_success"
-msgstr "恭喜获得{{points}}积分"
-
-#: pages/user/points-tasks.js msgid "share_task_description"
-msgstr "请将小程序分享给好友完成任务"
-
-#: pages/user/points-tasks.js msgid "share_task_title"
-msgstr "分享任务"
-
-#: pages/user/points-tasks.js msgid "processing"
-msgstr "处理中..."
-
-#: pages/user/points-tasks.js msgid "points_unit"
-msgstr "积分"
-
+#: pages/user/points-tasks.js
 msgid "task_completed"
 msgstr "任务已完成"
 
-#: pages/user/points-tasks.js msgid "operation_failed"
-msgstr "操作失败"
+#: pages/user/points-tasks.js
+msgid "points_reward_success"
+msgstr "积分奖励成功"
 
-#: pages/user/points-tasks.js msgid "claim_reward_failed"
-msgstr "领取奖励失败"
+#: pages/user/points-tasks.js
+msgid "share_task_description"
+msgstr "分享此页面给好友"
 
-#: pages/user/points-tasks.js msgid "task_not_found"
-msgstr "任务不存在"
+#: pages/user/points-tasks.js
+msgid "share_task_title"
+msgstr "邀请好友获取积分"
 
-#: pages/user/points-tasks.js msgid "signin_task"
-msgstr "签到任务"
+#: pages/user/points-tasks.js
+msgid "processing"
+msgstr "处理中..."
 
-#: pages/user/points-tasks.js msgid "comment_task"
-msgstr "评论任务"
-
-#: pages/user/points-tasks.js msgid "review_task"
-msgstr "评价任务"
-
-#: pages/user/points-tasks.js msgid "profile_task"
-msgstr "完善资料任务"
-
-#: pages/user/points-tasks.js msgid "purchase_task"
-msgstr "购买任务"
-
-#: pages/user/points-tasks.js msgid "order_task"
-msgstr "下单任务"
-
-#: pages/user/points-tasks.js msgid "follow_task"
-msgstr "关注任务"
-
-#: pages/user/points-tasks.js msgid "favorite_task"
-msgstr "收藏任务"
-
-#: pages/user/points-tasks.js msgid "navigation_failed"
-msgstr "页面导航失败"
-
-#: pages/user/points-tasks.js msgid "task_progress_update_success"
-msgstr "任务进度更新成功"
-
-#: pages/user/points-tasks.js msgid "submit_task_progress_failed"
-msgstr "提交任务进度失败"
-
-#: pages/user/points-tasks.js msgid "unnamed_task"
-msgstr "未命名任务"
-
-#: pages/user/points-tasks.js msgid "new_rewards_available"
-msgstr "有新奖励可领取"
-
-#: pages/user/points-tasks.js msgid "app_slogan"
-msgstr "Sut微信小程序，您的生活助手"
-
-#: pages/user/points-tasks.wxml msgid "points_tasks_page_title"
-msgstr "积分任务"
-
-#: pages/user/points-tasks.wxml msgid "points_rules"
-msgstr "积分规则"
-
-#: pages/user/points-tasks.wxml msgid "points_mall"
-msgstr "积分商城"
-
-#: pages/user/points-tasks.wxml msgid "task_type_all"
-msgstr "全部"
-
-#: pages/user/points-tasks.wxml msgid "task_type_once"
-msgstr "新手"
-
-#: pages/user/points-tasks.wxml msgid "task_type_daily"
-msgstr "每日"
-
-#: pages/user/points-tasks.wxml msgid "task_type_weekly"
-msgstr "每周"
-
-#: pages/user/points-tasks.wxml msgid "task_type_monthly"
-msgstr "每月"
-
-#: pages/user/points-tasks.wxml msgid "task_once_desc"
-msgstr "一次任务，永久有效"
-
-#: pages/user/points-tasks.wxml msgid "task_daily_desc"
-msgstr "每日刷新，天天有奖励"
-
-#: pages/user/points-tasks.wxml msgid "task_weekly_desc"
-msgstr "每周刷新，积分更丰厚"
-
-#: pages/user/points-tasks.wxml msgid "task_monthly_desc"
-msgstr "每月刷新，高额奖励等你来"
-
-#: pages/user/points-tasks.wxml msgid "points"
+#: pages/user/points-tasks.js
+msgid "points_unit"
 msgstr "积分"
 
-#: pages/user/points-tasks.wxml msgid "task_claim_reward"
+#: pages/user/points-tasks.js
+msgid "operation_failed"
+msgstr "操作失败"
+
+#: pages/user/points-tasks.js
+msgid "claim_reward_failed"
+msgstr "领取奖励失败"
+
+#: pages/user/points-tasks.js
+msgid "task_not_found"
+msgstr "任务不存在"
+
+#: pages/user/points-tasks.js
+msgid "signin_task"
+msgstr "签到任务"
+
+#: pages/user/points-tasks.js
+msgid "comment_task"
+msgstr "评论任务"
+
+#: pages/user/points-tasks.js
+msgid "review_task"
+msgstr "评价任务"
+
+#: pages/user/points-tasks.js
+msgid "profile_task"
+msgstr "完善资料任务"
+
+#: pages/user/points-tasks.js
+msgid "purchase_task"
+msgstr "购买任务"
+
+#: pages/user/points-tasks.js
+msgid "order_task"
+msgstr "订单任务"
+
+#: pages/user/points-tasks.js
+msgid "follow_task"
+msgstr "关注任务"
+
+#: pages/user/points-tasks.js
+msgid "favorite_task"
+msgstr "收藏任务"
+
+#: pages/user/points-tasks.js
+msgid "navigation_failed"
+msgstr "导航失败"
+
+#: pages/user/points-tasks.js
+msgid "task_progress_update_success"
+msgstr "任务进度更新成功"
+
+#: pages/user/points-tasks.js
+msgid "submit_task_progress_failed"
+msgstr "提交任务进度失败"
+
+#: pages/user/points-tasks.js
+msgid "unnamed_task"
+msgstr "未命名任务"
+
+#: pages/user/points-tasks.js
+msgid "new_rewards_available"
+msgstr "有新的奖励可以领取"
+
+#: pages/user/points-tasks.js
+msgid "app_slogan"
+msgstr "开启积分之旅，畅享更多优惠"
+
+#: pages/user/points-tasks.js
+msgid "get_task_detail_failed"
+msgstr "获取任务详情失败"
+
+#: pages/user/points-tasks.wxml
+msgid "points_tasks_page_title"
+msgstr "积分任务"
+
+#: pages/user/points-tasks.wxml
+msgid "points_rules"
+msgstr "积分规则"
+
+#: pages/user/points-tasks.wxml
+msgid "points_mall"
+msgstr "积分商城"
+
+#: pages/user/points-tasks.wxml
+msgid "task_type_all"
+msgstr "全部"
+
+#: pages/user/points-tasks.wxml
+msgid "task_type_once"
+msgstr "一次性"
+
+#: pages/user/points-tasks.wxml
+msgid "task_type_daily"
+msgstr "每日"
+
+#: pages/user/points-tasks.wxml
+msgid "task_type_weekly"
+msgstr "每周"
+
+#: pages/user/points-tasks.wxml
+msgid "task_type_monthly"
+msgstr "每月"
+
+#: pages/user/points-tasks.wxml
+msgid "task_once_desc"
+msgstr "完成后不再显示"
+
+#: pages/user/points-tasks.wxml
+msgid "task_daily_desc"
+msgstr "每天可完成一次"
+
+#: pages/user/points-tasks.wxml
+msgid "task_weekly_desc"
+msgstr "每周可完成一次"
+
+#: pages/user/points-tasks.wxml
+msgid "task_monthly_desc"
+msgstr "每月可完成一次"
+
+#: pages/user/points-tasks.wxml
+msgid "points"
+msgstr "积分"
+
+#: pages/user/points-tasks.wxml
+msgid "task_claim_reward"
 msgstr "领取奖励"
 
-#: pages/user/points-tasks.wxml msgid "task_complete_now"
+#: pages/user/points-tasks.wxml
+msgid "task_complete_now"
 msgstr "立即完成"
 
-#: pages/user/points-tasks.wxml msgid "task_go_complete"
+#: pages/user/points-tasks.wxml
+msgid "task_go_complete"
 msgstr "去完成"
 
-#: pages/user/points-tasks.wxml msgid "task_progress"
-msgstr "进度"
+#: pages/user/points-tasks.wxml
+msgid "task_progress"
+msgstr "进度: %{current}/%{total}"
 
-#: pages/user/points-tasks.wxml msgid "no_points_tasks"
+#: pages/user/points-tasks.wxml
+msgid "no_points_tasks"
 msgstr "暂无积分任务"
 
-#: pages/user/points-tasks.wxml msgid "please_check_later"
-msgstr "请稍后再查看"
+#: pages/user/points-tasks.wxml
+msgid "please_check_later"
+msgstr "请稍后重试"
 
-#: pages/user/points-tasks.wxml msgid "points_records"
-msgstr "积分明细"
+#: pages/user/points-tasks.wxml
+msgid "points_records"
+msgstr "积分记录"
 
 #: pages/user/points-tasks.wxml
 msgid "retry"
 msgstr "重试"
-
-#: pages/user/points-tasks.js msgid "get_task_detail_failed"
-msgstr "获取任务详情失败"
-
-
-msgstr "任务进度更新成功"
-
-
-msgstr "提交任务进度失败"
-
-
-msgstr "领取奖励失败"
 
 #: pages/user/points-tasks.wxml
 msgid "all_tasks"
@@ -168,7 +214,7 @@ msgstr "新手任务"
 
 #: pages/user/points-tasks.wxml
 msgid "daily_tasks"
-msgstr "每日任务"
+msgstr "日常任务"
 
 #: pages/user/points-tasks.wxml
 msgid "weekly_tasks"
@@ -188,17 +234,12 @@ msgstr "领取奖励"
 
 #: pages/user/points-tasks.wxml
 msgid "go_do"
-msgstr "去完成"
+msgstr "去做"
 
 #: pages/user/points-tasks.wxml
 msgid "no_tasks"
-msgstr "暂无任务"
+msgstr "没有任务"
 
-
-msgstr "积分记录"
-
-
-msgstr "积分规则"
-
-
-msgstr "积分商城"\n
+#: pages/index/index.js
+msgid "欢迎使用 SutWxApp"
+msgstr "欢迎使用 SutWxApp"

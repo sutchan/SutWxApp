@@ -1,124 +1,60 @@
-锘?!-- review.wxml - 鐠併垹宕熺拠鍕幆妞ょ敻娼板Ο鈩冩緲 -->
-
-<view class="review-container">
-  <!-- 妞ゅ爼鍎寸€佃壈鍩?-->
-  <view class="nav-bar">
-    <view class="nav-back" bindtap="navigateBack">
-      <text>鏉╂柨娲?/text>
-    </view>
-    <view class="nav-title">鐠囧嫪鐜拋銏犲礋</view>
-    <view class="nav-placeholder"></view>
+<!--
+  订单评价页面
+  作者: Sut
+  日期: 2025-11-15
+-->
+<view class="container">
+  <!-- 导航栏标题 -->
+  <view class="header">
+    <text class="title">{{i18n.reviewTitle}}</text>
   </view>
 
-  <!-- 閸旂姾娴囨稉顓犲Ц閹?-->
-  <view class="loading-container" wx:if="{{loading}}">
-    <view class="loading">
-      <text>閸旂姾娴囨稉?..</text>
-    </view>
-  </view>
-
-  <!-- 闁挎瑨顕ら悩鑸碘偓?-->
-  <view class="error-container" wx:if="{{error}}">
-    <view class="error-message">{{errorMessage}}</view>
-    <button class="btn-primary" bindtap="loadOrderItems">闁插秵鏌婇崝鐘烘祰</button>
-  </view>
-
-  <!-- 鐠囧嫪鐜崘鍛啇 -->
-  <view class="review-content" wx:if="{{!loading && !error && reviewData.length > 0}}">
-    <!-- 閸栧灝鎮曠拠鍕幆闁銆?-->
-    <view class="anonymous-option">
-      <text class="anonymous-label">閸栧灝鎮曠拠鍕幆</text>
-      <switch class="anonymous-switch" checked="{{anonymous}}" bindchange="toggleAnonymous"></switch>
-    </view>
-
-    <!-- 閸熷棗鎼х拠鍕幆閸掓銆?-->
-    <view class="goods-review-list">
-      <view wx:for="{{reviewData}}" wx:key="index" class="goods-review-item">
-        <!-- 閸熷棗鎼ф穱鈩冧紖 -->
-        <view class="goods-info">
-          <view class="goods-image">
-            <image src="{{item.product_image}}" mode="aspectFit"></image>
-          </view>
-          <view class="goods-details">
-            <view class="goods-name">{{item.product_name}}</view>
-            <view wx:if="{{item.specs}}" class="goods-specs">{{item.specs}}</view>
-          </view>
-        </view>
-
-        <!-- 鐠囧嫬鍨?-->
-        <view class="rating-section">
-          <view class="rating-label">鐠囧嫬鍨?/view>
-          <view class="rating-stars">
-            <view 
-              wx:for="[1, 2, 3, 4, 5]" 
-              wx:for-item="star" 
-              wx:key="star" 
-              class="star {{star <= item.score ? 'active' : ''}}" 
-              bindtap="setScore" 
-              data-index="{{index}}" 
-              data-score="{{star}}"
-            >
-              閳?            </view>
-          </view>
-        </view>
-
-        <!-- 鐠囧嫪鐜崘鍛啇 -->
-        <view class="content-section">
-          <view class="content-label">鐠囧嫪鐜崘鍛啇</view>
-          <textarea 
-            class="content-input" 
-            placeholder="鐠囩柉绶崗銉﹀亶鐎电懓鏅㈤崫浣烘畱鐠囧嫪鐜? 
-            value="{{item.content}}" 
-            bindinput="inputContent" 
-            data-index="{{index}}"
-            maxlength="200"
-          ></textarea>
-          <view class="content-count">{{item.content.length}}/200</view>
-        </view>
-
-        <!-- 閸ュ墽澧栨稉濠佺炊 -->
-        <view class="image-section">
-          <view class="image-label">娑撳﹣绱堕崶鍓у</view>
-          <view class="image-uploader">
-            <!-- 瀹歌弓绗傛导鐘叉禈閻?-->
-            <view 
-              wx:for="{{item.images}}" 
-              wx:for-item="image" 
-              wx:for-index="imageIndex" 
-              wx:key="imageIndex" 
-              class="image-item" 
-              bindtap="previewImage" 
-              data-index="{{index}}" 
-              data-image-index="{{imageIndex}}"
-            >
-              <image src="{{image}}" mode="aspectFit"></image>
-              <view class="image-delete" bindtap="deleteImage" data-index="{{index}}" data-image-index="{{imageIndex}}">鑴?/view>
-            </view>
-            <!-- 濞ｈ濮為崶鍓у閹稿鎸?-->
-            <view 
-              wx:if="{{item.images.length < 5}}" 
-              class="image-add" 
-              bindtap="chooseImage" 
-              data-index="{{index}}"
-            >
-              <view class="add-icon">+</view>
-              <view class="add-text">濞ｈ濮為崶鍓у</view>
-              <view class="add-tip">{{item.images.length}}/5</view>
-            </view>
-          </view>
-        </view>
-      </view>
+  <!-- 商品信息区域 -->
+  <view class="goods-info">
+    <image class="goods-image" src="/assets/images/default-goods.png" mode="aspectFill"></image>
+    <view class="goods-detail">
+      <text class="goods-name">{{i18n.goodsName}}</text>
+      <text class="goods-price">{{i18n.goodsPrice}}</text>
     </view>
   </view>
 
-  <!-- 閹绘劒姘﹂幐澶愭尦 -->
-  <view class="submit-bar" wx:if="{{!loading && !error && reviewData.length > 0}}">
-    <button 
-      class="btn-submit" 
-      bindtap="submitReview" 
-      disabled="{{submitting}}"
-    >
-      {{submitting ? '閹绘劒姘︽稉?..' : '閹绘劒姘︾拠鍕幆'}}
-    </button>
+  <!-- 评分区域 -->
+  <view class="rating-area">
+    <text class="rating-label">{{i18n.ratingLabel}}</text>
+    <view class="stars">
+      <!-- 这里可以放置评分组件，例如自定义的星级评分组件 -->
+      <text>★★★★★</text>
+    </view>
   </view>
-</view>\n
+
+  <!-- 评价内容输入框 -->
+  <view class="comment-input-area">
+    <textarea class="comment-textarea" placeholder="{{i18n.placeholder}}" maxlength="200"></textarea>
+    <text class="word-count">{{i18n.wordCount}}</text>
+  </view>
+
+  <!-- 匿名评价选项 -->
+  <view class="anonymous-option">
+    <switch checked="{{false}}" bindchange="toggleAnonymous"></switch>
+    <text class="anonymous-label">{{i18n.anonymousLabel}}</text>
+  </view>
+
+  <!-- 图片上传区域 -->
+  <view class="image-upload-area">
+    <text class="upload-label">{{i18n.uploadLabel}}</text>
+    <view class="image-list">
+      <!-- 这里可以放置图片上传组件 -->
+      <image class="upload-placeholder" src="/assets/images/upload-icon.png" mode="aspectFit"></image>
+    </view>
+  </view>
+
+  <!-- 提交按钮 -->
+  <view class="submit-button-area">
+    <button class="submit-button" type="primary" bindtap="submitReview">{{i18n.submitButton}}</button>
+  </view>
+
+  <!-- 返回按钮 (如果需要) -->
+  <view class="back-button-area">
+    <button class="back-button" bindtap="navigateBack">{{i18n.common.back}}</button>
+  </view>
+</view>

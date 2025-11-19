@@ -1,11 +1,1 @@
-{
-  "navigationBarTitleText": "我的粉丝",
-  "navigationBarBackgroundColor": "#ffffff",
-  "navigationBarTextStyle": "black",
-  "backgroundColor": "#f8f8f8",
-  "usingComponents": {
-    "user-item": "../../components/user-item/user-item",
-    "empty-state": "../../components/empty-state/empty-state"
-  },
-  "enablePullDownRefresh": true
-}
+{}

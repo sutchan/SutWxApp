@@ -1,10 +1,11 @@
 // eslint.config.js
 module.exports = [
   {
-    files: ['**/*.js'],
+    files: ['SutWxApp/**/*.js', 'sut-wechat-mini/**/*.js'],
+    ignores: ['coverage/**', '**/__mocks__/**', 'fix_*.js', 'check_*.js', 'test_fixes.js'],
     languageOptions: {
       ecmaVersion: 2020,
-      sourceType: 'module'
+      sourceType: 'commonjs'
     },
     rules: {
       'no-console': 'warn',

@@ -1,12 +1,1 @@
-{
-  "navigationBarTitleText": "积分商城",
-  "navigationBarBackgroundColor": "#ff6600",
-  "navigationBarTextStyle": "white",
-  "enablePullDownRefresh": true,
-  "backgroundColor": "#f5f5f5",
-  "backgroundTextStyle": "dark",
-  "usingComponents": {
-    "lazy-image": "/components/lazy-image/lazy-image",
-    "points-item": "/components/points-item/points-item"
-  }
-}
+{}
