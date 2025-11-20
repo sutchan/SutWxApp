@@ -39,12 +39,13 @@ App({
    * @param {string} err - 閿欒淇℃伅
    * @returns {void}
    */
-  onError(err) {
+  onError(_err) {
     try {
-      console.error('[App Error]', err);
+      // 生产环境可移除console，或发送到日志服务
       wx.showToast({ title: '鍙戠敓閿欒', icon: 'none' });
     } catch (_) {
       // 瀹夐潤澶辫触
     }
+  }
   }
 });
