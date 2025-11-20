@@ -1,12 +1,12 @@
 const i18n = require('./utils/i18n');
 
 /**
- * 搴旂敤鍏ュ彛
+ * 应用入口
  * @returns {void}
  */
 App({
   /**
-   * 搴旂敤鍚姩鍥炶皟
+   * 应用启动回调
    * @returns {void}
    */
   onLaunch() {
@@ -19,7 +19,7 @@ App({
         i18n.setLocale('zh_CN');
       }
     } catch (e) {
-      // 鍏煎鐜鏃犵郴缁熶俊鎭殑鍦烘櫙锛屼繚鎸侀粯璁よ瑷€
+      // 兼容无系统信息的场景，保持默认语言
     }
     this.globalData = {
       startedAt: Date.now()
@@ -27,25 +27,24 @@ App({
   },
 
   /**
-   * 搴旂敤鏄剧ず鍥炶皟
+   * 应用显示回调
    * @returns {void}
    */
   onShow() {
-    // 棰勭暀锛氬彲鍦ㄦ涓婃姤鏇濆厜鎴栨媺鍙栧叏灞€閰嶇疆
+    // 预留：可在此时上报数据或拉取全局配置
   },
 
   /**
-   * 鍏ㄥ眬閿欒澶勭悊
-   * @param {string} err - 閿欒淇℃伅
+   * 全局错误处理
+   * @param {string} _err - 错误信息
    * @returns {void}
    */
   onError(_err) {
     try {
       // 生产环境可移除console，或发送到日志服务
-      wx.showToast({ title: '鍙戠敓閿欒', icon: 'none' });
+      wx.showToast({ title: '发生错误', icon: 'none' });
     } catch (_) {
-      // 瀹夐潤澶辫触
+      // 静默失败
     }
-  }
   }
 });

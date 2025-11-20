@@ -117,9 +117,9 @@ SutWxApp/
 
 ### ✅ 单元测试
 ```
-Test Suites: 1 passed, 1 total
-Tests:       10 passed, 10 total
-Time:        ~18s
+核心单元测试: 9/10 通过
+功能测试: 全部通过
+语法检查: 通过
 ```
 
 ### ✅ 文件编码检查
