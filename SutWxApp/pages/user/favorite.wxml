@@ -1,1 +1,19 @@
-<!-- 默认页面模板 -->
+<view class="container">
+  <block wx:if="{{favoriteList.length > 0}}">
+    <view class="favorite-list">
+      <view class="favorite-item" wx:for="{{favoriteList}}" wx:key="id" data-id="{{item.id}}" bindtap="goToDetail">
+        <image class="favorite-image" src="{{item.image}}" mode="aspectFill"></image>
+        <view class="favorite-info">
+          <text class="favorite-name">{{item.name}}</text>
+          <text class="favorite-price">¥{{item.price}}</text>
+        </view>
+        <view class="delete-btn" data-id="{{item.id}}" catchtap="deleteFavorite">取消收藏</view>
+      </view>
+    </view>
+    <view wx:if="{{loading}}" class="loading-more">加载中...</view>
+    <view wx:if="{{!hasMore && favoriteList.length > 0}}" class="no-more">没有更多了</view>
+  </block>
+  <block wx:else>
+    <view class="no-favorites">暂无收藏</view>
+  </block>
+</view>

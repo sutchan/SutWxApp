@@ -8,7 +8,9 @@ Page({
   data: {
     i18n: i18n,
     loading: false,
-    items: []
+    banners: [],
+    categories: [],
+    products: []
   },
 
   /**
@@ -53,10 +55,54 @@ Page({
   loadData(done) {
     this.setData({ loading: true });
     const timer = setTimeout(() => {
-      const mock = [{ id: 1, title: i18n.translate('欢迎使用 SutWxApp') }];
-      this.setData({ items: mock, loading: false });
+      const mockBanners = [
+        { id: 1, image: '/assets/images/banner1.jpg' },
+        { id: 2, image: '/assets/images/banner2.jpg' },
+        { id: 3, image: '/assets/images/banner3.jpg' }
+      ];
+      const mockCategories = [
+        { id: 1, name: i18n.translate('新品'), icon: '/assets/images/icon_new.png' },
+        { id: 2, name: i18n.translate('推荐'), icon: '/assets/images/icon_recommend.png' },
+        { id: 3, name: i18n.translate('热卖'), icon: '/assets/images/icon_hot.png' },
+        { id: 4, name: i18n.translate('分类'), icon: '/assets/images/icon_category.png' }
+      ];
+      const mockProducts = [
+        { id: 1, name: i18n.translate('商品A'), image: '/assets/images/product1.jpg', price: '99.00' },
+        { id: 2, name: i18n.translate('商品B'), image: '/assets/images/product2.jpg', price: '129.00' },
+        { id: 3, name: i18n.translate('商品C'), image: '/assets/images/product3.jpg', price: '79.00' },
+        { id: 4, name: i18n.translate('商品D'), image: '/assets/images/product4.jpg', price: '159.00' }
+      ];
+
+      this.setData({
+        banners: mockBanners,
+        categories: mockCategories,
+        products: mockProducts,
+        loading: false
+      });
       clearTimeout(timer);
       if (typeof done === 'function') done();
     }, 300);
+  },
+
+  /**
+   * 跳转到分类页面
+   * @param {Object} e - 事件对象
+   */
+  goToCategory(e) {
+    const { id } = e.currentTarget.dataset;
+    wx.navigateTo({
+      url: `/pages/category/category?id=${id}`
+    });
+  },
+
+  /**
+   * 跳转到商品详情页
+   * @param {Object} e - 事件对象
+   */
+  goToProductDetail(e) {
+    const { id } = e.currentTarget.dataset;
+    wx.navigateTo({
+      url: `/pages/product/detail/detail?id=${id}`
+    });
   }
 });

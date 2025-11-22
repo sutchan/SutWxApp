@@ -1,1 +1,67 @@
+/* 文件名: comments.wxss */
+.container {
+  padding: 20rpx;
+}
 
+.comment-item {
+  background-color: #fff;
+  border-radius: 8rpx;
+  margin-bottom: 20rpx;
+  padding: 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+.comment-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15rpx;
+}
+
+.avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  margin-right: 20rpx;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.nick-name {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: bold;
+}
+
+.time {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.comment-content {
+  font-size: 28rpx;
+  color: #333;
+  line-height: 1.6;
+  margin-bottom: 15rpx;
+}
+
+.comment-footer {
+  border-top: 1rpx solid #eee;
+  padding-top: 15rpx;
+}
+
+.product-name {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.no-comments,
+.loading-more,
+.no-more {
+  text-align: center;
+  padding: 40rpx;
+  color: #999;
+  font-size: 28rpx;
+}

@@ -1,7 +1,14 @@
+<!--components/lazyImage/lazyImage.wxml-->
 <image
-  class="lazy-image {{show ? 'show' : 'hide'}}"
+  wx:if="{{lazyLoad && !show}}"
+  class="lazy-image hide"
+  src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+  mode="{{mode}}"
+></image>
+<image
+  wx:else
+  class="lazy-image {{show ? 'show' : ''}}"
   src="{{src}}"
   mode="{{mode}}"
-  lazy-load="{{lazyLoad}}"
   bindload="onLoad"
 ></image>
