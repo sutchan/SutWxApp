@@ -1,35 +1,38 @@
 /**
- * 璁㈠崟璇勪环椤甸潰
+ * 文件名: review.js
+ * 订单评价页面
  * @author Sut
  */
 const i18n = require('../../utils/i18n');
 
 Page({
   /**
-   * 椤甸潰鐨勫垵濮嬫暟鎹?   */
+   * 页面的初始数据
+   */
   data: {
-    i18n: i18n, // 灏唅18n瀹炰緥缁戝畾鍒伴〉闈㈡暟鎹紝浠ヤ究鍦╓XML涓娇鐢?    reviewContent: '', // 璇勪环鍐呭
-    score: 5, // 璇勫垎
-    anonymous: false, // 鏄惁鍖垮悕
-    goodsName: '', // 鍟嗗搧鍚嶇О
-    goodsPrice: '', // 鍟嗗搧浠锋牸
+    i18n: i18n, // 将i18n实例绑定到页面数据，以便在WXML中使用
+    reviewContent: '', // 评价内容
+    score: 5, // 评分
+    anonymous: false, // 是否匿名
+    goodsName: '', // 商品名称
+    goodsPrice: '', // 商品价格
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
-   * @param {Object} _options - 椤甸潰鍙傛暟
+   * 生命周期函数--监听页面加载
+   * @param {Object} _options - 页面参数
    */
   // eslint-disable-next-line no-unused-vars
   onLoad: function (_options) {
-    // 璁剧疆椤甸潰鏍囬
+    // 设置页面标题
     wx.setNavigationBarTitle({
       title: i18n.translate('review.title')
     });
 
-    // 妯℃嫙鑾峰彇鍟嗗搧淇℃伅
+    // 模拟获取商品信息
     this.setData({
       goodsName: i18n.translate('review.goodsName'),
-      goodsPrice: '楼199.00' // 绀轰緥浠锋牸
+      goodsPrice: '楼199.00' // 示例价格
     });
   },
 
@@ -46,8 +49,9 @@ Page({
 
 
   /**
-   * 鐢ㄦ埛鐐瑰嚮鍙充笂瑙掑垎浜?   * @param {Object} _res - 鍒嗕韩浜嬩欢鍙傛暟
-   * @returns {Object} 鍒嗕韩鍐呭
+   * 用户点击右上角分享
+   * @param {Object} _res - 分享事件参数
+   * @returns {Object} 分享内容
    */
   // eslint-disable-next-line no-unused-vars
   onShareAppMessage: function (_res) {
@@ -58,8 +62,8 @@ Page({
   },
 
   /**
-   * 璇勪环鍐呭杈撳叆
-   * @param {Object} e - 浜嬩欢瀵硅薄
+   * 评价内容输入
+   * @param {Object} e - 事件对象
    */
   bindReviewInput: function (e) {
     this.setData({
@@ -68,8 +72,8 @@ Page({
   },
 
   /**
-   * 璇勫垎鏀瑰彉
-   * @param {Object} e - 浜嬩欢瀵硅薄
+   * 评分改变
+   * @param {Object} e - 事件对象
    */
   bindScoreChange: function (e) {
     this.setData({
@@ -78,7 +82,8 @@ Page({
   },
 
   /**
-   * 鍖垮悕寮€鍏虫敼鍙?   * @param {Object} e - 浜嬩欢瀵硅薄
+   * 匿名开关改变
+   * @param {Object} e - 事件对象
    */
   bindAnonymousChange: function (e) {
     this.setData({
@@ -87,7 +92,7 @@ Page({
   },
 
   /**
-   * 鎻愪氦璇勪环
+   * 提交评价
    */
   submitReview: function () {
     const { reviewContent } = this.data;
@@ -98,12 +103,12 @@ Page({
       });
       return;
     }
-    // 妯℃嫙鎻愪氦璇勪环
-    // console.log('鎻愪氦璇勪环:', { reviewContent, score, anonymous });
+    // 模拟提交评价
+    // console.log('提交评价:', { reviewContent, score, anonymous });
     wx.showToast({
       title: i18n.translate('review.submitSuccess'),
       icon: 'success'
     });
-    // 鍙互鍦ㄨ繖閲屾坊鍔犲疄闄呯殑API璋冪敤
+    // 可以在这里添加实际的API调用
   }
 });

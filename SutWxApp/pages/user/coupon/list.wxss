@@ -1,1 +1,56 @@
-/* 榛樿鏍峰紡鏂囦欢 */
+/* pages/user/coupon/list.wxss */
+.container {
+  padding: 20rpx;
+}
+
+.loading-tip,
+.empty-tip {
+  text-align: center;
+  padding: 20rpx;
+  color: #999;
+}
+
+.coupon-list {
+  margin-top: 20rpx;
+}
+
+.coupon-item {
+  display: flex;
+  background-color: #fff;
+  margin-bottom: 20rpx;
+  border-radius: 8rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.coupon-value {
+  width: 200rpx;
+  flex-shrink: 0;
+  background-color: #ff4444;
+  color: #fff;
+  font-size: 48rpx;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.coupon-info {
+  flex-grow: 1;
+  padding: 20rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.coupon-name {
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-bottom: 10rpx;
+}
+
+.coupon-condition,
+.coupon-date {
+  font-size: 24rpx;
+  color: #666;
+}

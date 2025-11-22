@@ -1,0 +1,18 @@
+{
+  "返回": "Back",
+  "加载中...": "Loading...",
+  "提交": "Submit",
+  "取消": "Cancel",
+  "评价订单": "Order Review",
+  "商品名称": "Product Name",
+  "楼 {price}": "$ {price}",
+  "商品评分": "Product Rating",
+  "说您的使用体验吧...": "Share your experience...",
+  "{current}/{total}": "{current}/{total}",
+  "匿名评价": "Anonymous Review",
+  "上传图片 (最多{count}张)": "Upload Images (Max {count})",
+  "提交评价": "Submit Review",
+  "评价内容不能为空": "Review content cannot be empty",
+  "评价提交成功": "Review submitted successfully",
+  "分享订单评价": "Share Order Review"
+}

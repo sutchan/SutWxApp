@@ -1,0 +1,104 @@
+/* 文件名: list.wxss */
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.order-list-scroll {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.order-list {
+  padding: 20rpx;
+}
+
+.order-item {
+  background-color: #fff;
+  border-radius: 8rpx;
+  margin-bottom: 20rpx;
+  padding: 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10rpx;
+  padding-bottom: 10rpx;
+  border-bottom: 1rpx solid #eee;
+}
+
+.order-no {
+  font-size: 28rpx;
+  color: #333;
+}
+
+.order-status {
+  font-size: 28rpx;
+  color: #fa5151;
+}
+
+.order-body {
+  margin-bottom: 10rpx;
+}
+
+.order-goods {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10rpx;
+}
+
+.goods-image {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 8rpx;
+  margin-right: 20rpx;
+}
+
+.goods-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.goods-name {
+  font-size: 28rpx;
+  color: #333;
+  margin-bottom: 5rpx;
+}
+
+.goods-price {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.order-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 10rpx;
+  border-top: 1rpx solid #eee;
+}
+
+.order-total {
+  font-size: 30rpx;
+  color: #333;
+  font-weight: bold;
+}
+
+.order-time {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.no-orders,
+.loading-more,
+.no-more {
+  text-align: center;
+  padding: 40rpx;
+  color: #999;
+  font-size: 28rpx;
+}

@@ -1,1 +1,55 @@
-/* 榛樿鏍峰紡鏂囦欢 */
+/* pages/user/address/list.wxss */
+.container {
+  padding: 20rpx;
+}
+
+.loading-tip,
+.empty-tip {
+  text-align: center;
+  padding: 20rpx;
+  color: #999;
+}
+
+.address-item {
+  background-color: #fff;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  border-radius: 8rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+.address-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10rpx;
+}
+
+.address-info .name {
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-right: 20rpx;
+}
+
+.address-info .phone {
+  font-size: 28rpx;
+  color: #666;
+}
+
+.address-info .default-tag {
+  font-size: 20rpx;
+  color: #fff;
+  background-color: #07c160;
+  padding: 4rpx 12rpx;
+  border-radius: 6rpx;
+  margin-left: 20rpx;
+}
+
+.address-detail {
+  font-size: 28rpx;
+  color: #333;
+  line-height: 1.5;
+}
+
+.add-address-btn-area {
+  padding: 30rpx;
+}

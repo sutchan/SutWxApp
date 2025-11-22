@@ -1,1 +1,10 @@
-{}
+{
+  "navigationBarTitleText": "编辑收货地址",
+  "usingComponents": {
+    "mp-form": "weui-miniprogram/form/form",
+    "mp-cells": "weui-miniprogram/cells/cells",
+    "mp-cell": "weui-miniprogram/cell/cell",
+    "mp-checkbox-group": "weui-miniprogram/checkbox-group/checkbox-group",
+    "mp-checkbox": "weui-miniprogram/checkbox/checkbox"
+  }
+}

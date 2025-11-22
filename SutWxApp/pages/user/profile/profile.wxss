@@ -1,1 +1,15 @@
-/* 榛樿鏍峰紡鏂囦欢 */
+/* 默认样式文件 */
+.container {
+  padding-top: 20rpx;
+}
+
+.avatar {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+}
+
+.weui-btn-area {
+  margin-top: 40rpx;
+  padding: 0 20rpx;
+}

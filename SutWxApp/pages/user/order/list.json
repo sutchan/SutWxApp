@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "我的订单",
+  "usingComponents": {
+    "mp-tabs": "/weui/tabs/tabs",
+    "mp-tab": "/weui/tab/tab",
+    "mp-cells": "/weui/cells/cells",
+    "mp-cell": "/weui/cell/cell"
+  }
+}

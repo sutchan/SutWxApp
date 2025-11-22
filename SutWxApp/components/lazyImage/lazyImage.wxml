@@ -1,0 +1,7 @@
+<image
+  class="lazy-image {{show ? 'show' : 'hide'}}"
+  src="{{src}}"
+  mode="{{mode}}"
+  lazy-load="{{lazyLoad}}"
+  bindload="onLoad"
+></image>

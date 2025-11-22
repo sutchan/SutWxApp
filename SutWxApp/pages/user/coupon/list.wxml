@@ -1,1 +1,19 @@
-<!-- 默认页面模板 -->
+<!--pages/user/coupon/list.wxml-->
+<view class="container">
+  <mp-tabs activeTab="{{activeTab}}" tabs="{{tabs}}" bindtabclick="onTabChange"></mp-tabs>
+
+  <view wx:if="{{loading}}" class="loading-tip">加载中...</view>
+  <block wx:else>
+    <view wx:if="{{couponList.length === 0}}" class="empty-tip">暂无优惠券</view>
+    <view wx:else class="coupon-list">
+      <view wx:for="{{couponList}}" wx:key="id" class="coupon-item">
+        <view class="coupon-value">¥{{item.value}}</view>
+        <view class="coupon-info">
+          <view class="coupon-name">{{item.name}}</view>
+          <view class="coupon-condition">{{item.condition}}</view>
+          <view class="coupon-date">有效期至: {{item.endDate}}</view>
+        </view>
+      </view>
+    </view>
+  </block>
+</view>

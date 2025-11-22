@@ -1,5 +1,6 @@
 /**
- * 榛樿妯″潡鏂囦欢
+ * 文件名: notifications.js
+ * 用户通知页面
  */
 
 module.exports = {};

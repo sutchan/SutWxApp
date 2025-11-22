@@ -1,1 +1,9 @@
-
+<view class="container">
+  <mp-cells>
+    <mp-cell value="个人资料" link url="/pages/user/profile/profile"></mp-cell>
+    <mp-cell value="地址管理" link url="/pages/user/address/list"></mp-cell>
+    <mp-cell value="关于我们" link url="/pages/user/about/about"></mp-cell>
+    <mp-cell value="用户协议" link url="/pages/user/agreement/agreement"></mp-cell>
+    <mp-cell value="隐私政策" link url="/pages/user/privacySettings/privacySettings"></mp-cell>
+  </mp-cells>
+</view>

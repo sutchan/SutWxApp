@@ -1,1 +1,6 @@
-
+<!--pages/user/about/about.wxml-->
+<view class="container">
+  <view class="app-name">{{appName}}</view>
+  <view class="version">版本: {{version}}</view>
+  <view class="description">{{description}}</view>
+</view>

@@ -1,0 +1,62 @@
+<view class="container">
+  <block wx:if="{{orderDetail}}">
+    <!-- 订单状态 -->
+    <view class="order-status-card">
+      <view class="status-text">{{orderDetail.status}}</view>
+      <view class="status-tip" wx:if="{{orderDetail.status === '待付款'}}">请在30分钟内完成支付，逾期订单将自动取消</view>
+    </view>
+
+    <!-- 收货地址 -->
+    <mp-cells ext-class="address-card">
+      <mp-cell value="收货地址" footer="">
+        <view slot="title">
+          <view class="address-info">
+            <text class="name">{{orderDetail.address.name}}</text>
+            <text class="phone">{{orderDetail.address.phone}}</text>
+          </view>
+          <view class="detail">{{orderDetail.address.detail}}</view>
+        </view>
+      </mp-cell>
+    </mp-cells>
+
+    <!-- 商品列表 -->
+    <mp-cells ext-class="goods-card">
+      <mp-cell value="商品列表" footer=""></mp-cell>
+      <view class="goods-item" wx:for="{{orderDetail.items}}" wx:key="name" wx:for-item="goods">
+        <image class="goods-image" src="{{goods.image}}" mode="aspectFill"></image>
+        <view class="goods-info">
+          <text class="goods-name">{{goods.name}}</text>
+          <text class="goods-price">¥{{goods.price}} x {{goods.quantity}}</text>
+        </view>
+      </view>
+    </mp-cells>
+
+    <!-- 订单信息 -->
+    <mp-cells ext-class="order-info-card">
+      <mp-cell value="订单信息" footer=""></mp-cell>
+      <mp-cell value="订单编号" footer="{{orderDetail.orderNo}}"></mp-cell>
+      <mp-cell value="下单时间" footer="{{orderDetail.createTime}}"></mp-cell>
+      <mp-cell value="支付时间" footer="{{orderDetail.payTime || '暂无'}}"></mp-cell>
+      <mp-cell value="发货时间" footer="{{orderDetail.deliveryTime || '暂无'}}"></mp-cell>
+      <mp-cell value="收货时间" footer="{{orderDetail.receiveTime || '暂无'}}"></mp-cell>
+    </mp-cells>
+
+    <!-- 费用明细 -->
+    <mp-cells ext-class="price-detail-card">
+      <mp-cell value="商品总价" footer="¥{{orderDetail.totalPrice}}"></mp-cell>
+      <mp-cell value="运费" footer="¥{{orderDetail.freight}}"></mp-cell>
+      <mp-cell value="实付款" footer="¥{{orderDetail.actualPrice}}" ext-class="actual-price"></mp-cell>
+    </mp-cells>
+
+    <!-- 底部操作按钮 -->
+    <view class="footer-buttons">
+      <button class="weui-btn weui-btn_plain-default" wx:if="{{orderDetail.status === '待付款'}}" bindtap="cancelOrder">取消订单</button>
+      <button class="weui-btn weui-btn_primary" wx:if="{{orderDetail.status === '待付款'}}" bindtap="payOrder">立即支付</button>
+      <button class="weui-btn weui-btn_primary" wx:if="{{orderDetail.status === '待收货'}}" bindtap="confirmReceipt">确认收货</button>
+    </view>
+  </block>
+  <block wx:else>
+    <view class="loading-text" wx:if="{{loading}}">加载中...</view>
+    <view class="empty-text" wx:else>订单不存在</view>
+  </block>
+</view>

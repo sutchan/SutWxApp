@@ -1,1 +1,29 @@
+/* pages/article/detail/detail.wxss */
+.container {
+  padding: 20rpx;
+}
 
+.loading-tip {
+  text-align: center;
+  padding: 20rpx;
+  color: #999;
+}
+
+.article-title {
+  font-size: 40rpx;
+  font-weight: bold;
+  margin-bottom: 20rpx;
+}
+
+.article-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 24rpx;
+  color: #999;
+  margin-bottom: 30rpx;
+}
+
+.article-content {
+  font-size: 32rpx;
+  line-height: 1.6;
+}

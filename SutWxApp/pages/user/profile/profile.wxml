@@ -1,1 +1,14 @@
+<view class="container">
+  <mp-cells>
+    <mp-cell value="头像" link>
+      <image slot="footer" class="avatar" src="{{userInfo.avatarUrl || '/assets/images/default_avatar.png'}}" mode="aspectFill" bindtap="chooseAvatar"></image>
+    </mp-cell>
+    <mp-cell value="昵称" footer="{{userInfo.nickName}}" bindtap="editNickName"></mp-cell>
+    <mp-cell value="性别" footer="{{userInfo.gender === 1 ? '男' : userInfo.gender === 2 ? '女' : '未知'}}" bindtap="editGender"></mp-cell>
+    <mp-cell value="生日" footer="{{userInfo.birthday || '未设置'}}" bindtap="editBirthday"></mp-cell>
+  </mp-cells>
 
+  <view class="weui-btn-area">
+    <button class="weui-btn" type="warn" bindtap="logout">退出登录</button>
+  </view>
+</view>

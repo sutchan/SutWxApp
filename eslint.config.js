@@ -9,7 +9,7 @@ module.exports = [
     },
     rules: {
       'no-console': 'warn',
-      'no-unused-vars': 'warn',
+            'no-unused-vars': ['warn', { 'argsIgnorePattern': '^_' }],
       'semi': ['error', 'always'],
       'quotes': ['error', 'single']
     }

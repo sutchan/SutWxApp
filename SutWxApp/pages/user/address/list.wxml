@@ -1,1 +1,20 @@
-<!-- 默认页面模板 -->
+<!--pages/user/address/list.wxml-->
+<view class="container">
+  <view wx:if="{{loading}}" class="loading-tip">加载中...</view>
+  <block wx:else>
+    <view wx:if="{{addressList.length === 0}}" class="empty-tip">暂无收货地址</view>
+    <view wx:else class="address-list">
+      <view wx:for="{{addressList}}" wx:key="id" class="address-item" data-id="{{item.id}}" bindtap="editAddress">
+        <view class="address-info">
+          <text class="name">{{item.name}}</text>
+          <text class="phone">{{item.phone}}</text>
+          <text wx:if="{{item.isDefault}}" class="default-tag">默认</text>
+        </view>
+        <view class="address-detail">{{item.province}}{{item.city}}{{item.district}}{{item.detail}}</view>
+      </view>
+    </view>
+  </block>
+  <view class="add-address-btn-area">
+    <button class="weui-btn" type="primary" bindtap="addAddress">新增收货地址</button>
+  </view>
+</view>

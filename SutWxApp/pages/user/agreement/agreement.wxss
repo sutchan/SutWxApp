@@ -1,1 +1,19 @@
-/* 榛樿鏍峰紡鏂囦欢 */
+/* pages/user/agreement/agreement.wxss */
+.container {
+  padding: 30rpx;
+}
+
+.agreement-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 30rpx;
+}
+
+.agreement-content {
+  height: calc(100vh - 150rpx); /* 假设标题和padding占据150rpx */
+  font-size: 28rpx;
+  line-height: 1.8;
+  color: #333;
+  white-space: pre-wrap; /* 保留文本中的换行符 */
+}

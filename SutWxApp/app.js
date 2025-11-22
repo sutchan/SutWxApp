@@ -1,6 +1,7 @@
 const i18n = require('./utils/i18n');
 
 /**
+ * 文件名: app.js
  * 应用入口
  * @returns {void}
  */
@@ -43,7 +44,7 @@ App({
     try {
       // 生产环境可移除console，或发送到日志服务
       wx.showToast({ title: '发生错误', icon: 'none' });
-    } catch (_) {
+    } catch (innerErr) {
       // 静默失败
     }
   }

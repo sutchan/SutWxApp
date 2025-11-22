@@ -1,1 +1,7 @@
-<!-- 默认页面模板 -->
+<!--pages/user/agreement/agreement.wxml-->
+<view class="container">
+  <view class="agreement-title">{{agreementTitle}}</view>
+  <scroll-view scroll-y class="agreement-content">
+    <text>{{agreementContent}}</text>
+  </scroll-view>
+</view>

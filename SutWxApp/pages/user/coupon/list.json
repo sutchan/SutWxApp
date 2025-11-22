@@ -1,1 +1,9 @@
-{}
+{
+  "navigationBarTitleText": "我的优惠券",
+  "usingComponents": {
+    "mp-tabs": "weui-miniprogram/tabs/tabs",
+    "mp-tab": "weui-miniprogram/tab/tab",
+    "mp-tabbar": "weui-miniprogram/tabbar/tabbar",
+    "mp-tabbar-item": "weui-miniprogram/tabbar-item/tabbar-item"
+  }
+}

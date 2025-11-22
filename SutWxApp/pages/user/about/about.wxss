@@ -1,1 +1,23 @@
+/* pages/user/about/about.wxss */
+.container {
+  padding: 40rpx;
+  text-align: center;
+}
 
+.app-name {
+  font-size: 48rpx;
+  font-weight: bold;
+  margin-bottom: 20rpx;
+}
+
+.version {
+  font-size: 28rpx;
+  color: #888;
+  margin-bottom: 30rpx;
+}
+
+.description {
+  font-size: 32rpx;
+  line-height: 1.6;
+  color: #555;
+}

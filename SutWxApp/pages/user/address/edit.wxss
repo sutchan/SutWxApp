@@ -1,1 +1,12 @@
-/* 榛樿鏍峰紡鏂囦欢 */
+/* pages/user/address/edit.wxss */
+.weui-btn-area {
+  padding: 30rpx;
+}
+
+.weui-input,
+.weui-textarea {
+  text-align: right;
+  height: auto;
+  min-height: 2.4em;
+  line-height: 2.4em;
+}

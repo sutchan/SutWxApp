@@ -1,1 +1,15 @@
-
+<view class="container">
+  <mp-form>
+    <mp-cells>
+      <mp-cell prop="username" title="用户名">
+        <input data-field="username" bindinput="handleUsernameInput" class="weui-input" placeholder="请输入用户名" />
+      </mp-cell>
+      <mp-cell prop="password" title="密码">
+        <input data-field="password" bindinput="handlePasswordInput" class="weui-input" placeholder="请输入密码" password />
+      </mp-cell>
+    </mp-cells>
+    <view class="weui-btn-area">
+      <button class="weui-btn" type="primary" bindtap="handleLogin" loading="{{loading}}" disabled="{{loading}}">登录</button>
+    </view>
+  </mp-form>
+</view>

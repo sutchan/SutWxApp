@@ -1,1 +1,8 @@
-/* 榛樿鏍峰紡鏂囦欢 */
+/* 默认样式文件 */
+.container {
+  padding: 20rpx;
+}
+
+.weui-btn-area {
+  margin-top: 40rpx;
+}

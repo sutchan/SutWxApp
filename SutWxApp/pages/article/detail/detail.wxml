@@ -1,1 +1,14 @@
-<!-- 默认页面模板 -->
+<!--pages/article/detail/detail.wxml-->
+<view class="container">
+  <view wx:if="{{loading}}" class="loading-tip">加载中...</view>
+  <block wx:else>
+    <view class="article-title">{{article.title}}</view>
+    <view class="article-meta">
+      <text class="article-author">作者: {{article.author}}</text>
+      <text class="article-date">日期: {{article.date}}</text>
+    </view>
+    <view class="article-content">
+      <text>{{article.content}}</text>
+    </view>
+  </block>
+</view>

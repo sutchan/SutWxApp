@@ -1,1 +1,29 @@
-
+<!--pages/user/address/edit.wxml-->
+<mp-form id="form" rules="{{rules}}" models="{{formData}}">
+  <mp-cells title="收货信息">
+    <mp-cell prop="name" title="收货人">
+      <input data-field="name" bindinput="formInputChange" class="weui-input" placeholder="请输入收货人姓名" value="{{formData.name}}" />
+    </mp-cell>
+    <mp-cell prop="phone" title="手机号码">
+      <input data-field="phone" bindinput="formInputChange" class="weui-input" placeholder="请输入手机号码" value="{{formData.phone}}" />
+    </mp-cell>
+    <mp-cell prop="province" title="省份">
+      <input data-field="province" bindinput="formInputChange" class="weui-input" placeholder="请选择省份" value="{{formData.province}}" />
+    </mp-cell>
+    <mp-cell prop="city" title="城市">
+      <input data-field="city" bindinput="formInputChange" class="weui-input" placeholder="请选择城市" value="{{formData.city}}" />
+    </mp-cell>
+    <mp-cell prop="district" title="区县">
+      <input data-field="district" bindinput="formInputChange" class="weui-input" placeholder="请选择区县" value="{{formData.district}}" />
+    </mp-cell>
+    <mp-cell prop="detail" title="详细地址">
+      <textarea data-field="detail" bindinput="formInputChange" class="weui-textarea" placeholder="请输入详细地址" value="{{formData.detail}}" auto-height />
+    </mp-cell>
+    <mp-checkbox-group prop="isDefault" bindchange="formInputChange">
+      <mp-checkbox value="true" checked="{{formData.isDefault}}">设为默认地址</mp-checkbox>
+    </mp-checkbox-group>
+  </mp-cells>
+  <view class="weui-btn-area">
+    <button class="weui-btn" type="primary" bindtap="submitForm">保存</button>
+  </view>
+</mp-form>

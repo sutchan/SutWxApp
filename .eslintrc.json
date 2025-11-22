@@ -1,0 +1,21 @@
+{
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es2021": true,
+        "node": true
+    },
+    "extends": "standard",
+    "parserOptions": {
+        "ecmaVersion": 12
+    },
+    "rules": {
+        "indent": ["error", 2],
+        "linebreak-style": ["error", "unix"],
+        "quotes": ["error", "single"],
+        "semi": ["error", "always"],
+        "no-trailing-spaces": "error",
+        "no-multiple-empty-lines": ["error", { "max": 1, "maxEOF": 1 }],
+        "eol-last": ["error", "always"]
+    }
+}

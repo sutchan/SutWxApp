@@ -1,1 +1,9 @@
-
+<!--pages/index/index.wxml-->
+<view class="container">
+  <view wx:if="{{loading}}" class="loading-tip">{{i18n.translate('加载中...')}}</view>
+  <block wx:else>
+    <view wx:for="{{items}}" wx:key="id" class="list-item">
+      <text>{{item.title}}</text>
+    </view>
+  </block>
+</view>

@@ -1,0 +1,126 @@
+/* 文件名: detail.wxss */
+.container {
+  padding-bottom: 120rpx; /* 留出底部操作按钮的空间 */
+}
+
+.order-status-card {
+  background-color: #fa5151;
+  color: #fff;
+  padding: 30rpx 20rpx;
+  margin-bottom: 20rpx;
+}
+
+.status-text {
+  font-size: 36rpx;
+  font-weight: bold;
+  margin-bottom: 10rpx;
+}
+
+.status-tip {
+  font-size: 24rpx;
+  opacity: 0.8;
+}
+
+.address-card .weui-cell__ft {
+  display: none;
+}
+
+.address-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10rpx;
+}
+
+.address-info .name {
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-right: 20rpx;
+}
+
+.address-info .phone {
+  font-size: 28rpx;
+  color: #666;
+}
+
+.address-card .detail {
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.5;
+}
+
+.goods-card .weui-cell__ft {
+  display: none;
+}
+
+.goods-item {
+  display: flex;
+  align-items: center;
+  padding: 20rpx;
+  border-bottom: 1rpx solid #eee;
+}
+
+.goods-item:last-child {
+  border-bottom: none;
+}
+
+.goods-image {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 8rpx;
+  margin-right: 20rpx;
+}
+
+.goods-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.goods-name {
+  font-size: 28rpx;
+  color: #333;
+  margin-bottom: 10rpx;
+}
+
+.goods-price {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.order-info-card .weui-cell__ft,
+.price-detail-card .weui-cell__ft {
+  font-size: 28rpx;
+  color: #333;
+}
+
+.price-detail-card .actual-price .weui-cell__ft {
+  color: #fa5151;
+  font-weight: bold;
+  font-size: 32rpx;
+}
+
+.footer-buttons {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: flex-end;
+  padding: 20rpx;
+  background-color: #fff;
+  border-top: 1rpx solid #eee;
+  box-shadow: 0 -2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+.footer-buttons .weui-btn {
+  margin-left: 20rpx;
+  width: 200rpx;
+}
+
+.loading-text,
+.empty-text {
+  text-align: center;
+  padding: 40rpx;
+  color: #999;
+  font-size: 28rpx;
+}

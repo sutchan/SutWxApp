@@ -1,0 +1,34 @@
+<view class="container">
+  <mp-tabs activeTab="{{activeTab}}" tabs="{{tabs}}" bindtabclick="onTabChange"></mp-tabs>
+
+  <scroll-view scroll-y class="order-list-scroll" bindscrolltolower="onReachBottom">
+    <view class="order-list">
+      <block wx:if="{{orderList.length > 0}}">
+        <view class="order-item" wx:for="{{orderList}}" wx:key="id" data-id="{{item.id}}" bindtap="goToOrderDetail">
+          <view class="order-header">
+            <text class="order-no">订单号: {{item.orderNo}}</text>
+            <text class="order-status">{{item.status}}</text>
+          </view>
+          <view class="order-body">
+            <view class="order-goods" wx:for="{{item.items}}" wx:key="name" wx:for-item="goods">
+              <image class="goods-image" src="{{goods.image}}" mode="aspectFill"></image>
+              <view class="goods-info">
+                <text class="goods-name">{{goods.name}}</text>
+                <text class="goods-price">¥{{goods.price}} x {{goods.quantity}}</text>
+              </view>
+            </view>
+          </view>
+          <view class="order-footer">
+            <text class="order-total">实付: ¥{{item.totalPrice}}</text>
+            <text class="order-time">{{item.createTime}}</text>
+          </view>
+        </view>
+      </block>
+      <block wx:else>
+        <view class="no-orders">暂无订单</view>
+      </block>
+    </view>
+    <view wx:if="{{loading}}" class="loading-more">加载中...</view>
+    <view wx:if="{{!hasMore && orderList.length > 0}}" class="no-more">没有更多了</view>
+  </scroll-view>
+</view>

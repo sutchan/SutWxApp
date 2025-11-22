@@ -1,13 +1,66 @@
+# Translations template for Sut WeChat Mini Program.
+# Copyright (C) 2025 Sut
+# This file is distributed under the same license as the Sut WeChat Mini Program project.
+# Sut <sut@example.com>, 2025.
+#
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
-"Report-Msgid-Bugs-To: \n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Project-Id-Version: Sut WeChat Mini Program\n"
+"Report-Msgid-Bugs-To: sut@example.com\n"
+"POT-Creation-Date: 2025-11-21 00:00+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Sut <sut@example.com>\n"
+"Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-11-16T03:55:07+00:00\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.12.0\n"
-"X-Domain: SutWxApp\n"
+"Generated-By: SutWxApp\n"
+
+msgid "返回"
+msgstr ""
+
+msgid "加载中..."
+msgstr ""
+
+msgid "提交"
+msgstr ""
+
+msgid "取消"
+msgstr ""
+
+msgid "评价订单"
+msgstr ""
+
+msgid "商品名称"
+msgstr ""
+
+msgid "楼 {price}"
+msgstr ""
+
+msgid "商品评分"
+msgstr ""
+
+msgid "说您的使用体验吧..."
+msgstr ""
+
+msgid "{current}/{total}"
+msgstr ""
+
+msgid "匿名评价"
+msgstr ""
+
+msgid "上传图片 (最多{count}张)"
+msgstr ""
+
+msgid "提交评价"
+msgstr ""
+
+msgid "评价内容不能为空"
+msgstr ""
+
+msgid "评价提交成功"
+msgstr ""
+
+msgid "分享订单评价"
+msgstr ""

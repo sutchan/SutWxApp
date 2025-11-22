@@ -1,1 +1,19 @@
-/* 榛樿鏍峰紡鏂囦欢 */
+/* pages/index/index.wxss */
+.container {
+  padding: 20rpx;
+}
+
+.loading-tip {
+  text-align: center;
+  padding: 20rpx;
+  color: #999;
+}
+
+.list-item {
+  padding: 15rpx 0;
+  border-bottom: 1rpx solid #eee;
+}
+
+.list-item:last-child {
+  border-bottom: none;
+}
