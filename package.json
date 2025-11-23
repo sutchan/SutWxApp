@@ -5,6 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
+    "test:coverage": "jest --coverage",
+    "test:watch": "jest --watch",
+    "test:report": "node scripts/test-coverage-report.js",
     "prebuild": "powershell.exe -File .\\update_version.ps1",
     "lint": "eslint SutWxApp/ sut-wechat-mini/ --config eslint.config.js --fix"
   },

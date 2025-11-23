@@ -88,7 +88,7 @@ describe('authService', () => {
       
       const isLoggedIn = authService.isLoggedIn();
       
-      expect(isLoggedIn).toBe(true();
+      expect(isLoggedIn).toBe(true);
     });
 
     it('should return false when token does not exist', () => {
@@ -97,7 +97,7 @@ describe('authService', () => {
       
       const isLoggedIn = authService.isLoggedIn();
       
-      expect(isLoggedIn).toBe(false();
+      expect(isLoggedIn).toBe(false);
     });
   });
 });
