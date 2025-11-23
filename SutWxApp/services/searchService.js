@@ -1,6 +1,8 @@
 /**
- * 搜索服务
- * 提供搜索功能相关的API封装
+ * 文件名: searchService.js
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: 搜索服务
  */
 
 const request = require('../utils/request');

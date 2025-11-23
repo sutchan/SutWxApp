@@ -1,9 +1,11 @@
 /**
- * 商品服务
- * 提供商品相关的API调用
+ * 文件名: productService.js
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: 商品服务，提供商品相关的API调用
  */
 
-const request = require('../utils/request.js');
+const { request } = require('../utils/request.js');
 
 /**
  * 商品服务类
@@ -32,7 +34,11 @@ class ProductService {
       pageSize: options.pageSize || 20
     };
 
-    return request.get('/api/products', params);
+    return request({
+      url: '/api/products',
+      method: 'GET',
+      data: params
+    });
   }
 
   /**
@@ -45,7 +51,49 @@ class ProductService {
       throw new Error('商品ID不能为空');
     }
     
-    return request.get(`/api/products/${id}`);
+    return request({
+      url: `/api/products/${id}`,
+      method: 'GET'
+    });
+  }
+
+  /**
+   * 搜索商品
+   * @param {string} keyword - 搜索关键词
+   * @param {Object} options - 查询参数
+   * @param {number} options.page - 页码，默认为1
+   * @param {number} options.pageSize - 每页数量，默认为20
+   * @param {string} options.sort - 排序方式
+   * @returns {Promise<Object>} 搜索结果
+   */
+  async searchProducts(keyword, options = {}) {
+    if (!keyword) {
+      throw new Error('搜索关键词不能为空');
+    }
+    
+    const params = {
+      keyword,
+      page: options.page || 1,
+      pageSize: options.pageSize || 20,
+      sort: options.sort || 'newest'
+    };
+
+    return request({
+      url: '/api/products/search',
+      method: 'GET',
+      data: params
+    });
+  }
+
+  /**
+   * 获取商品分类
+   * @returns {Promise<Object>} 商品分类列表
+   */
+  async getProductCategories() {
+    return request({
+      url: '/api/products/categories',
+      method: 'GET'
+    });
   }
 
   /**
@@ -70,7 +118,11 @@ class ProductService {
       hasImage: options.hasImage ? 1 : ''
     };
 
-    return request.get(`/api/products/${productId}/reviews`, params);
+    return request({
+      url: `/api/products/${productId}/reviews`,
+      method: 'GET',
+      data: params
+    });
   }
 
   /**
@@ -84,7 +136,11 @@ class ProductService {
       limit
     };
 
-    return request.get(`/api/products/${productId}/recommendations`, params);
+    return request({
+      url: `/api/products/${productId}/recommendations`,
+      method: 'GET',
+      data: params
+    });
   }
 
   /**
@@ -97,7 +153,11 @@ class ProductService {
       limit
     };
 
-    return request.get('/api/products/hot', params);
+    return request({
+      url: '/api/products/hot',
+      method: 'GET',
+      data: params
+    });
   }
 
   /**
@@ -110,7 +170,11 @@ class ProductService {
       limit
     };
 
-    return request.get('/api/products/new', params);
+    return request({
+      url: '/api/products/new',
+      method: 'GET',
+      data: params
+    });
   }
 
   /**
@@ -118,7 +182,10 @@ class ProductService {
    * @returns {Promise<Object>} 搜索历史列表
    */
   async getSearchHistory() {
-    return request.get('/api/products/search-history');
+    return request({
+      url: '/api/products/search-history',
+      method: 'GET'
+    });
   }
 
   /**
@@ -126,7 +193,10 @@ class ProductService {
    * @returns {Promise<Object>} 操作结果
    */
   async clearSearchHistory() {
-    return request.delete('/api/products/search-history');
+    return request({
+      url: '/api/products/search-history',
+      method: 'DELETE'
+    });
   }
 
   /**
@@ -139,7 +209,11 @@ class ProductService {
       throw new Error('搜索关键词不能为空');
     }
     
-    return request.post('/api/products/search-history', { keyword });
+    return request({
+      url: '/api/products/search-history',
+      method: 'POST',
+      data: { keyword }
+    });
   }
 
   /**
@@ -152,7 +226,10 @@ class ProductService {
       throw new Error('商品ID不能为空');
     }
     
-    return request.get(`/api/products/${productId}/favorite-status`);
+    return request({
+      url: `/api/products/${productId}/favorite-status`,
+      method: 'GET'
+    });
   }
 
   /**
@@ -165,7 +242,11 @@ class ProductService {
       throw new Error('商品ID不能为空');
     }
     
-    return request.post('/api/favorites', { productId });
+    return request({
+      url: '/api/favorites',
+      method: 'POST',
+      data: { productId }
+    });
   }
 
   /**
@@ -178,7 +259,10 @@ class ProductService {
       throw new Error('商品ID不能为空');
     }
     
-    return request.delete(`/api/favorites/${productId}`);
+    return request({
+      url: `/api/favorites/${productId}`,
+      method: 'DELETE'
+    });
   }
 
   /**
@@ -197,20 +281,11 @@ class ProductService {
       skuId: options.skuId || ''
     };
 
-    return request.get(`/api/products/${productId}/stock`, params);
-  }
-
-  /**
-   * 获取商品SKU信息
-   * @param {string} productId - 商品ID
-   * @returns {Promise<Object>} SKU信息
-   */
-  async getProductSkus(productId) {
-    if (!productId) {
-      throw new Error('商品ID不能为空');
-    }
-    
-    return request.get(`/api/products/${productId}/skus`);
+    return request({
+      url: `/api/products/${productId}/stock`,
+      method: 'GET',
+      data: params
+    });
   }
 }
 

@@ -1,6 +1,8 @@
 /**
- * 分类服务
- * 提供商品分类相关的API调用
+ * 文件名: categoryService.js
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: 分类服务
  */
 
 const request = require('../utils/request.js');

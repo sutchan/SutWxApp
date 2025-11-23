@@ -5,3 +5,4 @@
 /tests
 SutWxApp.code-workspace
 test_fixes.js
+/coverage

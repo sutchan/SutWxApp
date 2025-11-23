@@ -1,6 +1,8 @@
 /**
- * 支付方式选择页面
- * 提供多种支付方式选择
+ * 文件名: methods.js
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: 支付方式选择页面
  */
 
 const paymentService = require('../../../services/paymentService');

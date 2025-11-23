@@ -1,7 +1,7 @@
 /**
  * 文件名: index.test.js
  * 版本号: 1.0.0
- * 更新日期: 2025-06-17
+ * 更新日期: 2025-11-23
  * 描述: 首页页面的单元测试
  */
 
@@ -32,11 +32,11 @@ global.wx = {
 };
 
 // 模拟 i18n 模块
-jest.mock('../../utils/i18n', () => ({
+jest.mock('../../../utils/i18n', () => ({
   translate: jest.fn((key) => key)
 }));
 
-const i18n = require('../../utils/i18n');
+const i18n = require('../../../utils/i18n');
 
 // 获取页面实例
 const indexPage = require('../index');

@@ -1,7 +1,7 @@
 /**
  * 文件名: lazyImage.test.js
  * 版本号: 1.0.0
- * 更新日期: 2025-06-17
+ * 更新日期: 2025-11-23
  * 描述: 懒加载图片组件单元测试
  */
 
@@ -41,10 +41,11 @@ const mockWx = {
       windowHeight: 667
     })),
     createIntersectionObserver: jest.fn(() => ({
-    relativeToViewport: jest.fn(() => ({
-      observe: jest.fn(),
-      unobserve: jest.fn(),
-      disconnect: jest.fn()
+      relativeToViewport: jest.fn(() => ({
+        observe: jest.fn(),
+        unobserve: jest.fn(),
+        disconnect: jest.fn()
+      }))
     }))
   }))
 };

@@ -1,3 +1,10 @@
+/**
+ * 文件名: mall.js
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: 
+ */
+
 // 积分商城页面
 const pointsService = require('../../../services/pointsService.js');
 

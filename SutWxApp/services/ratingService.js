@@ -1,6 +1,8 @@
 /**
- * 评价服务
- * 处理商品评价、订单评价等评价相关功能
+ * 文件名: ratingService.js
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: 评价服务
  */
 
 const request = require('../utils/request');

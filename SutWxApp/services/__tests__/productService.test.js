@@ -1,8 +1,8 @@
 /**
- * 商品服务单元测试
- * @file 商品服务单元测试
- * @version 1.0.0
- * @updateDate 2025-06-17
+ * 文件名: productService.test.js
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: 商品服务单元测试
  */
 
 // 模拟微信小程序API
@@ -15,11 +15,15 @@ global.wx = {
 
 // 模拟request模块
 jest.mock('../../utils/request', () => ({
-  request: jest.fn()
+  request: jest.fn(),
+  get: jest.fn(),
+  post: jest.fn(),
+  put: jest.fn(),
+  delete: jest.fn()
 }));
 
 const productService = require('../productService');
-const { request } = require('../../utils/request');
+const { request, get, post, put, delete: del } = require('../../utils/request');
 
 describe('商品服务测试', () => {
   beforeEach(() => {

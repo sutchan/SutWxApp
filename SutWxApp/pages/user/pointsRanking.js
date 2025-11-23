@@ -1,6 +1,8 @@
 /**
- * 积分排行榜页面
- * 显示用户积分排行榜信息，包括总榜、日榜、周榜、月榜等
+ * 文件名: pointsRanking.js
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: 积分排行榜页面
  */
 const pointsService = require('../../services/pointsService');
 

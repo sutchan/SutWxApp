@@ -1,7 +1,7 @@
 /**
  * 文件名: authService.test.js
  * 版本号: 1.0.0
- * 更新日期: 2025-06-17
+ * 更新日期: 2025-11-23
  * 描述: authService 的单元测试
  */
 
@@ -98,6 +98,28 @@ describe('authService', () => {
       const isLoggedIn = authService.isLoggedIn();
       
       expect(isLoggedIn).toBe(false);
+    });
+  });
+
+  describe('checkSession', () => {
+    it('should return true when token exists', async () => {
+      // 模拟 getToken 返回 token
+      wx.getStorageSync.mockReturnValue('mock_token_123');
+      
+      const isValid = await authService.checkSession();
+      
+      expect(isValid).toBe(true);
+      expect(wx.getStorageSync).toHaveBeenCalledWith('authToken');
+    });
+
+    it('should return false when token does not exist', async () => {
+      // 模拟 getToken 返回 null
+      wx.getStorageSync.mockReturnValue(null);
+      
+      const isValid = await authService.checkSession();
+      
+      expect(isValid).toBe(false);
+      expect(wx.getStorageSync).toHaveBeenCalledWith('authToken');
     });
   });
 });

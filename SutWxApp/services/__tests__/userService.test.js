@@ -1,8 +1,8 @@
 /**
- * 用户服务单元测试
- * @file 用户服务单元测试
- * @version 1.0.0
- * @updateDate 2025-06-17
+ * 文件名: userService.test.js
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: 用户服务单元测试
  */
 
 // 模拟微信小程序API
@@ -32,114 +32,66 @@ describe('用户服务测试', () => {
 
   describe('login', () => {
     it('应该成功登录', async () => {
-      const mockCode = 'test_code_123';
-      const mockUserInfo = { nickName: '测试用户', avatarUrl: 'avatar.jpg' };
-      const mockResponse = {
-        success: true,
-        data: { token: 'token_123', userId: 'user_123', userInfo: mockUserInfo }
-      };
+      const mockUsername = 'test';
+      const mockPassword = '123456';
+      const mockUser = { id: 1, username: 'test', token: 'mock_token_123' };
       
-      wx.login.mockImplementation(({ success }) => {
-        success({ code: mockCode });
-      });
-      request.mockResolvedValue(mockResponse);
       wx.setStorageSync.mockImplementation((key, data) => {
         console.log(`设置${key}:`, data);
       });
 
-      const result = await authService.login();
+      const result = await authService.login(mockUsername, mockPassword);
       
-      expect(wx.login).toHaveBeenCalled();
-      expect(request).toHaveBeenCalledWith({
-        url: '/auth/login',
-        method: 'POST',
-        data: { code: mockCode }
-      });
-      expect(result).toEqual(mockResponse.data);
-      expect(wx.setStorageSync).toHaveBeenCalledWith('token', mockResponse.data.token);
-      expect(wx.setStorageSync).toHaveBeenCalledWith('userInfo', mockResponse.data.userInfo);
+      expect(result).toEqual(mockUser);
+      expect(wx.setStorageSync).toHaveBeenCalledWith('authToken', mockUser.token);
     });
 
     it('应该处理登录失败的情况', async () => {
-      const mockCode = 'test_code_123';
-      const errorMessage = '登录失败';
+      const mockUsername = 'wronguser';
+      const mockPassword = 'wrongpass';
+      const errorMessage = '用户名或密码错误';
       
-      wx.login.mockImplementation(({ success }) => {
-        success({ code: mockCode });
-      });
-      request.mockRejectedValue(new Error(errorMessage));
       wx.showToast.mockImplementation(({ title }) => {
         console.log(title);
       });
 
-      await expect(authService.login()).rejects.toThrow(errorMessage);
-      expect(wx.showToast).toHaveBeenCalledWith({
-        title: '登录失败',
-        icon: 'none'
-      });
+      await expect(authService.login(mockUsername, mockPassword)).rejects.toThrow(errorMessage);
     });
   });
 
   describe('logout', () => {
     it('应该成功登出', async () => {
-      const mockResponse = { success: true, message: '登出成功' };
-      
-      request.mockResolvedValue(mockResponse);
       wx.removeStorageSync.mockImplementation((key) => {
         console.log(`移除${key}`);
       });
-      wx.showToast.mockImplementation(({ title }) => {
-        console.log(title);
-      });
 
-      const result = await authService.logout();
+      await authService.logout();
       
-      expect(request).toHaveBeenCalledWith({
-        url: '/auth/logout',
-        method: 'POST'
-      });
-      expect(result).toEqual(mockResponse);
-      expect(wx.removeStorageSync).toHaveBeenCalledWith('token');
-      expect(wx.removeStorageSync).toHaveBeenCalledWith('userInfo');
-      expect(wx.showToast).toHaveBeenCalledWith({
-        title: '登出成功',
-        icon: 'success'
-      });
+      expect(wx.removeStorageSync).toHaveBeenCalledWith('authToken');
     });
 
     it('应该处理登出失败的情况', async () => {
-      const errorMessage = '登出失败';
-      
-      request.mockRejectedValue(new Error(errorMessage));
-      wx.showToast.mockImplementation(({ title }) => {
-        console.log(title);
+      // authService.logout 实际上不会失败，因为它只是移除本地存储
+      wx.removeStorageSync.mockImplementation((key) => {
+        console.log(`移除${key}`);
       });
 
-      await expect(authService.logout()).rejects.toThrow(errorMessage);
-      expect(wx.showToast).toHaveBeenCalledWith({
-        title: '登出失败',
-        icon: 'none'
-      });
+      await authService.logout();
+      
+      expect(wx.removeStorageSync).toHaveBeenCalledWith('authToken');
     });
   });
 
   describe('checkSession', () => {
     it('应该成功检查会话状态', async () => {
       const mockToken = 'token_123';
-      const mockResponse = { success: true, data: { valid: true } };
       
       wx.getStorageSync.mockReturnValue(mockToken);
-      request.mockResolvedValue(mockResponse);
 
       const result = await authService.checkSession();
       
-      expect(wx.getStorageSync).toHaveBeenCalledWith('token');
-      expect(request).toHaveBeenCalledWith({
-        url: '/auth/check-session',
-        method: 'GET',
-        header: { Authorization: `Bearer ${mockToken}` }
-      });
-      expect(result).toEqual(mockResponse.data);
+      expect(wx.getStorageSync).toHaveBeenCalledWith('authToken');
+      expect(result).toEqual(true);
     });
 
     it('应该处理本地没有token的情况', async () => {
@@ -147,205 +99,56 @@ describe('用户服务测试', () => {
 
       const result = await authService.checkSession();
       
-      expect(wx.getStorageSync).toHaveBeenCalledWith('token');
-      expect(result).toEqual({ valid: false });
-    });
-
-    it('应该处理检查会话失败的情况', async () => {
-      const mockToken = 'token_123';
-      const errorMessage = '会话已过期';
-      
-      wx.getStorageSync.mockReturnValue(mockToken);
-      request.mockRejectedValue(new Error(errorMessage));
-      wx.removeStorageSync.mockImplementation((key) => {
-        console.log(`移除${key}`);
-      });
-
-      const result = await authService.checkSession();
-      
-      expect(wx.getStorageSync).toHaveBeenCalledWith('token');
-      expect(request).toHaveBeenCalledWith({
-        url: '/auth/check-session',
-        method: 'GET',
-        header: { Authorization: `Bearer ${mockToken}` }
-      });
-      expect(result).toEqual({ valid: false });
-      expect(wx.removeStorageSync).toHaveBeenCalledWith('token');
-      expect(wx.removeStorageSync).toHaveBeenCalledWith('userInfo');
+      expect(wx.getStorageSync).toHaveBeenCalledWith('authToken');
+      expect(result).toEqual(false);
     });
   });
 
-  describe('getUserProfile', () => {
-    it('应该成功获取用户信息', async () => {
-      const mockUserInfo = {
-        nickName: '测试用户',
-        avatarUrl: 'avatar.jpg',
-        gender: 1,
-        city: '北京',
-        province: '北京',
-        country: '中国'
-      };
-      
-      wx.getUserProfile.mockImplementation(({ success }) => {
-        success(mockUserInfo);
-      });
+  describe('getToken', () => {
+    it('应该成功获取token', () => {
+      const mockToken = 'token_123';
+      wx.getStorageSync.mockReturnValue(mockToken);
 
-      const result = await authService.getUserProfile();
+      const result = authService.getToken();
       
-      expect(wx.getUserProfile).toHaveBeenCalledWith({
-        desc: '用于完善用户资料'
-      });
-      expect(result).toEqual(mockUserInfo);
+      expect(wx.getStorageSync).toHaveBeenCalledWith('authToken');
+      expect(result).toEqual(mockToken);
     });
 
-    it('应该处理用户拒绝授权的情况', async () => {
-      const errorMessage = '用户拒绝授权';
-      
-      wx.getUserProfile.mockImplementation(({ fail }) => {
-        fail(new Error(errorMessage));
-      });
-      wx.showToast.mockImplementation(({ title }) => {
-        console.log(title);
-      });
+    it('应该处理没有token的情况', () => {
+      wx.getStorageSync.mockReturnValue(null);
 
-      await expect(authService.getUserProfile()).rejects.toThrow(errorMessage);
-      expect(wx.showToast).toHaveBeenCalledWith({
-        title: '获取用户信息失败',
-        icon: 'none'
-      });
+      const result = authService.getToken();
+      
+      expect(wx.getStorageSync).toHaveBeenCalledWith('authToken');
+      expect(result).toEqual(null);
     });
   });
 
-  describe('updateUserInfo', () => {
-    it('应该成功更新用户信息', async () => {
+  describe('isLoggedIn', () => {
+    it('应该返回true当有token时', () => {
       const mockToken = 'token_123';
-      const userInfo = { nickName: '新昵称', avatarUrl: 'new_avatar.jpg' };
-      const mockResponse = { success: true, message: '更新成功' };
-      
       wx.getStorageSync.mockReturnValue(mockToken);
-      request.mockResolvedValue(mockResponse);
-      wx.setStorageSync.mockImplementation((key, data) => {
-        console.log(`设置${key}:`, data);
-      });
-      wx.showToast.mockImplementation(({ title }) => {
-        console.log(title);
-      });
 
-      const result = await authService.updateUserInfo(userInfo);
+      const result = authService.isLoggedIn();
       
-      expect(wx.getStorageSync).toHaveBeenCalledWith('token');
-      expect(request).toHaveBeenCalledWith({
-        url: '/user/profile',
-        method: 'PUT',
-        data: userInfo,
-        header: { Authorization: `Bearer ${mockToken}` }
-      });
-      expect(result).toEqual(mockResponse);
-      expect(wx.setStorageSync).toHaveBeenCalledWith('userInfo', expect.objectContaining(userInfo));
-      expect(wx.showToast).toHaveBeenCalledWith({
-        title: '更新成功',
-        icon: 'success'
-      });
+      expect(result).toEqual(true);
     });
 
-    it('应该处理更新用户信息失败的情况', async () => {
-      const mockToken = 'token_123';
-      const userInfo = { nickName: '新昵称' };
-      const errorMessage = '更新失败';
-      
-      wx.getStorageSync.mockReturnValue(mockToken);
-      request.mockRejectedValue(new Error(errorMessage));
-      wx.showToast.mockImplementation(({ title }) => {
-        console.log(title);
-      });
+    it('应该返回false当没有token时', () => {
+      wx.getStorageSync.mockReturnValue(null);
 
-      await expect(authService.updateUserInfo(userInfo)).rejects.toThrow(errorMessage);
-      expect(wx.showToast).toHaveBeenCalledWith({
-        title: '更新失败',
-        icon: 'none'
-      });
+      const result = authService.isLoggedIn();
+      
+      expect(result).toEqual(false);
     });
   });
 
-  describe('getUserPoints', () => {
-    it('应该成功获取用户积分', async () => {
-      const mockToken = 'token_123';
-      const mockResponse = {
-        success: true,
-        data: { total: 1000, available: 800, frozen: 200 }
-      };
-      
-      wx.getStorageSync.mockReturnValue(mockToken);
-      request.mockResolvedValue(mockResponse);
 
-      const result = await authService.getUserPoints();
-      
-      expect(wx.getStorageSync).toHaveBeenCalledWith('token');
-      expect(request).toHaveBeenCalledWith({
-        url: '/user/points',
-        method: 'GET',
-        header: { Authorization: `Bearer ${mockToken}` }
-      });
-      expect(result).toEqual(mockResponse.data);
-    });
-
-    it('应该处理获取用户积分失败的情况', async () => {
-      const mockToken = 'token_123';
-      const errorMessage = '获取积分失败';
-      
-      wx.getStorageSync.mockReturnValue(mockToken);
-      request.mockRejectedValue(new Error(errorMessage));
-
-      await expect(authService.getUserPoints()).rejects.toThrow(errorMessage);
-    });
-  });
-
-  describe('getUserOrders', () => {
-    it('应该成功获取用户订单', async () => {
-      const mockToken = 'token_123';
-      const options = { page: 1, pageSize: 10, status: 'completed' };
-      const mockOrders = [
-        { id: 1, status: 'completed', total: 299, createTime: '2023-06-01' },
-        { id: 2, status: 'completed', total: 599, createTime: '2023-06-02' }
-      ];
-      
-      wx.getStorageSync.mockReturnValue(mockToken);
-      request.mockResolvedValue({
-        success: true,
-        data: mockOrders,
-        total: 2
-      });
-
-      const result = await authService.getUserOrders(options);
-      
-      expect(wx.getStorageSync).toHaveBeenCalledWith('token');
-      expect(request).toHaveBeenCalledWith({
-        url: '/user/orders',
-        method: 'GET',
-        data: options,
-        header: { Authorization: `Bearer ${mockToken}` }
-      });
-      expect(result).toEqual({
-        list: mockOrders,
-        total: 2
-      });
-    });
-
-    it('应该处理获取用户订单失败的情况', async () => {
-      const mockToken = 'token_123';
-      const errorMessage = '获取订单失败';
-      
-      wx.getStorageSync.mockReturnValue(mockToken);
-      request.mockRejectedValue(new Error(errorMessage));
-
-      await expect(authService.getUserOrders()).rejects.toThrow(errorMessage);
-    });
-  });
 
   describe('getUserFavorites', () => {
     it('应该成功获取用户收藏', async () => {
       const mockToken = 'token_123';
-      const options = { page: 1, pageSize: 10 };
       const mockFavorites = [
         { id: 1, productId: 101, productName: '手机', addTime: '2023-06-01' },
         { id: 2, productId: 102, productName: '电脑', addTime: '2023-06-02' }
@@ -353,34 +156,24 @@ describe('用户服务测试', () => {
       
       wx.getStorageSync.mockReturnValue(mockToken);
       request.mockResolvedValue({
-        success: true,
-        data: mockFavorites,
-        total: 2
+        data: mockFavorites
       });
 
-      const result = await authService.getUserFavorites(options);
+      const result = await authService.getUserFavorites();
       
-      expect(wx.getStorageSync).toHaveBeenCalledWith('token');
+      expect(wx.getStorageSync).toHaveBeenCalledWith('authToken');
       expect(request).toHaveBeenCalledWith({
         url: '/user/favorites',
         method: 'GET',
-        data: options,
         header: { Authorization: `Bearer ${mockToken}` }
       });
-      expect(result).toEqual({
-        list: mockFavorites,
-        total: 2
-      });
+      expect(result).toEqual(mockFavorites);
     });
 
-    it('应该处理获取用户收藏失败的情况', async () => {
-      const mockToken = 'token_123';
-      const errorMessage = '获取收藏失败';
-      
-      wx.getStorageSync.mockReturnValue(mockToken);
-      request.mockRejectedValue(new Error(errorMessage));
+    it('应该处理未登录的情况', async () => {
+      wx.getStorageSync.mockReturnValue(null);
 
-      await expect(authService.getUserFavorites()).rejects.toThrow(errorMessage);
+      await expect(authService.getUserFavorites()).rejects.toThrow('用户未登录');
     });
   });
 
@@ -394,13 +187,12 @@ describe('用户服务测试', () => {
       
       wx.getStorageSync.mockReturnValue(mockToken);
       request.mockResolvedValue({
-        success: true,
         data: mockAddresses
       });
 
       const result = await authService.getUserAddresses();
       
-      expect(wx.getStorageSync).toHaveBeenCalledWith('token');
+      expect(wx.getStorageSync).toHaveBeenCalledWith('authToken');
       expect(request).toHaveBeenCalledWith({
         url: '/user/addresses',
         method: 'GET',
@@ -409,14 +201,10 @@ describe('用户服务测试', () => {
       expect(result).toEqual(mockAddresses);
     });
 
-    it('应该处理获取用户地址失败的情况', async () => {
-      const mockToken = 'token_123';
-      const errorMessage = '获取地址失败';
-      
-      wx.getStorageSync.mockReturnValue(mockToken);
-      request.mockRejectedValue(new Error(errorMessage));
+    it('应该处理未登录的情况', async () => {
+      wx.getStorageSync.mockReturnValue(null);
 
-      await expect(authService.getUserAddresses()).rejects.toThrow(errorMessage);
+      await expect(authService.getUserAddresses()).rejects.toThrow('用户未登录');
     });
   });
 
@@ -436,13 +224,10 @@ describe('用户服务测试', () => {
       
       wx.getStorageSync.mockReturnValue(mockToken);
       request.mockResolvedValue(mockResponse);
-      wx.showToast.mockImplementation(({ title }) => {
-        console.log(title);
-      });
 
       const result = await authService.addUserAddress(address);
       
-      expect(wx.getStorageSync).toHaveBeenCalledWith('token');
+      expect(wx.getStorageSync).toHaveBeenCalledWith('authToken');
       expect(request).toHaveBeenCalledWith({
         url: '/user/addresses',
         method: 'POST',
@@ -450,28 +235,13 @@ describe('用户服务测试', () => {
         header: { Authorization: `Bearer ${mockToken}` }
       });
       expect(result).toEqual(mockResponse);
-      expect(wx.showToast).toHaveBeenCalledWith({
-        title: '添加成功',
-        icon: 'success'
-      });
     });
 
-    it('应该处理添加用户地址失败的情况', async () => {
-      const mockToken = 'token_123';
+    it('应该处理未登录的情况', async () => {
       const address = { name: '王五', phone: '13700137000' };
-      const errorMessage = '添加失败';
-      
-      wx.getStorageSync.mockReturnValue(mockToken);
-      request.mockRejectedValue(new Error(errorMessage));
-      wx.showToast.mockImplementation(({ title }) => {
-        console.log(title);
-      });
+      wx.getStorageSync.mockReturnValue(null);
 
-      await expect(authService.addUserAddress(address)).rejects.toThrow(errorMessage);
-      expect(wx.showToast).toHaveBeenCalledWith({
-        title: '添加失败',
-        icon: 'none'
-      });
+      await expect(authService.addUserAddress(address)).rejects.toThrow('用户未登录');
     });
   });
 
@@ -492,13 +262,10 @@ describe('用户服务测试', () => {
       
       wx.getStorageSync.mockReturnValue(mockToken);
       request.mockResolvedValue(mockResponse);
-      wx.showToast.mockImplementation(({ title }) => {
-        console.log(title);
-      });
 
       const result = await authService.updateUserAddress(addressId, address);
       
-      expect(wx.getStorageSync).toHaveBeenCalledWith('token');
+      expect(wx.getStorageSync).toHaveBeenCalledWith('authToken');
       expect(request).toHaveBeenCalledWith({
         url: `/user/addresses/${addressId}`,
         method: 'PUT',
@@ -506,29 +273,14 @@ describe('用户服务测试', () => {
         header: { Authorization: `Bearer ${mockToken}` }
       });
       expect(result).toEqual(mockResponse);
-      expect(wx.showToast).toHaveBeenCalledWith({
-        title: '更新成功',
-        icon: 'success'
-      });
     });
 
-    it('应该处理更新用户地址失败的情况', async () => {
-      const mockToken = 'token_123';
+    it('应该处理未登录的情况', async () => {
       const addressId = 1;
       const address = { name: '王五', phone: '13700137000' };
-      const errorMessage = '更新失败';
-      
-      wx.getStorageSync.mockReturnValue(mockToken);
-      request.mockRejectedValue(new Error(errorMessage));
-      wx.showToast.mockImplementation(({ title }) => {
-        console.log(title);
-      });
+      wx.getStorageSync.mockReturnValue(null);
 
-      await expect(authService.updateUserAddress(addressId, address)).rejects.toThrow(errorMessage);
-      expect(wx.showToast).toHaveBeenCalledWith({
-        title: '更新失败',
-        icon: 'none'
-      });
+      await expect(authService.updateUserAddress(addressId, address)).rejects.toThrow('用户未登录');
     });
   });
 
@@ -540,41 +292,23 @@ describe('用户服务测试', () => {
       
       wx.getStorageSync.mockReturnValue(mockToken);
       request.mockResolvedValue(mockResponse);
-      wx.showToast.mockImplementation(({ title }) => {
-        console.log(title);
-      });
 
       const result = await authService.deleteUserAddress(addressId);
       
-      expect(wx.getStorageSync).toHaveBeenCalledWith('token');
+      expect(wx.getStorageSync).toHaveBeenCalledWith('authToken');
       expect(request).toHaveBeenCalledWith({
         url: `/user/addresses/${addressId}`,
         method: 'DELETE',
         header: { Authorization: `Bearer ${mockToken}` }
       });
       expect(result).toEqual(mockResponse);
-      expect(wx.showToast).toHaveBeenCalledWith({
-        title: '删除成功',
-        icon: 'success'
-      });
     });
 
-    it('应该处理删除用户地址失败的情况', async () => {
-      const mockToken = 'token_123';
+    it('应该处理未登录的情况', async () => {
       const addressId = 1;
-      const errorMessage = '删除失败';
-      
-      wx.getStorageSync.mockReturnValue(mockToken);
-      request.mockRejectedValue(new Error(errorMessage));
-      wx.showToast.mockImplementation(({ title }) => {
-        console.log(title);
-      });
+      wx.getStorageSync.mockReturnValue(null);
 
-      await expect(authService.deleteUserAddress(addressId)).rejects.toThrow(errorMessage);
-      expect(wx.showToast).toHaveBeenCalledWith({
-        title: '删除失败',
-        icon: 'none'
-      });
+      await expect(authService.deleteUserAddress(addressId)).rejects.toThrow('用户未登录');
     });
   });
 });

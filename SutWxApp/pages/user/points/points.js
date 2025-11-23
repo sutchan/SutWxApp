@@ -1,6 +1,8 @@
 /**
- * 积分页面
- * 显示用户积分信息和积分记录
+ * 文件名: points.js
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: 积分页面
  */
 
 const pointsService = require('../../../services/pointsService');

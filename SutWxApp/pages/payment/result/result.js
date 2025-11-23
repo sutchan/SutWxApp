@@ -1,6 +1,8 @@
 /**
- * 支付结果页面
- * 显示支付成功或失败的结果
+ * 文件名: result.js
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: 支付结果页面
  */
 
 const paymentService = require('../../../services/paymentService');

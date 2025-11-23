@@ -1,6 +1,8 @@
 /**
- * 收藏与关注服务
- * 处理商品收藏、用户关注等功能
+ * 文件名: favoriteService.js
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: 收藏与关注服务
  */
 
 const request = require('../utils/request');

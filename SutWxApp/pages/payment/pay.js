@@ -1,6 +1,8 @@
 /**
- * 支付页面
- * 处理订单支付流程
+ * 文件名: pay.js
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: 支付页面
  */
 
 const paymentService = require('../../services/paymentService');

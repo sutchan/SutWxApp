@@ -1,5 +1,8 @@
 /**
- * 积分任务页面
+ * 文件名: pointsTasks.js
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: 积分任务页面
  */
 const app = getApp();
 const pointsService = require('../../services/pointsService');

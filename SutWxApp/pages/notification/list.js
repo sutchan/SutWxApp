@@ -1,3 +1,10 @@
+/**
+ * 文件名: list.js
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: 
+ */
+
 // pages/notification/list.js
 const notificationService = require('../../services/notificationService.js');
 
