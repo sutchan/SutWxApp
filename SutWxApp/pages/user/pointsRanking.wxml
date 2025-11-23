@@ -1,0 +1,96 @@
+<view class="container">
+  <!-- 当前用户信息 -->
+  <view class="user-info-card">
+    <view class="user-info">
+      <image class="user-avatar" src="{{userInfo.avatar}}" mode="aspectFill"></image>
+      <view class="user-details">
+        <text class="user-nickname">{{userInfo.nickname}}</text>
+        <view class="user-points">
+          <text class="points-value">{{userInfo.points}}</text>
+          <text class="points-label">积分</text>
+        </view>
+      </view>
+      <view class="user-rank">
+        <text class="rank-label">我的排名</text>
+        <text class="rank-value">{{userInfo.rank > 0 ? userInfo.rank : '未上榜'}}</text>
+      </view>
+    </view>
+    <view class="user-actions">
+      <view class="action-item" bindtap="onGoToDetail">
+        <text class="iconfont">积分明细</text>
+      </view>
+      <view class="action-item" bindtap="onGoToTasks">
+        <text class="iconfont">赚积分</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 榜单类型切换 -->
+  <view class="tab-bar">
+    <view 
+      wx:for="{{tabs}}" 
+      wx:key="key" 
+      class="tab-item {{activeTab === item.key ? 'active' : ''}}" 
+      data-tab="{{item.key}}" 
+      bindtap="onTabChange">
+      {{item.label}}
+    </view>
+  </view>
+
+  <!-- 排行榜列表 -->
+  <view class="content">
+    <!-- 排行榜列表 -->
+    <view class="ranking-list" wx:if="{{!isEmpty}}">
+      <view 
+        wx:for="{{rankingList}}" 
+        wx:key="id" 
+        class="ranking-item {{index < 3 ? 'top-three' : ''}}"
+        bindtap="onViewUser" 
+        data-id="{{item.id}}">
+        
+        <!-- 排名 -->
+        <view class="rank-number">
+          <view class="rank-badge {{index < 3 ? 'badge-' + (index + 1) : ''}}" wx:if="{{index < 3}}">
+            {{index + 1}}
+          </view>
+          <text class="rank-text" wx:else>{{index + 1}}</text>
+        </view>
+        
+        <!-- 用户信息 -->
+        <view class="user-info-row">
+          <image class="user-avatar-small" src="{{item.avatar}}" mode="aspectFill"></image>
+          <view class="user-details-row">
+            <text class="user-nickname-row">{{item.nickname}}</text>
+            <view class="user-level" wx:if="{{item.level}}">
+              <text class="level-text">{{item.level}}</text>
+            </view>
+          </view>
+        </view>
+        
+        <!-- 积分信息 -->
+        <view class="points-info">
+          <text class="points-value">{{item.points}}</text>
+          <text class="points-label">积分</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-state" wx:if="{{isEmpty}}">
+      <image class="empty-icon" src="/images/empty-ranking.png" mode="aspectFit"></image>
+      <text>暂无排行数据</text>
+      <view class="empty-tip">快去完成任务赚取积分吧</view>
+    </view>
+
+    <!-- 加载状态 -->
+    <view class="loading-state" wx:if="{{isLoading && rankingList.length === 0}}">
+      <view class="loading-spinner"></view>
+      <text>加载中...</text>
+    </view>
+
+    <!-- 没有更多数据 -->
+    <view class="no-more-data" wx:if="{{!hasMore && rankingList.length > 0}}">
+      没有更多数据了
+    </view>
+  </view>
+</view>
