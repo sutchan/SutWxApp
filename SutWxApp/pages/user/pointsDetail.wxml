@@ -1,0 +1,90 @@
+<view class="container">
+  <!-- 当前积分卡片 -->
+  <view class="points-card">
+    <view class="points-info">
+      <text class="points-label">当前积分</text>
+      <text class="points-value">{{currentPoints}}</text>
+    </view>
+    <view class="points-actions">
+      <button class="action-btn" bindtap="onGoToTasks">赚积分</button>
+      <button class="action-btn primary" bindtap="onGoToMall">花积分</button>
+    </view>
+  </view>
+
+  <!-- 筛选区域 -->
+  <view class="filter-section">
+    <!-- 类型筛选 -->
+    <view class="tab-bar">
+      <view 
+        wx:for="{{tabs}}" 
+        wx:key="key" 
+        class="tab-item {{activeTab === item.key ? 'active' : ''}}" 
+        data-tab="{{item.key}}" 
+        bindtap="onTabChange">
+        {{item.label}}
+      </view>
+    </view>
+
+    <!-- 时间筛选 -->
+    <view class="time-filter">
+      <view 
+        wx:for="{{timeOptions}}" 
+        wx:key="key" 
+        class="time-item {{timeRange === item.key ? 'active' : ''}}" 
+        data-time="{{item.key}}" 
+        bindtap="onTimeFilterChange">
+        {{item.label}}
+      </view>
+    </view>
+  </view>
+
+  <!-- 内容区域 -->
+  <view class="content">
+    <!-- 积分明细列表 -->
+    <view class="detail-list" wx:if="{{!isEmpty}}">
+      <view 
+        wx:for="{{detailList}}" 
+        wx:key="id" 
+        class="detail-item" 
+        data-id="{{item.id}}" 
+        bindtap="onViewDetail">
+        
+        <!-- 明细图标 -->
+        <view class="detail-icon {{item.type === 'earn' ? 'earn' : 'spend'}}">
+          <text class="iconfont">{{item.type === 'earn' ? '+' : '-'}}</text>
+        </view>
+        
+        <!-- 明细信息 -->
+        <view class="detail-info">
+          <view class="detail-title">{{item.title}}</view>
+          <view class="detail-desc">{{item.description}}</view>
+          <view class="detail-time">{{item.createTime}}</view>
+        </view>
+        
+        <!-- 积分变化 -->
+        <view class="detail-points {{item.type === 'earn' ? 'earn' : 'spend'}}">
+          {{item.type === 'earn' ? '+' : '-'}}{{item.points}}
+        </view>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-state" wx:if="{{isEmpty}}">
+      <image class="empty-icon" src="/images/empty-points.png" mode="aspectFit"></image>
+      <text>暂无积分明细</text>
+      <view class="empty-tip">完成任务或参与活动可获得积分</view>
+      <button class="empty-btn" bindtap="onGoToTasks">去赚积分</button>
+    </view>
+
+    <!-- 加载状态 -->
+    <view class="loading-state" wx:if="{{isLoading && detailList.length === 0}}">
+      <view class="loading-spinner"></view>
+      <text>加载中...</text>
+    </view>
+
+    <!-- 没有更多数据 -->
+    <view class="no-more-data" wx:if="{{!hasMore && detailList.length > 0}}">
+      没有更多数据了
+    </view>
+  </view>
+</view>

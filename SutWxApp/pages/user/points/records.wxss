@@ -1,0 +1,165 @@
+.container {
+  background-color: #f5f5f5;
+  min-height: 100vh;
+  padding-bottom: 30rpx;
+}
+
+/* 积分概览 */
+.points-summary {
+  background-color: #fff;
+  padding: 40rpx 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+.total-points {
+  text-align: center;
+}
+
+.points-value {
+  display: block;
+  font-size: 60rpx;
+  font-weight: bold;
+  color: #ff6b00;
+  margin-bottom: 10rpx;
+}
+
+.points-label {
+  font-size: 28rpx;
+  color: #999;
+}
+
+/* 标签切换 */
+.tabs {
+  display: flex;
+  background-color: #fff;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+.tab-item {
+  flex: 1;
+  text-align: center;
+  padding: 30rpx 0;
+  font-size: 30rpx;
+  color: #666;
+  position: relative;
+}
+
+.tab-item.active {
+  color: #ff6b00;
+  font-weight: bold;
+}
+
+.tab-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60rpx;
+  height: 6rpx;
+  background-color: #ff6b00;
+  border-radius: 3rpx;
+}
+
+/* 记录列表 */
+.records-list {
+  background-color: #fff;
+  border-radius: 20rpx;
+  margin: 0 30rpx;
+  overflow: hidden;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+.record-item {
+  display: flex;
+  align-items: center;
+  padding: 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.record-item:last-child {
+  border-bottom: none;
+}
+
+.record-icon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20rpx;
+  font-size: 36rpx;
+  font-weight: bold;
+}
+
+.record-icon.earn {
+  background-color: rgba(255, 107, 0, 0.1);
+  color: #ff6b00;
+}
+
+.record-icon.use {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #333;
+}
+
+.record-content {
+  flex: 1;
+}
+
+.record-title {
+  font-size: 30rpx;
+  color: #333;
+  margin-bottom: 8rpx;
+  font-weight: bold;
+}
+
+.record-desc {
+  font-size: 26rpx;
+  color: #666;
+  margin-bottom: 8rpx;
+}
+
+.record-time {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.record-amount {
+  font-size: 32rpx;
+  font-weight: bold;
+}
+
+.record-amount.earn {
+  color: #ff6b00;
+}
+
+.record-amount.use {
+  color: #333;
+}
+
+/* 加载状态 */
+.loading {
+  text-align: center;
+  padding: 40rpx 0;
+  color: #999;
+  font-size: 28rpx;
+}
+
+/* 无更多数据 */
+.no-more {
+  text-align: center;
+  padding: 40rpx 0;
+  color: #999;
+  font-size: 28rpx;
+}
+
+/* 空状态 */
+.empty-state {
+  text-align: center;
+  padding: 100rpx 0;
+  color: #999;
+  font-size: 28rpx;
+}

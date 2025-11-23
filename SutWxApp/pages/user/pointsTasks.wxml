@@ -1,1 +1,117 @@
-
+<!-- 积分任务页面 -->
+<view class="container">
+  <!-- 任务统计卡片 -->
+  <view class="stats-card">
+    <view class="stats-item">
+      <text class="stats-value">{{taskStats.total}}</text>
+      <text class="stats-label">总任务</text>
+    </view>
+    <view class="stats-item">
+      <text class="stats-value">{{taskStats.completed}}</text>
+      <text class="stats-label">已完成</text>
+    </view>
+    <view class="stats-item">
+      <text class="stats-value">{{taskStats.pending}}</text>
+      <text class="stats-label">进行中</text>
+    </view>
+    <view class="stats-item">
+      <text class="stats-value">{{taskStats.totalPoints}}</text>
+      <text class="stats-label">总积分</text>
+    </view>
+  </view>
+  
+  <!-- 标签切换 -->
+  <view class="tab-bar">
+    <view wx:for="{{tabs}}" wx:key="key" 
+          class="tab-item {{activeTab === item.key ? 'active' : ''}}"
+          data-tab="{{item.key}}" 
+          bindtap="onTabChange">
+      {{item.name}}
+    </view>
+  </view>
+  
+  <!-- 任务列表 -->
+  <view class="content">
+    <view wx:if="{{loading && taskList.length === 0}}" class="loading-state">
+      <view class="loading-spinner"></view>
+      <text>加载中...</text>
+    </view>
+    
+    <view wx:elif="{{taskList.length === 0 && !loading}}" class="empty-state">
+      <image class="empty-icon" src="/images/empty-tasks.png"></image>
+      <text>暂无任务</text>
+      <text class="empty-tip">快去完成其他任务吧</text>
+    </view>
+    
+    <view wx:else class="task-list">
+      <view wx:for="{{taskList}}" wx:key="id" 
+            class="task-item {{item.isExpired ? 'expired' : ''}}">
+        <!-- 任务头部 -->
+        <view class="task-header">
+          <view class="task-title">
+            <text class="task-name">{{item.name}}</text>
+            <view wx:if="{{item.isExpired}}" class="task-tag expired-tag">已过期</view>
+            <view wx:elif="{{item.status === 'completed' && !item.rewardReceived}}" class="task-tag reward-tag">待领取</view>
+            <view wx:elif="{{item.status === 'claimed'}}" class="task-tag claimed-tag">已领取</view>
+            <view wx:elif="{{item.status === 'completed'}}" class="task-tag completed-tag">已完成</view>
+          </view>
+          <view class="task-points">+{{item.points}}积分</view>
+        </view>
+        
+        <!-- 任务描述 -->
+        <view class="task-desc">{{item.description}}</view>
+        
+        <!-- 任务进度 -->
+        <view class="task-progress">
+          <view class="progress-info">
+            <text>进度: {{item.currentCount || 0}}/{{item.targetCount || 0}}</text>
+            <text>{{item.progress}}%</text>
+          </view>
+          <view class="progress-bar">
+            <view class="progress-fill" style="width: {{item.progress}}%"></view>
+          </view>
+        </view>
+        
+        <!-- 任务时间 -->
+        <view wx:if="{{item.expireTime}}" class="task-time">
+          <text>有效期至: {{item.expireTime}}</text>
+        </view>
+        
+        <!-- 任务操作 -->
+        <view class="task-actions">
+          <button wx:if="{{item.status === 'pending' && !item.isExpired}}" 
+                  class="action-btn primary" 
+                  data-id="{{item.id}}" 
+                  bindtap="onTaskAction">
+            {{item.actionText || '去完成'}}
+          </button>
+          
+          <button wx:elif="{{item.status === 'completed' && !item.rewardReceived && !item.isExpired}}" 
+                  class="action-btn reward" 
+                  data-id="{{item.id}}" 
+                  bindtap="onReceiveReward">
+            领取奖励
+          </button>
+          
+          <button wx:else 
+                  class="action-btn detail" 
+                  data-id="{{item.id}}" 
+                  bindtap="onViewTaskDetail">
+            查看详情
+          </button>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 加载更多 -->
+    <view wx:if="{{loadingMore}}" class="loading-state">
+      <view class="loading-spinner"></view>
+      <text>加载更多...</text>
+    </view>
+    
+    <!-- 没有更多数据 -->
+    <view wx:if="{{!hasMore && taskList.length > 0}}" class="no-more-data">
+      没有更多任务了
+    </view>
+  </view>
+</view>

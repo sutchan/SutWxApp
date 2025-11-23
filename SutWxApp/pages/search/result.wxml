@@ -1,0 +1,124 @@
+<view class="container">
+  <!-- 搜索框 -->
+  <view class="search-bar">
+    <view class="search-input-wrapper">
+      <icon class="search-icon" type="search" size="16"></icon>
+      <input 
+        class="search-input" 
+        placeholder="搜索商品、文章、用户" 
+        value="{{keyword}}"
+        bindinput="onInputChange"
+        bindconfirm="onSearch"
+      />
+      <view wx:if="{{keyword}}" class="clear-icon" bindtap="onClearInput">
+        <icon type="clear" size="16"></icon>
+      </view>
+    </view>
+    <view class="search-btn" bindtap="onSearch">搜索</view>
+  </view>
+  
+  <!-- 搜索结果 -->
+  <view wx:if="{{showResult}}" class="search-result">
+    <!-- 标签切换 -->
+    <view class="tabs">
+      <view 
+        wx:for="{{tabs}}" 
+        wx:key="key" 
+        class="tab-item {{activeTab === item.key ? 'active' : ''}}"
+        data-tab="{{item.key}}"
+        bindtap="onTabChange"
+      >
+        {{item.value}}
+      </view>
+    </view>
+    
+    <!-- 搜索结果列表 -->
+    <view class="result-list">
+      <view 
+        wx:for="{{searchResults}}" 
+        wx:key="id" 
+        class="result-item"
+        data-type="{{item.type}}"
+        data-id="{{item.id}}"
+        bindtap="onResultTap"
+      >
+        <image class="result-image" src="{{item.image}}" mode="aspectFill"></image>
+        <view class="result-content">
+          <view class="result-title">{{item.title}}</view>
+          <view class="result-desc">{{item.desc}}</view>
+          <view class="result-meta">
+            <block wx:if="{{item.type === 'product'}}">
+              <text class="result-price">¥{{item.price}}</text>
+            </block>
+            <block wx:elif="{{item.type === 'article'}}">
+              <text class="result-time">{{item.publishTime}}</text>
+            </block>
+            <block wx:elif="{{item.type === 'user'}}">
+              <text class="result-fans">{{item.fans}}粉丝</text>
+            </block>
+          </view>
+        </view>
+        <view class="result-type">
+          <block wx:if="{{item.type === 'product'}}">商品</block>
+          <block wx:elif="{{item.type === 'article'}}">文章</block>
+          <block wx:elif="{{item.type === 'user'}}">用户</block>
+        </view>
+      </view>
+      
+      <!-- 加载状态 -->
+      <view wx:if="{{loading}}" class="loading">
+        <text>加载中...</text>
+      </view>
+      
+      <!-- 无更多数据 -->
+      <view wx:if="{{!hasMore && searchResults.length > 0}}" class="no-more">
+        <text>没有更多结果了</text>
+      </view>
+      
+      <!-- 空状态 -->
+      <view wx:if="{{!loading && searchResults.length === 0}}" class="empty-state">
+        <text>未找到相关结果</text>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 搜索历史和热门搜索 -->
+  <view wx:else class="search-suggest">
+    <!-- 搜索历史 -->
+    <view wx:if="{{searchHistory.length > 0}}" class="search-history">
+      <view class="section-header">
+        <text class="section-title">搜索历史</text>
+        <text class="clear-history" bindtap="onClearHistory">清空</text>
+      </view>
+      <view class="history-list">
+        <view 
+          wx:for="{{searchHistory}}" 
+          wx:key="*this" 
+          class="history-item"
+          data-keyword="{{item}}"
+          bindtap="onHistoryTap"
+        >
+          {{item}}
+        </view>
+      </view>
+    </view>
+    
+    <!-- 热门搜索 -->
+    <view wx:if="{{hotSearches.length > 0}}" class="hot-search">
+      <view class="section-header">
+        <text class="section-title">热门搜索</text>
+      </view>
+      <view class="hot-list">
+        <view 
+          wx:for="{{hotSearches}}" 
+          wx:key="*this" 
+          class="hot-item"
+          data-keyword="{{item}}"
+          bindtap="onHotSearchTap"
+        >
+          {{item}}
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

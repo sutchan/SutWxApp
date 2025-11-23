@@ -1,0 +1,135 @@
+<view class="container">
+  <!-- 积分头部 -->
+  <view class="points-header">
+    <view class="points-info">
+      <text class="points-label">我的积分</text>
+      <text class="points-value">{{currentPoints}}</text>
+    </view>
+    <view class="points-actions">
+      <view class="action-item" bindtap="onGoToDetail">
+        <text class="iconfont">积分明细</text>
+      </view>
+      <view class="action-item" bindtap="onGoToTasks">
+        <text class="iconfont">赚积分</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 分类标签 -->
+  <view class="tab-bar">
+    <view 
+      wx:for="{{tabs}}" 
+      wx:key="key" 
+      class="tab-item {{activeTab === item.key ? 'active' : ''}}" 
+      data-tab="{{item.key}}" 
+      bindtap="onTabChange">
+      {{item.label}}
+    </view>
+  </view>
+
+  <!-- 排序筛选 -->
+  <view class="sort-bar">
+    <view class="sort-current" bindtap="onShowFilter">
+      <text>{{sortOptions.find(item => item.key === sortType).label}}</text>
+      <text class="iconfont arrow">▼</text>
+    </view>
+  </view>
+
+  <!-- 内容区域 -->
+  <view class="content">
+    <!-- 兑换商品列表 -->
+    <view class="exchange-list" wx:if="{{!isEmpty}}">
+      <view 
+        wx:for="{{exchangeList}}" 
+        wx:key="id" 
+        class="exchange-item">
+        
+        <!-- 商品图片 -->
+        <view class="item-image" bindtap="onViewDetail" data-id="{{item.id}}">
+          <image src="{{item.image}}" mode="aspectFill" class="image"></image>
+          <!-- 库存不足标签 -->
+          <view class="stock-tag" wx:if="{{item.stock <= 0}}">已兑完</view>
+          <!-- 热门标签 -->
+          <view class="hot-tag" wx:if="{{item.isHot}}">热门</view>
+        </view>
+        
+        <!-- 商品信息 -->
+        <view class="item-info">
+          <view class="item-name" bindtap="onViewDetail" data-id="{{item.id}}">{{item.name}}</view>
+          <view class="item-desc">{{item.description}}</view>
+          
+          <!-- 兑换信息 -->
+          <view class="item-exchange">
+            <view class="points-info">
+              <text class="points-value">{{item.points}}</text>
+              <text class="points-label">积分</text>
+            </view>
+            
+            <!-- 库存信息 -->
+            <view class="stock-info" wx:if="{{item.stock > 0}}">
+              <text class="stock-text">剩余{{item.stock}}件</text>
+            </view>
+            <view class="stock-info out-of-stock" wx:else>
+              <text class="stock-text">已兑完</text>
+            </view>
+          </view>
+          
+          <!-- 操作按钮 -->
+          <view class="item-actions">
+            <button 
+              class="detail-btn" 
+              bindtap="onViewDetail" 
+              data-id="{{item.id}}">
+              详情
+            </button>
+            <button 
+              class="exchange-btn {{item.stock <= 0 || currentPoints < item.points ? 'disabled' : ''}}" 
+              bindtap="onExchange" 
+              data-id="{{item.id}}"
+              disabled="{{item.stock <= 0 || currentPoints < item.points}}">
+              {{item.stock <= 0 ? '已兑完' : (currentPoints < item.points ? '积分不足' : '立即兑换')}}
+            </button>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-state" wx:if="{{isEmpty}}">
+      <image class="empty-icon" src="/images/empty-exchange.png" mode="aspectFit"></image>
+      <text>暂无兑换商品</text>
+      <view class="empty-tip">敬请期待更多精彩商品</view>
+    </view>
+
+    <!-- 加载状态 -->
+    <view class="loading-state" wx:if="{{isLoading && exchangeList.length === 0}}">
+      <view class="loading-spinner"></view>
+      <text>加载中...</text>
+    </view>
+
+    <!-- 没有更多数据 -->
+    <view class="no-more-data" wx:if="{{!hasMore && exchangeList.length > 0}}">
+      没有更多商品了
+    </view>
+  </view>
+
+  <!-- 筛选弹窗 -->
+  <view class="filter-popup" wx:if="{{showFilter}}" bindtap="onHideFilter">
+    <view class="filter-content" catchtap="">
+      <view class="filter-header">
+        <text>排序方式</text>
+        <view class="close-btn" bindtap="onHideFilter">×</view>
+      </view>
+      <view class="filter-options">
+        <view 
+          wx:for="{{sortOptions}}" 
+          wx:key="key" 
+          class="option-item {{sortType === item.key ? 'active' : ''}}" 
+          data-sort="{{item.key}}" 
+          bindtap="onSelectSort">
+          {{item.label}}
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
