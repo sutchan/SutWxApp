@@ -19,7 +19,7 @@ App({
       } else {
         i18n.setLocale('zh_CN');
       }
-    } catch (e) {
+    } catch {
       // 兼容无系统信息的场景，保持默认语言
     }
     this.globalData = {
@@ -44,7 +44,7 @@ App({
     try {
       // 生产环境可移除console，或发送到日志服务
       wx.showToast({ title: '发生错误', icon: 'none' });
-    } catch (innerErr) {
+    } catch {
       // 静默失败
     }
   }

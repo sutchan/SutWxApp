@@ -1,1 +1,5 @@
-{}
+{
+  "navigationBarTitleText": "订单评价",
+  "enablePullDownRefresh": false,
+  "backgroundTextStyle": "dark"
+}

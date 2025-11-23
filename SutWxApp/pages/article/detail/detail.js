@@ -6,7 +6,8 @@ Page({
   data: {
     articleId: null,
     article: null,
-    loading: true
+    loading: true,
+    timer: null
   },
 
   /**
@@ -23,6 +24,17 @@ Page({
   },
 
   /**
+   * 生命周期函数--监听页面卸载
+   * @returns {void}
+   */
+  onUnload() {
+    // 清理定时器，防止内存泄漏
+    if (this.data.timer) {
+      clearTimeout(this.data.timer);
+    }
+  },
+
+  /**
    * 加载文章详情
    * @param {string} id - 文章ID
    * @returns {void}
@@ -30,7 +42,7 @@ Page({
   loadArticleDetail(id) {
     this.setData({ loading: true });
     // 模拟数据请求
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       const mockArticle = {
         id: id,
         title: `文章标题 ${id}`,
@@ -40,8 +52,11 @@ Page({
       };
       this.setData({
         article: mockArticle,
-        loading: false
+        loading: false,
+        timer: null
       });
     }, 1000);
+    
+    this.setData({ timer });
   }
 });

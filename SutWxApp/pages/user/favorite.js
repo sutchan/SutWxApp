@@ -11,7 +11,8 @@ Page({
     loading: false,
     page: 1,
     pageSize: 10,
-    hasMore: true
+    hasMore: true,
+    timer: null
   },
 
   /**
@@ -19,6 +20,16 @@ Page({
    */
   onLoad() {
     this.loadFavoriteList();
+  },
+
+  /**
+   * 生命周期函数--监听页面卸载
+   */
+  onUnload() {
+    // 清理定时器，防止内存泄漏
+    if (this.data.timer) {
+      clearTimeout(this.data.timer);
+    }
   },
 
   /**
@@ -34,7 +45,7 @@ Page({
     const { page, pageSize } = this.data;
 
     // 模拟数据加载
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       const mockFavorites = [];
       for (let i = 0; i < pageSize; i++) {
         mockFavorites.push({
@@ -49,9 +60,12 @@ Page({
         favoriteList: [...this.data.favoriteList, ...mockFavorites],
         page: page + 1,
         hasMore: mockFavorites.length === pageSize,
-        loading: false
+        loading: false,
+        timer: null
       });
     }, 1000);
+    
+    this.setData({ timer });
   },
 
   /**

@@ -5,7 +5,8 @@
 Page({
   data: {
     addressList: [],
-    loading: true
+    loading: true,
+    timer: null
   },
 
   /**
@@ -14,6 +15,17 @@ Page({
    */
   onLoad() {
     this.loadAddressList();
+  },
+
+  /**
+   * 生命周期函数--监听页面卸载
+   * @returns {void}
+   */
+  onUnload() {
+    // 清理定时器，防止内存泄漏
+    if (this.data.timer) {
+      clearTimeout(this.data.timer);
+    }
   },
 
   /**
@@ -32,7 +44,7 @@ Page({
   loadAddressList() {
     this.setData({ loading: true });
     // 模拟数据请求
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       const mockList = [
         {
           id: '1',
@@ -57,9 +69,12 @@ Page({
       ];
       this.setData({
         addressList: mockList,
-        loading: false
+        loading: false,
+        timer: null
       });
     }, 500);
+    
+    this.setData({ timer });
   },
 
   /**

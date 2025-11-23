@@ -15,7 +15,7 @@ const authService = {
    */
   async login(username, password) {
     return new Promise((resolve, reject) => {
-      setTimeout(() => {
+      const timer = setTimeout(() => {
         if (username === 'test' && password === '123456') {
           const user = { id: 1, username: 'test', token: 'mock_token_123' };
           wx.setStorageSync(TOKEN_KEY, user.token);
@@ -24,6 +24,10 @@ const authService = {
           reject(new Error('用户名或密码错误'));
         }
       }, 1000);
+      
+      // 将定时器ID附加到Promise上，以便在需要时可以取消
+      resolve.timer = timer;
+      reject.timer = timer;
     });
   },
 
@@ -33,10 +37,13 @@ const authService = {
    */
   async logout() {
     return new Promise((resolve) => {
-      setTimeout(() => {
+      const timer = setTimeout(() => {
         wx.removeStorageSync(TOKEN_KEY);
         resolve();
       }, 500);
+      
+      // 将定时器ID附加到Promise上，以便在需要时可以取消
+      resolve.timer = timer;
     });
   },
 

@@ -27,9 +27,8 @@ class I18n {
   setLocale(locale) {
     if (this.translations[locale]) {
       this.locale = locale;
-    } else {
-      // console.warn(`Locale ${locale} not found, falling back to ${this.locale}`);
     }
+    // 如果找不到指定的语言，将保持默认语言
   }
 
   /**

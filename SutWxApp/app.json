@@ -37,7 +37,7 @@
       },
       {
         "pagePath": "pages/user/user",
-        "text": "我的",,
+        "text": "我的",
         "iconPath": "images/tabbar/user.png",
         "selectedIconPath": "images/tabbar/user-active.png"
       }

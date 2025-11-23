@@ -20,7 +20,8 @@ Page({
       { name: 'province', rules: { required: true, message: '请选择省份' } },
       { name: 'city', rules: { required: true, message: '请选择城市' } },
       { name: 'detail', rules: { required: true, message: '请输入详细地址' } }
-    ]
+    ],
+    timer: null
   },
 
   /**
@@ -37,13 +38,24 @@ Page({
   },
 
   /**
+   * 生命周期函数--监听页面卸载
+   * @returns {void}
+   */
+  onUnload() {
+    // 清理定时器，防止内存泄漏
+    if (this.data.timer) {
+      clearTimeout(this.data.timer);
+    }
+  },
+
+  /**
    * 加载地址详情
    * @param {string} id - 地址ID
    * @returns {void}
    */
   loadAddressDetail(id) {
     // 模拟数据请求
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       const mockAddress = {
         id: id,
         name: '张三',
@@ -54,8 +66,13 @@ Page({
         detail: 'XXX街道XXX号',
         isDefault: true
       };
-      this.setData({ 'formData': mockAddress });
+      this.setData({ 
+        'formData': mockAddress,
+        timer: null
+      });
     }, 500);
+    
+    this.setData({ timer });
   },
 
   /**
@@ -81,7 +98,6 @@ Page({
           title: '提交成功',
           icon: 'success'
         });
-        console.log('提交数据:', this.data.formData);
         // 实际提交逻辑
       } else {
         const firstError = errors[0];

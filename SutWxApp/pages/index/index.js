@@ -10,7 +10,8 @@ Page({
     loading: false,
     banners: [],
     categories: [],
-    products: []
+    products: [],
+    timer: null
   },
 
   /**
@@ -19,6 +20,17 @@ Page({
    */
   onLoad() {
     this.loadData();
+  },
+
+  /**
+   * 生命周期函数--监听页面卸载
+   * @returns {void}
+   */
+  onUnload() {
+    // 清理定时器，防止内存泄漏
+    if (this.data.timer) {
+      clearTimeout(this.data.timer);
+    }
   },
 
   /**
@@ -77,11 +89,13 @@ Page({
         banners: mockBanners,
         categories: mockCategories,
         products: mockProducts,
-        loading: false
+        loading: false,
+        timer: null
       });
-      clearTimeout(timer);
       if (typeof done === 'function') done();
     }, 300);
+    
+    this.setData({ timer });
   },
 
   /**

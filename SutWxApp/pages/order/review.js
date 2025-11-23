@@ -22,8 +22,9 @@ Page({
    * 生命周期函数--监听页面加载
    * @param {Object} _options - 页面参数
    */
-  // eslint-disable-next-line no-unused-vars
+   
   onLoad: function (_options) {
+    console.log('页面加载参数:', _options);
     // 设置页面标题
     wx.setNavigationBarTitle({
       title: i18n.translate('review.title')
@@ -53,8 +54,9 @@ Page({
    * @param {Object} _res - 分享事件参数
    * @returns {Object} 分享内容
    */
-  // eslint-disable-next-line no-unused-vars
+   
   onShareAppMessage: function (_res) {
+    console.log('分享事件参数:', _res);
     return {
       title: i18n.translate('review.shareTitle'),
       path: '/pages/order/review'
@@ -104,7 +106,6 @@ Page({
       return;
     }
     // 模拟提交评价
-    // console.log('提交评价:', { reviewContent, score, anonymous });
     wx.showToast({
       title: i18n.translate('review.submitSuccess'),
       icon: 'success'

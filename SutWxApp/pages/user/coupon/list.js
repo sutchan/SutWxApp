@@ -7,7 +7,8 @@ Page({
     couponList: [],
     loading: true,
     activeTab: 0, // 0: 可用, 1: 已使用, 2: 已过期
-    tabs: ['可用', '已使用', '已过期']
+    tabs: ['可用', '已使用', '已过期'],
+    timer: null
   },
 
   /**
@@ -16,6 +17,17 @@ Page({
    */
   onLoad() {
     this.loadCouponList(this.data.activeTab);
+  },
+
+  /**
+   * 生命周期函数--监听页面卸载
+   * @returns {void}
+   */
+  onUnload() {
+    // 清理定时器，防止内存泄漏
+    if (this.data.timer) {
+      clearTimeout(this.data.timer);
+    }
   },
 
   /**
@@ -37,7 +49,7 @@ Page({
   loadCouponList(type) {
     this.setData({ loading: true });
     // 模拟数据请求
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       let mockList = [];
       if (type === 0) {
         mockList = [
@@ -55,8 +67,11 @@ Page({
       }
       this.setData({
         couponList: mockList,
-        loading: false
+        loading: false,
+        timer: null
       });
     }, 500);
+    
+    this.setData({ timer });
   }
 });

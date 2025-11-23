@@ -8,7 +8,8 @@ Page({
     loading: true,
     selectedCouponId: null,
     availableCoupons: [],
-    unavailableCoupons: []
+    unavailableCoupons: [],
+    timer: null
   },
 
   /**
@@ -25,13 +26,24 @@ Page({
   },
 
   /**
+   * 生命周期函数--监听页面卸载
+   * @returns {void}
+   */
+  onUnload() {
+    // 清理定时器，防止内存泄漏
+    if (this.data.timer) {
+      clearTimeout(this.data.timer);
+    }
+  },
+
+  /**
    * 加载优惠券列表
    * @returns {void}
    */
   loadCoupons() {
     this.setData({ loading: true });
     // 模拟数据请求
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       const mockCoupons = [
         { id: '1', name: '满100减10元', value: 10, condition: '满100元可用', endDate: '2023-12-31', available: true },
         { id: '2', name: '新人专享券', value: 5, condition: '无门槛', endDate: '2023-11-30', available: true },
@@ -46,9 +58,12 @@ Page({
         couponList: mockCoupons,
         availableCoupons: available,
         unavailableCoupons: unavailable,
-        loading: false
+        loading: false,
+        timer: null
       });
     }, 500);
+    
+    this.setData({ timer });
   },
 
   /**
