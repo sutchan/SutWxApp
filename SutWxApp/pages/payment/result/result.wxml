@@ -1,0 +1,105 @@
+<!-- 支付结果页面 -->
+<view class="payment-result-container">
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="loading-container">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">正在获取支付结果...</text>
+  </view>
+  
+  <!-- 支付结果内容 -->
+  <view wx:else class="result-content">
+    <!-- 支付成功 -->
+    <view wx:if="{{paymentStatus === 'success'}}" class="success-result">
+      <view class="result-icon success">
+        <text class="iconfont icon-success"></text>
+      </view>
+      <view class="result-title">支付成功</view>
+      <view class="result-desc">您的订单已成功支付</view>
+      
+      <!-- 订单信息 -->
+      <view class="order-info">
+        <view class="order-item">
+          <text class="order-label">订单编号：</text>
+          <text class="order-value">{{orderData.orderNo}}</text>
+        </view>
+        <view class="order-item">
+          <text class="order-label">支付金额：</text>
+          <text class="order-value price">¥{{orderData.actualAmount}}</text>
+        </view>
+        <view class="order-item">
+          <text class="order-label">支付时间：</text>
+          <text class="order-value">{{paymentInfo.paymentTime}}</text>
+        </view>
+      </view>
+      
+      <!-- 操作按钮 -->
+      <view class="action-buttons">
+        <button class="btn primary" bindtap="goToOrderDetail">查看订单详情</button>
+        <button class="btn secondary" bindtap="continueShopping">继续购物</button>
+      </view>
+      
+      <!-- 倒计时提示 -->
+      <view class="countdown-tip">
+        <text>{{countdown}}秒后自动跳转到订单详情</text>
+      </view>
+    </view>
+    
+    <!-- 支付失败 -->
+    <view wx:elif="{{paymentStatus === 'failed'}}" class="failed-result">
+      <view class="result-icon failed">
+        <text class="iconfont icon-failed"></text>
+      </view>
+      <view class="result-title">支付失败</view>
+      <view class="result-desc">支付过程中出现错误，请重试</view>
+      
+      <!-- 错误信息 -->
+      <view class="error-info">
+        <text class="error-code">错误代码：PAY_FAILED</text>
+        <text class="error-desc">支付请求被拒绝，请检查您的账户余额或更换支付方式</text>
+      </view>
+      
+      <!-- 操作按钮 -->
+      <view class="action-buttons">
+        <button class="btn primary" bindtap="retryPayment">重新支付</button>
+        <button class="btn secondary" bindtap="contactService">联系客服</button>
+      </view>
+      
+      <!-- 倒计时提示 -->
+      <view class="countdown-tip">
+        <text>{{countdown}}秒后自动跳转到订单列表</text>
+      </view>
+    </view>
+    
+    <!-- 支付取消 -->
+    <view wx:elif="{{paymentStatus === 'cancelled'}}" class="cancelled-result">
+      <view class="result-icon cancelled">
+        <text class="iconfont icon-cancel"></text>
+      </view>
+      <view class="result-title">支付已取消</view>
+      <view class="result-desc">您已取消本次支付</view>
+      
+      <!-- 订单信息 -->
+      <view class="order-info">
+        <view class="order-item">
+          <text class="order-label">订单编号：</text>
+          <text class="order-value">{{orderData.orderNo}}</text>
+        </view>
+        <view class="order-item">
+          <text class="order-label">订单金额：</text>
+          <text class="order-value price">¥{{orderData.actualAmount}}</text>
+        </view>
+      </view>
+      
+      <!-- 操作按钮 -->
+      <view class="action-buttons">
+        <button class="btn primary" bindtap="retryPayment">重新支付</button>
+        <button class="btn secondary" bindtap="goToOrderList">查看订单</button>
+      </view>
+      
+      <!-- 倒计时提示 -->
+      <view class="countdown-tip">
+        <text>{{countdown}}秒后自动跳转到订单列表</text>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,108 @@
+<!-- 积分页面 -->
+<view class="points-container">
+  <!-- 用户信息卡片 -->
+  <view class="user-card">
+    <view class="user-info">
+      <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+      <view class="user-details">
+        <text class="nickname">{{userInfo.nickName}}</text>
+        <text class="level">积分会员</text>
+      </view>
+    </view>
+    
+    <!-- 积分信息 -->
+    <view class="points-info">
+      <view class="points-main">
+        <text class="points-value">{{pointsInfo.availablePoints}}</text>
+        <text class="points-label">可用积分</text>
+      </view>
+      
+      <view class="points-stats">
+        <view class="stat-item">
+          <text class="stat-value">{{pointsInfo.todayEarned}}</text>
+          <text class="stat-label">今日获得</text>
+        </view>
+        <view class="stat-divider"></view>
+        <view class="stat-item">
+          <text class="stat-value">{{pointsInfo.todaySpent}}</text>
+          <text class="stat-label">今日消费</text>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 功能入口 -->
+  <view class="function-entries">
+    <view class="entry-item" bindtap="goToPointsTasks">
+      <view class="entry-icon tasks"></view>
+      <text class="entry-text">积分任务</text>
+    </view>
+    
+    <view class="entry-item" bindtap="goToPointsMall">
+      <view class="entry-icon mall"></view>
+      <text class="entry-text">积分商城</text>
+    </view>
+    
+    <view class="entry-item" bindtap="goToPointsSignin">
+      <view class="entry-icon signin"></view>
+      <text class="entry-text">每日签到</text>
+    </view>
+    
+    <view class="entry-item" bindtap="goToPointsRules">
+      <view class="entry-icon rules"></view>
+      <text class="entry-text">积分规则</text>
+    </view>
+  </view>
+  
+  <!-- 积分记录 -->
+  <view class="points-records">
+    <view class="section-header">
+      <text class="section-title">积分记录</text>
+      <text class="section-more" bindtap="goToPointsExchangeRecords">查看全部</text>
+    </view>
+    
+    <!-- 加载状态 -->
+    <view wx:if="{{loading && pointsRecords.length === 0}}" class="loading-container">
+      <view class="loading-spinner"></view>
+      <text class="loading-text">正在加载积分记录...</text>
+    </view>
+    
+    <!-- 积分记录列表 -->
+    <view wx:else class="records-list">
+      <view wx:for="{{pointsRecords}}" wx:key="id" class="record-item">
+        <view class="record-icon {{item.type}}">
+          <text wx:if="{{item.type === 'earn'}}" class="iconfont icon-plus"></text>
+          <text wx:elif="{{item.type === 'spend'}}" class="iconfont icon-minus"></text>
+        </view>
+        
+        <view class="record-info">
+          <view class="record-title">{{item.reason}}</view>
+          <view class="record-time">{{formatTime(item.createTime)}}</view>
+          <view wx:if="{{item.orderNo}}" class="record-order">订单号：{{item.orderNo}}</view>
+        </view>
+        
+        <view class="record-amount {{item.type}}">
+          {{formatPointsChange(item.amount)}}
+        </view>
+      </view>
+      
+      <!-- 加载更多 -->
+      <view wx:if="{{hasMore && loading}}" class="loading-more">
+        <view class="loading-spinner small"></view>
+        <text class="loading-text">加载更多...</text>
+      </view>
+      
+      <!-- 没有更多数据 -->
+      <view wx:if="{{!hasMore && pointsRecords.length > 0}}" class="no-more">
+        <text>没有更多记录了</text>
+      </view>
+      
+      <!-- 空状态 -->
+      <view wx:if="{{pointsRecords.length === 0 && !loading}}" class="empty-state">
+        <view class="empty-icon"></view>
+        <text class="empty-text">暂无积分记录</text>
+        <text class="empty-desc">完成任务或购物可获得积分</text>
+      </view>
+    </view>
+  </view>
+</view>

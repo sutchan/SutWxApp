@@ -1,0 +1,436 @@
+/* 积分页面样式 */
+.points-container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding-bottom: 20px;
+}
+
+/* 用户信息卡片 */
+.user-card {
+  background: linear-gradient(135deg, #07c160 0%, #06ae56 100%);
+  padding: 30px 20px 40px;
+  color: #fff;
+  position: relative;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin-right: 15px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.user-details {
+  flex: 1;
+}
+
+.nickname {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.level {
+  font-size: 12px;
+  opacity: 0.8;
+  display: block;
+}
+
+/* 积分信息 */
+.points-info {
+  text-align: center;
+}
+
+.points-main {
+  margin-bottom: 20px;
+}
+
+.points-value {
+  font-size: 40px;
+  font-weight: 500;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.points-label {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.points-stats {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.stat-item {
+  flex: 1;
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 16px;
+  font-weight: 500;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.stat-label {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.stat-divider {
+  width: 1px;
+  height: 30px;
+  background-color: rgba(255, 255, 255, 0.3);
+  margin: 0 20px;
+}
+
+/* 功能入口 */
+.function-entries {
+  display: flex;
+  background-color: #fff;
+  margin: -20px 15px 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.entry-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0;
+  position: relative;
+}
+
+.entry-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 40px;
+  background-color: #f0f0f0;
+}
+
+.entry-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-bottom: 8px;
+  position: relative;
+}
+
+.entry-icon.tasks {
+  background-color: rgba(255, 153, 0, 0.1);
+}
+
+.entry-icon.tasks::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  background-color: #ff9900;
+  mask-image: url('/images/icons/tasks.svg');
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-image: url('/images/icons/tasks.svg');
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+}
+
+.entry-icon.mall {
+  background-color: rgba(255, 87, 51, 0.1);
+}
+
+.entry-icon.mall::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  background-color: #ff5733;
+  mask-image: url('/images/icons/mall.svg');
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-image: url('/images/icons/mall.svg');
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+}
+
+.entry-icon.signin {
+  background-color: rgba(7, 193, 96, 0.1);
+}
+
+.entry-icon.signin::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  background-color: #07c160;
+  mask-image: url('/images/icons/signin.svg');
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-image: url('/images/icons/signin.svg');
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+}
+
+.entry-icon.rules {
+  background-color: rgba(103, 58, 183, 0.1);
+}
+
+.entry-icon.rules::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  background-color: #673ab7;
+  mask-image: url('/images/icons/rules.svg');
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-image: url('/images/icons/rules.svg');
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+}
+
+.entry-text {
+  font-size: 12px;
+  color: #333;
+}
+
+/* 积分记录 */
+.points-records {
+  margin: 0 15px;
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+}
+
+.section-more {
+  font-size: 14px;
+  color: #999;
+}
+
+/* 加载状态 */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0;
+}
+
+.loading-spinner {
+  width: 30px;
+  height: 30px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #07c160;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 10px;
+}
+
+.loading-spinner.small {
+  width: 20px;
+  height: 20px;
+  border-width: 2px;
+}
+
+.loading-text {
+  font-size: 14px;
+  color: #999;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 积分记录列表 */
+.records-list {
+  padding: 0 20px;
+}
+
+.record-item {
+  display: flex;
+  align-items: center;
+  padding: 15px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.record-item:last-child {
+  border-bottom: none;
+}
+
+.record-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+}
+
+.record-icon.earn {
+  background-color: rgba(7, 193, 96, 0.1);
+}
+
+.record-icon.earn .iconfont {
+  color: #07c160;
+}
+
+.record-icon.spend {
+  background-color: rgba(245, 108, 108, 0.1);
+}
+
+.record-icon.spend .iconfont {
+  color: #f56c6c;
+}
+
+.record-info {
+  flex: 1;
+}
+
+.record-title {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.record-time {
+  font-size: 12px;
+  color: #999;
+  margin-bottom: 2px;
+}
+
+.record-order {
+  font-size: 12px;
+  color: #999;
+}
+
+.record-amount {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.record-amount.earn {
+  color: #07c160;
+}
+
+.record-amount.spend {
+  color: #f56c6c;
+}
+
+/* 加载更多 */
+.loading-more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px 0;
+}
+
+.loading-more .loading-text {
+  margin-left: 8px;
+}
+
+/* 没有更多数据 */
+.no-more {
+  text-align: center;
+  padding: 15px 0;
+  color: #999;
+  font-size: 14px;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 0;
+}
+
+.empty-icon {
+  width: 60px;
+  height: 60px;
+  background-color: #f5f5f5;
+  border-radius: 50%;
+  margin-bottom: 15px;
+  position: relative;
+}
+
+.empty-icon::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 30px;
+  height: 30px;
+  background-color: #ddd;
+  mask-image: url('/images/icons/empty.svg');
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-image: url('/images/icons/empty.svg');
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+}
+
+.empty-text {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.empty-desc {
+  font-size: 14px;
+  color: #999;
+}

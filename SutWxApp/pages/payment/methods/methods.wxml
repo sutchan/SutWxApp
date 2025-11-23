@@ -1,0 +1,52 @@
+<!-- 支付方式选择页面 -->
+<view class="payment-methods-container">
+  <!-- 订单金额信息 -->
+  <view class="order-amount">
+    <text class="amount-label">支付金额</text>
+    <text class="amount-value">¥{{orderAmount}}</text>
+  </view>
+  
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="loading-container">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">正在加载支付方式...</text>
+  </view>
+  
+  <!-- 支付方式列表 -->
+  <view wx:else class="payment-methods-list">
+    <view 
+      wx:for="{{paymentMethods}}" 
+      wx:key="id" 
+      class="payment-method-item {{!item.enabled ? 'disabled' : ''}} {{selectedMethod === item.id ? 'selected' : ''}}"
+      data-method="{{item.id}}"
+      bindtap="selectPaymentMethod"
+    >
+      <view class="method-icon">
+        <image src="{{item.icon}}" mode="aspectFit"></image>
+      </view>
+      
+      <view class="method-info">
+        <view class="method-name">
+          {{item.name}}
+          <text wx:if="{{item.recommended}}" class="recommended-tag">推荐</text>
+        </view>
+        <view class="method-desc">{{item.desc}}</view>
+      </view>
+      
+      <view class="method-radio">
+        <view class="radio-icon {{selectedMethod === item.id ? 'checked' : ''}}"></view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 确认支付按钮 -->
+  <view class="payment-actions">
+    <button 
+      class="confirm-btn {{submitting ? 'submitting' : ''}}" 
+      bindtap="confirmPayment"
+      disabled="{{submitting || !selectedMethod}}"
+    >
+      {{submitting ? '支付中...' : '确认支付'}}
+    </button>
+  </view>
+</view>

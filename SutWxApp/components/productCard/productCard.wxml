@@ -1,0 +1,55 @@
+<view class="product-card {{bordered ? 'bordered' : ''}}" style="width: {{width}}" bindtap="onProductTap">
+  <!-- 商品图片 -->
+  <view class="product-image-container" style="height: {{imageHeight}}">
+    <lazy-image 
+      src="{{product.image || defaultImage}}" 
+      mode="aspectFill" 
+      class="product-image"
+      bind:error="onImageError"
+    />
+    <!-- 折扣标签 -->
+    <view class="discount-badge" wx:if="{{product.discount && product.discount > 0}}">
+      {{product.discount}}折
+    </view>
+    <!-- 收藏图标 -->
+    <view class="favorite-icon {{product.isFavorite ? 'favorited' : ''}}" wx:if="{{showActions}}" bindtap="onFavorite">
+      <text class="iconfont icon-heart"></text>
+    </view>
+  </view>
+  
+  <!-- 商品信息 -->
+  <view class="product-info">
+    <!-- 商品名称 -->
+    <view class="product-name">{{product.name}}</view>
+    
+    <!-- 商品描述 -->
+    <view class="product-desc" wx:if="{{product.description}}">{{product.description}}</view>
+    
+    <!-- 商品标签 -->
+    <view class="product-tags" wx:if="{{product.tags && product.tags.length > 0}}">
+      <text class="tag" wx:for="{{product.tags}}" wx:key="index">{{item}}</text>
+    </view>
+    
+    <!-- 价格区域 -->
+    <view class="price-area">
+      <view class="price-row">
+        <!-- 当前价格 -->
+        <text class="current-price">¥{{product.price}}</text>
+        <!-- 原价 -->
+        <text class="original-price" wx:if="{{product.originalPrice && product.originalPrice > product.price}}">¥{{product.originalPrice}}</text>
+      </view>
+      <!-- 销量 -->
+      <view class="sales-info" wx:if="{{product.salesCount}}">
+        已售{{product.salesCount}}
+      </view>
+    </view>
+    
+    <!-- 操作按钮 -->
+    <view class="action-buttons" wx:if="{{showActions}}">
+      <button class="add-cart-btn" size="mini" bindtap="onAddToCart">
+        <text class="iconfont icon-cart"></text>
+        加入购物车
+      </button>
+    </view>
+  </view>
+</view>

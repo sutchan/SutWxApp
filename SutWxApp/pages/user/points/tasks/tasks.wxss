@@ -1,0 +1,409 @@
+/* 积分任务页面样式 */
+.tasks-container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+/* 用户积分信息 */
+.points-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, #07c160 0%, #06ae56 100%);
+  padding: 20px;
+  color: #fff;
+}
+
+.points-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.points-value {
+  font-size: 24px;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.points-label {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.today-earned {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.earned-value {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.earned-label {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+/* 任务类型筛选 */
+.task-types {
+  background-color: #fff;
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.types-scroll {
+  white-space: nowrap;
+}
+
+.types-list {
+  display: flex;
+  padding: 0 15px;
+}
+
+.type-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  margin-right: 10px;
+  background-color: #f5f5f5;
+  border-radius: 20px;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.type-item.active {
+  background-color: #07c160;
+  color: #fff;
+}
+
+.type-name {
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.type-count {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: #ff5733;
+  color: #fff;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 10px;
+  min-width: 16px;
+  text-align: center;
+}
+
+/* 任务状态筛选 */
+.task-statuses {
+  background-color: #fff;
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.statuses-scroll {
+  white-space: nowrap;
+}
+
+.statuses-list {
+  display: flex;
+  padding: 0 15px;
+}
+
+.status-item {
+  padding: 8px 16px;
+  margin-right: 10px;
+  background-color: #f5f5f5;
+  border-radius: 20px;
+  transition: all 0.2s ease;
+}
+
+.status-item.active {
+  background-color: #07c160;
+  color: #fff;
+}
+
+.status-name {
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+/* 任务列表 */
+.tasks-list {
+  padding: 10px 15px;
+}
+
+/* 加载状态 */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0;
+}
+
+.loading-spinner {
+  width: 30px;
+  height: 30px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #07c160;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 10px;
+}
+
+.loading-spinner.small {
+  width: 20px;
+  height: 20px;
+  border-width: 2px;
+}
+
+.loading-text {
+  font-size: 14px;
+  color: #999;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 任务项 */
+.task-items {
+  margin: -10px -15px;
+}
+
+.task-item {
+  background-color: #fff;
+  margin: 10px 15px;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* 任务头部 */
+.task-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.task-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  overflow: hidden;
+}
+
+.task-icon.once {
+  background-color: rgba(255, 87, 51, 0.1);
+}
+
+.task-icon.daily {
+  background-color: rgba(7, 193, 96, 0.1);
+}
+
+.task-icon.weekly {
+  background-color: rgba(33, 150, 243, 0.1);
+}
+
+.task-icon.monthly {
+  background-color: rgba(156, 39, 176, 0.1);
+}
+
+.task-icon image {
+  width: 24px;
+  height: 24px;
+}
+
+.task-basic-info {
+  flex: 1;
+}
+
+.task-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.task-desc {
+  font-size: 13px;
+  color: #666;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.task-reward {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.reward-value {
+  font-size: 18px;
+  font-weight: 500;
+  color: #ff9900;
+}
+
+.reward-label {
+  font-size: 12px;
+  color: #999;
+}
+
+/* 任务进度 */
+.task-progress {
+  margin-bottom: 10px;
+}
+
+.progress-bar {
+  height: 6px;
+  background-color: #f0f0f0;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 5px;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: #07c160;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  font-size: 12px;
+  color: #666;
+  text-align: right;
+}
+
+/* 任务底部 */
+.task-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.task-status {
+  font-size: 13px;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.task-status.pending {
+  color: #ff9900;
+  background-color: rgba(255, 153, 0, 0.1);
+}
+
+.task-status.completed {
+  color: #07c160;
+  background-color: rgba(7, 193, 96, 0.1);
+}
+
+.task-status.unclaimed {
+  color: #ff5733;
+  background-color: rgba(255, 87, 51, 0.1);
+}
+
+.task-status.claimed {
+  color: #999;
+  background-color: rgba(153, 153, 153, 0.1);
+}
+
+.task-actions {
+  display: flex;
+}
+
+.action-btn {
+  font-size: 13px;
+  padding: 6px 12px;
+  border-radius: 4px;
+  border: none;
+  margin-left: 10px;
+}
+
+.action-btn.primary {
+  background-color: #07c160;
+  color: #fff;
+}
+
+.action-btn.disabled {
+  background-color: #f0f0f0;
+  color: #999;
+}
+
+/* 加载更多 */
+.loading-more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.loading-more .loading-text {
+  margin-left: 8px;
+}
+
+/* 没有更多数据 */
+.no-more {
+  text-align: center;
+  padding: 20px 0;
+  color: #999;
+  font-size: 14px;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 0;
+}
+
+.empty-icon {
+  width: 60px;
+  height: 60px;
+  background-color: #f5f5f5;
+  border-radius: 50%;
+  margin-bottom: 15px;
+  position: relative;
+}
+
+.empty-icon::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 30px;
+  height: 30px;
+  background-color: #ddd;
+  mask-image: url('/images/icons/empty.svg');
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-image: url('/images/icons/empty.svg');
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+}
+
+.empty-text {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.empty-desc {
+  font-size: 14px;
+  color: #999;
+}

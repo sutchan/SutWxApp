@@ -1,0 +1,162 @@
+<!-- 积分商城页面 -->
+<view class="mall-container">
+  <!-- 用户积分信息 -->
+  <view class="points-header">
+    <view class="points-info">
+      <text class="points-value">{{userPoints}}</text>
+      <text class="points-label">我的积分</text>
+    </view>
+    <view class="points-actions">
+      <view class="action-item" bindtap="goToPoints">
+        <text class="iconfont icon-earn"></text>
+        <text class="action-text">赚积分</text>
+      </view>
+      <view class="action-item" bindtap="goToExchangeRecords">
+        <text class="iconfont icon-record"></text>
+        <text class="action-text">兑换记录</text>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 搜索栏 -->
+  <view class="search-bar">
+    <view class="search-input-wrapper">
+      <text class="iconfont icon-search"></text>
+      <input class="search-input" 
+             placeholder="搜索商品" 
+             value="{{searchKeyword}}" 
+             bindinput="onSearchInput" 
+             bindconfirm="onSearch" />
+      <text wx:if="{{searchKeyword}}" class="iconfont icon-clear" bindtap="clearSearch"></text>
+    </view>
+  </view>
+  
+  <!-- 商品分类 -->
+  <view class="categories">
+    <scroll-view scroll-x="true" class="categories-scroll">
+      <view class="categories-list">
+        <view wx:for="{{categories}}" wx:key="id" 
+              class="category-item {{currentCategory === item.id ? 'active' : ''}}"
+              data-id="{{item.id}}" bindtap="switchCategory">
+          <text class="category-name">{{item.name}}</text>
+          <view wx:if="{{item.count > 0}}" class="category-count">({{item.count}})</view>
+        </view>
+      </view>
+    </scroll-view>
+    
+    <!-- 排序按钮 -->
+    <view class="sort-btn" bindtap="showSortPopup">
+      <text class="iconfont icon-sort"></text>
+    </view>
+  </view>
+  
+  <!-- 商品列表 -->
+  <view class="products-container">
+    <!-- 加载状态 -->
+    <view wx:if="{{loading && productList.length === 0}}" class="loading-container">
+      <view class="loading-spinner"></view>
+      <text class="loading-text">正在加载商品...</text>
+    </view>
+    
+    <!-- 商品列表 -->
+    <view wx:else class="products-list">
+      <view wx:for="{{productList}}" wx:key="id" class="product-item">
+        <!-- 商品图片 -->
+        <view class="product-image" data-id="{{item.id}}" bindtap="goToProductDetail">
+          <image src="{{item.image}}" mode="aspectFill"></image>
+          <view wx:if="{{item.stock <= 0}}" class="out-of-stock">已售罄</view>
+          <view wx:elif="{{item.isHot}}" class="hot-tag">热门</view>
+        </view>
+        
+        <!-- 商品信息 -->
+        <view class="product-info" data-id="{{item.id}}" bindtap="goToProductDetail">
+          <view class="product-title">{{item.title}}</view>
+          <view class="product-desc">{{item.description}}</view>
+          
+          <!-- 商品标签 -->
+          <view wx:if="{{item.tags && item.tags.length > 0}}" class="product-tags">
+            <view wx:for="{{item.tags}}" wx:key="*this" wx:for-item="tag" class="tag">{{tag}}</view>
+          </view>
+          
+          <!-- 兑换量和库存 -->
+          <view class="product-stats">
+            <text class="exchange-count">已兑换{{item.exchangeCount || 0}}件</text>
+            <text class="stock">库存{{item.stock}}</text>
+          </view>
+        </view>
+        
+        <!-- 积分和操作 -->
+        <view class="product-footer">
+          <view class="product-points">
+            <text class="points-value">{{item.points}}</text>
+            <text class="points-label">积分</text>
+          </view>
+          
+          <button class="exchange-btn {{item.stock <= 0 || userPoints < item.points ? 'disabled' : ''}}" 
+                  data-id="{{item.id}}" 
+                  bindtap="exchangeProduct"
+                  disabled="{{item.stock <= 0 || userPoints < item.points}}">
+            {{item.stock <= 0 ? '已售罄' : (userPoints < item.points ? '积分不足' : '立即兑换')}}
+          </button>
+        </view>
+      </view>
+      
+      <!-- 加载更多 -->
+      <view wx:if="{{hasMore && loading}}" class="loading-more">
+        <view class="loading-spinner small"></view>
+        <text class="loading-text">加载更多...</text>
+      </view>
+      
+      <!-- 没有更多数据 -->
+      <view wx:if="{{!hasMore && productList.length > 0}}" class="no-more">
+        <text>没有更多商品了</text>
+      </view>
+      
+      <!-- 空状态 -->
+      <view wx:if="{{productList.length === 0 && !loading}}" class="empty-state">
+        <view class="empty-icon"></view>
+        <text class="empty-text">暂无商品</text>
+        <text class="empty-desc">当前分类下没有商品</text>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 最近兑换记录 -->
+  <view wx:if="{{exchangeRecords.length > 0}}" class="recent-exchanges">
+    <view class="section-header">
+      <text class="section-title">最近兑换</text>
+      <text class="section-more" bindtap="goToExchangeRecords">查看全部</text>
+    </view>
+    
+    <view class="exchange-list">
+      <view wx:for="{{exchangeRecords}}" wx:key="id" class="exchange-item">
+        <image class="exchange-image" src="{{item.productImage}}" mode="aspectFill"></image>
+        <view class="exchange-info">
+          <view class="exchange-title">{{item.productTitle}}</view>
+          <view class="exchange-time">{{formatTime(item.createTime)}}</view>
+        </view>
+        <view class="exchange-points">-{{item.points}}</view>
+      </view>
+    </view>
+  </view>
+</view>
+
+<!-- 排序弹窗 -->
+<view wx:if="{{showSortPopup}}" class="sort-popup">
+  <view class="popup-mask" bindtap="hideSortPopup"></view>
+  <view class="popup-content">
+    <view class="popup-header">
+      <text class="popup-title">排序方式</text>
+      <text class="popup-close" bindtap="hideSortPopup">×</text>
+    </view>
+    
+    <view class="sort-options">
+      <view wx:for="{{sortOptions}}" wx:key="key" 
+            class="sort-option {{currentSort === item.key ? 'active' : ''}}"
+            data-sort="{{item.key}}" bindtap="selectSort">
+        <text class="option-name">{{item.name}}</text>
+        <text wx:if="{{currentSort === item.key}}" class="iconfont icon-check"></text>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,88 @@
+<view class="order-card {{bordered ? 'bordered' : ''}}" style="width: {{width}}" bindtap="onOrderTap">
+  <!-- 订单头部 -->
+  <view class="order-header">
+    <view class="order-info">
+      <text class="order-no">订单号：{{order.orderNo}}</text>
+      <text class="order-time">{{order.createTime}}</text>
+    </view>
+    <view class="order-status" style="color: {{statusMap[order.status].color}}">
+      {{statusMap[order.status].text}}
+    </view>
+  </view>
+  
+  <!-- 商品列表 -->
+  <view class="order-items">
+    <view class="item" wx:for="{{order.items}}" wx:key="id">
+      <view class="item-image-container">
+        <lazy-image 
+          src="{{item.image}}" 
+          mode="aspectFill" 
+          class="item-image"
+        />
+      </view>
+      <view class="item-info">
+        <view class="item-name">{{item.name}}</view>
+        <view class="item-specs" wx:if="{{item.specs}}">{{item.specs}}</view>
+        <view class="item-price-row">
+          <text class="item-price">¥{{item.price}}</text>
+          <text class="item-quantity">x{{item.quantity}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 订单总计 -->
+  <view class="order-summary">
+    <view class="summary-row" wx:if="{{order.items && order.items.length > 1}}">
+      <text class="summary-label">共{{order.items.length}}件商品</text>
+    </view>
+    <view class="summary-row">
+      <text class="summary-label">订单总额</text>
+      <text class="summary-value">¥{{order.totalAmount}}</text>
+    </view>
+    <view class="summary-row" wx:if="{{order.shippingFee > 0}}">
+      <text class="summary-label">运费</text>
+      <text class="summary-value">¥{{order.shippingFee}}</text>
+    </view>
+    <view class="summary-row" wx:if="{{order.discountAmount > 0}}">
+      <text class="summary-label">优惠</text>
+      <text class="summary-value discount">-¥{{order.discountAmount}}</text>
+    </view>
+    <view class="summary-row total">
+      <text class="summary-label">实付金额</text>
+      <text class="summary-value total-amount">¥{{order.payAmount}}</text>
+    </view>
+  </view>
+  
+  <!-- 操作按钮 -->
+  <view class="order-actions" wx:if="{{showActions}}">
+    <!-- 待付款状态 -->
+    <block wx:if="{{order.status === 'pending'}}">
+      <button class="action-btn cancel" size="mini" bindtap="onCancelOrder">取消订单</button>
+      <button class="action-btn primary" size="mini">去支付</button>
+    </block>
+    
+    <!-- 待发货状态 -->
+    <block wx:elif="{{order.status === 'paid'}}">
+      <button class="action-btn" size="mini" bindtap="onCancelOrder">取消订单</button>
+    </block>
+    
+    <!-- 待收货状态 -->
+    <block wx:elif="{{order.status === 'shipped'}}">
+      <button class="action-btn" size="mini" bindtap="onViewLogistics">查看物流</button>
+      <button class="action-btn primary" size="mini" bindtap="onConfirmReceive">确认收货</button>
+    </block>
+    
+    <!-- 已完成状态 -->
+    <block wx:elif="{{order.status === 'completed'}}">
+      <button class="action-btn" size="mini" bindtap="onReviewOrder" wx:if="{{!order.isReviewed}}">评价</button>
+      <button class="action-btn" size="mini" bindtap="onViewLogistics">查看物流</button>
+      <button class="action-btn" size="mini" bindtap="onDeleteOrder">删除订单</button>
+    </block>
+    
+    <!-- 已取消状态 -->
+    <block wx:elif="{{order.status === 'cancelled'}}">
+      <button class="action-btn" size="mini" bindtap="onDeleteOrder">删除订单</button>
+    </block>
+  </view>
+</view>

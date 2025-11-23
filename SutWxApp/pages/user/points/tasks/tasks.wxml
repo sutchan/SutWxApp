@@ -1,0 +1,130 @@
+<!-- 积分任务页面 -->
+<view class="tasks-container">
+  <!-- 用户积分信息 -->
+  <view class="points-header">
+    <view class="points-info">
+      <text class="points-value">{{userPoints.availablePoints}}</text>
+      <text class="points-label">我的积分</text>
+    </view>
+    <view class="today-earned">
+      <text class="earned-value">+{{userPoints.todayEarned}}</text>
+      <text class="earned-label">今日获得</text>
+    </view>
+  </view>
+  
+  <!-- 任务类型筛选 -->
+  <view class="task-types">
+    <scroll-view scroll-x="true" class="types-scroll">
+      <view class="types-list">
+        <view wx:for="{{taskTypes}}" wx:key="key" 
+              class="type-item {{currentType === item.key ? 'active' : ''}}"
+              data-type="{{item.key}}" bindtap="switchTaskType">
+          <text class="type-name">{{item.name}}</text>
+          <view wx:if="{{item.count > 0}}" class="type-count">{{item.count}}</view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+  
+  <!-- 任务状态筛选 -->
+  <view class="task-statuses">
+    <scroll-view scroll-x="true" class="statuses-scroll">
+      <view class="statuses-list">
+        <view wx:for="{{taskStatuses}}" wx:key="key" 
+              class="status-item {{currentStatus === item.key ? 'active' : ''}}"
+              data-status="{{item.key}}" bindtap="switchTaskStatus">
+          <text class="status-name">{{item.name}}</text>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+  
+  <!-- 任务列表 -->
+  <view class="tasks-list">
+    <!-- 加载状态 -->
+    <view wx:if="{{loading && taskList.length === 0}}" class="loading-container">
+      <view class="loading-spinner"></view>
+      <text class="loading-text">正在加载任务...</text>
+    </view>
+    
+    <!-- 任务项 -->
+    <view wx:else class="task-items">
+      <view wx:for="{{taskList}}" wx:key="id" class="task-item" data-id="{{item.id}}" bindtap="goToTaskDetail">
+        <!-- 任务图标和基本信息 -->
+        <view class="task-header">
+          <view class="task-icon {{item.type}}">
+            <image src="{{item.icon}}" mode="aspectFit"></image>
+          </view>
+          
+          <view class="task-basic-info">
+            <view class="task-title">{{item.title}}</view>
+            <view class="task-desc">{{item.description}}</view>
+          </view>
+          
+          <view class="task-reward">
+            <text class="reward-value">+{{item.points}}</text>
+            <text class="reward-label">积分</text>
+          </view>
+        </view>
+        
+        <!-- 任务进度 -->
+        <view wx:if="{{item.target > 1}}" class="task-progress">
+          <view class="progress-bar">
+            <view class="progress-fill" style="width: {{getTaskProgressPercent(item.current, item.target)}}%"></view>
+          </view>
+          <view class="progress-text">
+            {{formatTaskProgress(item.current, item.target)}}
+          </view>
+        </view>
+        
+        <!-- 任务状态和操作 -->
+        <view class="task-footer">
+          <view class="task-status {{item.status}}">
+            <text wx:if="{{item.status === 'pending'}}">未完成</text>
+            <text wx:elif="{{item.status === 'completed'}}">已完成</text>
+            <text wx:elif="{{item.status === 'unclaimed'}}">待领取</text>
+            <text wx:elif="{{item.status === 'claimed'}}">已领取</text>
+          </view>
+          
+          <view class="task-actions">
+            <button wx:if="{{item.status === 'pending' && item.actionable}}" 
+                    class="action-btn primary" 
+                    data-id="{{item.id}}" 
+                    catchtap="completeTask">
+              {{item.actionText || '去完成'}}
+            </button>
+            
+            <button wx:elif="{{item.status === 'unclaimed'}}" 
+                    class="action-btn primary" 
+                    data-id="{{item.id}}" 
+                    catchtap="claimTaskReward">
+              领取奖励
+            </button>
+            
+            <button wx:else class="action-btn disabled" disabled>
+              {{item.statusText || '已完成'}}
+            </button>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 加载更多 -->
+      <view wx:if="{{hasMore && loading}}" class="loading-more">
+        <view class="loading-spinner small"></view>
+        <text class="loading-text">加载更多...</text>
+      </view>
+      
+      <!-- 没有更多数据 -->
+      <view wx:if="{{!hasMore && taskList.length > 0}}" class="no-more">
+        <text>没有更多任务了</text>
+      </view>
+      
+      <!-- 空状态 -->
+      <view wx:if="{{taskList.length === 0 && !loading}}" class="empty-state">
+        <view class="empty-icon"></view>
+        <text class="empty-text">暂无任务</text>
+        <text class="empty-desc">当前筛选条件下没有任务</text>
+      </view>
+    </view>
+  </view>
+</view>
