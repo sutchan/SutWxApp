@@ -1,3 +1,9 @@
+/**
+ * 文件名: README.md
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: README 文档文件
+ */
 # SutWxApp 微信小程序项目
 [![GitHub release](https://img.shields.io/github/release/sutchan/SutWxApp.svg)](https://github.com/sutchan/SutWxApp/releases)
 [![License](https://img.shields.io/github/license/sutchan/SutWxApp.svg)](https://github.com/sutchan/SutWxApp/blob/master/LICENSE)

@@ -1,3 +1,9 @@
+/**
+ * 文件名: rating.wxml
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: rating 页面结构文件
+ */
 <view class="rating-container">
   <!-- 星星评分 -->
   <view class="rating-stars" style="font-size: {{size}}">

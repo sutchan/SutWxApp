@@ -1,1 +1,62 @@
+<!-- pages/user/user.wxml -->
+<view class="user-center-container">
+  <!-- 用户信息头部 -->
+  <view class="user-header" bindtap="goToProfile">
+    <view wx:if="{{isLoggedIn}}" class="user-info">
+      <image src="{{userInfo.avatar || '/assets/images/default_avatar.png'}}" class="avatar" mode="aspectFill"></image>
+      <view class="user-details">
+        <view class="user-name">{{userInfo.nickname || i18n.translate('用户')}}</view>
+        <view class="user-level">
+          <text class="level-tag">{{userInfo.level || i18n.translate('普通用户')}}</text>
+        </view>
+      </view>
+      <image src="/assets/images/icon_arrow_right.png" class="arrow-icon" mode="aspectFit"></image>
+    </view>
+    <view wx:else class="not-login" bindtap="goToLogin">
+      <image src="/assets/images/default_avatar.png" class="avatar" mode="aspectFill"></image>
+      <view class="login-prompt">
+        <text>{{i18n.translate('点击登录')}}</text>
+      </view>
+      <image src="/assets/images/icon_arrow_right.png" class="arrow-icon" mode="aspectFit"></image>
+    </view>
+  </view>
+
+  <!-- 统计信息区域 -->
+  <view class="stats-section" wx:if="{{isLoggedIn}}">
+    <view class="stat-item">
+      <view class="stat-value">{{userInfo.points || 0}}</view>
+      <view class="stat-label">{{i18n.translate('积分')}}</view>
+    </view>
+    <view class="stat-divider"></view>
+    <view class="stat-item">
+      <view class="stat-value">{{userInfo.coupons || 0}}</view>
+      <view class="stat-label">{{i18n.translate('优惠券')}}</view>
+    </view>
+    <view class="stat-divider"></view>
+    <view class="stat-item">
+      <view class="stat-value">{{userInfo.orders || 0}}</view>
+      <view class="stat-label">{{i18n.translate('订单')}}</view>
+    </view>
+  </view>
+
+  <!-- 功能菜单 -->
+  <view class="menu-section">
+    <view class="menu-grid">
+      <view class="menu-item" wx:for="{{menuItems}}" wx:key="id" bindtap="handleMenuTap" data-id="{{item.id}}">
+        <image src="{{item.icon}}" class="menu-icon" mode="aspectFit"></image>
+        <text class="menu-name">{{item.name}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 退出登录按钮 -->
+  <view class="logout-section" wx:if="{{isLoggedIn}}">
+    <button class="logout-btn" bindtap="logout" type="warn">{{i18n.translate('退出登录')}}</button>
+  </view>
+
+  <!-- 版本信息 -->
+  <view class="version-info">
+    <text>{{i18n.translate('版本号')}} 1.0.1</text>
+  </view>
+</view>
 

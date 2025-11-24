@@ -1,3 +1,9 @@
+/**
+ * 文件名: result.wxml
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: result 页面结构文件
+ */
 <view class="container">
   <!-- 搜索框 -->
   <view class="search-bar">

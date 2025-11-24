@@ -1,3 +1,9 @@
+/**
+ * 文件名: records.wxss
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: records 页面样式文件
+ */
 .container {
   background-color: #f5f5f5;
   min-height: 100vh;

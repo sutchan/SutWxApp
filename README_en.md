@@ -1,3 +1,9 @@
+/**
+ * 文件名: README_en.md
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: README_en 文档文件
+ */
 # SUT WeChat Mini Program Project
 
 [![GitHub release](https://img.shields.io/github/release/sutchan/SutWxApp.svg)](https://github.com/sutchan/SutWxApp/releases)

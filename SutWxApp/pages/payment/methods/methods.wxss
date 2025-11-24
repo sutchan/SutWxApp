@@ -1,3 +1,9 @@
+/**
+ * 文件名: methods.wxss
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: methods 页面样式文件
+ */
 /* 支付方式选择页面样式 */
 .payment-methods-container {
   min-height: 100vh;

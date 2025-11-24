@@ -1,17 +1,24 @@
 /**
  * 文件名: user.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
+ * 版本号: 1.0.1
+ * 更新日期: 2025-11-24
  * 用户中心页面
  */
 const i18n = require('../../utils/i18n');
+const { createPage } = require('../../utils/store');
 
-Page({
+createPage({
+  // 映射状态到页面
+  mapState: ['user.isLoggedIn', 'user.userInfo', 'ui.loading'],
+  
+  // 映射mutations到页面方法
+  mapMutations: { 
+    setLoading: 'SET_LOADING',
+    setUserInfo: 'SET_USER_INFO',
+    logoutUser: 'LOGOUT_USER'
+  },
   data: {
     i18n: i18n,
-    loading: false,
-    userInfo: null,
-    isLoggedIn: false,
     menuItems: [
       { id: 'orders', name: i18n.translate('我的订单'), icon: '/assets/images/icon_orders.png' },
       { id: 'favorites', name: i18n.translate('我的收藏'), icon: '/assets/images/icon_favorites.png' },
@@ -55,25 +62,18 @@ Page({
    * @returns {void}
    */
   checkLoginStatus(done) {
-    this.setData({ loading: true });
+    this.setLoading(true);
     
     // 检查本地存储的登录状态
     const token = wx.getStorageSync('token');
     const userInfo = wx.getStorageSync('userInfo');
     
     if (token && userInfo) {
-      this.setData({
-        isLoggedIn: true,
-        userInfo: userInfo,
-        loading: false
-      });
-    } else {
-      this.setData({
-        isLoggedIn: false,
-        userInfo: null,
-        loading: false
-      });
+      // 更新到store
+      this.setUserInfo(userInfo);
     }
+    
+    this.setLoading(false);
     
     if (typeof done === 'function') done();
   },
@@ -98,14 +98,8 @@ Page({
       content: i18n.translate('确定要退出登录吗？'),
       success: (res) => {
         if (res.confirm) {
-          // 清除本地存储的登录信息
-          wx.removeStorageSync('token');
-          wx.removeStorageSync('userInfo');
-          
-          this.setData({
-            isLoggedIn: false,
-            userInfo: null
-          });
+          // 通过store退出登录
+          this.logoutUser();
           
           wx.showToast({
             title: i18n.translate('已退出登录'),

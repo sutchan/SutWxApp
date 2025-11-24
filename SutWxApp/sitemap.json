@@ -1,3 +1,9 @@
+/**
+ * 文件名: sitemap.json
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: sitemap JSON 配置文件
+ */
 {
   "desc": "关于本文件的更多信息，请参考文档 https://developers.weixin.qq.com/miniprogram/dev/framework/sitemap.html",
   "rules": [{

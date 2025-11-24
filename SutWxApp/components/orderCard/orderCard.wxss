@@ -1,3 +1,9 @@
+/**
+ * 文件名: orderCard.wxss
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: orderCard 页面样式文件
+ */
 /* 订单卡片容器 */
 .order-card {
   background-color: #fff;

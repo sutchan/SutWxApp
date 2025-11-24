@@ -1,3 +1,9 @@
+/**
+ * 文件名: list.wxml
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: list 页面结构文件
+ */
 <!--pages/user/address/list.wxml-->
 <view class="container">
   <view wx:if="{{loading}}" class="loading-tip">加载中...</view>

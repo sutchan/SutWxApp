@@ -1,3 +1,9 @@
+/**
+ * 文件名: pointsDetail.wxss
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: pointsDetail 页面样式文件
+ */
 /* 积分明细页面样式 */
 .container {
   display: flex;

@@ -1,0 +1,128 @@
+name: 微信小程序CI/CD流程
+
+on:
+  # 当推送到main分支时触发
+  push:
+    branches: [ main ]
+  # 当有PR合并到main分支时触发
+  pull_request:
+    branches: [ main ]
+  # 允许手动触发工作流
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: '部署环境'
+        required: true
+        default: 'test'
+        type: choice
+        options:
+          - test
+          - production
+
+jobs:
+  # 代码质量检查作业
+  code-quality:
+    name: 代码质量检查
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v3
+
+      - name: 设置Node.js环境
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'npm'
+          cache-dependency-path: './SutWxApp/package.json'
+
+      - name: 安装依赖
+        working-directory: ./SutWxApp
+        run: npm install
+
+      - name: 运行代码检查
+        working-directory: ./SutWxApp
+        run: npm run lint
+
+  # 构建作业
+  build:
+    name: 构建小程序
+    needs: code-quality
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v3
+
+      - name: 设置Node.js环境
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'npm'
+          cache-dependency-path: './SutWxApp/package.json'
+
+      - name: 安装依赖
+        working-directory: ./SutWxApp
+        run: npm install
+
+      - name: 运行构建脚本
+        working-directory: ./SutWxApp
+        run: |
+          mkdir -p build
+          node ./build/index.js build
+
+      - name: 打包构建产物
+        run: tar -czf wxapp-build.tar.gz ./SutWxApp/dist
+
+      - name: 保存构建产物
+        uses: actions/upload-artifact@v3
+        with:
+          name: wxapp-build
+          path: wxapp-build.tar.gz
+
+  # 部署作业
+  deploy:
+    name: 部署小程序
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v3
+
+      - name: 下载构建产物
+        uses: actions/download-artifact@v3
+        with:
+          name: wxapp-build
+
+      - name: 解压构建产物
+        run: tar -xzf wxapp-build.tar.gz
+
+      - name: 配置Git环境
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: 部署到生产环境
+        if: github.event.inputs.environment == 'production'
+        working-directory: ./SutWxApp
+        run: node ./build/index.js deploy
+        env:
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+          DEPLOY_SERVER: ${{ secrets.DEPLOY_SERVER }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+
+      - name: 部署到测试环境
+        if: github.event.inputs.environment == 'test' || github.event.inputs.environment == ''
+        working-directory: ./SutWxApp
+        run: node ./build/index.js deploy --env=test
+        env:
+          TEST_DEPLOY_TOKEN: ${{ secrets.TEST_DEPLOY_TOKEN }}
+          TEST_DEPLOY_SERVER: ${{ secrets.TEST_DEPLOY_SERVER }}
+          TEST_DEPLOY_PATH: ${{ secrets.TEST_DEPLOY_PATH }}
+
+      - name: 发送部署通知
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_TITLE: 小程序部署通知
+          SLACK_MESSAGE: 小程序已成功部署到${{ github.event.inputs.environment || '测试' }}环境
+          SLACK_COLOR: ${{ github.event.inputs.environment == 'production' && 'good' || 'warning' }}

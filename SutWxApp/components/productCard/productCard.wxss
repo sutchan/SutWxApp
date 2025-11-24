@@ -1,3 +1,9 @@
+/**
+ * 文件名: productCard.wxss
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: productCard 页面样式文件
+ */
 /* 商品卡片容器 */
 .product-card {
   background-color: #fff;

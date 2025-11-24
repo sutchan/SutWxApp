@@ -1,12 +1,12 @@
 /**
  * 文件名: i18n.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
+ * 版本号: 1.0.1
+ * 更新日期: 2025-11-24
  * i18n 国际化服务
  * 用于管理微信小程序中的多语言文本
  * 作者: Sut
- * 日期: 2025-11-23
- * 描述: 从字符串模板文件(.po)加载翻译内容(示例只在构建时使用工具做转换)
+ * 更新日期: 2025-11-24
+ * 描述: 从i18n目录下的JSON文件加载翻译内容
  */
 class I18n {
   constructor() {
@@ -53,10 +53,10 @@ class I18n {
 
 const i18n = new I18n();
 
-// 模拟构建时指定的转换(示例只在构建时使用工具做转换)
+// 从i18n目录加载翻译文件
 i18n.loadTranslations({
-  'zh_CN': require('./sut-wechat-mini-zh_CN.json'),
-  'en_US': require('./sut-wechat-mini-en_US.json')
+  'zh_CN': require('./i18n/sut-wechat-mini-zh_CN.json'),
+  'en_US': require('./i18n/sut-wechat-mini-en_US.json')
 });
 
 // 导出实例，方便在其他地方使用

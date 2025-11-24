@@ -123,5 +123,761 @@ msgstr ""
 
 
 #: pages/index/index.js
+msgid "新品"
+msgstr ""
+
+#: pages/index/index.js
+msgid "推荐"
+msgstr ""
+
+#: pages/index/index.js
+msgid "热卖"
+msgstr ""
+
+#: pages/index/index.js
+msgid "分类"
+msgstr ""
+
+#: pages/index/index.js
+msgid "商品A"
+msgstr ""
+
+#: pages/index/index.js
+msgid "商品B"
+msgstr ""
+
+#: pages/index/index.js
+msgid "商品C"
+msgstr ""
+
+#: pages/index/index.js
+msgid "商品D"
+msgstr ""
+
+#: pages/index/index.wxml
+msgid "加载中..."
+msgstr ""
+
+#: pages/index/index.wxml
+msgid "推荐商品"
+msgstr ""
+
+#: pages/user/user.js
+msgid "我的订单"
+msgstr ""
+
+#: pages/user/user.js
+msgid "我的收藏"
+msgstr ""
+
+#: pages/user/user.js
+msgid "积分中心"
+msgstr ""
+
+#: pages/user/user.js
+msgid "优惠券"
+msgstr ""
+
+#: pages/user/user.js
+msgid "收货地址"
+msgstr ""
+
+#: pages/user/user.js
+msgid "设置"
+msgstr ""
+
+#: pages/user/user.js
+msgid "提示"
+msgstr ""
+
+#: pages/user/user.js
+msgid "确定要退出登录吗？"
+msgstr ""
+
+#: pages/user/user.js
+msgid "已退出登录"
+msgstr ""
+
+#: pages/cart/cart.js
+msgid "确定要删除这个商品吗？"
+msgstr ""
+
+#: pages/cart/cart.js
+msgid "删除成功"
+msgstr ""
+
+#: pages/cart/cart.js
+msgid "结算"
+msgstr ""
+
+#: pages/cart/cart.js
+msgid "购物车为空"
+msgstr ""
+
+#: pages/cart/cart.js
+msgid "去逛逛"
+msgstr ""
+
+#: pages/cart/cart.js
+msgid "全选"
+msgstr ""
+
+#: pages/cart/cart.js
+msgid "合计"
+msgstr ""
+
+#: pages/cart/cart.js
+msgid "删除"
+msgstr ""
+
+#: pages/cart/cart.js
+msgid "编辑"
+msgstr ""
+
+#: pages/cart/cart.js
+msgid "完成"
+msgstr ""
+
+#: pages/cart/cart.js
+msgid "数量"
+msgstr ""
+
+#: pages/cart/cart.js
+msgid "单价"
+msgstr ""
+
+#: pages/cart/cart.js
+msgid "小计"
+msgstr ""
+
+#: pages/product/detail/detail.js
+msgid "商品详情"
+msgstr ""
+
+#: pages/product/detail/detail.js
+msgid "商品评价"
+msgstr ""
+
+#: pages/product/detail/detail.js
+msgid "加入购物车"
+msgstr ""
+
+#: pages/product/detail/detail.js
+msgid "立即购买"
+msgstr ""
+
+#: pages/product/detail/detail.js
+msgid "库存不足"
+msgstr ""
+
+#: pages/product/detail/detail.js
+msgid "商品已下架"
+msgstr ""
+
+#: pages/product/detail/detail.js
+msgid "规格选择"
+msgstr ""
+
+#: pages/product/detail/detail.js
+msgid "数量选择"
+msgstr ""
+
+#: pages/product/detail/detail.js
+msgid "配送方式"
+msgstr ""
+
+#: pages/product/detail/detail.js
+msgid "服务说明"
+msgstr ""
+
+#: pages/product/detail/detail.js
+msgid "商品参数"
+msgstr ""
+
+#: pages/product/detail/detail.js
+msgid "包装清单"
+msgstr ""
+
+#: pages/product/detail/detail.js
+msgid "售后保障"
+msgstr ""
+
+#: pages/product/detail/detail.js
+msgid "价格说明"
+msgstr ""
+
+#: pages/order/list/list.js
+msgid "全部订单"
+msgstr ""
+
+#: pages/order/list/list.js
+msgid "待付款"
+msgstr ""
+
+#: pages/order/list/list.js
+msgid "待发货"
+msgstr ""
+
+#: pages/order/list/list.js
+msgid "待收货"
+msgstr ""
+
+#: pages/order/list/list.js
+msgid "待评价"
+msgstr ""
+
+#: pages/order/list/list.js
+msgid "售后"
+msgstr ""
+
+#: pages/order/list/list.js
+msgid "取消订单"
+msgstr ""
+
+#: pages/order/list/list.js
+msgid "删除订单"
+msgstr ""
+
+#: pages/order/list/list.js
+msgid "确认收货"
+msgstr ""
+
+#: pages/order/list/list.js
+msgid "查看物流"
+msgstr ""
+
+#: pages/order/list/list.js
+msgid "申请售后"
+msgstr ""
+
+#: pages/order/list/list.js
+msgid "评价订单"
+msgstr ""
+
+#: pages/order/list/list.js
+msgid "再次购买"
+msgstr ""
+
+#: pages/order/list/list.js
+msgid "订单详情"
+msgstr ""
+
+#: pages/order/list/list.js
+msgid "订单状态"
+msgstr ""
+
+#: pages/order/list/list.js
+msgid "订单编号"
+msgstr ""
+
+#: pages/order/list/list.js
+msgid "下单时间"
+msgstr ""
+
+#: pages/order/list/list.js
+msgid "支付方式"
+msgstr ""
+
+#: pages/order/list/list.js
+msgid "配送信息"
+msgstr ""
+
+#: pages/order/list/list.js
+msgid "商品信息"
+msgstr ""
+
+#: pages/order/list/list.js
+msgid "订单金额"
+msgstr ""
+
+#: pages/order/list/list.js
+msgid "优惠金额"
+msgstr ""
+
+#: pages/order/list/list.js
+msgid "实付金额"
+msgstr ""
+
+#: pages/order/list/list.js
+msgid "发票信息"
+msgstr ""
+
+#: pages/order/list/list.js
+msgid "备注信息"
+msgstr ""
+
+#: pages/payment/pay.js
+msgid "支付方式选择"
+msgstr ""
+
+#: pages/payment/pay.js
+msgid "微信支付"
+msgstr ""
+
+#: pages/payment/pay.js
+msgid "支付宝支付"
+msgstr ""
+
+#: pages/payment/pay.js
+msgid "银行卡支付"
+msgstr ""
+
+#: pages/payment/pay.js
+msgid "余额支付"
+msgstr ""
+
+#: pages/payment/pay.js
+msgid "支付成功"
+msgstr ""
+
+#: pages/payment/pay.js
+msgid "支付失败"
+msgstr ""
+
+#: pages/payment/pay.js
+msgid "支付取消"
+msgstr ""
+
+#: pages/payment/pay.js
+msgid "支付处理中"
+msgstr ""
+
+#: pages/payment/pay.js
+msgid "请选择支付方式"
+msgstr ""
+
+#: pages/payment/pay.js
+msgid "确认支付"
+msgstr ""
+
+#: pages/payment/pay.js
+msgid "支付金额"
+msgstr ""
+
+#: pages/payment/pay.js
+msgid "订单信息"
+msgstr ""
+
+#: pages/search/result.js
+msgid "搜索结果"
+msgstr ""
+
+#: pages/search/result.js
+msgid "搜索历史"
+msgstr ""
+
+#: pages/search/result.js
+msgid "热门搜索"
+msgstr ""
+
+#: pages/search/result.js
+msgid "搜索建议"
+msgstr ""
+
+#: pages/search/result.js
+msgid "暂无搜索结果"
+msgstr ""
+
+#: pages/search/result.js
+msgid "清空搜索历史"
+msgstr ""
+
+#: pages/search/result.js
+msgid "搜索"
+msgstr ""
+
+#: pages/search/result.js
+msgid "取消"
+msgstr ""
+
+#: pages/search/result.js
+msgid "筛选"
+msgstr ""
+
+#: pages/search/result.js
+msgid "排序"
+msgstr ""
+
+#: pages/search/result.js
+msgid "价格从低到高"
+msgstr ""
+
+#: pages/search/result.js
+msgid "价格从高到低"
+msgstr ""
+
+#: pages/search/result.js
+msgid "销量从高到低"
+msgstr ""
+
+#: pages/search/result.js
+msgid "好评优先"
+msgstr ""
+
+#: pages/search/result.js
+msgid "最新上架"
+msgstr ""
+
+#: pages/search/result.js
+msgid "综合排序"
+msgstr ""
+
+#: pages/category/category.js
+msgid "商品分类"
+msgstr ""
+
+#: pages/category/category.js
+msgid "全部分类"
+msgstr ""
+
+#: pages/category/category.js
+msgid "子分类"
+msgstr ""
+
+#: pages/category/category.js
+msgid "分类商品"
+msgstr ""
+
+#: pages/notification/list.js
+msgid "消息通知"
+msgstr ""
+
+#: pages/notification/list.js
+msgid "系统通知"
+msgstr ""
+
+#: pages/notification/list.js
+msgid "订单通知"
+msgstr ""
+
+#: pages/notification/list.js
+msgid "活动通知"
+msgstr ""
+
+#: pages/notification/list.js
+msgid "全部标记为已读"
+msgstr ""
+
+#: pages/notification/list.js
+msgid "暂无通知"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "登录"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "注册"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "用户名"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "密码"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "确认密码"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "忘记密码"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "验证码"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "获取验证码"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "登录成功"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "注册成功"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "用户名或密码错误"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "验证码错误"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "请输入用户名"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "请输入密码"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "请输入验证码"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "密码不一致"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "账号已存在"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "账号不存在"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "账号已被禁用"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "登录已过期"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "请重新登录"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "微信登录"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "手机号登录"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "邮箱登录"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "手机号"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "邮箱"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "请输入手机号"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "请输入邮箱"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "手机号格式错误"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "邮箱格式错误"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "密码长度不能少于6位"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "验证码已发送"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "验证码发送失败"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "请稍后重试"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "操作过于频繁"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "账号或密码错误"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "登录失败"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "注册失败"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "网络错误"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "服务器错误"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "未知错误"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "请检查网络连接"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "请稍后再试"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "系统繁忙"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "系统维护中"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "功能暂未开放"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "敬请期待"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "感谢您的支持"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "欢迎回来"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "欢迎加入"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "开始您的购物之旅"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "探索更多精彩内容"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "享受更多会员权益"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "获取更多优惠信息"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "随时随地轻松购物"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "品质生活从这里开始"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "让购物成为一种享受"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "发现更多好物"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "精选优质商品"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "品质保证"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "极速发货"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "无忧售后"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "正品保障"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "七天无理由退换"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "假一赔十"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "先行赔付"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "全程保障"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "专业客服"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "24小时在线"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "快速响应"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "贴心服务"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "用心服务每一位用户"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "为您提供最优质的购物体验"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "感谢您的信任与支持"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "我们将不断努力做得更好"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "期待您的再次光临"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "祝您购物愉快"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "生活因您而精彩"
+msgstr ""
+
+#: pages/user/login/login.js
+msgid "让美好触手可及"
+msgstr ""
+
+#: pages/index/index.js
 msgid "欢迎使用 SutWxApp"
 msgstr ""

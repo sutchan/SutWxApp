@@ -1,3 +1,9 @@
+/**
+ * 文件名: points.wxss
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: points 页面样式文件
+ */
 /* 文件名: points.wxss */
 .container {
   padding: 20rpx;

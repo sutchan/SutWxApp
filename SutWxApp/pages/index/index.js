@@ -1,15 +1,24 @@
 /**
  * 文件名: index.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 首页
+ * 版本号: 1.0.1
+ * 更新日期: 2025-11-24
+ * 首页页面脚本
  */
-const i18n = require('../../utils/i18n');
 
-Page({
+const i18n = require('../../utils/i18n');
+const { createPage } = require('../../utils/useStore.js');
+
+// 使用状态管理创建页面配置
+Page(createPage(
+  // 映射的状态
+  ['user.isLoggedIn', 'ui.loading'],
+  // 映射的mutations
+  {
+    setLoading: 'SET_LOADING'
+  }
+)({
   data: {
     i18n: i18n,
-    loading: false,
     banners: [],
     categories: [],
     products: [],
@@ -18,7 +27,6 @@ Page({
 
   /**
    * 生命周期函数--监听页面加载
-   * @returns {void}
    */
   onLoad() {
     this.loadData();
@@ -26,7 +34,6 @@ Page({
 
   /**
    * 生命周期函数--监听页面卸载
-   * @returns {void}
    */
   onUnload() {
     // 清理定时器，防止内存泄漏
@@ -37,7 +44,6 @@ Page({
 
   /**
    * 页面显示时触发
-   * @returns {void}
    */
   onShow() {
     // 可以在此处刷新部分数据
@@ -45,7 +51,6 @@ Page({
 
   /**
    * 下拉刷新回调
-   * @returns {void}
    */
   onPullDownRefresh() {
     this.loadData(() => {
@@ -55,19 +60,45 @@ Page({
 
   /**
    * 触底加载更多
-   * @returns {void}
    */
   onReachBottom() {
     // 预留：分页加载
   },
 
   /**
+   * 数据缓存键
+   */
+  cacheKeys: {
+    BANNERS: 'index_banners',
+    CATEGORIES: 'index_categories',
+    PRODUCTS: 'index_products'
+  },
+
+  /**
+   * 缓存过期时间(毫秒)
+   */
+  cacheExpireTime: 5 * 60 * 1000, // 5分钟
+
+  /**
    * 加载首页数据
    * @param {Function} done - 完成回调
-   * @returns {void}
    */
   loadData(done) {
-    this.setData({ loading: true });
+    // 使用store设置加载状态
+    this.setLoading(true);
+    
+    // 尝试从缓存获取数据
+    const cachedData = this.getCachedData();
+    
+    if (cachedData && Object.keys(cachedData).length > 0) {
+      // 有缓存数据，先显示缓存
+      this.setData(cachedData);
+      this.setLoading(false);
+      
+      if (typeof done === 'function') done();
+    }
+    
+    // 异步加载最新数据
     const timer = setTimeout(() => {
       const mockBanners = [
         { id: 1, image: '/assets/images/banner1.jpg' },
@@ -75,29 +106,130 @@ Page({
         { id: 3, image: '/assets/images/banner3.jpg' }
       ];
       const mockCategories = [
-        { id: 1, name: i18n.translate('新品'), icon: '/assets/images/icon_new.png' },
-        { id: 2, name: i18n.translate('推荐'), icon: '/assets/images/icon_recommend.png' },
-        { id: 3, name: i18n.translate('热卖'), icon: '/assets/images/icon_hot.png' },
-        { id: 4, name: i18n.translate('分类'), icon: '/assets/images/icon_category.png' }
+        { id: 1, name: i18n.translate('新品') || '新品', icon: '/assets/images/icon_new.png' },
+        { id: 2, name: i18n.translate('推荐') || '推荐', icon: '/assets/images/icon_recommend.png' },
+        { id: 3, name: i18n.translate('热卖') || '热卖', icon: '/assets/images/icon_hot.png' },
+        { id: 4, name: i18n.translate('分类') || '分类', icon: '/assets/images/icon_category.png' }
       ];
       const mockProducts = [
-        { id: 1, name: i18n.translate('商品A'), image: '/assets/images/product1.jpg', price: '99.00' },
-        { id: 2, name: i18n.translate('商品B'), image: '/assets/images/product2.jpg', price: '129.00' },
-        { id: 3, name: i18n.translate('商品C'), image: '/assets/images/product3.jpg', price: '79.00' },
-        { id: 4, name: i18n.translate('商品D'), image: '/assets/images/product4.jpg', price: '159.00' }
+        { id: 1, name: i18n.translate('商品A') || '商品A', image: '/assets/images/product1.jpg', price: '99.00' },
+        { id: 2, name: i18n.translate('商品B') || '商品B', image: '/assets/images/product2.jpg', price: '129.00' },
+        { id: 3, name: i18n.translate('商品C') || '商品C', image: '/assets/images/product3.jpg', price: '79.00' },
+        { id: 4, name: i18n.translate('商品D') || '商品D', image: '/assets/images/product4.jpg', price: '159.00' }
       ];
+      
+      // 预加载图片
+      this.preloadImages([
+        ...mockBanners.map(item => item.image),
+        ...mockCategories.map(item => item.icon),
+        ...mockProducts.map(item => item.image)
+      ]);
 
       this.setData({
         banners: mockBanners,
         categories: mockCategories,
         products: mockProducts,
-        loading: false,
         timer: null
       });
-      if (typeof done === 'function') done();
+      
+      // 缓存数据
+      this.cacheData({
+        banners: mockBanners,
+        categories: mockCategories,
+        products: mockProducts
+      });
+      
+      // 使用store设置加载状态为false
+      this.setLoading(false);
+      
+      // 如果没有缓存数据，则调用回调
+      if (!cachedData && typeof done === 'function') {
+        done();
+      }
     }, 300);
     
     this.setData({ timer });
+  },
+
+  /**
+   * 从缓存获取数据
+   * @returns {Object|null} 缓存的数据
+   */
+  getCachedData() {
+    try {
+      const now = Date.now();
+      const cachedData = {};
+      let hasValidCache = false;
+      
+      // 检查每个缓存项
+      Object.values(this.cacheKeys).forEach(key => {
+        const cached = wx.getStorageSync(key);
+        if (cached && now - cached.timestamp < this.cacheExpireTime) {
+          // 根据缓存键获取对应的字段名
+          if (key === this.cacheKeys.BANNERS) {
+            cachedData.banners = cached.data;
+          } else if (key === this.cacheKeys.CATEGORIES) {
+            cachedData.categories = cached.data;
+          } else if (key === this.cacheKeys.PRODUCTS) {
+            cachedData.products = cached.data;
+          }
+          hasValidCache = true;
+        }
+      });
+      
+      return hasValidCache ? cachedData : null;
+    } catch (error) {
+      console.error('获取缓存数据失败:', error);
+      return null;
+    }
+  },
+
+  /**
+   * 缓存数据
+   * @param {Object} data - 要缓存的数据
+   */
+  cacheData(data) {
+    try {
+      const timestamp = Date.now();
+      
+      // 缓存各个数据项
+      if (data.banners) {
+        wx.setStorageSync(this.cacheKeys.BANNERS, {
+          data: data.banners,
+          timestamp
+        });
+      }
+      
+      if (data.categories) {
+        wx.setStorageSync(this.cacheKeys.CATEGORIES, {
+          data: data.categories,
+          timestamp
+        });
+      }
+      
+      if (data.products) {
+        wx.setStorageSync(this.cacheKeys.PRODUCTS, {
+          data: data.products,
+          timestamp
+        });
+      }
+    } catch (error) {
+      console.error('缓存数据失败:', error);
+    }
+  },
+
+  /**
+   * 预加载图片
+   * @param {Array} imageUrls - 图片URL数组
+   */
+  preloadImages(imageUrls) {
+    imageUrls.forEach(url => {
+      wx.getImageInfo({
+        src: url,
+        success: () => {},
+        fail: () => {}
+      });
+    });
   },
 
   /**
@@ -120,5 +252,23 @@ Page({
     wx.navigateTo({
       url: `/pages/product/detail/detail?id=${id}`
     });
+  },
+  
+  /**
+   * 跳转到用户中心
+   */
+  goToUserCenter() {
+    wx.navigateTo({
+      url: '/pages/user/index'
+    });
+  },
+  
+  /**
+   * 跳转到购物车
+   */
+  goToCart() {
+    wx.navigateTo({
+      url: '/pages/cart/index'
+    });
   }
-});
+}));

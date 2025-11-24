@@ -1,3 +1,9 @@
+/**
+ * 文件名: project.config.json
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: project.config JSON 配置文件
+ */
 {
   "description": "苏特微信小程序项目配置",
   "packOptions": {

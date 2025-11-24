@@ -1,3 +1,9 @@
+/**
+ * 文件名: tasks.wxss
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: tasks 页面样式文件
+ */
 /* 积分任务页面样式 */
 .tasks-container {
   min-height: 100vh;

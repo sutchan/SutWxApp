@@ -1,3 +1,9 @@
+/**
+ * 文件名: detail.wxml
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: detail 页面结构文件
+ */
 <!--pages/article/detail/detail.wxml-->
 <view class="container">
   <view wx:if="{{loading}}" class="loading-tip">加载中...</view>

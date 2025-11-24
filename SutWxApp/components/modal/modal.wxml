@@ -1,3 +1,9 @@
+/**
+ * 文件名: modal.wxml
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: modal 页面结构文件
+ */
 <view class="modal-container" wx:if="{{show}}">
   <!-- 遮罩层 -->
   <view class="modal-mask" wx:if="{{showMask}}" bindtap="onMaskTap"></view>

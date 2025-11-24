@@ -163,6 +163,9 @@
 
 ```javascript
 /**
+ * 文件名: 04-API开发指南.md
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
  * 用户控制器
  * @module controllers/userController
  */

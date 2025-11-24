@@ -1,3 +1,9 @@
+/**
+ * 文件名: edit.wxml
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: edit 页面结构文件
+ */
 <!--pages/user/address/edit.wxml-->
 <mp-form id="form" rules="{{rules}}" models="{{formData}}">
   <mp-cells title="收货信息">

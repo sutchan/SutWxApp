@@ -1,3 +1,9 @@
+/**
+ * 文件名: productCard.wxml
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: productCard 页面结构文件
+ */
 <view class="product-card {{bordered ? 'bordered' : ''}}" style="width: {{width}}" bindtap="onProductTap">
   <!-- 商品图片 -->
   <view class="product-image-container" style="height: {{imageHeight}}">

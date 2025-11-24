@@ -1,3 +1,9 @@
+/**
+ * 文件名: orderCard.wxml
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: orderCard 页面结构文件
+ */
 <view class="order-card {{bordered ? 'bordered' : ''}}" style="width: {{width}}" bindtap="onOrderTap">
   <!-- 订单头部 -->
   <view class="order-header">

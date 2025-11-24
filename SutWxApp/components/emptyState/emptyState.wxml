@@ -1,3 +1,9 @@
+/**
+ * 文件名: emptyState.wxml
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: emptyState 页面结构文件
+ */
 <view class="empty-state-container">
   <!-- 空状态图片 -->
   <view class="empty-image-container">

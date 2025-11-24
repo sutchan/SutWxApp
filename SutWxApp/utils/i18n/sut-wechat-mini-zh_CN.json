@@ -1,6 +1,15 @@
+/**
+ * 文件名: sut-wechat-mini-zh_CN.json
+ * 版本号: 1.0.1
+ * 更新日期: 2025-11-24
+ * 描述: sut-wechat-mini-zh_CN JSON 配置文件
+ */
 {
+  "loading": "加载中...",
+  "network_error": "网络错误",
+  "login_required": "请先登录",
+  "task_completed": "任务已完成",
   "返回": "返回",
-  "加载中...": "加载中...",
   "提交": "提交",
   "取消": "取消",
   "评价订单": "评价订单",

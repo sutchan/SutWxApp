@@ -1,1 +1,175 @@
+/* pages/user/user.wxss - 版本号: 1.0.1 - 2025-11-24 */
+
+/* 全局样式 */
+page {
+  background-color: #f5f5f5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 容器样式 */
+.user-center-container {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+/* 用户信息头部 */
+.user-header {
+  background-color: #fff;
+  padding: 30rpx 40rpx;
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.avatar {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 50%;
+  background-color: #f0f0f0;
+}
+
+.user-details {
+  margin-left: 30rpx;
+  flex: 1;
+}
+
+.user-name {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10rpx;
+}
+
+.user-level {
+  display: flex;
+  align-items: center;
+}
+
+.level-tag {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.arrow-icon {
+  width: 32rpx;
+  height: 32rpx;
+  margin-left: 20rpx;
+}
+
+.not-login {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.login-prompt {
+  margin-left: 30rpx;
+  flex: 1;
+}
+
+.login-prompt text {
+  font-size: 32rpx;
+  color: #333;
+}
+
+/* 统计信息区域 */
+.stats-section {
+  background-color: #fff;
+  padding: 30rpx 0;
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20rpx;
+}
+
+.stat-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-value {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #ff4444;
+  margin-bottom: 10rpx;
+}
+
+.stat-label {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.stat-divider {
+  width: 2rpx;
+  background-color: #eee;
+}
+
+/* 功能菜单 */
+.menu-section {
+  background-color: #fff;
+  padding: 20rpx 0;
+  margin-bottom: 20rpx;
+}
+
+.menu-grid {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 20rpx;
+}
+
+.menu-item {
+  width: 25%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30rpx 0;
+}
+
+.menu-icon {
+  width: 80rpx;
+  height: 80rpx;
+  margin-bottom: 15rpx;
+}
+
+.menu-name {
+  font-size: 26rpx;
+  color: #333;
+}
+
+/* 退出登录按钮 */
+.logout-section {
+  padding: 40rpx;
+}
+
+.logout-btn {
+  background-color: #fff;
+  border: 1rpx solid #ff4444;
+  color: #ff4444;
+  font-size: 32rpx;
+  line-height: 90rpx;
+  border-radius: 90rpx;
+}
+
+.logout-btn:active {
+  opacity: 0.8;
+}
+
+/* 版本信息 */
+.version-info {
+  padding: 40rpx 0;
+  text-align: center;
+}
+
+.version-info text {
+  font-size: 24rpx;
+  color: #999;
+}
 

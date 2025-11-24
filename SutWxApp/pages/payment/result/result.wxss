@@ -1,3 +1,9 @@
+/**
+ * 文件名: result.wxss
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: result 页面样式文件
+ */
 /* 支付结果页面样式 */
 .payment-result-container {
   min-height: 100vh;

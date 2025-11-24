@@ -1,3 +1,9 @@
+/**
+ * 文件名: pointsRanking.wxss
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: pointsRanking 页面样式文件
+ */
 /* 积分排行榜页面样式 */
 
 .container {
