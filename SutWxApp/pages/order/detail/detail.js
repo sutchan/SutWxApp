@@ -1,10 +1,11 @@
 /**
  * 文件名: detail.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
+ * 版本号: 1.0.1
+ * 更新日期: 2025-11-27
  * 订单详情页面
  */
 const i18n = require('../../../utils/i18n');
+const PointsService = require('../../../services/pointsService');
 
 Page({
   data: {
@@ -70,7 +71,6 @@ Page({
    * @returns {void}
    */
   loadOrderDetail(id, done) {
-    console.log('加载订单详情，ID:', id);
     this.setData({ loading: true });
     const orderTimer = setTimeout(() => {
       const mockOrder = {
@@ -92,11 +92,16 @@ Page({
           trackingNumber: 'SF1234567890',
           shippingFee: '10.00'
         },
+        pointsDeduction: {
+          points: 500,
+          amount: '5.00'
+        },
+        finalAmount: '194.00',
         items: [
           {
             id: 1,
             name: i18n.translate('优质商品A'),
-            image: '/assets/images/product1.jpg',
+            image: '/images/placeholder.svg',
             price: '99.00',
             quantity: 1,
             specs: {
@@ -107,7 +112,7 @@ Page({
           {
             id: 2,
             name: i18n.translate('优质商品B'),
-            image: '/assets/images/product2.jpg',
+            image: '/images/placeholder.svg',
             price: '100.00',
             quantity: 1,
             specs: {
@@ -301,12 +306,64 @@ Page({
    * @returns {void}
    */
   buyAgain() {
-    const { items } = this.data.order;
-    console.log('再次购买商品:', items);
     // 实际项目中应该将商品添加到购物车
     wx.showToast({
       title: i18n.translate('已添加到购物车'),
       icon: 'success'
+    });
+  },
+
+  /**
+   * 申请退款
+   * @returns {void}
+   */
+  applyRefund() {
+    const { order } = this.data;
+    
+    wx.showModal({
+      title: i18n.translate('申请退款'),
+      content: i18n.translate('确定要申请退款吗？'),
+      success: (res) => {
+        if (res.confirm) {
+          this.setData({ loading: true });
+          
+          // 模拟退款处理
+          setTimeout(() => {
+            // 如果订单使用了积分抵扣，调用积分退款回退接口
+            if (order.pointsDeduction && order.pointsDeduction.points > 0) {
+              this.refundPoints(order.id, order.pointsDeduction.points);
+            }
+            
+            this.setData({ loading: false });
+            
+            wx.showToast({
+              title: i18n.translate('退款申请已提交'),
+              icon: 'success'
+            });
+            
+            // 刷新订单详情
+            this.loadOrderDetail(order.id);
+          }, 1000);
+        }
+      }
+    });
+  },
+
+  /**
+   * 积分退款回退
+   * @param {string} orderId - 订单ID
+   * @param {number} points - 回退积分数量
+   * @returns {void}
+   */
+  refundPoints(orderId, points) {
+    // 调用积分服务的退款回退接口
+    PointsService.refundPoints({
+      orderId: orderId,
+      points: points
+    }).then(result => {
+      // 积分退款回退成功，无需额外处理
+    }).catch(error => {
+      // 积分退款回退失败，可以考虑记录日志或其他处理
     });
   }
 });

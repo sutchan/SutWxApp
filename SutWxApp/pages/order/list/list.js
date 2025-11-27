@@ -102,14 +102,14 @@ Page({
             {
               id: 1,
               name: i18n.translate('优质商品A'),
-              image: '/assets/images/product1.jpg',
+              image: '/images/placeholder.svg',
               price: '99.00',
               quantity: 1
             },
             {
               id: 2,
               name: i18n.translate('优质商品B'),
-              image: '/assets/images/product2.jpg',
+              image: '/images/placeholder.svg',
               price: '100.00',
               quantity: 1
             }
@@ -125,7 +125,7 @@ Page({
             {
               id: 3,
               name: i18n.translate('优质商品C'),
-              image: '/assets/images/product3.jpg',
+              image: '/images/placeholder.svg',
               price: '79.00',
               quantity: 1
             }
@@ -141,7 +141,7 @@ Page({
             {
               id: 4,
               name: i18n.translate('优质商品D'),
-              image: '/assets/images/product4.jpg',
+              image: '/images/placeholder.svg',
               price: '129.00',
               quantity: 1
             }
@@ -188,7 +188,7 @@ Page({
             {
               id: 5,
               name: i18n.translate('优质商品E'),
-              image: '/assets/images/product5.jpg',
+              image: '/images/placeholder.svg',
               price: '89.00',
               quantity: 1
             }

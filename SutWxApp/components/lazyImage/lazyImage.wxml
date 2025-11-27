@@ -1,9 +1,10 @@
-/**
- * 文件名: lazyImage.wxml
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: lazyImage 页面结构文件
- */
+<!--
+文件名: lazyImage.wxml
+版本号: 1.0.0
+更新日期: 2025-11-24
+作者: Sut
+描述: 懒加载图片组件结构文件
+-->
 <!--components/lazyImage/lazyImage.wxml-->
 <image
   wx:if="{{lazyLoad && !show}}"

@@ -995,3 +995,39 @@ msgstr "Life is wonderful because of you"
 #: pages/user/login/login.js
 msgid "让美好触手可及"
 msgstr "Make beauty within reach"
+
+#: pages/article/detail.js
+msgid "article_detail.load_failed"
+msgstr "Article loading failed"
+
+#: pages/article/detail.js
+msgid "article_detail.missing_id"
+msgstr "Article ID cannot be empty"
+
+#: pages/article/detail.js
+msgid "article_detail.default_title"
+msgstr "Article Detail"
+
+#: pages/article/detail.js
+msgid "article_detail.share_title"
+msgstr "Share Article"
+
+#: pages/article/detail.js
+msgid "article_detail.retry"
+msgstr "Retry"
+
+#: pages/article/detail.js
+msgid "article_detail.copy_link"
+msgstr "Copy Link"
+
+#: pages/article/detail.js
+msgid "article_detail.share"
+msgstr "Share"
+
+#: pages/common.js
+msgid "common.copy_success"
+msgstr "Copy successful"
+
+#: pages/common.js
+msgid "common.copy_failed"
+msgstr "Copy failed"

@@ -2,8 +2,8 @@
  * 文件名: useStore.js
  * 版本号: 1.0.0
  * 更新日期: 2025-11-24
- * 状态管理辅助函数
- * 提供在页面和组件中使用store的便捷方法
+ * 作者: Sut
+ * 状态管理辅助函数，提供在页面和组件中使用store的便捷方法，支持状态映射和mutations绑定
  */
 
 const store = require('./store.js');

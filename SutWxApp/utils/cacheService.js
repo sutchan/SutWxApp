@@ -1,7 +1,8 @@
 /**
  * 文件名: cacheService.js
  * 版本号: 1.0.18
- * 更新日期: 2025-11-23
+ * 更新日期: 2025-11-24
+ * 作者: Sut
  * 描述: 缓存服务，提供统一的本地缓存管理功能，支持数据缓存、图片缓存和缓存策略
  */
 
@@ -603,7 +604,16 @@ class CacheService {
 // 导出缓存服务实例
 const cacheService = new CacheService();
 
-export default cacheService;
-
 // 导出常量
-export { CACHE_POLICY, CACHE_TYPE, EXPIRY_TIME };
+const instance = cacheService;
+
+// 导出实例和常量
+module.exports = {
+  instance,
+  CACHE_POLICY,
+  CACHE_TYPE,
+  EXPIRY_TIME
+};
+
+// 同时支持直接引用实例
+module.exports.default = cacheService;

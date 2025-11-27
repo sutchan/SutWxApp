@@ -1,35 +1,167 @@
-/**
+/*
  * 文件名: detail.wxss
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: detail 页面样式文件
+ * 版本号: 1.0.1
+ * 更新日期: 2025-11-24
+ * 作者: Sut
+ * 描述: 文章详情页面样式
  */
 /* pages/article/detail/detail.wxss */
 .container {
   padding: 20rpx;
+  min-height: 100vh;
+  background-color: #f5f5f5;
 }
 
 .loading-tip {
   text-align: center;
-  padding: 20rpx;
+  padding: 60rpx 20rpx;
   color: #999;
+  font-size: 32rpx;
+}
+
+/* 错误提示样式 */
+.error-container {
+  text-align: center;
+  padding: 80rpx 20rpx;
+}
+
+.error-icon {
+  font-size: 80rpx;
+  margin-bottom: 30rpx;
+}
+
+.error-message {
+  font-size: 32rpx;
+  color: #e74c3c;
+  margin-bottom: 40rpx;
+  padding: 0 20rpx;
+}
+
+.retry-button {
+  background-color: #3498db;
+  color: white;
+  border-radius: 10rpx;
+  font-size: 32rpx;
+  padding: 20rpx 60rpx;
+}
+
+.retry-button:active {
+  background-color: #2980b9;
+}
+
+/* 文章头部样式 */
+.article-header {
+  background-color: white;
+  padding: 30rpx;
+  border-radius: 10rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
 }
 
 .article-title {
-  font-size: 40rpx;
+  font-size: 44rpx;
   font-weight: bold;
   margin-bottom: 20rpx;
+  color: #333;
+  line-height: 1.3;
 }
 
 .article-meta {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20rpx;
   font-size: 24rpx;
   color: #999;
-  margin-bottom: 30rpx;
+  margin-bottom: 20rpx;
 }
 
+.article-category {
+  background-color: #e3f2fd;
+  color: #1976d2;
+  padding: 4rpx 16rpx;
+  border-radius: 40rpx;
+  font-size: 22rpx;
+}
+
+.article-stats {
+  display: flex;
+  gap: 30rpx;
+  font-size: 26rpx;
+  color: #666;
+  border-top: 1rpx solid #eee;
+  padding-top: 20rpx;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+/* 文章内容样式 */
 .article-content {
+  background-color: white;
+  padding: 30rpx;
+  border-radius: 10rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
   font-size: 32rpx;
-  line-height: 1.6;
+  line-height: 1.8;
+  color: #333;
+}
+
+.article-content rich-text {
+  line-height: 1.8;
+}
+
+/* 文章内容富文本样式 */
+.article-content :deep(p) {
+  margin-bottom: 20rpx;
+}
+
+.article-content :deep(img) {
+  max-width: 100%;
+  margin: 20rpx 0;
+  border-radius: 8rpx;
+}
+
+/* 操作按钮样式 */
+.article-actions {
+  background-color: white;
+  padding: 20rpx;
+  border-radius: 10rpx;
+  display: flex;
+  justify-content: space-around;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+.action-button {
+  flex: 1;
+  margin: 0 10rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f8f8;
+  border-radius: 10rpx;
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.2;
+}
+
+.action-button:active {
+  background-color: #e8e8e8;
+}
+
+.button-icon {
+  font-size: 44rpx;
+  margin-bottom: 8rpx;
+}
+
+/* 适配不同屏幕大小 */
+@media screen and (min-width: 768px) {
+  .container {
+    max-width: 800rpx;
+    margin: 0 auto;
+  }
 }

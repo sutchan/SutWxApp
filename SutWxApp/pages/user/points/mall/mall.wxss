@@ -254,8 +254,11 @@
   color: #333;
   margin-bottom: 5px;
   display: -webkit-box;
+  display: box;
   -webkit-box-orient: vertical;
+  box-orient: vertical;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   overflow: hidden;
 }
 
@@ -264,8 +267,11 @@
   color: #666;
   margin-bottom: 10px;
   display: -webkit-box;
+  display: box;
   -webkit-box-orient: vertical;
+  box-orient: vertical;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   overflow: hidden;
 }
 
@@ -457,8 +463,11 @@
   color: #333;
   margin-bottom: 4px;
   display: -webkit-box;
+  display: box;
   -webkit-box-orient: vertical;
+  box-orient: vertical;
   -webkit-line-clamp: 1;
+  line-clamp: 1;
   overflow: hidden;
 }
 

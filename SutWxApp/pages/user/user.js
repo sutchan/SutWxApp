@@ -133,7 +133,7 @@ createPage({
         break;
       case 'favorites':
         wx.navigateTo({
-          url: '/pages/user/favorite/favorite'
+          url: '/pages/user/favorites'
         });
         break;
       case 'points':

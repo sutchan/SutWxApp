@@ -101,21 +101,21 @@ Page(createPage(
     // 异步加载最新数据
     const timer = setTimeout(() => {
       const mockBanners = [
-        { id: 1, image: '/assets/images/banner1.jpg' },
-        { id: 2, image: '/assets/images/banner2.jpg' },
-        { id: 3, image: '/assets/images/banner3.jpg' }
+        { id: 1, image: '/images/placeholder.svg' },
+        { id: 2, image: '/images/placeholder.svg' },
+        { id: 3, image: '/images/placeholder.svg' }
       ];
       const mockCategories = [
-        { id: 1, name: i18n.translate('新品') || '新品', icon: '/assets/images/icon_new.png' },
-        { id: 2, name: i18n.translate('推荐') || '推荐', icon: '/assets/images/icon_recommend.png' },
-        { id: 3, name: i18n.translate('热卖') || '热卖', icon: '/assets/images/icon_hot.png' },
-        { id: 4, name: i18n.translate('分类') || '分类', icon: '/assets/images/icon_category.png' }
+        { id: 1, name: i18n.translate('新品') || '新品', icon: '/images/placeholder.svg' },
+        { id: 2, name: i18n.translate('推荐') || '推荐', icon: '/images/placeholder.svg' },
+        { id: 3, name: i18n.translate('热卖') || '热卖', icon: '/images/placeholder.svg' },
+        { id: 4, name: i18n.translate('分类') || '分类', icon: '/images/placeholder.svg' }
       ];
       const mockProducts = [
-        { id: 1, name: i18n.translate('商品A') || '商品A', image: '/assets/images/product1.jpg', price: '99.00' },
-        { id: 2, name: i18n.translate('商品B') || '商品B', image: '/assets/images/product2.jpg', price: '129.00' },
-        { id: 3, name: i18n.translate('商品C') || '商品C', image: '/assets/images/product3.jpg', price: '79.00' },
-        { id: 4, name: i18n.translate('商品D') || '商品D', image: '/assets/images/product4.jpg', price: '159.00' }
+        { id: 1, name: i18n.translate('商品A') || '商品A', image: '/images/placeholder.svg', price: '99.00' },
+        { id: 2, name: i18n.translate('商品B') || '商品B', image: '/images/placeholder.svg', price: '129.00' },
+        { id: 3, name: i18n.translate('商品C') || '商品C', image: '/images/placeholder.svg', price: '79.00' },
+        { id: 4, name: i18n.translate('商品D') || '商品D', image: '/images/placeholder.svg', price: '159.00' }
       ];
       
       // 预加载图片
@@ -259,7 +259,7 @@ Page(createPage(
    */
   goToUserCenter() {
     wx.navigateTo({
-      url: '/pages/user/index'
+      url: '/pages/user/user'
     });
   },
   
@@ -268,7 +268,7 @@ Page(createPage(
    */
   goToCart() {
     wx.navigateTo({
-      url: '/pages/cart/index'
+      url: '/pages/cart/cart'
     });
   }
 }));

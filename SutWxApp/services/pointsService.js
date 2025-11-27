@@ -221,6 +221,38 @@ class PointsService {
   static async getTransferRecords(options = {}) {
     return request.get('/points/transfer-records', options);
   }
+
+  /**
+   * 计算可抵扣积分
+   * @param {Object} data - 计算参数
+   * @param {number} data.orderAmount - 订单金额
+   * @returns {Promise<Object>} 可抵扣积分信息
+   */
+  static async calculateDeductiblePoints(data) {
+    return request.post('/points/calculate-deductible', data);
+  }
+
+  /**
+   * 使用积分抵扣
+   * @param {Object} data - 抵扣参数
+   * @param {string} data.orderId - 订单ID
+   * @param {number} data.points - 抵扣积分数量
+   * @returns {Promise<Object>} 抵扣结果
+   */
+  static async usePointsForDeduction(data) {
+    return request.post('/points/use-for-deduction', data);
+  }
+
+  /**
+   * 积分退款回退
+   * @param {Object} data - 回退参数
+   * @param {string} data.orderId - 订单ID
+   * @param {number} data.points - 回退积分数量
+   * @returns {Promise<Object>} 回退结果
+   */
+  static async refundPoints(data) {
+    return request.post('/points/refund', data);
+  }
 }
 
 module.exports = PointsService;

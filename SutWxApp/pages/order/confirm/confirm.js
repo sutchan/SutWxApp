@@ -1,10 +1,11 @@
 /**
  * 文件名: confirm.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
+ * 版本号: 1.0.1
+ * 更新日期: 2025-11-27
  * 订单确认页面
  */
 const i18n = require('../../../utils/i18n');
+const PointsService = require('../../../services/pointsService');
 
 Page({
   data: {
@@ -18,9 +19,27 @@ Page({
     remark: '',
     totalAmount: '0.00',
     shippingFee: '0.00',
+    finalAmount: '0.00',
     productTimer: null,
     addressTimer: null,
-    submitTimer: null
+    submitTimer: null,
+    userPoints: null,
+    maxDeductiblePoints: 0,
+    deductionPoints: 0,
+    deductionAmount: '0.00',
+    pointsTimer: null,
+    paymentMethods: [
+      {
+        id: 'wechat',
+        name: i18n.translate('微信支付'),
+        icon: '/images/wechat-pay.png'
+      },
+      {
+        id: 'alipay',
+        name: i18n.translate('支付宝'),
+        icon: '/images/alipay.png'
+      }
+    ]
   },
 
   /**
@@ -40,6 +59,7 @@ Page({
     }
     
     this.loadDefaultAddress();
+    this.loadUserPoints();
   },
 
   /**
@@ -57,6 +77,41 @@ Page({
     if (this.data.submitTimer) {
       clearTimeout(this.data.submitTimer);
     }
+    if (this.data.pointsTimer) {
+      clearTimeout(this.data.pointsTimer);
+    }
+  },
+
+  /**
+   * 加载用户积分信息
+   * @returns {void}
+   */
+  loadUserPoints() {
+    this.setData({ loading: true });
+    PointsService.getUserPoints()
+      .then(result => {
+        this.setData({
+          userPoints: result.data,
+          loading: false
+        });
+        
+        // 计算可抵扣积分上限
+        this.calculateDeductiblePoints();
+      })
+      .catch(error => {
+        console.error('获取用户积分失败:', error);
+        this.setData({ loading: false });
+        
+        // 出错时使用默认值
+        this.setData({
+          userPoints: {
+            available: 0,
+            total: 0,
+            expiring: 0
+          },
+          maxDeductiblePoints: 0
+        });
+      });
   },
 
   /**
@@ -79,7 +134,7 @@ Page({
       const mockProduct = {
         id: id,
         name: i18n.translate('优质商品'),
-        image: '/assets/images/product1.jpg',
+        image: '/images/placeholder.svg',
         price: '99.00',
         specs: {
           '颜色': i18n.translate('红色'),
@@ -99,9 +154,106 @@ Page({
         loading: false,
         productTimer: null
       });
+      
+      // 计算可抵扣积分上限
+      if (this.data.userPoints) {
+        this.calculateDeductiblePoints();
+      }
     }, 300);
     
     this.setData({ productTimer });
+  },
+
+  /**
+   * 计算可抵扣积分上限
+   * @returns {void}
+   */
+  calculateDeductiblePoints() {
+    const { totalAmount } = this.data;
+    
+    if (!totalAmount || parseFloat(totalAmount) <= 0) {
+      this.setData({
+        maxDeductiblePoints: 0,
+        deductionPoints: 0
+      });
+      this.calculateDeduction();
+      return;
+    }
+    
+    PointsService.calculateDeductiblePoints({
+      orderAmount: parseFloat(totalAmount)
+    })
+      .then(result => {
+        const { maxDeductiblePoints } = result.data;
+        this.setData({
+          maxDeductiblePoints,
+          deductionPoints: Math.min(this.data.deductionPoints, maxDeductiblePoints) // 确保当前抵扣积分不超过新的上限
+        });
+        this.calculateDeduction();
+      })
+      .catch(error => {
+        console.error('计算可抵扣积分失败:', error);
+        // 出错时默认使用用户可用积分的50%作为上限
+        const maxPoints = this.data.userPoints ? Math.floor(this.data.userPoints.available * 0.5) : 0;
+        this.setData({
+          maxDeductiblePoints: maxPoints,
+          deductionPoints: Math.min(this.data.deductionPoints, maxPoints)
+        });
+        this.calculateDeduction();
+      });
+  },
+
+  /**
+   * 计算积分抵扣金额
+   * @returns {void}
+   */
+  calculateDeduction() {
+    const { deductionPoints, totalAmount, shippingFee } = this.data;
+    
+    if (deductionPoints <= 0) {
+      this.setData({
+        deductionAmount: '0.00',
+        finalAmount: (parseFloat(totalAmount) + parseFloat(shippingFee)).toFixed(2)
+      });
+      return;
+    }
+    
+    // 使用默认计算方式（100积分抵扣1元），实际抵扣金额将在提交订单时由后端计算
+    const deductionAmount = (deductionPoints / 100).toFixed(2);
+    const total = parseFloat(totalAmount) + parseFloat(shippingFee);
+    const finalAmount = Math.max(0, total - parseFloat(deductionAmount)).toFixed(2);
+    
+    this.setData({
+      deductionAmount,
+      finalAmount
+    });
+  },
+
+  /**
+   * 积分滑块变化事件
+   * @param {Object} e - 事件对象
+   * @returns {void}
+   */
+  onPointsChange(e) {
+    const points = parseInt(e.detail.value);
+    this.setData({ deductionPoints: points });
+    this.calculateDeduction();
+  },
+
+  /**
+   * 积分输入框变化事件
+   * @param {Object} e - 事件对象
+   * @returns {void}
+   */
+  onPointsInput(e) {
+    let points = parseInt(e.detail.value) || 0;
+    const { maxDeductiblePoints } = this.data;
+    
+    // 确保积分不超过最大可抵扣积分
+    points = Math.min(Math.max(0, points), maxDeductiblePoints);
+    
+    this.setData({ deductionPoints: points });
+    this.calculateDeduction();
   },
 
   /**
@@ -164,7 +316,7 @@ Page({
    * @returns {void}
    */
   submitOrder() {
-    const { product, quantity, address, paymentMethod, remark } = this.data;
+    const { product, quantity, address, paymentMethod, remark, deductionPoints } = this.data;
     
     // 检查是否选择了地址
     if (!address) {
@@ -199,10 +351,13 @@ Page({
       remark: remark,
       totalAmount: this.data.totalAmount,
       shippingFee: this.data.shippingFee,
-      finalAmount: this.data.finalAmount
+      finalAmount: this.data.finalAmount,
+      pointsDeduction: {
+        points: deductionPoints,
+        amount: this.data.deductionAmount
+      }
     };
     
-    console.log('提交订单数据:', orderData);
     this.setData({ loading: true });
     
     // 实际项目中应该调用API提交订单
@@ -211,6 +366,11 @@ Page({
       
       // 模拟订单提交成功
       const orderId = 'ORD' + new Date().getTime();
+      
+      // 如果使用了积分抵扣，调用积分抵扣API
+      if (deductionPoints > 0) {
+        this.usePointsForDeduction(orderId, deductionPoints);
+      }
       
       wx.showToast({
         title: i18n.translate('订单提交成功'),
@@ -230,5 +390,23 @@ Page({
     }, 1000);
     
     this.setData({ submitTimer });
+  },
+
+  /**
+   * 使用积分抵扣
+   * @param {string} orderId - 订单ID
+   * @param {number} points - 抵扣积分数量
+   * @returns {void}
+   */
+  usePointsForDeduction(orderId, points) {
+    // 调用积分服务的抵扣接口
+    PointsService.usePointsForDeduction({
+      orderId: orderId,
+      points: points
+    }).then(result => {
+      // 积分抵扣成功，无需额外处理
+    }).catch(error => {
+      // 积分抵扣失败，可以考虑回滚订单或其他处理
+    });
   }
 });

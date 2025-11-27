@@ -1,7 +1,8 @@
 /**
  * 文件名: ratingService.js
  * 版本号: 1.0.0
- * 更新日期: 2025-11-23
+ * 更新日期: 2025-11-24
+ * 作者: Sut
  * 描述: 评价服务
  */
 
@@ -11,11 +12,11 @@ const request = require('../utils/request');
  * 获取商品评价列表
  * @param {Object} options - 查询参数
  * @param {string} options.productId - 商品ID
- * @param {number} options.page - 页码，默认为1
- * @param {number} options.pageSize - 每页数量，默认为20
- * @param {string} options.sort - 排序方式：default/newest/highest/lowest
- * @param {number} options.rating - 评分筛选：1-5星
- * @param {boolean} options.hasImage - 是否有图片
+ * @param {number} [options.page] - 页码，默认为1 (可选)
+ * @param {number} [options.pageSize] - 每页数量，默认为20 (可选)
+ * @param {string} [options.sort] - 排序方式：default/newest/highest/lowest (可选)
+ * @param {number} [options.rating] - 评分筛选：1-5星 (可选)
+ * @param {boolean} [options.hasImage] - 是否有图片 (可选)
  * @returns {Promise<Object>} 评价列表和分页信息
  */
 async function getProductRatings(options = {}) {
@@ -82,9 +83,9 @@ async function getRatingDetail(ratingId) {
  * @param {string} data.orderId - 订单ID
  * @param {number} data.rating - 评分 1-5
  * @param {string} data.content - 评价内容
- * @param {Array} data.images - 评价图片URL数组
- * @param {Array} data.tags - 评价标签数组
- * @param {boolean} data.anonymous - 是否匿名评价
+ * @param {Array} [data.images] - 评价图片URL数组 (可选)
+ * @param {Array} [data.tags] - 评价标签数组 (可选)
+ * @param {boolean} [data.anonymous] - 是否匿名评价 (可选)
  * @returns {Promise<Object>} 提交结果
  */
 async function submitProductRating(data) {
@@ -196,7 +197,7 @@ async function unlikeRating(ratingId) {
  * 举报评价
  * @param {string} ratingId - 评价ID
  * @param {string} reason - 举报原因
- * @param {string} description - 举报描述
+ * @param {string} [description] - 举报描述 (可选)
  * @returns {Promise<Object>} 操作结果
  */
 async function reportRating(ratingId, reason, description = '') {
@@ -241,8 +242,8 @@ async function replyRating(ratingId, content) {
 /**
  * 获取评价回复列表
  * @param {string} ratingId - 评价ID
- * @param {number} page - 页码，默认为1
- * @param {number} pageSize - 每页数量，默认为20
+ * @param {number} [page] - 页码，默认为1 (可选)
+ * @param {number} [pageSize] - 每页数量，默认为20 (可选)
  * @returns {Promise<Object>} 回复列表和分页信息
  */
 async function getRatingReplies(ratingId, page = 1, pageSize = 20) {
@@ -258,10 +259,10 @@ async function getRatingReplies(ratingId, page = 1, pageSize = 20) {
 /**
  * 获取用户评价列表
  * @param {Object} options - 查询参数
- * @param {string} options.userId - 用户ID，不传则获取当前用户
- * @param {number} options.page - 页码，默认为1
- * @param {number} options.pageSize - 每页数量，默认为20
- * @param {string} options.type - 评价类型：all/good/medium/bad
+ * @param {string} [options.userId] - 用户ID，不传则获取当前用户 (可选)
+ * @param {number} [options.page] - 页码，默认为1 (可选)
+ * @param {number} [options.pageSize] - 每页数量，默认为20 (可选)
+ * @param {string} [options.type] - 评价类型：all/good/medium/bad (可选)
  * @returns {Promise<Object>} 评价列表和分页信息
  */
 async function getUserRatings(options = {}) {
@@ -312,11 +313,11 @@ async function deleteRating(ratingId) {
  * 修改自己的评价
  * @param {string} ratingId - 评价ID
  * @param {Object} data - 修改数据
- * @param {number} data.rating - 评分 1-5
- * @param {string} data.content - 评价内容
- * @param {Array} data.images - 评价图片URL数组
- * @param {Array} data.tags - 评价标签数组
- * @param {boolean} data.anonymous - 是否匿名评价
+ * @param {number} [data.rating] - 评分 1-5 (可选)
+ * @param {string} [data.content] - 评价内容 (可选)
+ * @param {Array} [data.images] - 评价图片URL数组 (可选)
+ * @param {Array} [data.tags] - 评价标签数组 (可选)
+ * @param {boolean} [data.anonymous] - 是否匿名评价 (可选)
  * @returns {Promise<Object>} 操作结果
  */
 async function updateRating(ratingId, data) {

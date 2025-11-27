@@ -63,7 +63,8 @@ function registerGlobalComponents(app) {
   try {
     components.forEach(comp => {
       if (comp.global) {
-        app.component(comp.name, comp.path);
+        const componentConfig = require(comp.path);
+        app.component(comp.name, componentConfig);
       }
     });
     console.log('全局组件注册完成');

@@ -5,7 +5,7 @@
  * 描述: 认证服务，处理用户登录、登出、会话管理等
  */
 
-const { request } = require('../utils/request');
+const Request = require('../utils/request');
 const TOKEN_KEY = 'authToken';
 
 const authService = {
@@ -85,9 +85,7 @@ const authService = {
     }
     
     try {
-      const response = await request({
-        url: '/user/favorites',
-        method: 'GET',
+      const response = await Request.get('/user/favorites', {}, {
         header: { Authorization: `Bearer ${token}` }
       });
       
@@ -108,9 +106,7 @@ const authService = {
     }
     
     try {
-      const response = await request({
-        url: '/user/addresses',
-        method: 'GET',
+      const response = await Request.get('/user/addresses', {}, {
         header: { Authorization: `Bearer ${token}` }
       });
       
@@ -132,10 +128,7 @@ const authService = {
     }
     
     try {
-      const response = await request({
-        url: '/user/addresses',
-        method: 'POST',
-        data: address,
+      const response = await Request.post('/user/addresses', address, {
         header: { Authorization: `Bearer ${token}` }
       });
       
@@ -167,10 +160,7 @@ const authService = {
     }
     
     try {
-      const response = await request({
-        url: `/user/addresses/${addressId}`,
-        method: 'PUT',
-        data: address,
+      const response = await Request.put(`/user/addresses/${addressId}`, address, {
         header: { Authorization: `Bearer ${token}` }
       });
       
@@ -201,9 +191,7 @@ const authService = {
     }
     
     try {
-      const response = await request({
-        url: `/user/addresses/${addressId}`,
-        method: 'DELETE',
+      const response = await Request.delete(`/user/addresses/${addressId}`, {}, {
         header: { Authorization: `Bearer ${token}` }
       });
       

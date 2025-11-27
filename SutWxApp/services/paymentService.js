@@ -1,7 +1,8 @@
 /**
  * 文件名: paymentService.js
  * 版本号: 1.0.0
- * 更新日期: 2025-11-23
+ * 更新日期: 2025-11-24
+ * 作者: Sut
  * 描述: 支付服务
  */
 
@@ -13,9 +14,9 @@ class PaymentService {
    * @param {Object} data - 支付数据
    * @param {Array} data.items - 商品列表
    * @param {number} data.totalAmount - 总金额
-   * @param {string} [data.couponId] - 优惠券ID
-   * @param {string} [data.addressId] - 收货地址ID
-   * @param {string} [data.remark] - 订单备注
+   * @param {string} [data.couponId] - 优惠券ID (可选)
+   * @param {string} [data.addressId] - 收货地址ID (可选)
+   * @param {string} [data.remark] - 订单备注 (可选)
    * @returns {Promise<Object>} 创建结果
    */
   static async createPayment(data) {
@@ -36,8 +37,8 @@ class PaymentService {
    * @param {Object} data - 支付参数
    * @param {string} data.orderId - 订单ID
    * @param {string} data.paymentMethod - 支付方式
-   * @param {string} [data.returnUrl] - 支付成功返回URL
-   * @param {string} [data.notifyUrl] - 支付结果通知URL
+   * @param {string} [data.returnUrl] - 支付成功返回URL (可选)
+   * @param {string} [data.notifyUrl] - 支付结果通知URL (可选)
    * @returns {Promise<Object>} 支付请求结果
    */
   static async initiatePayment(data) {

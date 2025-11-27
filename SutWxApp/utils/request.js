@@ -2,6 +2,7 @@
  * 文件名: request.js
  * 版本号: 1.1.0
  * 更新日期: 2025-11-25
+ * 作者: Sut
  * 描述: 网络请求工具类，集成安全验证和离线缓存
  */
 
@@ -18,7 +19,7 @@ const API_CONFIG = {
   USE_TEST: false, // 是否使用测试环境
   TIMEOUT: 30000, // 请求超时时间
   RETRY_COUNT: 3, // 重试次数
-  SECRET_KEY: 'your_secret_key_here' // 签名密钥（生产环境应从安全存储获取）
+  SECRET_KEY: wx.getStorageSync('api_secret_key') || '' // 签名密钥（从安全存储获取，生产环境必填）
 };
 
 /**
@@ -26,30 +27,19 @@ const API_CONFIG = {
  */
 class Request {
   /**
-   * 发起API请求
-   * @param {Object} options - 请求选项
-   * @param {string} options.url - 请求URL
-   * @param {string} options.method - 请求方法
-   * @param {Object} options.data - 请求数据
-   * @param {Object} options.header - 请求头
-   * @param {boolean} options.needAuth - 是否需要认证
-   * @param {boolean} options.needSign - 是否需要签名
-   * @returns {Promise} 请求结果
-   */
-  /**
-   * 发起API请求
-   * @param {Object} options - 请求选项
-   * @param {string} options.url - 请求URL
-   * @param {string} options.method - 请求方法
-   * @param {Object} options.data - 请求数据
-   * @param {Object} options.header - 请求头
-   * @param {boolean} options.needAuth - 是否需要认证
-   * @param {boolean} options.needSign - 是否需要签名
-   * @param {Object} options.cache - 缓存配置
-   * @param {string} options.cache.policy - 缓存策略: 'NETWORK_FIRST', 'CACHE_FIRST', 'STALE_WHILE_REVALIDATE', 'ONLY_NETWORK', 'ONLY_CACHE'
-   * @param {number} options.cache.maxAge - 缓存最大生命周期（毫秒）
-   * @returns {Promise} 请求结果
-   */
+ * 发起API请求
+ * @param {Object} options - 请求选项
+ * @param {string} options.url - 请求URL
+ * @param {string} options.method - 请求方法
+ * @param {Object} options.data - 请求数据
+ * @param {Object} options.header - 请求头
+ * @param {boolean} options.needAuth - 是否需要认证
+ * @param {boolean} options.needSign - 是否需要签名
+ * @param {Object} options.cache - 缓存配置
+ * @param {string} options.cache.policy - 缓存策略: 'NETWORK_FIRST', 'CACHE_FIRST', 'STALE_WHILE_REVALIDATE', 'ONLY_NETWORK', 'ONLY_CACHE'
+ * @param {number} options.cache.maxAge - 缓存最大生命周期（毫秒）
+ * @returns {Promise} 请求结果
+ */
   static async request(options) {
     const {
       url,
@@ -244,16 +234,11 @@ class Request {
   }
   
   /**
-   * 获取认证令牌
-   * @private
-   * @returns {string|null} 令牌
-   */
-  /**
-   * 生成缓存键
-   * @private
-   * @param {Object} requestOptions - 请求选项
-   * @returns {string} 缓存键
-   */
+ * 生成缓存键
+ * @private
+ * @param {Object} requestOptions - 请求选项
+ * @returns {string} 缓存键
+ */
   static _generateCacheKey(requestOptions) {
     const { url, data, method } = requestOptions;
     // 将URL和数据序列化，生成唯一的缓存键
@@ -261,6 +246,11 @@ class Request {
     return `${method}:${url}:${dataString}`;
   }
   
+  /**
+   * 获取认证令牌
+   * @private
+   * @returns {string|null} 令牌
+   */
   static _getAuthToken() {
     try {
       // 从store中获取token
@@ -353,18 +343,11 @@ class Request {
   }
   
   /**
-   * 上传文件
-   * @param {string} url - 上传URL
-   * @param {string} filePath - 文件路径
-   * @param {Object} options - 其他选项
-   * @returns {Promise} 上传结果
-   */
-  /**
-   * 清除特定URL的缓存
-   * @param {string} url - 请求URL
-   * @param {Object} data - 请求数据（可选）
-   * @returns {Promise<boolean>} 是否清除成功
-   */
+ * 清除特定URL的缓存
+ * @param {string} url - 请求URL
+ * @param {Object} data - 请求数据（可选）
+ * @returns {Promise<boolean>} 是否清除成功
+ */
   static async clearCache(url, data = {}) {
     if (!cacheService) return false;
     
@@ -387,6 +370,13 @@ class Request {
     return await cacheService.clear('request');
   }
   
+  /**
+   * 上传文件
+   * @param {string} url - 上传URL
+   * @param {string} filePath - 文件路径
+   * @param {Object} options - 其他选项
+   * @returns {Promise} 上传结果
+   */
   static uploadFile(url, filePath, options = {}) {
     const {
       name = 'file',

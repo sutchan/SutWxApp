@@ -128,8 +128,11 @@
   margin-bottom: 8rpx;
   font-weight: bold;
   display: -webkit-box;
+  display: box;
   -webkit-box-orient: vertical;
+  box-orient: vertical;
   -webkit-line-clamp: 1;
+  line-clamp: 1;
   overflow: hidden;
 }
 
@@ -138,8 +141,11 @@
   color: #666;
   margin-bottom: 8rpx;
   display: -webkit-box;
+  display: box;
   -webkit-box-orient: vertical;
+  box-orient: vertical;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   overflow: hidden;
 }
 

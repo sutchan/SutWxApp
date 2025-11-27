@@ -995,3 +995,30 @@ msgstr "生活因您而精彩"
 #: pages/user/login/login.js
 msgid "让美好触手可及"
 msgstr "让美好触手可及"
+
+msgid "article_detail.load_failed"
+msgstr "加载文章失败"
+
+msgid "article_detail.missing_id"
+msgstr "文章ID不能为空"
+
+msgid "article_detail.default_title"
+msgstr "文章详情"
+
+msgid "article_detail.share_title"
+msgstr "分享文章"
+
+msgid "article_detail.retry"
+msgstr "重试"
+
+msgid "article_detail.copy_link"
+msgstr "复制链接"
+
+msgid "article_detail.share"
+msgstr "分享"
+
+msgid "common.copy_success"
+msgstr "复制成功"
+
+msgid "common.copy_failed"
+msgstr "复制失败"

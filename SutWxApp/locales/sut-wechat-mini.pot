@@ -878,6 +878,42 @@ msgstr ""
 msgid "让美好触手可及"
 msgstr ""
 
+#: components/article-detail/article-detail.js
+msgid "article_detail.load_failed"
+msgstr "加载文章失败"
+
+#: components/article-detail/article-detail.js
+msgid "article_detail.missing_id"
+msgstr "文章ID不能为空"
+
+#: components/article-detail/article-detail.js
+msgid "article_detail.default_title"
+msgstr "文章详情"
+
+#: components/article-detail/article-detail.js
+msgid "article_detail.share_title"
+msgstr "分享文章"
+
+#: components/article-detail/article-detail.js
+msgid "article_detail.retry"
+msgstr "重试"
+
+#: components/article-detail/article-detail.js
+msgid "article_detail.copy_link"
+msgstr "复制链接"
+
+#: components/article-detail/article-detail.js
+msgid "article_detail.share"
+msgstr "分享"
+
+#: components/common/common.js
+msgid "common.copy_success"
+msgstr "复制成功"
+
+#: components/common/common.js
+msgid "common.copy_failed"
+msgstr "复制失败"
+
 #: pages/index/index.js
 msgid "欢迎使用 SutWxApp"
 msgstr ""

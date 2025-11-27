@@ -99,9 +99,9 @@ Page({
         price: '99.00',
         originalPrice: '129.00',
         images: [
-          '/assets/images/product1.jpg',
-          '/assets/images/product2.jpg',
-          '/assets/images/product3.jpg'
+          '/images/placeholder.svg',
+          '/images/placeholder.svg',
+          '/images/placeholder.svg'
         ],
         specs: [
           {
@@ -157,18 +157,18 @@ Page({
         {
           id: 1,
           user: {
-            avatar: '/assets/images/avatar1.jpg',
+            avatar: '/images/default-avatar.png',
             name: i18n.translate('用户A')
           },
           rating: 5,
           content: i18n.translate('商品质量很好，非常满意！'),
-          images: ['/assets/images/review1.jpg'],
+          images: ['/images/placeholder.svg'],
           createTime: '2023-10-01'
         },
         {
           id: 2,
           user: {
-            avatar: '/assets/images/avatar2.jpg',
+            avatar: '/images/default-avatar.png',
             name: i18n.translate('用户B')
           },
           rating: 4,
@@ -196,9 +196,9 @@ Page({
     console.log('加载相关商品，当前商品ID:', id);
     const relatedProductsTimer = setTimeout(() => {
       const mockRelatedProducts = [
-        { id: 1, name: i18n.translate('相关商品A'), image: '/assets/images/product4.jpg', price: '89.00' },
-        { id: 2, name: i18n.translate('相关商品B'), image: '/assets/images/product5.jpg', price: '109.00' },
-        { id: 3, name: i18n.translate('相关商品C'), image: '/assets/images/product6.jpg', price: '79.00' }
+        { id: 1, name: i18n.translate('相关商品A'), image: '/images/placeholder.svg', price: '89.00' },
+        { id: 2, name: i18n.translate('相关商品B'), image: '/images/placeholder.svg', price: '109.00' },
+        { id: 3, name: i18n.translate('相关商品C'), image: '/images/placeholder.svg', price: '79.00' }
       ];
 
       this.setData({ 

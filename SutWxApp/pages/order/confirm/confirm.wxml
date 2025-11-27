@@ -1,0 +1,152 @@
+<!--
+文件名: confirm.wxml
+版本号: 1.0.0
+更新日期: 2025-11-27
+描述: 订单确认页面模板
+-->
+<view class="order-confirm">
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="loading-container">
+    <view class="loading"></view>
+    <text>{{i18n.translate('加载中')}}</text>
+  </view>
+
+  <!-- 商品信息 -->
+  <view class="section" wx:if="{{!loading && product}}">
+    <view class="section-title">{{i18n.translate('商品信息')}}</view>
+    <view class="product-item">
+      <image class="product-image" src="{{product.image}}" mode="aspectFill"></image>
+      <view class="product-info">
+        <text class="product-name">{{product.name}}</text>
+        <view class="product-specs" wx:for="{{product.specs}}" wx:key="*this">
+          <text class="spec-key">{{item[0]}}:</text>
+          <text class="spec-value">{{item[1]}}</text>
+        </view>
+        <view class="product-price">
+          <text class="price">¥{{product.price}}</text>
+          <text class="quantity">x{{quantity}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 收货地址 -->
+  <view class="section" bindtap="goToAddressSelection">
+    <view class="section-title">{{i18n.translate('收货地址')}}</view>
+    <view class="address-item" wx:if="{{address}}">
+      <view class="address-info">
+        <view class="address-header">
+          <text class="name">{{address.name}}</text>
+          <text class="phone">{{address.phone}}</text>
+        </view>
+        <text class="address-detail">{{address.province}}{{address.city}}{{address.district}}{{address.detail}}</text>
+      </view>
+      <image class="arrow" src="/images/arrow-right.svg" mode="aspectFit"></image>
+    </view>
+    <view class="no-address" wx:else>
+      <text>{{i18n.translate('请选择收货地址')}}</text>
+      <image class="arrow" src="/images/arrow-right.svg" mode="aspectFit"></image>
+    </view>
+  </view>
+
+  <!-- 支付方式 -->
+  <view class="section">
+    <view class="section-title">{{i18n.translate('支付方式')}}</view>
+    <view class="payment-methods">
+      <view class="method-item" 
+            wx:for="{{paymentMethods}}" 
+            wx:key="id"
+            data-method="{{item.id}}"
+            bindtap="selectPaymentMethod"
+            class="{{paymentMethod === item.id ? 'selected' : ''}}">
+        <image class="method-icon" src="{{item.icon}}" mode="aspectFit"></image>
+        <text class="method-name">{{item.name}}</text>
+        <image class="check-icon" src="/images/check.svg" mode="aspectFit" wx:if="{{paymentMethod === item.id}}"></image>
+      </view>
+    </view>
+  </view>
+
+  <!-- 积分抵扣 -->
+  <view class="section" wx:if="{{userPoints && userPoints.available > 0}}">
+    <view class="section-title">{{i18n.translate('积分抵扣')}}</view>
+    <view class="points-deduction">
+      <view class="points-info">
+        <text>{{i18n.translate('可用积分')}}</text>
+        <text class="points-available">{{userPoints.available}} {{i18n.translate('积分')}}</text>
+      </view>
+      <view class="points-control">
+        <view class="points-slider-container">
+          <slider 
+            min="0" 
+            max="{{maxDeductiblePoints}}" 
+            value="{{deductionPoints}}" 
+            bindchange="onPointsChange"
+            activeColor="#ff6b35"
+            backgroundColor="#e0e0e0"
+          />
+        </view>
+        <view class="points-input-container">
+          <text class="points-label">{{i18n.translate('使用积分')}}</text>
+          <input 
+            type="number" 
+            value="{{deductionPoints}}" 
+            bindinput="onPointsInput"
+            min="0"
+            max="{{maxDeductiblePoints}}"
+            class="points-input"
+          />
+        </view>
+      </view>
+      <view class="deduction-amount">
+        <text>{{i18n.translate('抵扣金额')}}</text>
+        <text class="amount">-¥{{deductionAmount}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 备注 -->
+  <view class="section">
+    <view class="section-title">{{i18n.translate('订单备注')}}</view>
+    <textarea 
+      placeholder="{{i18n.translate('请输入订单备注')}}"
+      value="{{remark}}"
+      bindinput="updateRemark"
+      class="remark-input"
+      maxlength="200"
+    ></textarea>
+  </view>
+
+  <!-- 价格明细 -->
+  <view class="section" wx:if="{{!loading && product}}">
+    <view class="section-title">{{i18n.translate('价格明细')}}</view>
+    <view class="price-detail">
+      <view class="price-item">
+        <text>{{i18n.translate('商品金额')}}</text>
+        <text>¥{{totalAmount}}</text>
+      </view>
+      <view class="price-item">
+        <text>{{i18n.translate('运费')}}</text>
+        <text>¥{{shippingFee}}</text>
+      </view>
+      <view class="price-item" wx:if="{{deductionAmount > 0}}">
+        <text>{{i18n.translate('积分抵扣')}}</text>
+        <text class="deduction">-¥{{deductionAmount}}</text>
+      </view>
+      <view class="price-item total">
+        <text class="total-label">{{i18n.translate('实付金额')}}</text>
+        <text class="total-amount">¥{{finalAmount}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 提交按钮 -->
+  <view class="submit-container" wx:if="{{!loading && product}}">
+    <view class="total-price">
+      <text>{{i18n.translate('实付金额')}}：</text>
+      <text class="amount">¥{{finalAmount}}</text>
+    </view>
+    <button class="submit-btn" bindtap="submitOrder" type="primary" disabled="{{!address}}">
+      {{i18n.translate('提交订单')}}
+    </button>
+  </view>
+</view>

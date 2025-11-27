@@ -2,7 +2,8 @@
  * 文件名: webSocketService.js
  * 版本号: 1.0.0
  * 更新日期: 2025-11-25
- * 描述: WebSocket服务，用于实时消息推送
+ * 作者: Sut
+ * WebSocket服务，用于实时消息推送，实现连接管理、消息处理和心跳检测
  */
 
 const store = require('./store.js');
@@ -265,7 +266,7 @@ class WebSocketService {
    * @param {Object} message - 消息对象
    */
   _handleMessage(message) {
-    const { type, data, timestamp } = message;
+    const { type, data } = message;
     
     switch (type) {
       case WS_CONFIG.MSG_TYPE.HEARTBEAT_RESPONSE:
@@ -275,9 +276,9 @@ class WebSocketService {
       case WS_CONFIG.MSG_TYPE.USER_MESSAGE:
       case WS_CONFIG.MSG_TYPE.SYSTEM_NOTIFICATION:
         // 通知对应的消息监听器
-        this._notifyListeners(type, data, message);
+        this._notifyListeners(type, data);
         // 通用消息监听器
-        this._notifyListeners('message', { type, data, timestamp });
+        this._notifyListeners('message', { type, data });
         break;
         
       case WS_CONFIG.MSG_TYPE.ERROR:

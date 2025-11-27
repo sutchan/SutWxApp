@@ -2,7 +2,8 @@
  * 文件名: app.js
  * 版本号: 1.0.1
  * 更新日期: 2025-11-24
- * 描述: 小程序入口文件
+ * 作者: Sut
+ * 小程序入口文件，负责初始化全局服务、状态管理和组件注册
  */
 
 const i18n = require('./utils/i18n');
@@ -97,20 +98,6 @@ App({
   },
 
   /**
-   * 应用显示回调
-   * @returns {void}
-   */
-  onShow() {
-    // 预留：可在此时上报数据或拉取全局配置
-  },
-  
-  /**
-   * 应用隐藏回调
-   * @returns {void}
-   */
-
-
-  /**
    * 初始化全局组件
    */
   initComponents: function() {
@@ -143,7 +130,14 @@ App({
     } catch (error) {
       console.error('缓存服务初始化失败:', error);
     }
-  }
+  },
+  
+  /**
+   * 初始化国际化
+   */
+  initI18n: function() {
+    this.initLanguage();
+  },
   
   /**
    * 初始化WebSocket服务
@@ -164,7 +158,7 @@ App({
     } catch (error) {
       console.error('WebSocket初始化失败:', error);
     }
-  }
+  },
   
   /**
    * 注册WebSocket事件监听器
@@ -188,17 +182,17 @@ App({
     });
     
     // 监听用户消息
-    webSocketService.on(WS_CONFIG.MSG_TYPE.USER_MESSAGE, (data, message) => {
+    webSocketService.on(WS_CONFIG.MSG_TYPE.USER_MESSAGE, (data) => {
       console.log('收到用户消息:', data);
       // 处理用户消息，例如更新UI或存储到消息列表
-      this._handleUserMessage(data, message);
+      this._handleUserMessage(data);
     });
     
     // 监听系统通知
-    webSocketService.on(WS_CONFIG.MSG_TYPE.SYSTEM_NOTIFICATION, (data, message) => {
+    webSocketService.on(WS_CONFIG.MSG_TYPE.SYSTEM_NOTIFICATION, (data) => {
       console.log('收到系统通知:', data);
       // 处理系统通知，例如显示通知提示
-      this._handleSystemNotification(data, message);
+      this._handleSystemNotification(data);
     });
     
     // 监听重连尝试达到最大次数
@@ -206,15 +200,14 @@ App({
       console.warn(`WebSocket重连失败，已达到最大尝试次数(${info.maxAttempts})`);
       // 可以在这里添加用户提示，例如提示用户检查网络连接
     });
-  }
+  },
   
   /**
    * 处理用户消息
    * @private
    * @param {Object} data - 消息数据
-   * @param {Object} message - 完整消息对象
    */
-  _handleUserMessage(data, message) {
+  _handleUserMessage(data) {
     // 根据消息类型进行不同处理
     const { type, content, sender } = data;
     
@@ -227,15 +220,14 @@ App({
     
     // 这里可以添加更多的消息处理逻辑
     // 例如更新消息列表、存储消息等
-  }
+  },
   
   /**
    * 处理系统通知
    * @private
    * @param {Object} data - 通知数据
-   * @param {Object} message - 完整消息对象
    */
-  _handleSystemNotification(data, message) {
+  _handleSystemNotification(data) {
     const { title, content, priority = 'normal' } = data;
     
     // 根据通知优先级进行不同处理
@@ -260,42 +252,42 @@ App({
   },
   
   /**
- * 全局错误处理
- * @param {string} _err - 错误信息
- */
-onError(_err) {
-  console.error('全局错误:', _err);
-}
+   * 全局错误处理
+   * @param {string} _err - 错误信息
+   */
+  onError(_err) {
+    console.error('全局错误:', _err);
+  },
   
-/**
- * 应用显示时的处理
- */
-onShow() {
-  // 应用显示时，如果已登录且WebSocket未连接，尝试重新连接
-  const userInfo = store.getState('user.userInfo');
-  const token = store.getState('user.token');
+  /**
+   * 应用显示时的处理
+   */
+  onShow() {
+    // 应用显示时，如果已登录且WebSocket未连接，尝试重新连接
+    const userInfo = store.getState('user.userInfo');
+    const token = store.getState('user.token');
+    
+    if (userInfo && token && !this.globalData.websocketConnected) {
+      console.log('应用显示，尝试重新连接WebSocket');
+      this.initWebSocket();
+    }
+  },
   
-  if (userInfo && token && !this.globalData.websocketConnected) {
-    console.log('应用显示，尝试重新连接WebSocket');
-    this.initWebSocket();
+  /**
+   * 应用隐藏时的处理
+   */
+  onHide() {
+    // 应用隐藏时，可以选择是否保持WebSocket连接
+    // 这里我们保持连接，以接收重要通知
+    // 如果需要断开连接，可以取消注释下面的代码
+    // webSocketService.disconnect(1000, '应用隐藏');
+  },
+  
+  /**
+   * 获取WebSocket服务实例
+   * @returns {Object} WebSocket服务实例
+   */
+  getWebSocketService() {
+    return webSocketService;
   }
-}
-  
-/**
- * 应用隐藏时的处理
- */
-onHide() {
-  // 应用隐藏时，可以选择是否保持WebSocket连接
-  // 这里我们保持连接，以接收重要通知
-  // 如果需要断开连接，可以取消注释下面的代码
-  // webSocketService.disconnect(1000, '应用隐藏');
-}
-  
-/**
- * 获取WebSocket服务实例
- * @returns {WebSocketService} WebSocket服务实例
- */
-getWebSocketService() {
-  return webSocketService;
-}
 });

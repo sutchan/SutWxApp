@@ -1,9 +1,15 @@
-/**
- * 文件名: detail.json
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: detail JSON 配置文件
- */
+//
+// 文件名: detail.json
+// 版本号: 1.0.1
+// 更新日期: 2025-11-24
+// 作者: Sut
+// 描述: 文章详情页面配置
+//
 {
-  "navigationBarTitleText": "文章详情"
+  "navigationBarTitleText": "文章详情",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark",
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black",
+  "onReachBottomDistance": 50
 }
