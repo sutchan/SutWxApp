@@ -1,7 +1,7 @@
 /**
  * 文件名: request.js
- * 版本号: 1.1.0
- * 更新日期: 2025-11-25
+ * 版本号: 1.1.1
+ * 更新日期: 2025-11-27
  * 作者: Sut
  * 描述: 网络请求工具类，集成安全验证和离线缓存
  */
@@ -19,8 +19,26 @@ const API_CONFIG = {
   USE_TEST: false, // 是否使用测试环境
   TIMEOUT: 30000, // 请求超时时间
   RETRY_COUNT: 3, // 重试次数
-  SECRET_KEY: wx.getStorageSync('api_secret_key') || '' // 签名密钥（从安全存储获取，生产环境必填）
+  SECRET_KEY: '' // 签名密钥，初始化时为空，通过安全机制获取
 };
+
+// 初始化API密钥
+(function initApiSecretKey() {
+  try {
+    // 从安全存储获取API密钥
+    const secretKey = wx.getStorageSync('api_secret_key');
+    if (secretKey) {
+      API_CONFIG.SECRET_KEY = secretKey;
+    } else {
+      // 生产环境下必须配置API密钥
+      if (!API_CONFIG.USE_TEST) {
+        console.error('API密钥未配置，请在安全存储中设置api_secret_key');
+      }
+    }
+  } catch (error) {
+    console.error('获取API密钥失败:', error);
+  }
+})();
 
 /**
  * 网络请求工具类

@@ -1,7 +1,7 @@
 /**
  * 文件名: app.js
- * 版本号: 1.0.1
- * 更新日期: 2025-11-24
+ * 版本号: 1.0.2
+ * 更新日期: 2025-11-27
  * 作者: Sut
  * 小程序入口文件，负责初始化全局服务、状态管理和组件注册
  */
@@ -149,8 +149,12 @@ App({
       const token = store.getState('user.token');
       
       if (userInfo && token) {
-        // 注册WebSocket事件监听器
-        this._registerWebSocketListeners();
+        // 只注册一次监听器
+        if (!this._webSocketListenersRegistered) {
+          // 注册WebSocket事件监听器
+          this._registerWebSocketListeners();
+          this._webSocketListenersRegistered = true;
+        }
         
         // 建立WebSocket连接
         await webSocketService.connect();
@@ -269,7 +273,8 @@ App({
     
     if (userInfo && token && !this.globalData.websocketConnected) {
       console.log('应用显示，尝试重新连接WebSocket');
-      this.initWebSocket();
+      // 直接调用connect方法，避免重复初始化
+      webSocketService.connect();
     }
   },
   

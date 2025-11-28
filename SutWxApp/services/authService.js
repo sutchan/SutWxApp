@@ -1,11 +1,12 @@
 /**
  * 文件名: authService.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
+ * 版本号: 1.0.1
+ * 更新日期: 2025-11-27
  * 描述: 认证服务，处理用户登录、登出、会话管理等
  */
 
 const Request = require('../utils/request');
+const store = require('../utils/store.js');
 const TOKEN_KEY = 'authToken';
 
 const authService = {
@@ -16,21 +17,24 @@ const authService = {
    * @returns {Promise<Object>} 包含用户信息的 Promise
    */
   async login(username, password) {
-    return new Promise((resolve, reject) => {
-      const timer = setTimeout(() => {
-        if (username === 'test' && password === '123456') {
-          const user = { id: 1, username: 'test', token: 'mock_token_123' };
-          wx.setStorageSync(TOKEN_KEY, user.token);
-          resolve(user);
-        } else {
-          reject(new Error('用户名或密码错误'));
-        }
-      }, 1000);
+    try {
+      const response = await Request.post('/auth/login', { username, password }, {
+        needAuth: false
+      });
       
-      // 将定时器ID附加到Promise上，以便在需要时可以取消
-      resolve.timer = timer;
-      reject.timer = timer;
-    });
+      if (response && response.token) {
+        // 保存token到本地存储
+        wx.setStorageSync(TOKEN_KEY, response.token);
+        // 更新store中的用户信息
+        store.commit('SET_TOKEN', response.token);
+        store.commit('SET_USER_INFO', response.user);
+      }
+      
+      return response;
+    } catch (error) {
+      console.error('登录失败:', error);
+      throw error;
+    }
   },
 
   /**
@@ -38,15 +42,20 @@ const authService = {
    * @returns {Promise<void>} Promise
    */
   async logout() {
-    return new Promise((resolve) => {
-      const timer = setTimeout(() => {
-        wx.removeStorageSync(TOKEN_KEY);
-        resolve();
-      }, 500);
+    try {
+      await Request.post('/auth/logout');
       
-      // 将定时器ID附加到Promise上，以便在需要时可以取消
-      resolve.timer = timer;
-    });
+      // 清除本地存储和store中的用户信息
+      wx.removeStorageSync(TOKEN_KEY);
+      store.commit('SET_TOKEN', null);
+      store.commit('SET_USER_INFO', null);
+    } catch (error) {
+      console.error('登出失败:', error);
+      // 即使API调用失败，也要清除本地状态
+      wx.removeStorageSync(TOKEN_KEY);
+      store.commit('SET_TOKEN', null);
+      store.commit('SET_USER_INFO', null);
+    }
   },
 
   /**
@@ -71,7 +80,18 @@ const authService = {
    */
   async checkSession() {
     const token = this.getToken();
-    return !!token;
+    if (!token) {
+      return false;
+    }
+    
+    try {
+      await Request.get('/auth/check-session');
+      return true;
+    } catch (error) {
+      // 会话无效，清除token
+      this.logout();
+      return false;
+    }
   },
 
   /**
@@ -79,18 +99,10 @@ const authService = {
    * @returns {Promise<Array>} 用户收藏列表
    */
   async getUserFavorites() {
-    const token = this.getToken();
-    if (!token) {
-      throw new Error('用户未登录');
-    }
-    
     try {
-      const response = await Request.get('/user/favorites', {}, {
-        header: { Authorization: `Bearer ${token}` }
-      });
-      
-      return response.data;
+      return await Request.get('/user/favorites');
     } catch (error) {
+      console.error('获取用户收藏列表失败:', error);
       throw error;
     }
   },
@@ -100,18 +112,10 @@ const authService = {
    * @returns {Promise<Array>} 用户地址列表
    */
   async getUserAddresses() {
-    const token = this.getToken();
-    if (!token) {
-      throw new Error('用户未登录');
-    }
-    
     try {
-      const response = await Request.get('/user/addresses', {}, {
-        header: { Authorization: `Bearer ${token}` }
-      });
-      
-      return response.data;
+      return await Request.get('/user/addresses');
     } catch (error) {
+      console.error('获取用户地址列表失败:', error);
       throw error;
     }
   },
@@ -122,15 +126,8 @@ const authService = {
    * @returns {Promise<Object>} 添加结果
    */
   async addUserAddress(address) {
-    const token = this.getToken();
-    if (!token) {
-      throw new Error('用户未登录');
-    }
-    
     try {
-      const response = await Request.post('/user/addresses', address, {
-        header: { Authorization: `Bearer ${token}` }
-      });
+      const response = await Request.post('/user/addresses', address);
       
       wx.showToast({
         title: '添加成功',
@@ -143,6 +140,7 @@ const authService = {
         title: '添加失败',
         icon: 'none'
       });
+      console.error('添加用户地址失败:', error);
       throw error;
     }
   },
@@ -154,15 +152,8 @@ const authService = {
    * @returns {Promise<Object>} 更新结果
    */
   async updateUserAddress(addressId, address) {
-    const token = this.getToken();
-    if (!token) {
-      throw new Error('用户未登录');
-    }
-    
     try {
-      const response = await Request.put(`/user/addresses/${addressId}`, address, {
-        header: { Authorization: `Bearer ${token}` }
-      });
+      const response = await Request.put(`/user/addresses/${addressId}`, address);
       
       wx.showToast({
         title: '更新成功',
@@ -175,6 +166,7 @@ const authService = {
         title: '更新失败',
         icon: 'none'
       });
+      console.error('更新用户地址失败:', error);
       throw error;
     }
   },
@@ -185,15 +177,8 @@ const authService = {
    * @returns {Promise<Object>} 删除结果
    */
   async deleteUserAddress(addressId) {
-    const token = this.getToken();
-    if (!token) {
-      throw new Error('用户未登录');
-    }
-    
     try {
-      const response = await Request.delete(`/user/addresses/${addressId}`, {}, {
-        header: { Authorization: `Bearer ${token}` }
-      });
+      const response = await Request.delete(`/user/addresses/${addressId}`);
       
       wx.showToast({
         title: '删除成功',
@@ -206,6 +191,7 @@ const authService = {
         title: '删除失败',
         icon: 'none'
       });
+      console.error('删除用户地址失败:', error);
       throw error;
     }
   }
