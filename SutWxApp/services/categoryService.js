@@ -1,11 +1,12 @@
 /**
  * 文件名: categoryService.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
+ * 版本号: 1.0.2
+ * 更新日期: 2025-11-29
+ * 作者: Sut
  * 描述: 分类服务
  */
 
-const request = require('../utils/request.js');
+const request = require('../utils/request');
 
 /**
  * 分类服务类
@@ -26,7 +27,7 @@ class CategoryService {
       includeProductCount: options.includeProductCount ? 1 : 0
     };
 
-    return request.get('/api/categories', params);
+    return request.get('/categories', params);
   }
 
   /**
@@ -49,7 +50,7 @@ class CategoryService {
       includeProductCount: options.includeProductCount ? 1 : 0
     };
 
-    return request.get(`/api/categories/${id}`, params);
+    return request.get(`/categories/${id}`, params);
   }
 
   /**
@@ -67,7 +68,7 @@ class CategoryService {
       includeProductCount: options.includeProductCount ? 1 : 0
     };
 
-    return request.get('/api/categories/tree', params);
+    return request.get('/categories/tree', params);
   }
 
   /**
@@ -80,7 +81,7 @@ class CategoryService {
       limit
     };
 
-    return request.get('/api/categories/hot', params);
+    return request.get('/categories/hot', params);
   }
 
   /**
@@ -101,7 +102,7 @@ class CategoryService {
       sort: options.sort || 'sales'
     };
 
-    return request.get(`/api/categories/${categoryId}/products`, params);
+    return request.get(`/categories/${categoryId}/products`, params);
   }
 
   /**
@@ -123,7 +124,7 @@ class CategoryService {
       includeChildren: options.includeChildren ? 1 : 0
     };
 
-    return request.get('/api/categories/search', params);
+    return request.get('/categories/search', params);
   }
 
   /**
@@ -136,7 +137,7 @@ class CategoryService {
       throw new Error('分类ID不能为空');
     }
     
-    return request.get(`/api/categories/${categoryId}/breadcrumb`);
+    return request.get(`/categories/${categoryId}/breadcrumb`);
   }
 
   /**
@@ -155,7 +156,7 @@ class CategoryService {
       includeSelf: options.includeSelf ? 1 : 0
     };
 
-    return request.get(`/api/categories/${categoryId}/siblings`, params);
+    return request.get(`/categories/${categoryId}/siblings`, params);
   }
 }
 

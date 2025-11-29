@@ -1,21 +1,19 @@
 /**
- * 文件名: componentFactory.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-24
- * 作者: Sut
- * 组件工厂 - 提供组件创建和生命周期管理增强功能，自动集成状态管理和国际化
- */
+ * 鏂囦欢鍚? componentFactory.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-24
+ * 浣滆€? Sut
+ * 缁勪欢宸ュ巶 - 鎻愪緵缁勪欢鍒涘缓鍜岀敓鍛藉懆鏈熺鐞嗗寮哄姛鑳斤紝鑷姩闆嗘垚鐘舵€佺鐞嗗拰鍥介檯鍖? */
 
 const store = require('./store.js');
 const i18n = require('./i18n.js');
 
 /**
- * 组件生命周期钩子包装器
- * 提供统一的生命周期处理和错误捕获
- * @param {Function} hook - 原始钩子函数
- * @param {string} hookName - 钩子名称
- * @param {Object} options - 选项配置
- * @returns {Function} 包装后的钩子函数
+ * 缁勪欢鐢熷懡鍛ㄦ湡閽╁瓙鍖呰鍣? * 鎻愪緵缁熶竴鐨勭敓鍛藉懆鏈熷鐞嗗拰閿欒鎹曡幏
+ * @param {Function} hook - 鍘熷閽╁瓙鍑芥暟
+ * @param {string} hookName - 閽╁瓙鍚嶇О
+ * @param {Object} options - 閫夐」閰嶇疆
+ * @returns {Function} 鍖呰鍚庣殑閽╁瓙鍑芥暟
  */
 function wrapHook(hook, hookName, options = {}) {
   return function(...args) {
@@ -24,7 +22,7 @@ function wrapHook(hook, hookName, options = {}) {
         return hook.apply(this, args);
       }
     } catch (error) {
-      console.error(`组件生命周期钩子 ${hookName} 执行失败:`, error);
+      console.error(`缁勪欢鐢熷懡鍛ㄦ湡閽╁瓙 ${hookName} 鎵ц澶辫触:`, error);
       if (options.errorHandler && typeof options.errorHandler === 'function') {
         options.errorHandler(error, hookName);
       }
@@ -34,13 +32,11 @@ function wrapHook(hook, hookName, options = {}) {
 }
 
 /**
- * 创建组件配置对象
- * 自动集成状态管理、国际化和生命周期钩子处理
- * @param {Object} config - 组件配置
- * @returns {Object} 增强的组件配置
- */
+ * 鍒涘缓缁勪欢閰嶇疆瀵硅薄
+ * 鑷姩闆嗘垚鐘舵€佺鐞嗐€佸浗闄呭寲鍜岀敓鍛藉懆鏈熼挬瀛愬鐞? * @param {Object} config - 缁勪欢閰嶇疆
+ * @returns {Object} 澧炲己鐨勭粍浠堕厤缃? */
 function createComponent(config = {}) {
-  // 默认配置
+  // 榛樿閰嶇疆
   const defaultConfig = {
     data: {},
     properties: {},
@@ -53,26 +49,22 @@ function createComponent(config = {}) {
     externalClasses: []
   };
 
-  // 合并配置
+  // 鍚堝苟閰嶇疆
   const mergedConfig = { ...defaultConfig, ...config };
   
-  // 自动集成状态管理
-  if (config.mapState) {
+  // 鑷姩闆嗘垚鐘舵€佺鐞?  if (config.mapState) {
     mergedConfig.data = { ...mergedConfig.data, ...mapStateToData(config.mapState) };
     mergedConfig.lifetimes = mergedConfig.lifetimes || {};
     
-    // 增强生命周期钩子以响应状态更新
-    const originalAttached = mergedConfig.lifetimes.attached || function() {};
+    // 澧炲己鐢熷懡鍛ㄦ湡閽╁瓙浠ュ搷搴旂姸鎬佹洿鏂?    const originalAttached = mergedConfig.lifetimes.attached || function() {};
     mergedConfig.lifetimes.attached = wrapHook(function() {
-      // 初始化状态映射
-      this._stateUnsubscribe = store.subscribe(() => {
+      // 鍒濆鍖栫姸鎬佹槧灏?      this._stateUnsubscribe = store.subscribe(() => {
         this.setData(mapStateToData(config.mapState));
       });
       originalAttached.call(this);
     }, 'attached');
     
-    // 在detached时清理订阅
-    const originalDetached = mergedConfig.lifetimes.detached || function() {};
+    // 鍦╠etached鏃舵竻鐞嗚闃?    const originalDetached = mergedConfig.lifetimes.detached || function() {};
     mergedConfig.lifetimes.detached = wrapHook(function() {
       if (this._stateUnsubscribe) {
         this._stateUnsubscribe();
@@ -81,16 +73,14 @@ function createComponent(config = {}) {
     }, 'detached');
   }
   
-  // 自动集成国际化
-  if (config.useI18n !== false) {
+  // 鑷姩闆嗘垚鍥介檯鍖?  if (config.useI18n !== false) {
     mergedConfig.methods = mergedConfig.methods || {};
     mergedConfig.methods.__ = function(key, options) {
       return i18n.t(key, options);
     };
   }
   
-  // 包装所有生命周期钩子
-  const lifecycleHooks = [
+  // 鍖呰鎵€鏈夌敓鍛藉懆鏈熼挬瀛?  const lifecycleHooks = [
     'created', 'attached', 'ready', 'moved', 'detached', 'error'
   ];
   
@@ -104,7 +94,7 @@ function createComponent(config = {}) {
     }
   });
   
-  // 包装页面生命周期钩子
+  // 鍖呰椤甸潰鐢熷懡鍛ㄦ湡閽╁瓙
   const pageLifecycleHooks = [
     'show', 'hide', 'resize', 'routeDone'
   ];
@@ -119,7 +109,7 @@ function createComponent(config = {}) {
     }
   });
   
-  // 包装methods中的方法
+  // 鍖呰methods涓殑鏂规硶
   if (mergedConfig.methods) {
     Object.keys(mergedConfig.methods).forEach(methodName => {
       if (typeof mergedConfig.methods[methodName] === 'function' && 
@@ -138,9 +128,8 @@ function createComponent(config = {}) {
 }
 
 /**
- * 将状态映射转换为data对象
- * @param {Object|Function} mapState - 状态映射配置
- * @returns {Object} 转换后的data对象
+ * 灏嗙姸鎬佹槧灏勮浆鎹负data瀵硅薄
+ * @param {Object|Function} mapState - 鐘舵€佹槧灏勯厤缃? * @returns {Object} 杞崲鍚庣殑data瀵硅薄
  */
 function mapStateToData(mapState) {
   const state = store.state;
@@ -155,7 +144,7 @@ function mapStateToData(mapState) {
       if (typeof mapState[key] === 'function') {
         data[key] = mapState[key](state);
       } else if (typeof mapState[key] === 'string') {
-        // 支持路径访问，如 'user.info.name'
+        // 鏀寔璺緞璁块棶锛屽 'user.info.name'
         const pathParts = mapState[key].split('.');
         let value = state;
         for (const part of pathParts) {
@@ -171,34 +160,33 @@ function mapStateToData(mapState) {
 }
 
 /**
- * 组件通信总线
- * 提供组件间的事件通信机制
+ * 缁勪欢閫氫俊鎬荤嚎
+ * 鎻愪緵缁勪欢闂寸殑浜嬩欢閫氫俊鏈哄埗
  */
 const eventBus = {
   _events: {},
   
   /**
-   * 订阅事件
-   * @param {string} eventName - 事件名称
-   * @param {Function} callback - 回调函数
-   * @returns {Function} 取消订阅的函数
-   */
+   * 璁㈤槄浜嬩欢
+   * @param {string} eventName - 浜嬩欢鍚嶇О
+   * @param {Function} callback - 鍥炶皟鍑芥暟
+   * @returns {Function} 鍙栨秷璁㈤槄鐨勫嚱鏁?   */
   on(eventName, callback) {
     if (!this._events[eventName]) {
       this._events[eventName] = [];
     }
     this._events[eventName].push(callback);
     
-    // 返回取消订阅函数
+    // 杩斿洖鍙栨秷璁㈤槄鍑芥暟
     return () => {
       this.off(eventName, callback);
     };
   },
   
   /**
-   * 取消订阅
-   * @param {string} eventName - 事件名称
-   * @param {Function} callback - 回调函数（可选，不提供则取消该事件的所有订阅）
+   * 鍙栨秷璁㈤槄
+   * @param {string} eventName - 浜嬩欢鍚嶇О
+   * @param {Function} callback - 鍥炶皟鍑芥暟锛堝彲閫夛紝涓嶆彁渚涘垯鍙栨秷璇ヤ簨浠剁殑鎵€鏈夎闃咃級
    */
   off(eventName, callback) {
     if (!this._events[eventName]) return;
@@ -213,9 +201,9 @@ const eventBus = {
   },
   
   /**
-   * 触发事件
-   * @param {string} eventName - 事件名称
-   * @param {*} data - 事件数据
+   * 瑙﹀彂浜嬩欢
+   * @param {string} eventName - 浜嬩欢鍚嶇О
+   * @param {*} data - 浜嬩欢鏁版嵁
    */
   emit(eventName, data) {
     if (!this._events[eventName]) return;
@@ -224,21 +212,20 @@ const eventBus = {
       try {
         callback(data);
       } catch (error) {
-        console.error(`事件 ${eventName} 处理失败:`, error);
+        console.error(`浜嬩欢 ${eventName} 澶勭悊澶辫触:`, error);
       }
     });
   }
 };
 
 /**
- * 组件工具集
- */
+ * 缁勪欢宸ュ叿闆? */
 const componentUtils = {
   /**
-   * 节流函数
-   * @param {Function} func - 要节流的函数
-   * @param {number} delay - 延迟时间（毫秒）
-   * @returns {Function} 节流后的函数
+   * 鑺傛祦鍑芥暟
+   * @param {Function} func - 瑕佽妭娴佺殑鍑芥暟
+   * @param {number} delay - 寤惰繜鏃堕棿锛堟绉掞級
+   * @returns {Function} 鑺傛祦鍚庣殑鍑芥暟
    */
   throttle(func, delay) {
     let lastCall = 0;
@@ -252,10 +239,10 @@ const componentUtils = {
   },
   
   /**
-   * 防抖函数
-   * @param {Function} func - 要防抖的函数
-   * @param {number} delay - 延迟时间（毫秒）
-   * @returns {Function} 防抖后的函数
+   * 闃叉姈鍑芥暟
+   * @param {Function} func - 瑕侀槻鎶栫殑鍑芥暟
+   * @param {number} delay - 寤惰繜鏃堕棿锛堟绉掞級
+   * @returns {Function} 闃叉姈鍚庣殑鍑芥暟
    */
   debounce(func, delay) {
     let timeout;
@@ -268,15 +255,14 @@ const componentUtils = {
   },
   
   /**
-   * 安全地设置数据，避免不必要的更新
-   * @param {Object} component - 组件实例
-   * @param {Object} data - 要设置的数据
+   * 瀹夊叏鍦拌缃暟鎹紝閬垮厤涓嶅繀瑕佺殑鏇存柊
+   * @param {Object} component - 缁勪欢瀹炰緥
+   * @param {Object} data - 瑕佽缃殑鏁版嵁
    */
   safeSetData(component, data) {
     if (!component || typeof component.setData !== 'function') return;
     
-    // 过滤掉与当前数据相同的值
-    const changedData = {};
+    // 杩囨护鎺変笌褰撳墠鏁版嵁鐩稿悓鐨勫€?    const changedData = {};
     Object.keys(data).forEach(key => {
       if (component.data[key] !== data[key]) {
         changedData[key] = data[key];

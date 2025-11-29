@@ -1,7 +1,7 @@
 {
   "name": "sut-wx-app",
   "version": "1.0.0",
-  "description": "苏特微信小程序(SutWxApp)",
+  "description": "鑻忕壒寰俊灏忕▼搴?SutWxApp)",
   "main": "app.js",
   "scripts": {
     "lint": "eslint --ext .js .",

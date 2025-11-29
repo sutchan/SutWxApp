@@ -1,15 +1,14 @@
 /**
- * 文件名: po2json.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-24
- * PO文件转换为JSON工具
- * 用于将.po翻译文件转换为JSON格式，确保翻译同步
- */
+ * 鏂囦欢鍚? po2json.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-24
+ * PO鏂囦欢杞崲涓篔SON宸ュ叿
+ * 鐢ㄤ簬灏?po缈昏瘧鏂囦欢杞崲涓篔SON鏍煎紡锛岀‘淇濈炕璇戝悓姝? */
 
 /**
- * 解析PO文件内容
- * @param {string} poContent - PO文件内容
- * @returns {Object} 翻译键值对对象
+ * 瑙ｆ瀽PO鏂囦欢鍐呭
+ * @param {string} poContent - PO鏂囦欢鍐呭
+ * @returns {Object} 缈昏瘧閿€煎瀵硅薄
  */
 function parsePoFile(poContent) {
   const translations = {};
@@ -21,35 +20,30 @@ function parsePoFile(poContent) {
   for (const line of lines) {
     const trimmedLine = line.trim();
     
-    // 跳过注释和空行
-    if (trimmedLine.startsWith('#') || trimmedLine === '') {
+    // 璺宠繃娉ㄩ噴鍜岀┖琛?    if (trimmedLine.startsWith('#') || trimmedLine === '') {
       continue;
     }
 
-    // 匹配msgid行
-    if (trimmedLine.startsWith('msgid ')) {
-      // 如果已经有msgid，保存之前的翻译
+    // 鍖归厤msgid琛?    if (trimmedLine.startsWith('msgid ')) {
+      // 濡傛灉宸茬粡鏈塵sgid锛屼繚瀛樹箣鍓嶇殑缈昏瘧
       if (currentMsgid !== null) {
         translations[currentMsgid] = currentMsgstr;
       }
-      // 提取新的msgid
+      // 鎻愬彇鏂扮殑msgid
       currentMsgid = trimmedLine.substring(6).replace(/^"|"$/g, '');
       currentMsgstr = '';
       inMsgstr = false;
     }
-    // 匹配msgstr行
-    else if (trimmedLine.startsWith('msgstr ')) {
+    // 鍖归厤msgstr琛?    else if (trimmedLine.startsWith('msgstr ')) {
       currentMsgstr = trimmedLine.substring(7).replace(/^"|"$/g, '');
       inMsgstr = true;
     }
-    // 处理多行字符串
-    else if (inMsgstr && (trimmedLine.startsWith('"') && trimmedLine.endsWith('"'))) {
+    // 澶勭悊澶氳瀛楃涓?    else if (inMsgstr && (trimmedLine.startsWith('"') && trimmedLine.endsWith('"'))) {
       currentMsgstr += trimmedLine.replace(/^"|"$/g, '');
     }
   }
 
-  // 保存最后一个翻译
-  if (currentMsgid !== null && currentMsgid !== '') {
+  // 淇濆瓨鏈€鍚庝竴涓炕璇?  if (currentMsgid !== null && currentMsgid !== '') {
     translations[currentMsgid] = currentMsgstr;
   }
 
@@ -57,13 +51,10 @@ function parsePoFile(poContent) {
 }
 
 /**
- * 将翻译对象转换为JSON字符串
- * @param {Object} translations - 翻译对象
- * @returns {string} 格式化的JSON字符串
- */
+ * 灏嗙炕璇戝璞¤浆鎹负JSON瀛楃涓? * @param {Object} translations - 缈昏瘧瀵硅薄
+ * @returns {string} 鏍煎紡鍖栫殑JSON瀛楃涓? */
 function toJsonString(translations) {
-  // 按照键名排序，保持输出一致性
-  const sortedTranslations = {};
+  // 鎸夌収閿悕鎺掑簭锛屼繚鎸佽緭鍑轰竴鑷存€?  const sortedTranslations = {};
   Object.keys(translations).sort().forEach(key => {
     sortedTranslations[key] = translations[key];
   });
@@ -72,10 +63,9 @@ function toJsonString(translations) {
 }
 
 /**
- * 生成文件头部注释
- * @param {string} filename - 文件名
- * @param {string} language - 语言代码
- * @returns {string} 文件头部注释
+ * 鐢熸垚鏂囦欢澶撮儴娉ㄩ噴
+ * @param {string} filename - 鏂囦欢鍚? * @param {string} language - 璇█浠ｇ爜
+ * @returns {string} 鏂囦欢澶撮儴娉ㄩ噴
  */
 function generateHeaderComment(filename, language) {
   const now = new Date();
@@ -85,19 +75,17 @@ function generateHeaderComment(filename, language) {
   const dateStr = `${year}-${month}-${day}`;
 
   return `/**
- * 文件名: ${filename}
- * 版本号: 1.0.1
- * 更新日期: ${dateStr}
- * 描述: ${filename} JSON 配置文件 - 自动生成，请勿手动修改
- */`;
+ * 鏂囦欢鍚? ${filename}
+ * 鐗堟湰鍙? 1.0.1
+ * 鏇存柊鏃ユ湡: ${dateStr}
+ * 鎻忚堪: ${filename} JSON 閰嶇疆鏂囦欢 - 鑷姩鐢熸垚锛岃鍕挎墜鍔ㄤ慨鏀? */`;
 }
 
 /**
- * 转换PO文件为JSON
- * @param {string} poContent - PO文件内容
- * @param {string} filename - 输出文件名
- * @param {string} language - 语言代码
- * @returns {string} 完整的JSON文件内容
+ * 杞崲PO鏂囦欢涓篔SON
+ * @param {string} poContent - PO鏂囦欢鍐呭
+ * @param {string} filename - 杈撳嚭鏂囦欢鍚? * @param {string} language - 璇█浠ｇ爜
+ * @returns {string} 瀹屾暣鐨凧SON鏂囦欢鍐呭
  */
 function convertPoToJson(poContent, filename, language) {
   const header = generateHeaderComment(filename, language);
@@ -107,7 +95,7 @@ function convertPoToJson(poContent, filename, language) {
   return `${header}\n${jsonContent}`;
 }
 
-// 导出函数，供其他模块使用
+// 瀵煎嚭鍑芥暟锛屼緵鍏朵粬妯″潡浣跨敤
 module.exports = {
   parsePoFile,
   toJsonString,

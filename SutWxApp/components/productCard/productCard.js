@@ -1,35 +1,35 @@
 /**
- * 文件名: productCard.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: 商品卡片组件
+ * 鏂囦欢鍚? productCard.js
+ * 鐗堟湰鍙? 1.0.2
+ * 鏇存柊鏃ユ湡: 2025-11-29
+ * 浣滆€? Sut
+ * 鎻忚堪: 鍟嗗搧鍗＄墖缁勪欢
  */
 Component({
   /**
-   * 组件的属性列表
-   */
+   * 缁勪欢鐨勫睘鎬у垪琛?   */
   properties: {
-    // 商品信息
+    // 鍟嗗搧淇℃伅
     product: {
       type: Object,
       value: {}
     },
-    // 是否显示边框
+    // 鏄惁鏄剧ず杈规
     bordered: {
       type: Boolean,
       value: true
     },
-    // 是否显示操作按钮
+    // 鏄惁鏄剧ず鎿嶄綔鎸夐挳
     showActions: {
       type: Boolean,
       value: true
     },
-    // 卡片宽度，默认100%
+    // 鍗＄墖瀹藉害锛岄粯璁?00%
     width: {
       type: String,
       value: '100%'
     },
-    // 图片高度
+    // 鍥剧墖楂樺害
     imageHeight: {
       type: String,
       value: '200rpx'
@@ -37,53 +37,69 @@ Component({
   },
 
   /**
-   * 组件的初始数据
-   */
+   * 缁勪欢鐨勫垵濮嬫暟鎹?   */
   data: {
-    // 默认商品图片
-    defaultImage: '/assets/images/product-placeholder.png'
+    // 榛樿鍟嗗搧鍥剧墖
+    defaultImage: '/assets/images/product-placeholder.png',
+    // 鏈湴鍟嗗搧鏁版嵁锛岀敤浜庡鐞嗗浘鐗囧姞杞藉け璐ョ瓑鎯呭喌
+    localProduct: {}
   },
 
   /**
-   * 组件的方法列表
-   */
+   * 鐩戝惉灞炴€у彉鍖?   */
+  observers: {
+    'product': function(product) {
+      this.setData({
+        localProduct: { ...product }
+      });
+    }
+  },
+
+  /**
+   * 缁勪欢鐨勬柟娉曞垪琛?   */
   methods: {
     /**
-     * 点击商品卡片
+     * 鐐瑰嚮鍟嗗搧鍗＄墖
+     * @returns {void}
      */
     onProductTap() {
       this.triggerEvent('tap', {
-        product: this.data.product
+        product: this.properties.product
       });
     },
 
     /**
-     * 点击添加到购物车
+     * 鐐瑰嚮娣诲姞鍒拌喘鐗╄溅
+     * @param {Object} e - 浜嬩欢瀵硅薄
+     * @returns {void}
      */
     onAddToCart(e) {
       e.stopPropagation();
       this.triggerEvent('addtocart', {
-        product: this.data.product
+        product: this.properties.product
       });
     },
 
     /**
-     * 点击收藏
+     * 鐐瑰嚮鏀惰棌
+     * @param {Object} e - 浜嬩欢瀵硅薄
+     * @returns {void}
      */
     onFavorite(e) {
       e.stopPropagation();
       this.triggerEvent('favorite', {
-        product: this.data.product,
-        isFavorite: !this.data.product.isFavorite
+        product: this.properties.product,
+        isFavorite: !this.properties.product.isFavorite
       });
     },
 
     /**
-     * 图片加载失败处理
+     * 鍥剧墖鍔犺浇澶辫触澶勭悊
+     * @returns {void}
      */
     onImageError() {
       this.setData({
-        'product.image': this.data.defaultImage
+        'localProduct.image': this.data.defaultImage
       });
     }
   }

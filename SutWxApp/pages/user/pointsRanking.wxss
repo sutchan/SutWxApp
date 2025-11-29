@@ -1,17 +1,17 @@
 /**
- * 文件名: pointsRanking.wxss
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: pointsRanking 页面样式文件
+ * 鏂囦欢鍚? pointsRanking.wxss
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: pointsRanking 椤甸潰鏍峰紡鏂囦欢
  */
-/* 积分排行榜页面样式 */
+/* 绉垎鎺掕姒滈〉闈㈡牱寮?*/
 
 .container {
   background-color: #f5f5f5;
   min-height: 100vh;
 }
 
-/* 用户信息卡片 */
+/* 鐢ㄦ埛淇℃伅鍗＄墖 */
 .user-info-card {
   background: linear-gradient(135deg, #ff8a00 0%, #ff5e00 100%);
   color: white;
@@ -93,7 +93,7 @@
   text-align: center;
 }
 
-/* 榜单类型切换 */
+/* 姒滃崟绫诲瀷鍒囨崲 */
 .tab-bar {
   background-color: white;
   display: flex;
@@ -127,12 +127,12 @@
   border-radius: 2rpx;
 }
 
-/* 内容区域 */
+/* 鍐呭鍖哄煙 */
 .content {
   padding: 0 30rpx;
 }
 
-/* 排行榜列表 */
+/* 鎺掕姒滃垪琛?*/
 .ranking-list {
   display: flex;
   flex-direction: column;
@@ -152,7 +152,7 @@
   background: linear-gradient(to right, #fff9e6, #ffffff);
 }
 
-/* 排名 */
+/* 鎺掑悕 */
 .rank-number {
   width: 80rpx;
   display: flex;
@@ -190,7 +190,7 @@
   color: #666;
 }
 
-/* 用户信息 */
+/* 鐢ㄦ埛淇℃伅 */
 .user-info-row {
   flex: 1;
   display: flex;
@@ -229,7 +229,7 @@
   color: #666;
 }
 
-/* 积分信息 */
+/* 绉垎淇℃伅 */
 .points-info {
   display: flex;
   flex-direction: column;
@@ -247,7 +247,7 @@
   color: #999;
 }
 
-/* 空状态 */
+/* 绌虹姸鎬?*/
 .empty-state {
   display: flex;
   flex-direction: column;
@@ -268,7 +268,7 @@
   margin-top: 20rpx;
 }
 
-/* 加载状态 */
+/* 鍔犺浇鐘舵€?*/
 .loading-state {
   display: flex;
   flex-direction: column;
@@ -293,7 +293,7 @@
   100% { transform: rotate(360deg); }
 }
 
-/* 没有更多数据 */
+/* 娌℃湁鏇村鏁版嵁 */
 .no-more-data {
   text-align: center;
   padding: 30rpx 0;

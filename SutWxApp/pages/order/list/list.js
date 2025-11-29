@@ -1,8 +1,8 @@
 /**
- * 文件名: list.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 订单列表页面
+ * 鏂囦欢鍚? list.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 璁㈠崟鍒楄〃椤甸潰
  */
 const i18n = require('../../../utils/i18n');
 
@@ -23,10 +23,9 @@ Page({
   },
 
   /**
-   * 生命周期函数--监听页面加载
-   * @param {Object} options - 页面参数
-   * @param {string} options.status - 订单状态
-   * @returns {void}
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
+   * @param {Object} options - 椤甸潰鍙傛暟
+   * @param {string} options.status - 璁㈠崟鐘舵€?   * @returns {void}
    */
   onLoad(options) {
     if (options.status) {
@@ -37,12 +36,11 @@ Page({
   },
 
   /**
-   * 生命周期函数--监听页面卸载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍗歌浇
    * @returns {void}
    */
   onUnload() {
-    // 清理所有定时器，防止内存泄漏
-    if (this.data.loadTimer) {
+    // 娓呯悊鎵€鏈夊畾鏃跺櫒锛岄槻姝㈠唴瀛樻硠婕?    if (this.data.loadTimer) {
       clearTimeout(this.data.loadTimer);
     }
     if (this.data.loadMoreTimer) {
@@ -51,16 +49,15 @@ Page({
   },
 
   /**
-   * 页面显示时触发
-   * @returns {void}
+   * 椤甸潰鏄剧ず鏃惰Е鍙?   * @returns {void}
    */
   onShow() {
-    // 从其他页面返回时刷新订单列表
+    // 浠庡叾浠栭〉闈㈣繑鍥炴椂鍒锋柊璁㈠崟鍒楄〃
     this.loadOrders();
   },
 
   /**
-   * 下拉刷新回调
+   * 涓嬫媺鍒锋柊鍥炶皟
    * @returns {void}
    */
   onPullDownRefresh() {
@@ -74,7 +71,7 @@ Page({
   },
 
   /**
-   * 触底加载更多
+   * 瑙﹀簳鍔犺浇鏇村
    * @returns {void}
    */
   onReachBottom() {
@@ -84,8 +81,8 @@ Page({
   },
 
   /**
-   * 加载订单列表
-   * @param {Function} done - 完成回调
+   * 鍔犺浇璁㈠崟鍒楄〃
+   * @param {Function} done - 瀹屾垚鍥炶皟
    * @returns {void}
    */
   loadOrders(done) {
@@ -95,20 +92,20 @@ Page({
         {
           id: 'ORD20231001001',
           status: 'pending',
-          statusText: i18n.translate('待付款'),
+          statusText: i18n.translate('寰呬粯娆?),
           createTime: '2023-10-01 10:30:00',
           totalAmount: '199.00',
           items: [
             {
               id: 1,
-              name: i18n.translate('优质商品A'),
+              name: i18n.translate('浼樿川鍟嗗搧A'),
               image: '/images/placeholder.svg',
               price: '99.00',
               quantity: 1
             },
             {
               id: 2,
-              name: i18n.translate('优质商品B'),
+              name: i18n.translate('浼樿川鍟嗗搧B'),
               image: '/images/placeholder.svg',
               price: '100.00',
               quantity: 1
@@ -118,13 +115,13 @@ Page({
         {
           id: 'ORD20230928001',
           status: 'shipped',
-          statusText: i18n.translate('已发货'),
+          statusText: i18n.translate('宸插彂璐?),
           createTime: '2023-09-28 14:20:00',
           totalAmount: '79.00',
           items: [
             {
               id: 3,
-              name: i18n.translate('优质商品C'),
+              name: i18n.translate('浼樿川鍟嗗搧C'),
               image: '/images/placeholder.svg',
               price: '79.00',
               quantity: 1
@@ -134,13 +131,13 @@ Page({
         {
           id: 'ORD20230925001',
           status: 'completed',
-          statusText: i18n.translate('已完成'),
+          statusText: i18n.translate('宸插畬鎴?),
           createTime: '2023-09-25 16:45:00',
           totalAmount: '129.00',
           items: [
             {
               id: 4,
-              name: i18n.translate('优质商品D'),
+              name: i18n.translate('浼樿川鍟嗗搧D'),
               image: '/images/placeholder.svg',
               price: '129.00',
               quantity: 1
@@ -149,8 +146,7 @@ Page({
         }
       ];
 
-      // 根据当前选中的标签筛选订单
-      const filteredOrders = this.data.activeTab === 'all' 
+      // 鏍规嵁褰撳墠閫変腑鐨勬爣绛剧瓫閫夎鍗?      const filteredOrders = this.data.activeTab === 'all' 
         ? mockOrders 
         : mockOrders.filter(order => order.status === this.data.activeTab);
 
@@ -168,7 +164,7 @@ Page({
   },
 
   /**
-   * 加载更多订单
+   * 鍔犺浇鏇村璁㈠崟
    * @returns {void}
    */
   loadMoreOrders() {
@@ -181,13 +177,13 @@ Page({
         {
           id: `ORD2023092000${pagination.page + 1}`,
           status: 'cancelled',
-          statusText: i18n.translate('已取消'),
+          statusText: i18n.translate('宸插彇娑?),
           createTime: '2023-09-20 11:15:00',
           totalAmount: '89.00',
           items: [
             {
               id: 5,
-              name: i18n.translate('优质商品E'),
+              name: i18n.translate('浼樿川鍟嗗搧E'),
               image: '/images/placeholder.svg',
               price: '89.00',
               quantity: 1
@@ -212,8 +208,7 @@ Page({
   },
 
   /**
-   * 切换标签页
-   * @param {Object} e - 事件对象
+   * 鍒囨崲鏍囩椤?   * @param {Object} e - 浜嬩欢瀵硅薄
    * @returns {void}
    */
   switchTab(e) {
@@ -227,8 +222,8 @@ Page({
   },
 
   /**
-   * 跳转到订单详情页
-   * @param {Object} e - 事件对象
+   * 璺宠浆鍒拌鍗曡鎯呴〉
+   * @param {Object} e - 浜嬩欢瀵硅薄
    * @returns {void}
    */
   goToOrderDetail(e) {
@@ -239,21 +234,21 @@ Page({
   },
 
   /**
-   * 取消订单
-   * @param {Object} e - 事件对象
+   * 鍙栨秷璁㈠崟
+   * @param {Object} e - 浜嬩欢瀵硅薄
    * @returns {void}
    */
   cancelOrder(e) {
     const { id } = e.currentTarget.dataset;
-    console.log('取消订单，ID:', id);
+    console.log('鍙栨秷璁㈠崟锛孖D:', id);
     wx.showModal({
-      title: i18n.translate('提示'),
-      content: i18n.translate('确定要取消该订单吗？'),
+      title: i18n.translate('鎻愮ず'),
+      content: i18n.translate('纭畾瑕佸彇娑堣璁㈠崟鍚楋紵'),
       success: (res) => {
         if (res.confirm) {
-          // 实际项目中应该调用API取消订单
+          // 瀹為檯椤圭洰涓簲璇ヨ皟鐢ˋPI鍙栨秷璁㈠崟
           wx.showToast({
-            title: i18n.translate('订单已取消'),
+            title: i18n.translate('璁㈠崟宸插彇娑?),
             icon: 'success'
           });
           this.loadOrders();
@@ -263,21 +258,21 @@ Page({
   },
 
   /**
-   * 确认收货
-   * @param {Object} e - 事件对象
+   * 纭鏀惰揣
+   * @param {Object} e - 浜嬩欢瀵硅薄
    * @returns {void}
    */
   confirmReceipt(e) {
     const { id } = e.currentTarget.dataset;
-    console.log('确认收货，订单ID:', id);
+    console.log('纭鏀惰揣锛岃鍗旾D:', id);
     wx.showModal({
-      title: i18n.translate('提示'),
-      content: i18n.translate('确认已收到商品吗？'),
+      title: i18n.translate('鎻愮ず'),
+      content: i18n.translate('纭宸叉敹鍒板晢鍝佸悧锛?),
       success: (res) => {
         if (res.confirm) {
-          // 实际项目中应该调用API确认收货
+          // 瀹為檯椤圭洰涓簲璇ヨ皟鐢ˋPI纭鏀惰揣
           wx.showToast({
-            title: i18n.translate('已确认收货'),
+            title: i18n.translate('宸茬‘璁ゆ敹璐?),
             icon: 'success'
           });
           this.loadOrders();
@@ -287,31 +282,31 @@ Page({
   },
 
   /**
-   * 立即付款
-   * @param {Object} e - 事件对象
+   * 绔嬪嵆浠樻
+   * @param {Object} e - 浜嬩欢瀵硅薄
    * @returns {void}
    */
   payOrder(e) {
     const { id } = e.currentTarget.dataset;
-    console.log('立即付款，订单ID:', id);
-    // 实际项目中应该跳转到支付页面
+    console.log('绔嬪嵆浠樻锛岃鍗旾D:', id);
+    // 瀹為檯椤圭洰涓簲璇ヨ烦杞埌鏀粯椤甸潰
     wx.showToast({
-      title: i18n.translate('跳转到支付页面'),
+      title: i18n.translate('璺宠浆鍒版敮浠橀〉闈?),
       icon: 'none'
     });
   },
 
   /**
-   * 查看物流
-   * @param {Object} e - 事件对象
+   * 鏌ョ湅鐗╂祦
+   * @param {Object} e - 浜嬩欢瀵硅薄
    * @returns {void}
    */
   trackOrder(e) {
     const { id } = e.currentTarget.dataset;
-    console.log('查看物流，订单ID:', id);
-    // 实际项目中应该跳转到物流页面
+    console.log('鏌ョ湅鐗╂祦锛岃鍗旾D:', id);
+    // 瀹為檯椤圭洰涓簲璇ヨ烦杞埌鐗╂祦椤甸潰
     wx.showToast({
-      title: i18n.translate('跳转到物流页面'),
+      title: i18n.translate('璺宠浆鍒扮墿娴侀〉闈?),
       icon: 'none'
     });
   }

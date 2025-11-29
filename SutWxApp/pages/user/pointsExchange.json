@@ -1,11 +1,11 @@
 /**
- * 文件名: pointsExchange.json
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: pointsExchange JSON 配置文件
+ * 鏂囦欢鍚? pointsExchange.json
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: pointsExchange JSON 閰嶇疆鏂囦欢
  */
 {
-  "navigationBarTitleText": "积分兑换",
+  "navigationBarTitleText": "绉垎鍏戞崲",
   "enablePullDownRefresh": true,
   "onReachBottomDistance": 50
 }

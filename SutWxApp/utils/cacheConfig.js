@@ -1,38 +1,36 @@
 /**
- * 文件名: cacheConfig.js
- * 版本号: 1.0.18
- * 更新日期: 2025-11-24
- * 作者: Sut
- * 缓存配置管理，提供缓存策略配置和管理功能
+ * 鏂囦欢鍚? cacheConfig.js
+ * 鐗堟湰鍙? 1.0.18
+ * 鏇存柊鏃ユ湡: 2025-11-24
+ * 浣滆€? Sut
+ * 缂撳瓨閰嶇疆绠＄悊锛屾彁渚涚紦瀛樼瓥鐣ラ厤缃拰绠＄悊鍔熻兘
  */
 
 /**
- * 默认缓存配置
+ * 榛樿缂撳瓨閰嶇疆
  */
 const DEFAULT_CONFIG = {
-  // 是否启用缓存
+  // 鏄惁鍚敤缂撳瓨
   enabled: true,
-  // 缓存大小限制（字节）
+  // 缂撳瓨澶у皬闄愬埗锛堝瓧鑺傦級
   maxSize: 1024 * 1024 * 100, // 100MB
-  // 默认过期时间（毫秒）
-  defaultExpiry: 60 * 60 * 1000, // 1小时
-  // 是否自动清理过期缓存
+  // 榛樿杩囨湡鏃堕棿锛堟绉掞級
+  defaultExpiry: 60 * 60 * 1000, // 1灏忔椂
+  // 鏄惁鑷姩娓呯悊杩囨湡缂撳瓨
   autoClean: true,
-  // 自动清理间隔（毫秒）
-  cleanInterval: 24 * 60 * 60 * 1000, // 24小时
-  // 是否缓存图片
+  // 鑷姩娓呯悊闂撮殧锛堟绉掞級
+  cleanInterval: 24 * 60 * 60 * 1000, // 24灏忔椂
+  // 鏄惁缂撳瓨鍥剧墖
   cacheImages: true,
-  // 图片缓存最大数量
-  maxImageCacheCount: 100,
-  // 请求缓存配置
+  // 鍥剧墖缂撳瓨鏈€澶ф暟閲?  maxImageCacheCount: 100,
+  // 璇锋眰缂撳瓨閰嶇疆
   requestCache: {
-    // 默认缓存策略
+    // 榛樿缂撳瓨绛栫暐
     defaultPolicy: 'cache_first',
-    // 特定URL的缓存策略
-    policies: {
-      // 示例配置：'/api/user/profile': 'network_first'
+    // 鐗瑰畾URL鐨勭紦瀛樼瓥鐣?    policies: {
+      // 绀轰緥閰嶇疆锛?/api/user/profile': 'network_first'
     },
-    // 不缓存的URL模式
+    // 涓嶇紦瀛樼殑URL妯″紡
     noCachePatterns: [
       '/api/auth/',
       '/api/payment/',
@@ -42,8 +40,7 @@ const DEFAULT_CONFIG = {
 };
 
 /**
- * 缓存配置管理类
- */
+ * 缂撳瓨閰嶇疆绠＄悊绫? */
 class CacheConfigManager {
   constructor() {
     this.configKey = 'sut_cache_config';
@@ -52,28 +49,26 @@ class CacheConfigManager {
   }
 
   /**
-   * 初始化配置
-   * @returns {Promise<void>}
+   * 鍒濆鍖栭厤缃?   * @returns {Promise<void>}
    */
   async init() {
-    // 尝试从存储中加载配置
+    // 灏濊瘯浠庡瓨鍌ㄤ腑鍔犺浇閰嶇疆
     try {
       const storedConfig = await wx.getStorage({ key: this.configKey });
       this.config = { ...DEFAULT_CONFIG, ...storedConfig.data };
     } catch (error) {
-      // 如果加载失败，使用默认配置
-      this.config = { ...DEFAULT_CONFIG };
+      // 濡傛灉鍔犺浇澶辫触锛屼娇鐢ㄩ粯璁ら厤缃?      this.config = { ...DEFAULT_CONFIG };
     }
 
-    // 启动自动清理
+    // 鍚姩鑷姩娓呯悊
     if (this.config.autoClean) {
       this.startAutoCleanup();
     }
   }
 
   /**
-   * 获取配置
-   * @returns {Object} 缓存配置对象
+   * 鑾峰彇閰嶇疆
+   * @returns {Object} 缂撳瓨閰嶇疆瀵硅薄
    */
   getConfig() {
     if (!this.config) {
@@ -83,15 +78,14 @@ class CacheConfigManager {
   }
 
   /**
-   * 更新配置
-   * @param {Object} newConfig - 新配置
-   * @returns {Promise<void>}
+   * 鏇存柊閰嶇疆
+   * @param {Object} newConfig - 鏂伴厤缃?   * @returns {Promise<void>}
    */
   async updateConfig(newConfig) {
     this.config = { ...this.config, ...newConfig };
     await wx.setStorage({ key: this.configKey, data: this.config });
 
-    // 重新配置自动清理
+    // 閲嶆柊閰嶇疆鑷姩娓呯悊
     this.stopAutoCleanup();
     if (this.config.autoClean) {
       this.startAutoCleanup();
@@ -99,35 +93,32 @@ class CacheConfigManager {
   }
 
   /**
-   * 获取特定URL的缓存策略
-   * @param {string} url - 请求URL
-   * @returns {string} 缓存策略
+   * 鑾峰彇鐗瑰畾URL鐨勭紦瀛樼瓥鐣?   * @param {string} url - 璇锋眰URL
+   * @returns {string} 缂撳瓨绛栫暐
    */
   getRequestPolicy(url) {
     const config = this.getConfig();
     
-    // 检查是否匹配不缓存模式
+    // 妫€鏌ユ槸鍚﹀尮閰嶄笉缂撳瓨妯″紡
     for (const pattern of config.requestCache.noCachePatterns) {
       if (url.includes(pattern)) {
         return 'no_cache';
       }
     }
 
-    // 检查特定URL的缓存策略
-    for (const [pattern, policy] of Object.entries(config.requestCache.policies)) {
+    // 妫€鏌ョ壒瀹歎RL鐨勭紦瀛樼瓥鐣?    for (const [pattern, policy] of Object.entries(config.requestCache.policies)) {
       if (url.includes(pattern)) {
         return policy;
       }
     }
 
-    // 返回默认策略
+    // 杩斿洖榛樿绛栫暐
     return config.requestCache.defaultPolicy;
   }
 
   /**
-   * 添加特定URL的缓存策略
-   * @param {string} pattern - URL模式
-   * @param {string} policy - 缓存策略
+   * 娣诲姞鐗瑰畾URL鐨勭紦瀛樼瓥鐣?   * @param {string} pattern - URL妯″紡
+   * @param {string} policy - 缂撳瓨绛栫暐
    * @returns {Promise<void>}
    */
   async addRequestPolicy(pattern, policy) {
@@ -136,8 +127,7 @@ class CacheConfigManager {
   }
 
   /**
-   * 移除特定URL的缓存策略
-   * @param {string} pattern - URL模式
+   * 绉婚櫎鐗瑰畾URL鐨勭紦瀛樼瓥鐣?   * @param {string} pattern - URL妯″紡
    * @returns {Promise<void>}
    */
   async removeRequestPolicy(pattern) {
@@ -146,8 +136,8 @@ class CacheConfigManager {
   }
 
   /**
-   * 添加不缓存的URL模式
-   * @param {string} pattern - URL模式
+   * 娣诲姞涓嶇紦瀛樼殑URL妯″紡
+   * @param {string} pattern - URL妯″紡
    * @returns {Promise<void>}
    */
   async addNoCachePattern(pattern) {
@@ -158,8 +148,8 @@ class CacheConfigManager {
   }
 
   /**
-   * 移除不缓存的URL模式
-   * @param {string} pattern - URL模式
+   * 绉婚櫎涓嶇紦瀛樼殑URL妯″紡
+   * @param {string} pattern - URL妯″紡
    * @returns {Promise<void>}
    */
   async removeNoCachePattern(pattern) {
@@ -171,31 +161,29 @@ class CacheConfigManager {
   }
 
   /**
-   * 启动自动清理
+   * 鍚姩鑷姩娓呯悊
    */
   startAutoCleanup() {
-    this.stopAutoCleanup(); // 先停止之前的定时器
-    
+    this.stopAutoCleanup(); // 鍏堝仠姝箣鍓嶇殑瀹氭椂鍣?    
     this.cleanupTimer = setInterval(async () => {
       try {
-        // 动态导入以避免循环依赖
+        // 鍔ㄦ€佸鍏ヤ互閬垮厤寰幆渚濊禆
         const cacheService = require('./cacheService').default;
         
-        // 这里可以添加更多的清理逻辑
+        // 杩欓噷鍙互娣诲姞鏇村鐨勬竻鐞嗛€昏緫
         console.log('Running scheduled cache cleanup');
         
-        // 清理临时缓存
+        // 娓呯悊涓存椂缂撳瓨
         await cacheService.clearByType('temp');
         
-        // 可以添加其他类型的缓存清理
-      } catch (error) {
+        // 鍙互娣诲姞鍏朵粬绫诲瀷鐨勭紦瀛樻竻鐞?      } catch (error) {
         console.error('Auto cleanup error:', error);
       }
     }, this.config.cleanInterval);
   }
 
   /**
-   * 停止自动清理
+   * 鍋滄鑷姩娓呯悊
    */
   stopAutoCleanup() {
     if (this.cleanupTimer) {
@@ -205,14 +193,13 @@ class CacheConfigManager {
   }
 
   /**
-   * 重置为默认配置
-   * @returns {Promise<void>}
+   * 閲嶇疆涓洪粯璁ら厤缃?   * @returns {Promise<void>}
    */
   async reset() {
     this.config = { ...DEFAULT_CONFIG };
     await wx.setStorage({ key: this.configKey, data: this.config });
     
-    // 重新配置自动清理
+    // 閲嶆柊閰嶇疆鑷姩娓呯悊
     this.stopAutoCleanup();
     if (this.config.autoClean) {
       this.startAutoCleanup();
@@ -220,9 +207,7 @@ class CacheConfigManager {
   }
 
   /**
-   * 获取缓存使用状态
-   * @returns {Promise<Object>} 缓存状态信息
-   */
+   * 鑾峰彇缂撳瓨浣跨敤鐘舵€?   * @returns {Promise<Object>} 缂撳瓨鐘舵€佷俊鎭?   */
   async getCacheStatus() {
     try {
       const info = await wx.getStorageInfo();
@@ -242,11 +227,9 @@ class CacheConfigManager {
   }
 }
 
-// 导出缓存配置管理器实例
-const cacheConfigManager = new CacheConfigManager();
+// 瀵煎嚭缂撳瓨閰嶇疆绠＄悊鍣ㄥ疄渚?const cacheConfigManager = new CacheConfigManager();
 
-// 初始化配置
-cacheConfigManager.init().catch(error => {
+// 鍒濆鍖栭厤缃?cacheConfigManager.init().catch(error => {
   console.error('Failed to initialize cache config:', error);
 });
 

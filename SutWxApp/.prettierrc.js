@@ -1,39 +1,32 @@
 /**
- * 文件名: .prettierrc.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-24
- * 描述: Prettier配置文件
- * 提供统一的代码格式化规则
+ * 鏂囦欢鍚? .prettierrc.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-24
+ * 鎻忚堪: Prettier閰嶇疆鏂囦欢
+ * 鎻愪緵缁熶竴鐨勪唬鐮佹牸寮忓寲瑙勫垯
  */
 module.exports = {
-  // 行宽
+  // 琛屽
   printWidth: 100,
-  // 使用2个空格进行缩进
-  tabWidth: 2,
-  // 不使用制表符
+  // 浣跨敤2涓┖鏍艰繘琛岀缉杩?  tabWidth: 2,
+  // 涓嶄娇鐢ㄥ埗琛ㄧ
   useTabs: false,
-  // 语句末尾使用分号
+  // 璇彞鏈熬浣跨敤鍒嗗彿
   semi: true,
-  // 使用单引号
-  singleQuote: true,
-  // 对象属性使用引号规则 (consistent: 一致的)
+  // 浣跨敤鍗曞紩鍙?  singleQuote: true,
+  // 瀵硅薄灞炴€т娇鐢ㄥ紩鍙疯鍒?(consistent: 涓€鑷寸殑)
   quoteProps: 'consistent',
-  // 箭头函数参数括号
+  // 绠ご鍑芥暟鍙傛暟鎷彿
   arrowParens: 'always',
-  // 不使用尾随逗号
+  // 涓嶄娇鐢ㄥ熬闅忛€楀彿
   trailingComma: 'none',
-  // 对象大括号内的空格
-  bracketSpacing: true,
-  // HTML自闭合标签
-  htmlWhitespaceSensitivity: 'css',
-  // Vue文件脚本和样式标签缩进
-  vueIndentScriptAndStyle: false,
-  // 换行符格式
-  endOfLine: 'lf',
-  // JSX标签闭合方式
+  // 瀵硅薄澶ф嫭鍙峰唴鐨勭┖鏍?  bracketSpacing: true,
+  // HTML鑷棴鍚堟爣绛?  htmlWhitespaceSensitivity: 'css',
+  // Vue鏂囦欢鑴氭湰鍜屾牱寮忔爣绛剧缉杩?  vueIndentScriptAndStyle: false,
+  // 鎹㈣绗︽牸寮?  endOfLine: 'lf',
+  // JSX鏍囩闂悎鏂瑰紡
   jsxBracketSameLine: false,
-  // 行尾换行符类型
-  proseWrap: 'preserve',
-  // 是否格式化嵌入的代码
+  // 琛屽熬鎹㈣绗︾被鍨?  proseWrap: 'preserve',
+  // 鏄惁鏍煎紡鍖栧祵鍏ョ殑浠ｇ爜
   embeddedLanguageFormatting: 'auto'
 };

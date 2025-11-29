@@ -1,8 +1,8 @@
 /**
- * 文件名: list.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 商品列表页面
+ * 鏂囦欢鍚? list.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鍟嗗搧鍒楄〃椤甸潰
  */
 const i18n = require('../../../utils/i18n');
 
@@ -30,11 +30,10 @@ Page({
   },
 
   /**
-   * 生命周期函数--监听页面加载
-   * @param {Object} options - 页面参数
-   * @param {string} options.categoryId - 分类ID
-   * @param {string} options.keyword - 搜索关键词
-   * @returns {void}
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
+   * @param {Object} options - 椤甸潰鍙傛暟
+   * @param {string} options.categoryId - 鍒嗙被ID
+   * @param {string} options.keyword - 鎼滅储鍏抽敭璇?   * @returns {void}
    */
   onLoad(options) {
     if (options.categoryId) {
@@ -48,11 +47,11 @@ Page({
   },
 
   /**
-   * 生命周期函数--监听页面卸载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍗歌浇
    * @returns {void}
    */
   onUnload() {
-    // 清理定时器，防止内存泄漏
+    // 娓呯悊瀹氭椂鍣紝闃叉鍐呭瓨娉勬紡
     if (this.data.loadTimer) {
       clearTimeout(this.data.loadTimer);
     }
@@ -62,15 +61,13 @@ Page({
   },
 
   /**
-   * 页面显示时触发
-   * @returns {void}
+   * 椤甸潰鏄剧ず鏃惰Е鍙?   * @returns {void}
    */
   onShow() {
-    // 可以在此处刷新部分数据
-  },
+    // 鍙互鍦ㄦ澶勫埛鏂伴儴鍒嗘暟鎹?  },
 
   /**
-   * 下拉刷新回调
+   * 涓嬫媺鍒锋柊鍥炶皟
    * @returns {void}
    */
   onPullDownRefresh() {
@@ -84,7 +81,7 @@ Page({
   },
 
   /**
-   * 触底加载更多
+   * 瑙﹀簳鍔犺浇鏇村
    * @returns {void}
    */
   onReachBottom() {
@@ -94,18 +91,18 @@ Page({
   },
 
   /**
-   * 加载商品列表
-   * @param {Function} done - 完成回调
+   * 鍔犺浇鍟嗗搧鍒楄〃
+   * @param {Function} done - 瀹屾垚鍥炶皟
    * @returns {void}
    */
   loadProducts(done) {
     this.setData({ loading: true });
     const loadTimer = setTimeout(() => {
       const mockProducts = [
-        { id: 1, name: i18n.translate('商品A'), image: '/assets/images/product1.jpg', price: '99.00', sales: 100 },
-        { id: 2, name: i18n.translate('商品B'), image: '/assets/images/product2.jpg', price: '129.00', sales: 80 },
-        { id: 3, name: i18n.translate('商品C'), image: '/assets/images/product3.jpg', price: '79.00', sales: 120 },
-        { id: 4, name: i18n.translate('商品D'), image: '/assets/images/product4.jpg', price: '159.00', sales: 60 }
+        { id: 1, name: i18n.translate('鍟嗗搧A'), image: '/assets/images/product1.jpg', price: '99.00', sales: 100 },
+        { id: 2, name: i18n.translate('鍟嗗搧B'), image: '/assets/images/product2.jpg', price: '129.00', sales: 80 },
+        { id: 3, name: i18n.translate('鍟嗗搧C'), image: '/assets/images/product3.jpg', price: '79.00', sales: 120 },
+        { id: 4, name: i18n.translate('鍟嗗搧D'), image: '/assets/images/product4.jpg', price: '159.00', sales: 60 }
       ];
 
       this.setData({
@@ -122,7 +119,7 @@ Page({
   },
 
   /**
-   * 加载更多商品
+   * 鍔犺浇鏇村鍟嗗搧
    * @returns {void}
    */
   loadMoreProducts() {
@@ -132,8 +129,8 @@ Page({
     const loadMoreTimer = setTimeout(() => {
       const { products, pagination } = this.data;
       const newProducts = [
-        { id: products.length + 1, name: i18n.translate('商品E'), image: '/assets/images/product5.jpg', price: '89.00', sales: 40 },
-        { id: products.length + 2, name: i18n.translate('商品F'), image: '/assets/images/product6.jpg', price: '109.00', sales: 70 }
+        { id: products.length + 1, name: i18n.translate('鍟嗗搧E'), image: '/assets/images/product5.jpg', price: '89.00', sales: 40 },
+        { id: products.length + 2, name: i18n.translate('鍟嗗搧F'), image: '/assets/images/product6.jpg', price: '109.00', sales: 70 }
       ];
       
       const updatedProducts = [...products, ...newProducts];
@@ -152,8 +149,8 @@ Page({
   },
 
   /**
-   * 切换排序方式
-   * @param {Object} e - 事件对象
+   * 鍒囨崲鎺掑簭鏂瑰紡
+   * @param {Object} e - 浜嬩欢瀵硅薄
    * @returns {void}
    */
   changeSortType(e) {
@@ -167,13 +164,11 @@ Page({
   },
 
   /**
-   * 筛选商品
-   * @param {Object} e - 事件对象
+   * 绛涢€夊晢鍝?   * @param {Object} e - 浜嬩欢瀵硅薄
    * @returns {void}
    */
   filterProducts(e) {
-    // 实际项目中应该打开筛选弹窗
-    this.setData({
+    // 瀹為檯椤圭洰涓簲璇ユ墦寮€绛涢€夊脊绐?    this.setData({
       'pagination.page': 1,
       'pagination.hasMore': true
     });
@@ -181,8 +176,8 @@ Page({
   },
 
   /**
-   * 跳转到商品详情页
-   * @param {Object} e - 事件对象
+   * 璺宠浆鍒板晢鍝佽鎯呴〉
+   * @param {Object} e - 浜嬩欢瀵硅薄
    * @returns {void}
    */
   goToProductDetail(e) {
@@ -193,16 +188,16 @@ Page({
   },
 
   /**
-   * 添加到购物车
-   * @param {Object} e - 事件对象
+   * 娣诲姞鍒拌喘鐗╄溅
+   * @param {Object} e - 浜嬩欢瀵硅薄
    * @returns {void}
    */
   addToCart(e) {
     const { id } = e.currentTarget.dataset;
-    console.log('添加到购物车，商品ID:', id);
-    // 实际项目中应该调用API添加到购物车
+    console.log('娣诲姞鍒拌喘鐗╄溅锛屽晢鍝両D:', id);
+    // 瀹為檯椤圭洰涓簲璇ヨ皟鐢ˋPI娣诲姞鍒拌喘鐗╄溅
     wx.showToast({
-      title: i18n.translate('已添加到购物车'),
+      title: i18n.translate('宸叉坊鍔犲埌璐墿杞?),
       icon: 'success'
     });
   }

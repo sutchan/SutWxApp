@@ -1,8 +1,8 @@
 /**
- * 文件名: pay.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: 支付页面
+ * 鏂囦欢鍚? pay.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: 鏀粯椤甸潰
  */
 
 const paymentService = require('../../services/paymentService');
@@ -10,8 +10,7 @@ const userService = require('../../services/userService');
 
 Page({
   /**
-   * 页面的初始数据
-   */
+   * 椤甸潰鐨勫垵濮嬫暟鎹?   */
   data: {
     orderId: '',
     orderData: null,
@@ -24,7 +23,7 @@ Page({
   },
 
   /**
-   * 生命周期函数--监听页面加载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
    */
   onLoad(options) {
     const { orderId } = options;
@@ -35,7 +34,7 @@ Page({
       this.startCountdown();
     } else {
       wx.showToast({
-        title: '订单信息错误',
+        title: '璁㈠崟淇℃伅閿欒',
         icon: 'none'
       });
       setTimeout(() => {
@@ -45,7 +44,7 @@ Page({
   },
 
   /**
-   * 生命周期函数--监听页面卸载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍗歌浇
    */
   onUnload() {
     if (this.data.countdownTimer) {
@@ -54,16 +53,16 @@ Page({
   },
 
   /**
-   * 加载订单详情
+   * 鍔犺浇璁㈠崟璇︽儏
    */
   async loadOrderDetail(orderId) {
     try {
       this.setData({ loading: true });
       
-      // 这里应该调用实际的订单详情API
+      // 杩欓噷搴旇璋冪敤瀹為檯鐨勮鍗曡鎯匒PI
       // const orderData = await orderService.getOrderDetail(orderId);
       
-      // 模拟数据
+      // 妯℃嫙鏁版嵁
       setTimeout(() => {
         const orderData = {
           id: orderId,
@@ -75,18 +74,18 @@ Page({
           items: [
             {
               id: '1',
-              name: '高品质无线蓝牙耳机',
+              name: '楂樺搧璐ㄦ棤绾胯摑鐗欒€虫満',
               image: '/images/product/headphone.jpg',
               price: 299.00,
               quantity: 1,
-              specs: '黑色'
+              specs: '榛戣壊'
             }
           ],
           address: {
             id: '1',
-            name: '张三',
+            name: '寮犱笁',
             phone: '13800138000',
-            address: '北京市朝阳区某某街道某某小区1号楼1单元101室'
+            address: '鍖椾含甯傛湞闃冲尯鏌愭煇琛楅亾鏌愭煇灏忓尯1鍙锋ゼ1鍗曞厓101瀹?
           },
           createTime: new Date().toISOString()
         };
@@ -98,51 +97,51 @@ Page({
       }, 800);
       
     } catch (error) {
-      console.error('加载订单详情失败:', error);
+      console.error('鍔犺浇璁㈠崟璇︽儏澶辫触:', error);
       this.setData({ loading: false });
       wx.showToast({
-        title: '加载订单信息失败',
+        title: '鍔犺浇璁㈠崟淇℃伅澶辫触',
         icon: 'none'
       });
     }
   },
 
   /**
-   * 加载支付方式
+   * 鍔犺浇鏀粯鏂瑰紡
    */
   async loadPaymentMethods() {
     try {
-      // 这里应该调用实际的支付方式API
+      // 杩欓噷搴旇璋冪敤瀹為檯鐨勬敮浠樻柟寮廇PI
       // const paymentMethods = await paymentService.getPaymentMethods();
       
-      // 模拟数据
+      // 妯℃嫙鏁版嵁
       setTimeout(() => {
         const paymentMethods = [
           {
             id: 'wechat',
-            name: '微信支付',
+            name: '寰俊鏀粯',
             icon: '/images/payment/wechat.png',
-            description: '推荐使用微信支付，安全便捷',
+            description: '鎺ㄨ崘浣跨敤寰俊鏀粯锛屽畨鍏ㄤ究鎹?,
             enabled: true
           },
           {
             id: 'alipay',
-            name: '支付宝',
+            name: '鏀粯瀹?,
             icon: '/images/payment/alipay.png',
-            description: '使用支付宝余额或花呗支付',
+            description: '浣跨敤鏀粯瀹濅綑棰濇垨鑺卞憲鏀粯',
             enabled: true
           },
           {
             id: 'balance',
-            name: '余额支付',
+            name: '浣欓鏀粯',
             icon: '/images/payment/balance.png',
-            description: '使用账户余额支付',
+            description: '浣跨敤璐︽埛浣欓鏀粯',
             enabled: true,
             balance: 150.50
           }
         ];
         
-        // 默认选择微信支付
+        // 榛樿閫夋嫨寰俊鏀粯
         const selectedPaymentMethod = paymentMethods.find(method => method.enabled);
         
         this.setData({
@@ -152,21 +151,19 @@ Page({
       }, 500);
       
     } catch (error) {
-      console.error('加载支付方式失败:', error);
+      console.error('鍔犺浇鏀粯鏂瑰紡澶辫触:', error);
       wx.showToast({
-        title: '加载支付方式失败',
+        title: '鍔犺浇鏀粯鏂瑰紡澶辫触',
         icon: 'none'
       });
     }
   },
 
   /**
-   * 开始倒计时
-   */
+   * 寮€濮嬪€掕鏃?   */
   startCountdown() {
-    // 设置订单支付倒计时为15分钟
-    let countdown = 15 * 60; // 15分钟，单位：秒
-    
+    // 璁剧疆璁㈠崟鏀粯鍊掕鏃朵负15鍒嗛挓
+    let countdown = 15 * 60; // 15鍒嗛挓锛屽崟浣嶏細绉?    
     this.setData({ countdown });
     
     const countdownTimer = setInterval(() => {
@@ -180,8 +177,8 @@ Page({
         });
         
         wx.showModal({
-          title: '支付超时',
-          content: '订单支付已超时，订单已自动取消',
+          title: '鏀粯瓒呮椂',
+          content: '璁㈠崟鏀粯宸茶秴鏃讹紝璁㈠崟宸茶嚜鍔ㄥ彇娑?,
           showCancel: false,
           success: () => {
             wx.redirectTo({
@@ -199,8 +196,7 @@ Page({
   },
 
   /**
-   * 格式化倒计时
-   */
+   * 鏍煎紡鍖栧€掕鏃?   */
   formatCountdown(countdown) {
     const minutes = Math.floor(countdown / 60);
     const seconds = countdown % 60;
@@ -208,7 +204,7 @@ Page({
   },
 
   /**
-   * 选择支付方式
+   * 閫夋嫨鏀粯鏂瑰紡
    */
   selectPaymentMethod(e) {
     const { method } = e.currentTarget.dataset;
@@ -218,22 +214,21 @@ Page({
   },
 
   /**
-   * 提交支付
+   * 鎻愪氦鏀粯
    */
   async submitPayment() {
     if (!this.data.selectedPaymentMethod) {
       wx.showToast({
-        title: '请选择支付方式',
+        title: '璇烽€夋嫨鏀粯鏂瑰紡',
         icon: 'none'
       });
       return;
     }
 
-    // 检查余额是否足够
-    if (this.data.selectedPaymentMethod.id === 'balance' && 
+    // 妫€鏌ヤ綑棰濇槸鍚﹁冻澶?    if (this.data.selectedPaymentMethod.id === 'balance' && 
         this.data.selectedPaymentMethod.balance < this.data.orderData.actualAmount) {
       wx.showToast({
-        title: '余额不足，请选择其他支付方式',
+        title: '浣欓涓嶈冻锛岃閫夋嫨鍏朵粬鏀粯鏂瑰紡',
         icon: 'none'
       });
       return;
@@ -242,17 +237,17 @@ Page({
     try {
       this.setData({ submitting: true });
       
-      // 这里应该调用实际的支付API
+      // 杩欓噷搴旇璋冪敤瀹為檯鐨勬敮浠楢PI
       // const result = await paymentService.createPayment({
       //   orderId: this.data.orderId,
       //   paymentMethod: this.data.selectedPaymentMethod.id
       // });
       
-      // 模拟支付过程
+      // 妯℃嫙鏀粯杩囩▼
       setTimeout(() => {
         this.setData({ submitting: false });
         
-        // 根据不同支付方式处理
+        // 鏍规嵁涓嶅悓鏀粯鏂瑰紡澶勭悊
         if (this.data.selectedPaymentMethod.id === 'wechat') {
           this.processWechatPay();
         } else if (this.data.selectedPaymentMethod.id === 'alipay') {
@@ -263,53 +258,52 @@ Page({
       }, 1000);
       
     } catch (error) {
-      console.error('支付失败:', error);
+      console.error('鏀粯澶辫触:', error);
       this.setData({ submitting: false });
       wx.showToast({
-        title: '支付失败，请重试',
+        title: '鏀粯澶辫触锛岃閲嶈瘯',
         icon: 'none'
       });
     }
   },
 
   /**
-   * 处理微信支付
+   * 澶勭悊寰俊鏀粯
    */
   processWechatPay() {
-    // 这里应该调用微信支付API
-    wx.showLoading({ title: '调起支付...' });
+    // 杩欓噷搴旇璋冪敤寰俊鏀粯API
+    wx.showLoading({ title: '璋冭捣鏀粯...' });
     
     setTimeout(() => {
       wx.hideLoading();
       
-      // 模拟支付成功
+      // 妯℃嫙鏀粯鎴愬姛
       this.onPaymentSuccess();
     }, 1500);
   },
 
   /**
-   * 处理支付宝支付
-   */
+   * 澶勭悊鏀粯瀹濇敮浠?   */
   processAlipay() {
-    // 这里应该调用支付宝支付API
-    wx.showLoading({ title: '调起支付...' });
+    // 杩欓噷搴旇璋冪敤鏀粯瀹濇敮浠楢PI
+    wx.showLoading({ title: '璋冭捣鏀粯...' });
     
     setTimeout(() => {
       wx.hideLoading();
       
-      // 模拟支付成功
+      // 妯℃嫙鏀粯鎴愬姛
       this.onPaymentSuccess();
     }, 1500);
   },
 
   /**
-   * 处理余额支付
+   * 澶勭悊浣欓鏀粯
    */
   async processBalancePay() {
     try {
-      wx.showLoading({ title: '支付中...' });
+      wx.showLoading({ title: '鏀粯涓?..' });
       
-      // 这里应该调用余额支付API
+      // 杩欓噷搴旇璋冪敤浣欓鏀粯API
       // const result = await paymentService.balancePayment({
       //   orderId: this.data.orderId,
       //   amount: this.data.orderData.actualAmount
@@ -318,26 +312,26 @@ Page({
       setTimeout(() => {
         wx.hideLoading();
         
-        // 模拟支付成功
+        // 妯℃嫙鏀粯鎴愬姛
         this.onPaymentSuccess();
       }, 1000);
       
     } catch (error) {
-      console.error('余额支付失败:', error);
+      console.error('浣欓鏀粯澶辫触:', error);
       wx.hideLoading();
       wx.showToast({
-        title: '支付失败，请重试',
+        title: '鏀粯澶辫触锛岃閲嶈瘯',
         icon: 'none'
       });
     }
   },
 
   /**
-   * 支付成功处理
+   * 鏀粯鎴愬姛澶勭悊
    */
   onPaymentSuccess() {
     wx.showToast({
-      title: '支付成功',
+      title: '鏀粯鎴愬姛',
       icon: 'success'
     });
     
@@ -349,12 +343,12 @@ Page({
   },
 
   /**
-   * 取消支付
+   * 鍙栨秷鏀粯
    */
   cancelPayment() {
     wx.showModal({
-      title: '取消支付',
-      content: '确定要取消支付吗？',
+      title: '鍙栨秷鏀粯',
+      content: '纭畾瑕佸彇娑堟敮浠樺悧锛?,
       success: (res) => {
         if (res.confirm) {
           wx.navigateBack();
@@ -364,7 +358,7 @@ Page({
   },
 
   /**
-   * 查看订单详情
+   * 鏌ョ湅璁㈠崟璇︽儏
    */
   viewOrderDetail() {
     wx.navigateTo({
@@ -373,7 +367,7 @@ Page({
   },
 
   /**
-   * 联系客服
+   * 鑱旂郴瀹㈡湇
    */
   contactService() {
     wx.navigateTo({

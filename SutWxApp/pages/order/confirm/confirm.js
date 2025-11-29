@@ -1,8 +1,8 @@
 /**
- * 文件名: confirm.js
- * 版本号: 1.0.1
- * 更新日期: 2025-11-27
- * 订单确认页面
+ * 鏂囦欢鍚? confirm.js
+ * 鐗堟湰鍙? 1.0.1
+ * 鏇存柊鏃ユ湡: 2025-11-27
+ * 璁㈠崟纭椤甸潰
  */
 const i18n = require('../../../utils/i18n');
 const PointsService = require('../../../services/pointsService');
@@ -31,22 +31,22 @@ Page({
     paymentMethods: [
       {
         id: 'wechat',
-        name: i18n.translate('微信支付'),
+        name: i18n.translate('寰俊鏀粯'),
         icon: '/images/wechat-pay.png'
       },
       {
         id: 'alipay',
-        name: i18n.translate('支付宝'),
+        name: i18n.translate('鏀粯瀹?),
         icon: '/images/alipay.png'
       }
     ]
   },
 
   /**
-   * 生命周期函数--监听页面加载
-   * @param {Object} options - 页面参数
-   * @param {string} options.productId - 商品ID
-   * @param {string} options.quantity - 商品数量
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
+   * @param {Object} options - 椤甸潰鍙傛暟
+   * @param {string} options.productId - 鍟嗗搧ID
+   * @param {string} options.quantity - 鍟嗗搧鏁伴噺
    * @returns {void}
    */
   onLoad(options) {
@@ -63,12 +63,11 @@ Page({
   },
 
   /**
-   * 生命周期函数--监听页面卸载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍗歌浇
    * @returns {void}
    */
   onUnload() {
-    // 清理所有定时器，防止内存泄漏
-    if (this.data.productTimer) {
+    // 娓呯悊鎵€鏈夊畾鏃跺櫒锛岄槻姝㈠唴瀛樻硠婕?    if (this.data.productTimer) {
       clearTimeout(this.data.productTimer);
     }
     if (this.data.addressTimer) {
@@ -83,7 +82,7 @@ Page({
   },
 
   /**
-   * 加载用户积分信息
+   * 鍔犺浇鐢ㄦ埛绉垎淇℃伅
    * @returns {void}
    */
   loadUserPoints() {
@@ -95,15 +94,13 @@ Page({
           loading: false
         });
         
-        // 计算可抵扣积分上限
-        this.calculateDeductiblePoints();
+        // 璁＄畻鍙姷鎵ｇН鍒嗕笂闄?        this.calculateDeductiblePoints();
       })
       .catch(error => {
-        console.error('获取用户积分失败:', error);
+        console.error('鑾峰彇鐢ㄦ埛绉垎澶辫触:', error);
         this.setData({ loading: false });
         
-        // 出错时使用默认值
-        this.setData({
+        // 鍑洪敊鏃朵娇鐢ㄩ粯璁ゅ€?        this.setData({
           userPoints: {
             available: 0,
             total: 0,
@@ -115,17 +112,16 @@ Page({
   },
 
   /**
-   * 页面显示时触发
-   * @returns {void}
+   * 椤甸潰鏄剧ず鏃惰Е鍙?   * @returns {void}
    */
   onShow() {
-    // 从地址选择页面返回时刷新地址信息
+    // 浠庡湴鍧€閫夋嫨椤甸潰杩斿洖鏃跺埛鏂板湴鍧€淇℃伅
     this.loadDefaultAddress();
   },
 
   /**
-   * 加载商品详情
-   * @param {string} id - 商品ID
+   * 鍔犺浇鍟嗗搧璇︽儏
+   * @param {string} id - 鍟嗗搧ID
    * @returns {void}
    */
   loadProductDetail(id) {
@@ -133,12 +129,12 @@ Page({
     const productTimer = setTimeout(() => {
       const mockProduct = {
         id: id,
-        name: i18n.translate('优质商品'),
+        name: i18n.translate('浼樿川鍟嗗搧'),
         image: '/images/placeholder.svg',
         price: '99.00',
         specs: {
-          '颜色': i18n.translate('红色'),
-          '尺寸': 'M'
+          '棰滆壊': i18n.translate('绾㈣壊'),
+          '灏哄': 'M'
         }
       };
 
@@ -155,8 +151,7 @@ Page({
         productTimer: null
       });
       
-      // 计算可抵扣积分上限
-      if (this.data.userPoints) {
+      // 璁＄畻鍙姷鎵ｇН鍒嗕笂闄?      if (this.data.userPoints) {
         this.calculateDeductiblePoints();
       }
     }, 300);
@@ -165,8 +160,7 @@ Page({
   },
 
   /**
-   * 计算可抵扣积分上限
-   * @returns {void}
+   * 璁＄畻鍙姷鎵ｇН鍒嗕笂闄?   * @returns {void}
    */
   calculateDeductiblePoints() {
     const { totalAmount } = this.data;
@@ -187,13 +181,12 @@ Page({
         const { maxDeductiblePoints } = result.data;
         this.setData({
           maxDeductiblePoints,
-          deductionPoints: Math.min(this.data.deductionPoints, maxDeductiblePoints) // 确保当前抵扣积分不超过新的上限
-        });
+          deductionPoints: Math.min(this.data.deductionPoints, maxDeductiblePoints) // 纭繚褰撳墠鎶垫墸绉垎涓嶈秴杩囨柊鐨勪笂闄?        });
         this.calculateDeduction();
       })
       .catch(error => {
-        console.error('计算可抵扣积分失败:', error);
-        // 出错时默认使用用户可用积分的50%作为上限
+        console.error('璁＄畻鍙姷鎵ｇН鍒嗗け璐?', error);
+        // 鍑洪敊鏃堕粯璁や娇鐢ㄧ敤鎴峰彲鐢ㄧН鍒嗙殑50%浣滀负涓婇檺
         const maxPoints = this.data.userPoints ? Math.floor(this.data.userPoints.available * 0.5) : 0;
         this.setData({
           maxDeductiblePoints: maxPoints,
@@ -204,7 +197,7 @@ Page({
   },
 
   /**
-   * 计算积分抵扣金额
+   * 璁＄畻绉垎鎶垫墸閲戦
    * @returns {void}
    */
   calculateDeduction() {
@@ -218,8 +211,7 @@ Page({
       return;
     }
     
-    // 使用默认计算方式（100积分抵扣1元），实际抵扣金额将在提交订单时由后端计算
-    const deductionAmount = (deductionPoints / 100).toFixed(2);
+    // 浣跨敤榛樿璁＄畻鏂瑰紡锛?00绉垎鎶垫墸1鍏冿級锛屽疄闄呮姷鎵ｉ噾棰濆皢鍦ㄦ彁浜よ鍗曟椂鐢卞悗绔绠?    const deductionAmount = (deductionPoints / 100).toFixed(2);
     const total = parseFloat(totalAmount) + parseFloat(shippingFee);
     const finalAmount = Math.max(0, total - parseFloat(deductionAmount)).toFixed(2);
     
@@ -230,8 +222,8 @@ Page({
   },
 
   /**
-   * 积分滑块变化事件
-   * @param {Object} e - 事件对象
+   * 绉垎婊戝潡鍙樺寲浜嬩欢
+   * @param {Object} e - 浜嬩欢瀵硅薄
    * @returns {void}
    */
   onPointsChange(e) {
@@ -241,15 +233,14 @@ Page({
   },
 
   /**
-   * 积分输入框变化事件
-   * @param {Object} e - 事件对象
+   * 绉垎杈撳叆妗嗗彉鍖栦簨浠?   * @param {Object} e - 浜嬩欢瀵硅薄
    * @returns {void}
    */
   onPointsInput(e) {
     let points = parseInt(e.detail.value) || 0;
     const { maxDeductiblePoints } = this.data;
     
-    // 确保积分不超过最大可抵扣积分
+    // 纭繚绉垎涓嶈秴杩囨渶澶у彲鎶垫墸绉垎
     points = Math.min(Math.max(0, points), maxDeductiblePoints);
     
     this.setData({ deductionPoints: points });
@@ -257,19 +248,19 @@ Page({
   },
 
   /**
-   * 加载默认地址
+   * 鍔犺浇榛樿鍦板潃
    * @returns {void}
    */
   loadDefaultAddress() {
     const addressTimer = setTimeout(() => {
       const mockAddress = {
         id: 1,
-        name: i18n.translate('张三'),
+        name: i18n.translate('寮犱笁'),
         phone: '13800138000',
-        province: i18n.translate('北京市'),
-        city: i18n.translate('北京市'),
-        district: i18n.translate('朝阳区'),
-        detail: i18n.translate('某某街道某某小区1号楼1单元101室'),
+        province: i18n.translate('鍖椾含甯?),
+        city: i18n.translate('鍖椾含甯?),
+        district: i18n.translate('鏈濋槼鍖?),
+        detail: i18n.translate('鏌愭煇琛楅亾鏌愭煇灏忓尯1鍙锋ゼ1鍗曞厓101瀹?),
         isDefault: true
       };
 
@@ -283,7 +274,7 @@ Page({
   },
 
   /**
-   * 跳转到地址选择页面
+   * 璺宠浆鍒板湴鍧€閫夋嫨椤甸潰
    * @returns {void}
    */
   goToAddressSelection() {
@@ -293,8 +284,8 @@ Page({
   },
 
   /**
-   * 选择支付方式
-   * @param {Object} e - 事件对象
+   * 閫夋嫨鏀粯鏂瑰紡
+   * @param {Object} e - 浜嬩欢瀵硅薄
    * @returns {void}
    */
   selectPaymentMethod(e) {
@@ -303,8 +294,8 @@ Page({
   },
 
   /**
-   * 更新备注信息
-   * @param {Object} e - 事件对象
+   * 鏇存柊澶囨敞淇℃伅
+   * @param {Object} e - 浜嬩欢瀵硅薄
    * @returns {void}
    */
   updateRemark(e) {
@@ -312,31 +303,30 @@ Page({
   },
 
   /**
-   * 提交订单
+   * 鎻愪氦璁㈠崟
    * @returns {void}
    */
   submitOrder() {
     const { product, quantity, address, paymentMethod, remark, deductionPoints } = this.data;
     
-    // 检查是否选择了地址
+    // 妫€鏌ユ槸鍚﹂€夋嫨浜嗗湴鍧€
     if (!address) {
       wx.showToast({
-        title: i18n.translate('请选择收货地址'),
+        title: i18n.translate('璇烽€夋嫨鏀惰揣鍦板潃'),
         icon: 'none'
       });
       return;
     }
     
-    // 检查商品信息是否完整
-    if (!product) {
+    // 妫€鏌ュ晢鍝佷俊鎭槸鍚﹀畬鏁?    if (!product) {
       wx.showToast({
-        title: i18n.translate('商品信息不完整'),
+        title: i18n.translate('鍟嗗搧淇℃伅涓嶅畬鏁?),
         icon: 'none'
       });
       return;
     }
     
-    // 构建订单数据
+    // 鏋勫缓璁㈠崟鏁版嵁
     const orderData = {
       items: [{
         productId: product.id,
@@ -360,25 +350,24 @@ Page({
     
     this.setData({ loading: true });
     
-    // 实际项目中应该调用API提交订单
+    // 瀹為檯椤圭洰涓簲璇ヨ皟鐢ˋPI鎻愪氦璁㈠崟
     const submitTimer = setTimeout(() => {
       this.setData({ loading: false });
       
-      // 模拟订单提交成功
+      // 妯℃嫙璁㈠崟鎻愪氦鎴愬姛
       const orderId = 'ORD' + new Date().getTime();
       
-      // 如果使用了积分抵扣，调用积分抵扣API
+      // 濡傛灉浣跨敤浜嗙Н鍒嗘姷鎵ｏ紝璋冪敤绉垎鎶垫墸API
       if (deductionPoints > 0) {
         this.usePointsForDeduction(orderId, deductionPoints);
       }
       
       wx.showToast({
-        title: i18n.translate('订单提交成功'),
+        title: i18n.translate('璁㈠崟鎻愪氦鎴愬姛'),
         icon: 'success',
         duration: 1500,
         success: () => {
-          // 跳转到支付页面或订单详情页
-          setTimeout(() => {
+          // 璺宠浆鍒版敮浠橀〉闈㈡垨璁㈠崟璇︽儏椤?          setTimeout(() => {
             wx.redirectTo({
               url: `/pages/order/detail/detail?id=${orderId}`
             });
@@ -393,20 +382,18 @@ Page({
   },
 
   /**
-   * 使用积分抵扣
-   * @param {string} orderId - 订单ID
-   * @param {number} points - 抵扣积分数量
+   * 浣跨敤绉垎鎶垫墸
+   * @param {string} orderId - 璁㈠崟ID
+   * @param {number} points - 鎶垫墸绉垎鏁伴噺
    * @returns {void}
    */
   usePointsForDeduction(orderId, points) {
-    // 调用积分服务的抵扣接口
-    PointsService.usePointsForDeduction({
+    // 璋冪敤绉垎鏈嶅姟鐨勬姷鎵ｆ帴鍙?    PointsService.usePointsForDeduction({
       orderId: orderId,
       points: points
     }).then(result => {
-      // 积分抵扣成功，无需额外处理
+      // 绉垎鎶垫墸鎴愬姛锛屾棤闇€棰濆澶勭悊
     }).catch(error => {
-      // 积分抵扣失败，可以考虑回滚订单或其他处理
-    });
+      // 绉垎鎶垫墸澶辫触锛屽彲浠ヨ€冭檻鍥炴粴璁㈠崟鎴栧叾浠栧鐞?    });
   }
 });

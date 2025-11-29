@@ -1,12 +1,12 @@
 /**
- * 文件名: detail.wxss
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: detail 页面样式文件
+ * 鏂囦欢鍚? detail.wxss
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: detail 椤甸潰鏍峰紡鏂囦欢
  */
-/* 文件名: detail.wxss */
+/* 鏂囦欢鍚? detail.wxss */
 .container {
-  padding-bottom: 120rpx; /* 留出底部操作按钮的空间 */
+  padding-bottom: 120rpx; /* 鐣欏嚭搴曢儴鎿嶄綔鎸夐挳鐨勭┖闂?*/
 }
 
 .order-status-card {

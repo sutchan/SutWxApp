@@ -1,27 +1,27 @@
 /**
- * 文件名: sut-wechat-mini-en_US.json
- * 版本号: 1.0.1
- * 更新日期: 2025-11-24
- * 描述: sut-wechat-mini-en_US JSON 配置文件
+ * 鏂囦欢鍚? sut-wechat-mini-en_US.json
+ * 鐗堟湰鍙? 1.0.1
+ * 鏇存柊鏃ユ湡: 2025-11-24
+ * 鎻忚堪: sut-wechat-mini-en_US JSON 閰嶇疆鏂囦欢
  */
 {
   "loading": "Loading...",
   "network_error": "Network Error",
   "login_required": "Please Login First",
   "task_completed": "Task Completed",
-  "返回": "Back",
-  "提交": "Submit",
-  "取消": "Cancel",
-  "评价订单": "Order Review",
-  "商品名称": "Product Name",
-  "楼 {price}": "$ {price}",
-  "商品评分": "Product Rating",
-  "说您的使用体验吧...": "Share your experience...",
+  "杩斿洖": "Back",
+  "鎻愪氦": "Submit",
+  "鍙栨秷": "Cancel",
+  "璇勪环璁㈠崟": "Order Review",
+  "鍟嗗搧鍚嶇О": "Product Name",
+  "妤?{price}": "$ {price}",
+  "鍟嗗搧璇勫垎": "Product Rating",
+  "璇存偍鐨勪娇鐢ㄤ綋楠屽惂...": "Share your experience...",
   "{current}/{total}": "{current}/{total}",
-  "匿名评价": "Anonymous Review",
-  "上传图片 (最多{count}张)": "Upload Images (Max {count})",
-  "提交评价": "Submit Review",
-  "评价内容不能为空": "Review content cannot be empty",
-  "评价提交成功": "Review submitted successfully",
-  "分享订单评价": "Share Order Review"
+  "鍖垮悕璇勪环": "Anonymous Review",
+  "涓婁紶鍥剧墖 (鏈€澶歿count}寮?": "Upload Images (Max {count})",
+  "鎻愪氦璇勪环": "Submit Review",
+  "璇勪环鍐呭涓嶈兘涓虹┖": "Review content cannot be empty",
+  "璇勪环鎻愪氦鎴愬姛": "Review submitted successfully",
+  "鍒嗕韩璁㈠崟璇勪环": "Share Order Review"
 }

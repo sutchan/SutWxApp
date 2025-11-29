@@ -1,9 +1,9 @@
 /**
- * 文件名: detail.js
- * 版本号: 1.0.1
- * 更新日期: 2025-11-24
- * 作者: Sut
- * 描述: 文章详情页面
+ * 鏂囦欢鍚? detail.js
+ * 鐗堟湰鍙? 1.0.1
+ * 鏇存柊鏃ユ湡: 2025-11-24
+ * 浣滆€? Sut
+ * 鎻忚堪: 鏂囩珷璇︽儏椤甸潰
  */
 
 const articleService = require('../../../services/articleService');
@@ -18,9 +18,9 @@ Page({
   },
 
   /**
-   * 生命周期函数--监听页面加载
-   * @param {Object} options - 页面参数
-   * @param {string} options.id - 文章ID
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
+   * @param {Object} options - 椤甸潰鍙傛暟
+   * @param {string} options.id - 鏂囩珷ID
    * @returns {void}
    */
   onLoad(options) {
@@ -36,50 +36,47 @@ Page({
   },
 
   /**
-   * 生命周期函数--监听页面显示
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
    * @returns {void}
    */
   onShow() {
-    // 页面显示时可以刷新数据
-    if (this.data.articleId && !this.data.loading) {
-      // 可以选择是否重新加载数据
+    // 椤甸潰鏄剧ず鏃跺彲浠ュ埛鏂版暟鎹?    if (this.data.articleId && !this.data.loading) {
+      // 鍙互閫夋嫨鏄惁閲嶆柊鍔犺浇鏁版嵁
       // this.loadArticleDetail(this.data.articleId);
     }
   },
 
   /**
-   * 加载文章详情
-   * @param {string} id - 文章ID
+   * 鍔犺浇鏂囩珷璇︽儏
+   * @param {string} id - 鏂囩珷ID
    * @returns {Promise<void>}
    */
   async loadArticleDetail(id) {
     try {
       this.setData({ loading: true, error: null });
       
-      // 调用服务层获取文章详情
-      const article = await articleService.getArticleDetail(id);
+      // 璋冪敤鏈嶅姟灞傝幏鍙栨枃绔犺鎯?      const article = await articleService.getArticleDetail(id);
       
-      // 更新页面数据
+      // 鏇存柊椤甸潰鏁版嵁
       this.setData({ article, loading: false });
       
-      // 更新导航栏标题
-      wx.setNavigationBarTitle({
+      // 鏇存柊瀵艰埅鏍忔爣棰?      wx.setNavigationBarTitle({
         title: article.title || i18n.t('article_detail.default_title')
       });
       
-      // 异步增加阅读次数
+      // 寮傛澧炲姞闃呰娆℃暟
       articleService.increaseViewCount(id).catch(err => {
-        console.warn('增加阅读次数失败:', err);
+        console.warn('澧炲姞闃呰娆℃暟澶辫触:', err);
       });
       
     } catch (error) {
-      console.error('加载文章详情失败:', error);
+      console.error('鍔犺浇鏂囩珷璇︽儏澶辫触:', error);
       this.setData({
         loading: false,
         error: error.message || i18n.t('article_detail.load_failed')
       });
       
-      // 显示错误提示
+      // 鏄剧ず閿欒鎻愮ず
       wx.showToast({
         title: i18n.t('article_detail.load_failed'),
         icon: 'none',
@@ -89,13 +86,13 @@ Page({
   },
 
   /**
-   * 页面相关事件处理函数--监听用户下拉动作
+   * 椤甸潰鐩稿叧浜嬩欢澶勭悊鍑芥暟--鐩戝惉鐢ㄦ埛涓嬫媺鍔ㄤ綔
    * @returns {void}
    */
   onPullDownRefresh() {
     if (this.data.articleId) {
       this.loadArticleDetail(this.data.articleId).finally(() => {
-        // 停止下拉刷新
+        // 鍋滄涓嬫媺鍒锋柊
         wx.stopPullDownRefresh();
       });
     } else {
@@ -104,20 +101,19 @@ Page({
   },
 
   /**
-   * 用户点击右上角分享
-   * @returns {Object} 分享配置
+   * 鐢ㄦ埛鐐瑰嚮鍙充笂瑙掑垎浜?   * @returns {Object} 鍒嗕韩閰嶇疆
    */
   onShareAppMessage() {
     const { article } = this.data;
     return {
       title: article?.title || i18n.t('article_detail.share_title'),
       path: `/pages/article/detail/detail?id=${this.data.articleId}`,
-      imageUrl: '' // 可以设置分享图片
+      imageUrl: '' // 鍙互璁剧疆鍒嗕韩鍥剧墖
     };
   },
 
   /**
-   * 重试加载
+   * 閲嶈瘯鍔犺浇
    * @returns {void}
    */
   handleRetry() {
@@ -127,7 +123,7 @@ Page({
   },
 
   /**
-   * 复制文章链接
+   * 澶嶅埗鏂囩珷閾炬帴
    * @returns {void}
    */
   copyArticleLink() {
@@ -142,7 +138,7 @@ Page({
         });
       },
       fail: (err) => {
-        console.error('复制链接失败:', err);
+        console.error('澶嶅埗閾炬帴澶辫触:', err);
         wx.showToast({
           title: i18n.t('common.copy_failed'),
           icon: 'none',

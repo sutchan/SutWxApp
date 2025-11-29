@@ -1,7 +1,7 @@
 /**
  * 文件名: settingsService.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
+ * 版本号: 1.0.1
+ * 更新日期: 2025-11-28
  * 描述: 设置服务
  */
 
@@ -386,7 +386,7 @@ const settingsService = {
   },
 
   /**
-   * 删除账户
+   * 删除账号
    * @param {Object} options - 删除参数
    * @param {string} options.password - 密码
    * @param {string} options.reason - 删除原因

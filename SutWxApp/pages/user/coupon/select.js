@@ -1,8 +1,8 @@
 /**
- * 文件名: select.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 用户优惠券选择页面
+ * 鏂囦欢鍚? select.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鐢ㄦ埛浼樻儬鍒搁€夋嫨椤甸潰
  */
 Page({
   data: {
@@ -15,9 +15,9 @@ Page({
   },
 
   /**
-   * 生命周期函数--监听页面加载
-   * @param {Object} options - 页面参数
-   * @param {string} options.selectedId - 已选中的优惠券ID
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
+   * @param {Object} options - 椤甸潰鍙傛暟
+   * @param {string} options.selectedId - 宸查€変腑鐨勪紭鎯犲埜ID
    * @returns {void}
    */
   onLoad(options) {
@@ -28,29 +28,28 @@ Page({
   },
 
   /**
-   * 生命周期函数--监听页面卸载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍗歌浇
    * @returns {void}
    */
   onUnload() {
-    // 清理定时器，防止内存泄漏
+    // 娓呯悊瀹氭椂鍣紝闃叉鍐呭瓨娉勬紡
     if (this.data.timer) {
       clearTimeout(this.data.timer);
     }
   },
 
   /**
-   * 加载优惠券列表
-   * @returns {void}
+   * 鍔犺浇浼樻儬鍒稿垪琛?   * @returns {void}
    */
   loadCoupons() {
     this.setData({ loading: true });
-    // 模拟数据请求
+    // 妯℃嫙鏁版嵁璇锋眰
     const timer = setTimeout(() => {
       const mockCoupons = [
-        { id: '1', name: '满100减10元', value: 10, condition: '满100元可用', endDate: '2023-12-31', available: true },
-        { id: '2', name: '新人专享券', value: 5, condition: '无门槛', endDate: '2023-11-30', available: true },
-        { id: '3', name: '已过期优惠券', value: 15, condition: '满150元可用', endDate: '2023-09-30', available: false },
-        { id: '4', name: '不满足条件优惠券', value: 20, condition: '满200元可用', endDate: '2023-12-31', available: false }
+        { id: '1', name: '婊?00鍑?0鍏?, value: 10, condition: '婊?00鍏冨彲鐢?, endDate: '2023-12-31', available: true },
+        { id: '2', name: '鏂颁汉涓撲韩鍒?, value: 5, condition: '鏃犻棬妲?, endDate: '2023-11-30', available: true },
+        { id: '3', name: '宸茶繃鏈熶紭鎯犲埜', value: 15, condition: '婊?50鍏冨彲鐢?, endDate: '2023-09-30', available: false },
+        { id: '4', name: '涓嶆弧瓒虫潯浠朵紭鎯犲埜', value: 20, condition: '婊?00鍏冨彲鐢?, endDate: '2023-12-31', available: false }
       ];
 
       const available = mockCoupons.filter(coupon => coupon.available);
@@ -69,15 +68,14 @@ Page({
   },
 
   /**
-   * 选择优惠券
-   * @param {Object} e - 事件对象
+   * 閫夋嫨浼樻儬鍒?   * @param {Object} e - 浜嬩欢瀵硅薄
    * @returns {void}
    */
   selectCoupon(e) {
     const { id } = e.currentTarget.dataset;
     const selectedCoupon = this.data.availableCoupons.find(coupon => coupon.id === id);
     if (selectedCoupon) {
-      // 返回上一页并传递选中的优惠券信息
+      // 杩斿洖涓婁竴椤靛苟浼犻€掗€変腑鐨勪紭鎯犲埜淇℃伅
       const pages = getCurrentPages();
       const prevPage = pages[pages.length - 2];
       if (prevPage) {
@@ -90,7 +88,7 @@ Page({
   },
 
   /**
-   * 不使用优惠券
+   * 涓嶄娇鐢ㄤ紭鎯犲埜
    * @returns {void}
    */
   noCoupon() {

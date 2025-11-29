@@ -1,20 +1,19 @@
 /**
- * 文件名: list.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: 
+ * 鏂囦欢鍚? list.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: 
  */
 
 // pages/notification/list.js
 const notificationService = require('../../services/notificationService.js');
 
 /**
- * 通知列表页面
+ * 閫氱煡鍒楄〃椤甸潰
  */
 Page({
   /**
-   * 页面的初始数据
-   */
+   * 椤甸潰鐨勫垵濮嬫暟鎹?   */
   data: {
     notifications: [],
     loading: true,
@@ -25,25 +24,24 @@ Page({
   },
 
   /**
-   * 生命周期函数--监听页面加载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
    */
   onLoad: function (options) {
     this.loadNotifications();
   },
 
   /**
-   * 生命周期函数--监听页面初次渲染完成
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍒濇娓叉煋瀹屾垚
    */
   onReady: function () {
     
   },
 
   /**
-   * 生命周期函数--监听页面显示
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
    */
   onShow: function () {
-    // 每次显示页面时刷新数据
-    this.setData({
+    // 姣忔鏄剧ず椤甸潰鏃跺埛鏂版暟鎹?    this.setData({
       page: 1,
       notifications: [],
       hasMore: true
@@ -52,21 +50,21 @@ Page({
   },
 
   /**
-   * 生命周期函数--监听页面隐藏
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰闅愯棌
    */
   onHide: function () {
     
   },
 
   /**
-   * 生命周期函数--监听页面卸载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍗歌浇
    */
   onUnload: function () {
     
   },
 
   /**
-   * 页面相关事件处理函数--监听用户下拉动作
+   * 椤甸潰鐩稿叧浜嬩欢澶勭悊鍑芥暟--鐩戝惉鐢ㄦ埛涓嬫媺鍔ㄤ綔
    */
   onPullDownRefresh: function () {
     this.setData({
@@ -78,8 +76,7 @@ Page({
   },
 
   /**
-   * 页面上拉触底事件的处理函数
-   */
+   * 椤甸潰涓婃媺瑙﹀簳浜嬩欢鐨勫鐞嗗嚱鏁?   */
   onReachBottom: function () {
     if (this.data.hasMore && !this.data.loading) {
       this.loadNotifications();
@@ -87,19 +84,17 @@ Page({
   },
 
   /**
-   * 用户点击右上角分享
-   */
+   * 鐢ㄦ埛鐐瑰嚮鍙充笂瑙掑垎浜?   */
   onShareAppMessage: function () {
     return {
-      title: '通知中心',
+      title: '閫氱煡涓績',
       path: '/pages/notification/list/list'
     };
   },
 
   /**
-   * 加载通知列表
-   * @param {boolean} isRefresh - 是否是刷新操作
-   */
+   * 鍔犺浇閫氱煡鍒楄〃
+   * @param {boolean} isRefresh - 鏄惁鏄埛鏂版搷浣?   */
   loadNotifications: function(isRefresh = false) {
     if (this.data.loading) return;
     
@@ -125,7 +120,7 @@ Page({
           page: hasMore ? this.data.page + 1 : this.data.page
         });
         
-        // 停止下拉刷新
+        // 鍋滄涓嬫媺鍒锋柊
         if (isRefresh) {
           wx.stopPullDownRefresh();
         }
@@ -136,11 +131,11 @@ Page({
         });
         
         wx.showToast({
-          title: err.message || '加载通知失败',
+          title: err.message || '鍔犺浇閫氱煡澶辫触',
           icon: 'none'
         });
         
-        // 停止下拉刷新
+        // 鍋滄涓嬫媺鍒锋柊
         if (isRefresh) {
           wx.stopPullDownRefresh();
         }
@@ -148,17 +143,14 @@ Page({
   },
 
   /**
-   * 点击通知项
-   * @param {Object} e - 事件对象
+   * 鐐瑰嚮閫氱煡椤?   * @param {Object} e - 浜嬩欢瀵硅薄
    */
   onNotificationTap: function(e) {
     const { id, type, url } = e.currentTarget.dataset;
     
-    // 标记通知为已读
-    notificationService.markAsRead(id)
+    // 鏍囪閫氱煡涓哄凡璇?    notificationService.markAsRead(id)
       .then(() => {
-        // 更新本地数据中的已读状态
-        const notifications = this.data.notifications.map(item => {
+        // 鏇存柊鏈湴鏁版嵁涓殑宸茶鐘舵€?        const notifications = this.data.notifications.map(item => {
           if (item.id === id) {
             return { ...item, isRead: true };
           }
@@ -170,10 +162,10 @@ Page({
         });
       })
       .catch(err => {
-        console.error('标记已读失败:', err);
+        console.error('鏍囪宸茶澶辫触:', err);
       });
     
-    // 根据通知类型跳转
+    // 鏍规嵁閫氱煡绫诲瀷璺宠浆
     if (type === 'article' && url) {
       wx.navigateTo({
         url: `/pages/article/detail/detail?id=${url}`
@@ -187,21 +179,18 @@ Page({
         url: `/pages/user/order/detail/detail?id=${url}`
       });
     } else if (type === 'system') {
-      // 系统通知跳转到通知详情页
-      wx.navigateTo({
+      // 绯荤粺閫氱煡璺宠浆鍒伴€氱煡璇︽儏椤?      wx.navigateTo({
         url: `/pages/notification/detail/detail?id=${id}`
       });
     }
   },
 
   /**
-   * 全部标记为已读
-   */
+   * 鍏ㄩ儴鏍囪涓哄凡璇?   */
   markAllAsRead: function() {
     notificationService.markAllAsRead()
       .then(() => {
-        // 更新本地数据中的已读状态
-        const notifications = this.data.notifications.map(item => {
+        // 鏇存柊鏈湴鏁版嵁涓殑宸茶鐘舵€?        const notifications = this.data.notifications.map(item => {
           return { ...item, isRead: true };
         });
         
@@ -210,13 +199,13 @@ Page({
         });
         
         wx.showToast({
-          title: '已全部标记为已读',
+          title: '宸插叏閮ㄦ爣璁颁负宸茶',
           icon: 'success'
         });
       })
       .catch(err => {
         wx.showToast({
-          title: err.message || '操作失败',
+          title: err.message || '鎿嶄綔澶辫触',
           icon: 'none'
         });
       });

@@ -1,40 +1,39 @@
 /**
- * 文件名: i18n.js
- * 版本号: 1.0.1
- * 更新日期: 2025-11-24
- * 作者: Sut
- * 描述: 国际化服务，用于管理微信小程序中的多语言文本，从i18n目录下的JSON文件加载翻译内容
+ * 鏂囦欢鍚? i18n.js
+ * 鐗堟湰鍙? 1.0.2
+ * 鏇存柊鏃ユ湡: 2025-11-29
+ * 浣滆€? Sut
+ * 鎻忚堪: 鍥介檯鍖栨湇鍔★紝鐢ㄤ簬绠＄悊寰俊灏忕▼搴忎腑鐨勫璇█鏂囨湰锛屼粠i18n鐩綍涓嬬殑JSON鏂囦欢鍔犺浇缈昏瘧鍐呭
  */
 class I18n {
   constructor() {
-    this.locale = 'zh_CN'; // 默认语言
-    this.translations = {}; // 用于加载翻译内容
+    this.locale = 'zh_CN'; // 榛樿璇█
+    this.translations = {}; // 鐢ㄤ簬鍔犺浇缈昏瘧鍐呭
   }
 
   /**
-   * 从字符串模板文件加载翻译内容
-   * @param {Object} poData - 解析后的.po文件内容(构建时指定)
+   * 浠庡瓧绗︿覆妯℃澘鏂囦欢鍔犺浇缈昏瘧鍐呭
+   * @param {Object} poData - 瑙ｆ瀽鍚庣殑.po鏂囦欢鍐呭(鏋勫缓鏃舵寚瀹?
    */
   loadTranslations(poData) {
     this.translations = poData;
   }
 
   /**
-   * 设置当前语言
-   * @param {string} locale - 语言代码，例如 'zh_CN', 'en_US'
+   * 璁剧疆褰撳墠璇█
+   * @param {string} locale - 璇█浠ｇ爜锛屼緥濡?'zh_CN', 'en_US'
    */
   setLocale(locale) {
     if (this.translations[locale]) {
       this.locale = locale;
     }
-    // 如果找不到指定的语言，将保持默认语言
+    // 濡傛灉鎵句笉鍒版寚瀹氱殑璇█锛屽皢淇濇寔榛樿璇█
   }
 
   /**
-   * 获取翻译文本
-   * @param {string} key - 翻译键
-   * @param {Object} params - 替换参数，例如 { price: '99.00' }
-   * @returns {string} 翻译后的文本
+   * 鑾峰彇缈昏瘧鏂囨湰
+   * @param {string} key - 缈昏瘧閿?   * @param {Object} params - 鏇挎崲鍙傛暟锛屼緥濡?{ price: '99.00' }
+   * @returns {string} 缈昏瘧鍚庣殑鏂囨湰
    */
   translate(key, params = {}) {
     if (!this.translations[this.locale]) {
@@ -50,11 +49,11 @@ class I18n {
 
 const i18n = new I18n();
 
-// 从i18n目录加载翻译文件
+// 浠巌18n鐩綍鍔犺浇缈昏瘧鏂囦欢
 i18n.loadTranslations({
   'zh_CN': require('./i18n/sut-wechat-mini-zh_CN.json'),
   'en_US': require('./i18n/sut-wechat-mini-en_US.json')
 });
 
-// 导出实例，方便在其他地方使用
+// 瀵煎嚭瀹炰緥锛屾柟渚垮湪鍏朵粬鍦版柟浣跨敤
 module.exports = i18n;

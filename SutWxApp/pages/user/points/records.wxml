@@ -1,19 +1,19 @@
 /**
- * 文件名: records.wxml
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: records 页面结构文件
+ * 鏂囦欢鍚? records.wxml
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: records 椤甸潰缁撴瀯鏂囦欢
  */
 <view class="container">
-  <!-- 积分概览 -->
+  <!-- 绉垎姒傝 -->
   <view class="points-summary">
     <view class="total-points">
       <text class="points-value">{{totalPoints}}</text>
-      <text class="points-label">当前积分</text>
+      <text class="points-label">褰撳墠绉垎</text>
     </view>
   </view>
   
-  <!-- 标签切换 -->
+  <!-- 鏍囩鍒囨崲 -->
   <view class="tabs">
     <view 
       wx:for="{{tabs}}" 
@@ -26,7 +26,7 @@
     </view>
   </view>
   
-  <!-- 积分记录列表 -->
+  <!-- 绉垎璁板綍鍒楄〃 -->
   <view class="records-list">
     <view 
       wx:for="{{pointsRecords}}" 
@@ -46,19 +46,19 @@
       </view>
     </view>
     
-    <!-- 加载状态 -->
+    <!-- 鍔犺浇鐘舵€?-->
     <view wx:if="{{loading}}" class="loading">
-      <text>加载中...</text>
+      <text>鍔犺浇涓?..</text>
     </view>
     
-    <!-- 无更多数据 -->
+    <!-- 鏃犳洿澶氭暟鎹?-->
     <view wx:if="{{!hasMore && pointsRecords.length > 0}}" class="no-more">
-      <text>没有更多记录了</text>
+      <text>娌℃湁鏇村璁板綍浜?/text>
     </view>
     
-    <!-- 空状态 -->
+    <!-- 绌虹姸鎬?-->
     <view wx:if="{{!loading && pointsRecords.length === 0}}" class="empty-state">
-      <text>暂无积分记录</text>
+      <text>鏆傛棤绉垎璁板綍</text>
     </view>
   </view>
 </view>

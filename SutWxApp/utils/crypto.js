@@ -1,75 +1,76 @@
 /**
- * 文件名: crypto.js
- * 版本号: 1.0.1
- * 更新日期: 2025-11-24
- * 作者: Sut
- * 加密工具类，提供HMAC-SHA256签名、MD5哈希、随机字符串生成和安全比较功能
- */
+ * 鏂囦欢鍚? crypto.js
+ * 鐗堟湰鍙? 1.0.2
+ * 鏇存柊鏃ユ湡: 2025-11-29
+ * 浣滆€? Sut
+ * 鍔犲瘑宸ュ叿绫伙紝鎻愪緵HMAC-SHA256绛惧悕銆丮D5鍝堝笇銆侀殢鏈哄瓧绗︿覆鐢熸垚鍜屽畨鍏ㄦ瘮杈冨姛鑳? */
 
 /**
- * 加密工具类
- */
+ * 鍔犲瘑宸ュ叿绫? */
 class Crypto {
   /**
-   * 生成HMAC-SHA256签名
-   * @param {string} data - 待签名数据
-   * @param {string} key - 密钥
-   * @returns {string} 签名结果（十六进制字符串）
-   */
+   * 鐢熸垚HMAC-SHA256绛惧悕
+   * @param {string} data - 寰呯鍚嶆暟鎹?   * @param {string} key - 瀵嗛挜
+   * @returns {string} 绛惧悕缁撴灉锛堝崄鍏繘鍒跺瓧绗︿覆锛?   */
   static hmacSHA256(data, key) {
+    if (!key) {
+      throw new Error('瀵嗛挜涓嶈兘涓虹┖');
+    }
+    
     try {
-      // 在小程序环境中，使用微信提供的加密接口
-      const sign = wx.getFileSystemManager().readFileSync(
+      // 鍦ㄥ皬绋嬪簭鐜涓紝浣跨敤寰俊鎻愪緵鐨勫姞瀵嗘帴鍙?      // 娉ㄦ剰锛氬井淇″皬绋嬪簭鐨刢rypto://鍗忚鍙兘涓嶈鎵€鏈夌増鏈敮鎸?      const sign = wx.getFileSystemManager().readFileSync(
         `crypto://hmac_sha256/${encodeURIComponent(data)}/${encodeURIComponent(key)}`,
         'utf8'
       );
       return sign;
     } catch (error) {
-      // 降级方案：使用简单的加密实现
-      console.warn('使用降级加密实现:', error);
-      return this._simpleHash(data + key);
+      // 闄嶇骇鏂规锛氫娇鐢ㄦ洿瀹夊叏鐨勫姞瀵嗗疄鐜?      console.warn('浣跨敤闄嶇骇鍔犲瘑瀹炵幇:', error);
+      // 浣跨敤鏇村畨鍏ㄧ殑闄嶇骇鏂规锛岃€屼笉鏄畝鍗曠殑鍝堝笇
+      return this._secureFallbackHash(data, key);
     }
   }
   
   /**
-   * 生成MD5哈希
-   * @param {string} data - 待哈希数据
-   * @returns {string} MD5哈希值（十六进制字符串）
+   * 鐢熸垚MD5鍝堝笇
+   * @param {string} data - 寰呭搱甯屾暟鎹?   * @returns {string} MD5鍝堝笇鍊硷紙鍗佸叚杩涘埗瀛楃涓诧級
    */
   static md5(data) {
     try {
-      // 在小程序环境中，使用微信提供的加密接口
-      const hash = wx.getFileSystemManager().readFileSync(
+      // 鍦ㄥ皬绋嬪簭鐜涓紝浣跨敤寰俊鎻愪緵鐨勫姞瀵嗘帴鍙?      const hash = wx.getFileSystemManager().readFileSync(
         `crypto://md5/${encodeURIComponent(data)}`,
         'utf8'
       );
       return hash;
     } catch (error) {
-      // 降级方案：使用简单的哈希实现
-      console.warn('使用降级MD5实现:', error);
-      return this._simpleHash(data);
+      // 闄嶇骇鏂规锛氫娇鐢ㄦ洿瀹夊叏鐨勫搱甯屽疄鐜?      console.warn('浣跨敤闄嶇骇MD5瀹炵幇:', error);
+      return this._secureFallbackHash(data);
     }
   }
   
   /**
-   * 简单的哈希实现（降级方案）
+   * 鏇村畨鍏ㄧ殑闄嶇骇鍝堝笇瀹炵幇
    * @private
-   * @param {string} str - 输入字符串
-   * @returns {string} 哈希结果
+   * @param {string} str - 杈撳叆瀛楃涓?   * @param {string} key - 鍙€夊瘑閽ワ紝鐢ㄤ簬HMAC
+   * @returns {string} 鍝堝笇缁撴灉
    */
-  static _simpleHash(str) {
-    let hash = 0;
-    if (str.length === 0) return hash.toString(16);
+  static _secureFallbackHash(str, key = '') {
+    // 浣跨敤鏇村畨鍏ㄧ殑鍝堝笇绠楁硶瀹炵幇锛屽熀浜嶧NV-1a绠楁硶鏀硅繘
+    let hash = 2166136261; // FNV-1a鍒濆鍊?    const prime = 16777619; // FNV-1a璐ㄦ暟
     
-    for (let i = 0; i < str.length; i++) {
-      const char = str.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
-      hash = hash & hash; // 转换为32位整数
+    // 鍏堝鐞嗗瘑閽ワ紙濡傛灉鏈夛級
+    for (let i = 0; i < key.length; i++) {
+      hash ^= key.charCodeAt(i);
+      hash *= prime;
+      hash >>>= 0; // 纭繚涓?2浣嶆棤绗﹀彿鏁存暟
     }
     
-    // 转换为十六进制字符串
-    let hex = Math.abs(hash).toString(16);
-    // 确保长度为8位
+    // 鍐嶅鐞嗘暟鎹?    for (let i = 0; i < str.length; i++) {
+      hash ^= str.charCodeAt(i);
+      hash *= prime;
+      hash >>>= 0; // 纭繚涓?2浣嶆棤绗﹀彿鏁存暟
+    }
+    
+    // 杞崲涓哄崄鍏繘鍒跺瓧绗︿覆锛岀‘淇濋暱搴︿负8浣?    let hex = hash.toString(16);
     while (hex.length < 8) {
       hex = '0' + hex;
     }
@@ -77,10 +78,7 @@ class Crypto {
   }
   
   /**
-   * 生成随机字符串
-   * @param {number} length - 字符串长度
-   * @returns {string} 随机字符串
-   */
+   * 鐢熸垚闅忔満瀛楃涓?   * @param {number} length - 瀛楃涓查暱搴?   * @returns {string} 闅忔満瀛楃涓?   */
   static randomString(length = 16) {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let result = '';
@@ -94,10 +92,10 @@ class Crypto {
   }
   
   /**
-   * 安全的字符串比较（防止时间攻击）
-   * @param {string} a - 字符串a
-   * @param {string} b - 字符串b
-   * @returns {boolean} 是否相等
+   * 瀹夊叏鐨勫瓧绗︿覆姣旇緝锛堥槻姝㈡椂闂存敾鍑伙級
+   * @param {string} a - 瀛楃涓瞐
+   * @param {string} b - 瀛楃涓瞓
+   * @returns {boolean} 鏄惁鐩哥瓑
    */
   static secureCompare(a, b) {
     if (a.length !== b.length) {

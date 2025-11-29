@@ -1,7 +1,7 @@
 /**
  * 文件名: favoriteService.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
+ * 版本号: 1.0.1
+ * 更新日期: 2025-11-28
  * 描述: 收藏与关注服务
  */
 
@@ -35,7 +35,7 @@ async function getUserFavorites(options = {}) {
 
   const url = userId ? `/users/${userId}/favorites` : '/user/favorites';
 
-  return request.get(url, { params });
+  return request.get(url, params);
 }
 
 /**
@@ -126,7 +126,7 @@ async function batchRemoveFavorites(favoriteIds) {
     throw new Error('收藏ID列表不能为空');
   }
 
-  return request.delete('/user/favorites/batch', { data: { favoriteIds } });
+  return request.delete('/user/favorites/batch', { favoriteIds });
 }
 
 /**
@@ -154,7 +154,7 @@ async function getUserFollowing(options = {}) {
 
   const url = userId ? `/users/${userId}/following` : '/user/following';
 
-  return request.get(url, { params });
+  return request.get(url, params);
 }
 
 /**
@@ -182,7 +182,7 @@ async function getUserFollowers(options = {}) {
 
   const url = userId ? `/users/${userId}/followers` : '/user/followers';
 
-  return request.get(url, { params });
+  return request.get(url, params);
 }
 
 /**
@@ -225,7 +225,7 @@ async function checkUserFollowing(targetUserId) {
 }
 
 /**
- * 移除粉丝
+ * 删除粉丝
  * @param {string} followerId - 粉丝ID
  * @returns {Promise<Object>} 操作结果
  */
@@ -243,9 +243,7 @@ async function removeFollower(followerId) {
  * @returns {Promise<Array>} 推荐用户列表
  */
 async function getRecommendedUsers(limit = 10) {
-  return request.get('/users/recommended', {
-    params: { limit }
-  });
+  return request.get('/users/recommended', { limit });
 }
 
 /**
@@ -259,22 +257,20 @@ async function getUserFollowStats(userId) {
 }
 
 /**
- * 获取收藏夹列表
+ * 获取收藏文件夹列表
  * @param {number} page - 页码，默认为1
  * @param {number} pageSize - 每页数量，默认为20
- * @returns {Promise<Object>} 收藏夹列表和分页信息
+ * @returns {Promise<Object>} 收藏文件夹列表和分页信息
  */
 async function getFavoriteFolders(page = 1, pageSize = 20) {
-  return request.get('/user/favorite-folders', {
-    params: { page, pageSize }
-  });
+  return request.get('/user/favorite-folders', { page, pageSize });
 }
 
 /**
- * 创建收藏夹
- * @param {Object} data - 收藏夹数据
- * @param {string} data.name - 收藏夹名称
- * @param {string} data.description - 收藏夹描述
+ * 创建收藏文件夹
+ * @param {Object} data - 收藏文件夹数据
+ * @param {string} data.name - 收藏文件夹名称
+ * @param {string} data.description - 收藏文件夹描述
  * @param {boolean} data.isPublic - 是否公开
  * @returns {Promise<Object>} 创建结果
  */
@@ -282,15 +278,15 @@ async function createFavoriteFolder(data) {
   const { name, description, isPublic = false } = data;
 
   if (!name || name.trim().length === 0) {
-    throw new Error('收藏夹名称不能为空');
+    throw new Error('收藏文件夹名称不能为空');
   }
 
   if (name.length > 20) {
-    throw new Error('收藏夹名称不能超过20个字符');
+    throw new Error('收藏文件夹名称不能超过20个字符');
   }
 
   if (description && description.length > 100) {
-    throw new Error('收藏夹描述不能超过100个字符');
+    throw new Error('收藏文件夹描述不能超过100个字符');
   }
 
   return request.post('/user/favorite-folders', {
@@ -301,11 +297,11 @@ async function createFavoriteFolder(data) {
 }
 
 /**
- * 更新收藏夹
- * @param {string} folderId - 收藏夹ID
+ * 更新收藏文件夹
+ * @param {string} folderId - 收藏文件夹ID
  * @param {Object} data - 更新数据
- * @param {string} data.name - 收藏夹名称
- * @param {string} data.description - 收藏夹描述
+ * @param {string} data.name - 收藏文件夹名称
+ * @param {string} data.description - 收藏文件夹描述
  * @param {boolean} data.isPublic - 是否公开
  * @returns {Promise<Object>} 更新结果
  */
@@ -313,21 +309,21 @@ async function updateFavoriteFolder(folderId, data) {
   const { name, description, isPublic } = data;
 
   if (!folderId) {
-    throw new Error('收藏夹ID不能为空');
+    throw new Error('收藏文件夹ID不能为空');
   }
 
   if (name !== undefined) {
     if (!name || name.trim().length === 0) {
-      throw new Error('收藏夹名称不能为空');
+      throw new Error('收藏文件夹名称不能为空');
     }
 
     if (name.length > 20) {
-      throw new Error('收藏夹名称不能超过20个字符');
+      throw new Error('收藏文件夹名称不能超过20个字符');
     }
   }
 
   if (description !== undefined && description && description.length > 100) {
-    throw new Error('收藏夹描述不能超过100个字符');
+    throw new Error('收藏文件夹描述不能超过100个字符');
   }
 
   const updateData = {};
@@ -340,44 +336,42 @@ async function updateFavoriteFolder(folderId, data) {
 }
 
 /**
- * 删除收藏夹
- * @param {string} folderId - 收藏夹ID
+ * 删除收藏文件夹
+ * @param {string} folderId - 收藏文件夹ID
  * @returns {Promise<Object>} 删除结果
  */
 async function deleteFavoriteFolder(folderId) {
   if (!folderId) {
-    throw new Error('收藏夹ID不能为空');
+    throw new Error('收藏文件夹ID不能为空');
   }
 
   return request.delete(`/user/favorite-folders/${folderId}`);
 }
 
 /**
- * 获取收藏夹内容
- * @param {string} folderId - 收藏夹ID
+ * 获取收藏文件夹内容
+ * @param {string} folderId - 收藏文件夹ID
  * @param {number} page - 页码，默认为1
  * @param {number} pageSize - 每页数量，默认为20
- * @returns {Promise<Object>} 收藏夹内容和分页信息
+ * @returns {Promise<Object>} 收藏文件夹内容和分页信息
  */
 async function getFavoriteFolderContent(folderId, page = 1, pageSize = 20) {
   if (!folderId) {
-    throw new Error('收藏夹ID不能为空');
+    throw new Error('收藏文件夹ID不能为空');
   }
 
-  return request.get(`/user/favorite-folders/${folderId}/content`, {
-    params: { page, pageSize }
-  });
+  return request.get(`/user/favorite-folders/${folderId}/content`, { page, pageSize });
 }
 
 /**
- * 将收藏添加到收藏夹
- * @param {string} folderId - 收藏夹ID
+ * 将收藏添加到收藏文件夹
+ * @param {string} folderId - 收藏文件夹ID
  * @param {string} favoriteId - 收藏ID
  * @returns {Promise<Object>} 操作结果
  */
 async function addToFavoriteFolder(folderId, favoriteId) {
   if (!folderId) {
-    throw new Error('收藏夹ID不能为空');
+    throw new Error('收藏文件夹ID不能为空');
   }
 
   if (!favoriteId) {
@@ -388,14 +382,14 @@ async function addToFavoriteFolder(folderId, favoriteId) {
 }
 
 /**
- * 从收藏夹移除收藏
- * @param {string} folderId - 收藏夹ID
+ * 从收藏文件夹移除收藏
+ * @param {string} folderId - 收藏文件夹ID
  * @param {string} favoriteId - 收藏ID
  * @returns {Promise<Object>} 操作结果
  */
 async function removeFromFavoriteFolder(folderId, favoriteId) {
   if (!folderId) {
-    throw new Error('收藏夹ID不能为空');
+    throw new Error('收藏文件夹ID不能为空');
   }
 
   if (!favoriteId) {

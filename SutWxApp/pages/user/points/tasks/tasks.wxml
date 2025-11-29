@@ -1,24 +1,24 @@
 /**
- * 文件名: tasks.wxml
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: tasks 页面结构文件
+ * 鏂囦欢鍚? tasks.wxml
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: tasks 椤甸潰缁撴瀯鏂囦欢
  */
-<!-- 积分任务页面 -->
+<!-- 绉垎浠诲姟椤甸潰 -->
 <view class="tasks-container">
-  <!-- 用户积分信息 -->
+  <!-- 鐢ㄦ埛绉垎淇℃伅 -->
   <view class="points-header">
     <view class="points-info">
       <text class="points-value">{{userPoints.availablePoints}}</text>
-      <text class="points-label">我的积分</text>
+      <text class="points-label">鎴戠殑绉垎</text>
     </view>
     <view class="today-earned">
       <text class="earned-value">+{{userPoints.todayEarned}}</text>
-      <text class="earned-label">今日获得</text>
+      <text class="earned-label">浠婃棩鑾峰緱</text>
     </view>
   </view>
   
-  <!-- 任务类型筛选 -->
+  <!-- 浠诲姟绫诲瀷绛涢€?-->
   <view class="task-types">
     <scroll-view scroll-x="true" class="types-scroll">
       <view class="types-list">
@@ -32,7 +32,7 @@
     </scroll-view>
   </view>
   
-  <!-- 任务状态筛选 -->
+  <!-- 浠诲姟鐘舵€佺瓫閫?-->
   <view class="task-statuses">
     <scroll-view scroll-x="true" class="statuses-scroll">
       <view class="statuses-list">
@@ -45,18 +45,18 @@
     </scroll-view>
   </view>
   
-  <!-- 任务列表 -->
+  <!-- 浠诲姟鍒楄〃 -->
   <view class="tasks-list">
-    <!-- 加载状态 -->
+    <!-- 鍔犺浇鐘舵€?-->
     <view wx:if="{{loading && taskList.length === 0}}" class="loading-container">
       <view class="loading-spinner"></view>
-      <text class="loading-text">正在加载任务...</text>
+      <text class="loading-text">姝ｅ湪鍔犺浇浠诲姟...</text>
     </view>
     
-    <!-- 任务项 -->
+    <!-- 浠诲姟椤?-->
     <view wx:else class="task-items">
       <view wx:for="{{taskList}}" wx:key="id" class="task-item" data-id="{{item.id}}" bindtap="goToTaskDetail">
-        <!-- 任务图标和基本信息 -->
+        <!-- 浠诲姟鍥炬爣鍜屽熀鏈俊鎭?-->
         <view class="task-header">
           <view class="task-icon {{item.type}}">
             <image src="{{item.icon}}" mode="aspectFit"></image>
@@ -69,11 +69,11 @@
           
           <view class="task-reward">
             <text class="reward-value">+{{item.points}}</text>
-            <text class="reward-label">积分</text>
+            <text class="reward-label">绉垎</text>
           </view>
         </view>
         
-        <!-- 任务进度 -->
+        <!-- 浠诲姟杩涘害 -->
         <view wx:if="{{item.target > 1}}" class="task-progress">
           <view class="progress-bar">
             <view class="progress-fill" style="width: {{getTaskProgressPercent(item.current, item.target)}}%"></view>
@@ -83,13 +83,13 @@
           </view>
         </view>
         
-        <!-- 任务状态和操作 -->
+        <!-- 浠诲姟鐘舵€佸拰鎿嶄綔 -->
         <view class="task-footer">
           <view class="task-status {{item.status}}">
-            <text wx:if="{{item.status === 'pending'}}">未完成</text>
-            <text wx:elif="{{item.status === 'completed'}}">已完成</text>
-            <text wx:elif="{{item.status === 'unclaimed'}}">待领取</text>
-            <text wx:elif="{{item.status === 'claimed'}}">已领取</text>
+            <text wx:if="{{item.status === 'pending'}}">鏈畬鎴?/text>
+            <text wx:elif="{{item.status === 'completed'}}">宸插畬鎴?/text>
+            <text wx:elif="{{item.status === 'unclaimed'}}">寰呴鍙?/text>
+            <text wx:elif="{{item.status === 'claimed'}}">宸查鍙?/text>
           </view>
           
           <view class="task-actions">
@@ -97,39 +97,39 @@
                     class="action-btn primary" 
                     data-id="{{item.id}}" 
                     catchtap="completeTask">
-              {{item.actionText || '去完成'}}
+              {{item.actionText || '鍘诲畬鎴?}}
             </button>
             
             <button wx:elif="{{item.status === 'unclaimed'}}" 
                     class="action-btn primary" 
                     data-id="{{item.id}}" 
                     catchtap="claimTaskReward">
-              领取奖励
+              棰嗗彇濂栧姳
             </button>
             
             <button wx:else class="action-btn disabled" disabled>
-              {{item.statusText || '已完成'}}
+              {{item.statusText || '宸插畬鎴?}}
             </button>
           </view>
         </view>
       </view>
       
-      <!-- 加载更多 -->
+      <!-- 鍔犺浇鏇村 -->
       <view wx:if="{{hasMore && loading}}" class="loading-more">
         <view class="loading-spinner small"></view>
-        <text class="loading-text">加载更多...</text>
+        <text class="loading-text">鍔犺浇鏇村...</text>
       </view>
       
-      <!-- 没有更多数据 -->
+      <!-- 娌℃湁鏇村鏁版嵁 -->
       <view wx:if="{{!hasMore && taskList.length > 0}}" class="no-more">
-        <text>没有更多任务了</text>
+        <text>娌℃湁鏇村浠诲姟浜?/text>
       </view>
       
-      <!-- 空状态 -->
+      <!-- 绌虹姸鎬?-->
       <view wx:if="{{taskList.length === 0 && !loading}}" class="empty-state">
         <view class="empty-icon"></view>
-        <text class="empty-text">暂无任务</text>
-        <text class="empty-desc">当前筛选条件下没有任务</text>
+        <text class="empty-text">鏆傛棤浠诲姟</text>
+        <text class="empty-desc">褰撳墠绛涢€夋潯浠朵笅娌℃湁浠诲姟</text>
       </view>
     </view>
   </view>

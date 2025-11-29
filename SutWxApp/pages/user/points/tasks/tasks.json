@@ -1,11 +1,11 @@
 /**
- * 文件名: tasks.json
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: tasks JSON 配置文件
+ * 鏂囦欢鍚? tasks.json
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: tasks JSON 閰嶇疆鏂囦欢
  */
 {
-  "navigationBarTitleText": "积分任务",
+  "navigationBarTitleText": "绉垎浠诲姟",
   "navigationBarBackgroundColor": "#07c160",
   "navigationBarTextStyle": "white",
   "backgroundColor": "#f5f5f5",

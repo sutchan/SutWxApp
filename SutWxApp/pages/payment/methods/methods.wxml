@@ -1,24 +1,24 @@
 /**
- * 文件名: methods.wxml
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: methods 页面结构文件
+ * 鏂囦欢鍚? methods.wxml
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: methods 椤甸潰缁撴瀯鏂囦欢
  */
-<!-- 支付方式选择页面 -->
+<!-- 鏀粯鏂瑰紡閫夋嫨椤甸潰 -->
 <view class="payment-methods-container">
-  <!-- 订单金额信息 -->
+  <!-- 璁㈠崟閲戦淇℃伅 -->
   <view class="order-amount">
-    <text class="amount-label">支付金额</text>
-    <text class="amount-value">¥{{orderAmount}}</text>
+    <text class="amount-label">鏀粯閲戦</text>
+    <text class="amount-value">楼{{orderAmount}}</text>
   </view>
   
-  <!-- 加载状态 -->
+  <!-- 鍔犺浇鐘舵€?-->
   <view wx:if="{{loading}}" class="loading-container">
     <view class="loading-spinner"></view>
-    <text class="loading-text">正在加载支付方式...</text>
+    <text class="loading-text">姝ｅ湪鍔犺浇鏀粯鏂瑰紡...</text>
   </view>
   
-  <!-- 支付方式列表 -->
+  <!-- 鏀粯鏂瑰紡鍒楄〃 -->
   <view wx:else class="payment-methods-list">
     <view 
       wx:for="{{paymentMethods}}" 
@@ -34,7 +34,7 @@
       <view class="method-info">
         <view class="method-name">
           {{item.name}}
-          <text wx:if="{{item.recommended}}" class="recommended-tag">推荐</text>
+          <text wx:if="{{item.recommended}}" class="recommended-tag">鎺ㄨ崘</text>
         </view>
         <view class="method-desc">{{item.desc}}</view>
       </view>
@@ -45,14 +45,14 @@
     </view>
   </view>
   
-  <!-- 确认支付按钮 -->
+  <!-- 纭鏀粯鎸夐挳 -->
   <view class="payment-actions">
     <button 
       class="confirm-btn {{submitting ? 'submitting' : ''}}" 
       bindtap="confirmPayment"
       disabled="{{submitting || !selectedMethod}}"
     >
-      {{submitting ? '支付中...' : '确认支付'}}
+      {{submitting ? '鏀粯涓?..' : '纭鏀粯'}}
     </button>
   </view>
 </view>

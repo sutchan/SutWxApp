@@ -1,8 +1,8 @@
 /**
- * 文件名: records.wxss
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: records 页面样式文件
+ * 鏂囦欢鍚? records.wxss
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: records 椤甸潰鏍峰紡鏂囦欢
  */
 .container {
   background-color: #f5f5f5;
@@ -10,7 +10,7 @@
   padding-bottom: 30rpx;
 }
 
-/* 积分概览 */
+/* 绉垎姒傝 */
 .points-summary {
   background-color: #fff;
   padding: 40rpx 30rpx;
@@ -35,7 +35,7 @@
   color: #999;
 }
 
-/* 标签切换 */
+/* 鏍囩鍒囨崲 */
 .tabs {
   display: flex;
   background-color: #fff;
@@ -69,7 +69,7 @@
   border-radius: 3rpx;
 }
 
-/* 记录列表 */
+/* 璁板綍鍒楄〃 */
 .records-list {
   background-color: #fff;
   border-radius: 20rpx;
@@ -146,7 +146,7 @@
   color: #333;
 }
 
-/* 加载状态 */
+/* 鍔犺浇鐘舵€?*/
 .loading {
   text-align: center;
   padding: 40rpx 0;
@@ -154,7 +154,7 @@
   font-size: 28rpx;
 }
 
-/* 无更多数据 */
+/* 鏃犳洿澶氭暟鎹?*/
 .no-more {
   text-align: center;
   padding: 40rpx 0;
@@ -162,7 +162,7 @@
   font-size: 28rpx;
 }
 
-/* 空状态 */
+/* 绌虹姸鎬?*/
 .empty-state {
   text-align: center;
   padding: 100rpx 0;

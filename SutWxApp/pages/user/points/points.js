@@ -1,20 +1,19 @@
 /**
- * 文件名: points.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: 积分页面
+ * 鏂囦欢鍚? points.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: 绉垎椤甸潰
  */
 
 const pointsService = require('../../../services/pointsService');
 
 Page({
   /**
-   * 页面的初始数据
-   */
+   * 椤甸潰鐨勫垵濮嬫暟鎹?   */
   data: {
     userInfo: {
       avatarUrl: '/images/default-avatar.png',
-      nickName: '微信用户'
+      nickName: '寰俊鐢ㄦ埛'
     },
     pointsInfo: {
       totalPoints: 1250,
@@ -32,7 +31,7 @@ Page({
   },
 
   /**
-   * 生命周期函数--监听页面加载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
    */
   onLoad() {
     this.loadUserInfo();
@@ -41,15 +40,14 @@ Page({
   },
 
   /**
-   * 生命周期函数--监听页面显示
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
    */
   onShow() {
-    // 页面显示时刷新积分信息
-    this.loadPointsInfo();
+    // 椤甸潰鏄剧ず鏃跺埛鏂扮Н鍒嗕俊鎭?    this.loadPointsInfo();
   },
 
   /**
-   * 页面相关事件处理函数--监听用户下拉动作
+   * 椤甸潰鐩稿叧浜嬩欢澶勭悊鍑芥暟--鐩戝惉鐢ㄦ埛涓嬫媺鍔ㄤ綔
    */
   onPullDownRefresh() {
     this.setData({ refreshing: true });
@@ -61,8 +59,7 @@ Page({
   },
 
   /**
-   * 页面上拉触底事件的处理函数
-   */
+   * 椤甸潰涓婃媺瑙﹀簳浜嬩欢鐨勫鐞嗗嚱鏁?   */
   onReachBottom() {
     if (this.data.hasMore && !this.data.loading) {
       this.loadPointsRecords(false);
@@ -70,34 +67,34 @@ Page({
   },
 
   /**
-   * 加载用户信息
+   * 鍔犺浇鐢ㄦ埛淇℃伅
    */
   async loadUserInfo() {
     try {
-      // 这里应该调用实际的用户信息API
+      // 杩欓噷搴旇璋冪敤瀹為檯鐨勭敤鎴蜂俊鎭疉PI
       // const userInfo = await userService.getUserInfo();
       
-      // 模拟数据
+      // 妯℃嫙鏁版嵁
       this.setData({
         userInfo: {
           avatarUrl: '/images/default-avatar.png',
-          nickName: '微信用户'
+          nickName: '寰俊鐢ㄦ埛'
         }
       });
     } catch (error) {
-      console.error('加载用户信息失败:', error);
+      console.error('鍔犺浇鐢ㄦ埛淇℃伅澶辫触:', error);
     }
   },
 
   /**
-   * 加载积分信息
+   * 鍔犺浇绉垎淇℃伅
    */
   async loadPointsInfo() {
     try {
-      // 这里应该调用实际的积分信息API
+      // 杩欓噷搴旇璋冪敤瀹為檯鐨勭Н鍒嗕俊鎭疉PI
       // const pointsInfo = await pointsService.getUserPoints();
       
-      // 模拟数据
+      // 妯℃嫙鏁版嵁
       setTimeout(() => {
         this.setData({
           pointsInfo: {
@@ -110,16 +107,16 @@ Page({
         });
       }, 500);
     } catch (error) {
-      console.error('加载积分信息失败:', error);
+      console.error('鍔犺浇绉垎淇℃伅澶辫触:', error);
       wx.showToast({
-        title: '加载积分信息失败',
+        title: '鍔犺浇绉垎淇℃伅澶辫触',
         icon: 'none'
       });
     }
   },
 
   /**
-   * 加载积分记录
+   * 鍔犺浇绉垎璁板綍
    */
   async loadPointsRecords(reset = false) {
     if (this.data.loading) return;
@@ -129,17 +126,17 @@ Page({
       
       const page = reset ? 1 : this.data.page;
       
-      // 这里应该调用实际的积分记录API
+      // 杩欓噷搴旇璋冪敤瀹為檯鐨勭Н鍒嗚褰旳PI
       // const result = await pointsService.getPointsRecords({ page, pageSize: this.data.pageSize });
       
-      // 模拟数据
+      // 妯℃嫙鏁版嵁
       setTimeout(() => {
         const newRecords = [
           {
             id: '1',
             type: 'earn',
             amount: 20,
-            reason: '每日签到',
+            reason: '姣忔棩绛惧埌',
             createTime: '2023-12-20 09:00:00',
             orderNo: ''
           },
@@ -147,7 +144,7 @@ Page({
             id: '2',
             type: 'earn',
             amount: 50,
-            reason: '完成订单评价',
+            reason: '瀹屾垚璁㈠崟璇勪环',
             createTime: '2023-12-19 14:30:00',
             orderNo: 'ORD20231219001'
           },
@@ -155,7 +152,7 @@ Page({
             id: '3',
             type: 'spend',
             amount: -100,
-            reason: '积分兑换商品',
+            reason: '绉垎鍏戞崲鍟嗗搧',
             createTime: '2023-12-18 16:20:00',
             orderNo: 'EXC20231218001'
           },
@@ -163,7 +160,7 @@ Page({
             id: '4',
             type: 'earn',
             amount: 30,
-            reason: '分享商品给好友',
+            reason: '鍒嗕韩鍟嗗搧缁欏ソ鍙?,
             createTime: '2023-12-17 11:15:00',
             orderNo: ''
           },
@@ -171,7 +168,7 @@ Page({
             id: '5',
             type: 'earn',
             amount: 10,
-            reason: '完善个人资料',
+            reason: '瀹屽杽涓汉璧勬枡',
             createTime: '2023-12-16 10:30:00',
             orderNo: ''
           },
@@ -179,7 +176,7 @@ Page({
             id: '6',
             type: 'spend',
             amount: -50,
-            reason: '积分兑换优惠券',
+            reason: '绉垎鍏戞崲浼樻儬鍒?,
             createTime: '2023-12-15 15:45:00',
             orderNo: 'EXC20231215001'
           },
@@ -187,7 +184,7 @@ Page({
             id: '7',
             type: 'earn',
             amount: 100,
-            reason: '新用户注册奖励',
+            reason: '鏂扮敤鎴锋敞鍐屽鍔?,
             createTime: '2023-12-10 12:00:00',
             orderNo: ''
           },
@@ -195,7 +192,7 @@ Page({
             id: '8',
             type: 'earn',
             amount: 20,
-            reason: '每日签到',
+            reason: '姣忔棩绛惧埌',
             createTime: '2023-12-09 09:00:00',
             orderNo: ''
           },
@@ -203,7 +200,7 @@ Page({
             id: '9',
             type: 'spend',
             amount: -200,
-            reason: '积分兑换商品',
+            reason: '绉垎鍏戞崲鍟嗗搧',
             createTime: '2023-12-08 14:20:00',
             orderNo: 'EXC20231208001'
           },
@@ -211,13 +208,13 @@ Page({
             id: '10',
             type: 'earn',
             amount: 15,
-            reason: '浏览商品',
+            reason: '娴忚鍟嗗搧',
             createTime: '2023-12-07 16:10:00',
             orderNo: ''
           }
         ];
         
-        // 根据页码截取数据
+        // 鏍规嵁椤电爜鎴彇鏁版嵁
         const startIndex = (page - 1) * this.data.pageSize;
         const endIndex = startIndex + this.data.pageSize;
         const pageRecords = newRecords.slice(startIndex, endIndex);
@@ -235,18 +232,17 @@ Page({
       }, 800);
       
     } catch (error) {
-      console.error('加载积分记录失败:', error);
+      console.error('鍔犺浇绉垎璁板綍澶辫触:', error);
       this.setData({ loading: false });
       wx.showToast({
-        title: '加载积分记录失败',
+        title: '鍔犺浇绉垎璁板綍澶辫触',
         icon: 'none'
       });
     }
   },
 
   /**
-   * 跳转到积分任务页面
-   */
+   * 璺宠浆鍒扮Н鍒嗕换鍔￠〉闈?   */
   goToPointsTasks() {
     wx.navigateTo({
       url: '/pages/user/pointsTasks/pointsTasks'
@@ -254,8 +250,7 @@ Page({
   },
 
   /**
-   * 跳转到积分商城页面
-   */
+   * 璺宠浆鍒扮Н鍒嗗晢鍩庨〉闈?   */
   goToPointsMall() {
     wx.navigateTo({
       url: '/pages/user/pointsMall/pointsMall'
@@ -263,8 +258,7 @@ Page({
   },
 
   /**
-   * 跳转到积分签到页面
-   */
+   * 璺宠浆鍒扮Н鍒嗙鍒伴〉闈?   */
   goToPointsSignin() {
     wx.navigateTo({
       url: '/pages/user/pointsSignin/pointsSignin'
@@ -272,8 +266,7 @@ Page({
   },
 
   /**
-   * 跳转到积分规则页面
-   */
+   * 璺宠浆鍒扮Н鍒嗚鍒欓〉闈?   */
   goToPointsRules() {
     wx.navigateTo({
       url: '/pages/user/pointsRules/pointsRules'
@@ -281,8 +274,7 @@ Page({
   },
 
   /**
-   * 跳转到积分兑换记录页面
-   */
+   * 璺宠浆鍒扮Н鍒嗗厬鎹㈣褰曢〉闈?   */
   goToPointsExchangeRecords() {
     wx.navigateTo({
       url: '/pages/user/pointsExchangeRecords/pointsExchangeRecords'
@@ -290,39 +282,35 @@ Page({
   },
 
   /**
-   * 格式化积分变化
-   */
+   * 鏍煎紡鍖栫Н鍒嗗彉鍖?   */
   formatPointsChange(amount) {
     return amount > 0 ? `+${amount}` : `${amount}`;
   },
 
   /**
-   * 格式化时间
-   */
+   * 鏍煎紡鍖栨椂闂?   */
   formatTime(time) {
     const date = new Date(time);
     const now = new Date();
     const diff = now - date;
     
-    // 小于1小时
+    // 灏忎簬1灏忔椂
     if (diff < 3600000) {
       const minutes = Math.floor(diff / 60000);
-      return minutes <= 0 ? '刚刚' : `${minutes}分钟前`;
+      return minutes <= 0 ? '鍒氬垰' : `${minutes}鍒嗛挓鍓峘;
     }
     
-    // 小于24小时
+    // 灏忎簬24灏忔椂
     if (diff < 86400000) {
       const hours = Math.floor(diff / 3600000);
-      return `${hours}小时前`;
+      return `${hours}灏忔椂鍓峘;
     }
     
-    // 小于30天
-    if (diff < 2592000000) {
+    // 灏忎簬30澶?    if (diff < 2592000000) {
       const days = Math.floor(diff / 86400000);
-      return `${days}天前`;
+      return `${days}澶╁墠`;
     }
     
-    // 超过30天显示具体日期
-    return time.split(' ')[0];
+    // 瓒呰繃30澶╂樉绀哄叿浣撴棩鏈?    return time.split(' ')[0];
   }
 });

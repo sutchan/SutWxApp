@@ -1,48 +1,44 @@
 /**
- * 文件名: pointsRanking.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: 积分排行榜页面
- */
+ * 鏂囦欢鍚? pointsRanking.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: 绉垎鎺掕姒滈〉闈? */
 const pointsService = require('../../services/pointsService');
 
 Page({
   data: {
-    // 当前用户积分信息
+    // 褰撳墠鐢ㄦ埛绉垎淇℃伅
     userInfo: {
       avatar: '/images/default-avatar.png',
-      nickname: '用户昵称',
+      nickname: '鐢ㄦ埛鏄电О',
       points: 0,
       rank: 0
     },
     
-    // 榜单类型
+    // 姒滃崟绫诲瀷
     activeTab: 'total',
     tabs: [
-      { key: 'total', label: '总榜' },
-      { key: 'daily', label: '日榜' },
-      { key: 'weekly', label: '周榜' },
-      { key: 'monthly', label: '月榜' }
+      { key: 'total', label: '鎬绘' },
+      { key: 'daily', label: '鏃ユ' },
+      { key: 'weekly', label: '鍛ㄦ' },
+      { key: 'monthly', label: '鏈堟' }
     ],
     
-    // 排行榜列表
-    rankingList: [],
+    // 鎺掕姒滃垪琛?    rankingList: [],
     
-    // 分页参数
+    // 鍒嗛〉鍙傛暟
     page: 1,
     pageSize: 20,
     hasMore: true,
     
-    // 加载状态
-    isLoading: false,
+    // 鍔犺浇鐘舵€?    isLoading: false,
     isEmpty: false,
     
-    // 刷新状态
-    isRefreshing: false
+    // 鍒锋柊鐘舵€?    isRefreshing: false
   },
 
   /**
-   * 生命周期函数--监听页面加载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
    */
   onLoad: function (options) {
     this.loadUserInfo();
@@ -50,35 +46,35 @@ Page({
   },
 
   /**
-   * 生命周期函数--监听页面初次渲染完成
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍒濇娓叉煋瀹屾垚
    */
   onReady: function () {
     
   },
 
   /**
-   * 生命周期函数--监听页面显示
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
    */
   onShow: function () {
     
   },
 
   /**
-   * 生命周期函数--监听页面隐藏
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰闅愯棌
    */
   onHide: function () {
     
   },
 
   /**
-   * 生命周期函数--监听页面卸载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍗歌浇
    */
   onUnload: function () {
     
   },
 
   /**
-   * 页面相关事件处理函数--监听用户下拉动作
+   * 椤甸潰鐩稿叧浜嬩欢澶勭悊鍑芥暟--鐩戝惉鐢ㄦ埛涓嬫媺鍔ㄤ綔
    */
   onPullDownRefresh: function () {
     this.setData({
@@ -100,8 +96,7 @@ Page({
   },
 
   /**
-   * 页面上拉触底事件的处理函数
-   */
+   * 椤甸潰涓婃媺瑙﹀簳浜嬩欢鐨勫鐞嗗嚱鏁?   */
   onReachBottom: function () {
     if (this.data.hasMore && !this.data.isLoading) {
       this.loadRankingList();
@@ -109,17 +104,16 @@ Page({
   },
 
   /**
-   * 用户点击右上角分享
-   */
+   * 鐢ㄦ埛鐐瑰嚮鍙充笂瑙掑垎浜?   */
   onShareAppMessage: function () {
     return {
-      title: '积分排行榜',
+      title: '绉垎鎺掕姒?,
       path: '/pages/user/pointsRanking/pointsRanking'
     };
   },
 
   /**
-   * 加载当前用户信息
+   * 鍔犺浇褰撳墠鐢ㄦ埛淇℃伅
    */
   loadUserInfo: function() {
     pointsService.getUserPoints()
@@ -129,18 +123,17 @@ Page({
             'userInfo.points': res.data.points,
             'userInfo.rank': res.data.rank,
             'userInfo.avatar': res.data.avatar || '/images/default-avatar.png',
-            'userInfo.nickname': res.data.nickname || '用户昵称'
+            'userInfo.nickname': res.data.nickname || '鐢ㄦ埛鏄电О'
           });
         }
       })
       .catch(err => {
-        console.error('获取用户积分信息失败', err);
+        console.error('鑾峰彇鐢ㄦ埛绉垎淇℃伅澶辫触', err);
       });
   },
 
   /**
-   * 加载排行榜列表
-   */
+   * 鍔犺浇鎺掕姒滃垪琛?   */
   loadRankingList: function() {
     if (this.data.isLoading || !this.data.hasMore) return;
     
@@ -168,15 +161,15 @@ Page({
           });
         } else {
           wx.showToast({
-            title: res.message || '加载失败',
+            title: res.message || '鍔犺浇澶辫触',
             icon: 'none'
           });
         }
       })
       .catch(err => {
-        console.error('加载排行榜失败', err);
+        console.error('鍔犺浇鎺掕姒滃け璐?, err);
         wx.showToast({
-          title: '网络错误',
+          title: '缃戠粶閿欒',
           icon: 'none'
         });
       })
@@ -188,7 +181,7 @@ Page({
   },
 
   /**
-   * 切换榜单类型
+   * 鍒囨崲姒滃崟绫诲瀷
    */
   onTabChange: function(e) {
     const tab = e.currentTarget.dataset.tab;
@@ -206,7 +199,7 @@ Page({
   },
 
   /**
-   * 查看用户详情
+   * 鏌ョ湅鐢ㄦ埛璇︽儏
    */
   onViewUser: function(e) {
     const userId = e.currentTarget.dataset.id;
@@ -216,8 +209,7 @@ Page({
   },
 
   /**
-   * 跳转到积分任务页面
-   */
+   * 璺宠浆鍒扮Н鍒嗕换鍔￠〉闈?   */
   onGoToTasks: function() {
     wx.navigateTo({
       url: '/pages/user/pointsTasks/pointsTasks'
@@ -225,8 +217,7 @@ Page({
   },
 
   /**
-   * 跳转到积分明细页面
-   */
+   * 璺宠浆鍒扮Н鍒嗘槑缁嗛〉闈?   */
   onGoToDetail: function() {
     wx.navigateTo({
       url: '/pages/user/pointsDetail/pointsDetail'

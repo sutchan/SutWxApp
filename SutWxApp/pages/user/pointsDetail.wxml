@@ -1,25 +1,25 @@
 /**
- * 文件名: pointsDetail.wxml
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: pointsDetail 页面结构文件
+ * 鏂囦欢鍚? pointsDetail.wxml
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: pointsDetail 椤甸潰缁撴瀯鏂囦欢
  */
 <view class="container">
-  <!-- 当前积分卡片 -->
+  <!-- 褰撳墠绉垎鍗＄墖 -->
   <view class="points-card">
     <view class="points-info">
-      <text class="points-label">当前积分</text>
+      <text class="points-label">褰撳墠绉垎</text>
       <text class="points-value">{{currentPoints}}</text>
     </view>
     <view class="points-actions">
-      <button class="action-btn" bindtap="onGoToTasks">赚积分</button>
-      <button class="action-btn primary" bindtap="onGoToMall">花积分</button>
+      <button class="action-btn" bindtap="onGoToTasks">璧氱Н鍒?/button>
+      <button class="action-btn primary" bindtap="onGoToMall">鑺辩Н鍒?/button>
     </view>
   </view>
 
-  <!-- 筛选区域 -->
+  <!-- 绛涢€夊尯鍩?-->
   <view class="filter-section">
-    <!-- 类型筛选 -->
+    <!-- 绫诲瀷绛涢€?-->
     <view class="tab-bar">
       <view 
         wx:for="{{tabs}}" 
@@ -31,7 +31,7 @@
       </view>
     </view>
 
-    <!-- 时间筛选 -->
+    <!-- 鏃堕棿绛涢€?-->
     <view class="time-filter">
       <view 
         wx:for="{{timeOptions}}" 
@@ -44,9 +44,9 @@
     </view>
   </view>
 
-  <!-- 内容区域 -->
+  <!-- 鍐呭鍖哄煙 -->
   <view class="content">
-    <!-- 积分明细列表 -->
+    <!-- 绉垎鏄庣粏鍒楄〃 -->
     <view class="detail-list" wx:if="{{!isEmpty}}">
       <view 
         wx:for="{{detailList}}" 
@@ -55,42 +55,41 @@
         data-id="{{item.id}}" 
         bindtap="onViewDetail">
         
-        <!-- 明细图标 -->
+        <!-- 鏄庣粏鍥炬爣 -->
         <view class="detail-icon {{item.type === 'earn' ? 'earn' : 'spend'}}">
           <text class="iconfont">{{item.type === 'earn' ? '+' : '-'}}</text>
         </view>
         
-        <!-- 明细信息 -->
+        <!-- 鏄庣粏淇℃伅 -->
         <view class="detail-info">
           <view class="detail-title">{{item.title}}</view>
           <view class="detail-desc">{{item.description}}</view>
           <view class="detail-time">{{item.createTime}}</view>
         </view>
         
-        <!-- 积分变化 -->
+        <!-- 绉垎鍙樺寲 -->
         <view class="detail-points {{item.type === 'earn' ? 'earn' : 'spend'}}">
           {{item.type === 'earn' ? '+' : '-'}}{{item.points}}
         </view>
       </view>
     </view>
 
-    <!-- 空状态 -->
+    <!-- 绌虹姸鎬?-->
     <view class="empty-state" wx:if="{{isEmpty}}">
       <image class="empty-icon" src="/images/empty-points.png" mode="aspectFit"></image>
-      <text>暂无积分明细</text>
-      <view class="empty-tip">完成任务或参与活动可获得积分</view>
-      <button class="empty-btn" bindtap="onGoToTasks">去赚积分</button>
+      <text>鏆傛棤绉垎鏄庣粏</text>
+      <view class="empty-tip">瀹屾垚浠诲姟鎴栧弬涓庢椿鍔ㄥ彲鑾峰緱绉垎</view>
+      <button class="empty-btn" bindtap="onGoToTasks">鍘昏禋绉垎</button>
     </view>
 
-    <!-- 加载状态 -->
+    <!-- 鍔犺浇鐘舵€?-->
     <view class="loading-state" wx:if="{{isLoading && detailList.length === 0}}">
       <view class="loading-spinner"></view>
-      <text>加载中...</text>
+      <text>鍔犺浇涓?..</text>
     </view>
 
-    <!-- 没有更多数据 -->
+    <!-- 娌℃湁鏇村鏁版嵁 -->
     <view class="no-more-data" wx:if="{{!hasMore && detailList.length > 0}}">
-      没有更多数据了
-    </view>
+      娌℃湁鏇村鏁版嵁浜?    </view>
   </view>
 </view>

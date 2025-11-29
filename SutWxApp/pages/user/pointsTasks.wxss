@@ -1,10 +1,10 @@
 /**
- * 文件名: pointsTasks.wxss
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: pointsTasks 页面样式文件
+ * 鏂囦欢鍚? pointsTasks.wxss
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: pointsTasks 椤甸潰鏍峰紡鏂囦欢
  */
-/* 积分任务页面样式 */
+/* 绉垎浠诲姟椤甸潰鏍峰紡 */
 .container {
   display: flex;
   flex-direction: column;
@@ -12,7 +12,7 @@
   background-color: #f5f5f5;
 }
 
-/* 任务统计卡片 */
+/* 浠诲姟缁熻鍗＄墖 */
 .stats-card {
   display: flex;
   background-color: #fff;
@@ -39,7 +39,7 @@
   color: #999;
 }
 
-/* 标签切换 */
+/* 鏍囩鍒囨崲 */
 .tab-bar {
   display: flex;
   background-color: #fff;
@@ -75,13 +75,13 @@
   border-radius: 2rpx;
 }
 
-/* 内容区域 */
+/* 鍐呭鍖哄煙 */
 .content {
   flex: 1;
   padding: 0 24rpx;
 }
 
-/* 任务列表 */
+/* 浠诲姟鍒楄〃 */
 .task-list {
   margin-top: 24rpx;
 }
@@ -99,7 +99,7 @@
   opacity: 0.7;
 }
 
-/* 任务头部 */
+/* 浠诲姟澶撮儴 */
 .task-header {
   display: flex;
   justify-content: space-between;
@@ -158,7 +158,7 @@
   font-weight: 500;
 }
 
-/* 任务描述 */
+/* 浠诲姟鎻忚堪 */
 .task-desc {
   font-size: 26rpx;
   color: #666;
@@ -166,7 +166,7 @@
   margin-bottom: 20rpx;
 }
 
-/* 任务进度 */
+/* 浠诲姟杩涘害 */
 .task-progress {
   margin-bottom: 16rpx;
 }
@@ -197,7 +197,7 @@
   transition: width 0.3s ease;
 }
 
-/* 任务时间 */
+/* 浠诲姟鏃堕棿 */
 .task-time {
   margin-bottom: 20rpx;
 }
@@ -207,7 +207,7 @@
   color: #999;
 }
 
-/* 任务操作 */
+/* 浠诲姟鎿嶄綔 */
 .task-actions {
   display: flex;
   justify-content: flex-end;
@@ -238,7 +238,7 @@
   color: #666;
 }
 
-/* 空状态 */
+/* 绌虹姸鎬?*/
 .empty-state {
   display: flex;
   flex-direction: column;
@@ -267,7 +267,7 @@
   color: #ccc;
 }
 
-/* 加载状态 */
+/* 鍔犺浇鐘舵€?*/
 .loading-state {
   display: flex;
   flex-direction: column;
@@ -296,7 +296,7 @@
   color: #999;
 }
 
-/* 没有更多数据 */
+/* 娌℃湁鏇村鏁版嵁 */
 .no-more-data {
   text-align: center;
   padding: 40rpx 0;

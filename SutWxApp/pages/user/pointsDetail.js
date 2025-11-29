@@ -1,34 +1,32 @@
 /**
- * 文件名: pointsDetail.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: 积分明细页面
+ * 鏂囦欢鍚? pointsDetail.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: 绉垎鏄庣粏椤甸潰
  */
 const pointsService = require('../../services/pointsService');
 
 Page({
   data: {
-    // 当前积分
+    // 褰撳墠绉垎
     currentPoints: 0,
     
-    // 筛选类型
-    activeTab: 'all',
+    // 绛涢€夌被鍨?    activeTab: 'all',
     tabs: [
-      { key: 'all', label: '全部' },
-      { key: 'earn', label: '获得' },
-      { key: 'spend', label: '消费' }
+      { key: 'all', label: '鍏ㄩ儴' },
+      { key: 'earn', label: '鑾峰緱' },
+      { key: 'spend', label: '娑堣垂' }
     ],
     
-    // 时间筛选
-    timeRange: 'all',
+    // 鏃堕棿绛涢€?    timeRange: 'all',
     timeOptions: [
-      { key: 'all', label: '全部时间' },
-      { key: 'today', label: '今天' },
-      { key: 'week', label: '本周' },
-      { key: 'month', label: '本月' }
+      { key: 'all', label: '鍏ㄩ儴鏃堕棿' },
+      { key: 'today', label: '浠婂ぉ' },
+      { key: 'week', label: '鏈懆' },
+      { key: 'month', label: '鏈湀' }
     ],
     
-    // 明细列表
+    // 鏄庣粏鍒楄〃
     detailList: [],
     page: 1,
     pageSize: 20,
@@ -38,7 +36,7 @@ Page({
   },
 
   /**
-   * 生命周期函数--监听页面加载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
    */
   onLoad: function (options) {
     this.loadCurrentPoints();
@@ -46,23 +44,21 @@ Page({
   },
 
   /**
-   * 生命周期函数--监听页面显示
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
    */
   onShow: function () {
-    // 从其他页面返回时，刷新当前积分
-    this.loadCurrentPoints();
+    // 浠庡叾浠栭〉闈㈣繑鍥炴椂锛屽埛鏂板綋鍓嶇Н鍒?    this.loadCurrentPoints();
   },
 
   /**
-   * 页面相关事件处理函数--监听用户下拉动作
+   * 椤甸潰鐩稿叧浜嬩欢澶勭悊鍑芥暟--鐩戝惉鐢ㄦ埛涓嬫媺鍔ㄤ綔
    */
   onPullDownRefresh: function () {
     this.refreshData();
   },
 
   /**
-   * 页面上拉触底事件的处理函数
-   */
+   * 椤甸潰涓婃媺瑙﹀簳浜嬩欢鐨勫鐞嗗嚱鏁?   */
   onReachBottom: function () {
     if (this.data.hasMore && !this.data.isLoading) {
       this.loadMoreDetailList();
@@ -70,7 +66,7 @@ Page({
   },
 
   /**
-   * 加载当前积分
+   * 鍔犺浇褰撳墠绉垎
    */
   loadCurrentPoints: function() {
     pointsService.getUserPoints()
@@ -80,12 +76,12 @@ Page({
         });
       })
       .catch(err => {
-        console.error('获取当前积分失败', err);
+        console.error('鑾峰彇褰撳墠绉垎澶辫触', err);
       });
   },
 
   /**
-   * 加载积分明细列表
+   * 鍔犺浇绉垎鏄庣粏鍒楄〃
    */
   loadDetailList: function() {
     if (this.data.isLoading) return;
@@ -117,21 +113,21 @@ Page({
         wx.stopPullDownRefresh();
       })
       .catch(err => {
-        console.error('获取积分明细失败', err);
+        console.error('鑾峰彇绉垎鏄庣粏澶辫触', err);
         this.setData({
           isLoading: false
         });
         wx.stopPullDownRefresh();
         
         wx.showToast({
-          title: '加载失败，请重试',
+          title: '鍔犺浇澶辫触锛岃閲嶈瘯',
           icon: 'none'
         });
       });
   },
 
   /**
-   * 加载更多积分明细
+   * 鍔犺浇鏇村绉垎鏄庣粏
    */
   loadMoreDetailList: function() {
     this.setData({
@@ -142,7 +138,7 @@ Page({
   },
 
   /**
-   * 刷新数据
+   * 鍒锋柊鏁版嵁
    */
   refreshData: function() {
     this.setData({
@@ -155,7 +151,7 @@ Page({
   },
 
   /**
-   * 切换类型标签
+   * 鍒囨崲绫诲瀷鏍囩
    */
   onTabChange: function(e) {
     const activeTab = e.currentTarget.dataset.tab;
@@ -171,8 +167,7 @@ Page({
   },
 
   /**
-   * 切换时间筛选
-   */
+   * 鍒囨崲鏃堕棿绛涢€?   */
   onTimeFilterChange: function(e) {
     const timeRange = e.currentTarget.dataset.time;
     if (timeRange === this.data.timeRange) return;
@@ -187,7 +182,7 @@ Page({
   },
 
   /**
-   * 查看明细详情
+   * 鏌ョ湅鏄庣粏璇︽儏
    */
   onViewDetail: function(e) {
     const id = e.currentTarget.dataset.id;
@@ -197,8 +192,7 @@ Page({
   },
 
   /**
-   * 跳转到积分任务页面
-   */
+   * 璺宠浆鍒扮Н鍒嗕换鍔￠〉闈?   */
   onGoToTasks: function() {
     wx.navigateTo({
       url: '/pages/user/pointsTasks'
@@ -206,8 +200,7 @@ Page({
   },
 
   /**
-   * 跳转到积分商城页面
-   */
+   * 璺宠浆鍒扮Н鍒嗗晢鍩庨〉闈?   */
   onGoToMall: function() {
     wx.switchTab({
       url: '/pages/user/pointsMall'

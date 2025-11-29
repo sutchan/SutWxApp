@@ -1,11 +1,11 @@
 /**
- * 文件名: emptyState.wxml
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: emptyState 页面结构文件
+ * 鏂囦欢鍚? emptyState.wxml
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: emptyState 椤甸潰缁撴瀯鏂囦欢
  */
 <view class="empty-state-container">
-  <!-- 空状态图片 -->
+  <!-- 绌虹姸鎬佸浘鐗?-->
   <view class="empty-image-container">
     <lazy-image 
       src="{{image || defaultImages[type]}}" 
@@ -15,15 +15,15 @@
     />
   </view>
   
-  <!-- 标题 -->
+  <!-- 鏍囬 -->
   <view class="empty-title">{{title || defaultTitles[type]}}</view>
   
-  <!-- 描述 -->
+  <!-- 鎻忚堪 -->
   <view class="empty-description" wx:if="{{description || defaultDescriptions[type]}}">
     {{description || defaultDescriptions[type]}}
   </view>
   
-  <!-- 按钮 -->
+  <!-- 鎸夐挳 -->
   <button class="empty-button" wx:if="{{showButton}}" bindtap="onButtonTap">
     {{buttonText}}
   </button>

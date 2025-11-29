@@ -1,11 +1,11 @@
 /**
- * 文件名: review.json
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: review JSON 配置文件
+ * 鏂囦欢鍚? review.json
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: review JSON 閰嶇疆鏂囦欢
  */
 {
-  "navigationBarTitleText": "订单评价",
+  "navigationBarTitleText": "璁㈠崟璇勪环",
   "enablePullDownRefresh": false,
   "backgroundTextStyle": "dark"
 }

@@ -1,103 +1,99 @@
 /**
- * 文件名: mall.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: 
+ * 鏂囦欢鍚? mall.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: 
  */
 
-// 积分商城页面
+// 绉垎鍟嗗煄椤甸潰
 const pointsService = require('../../../services/pointsService.js');
 
 Page({
   /**
-   * 页面的初始数据
-   */
+   * 椤甸潰鐨勫垵濮嬫暟鎹?   */
   data: {
-    // 用户积分信息
+    // 鐢ㄦ埛绉垎淇℃伅
     userPoints: 0,
     
-    // 商品分类
+    // 鍟嗗搧鍒嗙被
     categories: [
-      { id: 0, name: '全部', count: 0 },
-      { id: 1, name: '优惠券', count: 0 },
-      { id: 2, name: '实物商品', count: 0 },
-      { id: 3, name: '虚拟商品', count: 0 },
-      { id: 4, name: '会员特权', count: 0 }
+      { id: 0, name: '鍏ㄩ儴', count: 0 },
+      { id: 1, name: '浼樻儬鍒?, count: 0 },
+      { id: 2, name: '瀹炵墿鍟嗗搧', count: 0 },
+      { id: 3, name: '铏氭嫙鍟嗗搧', count: 0 },
+      { id: 4, name: '浼氬憳鐗规潈', count: 0 }
     ],
     currentCategory: 0,
     
-    // 排序方式
+    // 鎺掑簭鏂瑰紡
     sortOptions: [
-      { key: 'default', name: '综合排序' },
-      { key: 'points_asc', name: '积分从低到高' },
-      { key: 'points_desc', name: '积分从高到低' },
-      { key: 'popularity', name: '热门优先' }
+      { key: 'default', name: '缁煎悎鎺掑簭' },
+      { key: 'points_asc', name: '绉垎浠庝綆鍒伴珮' },
+      { key: 'points_desc', name: '绉垎浠庨珮鍒颁綆' },
+      { key: 'popularity', name: '鐑棬浼樺厛' }
     ],
     currentSort: 'default',
     showSortPopup: false,
     
-    // 商品列表
+    // 鍟嗗搧鍒楄〃
     productList: [],
     loading: false,
     hasMore: true,
     page: 1,
     pageSize: 10,
     
-    // 搜索关键词
-    searchKeyword: '',
+    // 鎼滅储鍏抽敭璇?    searchKeyword: '',
     
-    // 兑换记录
+    // 鍏戞崲璁板綍
     exchangeRecords: []
   },
 
   /**
-   * 生命周期函数--监听页面加载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
    */
   onLoad: function (options) {
-    // 加载用户积分
+    // 鍔犺浇鐢ㄦ埛绉垎
     this.loadUserPoints();
     
-    // 加载商品列表
+    // 鍔犺浇鍟嗗搧鍒楄〃
     this.loadProductList(true);
     
-    // 加载兑换记录
+    // 鍔犺浇鍏戞崲璁板綍
     this.loadExchangeRecords();
   },
 
   /**
-   * 生命周期函数--监听页面初次渲染完成
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍒濇娓叉煋瀹屾垚
    */
   onReady: function () {
-    // 设置导航栏标题
-    wx.setNavigationBarTitle({
-      title: '积分商城'
+    // 璁剧疆瀵艰埅鏍忔爣棰?    wx.setNavigationBarTitle({
+      title: '绉垎鍟嗗煄'
     });
   },
 
   /**
-   * 生命周期函数--监听页面显示
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
    */
   onShow: function () {
-    // 页面显示时刷新用户积分
-    this.loadUserPoints();
+    // 椤甸潰鏄剧ず鏃跺埛鏂扮敤鎴风Н鍒?    this.loadUserPoints();
   },
 
   /**
-   * 生命周期函数--监听页面隐藏
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰闅愯棌
    */
   onHide: function () {
     
   },
 
   /**
-   * 生命周期函数--监听页面卸载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍗歌浇
    */
   onUnload: function () {
     
   },
 
   /**
-   * 页面相关事件处理函数--监听用户下拉动作
+   * 椤甸潰鐩稿叧浜嬩欢澶勭悊鍑芥暟--鐩戝惉鐢ㄦ埛涓嬫媺鍔ㄤ綔
    */
   onPullDownRefresh: function () {
     this.loadUserPoints().then(() => {
@@ -108,8 +104,7 @@ Page({
   },
 
   /**
-   * 页面上拉触底事件的处理函数
-   */
+   * 椤甸潰涓婃媺瑙﹀簳浜嬩欢鐨勫鐞嗗嚱鏁?   */
   onReachBottom: function () {
     if (this.data.hasMore && !this.data.loading) {
       this.loadProductList(false);
@@ -117,17 +112,16 @@ Page({
   },
 
   /**
-   * 用户点击右上角分享
-   */
+   * 鐢ㄦ埛鐐瑰嚮鍙充笂瑙掑垎浜?   */
   onShareAppMessage: function () {
     return {
-      title: '积分好礼等你来换',
+      title: '绉垎濂界ぜ绛変綘鏉ユ崲',
       path: '/pages/user/points/mall/mall'
     };
   },
 
   /**
-   * 加载用户积分
+   * 鍔犺浇鐢ㄦ埛绉垎
    */
   loadUserPoints: async function() {
     try {
@@ -139,12 +133,12 @@ Page({
         return result;
       }
     } catch (error) {
-      console.error('加载用户积分失败:', error);
+      console.error('鍔犺浇鐢ㄦ埛绉垎澶辫触:', error);
     }
   },
 
   /**
-   * 加载商品列表
+   * 鍔犺浇鍟嗗搧鍒楄〃
    */
   loadProductList: async function(reset = false) {
     if (this.data.loading) return;
@@ -169,7 +163,7 @@ Page({
         const newProducts = result.data.list || [];
         const hasMore = newProducts.length === this.data.pageSize;
         
-        // 更新分类计数
+        // 鏇存柊鍒嗙被璁℃暟
         if (reset && result.data.categoryCounts) {
           const categories = this.data.categories.map(category => {
             const count = category.id === 0 ? result.data.total : (result.data.categoryCounts[category.id] || 0);
@@ -189,24 +183,24 @@ Page({
           loading: false
         });
         wx.showToast({
-          title: result.message || '加载商品失败',
+          title: result.message || '鍔犺浇鍟嗗搧澶辫触',
           icon: 'none'
         });
       }
     } catch (error) {
-      console.error('加载商品列表失败:', error);
+      console.error('鍔犺浇鍟嗗搧鍒楄〃澶辫触:', error);
       this.setData({
         loading: false
       });
       wx.showToast({
-        title: '网络错误，请重试',
+        title: '缃戠粶閿欒锛岃閲嶈瘯',
         icon: 'none'
       });
     }
   },
 
   /**
-   * 加载兑换记录
+   * 鍔犺浇鍏戞崲璁板綍
    */
   loadExchangeRecords: async function() {
     try {
@@ -217,12 +211,12 @@ Page({
         });
       }
     } catch (error) {
-      console.error('加载兑换记录失败:', error);
+      console.error('鍔犺浇鍏戞崲璁板綍澶辫触:', error);
     }
   },
 
   /**
-   * 切换商品分类
+   * 鍒囨崲鍟嗗搧鍒嗙被
    */
   switchCategory: function(e) {
     const categoryId = e.currentTarget.dataset.id;
@@ -239,7 +233,7 @@ Page({
   },
 
   /**
-   * 显示排序弹窗
+   * 鏄剧ず鎺掑簭寮圭獥
    */
   showSortPopup: function() {
     this.setData({
@@ -248,7 +242,7 @@ Page({
   },
 
   /**
-   * 隐藏排序弹窗
+   * 闅愯棌鎺掑簭寮圭獥
    */
   hideSortPopup: function() {
     this.setData({
@@ -257,7 +251,7 @@ Page({
   },
 
   /**
-   * 选择排序方式
+   * 閫夋嫨鎺掑簭鏂瑰紡
    */
   selectSort: function(e) {
     const sort = e.currentTarget.dataset.sort;
@@ -278,8 +272,7 @@ Page({
   },
 
   /**
-   * 输入搜索关键词
-   */
+   * 杈撳叆鎼滅储鍏抽敭璇?   */
   onSearchInput: function(e) {
     this.setData({
       searchKeyword: e.detail.value
@@ -287,7 +280,7 @@ Page({
   },
 
   /**
-   * 执行搜索
+   * 鎵ц鎼滅储
    */
   onSearch: function() {
     this.setData({
@@ -300,7 +293,7 @@ Page({
   },
 
   /**
-   * 清空搜索
+   * 娓呯┖鎼滅储
    */
   clearSearch: function() {
     this.setData({
@@ -314,7 +307,7 @@ Page({
   },
 
   /**
-   * 跳转到商品详情页
+   * 璺宠浆鍒板晢鍝佽鎯呴〉
    */
   goToProductDetail: function(e) {
     const productId = e.currentTarget.dataset.id;
@@ -324,7 +317,7 @@ Page({
   },
 
   /**
-   * 兑换商品
+   * 鍏戞崲鍟嗗搧
    */
   exchangeProduct: async function(e) {
     const productId = e.currentTarget.dataset.id;
@@ -332,10 +325,9 @@ Page({
     
     if (!product) return;
     
-    // 检查积分是否足够
-    if (this.data.userPoints < product.points) {
+    // 妫€鏌ョН鍒嗘槸鍚﹁冻澶?    if (this.data.userPoints < product.points) {
       wx.showToast({
-        title: '积分不足',
+        title: '绉垎涓嶈冻',
         icon: 'none'
       });
       return;
@@ -343,7 +335,7 @@ Page({
     
     try {
       wx.showLoading({
-        title: '正在兑换...',
+        title: '姝ｅ湪鍏戞崲...',
       });
       
       const result = await pointsService.exchangeProduct(productId);
@@ -352,37 +344,36 @@ Page({
       
       if (result.success) {
         wx.showToast({
-          title: '兑换成功',
+          title: '鍏戞崲鎴愬姛',
           icon: 'success'
         });
         
-        // 刷新用户积分
+        // 鍒锋柊鐢ㄦ埛绉垎
         this.loadUserPoints();
         
-        // 刷新商品列表
+        // 鍒锋柊鍟嗗搧鍒楄〃
         this.loadProductList(true);
         
-        // 刷新兑换记录
+        // 鍒锋柊鍏戞崲璁板綍
         this.loadExchangeRecords();
       } else {
         wx.showToast({
-          title: result.message || '兑换失败',
+          title: result.message || '鍏戞崲澶辫触',
           icon: 'none'
         });
       }
     } catch (error) {
       wx.hideLoading();
-      console.error('兑换商品失败:', error);
+      console.error('鍏戞崲鍟嗗搧澶辫触:', error);
       wx.showToast({
-        title: '网络错误，请重试',
+        title: '缃戠粶閿欒锛岃閲嶈瘯',
         icon: 'none'
       });
     }
   },
 
   /**
-   * 跳转到积分页面
-   */
+   * 璺宠浆鍒扮Н鍒嗛〉闈?   */
   goToPoints: function() {
     wx.switchTab({
       url: '/pages/user/points/points'
@@ -390,8 +381,7 @@ Page({
   },
 
   /**
-   * 跳转到兑换记录页面
-   */
+   * 璺宠浆鍒板厬鎹㈣褰曢〉闈?   */
   goToExchangeRecords: function() {
     wx.navigateTo({
       url: '/pages/user/points/exchangeRecords/exchangeRecords'

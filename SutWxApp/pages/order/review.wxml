@@ -1,21 +1,21 @@
 /**
- * 文件名: review.wxml
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: review 页面结构文件
+ * 鏂囦欢鍚? review.wxml
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: review 椤甸潰缁撴瀯鏂囦欢
  */
 <!--
-  订单评价页面
-  作者: Sut
-  日期: 2025-11-15
+  璁㈠崟璇勪环椤甸潰
+  浣滆€? Sut
+  鏃ユ湡: 2025-11-15
 -->
 <view class="container">
-  <!-- 导航栏标题 -->
+  <!-- 瀵艰埅鏍忔爣棰?-->
   <view class="header">
     <text class="title">{{i18n.reviewTitle}}</text>
   </view>
 
-  <!-- 商品信息区域 -->
+  <!-- 鍟嗗搧淇℃伅鍖哄煙 -->
   <view class="goods-info">
     <image class="goods-image" src="/assets/images/default-goods.png" mode="aspectFill"></image>
     <view class="goods-detail">
@@ -24,42 +24,42 @@
     </view>
   </view>
 
-  <!-- 评分区域 -->
+  <!-- 璇勫垎鍖哄煙 -->
   <view class="rating-area">
     <text class="rating-label">{{i18n.ratingLabel}}</text>
     <view class="stars">
-      <!-- 这里可以放置评分组件，例如自定义的星级评分组件 -->
-      <text>★★★★★</text>
+      <!-- 杩欓噷鍙互鏀剧疆璇勫垎缁勪欢锛屼緥濡傝嚜瀹氫箟鐨勬槦绾ц瘎鍒嗙粍浠?-->
+      <text>鈽呪槄鈽呪槄鈽?/text>
     </view>
   </view>
 
-  <!-- 评价内容输入框 -->
+  <!-- 璇勪环鍐呭杈撳叆妗?-->
   <view class="comment-input-area">
     <textarea class="comment-textarea" placeholder="{{i18n.placeholder}}" maxlength="200"></textarea>
     <text class="word-count">{{i18n.wordCount}}</text>
   </view>
 
-  <!-- 匿名评价选项 -->
+  <!-- 鍖垮悕璇勪环閫夐」 -->
   <view class="anonymous-option">
     <switch checked="{{false}}" bindchange="toggleAnonymous"></switch>
     <text class="anonymous-label">{{i18n.anonymousLabel}}</text>
   </view>
 
-  <!-- 图片上传区域 -->
+  <!-- 鍥剧墖涓婁紶鍖哄煙 -->
   <view class="image-upload-area">
     <text class="upload-label">{{i18n.uploadLabel}}</text>
     <view class="image-list">
-      <!-- 这里可以放置图片上传组件 -->
+      <!-- 杩欓噷鍙互鏀剧疆鍥剧墖涓婁紶缁勪欢 -->
       <image class="upload-placeholder" src="/assets/images/upload-icon.png" mode="aspectFit"></image>
     </view>
   </view>
 
-  <!-- 提交按钮 -->
+  <!-- 鎻愪氦鎸夐挳 -->
   <view class="submit-button-area">
     <button class="submit-button" type="primary" bindtap="submitReview">{{i18n.submitButton}}</button>
   </view>
 
-  <!-- 返回按钮 (如果需要) -->
+  <!-- 杩斿洖鎸夐挳 (濡傛灉闇€瑕? -->
   <view class="back-button-area">
     <button class="back-button" bindtap="navigateBack">{{i18n.common.back}}</button>
   </view>

@@ -1,8 +1,96 @@
 /**
- * 文件名: app.wxss
- * 版本号: 1.0.0
- * 更新日期: 2025-11-24
- * 作者: Sut
- * 小程序全局样式文件，定义应用的基础样式
+ * 鏂囦欢鍚? app.wxss
+ * 鐗堟湰鍙? 1.0.2
+ * 鏇存柊鏃ユ湡: 2025-11-29
+ * 浣滆€? Sut
+ * 灏忕▼搴忓叏灞€鏍峰紡鏂囦欢锛屽畾涔夊簲鐢ㄧ殑鍩虹鏍峰紡
  */
-/* 默认样式文件 */
+
+/* 鍩虹閲嶇疆鏍峰紡 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 鍏ㄥ眬瀛椾綋璁剧疆 */
+page {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #333333;
+  background-color: #f7f7f7;
+}
+
+/* 甯哥敤棰滆壊鍙橀噺 */
+:root {
+  --primary-color: #07c160;
+  --secondary-color: #1989fa;
+  --warning-color: #ff976a;
+  --danger-color: #ee0a24;
+  --success-color: #07c160;
+  --text-primary: #333333;
+  --text-secondary: #646566;
+  --text-light: #969799;
+  --border-color: #ebedf0;
+  --background-color: #f7f7f7;
+  --white: #ffffff;
+}
+
+/* 娓呴櫎娴姩 */
+.clearfix::after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+/* 闅愯棌鍏冪礌 */
+.hidden {
+  display: none !important;
+}
+
+/* 鏂囨湰婧㈠嚭澶勭悊 */
+.text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text-ellipsis-2 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* 甯哥敤闂磋窛绫?*/
+.mt-10 { margin-top: 10rpx; }
+.mt-20 { margin-top: 20rpx; }
+.mt-30 { margin-top: 30rpx; }
+.mb-10 { margin-bottom: 10rpx; }
+.mb-20 { margin-bottom: 20rpx; }
+.mb-30 { margin-bottom: 30rpx; }
+.ml-10 { margin-left: 10rpx; }
+.ml-20 { margin-left: 20rpx; }
+.ml-30 { margin-left: 30rpx; }
+.mr-10 { margin-right: 10rpx; }
+.mr-20 { margin-right: 20rpx; }
+.mr-30 { margin-right: 30rpx; }
+
+/* 甯哥敤鍐呰竟璺濈被 */
+.p-10 { padding: 10rpx; }
+.p-20 { padding: 20rpx; }
+.p-30 { padding: 30rpx; }
+.pt-10 { padding-top: 10rpx; }
+.pt-20 { padding-top: 20rpx; }
+.pt-30 { padding-top: 30rpx; }
+.pb-10 { padding-bottom: 10rpx; }
+.pb-20 { padding-bottom: 20rpx; }
+.pb-30 { padding-bottom: 30rpx; }
+.pl-10 { padding-left: 10rpx; }
+.pl-20 { padding-left: 20rpx; }
+.pl-30 { padding-left: 30rpx; }
+.pr-10 { padding-right: 10rpx; }
+.pr-20 { padding-right: 20rpx; }
+.pr-30 { padding-right: 30rpx; }

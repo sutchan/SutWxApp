@@ -1,19 +1,17 @@
 /**
- * 文件名: useStore.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-24
- * 作者: Sut
- * 状态管理辅助函数，提供在页面和组件中使用store的便捷方法，支持状态映射和mutations绑定
+ * 鏂囦欢鍚? useStore.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-24
+ * 浣滆€? Sut
+ * 鐘舵€佺鐞嗚緟鍔╁嚱鏁帮紝鎻愪緵鍦ㄩ〉闈㈠拰缁勪欢涓娇鐢╯tore鐨勪究鎹锋柟娉曪紝鏀寔鐘舵€佹槧灏勫拰mutations缁戝畾
  */
 
 const store = require('./store.js');
 
 /**
- * 页面和组件使用store的辅助方法
- * @param {Object} options - 组件选项
- * @param {Array} mapState - 需要映射的状态路径数组
- * @param {Object} mapMutations - 需要映射的mutations对象
- * @returns {Object} 增强后的组件选项
+ * 椤甸潰鍜岀粍浠朵娇鐢╯tore鐨勮緟鍔╂柟娉? * @param {Object} options - 缁勪欢閫夐」
+ * @param {Array} mapState - 闇€瑕佹槧灏勭殑鐘舵€佽矾寰勬暟缁? * @param {Object} mapMutations - 闇€瑕佹槧灏勭殑mutations瀵硅薄
+ * @returns {Object} 澧炲己鍚庣殑缁勪欢閫夐」
  */
 function useStore(options = {}, mapState = [], mapMutations = {}) {
   const { onLoad, onUnload, ...restOptions } = options;
@@ -21,8 +19,7 @@ function useStore(options = {}, mapState = [], mapMutations = {}) {
   return {
     ...restOptions,
     
-    // 组件数据中初始化store状态
-    data: {
+    // 缁勪欢鏁版嵁涓垵濮嬪寲store鐘舵€?    data: {
       ...(options.data || {}),
       ...mapState.reduce((stateMap, statePath) => {
         stateMap[getStateKey(statePath)] = store.getState(statePath);
@@ -30,15 +27,13 @@ function useStore(options = {}, mapState = [], mapMutations = {}) {
       }, {})
     },
     
-    // 生命周期方法：组件加载时订阅store
+    // 鐢熷懡鍛ㄦ湡鏂规硶锛氱粍浠跺姞杞芥椂璁㈤槄store
     onLoad(options) {
-      // 生成唯一标识符用于订阅
-      this._storeId = `component_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      // 鐢熸垚鍞竴鏍囪瘑绗︾敤浜庤闃?      this._storeId = `component_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
       
-      // 订阅store变化
+      // 璁㈤槄store鍙樺寲
       store.subscribe(this._storeId, (newState) => {
-        // 更新映射的状态
-        const updateData = {};
+        // 鏇存柊鏄犲皠鐨勭姸鎬?        const updateData = {};
         mapState.forEach(statePath => {
           const key = getStateKey(statePath);
           const value = store.getState(statePath);
@@ -47,32 +42,31 @@ function useStore(options = {}, mapState = [], mapMutations = {}) {
           }
         });
         
-        // 如果有数据变化，更新组件数据
+        // 濡傛灉鏈夋暟鎹彉鍖栵紝鏇存柊缁勪欢鏁版嵁
         if (Object.keys(updateData).length > 0) {
           this.setData(updateData);
         }
       });
       
-      // 调用原始的onLoad
+      // 璋冪敤鍘熷鐨刼nLoad
       if (onLoad) {
         onLoad.call(this, options);
       }
     },
     
-    // 生命周期方法：组件卸载时取消订阅
+    // 鐢熷懡鍛ㄦ湡鏂规硶锛氱粍浠跺嵏杞芥椂鍙栨秷璁㈤槄
     onUnload() {
       if (this._storeId) {
         store.unsubscribe(this._storeId);
       }
       
-      // 调用原始的onUnload
+      // 璋冪敤鍘熷鐨刼nUnload
       if (onUnload) {
         onUnload.call(this);
       }
     },
     
-    // 映射mutations到组件方法
-    ...Object.keys(mapMutations).reduce((methods, methodName) => {
+    // 鏄犲皠mutations鍒扮粍浠舵柟娉?    ...Object.keys(mapMutations).reduce((methods, methodName) => {
       methods[methodName] = function(payload) {
         store.commit(mapMutations[methodName], payload);
       };
@@ -82,19 +76,16 @@ function useStore(options = {}, mapState = [], mapMutations = {}) {
 }
 
 /**
- * 将状态路径转换为组件数据键名
- * @param {string} statePath - 状态路径
- * @returns {string} 转换后的键名
+ * 灏嗙姸鎬佽矾寰勮浆鎹负缁勪欢鏁版嵁閿悕
+ * @param {string} statePath - 鐘舵€佽矾寰? * @returns {string} 杞崲鍚庣殑閿悕
  */
 function getStateKey(statePath) {
   return statePath.replace(/\./g, '_');
 }
 
 /**
- * 创建store绑定的页面配置
- * @param {Array} mapState - 需要映射的状态路径数组
- * @param {Object} mapMutations - 需要映射的mutations对象
- * @returns {Function} 页面增强函数
+ * 鍒涘缓store缁戝畾鐨勯〉闈㈤厤缃? * @param {Array} mapState - 闇€瑕佹槧灏勭殑鐘舵€佽矾寰勬暟缁? * @param {Object} mapMutations - 闇€瑕佹槧灏勭殑mutations瀵硅薄
+ * @returns {Function} 椤甸潰澧炲己鍑芥暟
  */
 function createPage(mapState = [], mapMutations = {}) {
   return function(options) {
@@ -103,14 +94,12 @@ function createPage(mapState = [], mapMutations = {}) {
 }
 
 /**
- * 创建store绑定的组件配置
- * @param {Array} mapState - 需要映射的状态路径数组
- * @param {Object} mapMutations - 需要映射的mutations对象
- * @returns {Function} 组件增强函数
+ * 鍒涘缓store缁戝畾鐨勭粍浠堕厤缃? * @param {Array} mapState - 闇€瑕佹槧灏勭殑鐘舵€佽矾寰勬暟缁? * @param {Object} mapMutations - 闇€瑕佹槧灏勭殑mutations瀵硅薄
+ * @returns {Function} 缁勪欢澧炲己鍑芥暟
  */
 function createComponent(mapState = [], mapMutations = {}) {
   return function(options) {
-    // 对于组件，使用created和detached生命周期
+    // 瀵逛簬缁勪欢锛屼娇鐢╟reated鍜宒etached鐢熷懡鍛ㄦ湡
     const { created, detached, ...restOptions } = options;
     
     const storeOptions = useStore(restOptions, mapState, mapMutations);
@@ -118,7 +107,7 @@ function createComponent(mapState = [], mapMutations = {}) {
     return {
       ...storeOptions,
       created() {
-        // 组件创建时订阅store
+        // 缁勪欢鍒涘缓鏃惰闃卻tore
         this._storeId = `component_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
         
         store.subscribe(this._storeId, (newState) => {
@@ -141,8 +130,7 @@ function createComponent(mapState = [], mapMutations = {}) {
         }
       },
       detached() {
-        // 组件分离时取消订阅
-        if (this._storeId) {
+        // 缁勪欢鍒嗙鏃跺彇娑堣闃?        if (this._storeId) {
           store.unsubscribe(this._storeId);
         }
         

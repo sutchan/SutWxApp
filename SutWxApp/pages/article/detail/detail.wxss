@@ -1,9 +1,9 @@
 /*
- * 文件名: detail.wxss
- * 版本号: 1.0.1
- * 更新日期: 2025-11-24
- * 作者: Sut
- * 描述: 文章详情页面样式
+ * 鏂囦欢鍚? detail.wxss
+ * 鐗堟湰鍙? 1.0.1
+ * 鏇存柊鏃ユ湡: 2025-11-24
+ * 浣滆€? Sut
+ * 鎻忚堪: 鏂囩珷璇︽儏椤甸潰鏍峰紡
  */
 /* pages/article/detail/detail.wxss */
 .container {
@@ -19,7 +19,7 @@
   font-size: 32rpx;
 }
 
-/* 错误提示样式 */
+/* 閿欒鎻愮ず鏍峰紡 */
 .error-container {
   text-align: center;
   padding: 80rpx 20rpx;
@@ -49,7 +49,7 @@
   background-color: #2980b9;
 }
 
-/* 文章头部样式 */
+/* 鏂囩珷澶撮儴鏍峰紡 */
 .article-header {
   background-color: white;
   padding: 30rpx;
@@ -98,7 +98,7 @@
   gap: 8rpx;
 }
 
-/* 文章内容样式 */
+/* 鏂囩珷鍐呭鏍峰紡 */
 .article-content {
   background-color: white;
   padding: 30rpx;
@@ -114,7 +114,7 @@
   line-height: 1.8;
 }
 
-/* 文章内容富文本样式 */
+/* 鏂囩珷鍐呭瀵屾枃鏈牱寮?*/
 .article-content :deep(p) {
   margin-bottom: 20rpx;
 }
@@ -125,7 +125,7 @@
   border-radius: 8rpx;
 }
 
-/* 操作按钮样式 */
+/* 鎿嶄綔鎸夐挳鏍峰紡 */
 .article-actions {
   background-color: white;
   padding: 20rpx;
@@ -158,7 +158,7 @@
   margin-bottom: 8rpx;
 }
 
-/* 适配不同屏幕大小 */
+/* 閫傞厤涓嶅悓灞忓箷澶у皬 */
 @media screen and (min-width: 768px) {
   .container {
     max-width: 800rpx;

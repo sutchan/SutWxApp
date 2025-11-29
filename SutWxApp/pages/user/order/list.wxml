@@ -1,8 +1,8 @@
 /**
- * 文件名: list.wxml
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: list 页面结构文件
+ * 鏂囦欢鍚? list.wxml
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: list 椤甸潰缁撴瀯鏂囦欢
  */
 <view class="container">
   <mp-tabs activeTab="{{activeTab}}" tabs="{{tabs}}" bindtabclick="onTabChange"></mp-tabs>
@@ -12,7 +12,7 @@
       <block wx:if="{{orderList.length > 0}}">
         <view class="order-item" wx:for="{{orderList}}" wx:key="id" data-id="{{item.id}}" bindtap="goToOrderDetail">
           <view class="order-header">
-            <text class="order-no">订单号: {{item.orderNo}}</text>
+            <text class="order-no">璁㈠崟鍙? {{item.orderNo}}</text>
             <text class="order-status">{{item.status}}</text>
           </view>
           <view class="order-body">
@@ -20,21 +20,21 @@
               <image class="goods-image" src="{{goods.image}}" mode="aspectFill"></image>
               <view class="goods-info">
                 <text class="goods-name">{{goods.name}}</text>
-                <text class="goods-price">¥{{goods.price}} x {{goods.quantity}}</text>
+                <text class="goods-price">楼{{goods.price}} x {{goods.quantity}}</text>
               </view>
             </view>
           </view>
           <view class="order-footer">
-            <text class="order-total">实付: ¥{{item.totalPrice}}</text>
+            <text class="order-total">瀹炰粯: 楼{{item.totalPrice}}</text>
             <text class="order-time">{{item.createTime}}</text>
           </view>
         </view>
       </block>
       <block wx:else>
-        <view class="no-orders">暂无订单</view>
+        <view class="no-orders">鏆傛棤璁㈠崟</view>
       </block>
     </view>
-    <view wx:if="{{loading}}" class="loading-more">加载中...</view>
-    <view wx:if="{{!hasMore && orderList.length > 0}}" class="no-more">没有更多了</view>
+    <view wx:if="{{loading}}" class="loading-more">鍔犺浇涓?..</view>
+    <view wx:if="{{!hasMore && orderList.length > 0}}" class="no-more">娌℃湁鏇村浜?/view>
   </scroll-view>
 </view>

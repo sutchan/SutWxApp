@@ -1,37 +1,35 @@
 /**
- * 文件名: profile.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 用户个人资料页面
+ * 鏂囦欢鍚? profile.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鐢ㄦ埛涓汉璧勬枡椤甸潰
  */
 Page({
   /**
-   * 页面的初始数据
-   */
+   * 椤甸潰鐨勫垵濮嬫暟鎹?   */
   data: {
     userInfo: {
       avatarUrl: '',
-      nickName: '微信用户',
-      gender: 0, // 0: 未知, 1: 男, 2: 女
-      birthday: ''
+      nickName: '寰俊鐢ㄦ埛',
+      gender: 0, // 0: 鏈煡, 1: 鐢? 2: 濂?      birthday: ''
     }
   },
 
   /**
-   * 生命周期函数--监听页面加载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
    */
   onLoad() {
     this.loadUserInfo();
   },
 
   /**
-   * 加载用户信息
+   * 鍔犺浇鐢ㄦ埛淇℃伅
    */
   loadUserInfo() {
-    // 模拟从本地存储或后端获取用户信息
+    // 妯℃嫙浠庢湰鍦板瓨鍌ㄦ垨鍚庣鑾峰彇鐢ㄦ埛淇℃伅
     const userInfo = wx.getStorageSync('userInfo') || {
       avatarUrl: '/assets/images/default_avatar.png',
-      nickName: '微信用户',
+      nickName: '寰俊鐢ㄦ埛',
       gender: 0,
       birthday: ''
     };
@@ -39,7 +37,7 @@ Page({
   },
 
   /**
-   * 选择头像
+   * 閫夋嫨澶村儚
    */
   chooseAvatar() {
     wx.chooseMedia({
@@ -55,7 +53,7 @@ Page({
           });
           wx.setStorageSync('userInfo', this.data.userInfo);
           wx.showToast({
-            title: '头像更新成功',
+            title: '澶村儚鏇存柊鎴愬姛',
             icon: 'success'
           });
         }
@@ -64,13 +62,13 @@ Page({
   },
 
   /**
-   * 编辑昵称
+   * 缂栬緫鏄电О
    */
   editNickName() {
     wx.showModal({
-      title: '编辑昵称',
+      title: '缂栬緫鏄电О',
       editable: true,
-      placeholderText: '请输入昵称',
+      placeholderText: '璇疯緭鍏ユ樀绉?,
       content: this.data.userInfo.nickName,
       success: (res) => {
         if (res.confirm && res.content) {
@@ -79,7 +77,7 @@ Page({
           });
           wx.setStorageSync('userInfo', this.data.userInfo);
           wx.showToast({
-            title: '昵称更新成功',
+            title: '鏄电О鏇存柊鎴愬姛',
             icon: 'success'
           });
         }
@@ -88,11 +86,11 @@ Page({
   },
 
   /**
-   * 编辑性别
+   * 缂栬緫鎬у埆
    */
   editGender() {
     wx.showActionSheet({
-      itemList: ['男', '女'],
+      itemList: ['鐢?, '濂?],
       success: (res) => {
         const gender = res.tapIndex === 0 ? 1 : 2;
         this.setData({
@@ -100,7 +98,7 @@ Page({
         });
         wx.setStorageSync('userInfo', this.data.userInfo);
         wx.showToast({
-          title: '性别更新成功',
+          title: '鎬у埆鏇存柊鎴愬姛',
           icon: 'success'
         });
       }
@@ -108,7 +106,7 @@ Page({
   },
 
   /**
-   * 编辑生日
+   * 缂栬緫鐢熸棩
    */
   editBirthday() {
     wx.showDatePicker({
@@ -119,7 +117,7 @@ Page({
         });
         wx.setStorageSync('userInfo', this.data.userInfo);
         wx.showToast({
-          title: '生日更新成功',
+          title: '鐢熸棩鏇存柊鎴愬姛',
           icon: 'success'
         });
       }
@@ -127,20 +125,19 @@ Page({
   },
 
   /**
-   * 退出登录
-   */
+   * 閫€鍑虹櫥褰?   */
   logout() {
     wx.showModal({
-      title: '退出登录',
-      content: '确定要退出登录吗？',
+      title: '閫€鍑虹櫥褰?,
+      content: '纭畾瑕侀€€鍑虹櫥褰曞悧锛?,
       success: (res) => {
         if (res.confirm) {
           wx.removeStorageSync('userInfo');
           wx.showToast({
-            title: '退出成功',
+            title: '閫€鍑烘垚鍔?,
             icon: 'success'
           });
-          // 跳转到登录页面或首页
+          // 璺宠浆鍒扮櫥褰曢〉闈㈡垨棣栭〉
           wx.reLaunch({
             url: '/pages/user/login/login'
           });

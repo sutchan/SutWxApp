@@ -1,11 +1,11 @@
 /**
- * 文件名: pointsRanking.wxml
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: pointsRanking 页面结构文件
+ * 鏂囦欢鍚? pointsRanking.wxml
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: pointsRanking 椤甸潰缁撴瀯鏂囦欢
  */
 <view class="container">
-  <!-- 当前用户信息 -->
+  <!-- 褰撳墠鐢ㄦ埛淇℃伅 -->
   <view class="user-info-card">
     <view class="user-info">
       <image class="user-avatar" src="{{userInfo.avatar}}" mode="aspectFill"></image>
@@ -13,25 +13,25 @@
         <text class="user-nickname">{{userInfo.nickname}}</text>
         <view class="user-points">
           <text class="points-value">{{userInfo.points}}</text>
-          <text class="points-label">积分</text>
+          <text class="points-label">绉垎</text>
         </view>
       </view>
       <view class="user-rank">
-        <text class="rank-label">我的排名</text>
-        <text class="rank-value">{{userInfo.rank > 0 ? userInfo.rank : '未上榜'}}</text>
+        <text class="rank-label">鎴戠殑鎺掑悕</text>
+        <text class="rank-value">{{userInfo.rank > 0 ? userInfo.rank : '鏈笂姒?}}</text>
       </view>
     </view>
     <view class="user-actions">
       <view class="action-item" bindtap="onGoToDetail">
-        <text class="iconfont">积分明细</text>
+        <text class="iconfont">绉垎鏄庣粏</text>
       </view>
       <view class="action-item" bindtap="onGoToTasks">
-        <text class="iconfont">赚积分</text>
+        <text class="iconfont">璧氱Н鍒?/text>
       </view>
     </view>
   </view>
 
-  <!-- 榜单类型切换 -->
+  <!-- 姒滃崟绫诲瀷鍒囨崲 -->
   <view class="tab-bar">
     <view 
       wx:for="{{tabs}}" 
@@ -43,9 +43,9 @@
     </view>
   </view>
 
-  <!-- 排行榜列表 -->
+  <!-- 鎺掕姒滃垪琛?-->
   <view class="content">
-    <!-- 排行榜列表 -->
+    <!-- 鎺掕姒滃垪琛?-->
     <view class="ranking-list" wx:if="{{!isEmpty}}">
       <view 
         wx:for="{{rankingList}}" 
@@ -54,7 +54,7 @@
         bindtap="onViewUser" 
         data-id="{{item.id}}">
         
-        <!-- 排名 -->
+        <!-- 鎺掑悕 -->
         <view class="rank-number">
           <view class="rank-badge {{index < 3 ? 'badge-' + (index + 1) : ''}}" wx:if="{{index < 3}}">
             {{index + 1}}
@@ -62,7 +62,7 @@
           <text class="rank-text" wx:else>{{index + 1}}</text>
         </view>
         
-        <!-- 用户信息 -->
+        <!-- 鐢ㄦ埛淇℃伅 -->
         <view class="user-info-row">
           <image class="user-avatar-small" src="{{item.avatar}}" mode="aspectFill"></image>
           <view class="user-details-row">
@@ -73,30 +73,29 @@
           </view>
         </view>
         
-        <!-- 积分信息 -->
+        <!-- 绉垎淇℃伅 -->
         <view class="points-info">
           <text class="points-value">{{item.points}}</text>
-          <text class="points-label">积分</text>
+          <text class="points-label">绉垎</text>
         </view>
       </view>
     </view>
 
-    <!-- 空状态 -->
+    <!-- 绌虹姸鎬?-->
     <view class="empty-state" wx:if="{{isEmpty}}">
       <image class="empty-icon" src="/images/empty-ranking.png" mode="aspectFit"></image>
-      <text>暂无排行数据</text>
-      <view class="empty-tip">快去完成任务赚取积分吧</view>
+      <text>鏆傛棤鎺掕鏁版嵁</text>
+      <view class="empty-tip">蹇幓瀹屾垚浠诲姟璧氬彇绉垎鍚?/view>
     </view>
 
-    <!-- 加载状态 -->
+    <!-- 鍔犺浇鐘舵€?-->
     <view class="loading-state" wx:if="{{isLoading && rankingList.length === 0}}">
       <view class="loading-spinner"></view>
-      <text>加载中...</text>
+      <text>鍔犺浇涓?..</text>
     </view>
 
-    <!-- 没有更多数据 -->
+    <!-- 娌℃湁鏇村鏁版嵁 -->
     <view class="no-more-data" wx:if="{{!hasMore && rankingList.length > 0}}">
-      没有更多数据了
-    </view>
+      娌℃湁鏇村鏁版嵁浜?    </view>
   </view>
 </view>

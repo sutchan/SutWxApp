@@ -1,78 +1,73 @@
 /**
- * 文件名: following.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: 关注列表页面
+ * 鏂囦欢鍚? following.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: 鍏虫敞鍒楄〃椤甸潰
  */
 const userService = require('../../../services/userService');
 
 Page({
   /**
-   * 页面的初始数据
-   */
+   * 椤甸潰鐨勫垵濮嬫暟鎹?   */
   data: {
-    activeTab: 0, // 当前激活的标签 0-我关注的 1-关注我的
-    tabs: ['我关注的', '关注我的'],
-    followingList: [], // 我关注的列表
-    followersList: [], // 关注我的列表
-    loading: false, // 加载状态
-    noMoreData: false, // 是否没有更多数据
-    isEmpty: false, // 是否为空
-    page: 1, // 当前页码
-    pageSize: 20, // 每页数量
-    editMode: false, // 是否处于编辑模式
-    selectedItems: [], // 选中的项目
-    searchKeyword: '', // 搜索关键词
-    searchResults: [], // 搜索结果
-    showSearchResults: false // 是否显示搜索结果
+    activeTab: 0, // 褰撳墠婵€娲荤殑鏍囩 0-鎴戝叧娉ㄧ殑 1-鍏虫敞鎴戠殑
+    tabs: ['鎴戝叧娉ㄧ殑', '鍏虫敞鎴戠殑'],
+    followingList: [], // 鎴戝叧娉ㄧ殑鍒楄〃
+    followersList: [], // 鍏虫敞鎴戠殑鍒楄〃
+    loading: false, // 鍔犺浇鐘舵€?    noMoreData: false, // 鏄惁娌℃湁鏇村鏁版嵁
+    isEmpty: false, // 鏄惁涓虹┖
+    page: 1, // 褰撳墠椤电爜
+    pageSize: 20, // 姣忛〉鏁伴噺
+    editMode: false, // 鏄惁澶勪簬缂栬緫妯″紡
+    selectedItems: [], // 閫変腑鐨勯」鐩?    searchKeyword: '', // 鎼滅储鍏抽敭璇?    searchResults: [], // 鎼滅储缁撴灉
+    showSearchResults: false // 鏄惁鏄剧ず鎼滅储缁撴灉
   },
 
   /**
-   * 生命周期函数--监听页面加载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
    */
   onLoad: function (options) {
     this.loadFollowingList(true);
   },
 
   /**
-   * 生命周期函数--监听页面初次渲染完成
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍒濇娓叉煋瀹屾垚
    */
   onReady: function () {
     
   },
 
   /**
-   * 生命周期函数--监听页面显示
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
    */
   onShow: function () {
-    // 刷新数据
+    // 鍒锋柊鏁版嵁
     this.refreshCurrentTab();
   },
 
   /**
-   * 生命周期函数--监听页面隐藏
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰闅愯棌
    */
   onHide: function () {
     
   },
 
   /**
-   * 生命周期函数--监听页面卸载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍗歌浇
    */
   onUnload: function () {
     
   },
 
   /**
-   * 页面相关事件处理函数--监听用户下拉动作
+   * 椤甸潰鐩稿叧浜嬩欢澶勭悊鍑芥暟--鐩戝惉鐢ㄦ埛涓嬫媺鍔ㄤ綔
    */
   onPullDownRefresh: function () {
     this.refreshCurrentTab();
   },
 
   /**
-   * 页面上拉触底事件的处理函数
-   */
+   * 椤甸潰涓婃媺瑙﹀簳浜嬩欢鐨勫鐞嗗嚱鏁?   */
   onReachBottom: function () {
     if (!this.data.loading && !this.data.noMoreData && !this.data.showSearchResults) {
       this.loadMoreData();
@@ -80,17 +75,16 @@ Page({
   },
 
   /**
-   * 用户点击右上角分享
-   */
+   * 鐢ㄦ埛鐐瑰嚮鍙充笂瑙掑垎浜?   */
   onShareAppMessage: function () {
     return {
-      title: '我的关注',
+      title: '鎴戠殑鍏虫敞',
       path: '/pages/user/following/following'
     };
   },
 
   /**
-   * 切换标签
+   * 鍒囨崲鏍囩
    */
   onTabChange: function(e) {
     const index = e.currentTarget.dataset.index;
@@ -108,8 +102,7 @@ Page({
   },
 
   /**
-   * 刷新当前标签页数据
-   */
+   * 鍒锋柊褰撳墠鏍囩椤垫暟鎹?   */
   refreshCurrentTab: function() {
     if (this.data.activeTab === 0) {
       this.loadFollowingList(true);
@@ -119,7 +112,7 @@ Page({
   },
 
   /**
-   * 加载更多数据
+   * 鍔犺浇鏇村鏁版嵁
    */
   loadMoreData: function() {
     if (this.data.activeTab === 0) {
@@ -130,7 +123,7 @@ Page({
   },
 
   /**
-   * 加载我关注的列表
+   * 鍔犺浇鎴戝叧娉ㄧ殑鍒楄〃
    */
   loadFollowingList: function(reset = false) {
     if (this.data.loading) return;
@@ -163,7 +156,7 @@ Page({
         this.setData({ loading: false });
         
         wx.showToast({
-          title: err.message || '加载失败',
+          title: err.message || '鍔犺浇澶辫触',
           icon: 'none'
         });
       }
@@ -171,7 +164,7 @@ Page({
   },
 
   /**
-   * 加载关注我的列表
+   * 鍔犺浇鍏虫敞鎴戠殑鍒楄〃
    */
   loadFollowersList: function(reset = false) {
     if (this.data.loading) return;
@@ -204,7 +197,7 @@ Page({
         this.setData({ loading: false });
         
         wx.showToast({
-          title: err.message || '加载失败',
+          title: err.message || '鍔犺浇澶辫触',
           icon: 'none'
         });
       }
@@ -212,7 +205,7 @@ Page({
   },
 
   /**
-   * 切换编辑模式
+   * 鍒囨崲缂栬緫妯″紡
    */
   toggleEditMode: function() {
     this.setData({
@@ -222,7 +215,7 @@ Page({
   },
 
   /**
-   * 选择/取消选择项目
+   * 閫夋嫨/鍙栨秷閫夋嫨椤圭洰
    */
   onSelectItem: function(e) {
     const { id } = e.currentTarget.dataset;
@@ -230,10 +223,10 @@ Page({
     const index = selectedItems.indexOf(id);
     
     if (index > -1) {
-      // 已选中，取消选中
+      // 宸查€変腑锛屽彇娑堥€変腑
       selectedItems.splice(index, 1);
     } else {
-      // 未选中，添加选中
+      // 鏈€変腑锛屾坊鍔犻€変腑
       selectedItems.push(id);
     }
     
@@ -241,8 +234,7 @@ Page({
   },
 
   /**
-   * 全选/取消全选
-   */
+   * 鍏ㄩ€?鍙栨秷鍏ㄩ€?   */
   toggleSelectAll: function() {
     const { editMode, selectedItems, activeTab, followingList, followersList } = this.data;
     if (!editMode) return;
@@ -251,35 +243,33 @@ Page({
     const allIds = currentList.map(item => item.id);
     
     if (selectedItems.length === allIds.length) {
-      // 已全选，取消全选
-      this.setData({ selectedItems: [] });
+      // 宸插叏閫夛紝鍙栨秷鍏ㄩ€?      this.setData({ selectedItems: [] });
     } else {
-      // 未全选，执行全选
-      this.setData({ selectedItems: allIds });
+      // 鏈叏閫夛紝鎵ц鍏ㄩ€?      this.setData({ selectedItems: allIds });
     }
   },
 
   /**
-   * 取消关注
+   * 鍙栨秷鍏虫敞
    */
   unfollowUsers: function() {
     const { selectedItems, activeTab } = this.data;
     if (selectedItems.length === 0) {
       wx.showToast({
-        title: '请选择要取消关注的用户',
+        title: '璇烽€夋嫨瑕佸彇娑堝叧娉ㄧ殑鐢ㄦ埛',
         icon: 'none'
       });
       return;
     }
     
     wx.showModal({
-      title: '提示',
-      content: `确定要取消关注选中的${selectedItems.length}个用户吗？`,
+      title: '鎻愮ず',
+      content: `纭畾瑕佸彇娑堝叧娉ㄩ€変腑鐨?{selectedItems.length}涓敤鎴峰悧锛焋,
       success: (res) => {
         if (res.confirm) {
           this.setData({ loading: true });
           
-          // 批量取消关注
+          // 鎵归噺鍙栨秷鍏虫敞
           const promises = selectedItems.map(id => 
             new Promise((resolve, reject) => {
               userService.unfollowUser({
@@ -293,11 +283,11 @@ Page({
           Promise.all(promises)
             .then(() => {
               wx.showToast({
-                title: '取消关注成功',
+                title: '鍙栨秷鍏虫敞鎴愬姛',
                 icon: 'success'
               });
               
-              // 刷新列表
+              // 鍒锋柊鍒楄〃
               this.setData({
                 editMode: false,
                 selectedItems: []
@@ -312,7 +302,7 @@ Page({
             .catch((err) => {
               this.setData({ loading: false });
               wx.showToast({
-                title: err.message || '操作失败',
+                title: err.message || '鎿嶄綔澶辫触',
                 icon: 'none'
               });
             });
@@ -322,7 +312,7 @@ Page({
   },
 
   /**
-   * 关注用户
+   * 鍏虫敞鐢ㄦ埛
    */
   followUser: function(e) {
     const { id } = e.currentTarget.dataset;
@@ -334,11 +324,11 @@ Page({
       success: () => {
         this.setData({ loading: false });
         wx.showToast({
-          title: '关注成功',
+          title: '鍏虫敞鎴愬姛',
           icon: 'success'
         });
         
-        // 刷新关注我的列表
+        // 鍒锋柊鍏虫敞鎴戠殑鍒楄〃
         if (this.data.activeTab === 1) {
           this.loadFollowersList(true);
         }
@@ -346,7 +336,7 @@ Page({
       fail: (err) => {
         this.setData({ loading: false });
         wx.showToast({
-          title: err.message || '关注失败',
+          title: err.message || '鍏虫敞澶辫触',
           icon: 'none'
         });
       }
@@ -354,14 +344,13 @@ Page({
   },
 
   /**
-   * 搜索输入
+   * 鎼滅储杈撳叆
    */
   onSearchInput: function(e) {
     const keyword = e.detail.value.trim();
     this.setData({ searchKeyword: keyword });
     
-    // 清空搜索框时显示原列表
-    if (!keyword) {
+    // 娓呯┖鎼滅储妗嗘椂鏄剧ず鍘熷垪琛?    if (!keyword) {
       this.setData({
         showSearchResults: false,
         searchResults: []
@@ -370,7 +359,7 @@ Page({
   },
 
   /**
-   * 执行搜索
+   * 鎵ц鎼滅储
    */
   onSearch: function() {
     const keyword = this.data.searchKeyword.trim();
@@ -390,7 +379,7 @@ Page({
       fail: (err) => {
         this.setData({ loading: false });
         wx.showToast({
-          title: err.message || '搜索失败',
+          title: err.message || '鎼滅储澶辫触',
           icon: 'none'
         });
       }
@@ -398,7 +387,7 @@ Page({
   },
 
   /**
-   * 清空搜索
+   * 娓呯┖鎼滅储
    */
   clearSearch: function() {
     this.setData({
@@ -409,7 +398,7 @@ Page({
   },
 
   /**
-   * 查看用户详情
+   * 鏌ョ湅鐢ㄦ埛璇︽儏
    */
   viewUserDetail: function(e) {
     const { id } = e.currentTarget.dataset;

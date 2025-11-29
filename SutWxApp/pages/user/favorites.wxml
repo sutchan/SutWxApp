@@ -1,11 +1,11 @@
 /**
- * 文件名: favorites.wxml
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: favorites 页面结构文件
+ * 鏂囦欢鍚? favorites.wxml
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: favorites 椤甸潰缁撴瀯鏂囦欢
  */
 <view class="container">
-  <!-- 标签切换 -->
+  <!-- 鏍囩鍒囨崲 -->
   <view class="tabs">
     <view class="tabs-item {{activeTab === index ? 'active' : ''}}" 
           wx:for="{{tabs}}" 
@@ -16,26 +16,26 @@
     </view>
   </view>
 
-  <!-- 商品收藏列表 -->
+  <!-- 鍟嗗搧鏀惰棌鍒楄〃 -->
   <view class="content" wx:if="{{activeTab === 0}}">
     <view class="list-header">
-      <text class="count">共{{productFavorites.length}}件商品</text>
-      <text class="edit-btn" bindtap="onEditMode" wx:if="{{!editMode && productFavorites.length > 0}}">管理</text>
+      <text class="count">鍏眥{productFavorites.length}}浠跺晢鍝?/text>
+      <text class="edit-btn" bindtap="onEditMode" wx:if="{{!editMode && productFavorites.length > 0}}">绠＄悊</text>
     </view>
     
-    <!-- 编辑模式操作栏 -->
+    <!-- 缂栬緫妯″紡鎿嶄綔鏍?-->
     <view class="edit-bar" wx:if="{{editMode}}">
       <view class="select-all" bindtap="onSelectAll">
         <icon type="{{selectAll.product ? 'success' : 'circle'}}" size="18"/>
-        <text>全选</text>
+        <text>鍏ㄩ€?/text>
       </view>
       <view class="edit-actions">
-        <text class="cancel-btn" bindtap="onCancelEdit">取消</text>
-        <text class="delete-btn" bindtap="onDeleteSelected">删除</text>
+        <text class="cancel-btn" bindtap="onCancelEdit">鍙栨秷</text>
+        <text class="delete-btn" bindtap="onDeleteSelected">鍒犻櫎</text>
       </view>
     </view>
     
-    <!-- 商品列表 -->
+    <!-- 鍟嗗搧鍒楄〃 -->
     <view class="product-list" wx:if="{{productFavorites.length > 0}}">
       <view class="product-item" 
             wx:for="{{productFavorites}}" 
@@ -53,45 +53,45 @@
         <view class="product-info">
           <view class="product-name">{{item.name}}</view>
           <view class="product-price">
-            <text class="current-price">¥{{item.price}}</text>
-            <text class="original-price" wx:if="{{item.originalPrice > item.price}}">¥{{item.originalPrice}}</text>
+            <text class="current-price">楼{{item.price}}</text>
+            <text class="original-price" wx:if="{{item.originalPrice > item.price}}">楼{{item.originalPrice}}</text>
           </view>
           <view class="product-meta">
-            <text class="sales">已售{{item.sales}}件</text>
-            <text class="collect-time">{{item.collectTime}}收藏</text>
+            <text class="sales">宸插敭{{item.sales}}浠?/text>
+            <text class="collect-time">{{item.collectTime}}鏀惰棌</text>
           </view>
         </view>
       </view>
     </view>
     
-    <!-- 空状态 -->
+    <!-- 绌虹姸鎬?-->
     <view class="empty-state" wx:if="{{productFavorites.length === 0 && !loading}}">
       <image class="empty-icon" src="/images/empty/empty-favorite.png"></image>
-      <text class="empty-text">暂无收藏商品</text>
-      <button class="empty-btn" bindtap="goToHome">去逛逛</button>
+      <text class="empty-text">鏆傛棤鏀惰棌鍟嗗搧</text>
+      <button class="empty-btn" bindtap="goToHome">鍘婚€涢€?/button>
     </view>
   </view>
 
-  <!-- 文章收藏列表 -->
+  <!-- 鏂囩珷鏀惰棌鍒楄〃 -->
   <view class="content" wx:if="{{activeTab === 1}}">
     <view class="list-header">
-      <text class="count">共{{articleFavorites.length}}篇文章</text>
-      <text class="edit-btn" bindtap="onEditMode" wx:if="{{!editMode && articleFavorites.length > 0}}">管理</text>
+      <text class="count">鍏眥{articleFavorites.length}}绡囨枃绔?/text>
+      <text class="edit-btn" bindtap="onEditMode" wx:if="{{!editMode && articleFavorites.length > 0}}">绠＄悊</text>
     </view>
     
-    <!-- 编辑模式操作栏 -->
+    <!-- 缂栬緫妯″紡鎿嶄綔鏍?-->
     <view class="edit-bar" wx:if="{{editMode}}">
       <view class="select-all" bindtap="onSelectAll">
         <icon type="{{selectAll.article ? 'success' : 'circle'}}" size="18"/>
-        <text>全选</text>
+        <text>鍏ㄩ€?/text>
       </view>
       <view class="edit-actions">
-        <text class="cancel-btn" bindtap="onCancelEdit">取消</text>
-        <text class="delete-btn" bindtap="onDeleteSelected">删除</text>
+        <text class="cancel-btn" bindtap="onCancelEdit">鍙栨秷</text>
+        <text class="delete-btn" bindtap="onDeleteSelected">鍒犻櫎</text>
       </view>
     </view>
     
-    <!-- 文章列表 -->
+    <!-- 鏂囩珷鍒楄〃 -->
     <view class="article-list" wx:if="{{articleFavorites.length > 0}}">
       <view class="article-item" 
             wx:for="{{articleFavorites}}" 
@@ -112,29 +112,29 @@
           <view class="article-meta">
             <text class="author">{{item.author}}</text>
             <text class="publish-time">{{item.publishTime}}</text>
-            <text class="read-count">{{item.readCount}}阅读</text>
+            <text class="read-count">{{item.readCount}}闃呰</text>
           </view>
-          <view class="collect-time">{{item.collectTime}}收藏</view>
+          <view class="collect-time">{{item.collectTime}}鏀惰棌</view>
         </view>
       </view>
     </view>
     
-    <!-- 空状态 -->
+    <!-- 绌虹姸鎬?-->
     <view class="empty-state" wx:if="{{articleFavorites.length === 0 && !loading}}">
       <image class="empty-icon" src="/images/empty/empty-favorite.png"></image>
-      <text class="empty-text">暂无收藏文章</text>
-      <button class="empty-btn" bindtap="goToArticle">去看看</button>
+      <text class="empty-text">鏆傛棤鏀惰棌鏂囩珷</text>
+      <button class="empty-btn" bindtap="goToArticle">鍘荤湅鐪?/button>
     </view>
   </view>
 
-  <!-- 加载状态 -->
+  <!-- 鍔犺浇鐘舵€?-->
   <view class="loading" wx:if="{{loading}}">
     <view class="loading-spinner"></view>
-    <text>加载中...</text>
+    <text>鍔犺浇涓?..</text>
   </view>
 
-  <!-- 没有更多数据 -->
+  <!-- 娌℃湁鏇村鏁版嵁 -->
   <view class="no-more" wx:if="{{!hasMore[activeTab === 0 ? 'product' : 'article'] && (activeTab === 0 ? productFavorites : articleFavorites).length > 0}}">
-    <text>没有更多了</text>
+    <text>娌℃湁鏇村浜?/text>
   </view>
 </view>

@@ -1,30 +1,30 @@
 /**
- * 文件名: orderCard.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: 订单卡片组件
+ * 鏂囦欢鍚? orderCard.js
+ * 鐗堟湰鍙? 1.0.2
+ * 鏇存柊鏃ユ湡: 2025-11-29
+ * 浣滆€? Sut
+ * 鎻忚堪: 璁㈠崟鍗＄墖缁勪欢
  */
 Component({
   /**
-   * 组件的属性列表
-   */
+   * 缁勪欢鐨勫睘鎬у垪琛?   */
   properties: {
-    // 订单信息
+    // 璁㈠崟淇℃伅
     order: {
       type: Object,
       value: {}
     },
-    // 是否显示边框
+    // 鏄惁鏄剧ず杈规
     bordered: {
       type: Boolean,
       value: true
     },
-    // 是否显示操作按钮
+    // 鏄惁鏄剧ず鎿嶄綔鎸夐挳
     showActions: {
       type: Boolean,
       value: true
     },
-    // 卡片宽度，默认100%
+    // 鍗＄墖瀹藉害锛岄粯璁?00%
     width: {
       type: String,
       value: '100%'
@@ -32,88 +32,95 @@ Component({
   },
 
   /**
-   * 组件的初始数据
-   */
+   * 缁勪欢鐨勫垵濮嬫暟鎹?   */
   data: {
-    // 订单状态映射
-    statusMap: {
-      'pending': { text: '待付款', color: '#ff9500' },
-      'paid': { text: '待发货', color: '#007aff' },
-      'shipped': { text: '待收货', color: '#4cd964' },
-      'completed': { text: '已完成', color: '#8e8e93' },
-      'cancelled': { text: '已取消', color: '#8e8e93' },
-      'refunded': { text: '已退款', color: '#8e8e93' }
+    // 璁㈠崟鐘舵€佹槧灏?    statusMap: {
+      'pending': { text: '寰呬粯娆?, color: '#ff9500' },
+      'paid': { text: '寰呭彂璐?, color: '#007aff' },
+      'shipped': { text: '寰呮敹璐?, color: '#4cd964' },
+      'completed': { text: '宸插畬鎴?, color: '#8e8e93' },
+      'cancelled': { text: '宸插彇娑?, color: '#8e8e93' },
+      'refunded': { text: '宸查€€娆?, color: '#8e8e93' }
     }
   },
 
   /**
-   * 组件的方法列表
-   */
+   * 缁勪欢鐨勬柟娉曞垪琛?   */
   methods: {
     /**
-     * 点击订单卡片
+     * 鐐瑰嚮璁㈠崟鍗＄墖
+     * @returns {void}
      */
     onOrderTap() {
       this.triggerEvent('tap', {
-        order: this.data.order
+        order: this.properties.order
       });
     },
 
     /**
-     * 点击取消订单
+     * 鐐瑰嚮鍙栨秷璁㈠崟
+     * @param {Object} e - 浜嬩欢瀵硅薄
+     * @returns {void}
      */
     onCancelOrder(e) {
       e.stopPropagation();
       this.triggerEvent('cancel', {
-        order: this.data.order
+        order: this.properties.order
       });
     },
 
     /**
-     * 点击确认收货
+     * 鐐瑰嚮纭鏀惰揣
+     * @param {Object} e - 浜嬩欢瀵硅薄
+     * @returns {void}
      */
     onConfirmReceive(e) {
       e.stopPropagation();
       this.triggerEvent('confirm', {
-        order: this.data.order
+        order: this.properties.order
       });
     },
 
     /**
-     * 点击删除订单
+     * 鐐瑰嚮鍒犻櫎璁㈠崟
+     * @param {Object} e - 浜嬩欢瀵硅薄
+     * @returns {void}
      */
     onDeleteOrder(e) {
       e.stopPropagation();
       this.triggerEvent('delete', {
-        order: this.data.order
+        order: this.properties.order
       });
     },
 
     /**
-     * 点击评价订单
+     * 鐐瑰嚮璇勪环璁㈠崟
+     * @param {Object} e - 浜嬩欢瀵硅薄
+     * @returns {void}
      */
     onReviewOrder(e) {
       e.stopPropagation();
       this.triggerEvent('review', {
-        order: this.data.order
+        order: this.properties.order
       });
     },
 
     /**
-     * 点击查看物流
+     * 鐐瑰嚮鏌ョ湅鐗╂祦
+     * @param {Object} e - 浜嬩欢瀵硅薄
+     * @returns {void}
      */
     onViewLogistics(e) {
       e.stopPropagation();
       this.triggerEvent('logistics', {
-        order: this.data.order
+        order: this.properties.order
       });
     },
 
     /**
-     * 格式化订单状态
-     */
+     * 鏍煎紡鍖栬鍗曠姸鎬?     * @param {string} status - 璁㈠崟鐘舵€?     * @returns {Object} 鏍煎紡鍖栧悗鐨勭姸鎬佷俊鎭?     */
     formatOrderStatus(status) {
-      return this.data.statusMap[status] || { text: '未知状态', color: '#8e8e93' };
+      return this.data.statusMap[status] || { text: '鏈煡鐘舵€?, color: '#8e8e93' };
     }
   }
 });

@@ -1,20 +1,20 @@
 /**
- * 文件名: detail.wxml
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: detail 页面结构文件
+ * 鏂囦欢鍚? detail.wxml
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: detail 椤甸潰缁撴瀯鏂囦欢
  */
 <view class="container">
   <block wx:if="{{orderDetail}}">
-    <!-- 订单状态 -->
+    <!-- 璁㈠崟鐘舵€?-->
     <view class="order-status-card">
       <view class="status-text">{{orderDetail.status}}</view>
-      <view class="status-tip" wx:if="{{orderDetail.status === '待付款'}}">请在30分钟内完成支付，逾期订单将自动取消</view>
+      <view class="status-tip" wx:if="{{orderDetail.status === '寰呬粯娆?}}">璇峰湪30鍒嗛挓鍐呭畬鎴愭敮浠橈紝閫炬湡璁㈠崟灏嗚嚜鍔ㄥ彇娑?/view>
     </view>
 
-    <!-- 收货地址 -->
+    <!-- 鏀惰揣鍦板潃 -->
     <mp-cells ext-class="address-card">
-      <mp-cell value="收货地址" footer="">
+      <mp-cell value="鏀惰揣鍦板潃" footer="">
         <view slot="title">
           <view class="address-info">
             <text class="name">{{orderDetail.address.name}}</text>
@@ -25,44 +25,44 @@
       </mp-cell>
     </mp-cells>
 
-    <!-- 商品列表 -->
+    <!-- 鍟嗗搧鍒楄〃 -->
     <mp-cells ext-class="goods-card">
-      <mp-cell value="商品列表" footer=""></mp-cell>
+      <mp-cell value="鍟嗗搧鍒楄〃" footer=""></mp-cell>
       <view class="goods-item" wx:for="{{orderDetail.items}}" wx:key="name" wx:for-item="goods">
         <image class="goods-image" src="{{goods.image}}" mode="aspectFill"></image>
         <view class="goods-info">
           <text class="goods-name">{{goods.name}}</text>
-          <text class="goods-price">¥{{goods.price}} x {{goods.quantity}}</text>
+          <text class="goods-price">楼{{goods.price}} x {{goods.quantity}}</text>
         </view>
       </view>
     </mp-cells>
 
-    <!-- 订单信息 -->
+    <!-- 璁㈠崟淇℃伅 -->
     <mp-cells ext-class="order-info-card">
-      <mp-cell value="订单信息" footer=""></mp-cell>
-      <mp-cell value="订单编号" footer="{{orderDetail.orderNo}}"></mp-cell>
-      <mp-cell value="下单时间" footer="{{orderDetail.createTime}}"></mp-cell>
-      <mp-cell value="支付时间" footer="{{orderDetail.payTime || '暂无'}}"></mp-cell>
-      <mp-cell value="发货时间" footer="{{orderDetail.deliveryTime || '暂无'}}"></mp-cell>
-      <mp-cell value="收货时间" footer="{{orderDetail.receiveTime || '暂无'}}"></mp-cell>
+      <mp-cell value="璁㈠崟淇℃伅" footer=""></mp-cell>
+      <mp-cell value="璁㈠崟缂栧彿" footer="{{orderDetail.orderNo}}"></mp-cell>
+      <mp-cell value="涓嬪崟鏃堕棿" footer="{{orderDetail.createTime}}"></mp-cell>
+      <mp-cell value="鏀粯鏃堕棿" footer="{{orderDetail.payTime || '鏆傛棤'}}"></mp-cell>
+      <mp-cell value="鍙戣揣鏃堕棿" footer="{{orderDetail.deliveryTime || '鏆傛棤'}}"></mp-cell>
+      <mp-cell value="鏀惰揣鏃堕棿" footer="{{orderDetail.receiveTime || '鏆傛棤'}}"></mp-cell>
     </mp-cells>
 
-    <!-- 费用明细 -->
+    <!-- 璐圭敤鏄庣粏 -->
     <mp-cells ext-class="price-detail-card">
-      <mp-cell value="商品总价" footer="¥{{orderDetail.totalPrice}}"></mp-cell>
-      <mp-cell value="运费" footer="¥{{orderDetail.freight}}"></mp-cell>
-      <mp-cell value="实付款" footer="¥{{orderDetail.actualPrice}}" ext-class="actual-price"></mp-cell>
+      <mp-cell value="鍟嗗搧鎬讳环" footer="楼{{orderDetail.totalPrice}}"></mp-cell>
+      <mp-cell value="杩愯垂" footer="楼{{orderDetail.freight}}"></mp-cell>
+      <mp-cell value="瀹炰粯娆? footer="楼{{orderDetail.actualPrice}}" ext-class="actual-price"></mp-cell>
     </mp-cells>
 
-    <!-- 底部操作按钮 -->
+    <!-- 搴曢儴鎿嶄綔鎸夐挳 -->
     <view class="footer-buttons">
-      <button class="weui-btn weui-btn_plain-default" wx:if="{{orderDetail.status === '待付款'}}" bindtap="cancelOrder">取消订单</button>
-      <button class="weui-btn weui-btn_primary" wx:if="{{orderDetail.status === '待付款'}}" bindtap="payOrder">立即支付</button>
-      <button class="weui-btn weui-btn_primary" wx:if="{{orderDetail.status === '待收货'}}" bindtap="confirmReceipt">确认收货</button>
+      <button class="weui-btn weui-btn_plain-default" wx:if="{{orderDetail.status === '寰呬粯娆?}}" bindtap="cancelOrder">鍙栨秷璁㈠崟</button>
+      <button class="weui-btn weui-btn_primary" wx:if="{{orderDetail.status === '寰呬粯娆?}}" bindtap="payOrder">绔嬪嵆鏀粯</button>
+      <button class="weui-btn weui-btn_primary" wx:if="{{orderDetail.status === '寰呮敹璐?}}" bindtap="confirmReceipt">纭鏀惰揣</button>
     </view>
   </block>
   <block wx:else>
-    <view class="loading-text" wx:if="{{loading}}">加载中...</view>
-    <view class="empty-text" wx:else>订单不存在</view>
+    <view class="loading-text" wx:if="{{loading}}">鍔犺浇涓?..</view>
+    <view class="empty-text" wx:else>璁㈠崟涓嶅瓨鍦?/view>
   </block>
 </view>

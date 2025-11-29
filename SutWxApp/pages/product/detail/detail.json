@@ -1,11 +1,11 @@
 /**
- * 文件名: detail.json
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: detail JSON 配置文件
+ * 鏂囦欢鍚? detail.json
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: detail JSON 閰嶇疆鏂囦欢
  */
 {
-  "navigationBarTitleText": "商品详情",
+  "navigationBarTitleText": "鍟嗗搧璇︽儏",
   "enablePullDownRefresh": true,
   "backgroundTextStyle": "dark"
 }

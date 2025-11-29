@@ -1,6 +1,6 @@
-/* index.wxss - 版本号: 1.0.1 - 2025-11-24 */
+/* index.wxss - 鐗堟湰鍙? 1.0.1 - 2025-11-24 */
 
-/* 容器样式 */
+/* 瀹瑰櫒鏍峰紡 */
 .container {
   width: 100%;
   padding: 0;
@@ -9,7 +9,7 @@
   -webkit-font-smoothing: antialiased;
 }
 
-/* 加载提示 */
+/* 鍔犺浇鎻愮ず */
 .loading-tip {
   padding: 40rpx 0;
   text-align: center;
@@ -17,7 +17,7 @@
   font-size: 28rpx;
 }
 
-/* 轮播图样式 */
+/* 杞挱鍥炬牱寮?*/
 .swiper-container {
   width: 100%;
   height: 300rpx;
@@ -32,7 +32,7 @@
   will-change: transform;
 }
 
-/* 分类入口样式 */
+/* 鍒嗙被鍏ュ彛鏍峰紡 */
 .category-grid {
   display: flex;
   flex-wrap: wrap;
@@ -62,7 +62,7 @@
   color: #333;
 }
 
-/* 推荐商品样式 */
+/* 鎺ㄨ崘鍟嗗搧鏍峰紡 */
 .recommend-products {
   background-color: #fff;
   padding-bottom: 20rpx;

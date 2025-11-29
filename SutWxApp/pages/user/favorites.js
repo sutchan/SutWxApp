@@ -1,115 +1,105 @@
 /**
- * 文件名: favorites.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: 收藏列表页面
+ * 鏂囦欢鍚? favorites.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: 鏀惰棌鍒楄〃椤甸潰
  */
 Page({
   /**
-   * 页面的初始数据
-   */
+   * 椤甸潰鐨勫垵濮嬫暟鎹?   */
   data: {
-    activeTab: 0, // 当前激活的标签 0:商品 1:文章
-    tabs: ['商品', '文章'],
-    productFavorites: [], // 商品收藏列表
-    articleFavorites: [], // 文章收藏列表
-    loading: false, // 加载状态
-    hasMore: {
-      product: true, // 商品是否还有更多数据
-      article: true  // 文章是否还有更多数据
+    activeTab: 0, // 褰撳墠婵€娲荤殑鏍囩 0:鍟嗗搧 1:鏂囩珷
+    tabs: ['鍟嗗搧', '鏂囩珷'],
+    productFavorites: [], // 鍟嗗搧鏀惰棌鍒楄〃
+    articleFavorites: [], // 鏂囩珷鏀惰棌鍒楄〃
+    loading: false, // 鍔犺浇鐘舵€?    hasMore: {
+      product: true, // 鍟嗗搧鏄惁杩樻湁鏇村鏁版嵁
+      article: true  // 鏂囩珷鏄惁杩樻湁鏇村鏁版嵁
     },
     page: {
-      product: 1, // 商品当前页码
-      article: 1  // 文章当前页码
+      product: 1, // 鍟嗗搧褰撳墠椤电爜
+      article: 1  // 鏂囩珷褰撳墠椤电爜
     },
-    pageSize: 10, // 每页数量
+    pageSize: 10, // 姣忛〉鏁伴噺
     isEmpty: {
-      product: false, // 商品收藏是否为空
-      article: false  // 文章收藏是否为空
+      product: false, // 鍟嗗搧鏀惰棌鏄惁涓虹┖
+      article: false  // 鏂囩珷鏀惰棌鏄惁涓虹┖
     },
-    editMode: false, // 是否处于编辑模式
+    editMode: false, // 鏄惁澶勪簬缂栬緫妯″紡
     selectedItems: {
-      product: [], // 选中的商品
-      article: []  // 选中的文章
-    },
+      product: [], // 閫変腑鐨勫晢鍝?      article: []  // 閫変腑鐨勬枃绔?    },
     selectAll: {
-      product: false, // 商品是否全选
-      article: false  // 文章是否全选
-    }
+      product: false, // 鍟嗗搧鏄惁鍏ㄩ€?      article: false  // 鏂囩珷鏄惁鍏ㄩ€?    }
   },
 
   /**
-   * 生命周期函数--监听页面加载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
    */
   onLoad: function (options) {
-    // 加载收藏列表
+    // 鍔犺浇鏀惰棌鍒楄〃
     this.loadFavorites();
   },
 
   /**
-   * 生命周期函数--监听页面初次渲染完成
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍒濇娓叉煋瀹屾垚
    */
   onReady: function () {
 
   },
 
   /**
-   * 生命周期函数--监听页面显示
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
    */
   onShow: function () {
-    // 页面显示时刷新数据
-    this.refreshFavorites();
+    // 椤甸潰鏄剧ず鏃跺埛鏂版暟鎹?    this.refreshFavorites();
   },
 
   /**
-   * 生命周期函数--监听页面隐藏
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰闅愯棌
    */
   onHide: function () {
 
   },
 
   /**
-   * 生命周期函数--监听页面卸载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍗歌浇
    */
   onUnload: function () {
 
   },
 
   /**
-   * 页面相关事件处理函数--监听用户下拉动作
+   * 椤甸潰鐩稿叧浜嬩欢澶勭悊鍑芥暟--鐩戝惉鐢ㄦ埛涓嬫媺鍔ㄤ綔
    */
   onPullDownRefresh: function () {
     this.refreshFavorites();
   },
 
   /**
-   * 页面上拉触底事件的处理函数
-   */
+   * 椤甸潰涓婃媺瑙﹀簳浜嬩欢鐨勫鐞嗗嚱鏁?   */
   onReachBottom: function () {
-    // 加载更多数据
+    // 鍔犺浇鏇村鏁版嵁
     if (this.data.hasMore[this.data.activeTab === 0 ? 'product' : 'article'] && !this.data.loading) {
       this.loadMoreFavorites();
     }
   },
 
   /**
-   * 用户点击右上角分享
-   */
+   * 鐢ㄦ埛鐐瑰嚮鍙充笂瑙掑垎浜?   */
   onShareAppMessage: function () {
 
   },
 
   /**
-   * 切换标签
+   * 鍒囨崲鏍囩
    */
   onTabChange: function(e) {
     const index = e.currentTarget.dataset.index;
     this.setData({
       activeTab: index,
-      editMode: false // 切换标签时退出编辑模式
-    });
+      editMode: false // 鍒囨崲鏍囩鏃堕€€鍑虹紪杈戞ā寮?    });
     
-    // 如果该标签还没有数据，则加载数据
+    // 濡傛灉璇ユ爣绛捐繕娌℃湁鏁版嵁锛屽垯鍔犺浇鏁版嵁
     const tabType = index === 0 ? 'product' : 'article';
     if (this.data[`${tabType}Favorites`].length === 0 && !this.data.isEmpty[tabType]) {
       this.loadFavorites();
@@ -117,10 +107,10 @@ Page({
   },
 
   /**
-   * 刷新收藏列表
+   * 鍒锋柊鏀惰棌鍒楄〃
    */
   refreshFavorites: function() {
-    // 重置数据
+    // 閲嶇疆鏁版嵁
     const tabType = this.data.activeTab === 0 ? 'product' : 'article';
     this.setData({
       [`page.${tabType}`]: 1,
@@ -132,12 +122,12 @@ Page({
       [`selectAll.${tabType}`]: false
     });
     
-    // 加载数据
+    // 鍔犺浇鏁版嵁
     this.loadFavorites();
   },
 
   /**
-   * 加载收藏列表
+   * 鍔犺浇鏀惰棌鍒楄〃
    */
   loadFavorites: function() {
     const tabType = this.data.activeTab === 0 ? 'product' : 'article';
@@ -146,12 +136,12 @@ Page({
     
     this.setData({ loading: true });
     
-    // 模拟API请求
+    // 妯℃嫙API璇锋眰
     setTimeout(() => {
-      // 模拟数据
+      // 妯℃嫙鏁版嵁
       const mockData = tabType === 'product' ? this.generateMockProducts(page, pageSize) : this.generateMockArticles(page, pageSize);
       
-      // 更新数据
+      // 鏇存柊鏁版嵁
       this.setData({
         [`${tabType}Favorites`]: this.data[`${tabType}Favorites`].concat(mockData.list),
         [`hasMore.${tabType}`]: mockData.hasMore,
@@ -159,13 +149,13 @@ Page({
         loading: false
       });
       
-      // 停止下拉刷新
+      // 鍋滄涓嬫媺鍒锋柊
       wx.stopPullDownRefresh();
     }, 500);
   },
 
   /**
-   * 加载更多收藏
+   * 鍔犺浇鏇村鏀惰棌
    */
   loadMoreFavorites: function() {
     const tabType = this.data.activeTab === 0 ? 'product' : 'article';
@@ -176,19 +166,18 @@ Page({
   },
 
   /**
-   * 生成模拟商品数据
+   * 鐢熸垚妯℃嫙鍟嗗搧鏁版嵁
    */
   generateMockProducts: function(page, pageSize) {
     const products = [];
-    const total = 25; // 总共25条数据
-    
+    const total = 25; // 鎬诲叡25鏉℃暟鎹?    
     const start = (page - 1) * pageSize;
     const end = Math.min(start + pageSize, total);
     
     for (let i = start; i < end; i++) {
       products.push({
         id: `product_${i + 1}`,
-        name: `精选商品 ${i + 1}`,
+        name: `绮鹃€夊晢鍝?${i + 1}`,
         price: Math.floor(Math.random() * 1000) + 100,
         originalPrice: Math.floor(Math.random() * 1200) + 200,
         image: `/images/product/product${(i % 5) + 1}.jpg`,
@@ -204,22 +193,21 @@ Page({
   },
 
   /**
-   * 生成模拟文章数据
+   * 鐢熸垚妯℃嫙鏂囩珷鏁版嵁
    */
   generateMockArticles: function(page, pageSize) {
     const articles = [];
-    const total = 20; // 总共20条数据
-    
+    const total = 20; // 鎬诲叡20鏉℃暟鎹?    
     const start = (page - 1) * pageSize;
     const end = Math.min(start + pageSize, total);
     
     for (let i = start; i < end; i++) {
       articles.push({
         id: `article_${i + 1}`,
-        title: `热门文章标题 ${i + 1}`,
-        summary: `这是文章${i + 1}的简介内容，介绍了相关知识和技巧...`,
+        title: `鐑棬鏂囩珷鏍囬 ${i + 1}`,
+        summary: `杩欐槸鏂囩珷${i + 1}鐨勭畝浠嬪唴瀹癸紝浠嬬粛浜嗙浉鍏崇煡璇嗗拰鎶€宸?..`,
         image: `/images/article/article${(i % 4) + 1}.jpg`,
-        author: `作者${(i % 3) + 1}`,
+        author: `浣滆€?{(i % 3) + 1}`,
         publishTime: this.formatTime(new Date(Date.now() - Math.random() * 60 * 24 * 60 * 60 * 1000)),
         collectTime: this.formatTime(new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000)),
         readCount: Math.floor(Math.random() * 5000) + 100
@@ -233,8 +221,7 @@ Page({
   },
 
   /**
-   * 格式化时间
-   */
+   * 鏍煎紡鍖栨椂闂?   */
   formatTime: function(date) {
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
@@ -244,7 +231,7 @@ Page({
   },
 
   /**
-   * 进入编辑模式
+   * 杩涘叆缂栬緫妯″紡
    */
   onEditMode: function() {
     this.setData({
@@ -253,8 +240,7 @@ Page({
   },
 
   /**
-   * 退出编辑模式
-   */
+   * 閫€鍑虹紪杈戞ā寮?   */
   onCancelEdit: function() {
     const tabType = this.data.activeTab === 0 ? 'product' : 'article';
     this.setData({
@@ -265,7 +251,7 @@ Page({
   },
 
   /**
-   * 选择/取消选择项目
+   * 閫夋嫨/鍙栨秷閫夋嫨椤圭洰
    */
   onSelectItem: function(e) {
     const { id, type } = e.currentTarget.dataset;
@@ -274,10 +260,10 @@ Page({
     const index = selectedItems.indexOf(id);
     
     if (index > -1) {
-      // 取消选择
+      // 鍙栨秷閫夋嫨
       selectedItems.splice(index, 1);
     } else {
-      // 添加选择
+      // 娣诲姞閫夋嫨
       selectedItems.push(id);
     }
     
@@ -288,8 +274,7 @@ Page({
   },
 
   /**
-   * 全选/取消全选
-   */
+   * 鍏ㄩ€?鍙栨秷鍏ㄩ€?   */
   onSelectAll: function() {
     const tabType = this.data.activeTab === 0 ? 'product' : 'article';
     const selectAll = !this.data.selectAll[tabType];
@@ -301,27 +286,25 @@ Page({
   },
 
   /**
-   * 删除选中的收藏
-   */
+   * 鍒犻櫎閫変腑鐨勬敹钘?   */
   onDeleteSelected: function() {
     const tabType = this.data.activeTab === 0 ? 'product' : 'article';
     const selectedItems = this.data.selectedItems[tabType];
     
     if (selectedItems.length === 0) {
       wx.showToast({
-        title: '请选择要删除的项目',
+        title: '璇烽€夋嫨瑕佸垹闄ょ殑椤圭洰',
         icon: 'none'
       });
       return;
     }
     
     wx.showModal({
-      title: '确认删除',
-      content: `确定要删除选中的${selectedItems.length}个收藏吗？`,
+      title: '纭鍒犻櫎',
+      content: `纭畾瑕佸垹闄ら€変腑鐨?{selectedItems.length}涓敹钘忓悧锛焋,
       success: (res) => {
         if (res.confirm) {
-          // 从列表中移除选中的项目
-          const favorites = this.data[`${tabType}Favorites`].filter(item => !selectedItems.includes(item.id));
+          // 浠庡垪琛ㄤ腑绉婚櫎閫変腑鐨勯」鐩?          const favorites = this.data[`${tabType}Favorites`].filter(item => !selectedItems.includes(item.id));
           
           this.setData({
             [`${tabType}Favorites`]: favorites,
@@ -331,7 +314,7 @@ Page({
           });
           
           wx.showToast({
-            title: '删除成功',
+            title: '鍒犻櫎鎴愬姛',
             icon: 'success'
           });
         }
@@ -340,8 +323,7 @@ Page({
   },
 
   /**
-   * 跳转到商品详情
-   */
+   * 璺宠浆鍒板晢鍝佽鎯?   */
   onProductTap: function(e) {
     if (this.data.editMode) return;
     
@@ -352,8 +334,7 @@ Page({
   },
 
   /**
-   * 跳转到文章详情
-   */
+   * 璺宠浆鍒版枃绔犺鎯?   */
   onArticleTap: function(e) {
     if (this.data.editMode) return;
     

@@ -1,16 +1,15 @@
 /**
- * 文件名: result.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: 支付结果页面
+ * 鏂囦欢鍚? result.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: 鏀粯缁撴灉椤甸潰
  */
 
 const paymentService = require('../../../services/paymentService');
 
 Page({
   /**
-   * 页面的初始数据
-   */
+   * 椤甸潰鐨勫垵濮嬫暟鎹?   */
   data: {
     orderId: '',
     paymentStatus: '', // success, failed, cancelled
@@ -22,7 +21,7 @@ Page({
   },
 
   /**
-   * 生命周期函数--监听页面加载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
    */
   onLoad(options) {
     const { orderId, status } = options;
@@ -37,7 +36,7 @@ Page({
       this.startCountdown();
     } else {
       wx.showToast({
-        title: '参数错误',
+        title: '鍙傛暟閿欒',
         icon: 'none'
       });
       setTimeout(() => {
@@ -49,7 +48,7 @@ Page({
   },
 
   /**
-   * 生命周期函数--监听页面卸载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍗歌浇
    */
   onUnload() {
     if (this.data.countdownTimer) {
@@ -58,16 +57,16 @@ Page({
   },
 
   /**
-   * 加载支付结果
+   * 鍔犺浇鏀粯缁撴灉
    */
   async loadPaymentResult(orderId, status) {
     try {
       this.setData({ loading: true });
       
-      // 这里应该调用实际的支付结果API
+      // 杩欓噷搴旇璋冪敤瀹為檯鐨勬敮浠樼粨鏋淎PI
       // const result = await paymentService.getPaymentResult(orderId);
       
-      // 模拟数据
+      // 妯℃嫙鏁版嵁
       setTimeout(() => {
         const orderData = {
           id: orderId,
@@ -79,18 +78,18 @@ Page({
           items: [
             {
               id: '1',
-              name: '高品质无线蓝牙耳机',
+              name: '楂樺搧璐ㄦ棤绾胯摑鐗欒€虫満',
               image: '/images/product/headphone.jpg',
               price: 299.00,
               quantity: 1,
-              specs: '黑色'
+              specs: '榛戣壊'
             }
           ],
           address: {
             id: '1',
-            name: '张三',
+            name: '寮犱笁',
             phone: '13800138000',
-            address: '北京市朝阳区某某街道某某小区1号楼1单元101室'
+            address: '鍖椾含甯傛湞闃冲尯鏌愭煇琛楅亾鏌愭煇灏忓尯1鍙锋ゼ1鍗曞厓101瀹?
           },
           createTime: new Date().toISOString()
         };
@@ -109,20 +108,19 @@ Page({
       }, 800);
       
     } catch (error) {
-      console.error('加载支付结果失败:', error);
+      console.error('鍔犺浇鏀粯缁撴灉澶辫触:', error);
       this.setData({ loading: false });
       wx.showToast({
-        title: '加载支付结果失败',
+        title: '鍔犺浇鏀粯缁撴灉澶辫触',
         icon: 'none'
       });
     }
   },
 
   /**
-   * 开始倒计时
-   */
+   * 寮€濮嬪€掕鏃?   */
   startCountdown() {
-    let countdown = 5; // 5秒后自动跳转
+    let countdown = 5; // 5绉掑悗鑷姩璺宠浆
     
     this.setData({ countdown });
     
@@ -136,7 +134,7 @@ Page({
           countdownTimer: null 
         });
         
-        // 根据支付状态跳转到不同页面
+        // 鏍规嵁鏀粯鐘舵€佽烦杞埌涓嶅悓椤甸潰
         if (this.data.paymentStatus === 'success') {
           this.goToOrderDetail();
         } else {
@@ -152,7 +150,7 @@ Page({
   },
 
   /**
-   * 查看订单详情
+   * 鏌ョ湅璁㈠崟璇︽儏
    */
   goToOrderDetail() {
     if (this.data.countdownTimer) {
@@ -166,7 +164,7 @@ Page({
   },
 
   /**
-   * 返回订单列表
+   * 杩斿洖璁㈠崟鍒楄〃
    */
   goToOrderList() {
     if (this.data.countdownTimer) {
@@ -180,7 +178,7 @@ Page({
   },
 
   /**
-   * 返回首页
+   * 杩斿洖棣栭〉
    */
   goToHome() {
     if (this.data.countdownTimer) {
@@ -194,7 +192,7 @@ Page({
   },
 
   /**
-   * 继续购物
+   * 缁х画璐墿
    */
   continueShopping() {
     if (this.data.countdownTimer) {
@@ -208,7 +206,7 @@ Page({
   },
 
   /**
-   * 重新支付
+   * 閲嶆柊鏀粯
    */
   retryPayment() {
     if (this.data.countdownTimer) {
@@ -222,7 +220,7 @@ Page({
   },
 
   /**
-   * 联系客服
+   * 鑱旂郴瀹㈡湇
    */
   contactService() {
     if (this.data.countdownTimer) {
@@ -236,26 +234,26 @@ Page({
   },
 
   /**
-   * 分享支付结果
+   * 鍒嗕韩鏀粯缁撴灉
    */
   onShareAppMessage() {
     return {
       title: this.data.paymentStatus === 'success' ? 
-        '我刚完成了一笔订单，商品质量很棒！' : 
-        '支付遇到问题，需要帮助',
+        '鎴戝垰瀹屾垚浜嗕竴绗旇鍗曪紝鍟嗗搧璐ㄩ噺寰堟锛? : 
+        '鏀粯閬囧埌闂锛岄渶瑕佸府鍔?,
       path: `/pages/payment/result/result?orderId=${this.data.orderId}&status=${this.data.paymentStatus}`,
       imageUrl: '/images/share/payment-result.jpg'
     };
   },
 
   /**
-   * 分享到朋友圈
+   * 鍒嗕韩鍒版湅鍙嬪湀
    */
   onShareTimeline() {
     return {
       title: this.data.paymentStatus === 'success' ? 
-        '我刚完成了一笔订单，商品质量很棒！' : 
-        '支付遇到问题，需要帮助',
+        '鎴戝垰瀹屾垚浜嗕竴绗旇鍗曪紝鍟嗗搧璐ㄩ噺寰堟锛? : 
+        '鏀粯閬囧埌闂锛岄渶瑕佸府鍔?,
       query: `orderId=${this.data.orderId}&status=${this.data.paymentStatus}`,
       imageUrl: '/images/share/payment-result.jpg'
     };

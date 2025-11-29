@@ -1,11 +1,12 @@
 /**
  * 文件名: authService.js
- * 版本号: 1.0.1
- * 更新日期: 2025-11-27
- * 描述: 认证服务，处理用户登录、登出、会话管理等
+ * 版本号: 1.0.2
+ * 更新日期: 2025-11-29
+ * 作者: Sut
+ * 描述: 认证服务，处理用户注册、登录、登出、会话管理等
  */
 
-const Request = require('../utils/request');
+const request = require('../utils/request');
 const store = require('../utils/store.js');
 const TOKEN_KEY = 'authToken';
 
@@ -14,11 +15,11 @@ const authService = {
    * 用户登录
    * @param {string} username - 用户名
    * @param {string} password - 密码
-   * @returns {Promise<Object>} 包含用户信息的 Promise
+   * @returns {Promise<Object>} 包含用户信息的Promise
    */
   async login(username, password) {
     try {
-      const response = await Request.post('/auth/login', { username, password }, {
+      const response = await request.post('/auth/login', { username, password }, {
         needAuth: false
       });
       
@@ -43,7 +44,7 @@ const authService = {
    */
   async logout() {
     try {
-      await Request.post('/auth/logout');
+      await request.post('/auth/logout');
       
       // 清除本地存储和store中的用户信息
       wx.removeStorageSync(TOKEN_KEY);
@@ -85,7 +86,7 @@ const authService = {
     }
     
     try {
-      await Request.get('/auth/check-session');
+      await request.get('/auth/check-session');
       return true;
     } catch (error) {
       // 会话无效，清除token
@@ -100,7 +101,7 @@ const authService = {
    */
   async getUserFavorites() {
     try {
-      return await Request.get('/user/favorites');
+      return await request.get('/user/favorites');
     } catch (error) {
       console.error('获取用户收藏列表失败:', error);
       throw error;
@@ -113,7 +114,7 @@ const authService = {
    */
   async getUserAddresses() {
     try {
-      return await Request.get('/user/addresses');
+      return await request.get('/user/addresses');
     } catch (error) {
       console.error('获取用户地址列表失败:', error);
       throw error;
@@ -127,7 +128,7 @@ const authService = {
    */
   async addUserAddress(address) {
     try {
-      const response = await Request.post('/user/addresses', address);
+      const response = await request.post('/user/addresses', address);
       
       wx.showToast({
         title: '添加成功',
@@ -153,7 +154,7 @@ const authService = {
    */
   async updateUserAddress(addressId, address) {
     try {
-      const response = await Request.put(`/user/addresses/${addressId}`, address);
+      const response = await request.put(`/user/addresses/${addressId}`, address);
       
       wx.showToast({
         title: '更新成功',
@@ -178,7 +179,7 @@ const authService = {
    */
   async deleteUserAddress(addressId) {
     try {
-      const response = await Request.delete(`/user/addresses/${addressId}`);
+      const response = await request.delete(`/user/addresses/${addressId}`);
       
       wx.showToast({
         title: '删除成功',

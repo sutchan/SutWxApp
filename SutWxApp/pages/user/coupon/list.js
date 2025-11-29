@@ -1,20 +1,18 @@
 /**
- * 文件名: list.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 用户优惠券列表页面
- */
+ * 鏂囦欢鍚? list.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鐢ㄦ埛浼樻儬鍒稿垪琛ㄩ〉闈? */
 Page({
   data: {
     couponList: [],
     loading: true,
-    activeTab: 0, // 0: 可用, 1: 已使用, 2: 已过期
-    tabs: ['可用', '已使用', '已过期'],
+    activeTab: 0, // 0: 鍙敤, 1: 宸蹭娇鐢? 2: 宸茶繃鏈?    tabs: ['鍙敤', '宸蹭娇鐢?, '宸茶繃鏈?],
     timer: null
   },
 
   /**
-   * 生命周期函数--监听页面加载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
    * @returns {void}
    */
   onLoad() {
@@ -22,19 +20,18 @@ Page({
   },
 
   /**
-   * 生命周期函数--监听页面卸载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍗歌浇
    * @returns {void}
    */
   onUnload() {
-    // 清理定时器，防止内存泄漏
+    // 娓呯悊瀹氭椂鍣紝闃叉鍐呭瓨娉勬紡
     if (this.data.timer) {
       clearTimeout(this.data.timer);
     }
   },
 
   /**
-   * 切换优惠券类型
-   * @param {Object} e - 事件对象
+   * 鍒囨崲浼樻儬鍒哥被鍨?   * @param {Object} e - 浜嬩欢瀵硅薄
    * @returns {void}
    */
   onTabChange(e) {
@@ -44,27 +41,26 @@ Page({
   },
 
   /**
-   * 加载优惠券列表
-   * @param {number} type - 优惠券类型 (0: 可用, 1: 已使用, 2: 已过期)
+   * 鍔犺浇浼樻儬鍒稿垪琛?   * @param {number} type - 浼樻儬鍒哥被鍨?(0: 鍙敤, 1: 宸蹭娇鐢? 2: 宸茶繃鏈?
    * @returns {void}
    */
   loadCouponList(type) {
     this.setData({ loading: true });
-    // 模拟数据请求
+    // 妯℃嫙鏁版嵁璇锋眰
     const timer = setTimeout(() => {
       let mockList = [];
       if (type === 0) {
         mockList = [
-          { id: 1, name: '满100减10元', value: 10, condition: '满100元可用', endDate: '2023-12-31' },
-          { id: 2, name: '新人专享券', value: 5, condition: '无门槛', endDate: '2023-11-30' }
+          { id: 1, name: '婊?00鍑?0鍏?, value: 10, condition: '婊?00鍏冨彲鐢?, endDate: '2023-12-31' },
+          { id: 2, name: '鏂颁汉涓撲韩鍒?, value: 5, condition: '鏃犻棬妲?, endDate: '2023-11-30' }
         ];
       } else if (type === 1) {
         mockList = [
-          { id: 3, name: '已使用优惠券', value: 20, condition: '满200元可用', endDate: '2023-10-31' }
+          { id: 3, name: '宸蹭娇鐢ㄤ紭鎯犲埜', value: 20, condition: '婊?00鍏冨彲鐢?, endDate: '2023-10-31' }
         ];
       } else if (type === 2) {
         mockList = [
-          { id: 4, name: '已过期优惠券', value: 15, condition: '满150元可用', endDate: '2023-09-30' }
+          { id: 4, name: '宸茶繃鏈熶紭鎯犲埜', value: 15, condition: '婊?50鍏冨彲鐢?, endDate: '2023-09-30' }
         ];
       }
       this.setData({

@@ -1,25 +1,14 @@
 /**
  * 文件名: articleService.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-24
+ * 版本号: 1.0.2
+ * 更新日期: 2025-11-29
  * 作者: Sut
  * 描述: 文章服务层 - 提供文章相关的API接口调用
  */
 
 const request = require('../utils/request');
-const cache = require('../utils/cache-service');
-
-/**
- * 缓存键前缀
- * @type {string}
- */
-const CACHE_KEY_PREFIX = 'article_';
-
-/**
- * 缓存过期时间（毫秒）
- * @type {number}
- */
-const CACHE_EXPIRE_TIME = 30 * 60 * 1000; // 30分钟
+const cacheService = require('../utils/cacheService.js').instance;
+const CACHE_POLICY = require('../utils/cacheService.js').CACHE_POLICY;
 
 /**
  * 获取文章列表
@@ -33,26 +22,19 @@ const getArticleList = async (params = {}) => {
   const { page = 1, pageSize = 10, category = '' } = params;
   
   try {
-    // 构建缓存键
-    const cacheKey = `${CACHE_KEY_PREFIX}list_${page}_${pageSize}_${category}`;
-    
-    // 尝试从缓存获取数据
-    const cachedData = await cache.get(cacheKey);
-    if (cachedData) {
-      return cachedData;
-    }
-    
     // 调用API获取文章列表
-    const response = await request.get('/api/articles', {
+    const response = await request.get('/articles', {
       page,
       pageSize,
       category
+    }, {
+      cache: {
+        policy: CACHE_POLICY.NETWORK_FIRST,
+        maxAge: 30 * 60 * 1000 // 30分钟
+      }
     });
     
-    // 缓存数据
-    await cache.set(cacheKey, response.data, CACHE_EXPIRE_TIME);
-    
-    return response.data;
+    return response;
   } catch (error) {
     console.error('获取文章列表失败:', error);
     throw error;
@@ -70,46 +52,23 @@ const getArticleDetail = async (articleId) => {
   }
   
   try {
-    // 构建缓存键
-    const cacheKey = `${CACHE_KEY_PREFIX}detail_${articleId}`;
-    
-    // 尝试从缓存获取数据
-    const cachedData = await cache.get(cacheKey);
-    if (cachedData) {
-      return cachedData;
-    }
-    
     // 调用API获取文章详情
-    const response = await request.get(`/api/articles/${articleId}`);
+    const response = await request.get(`/articles/${articleId}`, {}, {
+      cache: {
+        policy: CACHE_POLICY.STALE_WHILE_REVALIDATE,
+        maxAge: 60 * 60 * 1000 // 1小时
+      }
+    });
     
-    // 缓存数据
-    await cache.set(cacheKey, response.data, CACHE_EXPIRE_TIME);
-    
-    return response.data;
+    return response;
   } catch (error) {
     console.error('获取文章详情失败:', error);
-    
-    // 开发环境下返回模拟数据
-    if (process.env.NODE_ENV !== 'production') {
-      return {
-        id: articleId,
-        title: `文章标题 ${articleId}`,
-        content: `这是文章 ${articleId} 的详细内容。\n\n这里是更多的文章内容示例，可以包含段落、列表等格式化内容。\n\n文章是信息传递的重要方式，通过清晰的结构和生动的描述，能够让读者更好地理解作者想要表达的观点。`,
-        author: 'Sut',
-        date: '2025-11-23',
-        category: '技术',
-        viewCount: 1234,
-        likeCount: 45,
-        commentCount: 12
-      };
-    }
-    
     throw error;
   }
 };
 
 /**
- * 增加文章阅读次数
+ * 增加文章浏览次数
  * @param {string} articleId - 文章ID
  * @returns {Promise<void>}
  */
@@ -119,10 +78,10 @@ const increaseViewCount = async (articleId) => {
   }
   
   try {
-    await request.post(`/api/articles/${articleId}/view`);
+    await request.post(`/articles/${articleId}/view`);
   } catch (error) {
-    console.error('增加阅读次数失败:', error);
-    // 不抛出错误，避免影响用户阅读体验
+    console.error('增加浏览次数失败:', error);
+    // 不抛出错误，避免影响用户浏览体验
   }
 };
 
@@ -142,12 +101,17 @@ const getArticleComments = async (articleId, params = {}) => {
   const { page = 1, pageSize = 20 } = params;
   
   try {
-    const response = await request.get(`/api/articles/${articleId}/comments`, {
+    const response = await request.get(`/articles/${articleId}/comments`, {
       page,
       pageSize
+    }, {
+      cache: {
+        policy: CACHE_POLICY.NETWORK_FIRST,
+        maxAge: 5 * 60 * 1000 // 5分钟
+      }
     });
     
-    return response.data;
+    return response;
   } catch (error) {
     console.error('获取文章评论失败:', error);
     throw error;

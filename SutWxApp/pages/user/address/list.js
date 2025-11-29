@@ -1,8 +1,8 @@
 /**
- * 文件名: list.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 用户地址列表页面
+ * 鏂囦欢鍚? list.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鐢ㄦ埛鍦板潃鍒楄〃椤甸潰
  */
 Page({
   data: {
@@ -12,7 +12,7 @@ Page({
   },
 
   /**
-   * 生命周期函数--监听页面加载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
    * @returns {void}
    */
   onLoad() {
@@ -20,52 +20,51 @@ Page({
   },
 
   /**
-   * 生命周期函数--监听页面卸载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍗歌浇
    * @returns {void}
    */
   onUnload() {
-    // 清理定时器，防止内存泄漏
+    // 娓呯悊瀹氭椂鍣紝闃叉鍐呭瓨娉勬紡
     if (this.data.timer) {
       clearTimeout(this.data.timer);
     }
   },
 
   /**
-   * 生命周期函数--监听页面显示
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
    * @returns {void}
    */
   onShow() {
-    // 页面显示时刷新地址列表，确保数据最新
-    this.loadAddressList();
+    // 椤甸潰鏄剧ず鏃跺埛鏂板湴鍧€鍒楄〃锛岀‘淇濇暟鎹渶鏂?    this.loadAddressList();
   },
 
   /**
-   * 加载地址列表
+   * 鍔犺浇鍦板潃鍒楄〃
    * @returns {void}
    */
   loadAddressList() {
     this.setData({ loading: true });
-    // 模拟数据请求
+    // 妯℃嫙鏁版嵁璇锋眰
     const timer = setTimeout(() => {
       const mockList = [
         {
           id: '1',
-          name: '张三',
+          name: '寮犱笁',
           phone: '13800138000',
-          province: '广东省',
-          city: '广州市',
-          district: '天河区',
-          detail: 'XXX街道XXX号',
+          province: '骞夸笢鐪?,
+          city: '骞垮窞甯?,
+          district: '澶╂渤鍖?,
+          detail: 'XXX琛楅亾XXX鍙?,
           isDefault: true
         },
         {
           id: '2',
-          name: '李四',
+          name: '鏉庡洓',
           phone: '13912345678',
-          province: '广东省',
-          city: '深圳市',
-          district: '南山区',
-          detail: 'YYY路YYY号',
+          province: '骞夸笢鐪?,
+          city: '娣卞湷甯?,
+          district: '鍗楀北鍖?,
+          detail: 'YYY璺痀YY鍙?,
           isDefault: false
         }
       ];
@@ -80,8 +79,8 @@ Page({
   },
 
   /**
-   * 编辑地址
-   * @param {Object} e - 事件对象
+   * 缂栬緫鍦板潃
+   * @param {Object} e - 浜嬩欢瀵硅薄
    * @returns {void}
    */
   editAddress(e) {
@@ -92,7 +91,7 @@ Page({
   },
 
   /**
-   * 添加新地址
+   * 娣诲姞鏂板湴鍧€
    * @returns {void}
    */
   addAddress() {

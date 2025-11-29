@@ -1,17 +1,17 @@
 /**
- * 文件名: points.wxss
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: points 页面样式文件
+ * 鏂囦欢鍚? points.wxss
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: points 椤甸潰鏍峰紡鏂囦欢
  */
-/* 积分页面样式 */
+/* 绉垎椤甸潰鏍峰紡 */
 .points-container {
   min-height: 100vh;
   background-color: #f5f5f5;
   padding-bottom: 20px;
 }
 
-/* 用户信息卡片 */
+/* 鐢ㄦ埛淇℃伅鍗＄墖 */
 .user-card {
   background: linear-gradient(135deg, #07c160 0%, #06ae56 100%);
   padding: 30px 20px 40px;
@@ -50,7 +50,7 @@
   display: block;
 }
 
-/* 积分信息 */
+/* 绉垎淇℃伅 */
 .points-info {
   text-align: center;
 }
@@ -101,7 +101,7 @@
   margin: 0 20px;
 }
 
-/* 功能入口 */
+/* 鍔熻兘鍏ュ彛 */
 .function-entries {
   display: flex;
   background-color: #fff;
@@ -236,7 +236,7 @@
   color: #333;
 }
 
-/* 积分记录 */
+/* 绉垎璁板綍 */
 .points-records {
   margin: 0 15px;
   background-color: #fff;
@@ -263,7 +263,7 @@
   color: #999;
 }
 
-/* 加载状态 */
+/* 鍔犺浇鐘舵€?*/
 .loading-container {
   display: flex;
   flex-direction: column;
@@ -298,7 +298,7 @@
   100% { transform: rotate(360deg); }
 }
 
-/* 积分记录列表 */
+/* 绉垎璁板綍鍒楄〃 */
 .records-list {
   padding: 0 20px;
 }
@@ -374,7 +374,7 @@
   color: #f56c6c;
 }
 
-/* 加载更多 */
+/* 鍔犺浇鏇村 */
 .loading-more {
   display: flex;
   align-items: center;
@@ -386,7 +386,7 @@
   margin-left: 8px;
 }
 
-/* 没有更多数据 */
+/* 娌℃湁鏇村鏁版嵁 */
 .no-more {
   text-align: center;
   padding: 15px 0;
@@ -394,7 +394,7 @@
   font-size: 14px;
 }
 
-/* 空状态 */
+/* 绌虹姸鎬?*/
 .empty-state {
   display: flex;
   flex-direction: column;

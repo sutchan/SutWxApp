@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "鍒嗛攢鍒楄〃",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark",
+  "usingComponents": {
+    "product-card": "../../components/productCard/productCard"
+  }
+}

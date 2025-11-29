@@ -1,108 +1,103 @@
 /**
- * 文件名: index.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-24
- * 描述: 组件管理工具 - 用于集中管理和注册全局组件
+ * 鏂囦欢鍚? index.js
+ * 鐗堟湰鍙? 1.0.2
+ * 鏇存柊鏃ユ湡: 2025-11-29
+ * 鎻忚堪: 缁勪欢绠＄悊宸ュ叿 - 鐢ㄤ簬闆嗕腑绠＄悊鍜屾敞鍐屽叏灞€缁勪欢
  */
 
 /**
- * 组件列表配置
- * 每个组件包含以下属性：
- * - name: 组件名称
- * - path: 组件路径
- * - global: 是否全局注册
+ * 缁勪欢鍒楄〃閰嶇疆
+ * 姣忎釜缁勪欢鍖呭惈浠ヤ笅灞炴€э細
+ * - name: 缁勪欢鍚嶇О
+ * - path: 缁勪欢璺緞
+ * - global: 鏄惁鍏ㄥ眬娉ㄥ唽
  */
 const components = [
   {
     name: 'lazyImage',
-    path: './lazyImage/lazyImage',
-    global: true
-  },
-  {
-    name: 'modal',
-    path: './modal/modal',
+    path: './lazyImage',
     global: true
   },
   {
     name: 'emptyState',
-    path: './emptyState/emptyState',
-    global: true
-  },
-  {
-    name: 'loadMore',
-    path: './loadMore/loadMore',
-    global: true
-  },
-  {
-    name: 'rating',
-    path: './rating/rating',
+    path: './emptyState',
     global: true
   },
   {
     name: 'productCard',
-    path: './productCard/productCard',
+    path: './productCard',
     global: true
   },
   {
     name: 'orderCard',
-    path: './orderCard/orderCard',
+    path: './orderCard',
     global: true
   }
 ];
 
 /**
- * 全局注册组件
- * @param {Object} app - App实例
+ * 鍏ㄥ眬娉ㄥ唽缁勪欢
+ * @param {Object} app - App瀹炰緥
+ * @returns {void}
  */
 function registerGlobalComponents(app) {
   if (!app) {
-    console.error('注册组件失败: App实例不存在');
+    console.error('娉ㄥ唽缁勪欢澶辫触: App瀹炰緥涓嶅瓨鍦?);
     return;
   }
   
   try {
+    const registeredComponents = [];
     components.forEach(comp => {
       if (comp.global) {
-        const componentConfig = require(comp.path);
-        app.component(comp.name, componentConfig);
+        try {
+          const componentConfig = require(comp.path);
+          app.component(comp.name, componentConfig);
+          registeredComponents.push(comp.name);
+        } catch (error) {
+          console.error(`缁勪欢 ${comp.name} 娉ㄥ唽澶辫触:`, error);
+        }
       }
     });
-    console.log('全局组件注册完成');
+    console.log(`鍏ㄥ眬缁勪欢娉ㄥ唽瀹屾垚锛屾垚鍔熸敞鍐?${registeredComponents.length}/${components.filter(c => c.global).length} 涓粍浠?`, registeredComponents);
   } catch (error) {
-    console.error('全局组件注册失败:', error);
+    console.error('鍏ㄥ眬缁勪欢娉ㄥ唽澶辫触:', error);
   }
 }
 
 /**
- * 获取组件配置
- * @param {string} componentName - 组件名称
- * @returns {Object|null} 组件配置或null
+ * 鑾峰彇缁勪欢閰嶇疆
+ * @param {string} componentName - 缁勪欢鍚嶇О
+ * @returns {Object|null} 缁勪欢閰嶇疆鎴杗ull
  */
 function getComponent(componentName) {
   return components.find(comp => comp.name === componentName) || null;
 }
 
 /**
- * 获取所有组件列表
- * @returns {Array} 组件列表
+ * 鑾峰彇鎵€鏈夌粍浠跺垪琛? * @returns {Array<Object>} 缁勪欢鍒楄〃
  */
 function getAllComponents() {
   return components;
 }
 
 /**
- * 添加新组件到配置
- * @param {Object} componentConfig - 组件配置
+ * 娣诲姞鏂扮粍浠跺埌閰嶇疆
+ * @param {Object} componentConfig - 缁勪欢閰嶇疆
+ * @param {string} componentConfig.name - 缁勪欢鍚嶇О
+ * @param {string} componentConfig.path - 缁勪欢璺緞
+ * @param {boolean} [componentConfig.global=false] - 鏄惁鍏ㄥ眬娉ㄥ唽
+ * @returns {boolean} 娣诲姞缁撴灉
  */
 function addComponent(componentConfig) {
   if (!componentConfig || !componentConfig.name || !componentConfig.path) {
-    console.error('添加组件失败: 配置不完整');
+    console.error('娣诲姞缁勪欢澶辫触: 閰嶇疆涓嶅畬鏁?);
     return false;
   }
   
   const existingIndex = components.findIndex(comp => comp.name === componentConfig.name);
   if (existingIndex >= 0) {
-    console.warn(`组件 ${componentConfig.name} 已存在，将被覆盖`);
+    console.warn(`缁勪欢 ${componentConfig.name} 宸插瓨鍦紝灏嗚瑕嗙洊`);
     components[existingIndex] = componentConfig;
   } else {
     components.push(componentConfig);

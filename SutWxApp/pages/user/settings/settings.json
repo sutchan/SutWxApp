@@ -1,10 +1,10 @@
 /**
- * 文件名: settings.json
- * 版本号: 1.0.0
- * 更新日期: 2025-11-24
- * 作者: Sut
- * 描述: 用户设置页面配置文件
+ * 鏂囦欢鍚? settings.json
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-24
+ * 浣滆€? Sut
+ * 鎻忚堪: 鐢ㄦ埛璁剧疆椤甸潰閰嶇疆鏂囦欢
  */
 {
-  "navigationBarTitleText": "设置"
+  "navigationBarTitleText": "璁剧疆"
 }

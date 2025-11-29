@@ -1,7 +1,8 @@
 /**
  * 文件名: cartService.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
+ * 版本号: 1.0.2
+ * 更新日期: 2025-11-29
+ * 作者: Sut
  * 描述: 购物车服务
  */
 
@@ -14,7 +15,7 @@ class CartService {
    * @returns {Promise<Object>} 购物车列表和统计信息
    */
   static async getCartList(options = {}) {
-    return request.get('/cart/list', options);
+    return request.get('/cart/list', {}, options);
   }
 
   /**
@@ -76,10 +77,7 @@ class CartService {
    */
   static async updateCartItemSelection(cartIds, selected) {
     const ids = Array.isArray(cartIds) ? cartIds : [cartIds];
-    return request.put('/cart/selection', { 
-      cartIds: ids, 
-      selected 
-    });
+    return request.put('/cart/selection', { cartIds: ids, selected });
   }
 
   /**
@@ -121,7 +119,7 @@ class CartService {
   }
 
   /**
-   * 将商品移至收藏夹
+   * 将商品移到收藏夹
    * @param {string|Array} cartIds - 购物车项ID或ID数组
    * @returns {Promise<Object>} 操作结果
    */

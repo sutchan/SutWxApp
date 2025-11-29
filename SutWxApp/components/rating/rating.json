@@ -1,9 +1,0 @@
-/**
- * 文件名: rating.json
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: rating JSON 配置文件
- */
-{
-  "component": true
-}

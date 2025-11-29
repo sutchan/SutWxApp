@@ -1,11 +1,11 @@
 /**
- * 文件名: sitemap.json
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: sitemap JSON 配置文件
+ * 鏂囦欢鍚? sitemap.json
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: sitemap JSON 閰嶇疆鏂囦欢
  */
 {
-  "desc": "关于本文件的更多信息，请参考文档 https://developers.weixin.qq.com/miniprogram/dev/framework/sitemap.html",
+  "desc": "鍏充簬鏈枃浠剁殑鏇村淇℃伅锛岃鍙傝€冩枃妗?https://developers.weixin.qq.com/miniprogram/dev/framework/sitemap.html",
   "rules": [{
     "action": "allow",
     "page": "*"

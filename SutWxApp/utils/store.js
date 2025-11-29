@@ -1,49 +1,42 @@
 /**
- * 文件名: store.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-24
- * 作者: Sut
- * 全局状态管理器，基于观察者模式实现的简易状态管理方案，提供状态管理和组件间通信功能
+ * 鏂囦欢鍚? store.js
+ * 鐗堟湰鍙? 1.0.2
+ * 鏇存柊鏃ユ湡: 2025-11-29
+ * 浣滆€? Sut
+ * 鍏ㄥ眬鐘舵€佺鐞嗗櫒锛屽熀浜庤瀵熻€呮ā寮忓疄鐜扮殑绠€鏄撶姸鎬佺鐞嗘柟妗堬紝鎻愪緵鐘舵€佺鐞嗗拰缁勪欢闂撮€氫俊鍔熻兘
  */
 
 /**
- * 全局状态管理器
- * 使用观察者模式实现状态的集中管理和组件间通信
+ * 鍏ㄥ眬鐘舵€佺鐞嗗櫒
+ * 浣跨敤瑙傚療鑰呮ā寮忓疄鐜扮姸鎬佺殑闆嗕腑绠＄悊鍜岀粍浠堕棿閫氫俊
  */
 class Store {
   constructor() {
     this.state = {
-      // 用户相关状态
-      user: {
+      // 鐢ㄦ埛鐩稿叧鐘舵€?      user: {
         isLoggedIn: false,
         userInfo: null,
         token: null
       },
-      // 购物车状态
-      cart: {
+      // 璐墿杞︾姸鎬?      cart: {
         items: [],
         total: 0
       },
-      // 全局UI状态
-      ui: {
+      // 鍏ㄥ眬UI鐘舵€?      ui: {
         loading: false,
         error: null
       },
-      // 积分状态
-      points: {
+      // 绉垎鐘舵€?      points: {
         balance: 0,
         tasks: []
       }
     };
-    this.listeners = new Map(); // 存储状态监听器
-    this.mutations = new Map(); // 存储状态变更方法
-  }
+    this.listeners = new Map(); // 瀛樺偍鐘舵€佺洃鍚櫒
+    this.mutations = new Map(); // 瀛樺偍鐘舵€佸彉鏇存柟娉?  }
 
   /**
-   * 获取状态
-   * @param {string} path - 状态路径，如 'user.userInfo'
-   * @returns {*} 状态值
-   */
+   * 鑾峰彇鐘舵€?   * @param {string} path - 鐘舵€佽矾寰勶紝濡?'user.userInfo'
+   * @returns {*} 鐘舵€佸€?   */
   getState(path = '') {
     if (!path) return this.state;
     
@@ -53,9 +46,7 @@ class Store {
   }
 
   /**
-   * 注册状态变更方法
-   * @param {string} name - 变更方法名
-   * @param {Function} mutation - 变更方法
+   * 娉ㄥ唽鐘舵€佸彉鏇存柟娉?   * @param {string} name - 鍙樻洿鏂规硶鍚?   * @param {Function} mutation - 鍙樻洿鏂规硶
    */
   registerMutation(name, mutation) {
     if (typeof mutation !== 'function') {
@@ -65,9 +56,7 @@ class Store {
   }
 
   /**
-   * 提交状态变更
-   * @param {string} name - 变更方法名
-   * @param {*} payload - 变更参数
+   * 鎻愪氦鐘舵€佸彉鏇?   * @param {string} name - 鍙樻洿鏂规硶鍚?   * @param {*} payload - 鍙樻洿鍙傛暟
    */
   commit(name, payload) {
     if (!this.mutations.has(name)) {
@@ -77,23 +66,24 @@ class Store {
     
     const mutation = this.mutations.get(name);
     try {
-      // 执行状态变更
-      const newState = mutation(this.state, payload);
+      // 鎵ц鐘舵€佸彉鏇?      const newState = mutation(this.state, payload);
       if (newState !== undefined) {
+        const oldState = this.state;
         this.state = { ...this.state, ...newState };
+        
+        // 鍙湁褰撶姸鎬佺湡姝ｆ敼鍙樻椂鎵嶉€氱煡鐩戝惉鍣?        if (JSON.stringify(oldState) !== JSON.stringify(this.state)) {
+          this.notify();
+        }
       }
-      // 通知所有监听器
-      this.notify();
     } catch (error) {
       console.error(`Error in mutation ${name}:`, error);
     }
   }
 
   /**
-   * 注册状态监听器
-   * @param {string} id - 监听器唯一标识
-   * @param {Function} callback - 状态变化回调函数
-   */
+   * 娉ㄥ唽鐘舵€佺洃鍚櫒
+   * @param {string} id - 鐩戝惉鍣ㄥ敮涓€鏍囪瘑
+   * @param {Function} callback - 鐘舵€佸彉鍖栧洖璋冨嚱鏁?   */
   subscribe(id, callback) {
     if (typeof callback !== 'function') {
       throw new Error('Callback must be a function');
@@ -102,15 +92,14 @@ class Store {
   }
 
   /**
-   * 取消状态监听
-   * @param {string} id - 监听器唯一标识
+   * 鍙栨秷鐘舵€佺洃鍚?   * @param {string} id - 鐩戝惉鍣ㄥ敮涓€鏍囪瘑
    */
   unsubscribe(id) {
     this.listeners.delete(id);
   }
 
   /**
-   * 通知所有监听器状态已更新
+   * 閫氱煡鎵€鏈夌洃鍚櫒鐘舵€佸凡鏇存柊
    */
   notify() {
     this.listeners.forEach(callback => {
@@ -123,8 +112,8 @@ class Store {
   }
 
   /**
-   * 持久化状态到本地存储
-   * @param {string} key - 本地存储键名
+   * 鎸佷箙鍖栫姸鎬佸埌鏈湴瀛樺偍
+   * @param {string} key - 鏈湴瀛樺偍閿悕
    */
   persist(key = 'sutwxapp_state') {
     try {
@@ -135,8 +124,7 @@ class Store {
   }
 
   /**
-   * 从本地存储恢复状态
-   * @param {string} key - 本地存储键名
+   * 浠庢湰鍦板瓨鍌ㄦ仮澶嶇姸鎬?   * @param {string} key - 鏈湴瀛樺偍閿悕
    */
   restore(key = 'sutwxapp_state') {
     try {
@@ -151,11 +139,10 @@ class Store {
   }
 }
 
-// 创建并导出store实例
+// 鍒涘缓骞跺鍑簊tore瀹炰緥
 const store = new Store();
 
-// 注册常用的状态变更方法
-store.registerMutation('SET_USER_INFO', (state, userInfo) => ({
+// 娉ㄥ唽甯哥敤鐨勭姸鎬佸彉鏇存柟娉?store.registerMutation('SET_USER_INFO', (state, userInfo) => ({
   user: {
     ...state.user,
     userInfo,

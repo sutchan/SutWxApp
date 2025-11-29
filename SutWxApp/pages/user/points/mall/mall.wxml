@@ -1,35 +1,35 @@
 /**
- * 文件名: mall.wxml
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: mall 页面结构文件
+ * 鏂囦欢鍚? mall.wxml
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: mall 椤甸潰缁撴瀯鏂囦欢
  */
-<!-- 积分商城页面 -->
+<!-- 绉垎鍟嗗煄椤甸潰 -->
 <view class="mall-container">
-  <!-- 用户积分信息 -->
+  <!-- 鐢ㄦ埛绉垎淇℃伅 -->
   <view class="points-header">
     <view class="points-info">
       <text class="points-value">{{userPoints}}</text>
-      <text class="points-label">我的积分</text>
+      <text class="points-label">鎴戠殑绉垎</text>
     </view>
     <view class="points-actions">
       <view class="action-item" bindtap="goToPoints">
         <text class="iconfont icon-earn"></text>
-        <text class="action-text">赚积分</text>
+        <text class="action-text">璧氱Н鍒?/text>
       </view>
       <view class="action-item" bindtap="goToExchangeRecords">
         <text class="iconfont icon-record"></text>
-        <text class="action-text">兑换记录</text>
+        <text class="action-text">鍏戞崲璁板綍</text>
       </view>
     </view>
   </view>
   
-  <!-- 搜索栏 -->
+  <!-- 鎼滅储鏍?-->
   <view class="search-bar">
     <view class="search-input-wrapper">
       <text class="iconfont icon-search"></text>
       <input class="search-input" 
-             placeholder="搜索商品" 
+             placeholder="鎼滅储鍟嗗搧" 
              value="{{searchKeyword}}" 
              bindinput="onSearchInput" 
              bindconfirm="onSearch" />
@@ -37,7 +37,7 @@
     </view>
   </view>
   
-  <!-- 商品分类 -->
+  <!-- 鍟嗗搧鍒嗙被 -->
   <view class="categories">
     <scroll-view scroll-x="true" class="categories-scroll">
       <view class="categories-list">
@@ -50,88 +50,88 @@
       </view>
     </scroll-view>
     
-    <!-- 排序按钮 -->
+    <!-- 鎺掑簭鎸夐挳 -->
     <view class="sort-btn" bindtap="showSortPopup">
       <text class="iconfont icon-sort"></text>
     </view>
   </view>
   
-  <!-- 商品列表 -->
+  <!-- 鍟嗗搧鍒楄〃 -->
   <view class="products-container">
-    <!-- 加载状态 -->
+    <!-- 鍔犺浇鐘舵€?-->
     <view wx:if="{{loading && productList.length === 0}}" class="loading-container">
       <view class="loading-spinner"></view>
-      <text class="loading-text">正在加载商品...</text>
+      <text class="loading-text">姝ｅ湪鍔犺浇鍟嗗搧...</text>
     </view>
     
-    <!-- 商品列表 -->
+    <!-- 鍟嗗搧鍒楄〃 -->
     <view wx:else class="products-list">
       <view wx:for="{{productList}}" wx:key="id" class="product-item">
-        <!-- 商品图片 -->
+        <!-- 鍟嗗搧鍥剧墖 -->
         <view class="product-image" data-id="{{item.id}}" bindtap="goToProductDetail">
           <image src="{{item.image}}" mode="aspectFill"></image>
-          <view wx:if="{{item.stock <= 0}}" class="out-of-stock">已售罄</view>
-          <view wx:elif="{{item.isHot}}" class="hot-tag">热门</view>
+          <view wx:if="{{item.stock <= 0}}" class="out-of-stock">宸插敭缃?/view>
+          <view wx:elif="{{item.isHot}}" class="hot-tag">鐑棬</view>
         </view>
         
-        <!-- 商品信息 -->
+        <!-- 鍟嗗搧淇℃伅 -->
         <view class="product-info" data-id="{{item.id}}" bindtap="goToProductDetail">
           <view class="product-title">{{item.title}}</view>
           <view class="product-desc">{{item.description}}</view>
           
-          <!-- 商品标签 -->
+          <!-- 鍟嗗搧鏍囩 -->
           <view wx:if="{{item.tags && item.tags.length > 0}}" class="product-tags">
             <view wx:for="{{item.tags}}" wx:key="*this" wx:for-item="tag" class="tag">{{tag}}</view>
           </view>
           
-          <!-- 兑换量和库存 -->
+          <!-- 鍏戞崲閲忓拰搴撳瓨 -->
           <view class="product-stats">
-            <text class="exchange-count">已兑换{{item.exchangeCount || 0}}件</text>
-            <text class="stock">库存{{item.stock}}</text>
+            <text class="exchange-count">宸插厬鎹{item.exchangeCount || 0}}浠?/text>
+            <text class="stock">搴撳瓨{{item.stock}}</text>
           </view>
         </view>
         
-        <!-- 积分和操作 -->
+        <!-- 绉垎鍜屾搷浣?-->
         <view class="product-footer">
           <view class="product-points">
             <text class="points-value">{{item.points}}</text>
-            <text class="points-label">积分</text>
+            <text class="points-label">绉垎</text>
           </view>
           
           <button class="exchange-btn {{item.stock <= 0 || userPoints < item.points ? 'disabled' : ''}}" 
                   data-id="{{item.id}}" 
                   bindtap="exchangeProduct"
                   disabled="{{item.stock <= 0 || userPoints < item.points}}">
-            {{item.stock <= 0 ? '已售罄' : (userPoints < item.points ? '积分不足' : '立即兑换')}}
+            {{item.stock <= 0 ? '宸插敭缃? : (userPoints < item.points ? '绉垎涓嶈冻' : '绔嬪嵆鍏戞崲')}}
           </button>
         </view>
       </view>
       
-      <!-- 加载更多 -->
+      <!-- 鍔犺浇鏇村 -->
       <view wx:if="{{hasMore && loading}}" class="loading-more">
         <view class="loading-spinner small"></view>
-        <text class="loading-text">加载更多...</text>
+        <text class="loading-text">鍔犺浇鏇村...</text>
       </view>
       
-      <!-- 没有更多数据 -->
+      <!-- 娌℃湁鏇村鏁版嵁 -->
       <view wx:if="{{!hasMore && productList.length > 0}}" class="no-more">
-        <text>没有更多商品了</text>
+        <text>娌℃湁鏇村鍟嗗搧浜?/text>
       </view>
       
-      <!-- 空状态 -->
+      <!-- 绌虹姸鎬?-->
       <view wx:if="{{productList.length === 0 && !loading}}" class="empty-state">
         <view class="empty-icon"></view>
-        <text class="empty-text">暂无商品</text>
-        <text class="empty-desc">当前分类下没有商品</text>
+        <text class="empty-text">鏆傛棤鍟嗗搧</text>
+        <text class="empty-desc">褰撳墠鍒嗙被涓嬫病鏈夊晢鍝?/text>
       </view>
     </view>
   </view>
   
-  <!-- 最近兑换记录 -->
+  <!-- 鏈€杩戝厬鎹㈣褰?-->
   <view wx:if="{{exchangeRecords.length > 0}}" class="recent-exchanges">
     <view class="section-header">
-      <text class="section-title">最近兑换</text>
-      <text class="section-more" bindtap="goToExchangeRecords">查看全部</text>
+      <text class="section-title">鏈€杩戝厬鎹?/text>
+      <text class="section-more" bindtap="goToExchangeRecords">鏌ョ湅鍏ㄩ儴</text>
     </view>
     
     <view class="exchange-list">
@@ -147,13 +147,13 @@
   </view>
 </view>
 
-<!-- 排序弹窗 -->
+<!-- 鎺掑簭寮圭獥 -->
 <view wx:if="{{showSortPopup}}" class="sort-popup">
   <view class="popup-mask" bindtap="hideSortPopup"></view>
   <view class="popup-content">
     <view class="popup-header">
-      <text class="popup-title">排序方式</text>
-      <text class="popup-close" bindtap="hideSortPopup">×</text>
+      <text class="popup-title">鎺掑簭鏂瑰紡</text>
+      <text class="popup-close" bindtap="hideSortPopup">脳</text>
     </view>
     
     <view class="sort-options">

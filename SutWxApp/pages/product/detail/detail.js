@@ -1,8 +1,8 @@
 /**
- * 文件名: detail.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 商品详情页面
+ * 鏂囦欢鍚? detail.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鍟嗗搧璇︽儏椤甸潰
  */
 const i18n = require('../../../utils/i18n');
 
@@ -23,9 +23,9 @@ Page({
   },
 
   /**
-   * 生命周期函数--监听页面加载
-   * @param {Object} options - 页面参数
-   * @param {string} options.id - 商品ID
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
+   * @param {Object} options - 椤甸潰鍙傛暟
+   * @param {string} options.id - 鍟嗗搧ID
    * @returns {void}
    */
   onLoad(options) {
@@ -38,12 +38,11 @@ Page({
   },
 
   /**
-   * 生命周期函数--监听页面卸载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍗歌浇
    * @returns {void}
    */
   onUnload() {
-    // 清理所有定时器，防止内存泄漏
-    if (this.data.timer) {
+    // 娓呯悊鎵€鏈夊畾鏃跺櫒锛岄槻姝㈠唴瀛樻硠婕?    if (this.data.timer) {
       clearTimeout(this.data.timer);
     }
     if (this.data.reviewsTimer) {
@@ -55,15 +54,13 @@ Page({
   },
 
   /**
-   * 页面显示时触发
-   * @returns {void}
+   * 椤甸潰鏄剧ず鏃惰Е鍙?   * @returns {void}
    */
   onShow() {
-    // 可以在此处刷新部分数据
-  },
+    // 鍙互鍦ㄦ澶勫埛鏂伴儴鍒嗘暟鎹?  },
 
   /**
-   * 下拉刷新回调
+   * 涓嬫媺鍒锋柊鍥炶皟
    * @returns {void}
    */
   onPullDownRefresh() {
@@ -73,20 +70,20 @@ Page({
   },
 
   /**
-   * 分享页面
-   * @returns {Object} 分享配置
+   * 鍒嗕韩椤甸潰
+   * @returns {Object} 鍒嗕韩閰嶇疆
    */
   onShareAppMessage() {
     return {
-      title: this.data.product ? this.data.product.name : i18n.translate('商品详情'),
+      title: this.data.product ? this.data.product.name : i18n.translate('鍟嗗搧璇︽儏'),
       path: `/pages/product/detail/detail?id=${this.data.productId}`
     };
   },
 
   /**
-   * 加载商品详情
-   * @param {string} id - 商品ID
-   * @param {Function} done - 完成回调
+   * 鍔犺浇鍟嗗搧璇︽儏
+   * @param {string} id - 鍟嗗搧ID
+   * @param {Function} done - 瀹屾垚鍥炶皟
    * @returns {void}
    */
   loadProductDetail(id, done) {
@@ -94,8 +91,8 @@ Page({
     const timer = setTimeout(() => {
       const mockProduct = {
         id: id,
-        name: i18n.translate('优质商品'),
-        description: i18n.translate('这是一个高质量的商品，采用优质材料制作，设计精美，功能实用。'),
+        name: i18n.translate('浼樿川鍟嗗搧'),
+        description: i18n.translate('杩欐槸涓€涓珮璐ㄩ噺鐨勫晢鍝侊紝閲囩敤浼樿川鏉愭枡鍒朵綔锛岃璁＄簿缇庯紝鍔熻兘瀹炵敤銆?),
         price: '99.00',
         originalPrice: '129.00',
         images: [
@@ -105,15 +102,15 @@ Page({
         ],
         specs: [
           {
-            name: i18n.translate('颜色'),
+            name: i18n.translate('棰滆壊'),
             options: [
-              { id: 'red', name: i18n.translate('红色') },
-              { id: 'blue', name: i18n.translate('蓝色') },
-              { id: 'black', name: i18n.translate('黑色') }
+              { id: 'red', name: i18n.translate('绾㈣壊') },
+              { id: 'blue', name: i18n.translate('钃濊壊') },
+              { id: 'black', name: i18n.translate('榛戣壊') }
             ]
           },
           {
-            name: i18n.translate('尺寸'),
+            name: i18n.translate('灏哄'),
             options: [
               { id: 's', name: 'S' },
               { id: 'm', name: 'M' },
@@ -126,7 +123,7 @@ Page({
         rating: 4.5
       };
 
-      // 初始化选中规格
+      // 鍒濆鍖栭€変腑瑙勬牸
       const selectedSpecs = {};
       mockProduct.specs.forEach(spec => {
         selectedSpecs[spec.name] = spec.options[0].id;
@@ -146,22 +143,22 @@ Page({
   },
 
   /**
-   * 加载商品评价
-   * @param {string} id - 商品ID
+   * 鍔犺浇鍟嗗搧璇勪环
+   * @param {string} id - 鍟嗗搧ID
    * @returns {void}
    */
   loadProductReviews(id) {
-    console.log('加载商品评价，商品ID:', id);
+    console.log('鍔犺浇鍟嗗搧璇勪环锛屽晢鍝両D:', id);
     const reviewsTimer = setTimeout(() => {
       const mockReviews = [
         {
           id: 1,
           user: {
             avatar: '/images/default-avatar.png',
-            name: i18n.translate('用户A')
+            name: i18n.translate('鐢ㄦ埛A')
           },
           rating: 5,
-          content: i18n.translate('商品质量很好，非常满意！'),
+          content: i18n.translate('鍟嗗搧璐ㄩ噺寰堝ソ锛岄潪甯告弧鎰忥紒'),
           images: ['/images/placeholder.svg'],
           createTime: '2023-10-01'
         },
@@ -169,10 +166,10 @@ Page({
           id: 2,
           user: {
             avatar: '/images/default-avatar.png',
-            name: i18n.translate('用户B')
+            name: i18n.translate('鐢ㄦ埛B')
           },
           rating: 4,
-          content: i18n.translate('整体不错，就是物流有点慢'),
+          content: i18n.translate('鏁翠綋涓嶉敊锛屽氨鏄墿娴佹湁鐐规參'),
           images: [],
           createTime: '2023-09-28'
         }
@@ -188,17 +185,17 @@ Page({
   },
 
   /**
-   * 加载相关商品
-   * @param {string} id - 商品ID
+   * 鍔犺浇鐩稿叧鍟嗗搧
+   * @param {string} id - 鍟嗗搧ID
    * @returns {void}
    */
   loadRelatedProducts(id) {
-    console.log('加载相关商品，当前商品ID:', id);
+    console.log('鍔犺浇鐩稿叧鍟嗗搧锛屽綋鍓嶅晢鍝両D:', id);
     const relatedProductsTimer = setTimeout(() => {
       const mockRelatedProducts = [
-        { id: 1, name: i18n.translate('相关商品A'), image: '/images/placeholder.svg', price: '89.00' },
-        { id: 2, name: i18n.translate('相关商品B'), image: '/images/placeholder.svg', price: '109.00' },
-        { id: 3, name: i18n.translate('相关商品C'), image: '/images/placeholder.svg', price: '79.00' }
+        { id: 1, name: i18n.translate('鐩稿叧鍟嗗搧A'), image: '/images/placeholder.svg', price: '89.00' },
+        { id: 2, name: i18n.translate('鐩稿叧鍟嗗搧B'), image: '/images/placeholder.svg', price: '109.00' },
+        { id: 3, name: i18n.translate('鐩稿叧鍟嗗搧C'), image: '/images/placeholder.svg', price: '79.00' }
       ];
 
       this.setData({ 
@@ -211,8 +208,8 @@ Page({
   },
 
   /**
-   * 预览图片
-   * @param {Object} e - 事件对象
+   * 棰勮鍥剧墖
+   * @param {Object} e - 浜嬩欢瀵硅薄
    * @returns {void}
    */
   previewImage(e) {
@@ -224,7 +221,7 @@ Page({
   },
 
   /**
-   * 显示规格选择弹窗
+   * 鏄剧ず瑙勬牸閫夋嫨寮圭獥
    * @returns {void}
    */
   showSpecModal() {
@@ -232,7 +229,7 @@ Page({
   },
 
   /**
-   * 隐藏规格选择弹窗
+   * 闅愯棌瑙勬牸閫夋嫨寮圭獥
    * @returns {void}
    */
   hideSpecModal() {
@@ -240,8 +237,8 @@ Page({
   },
 
   /**
-   * 选择规格
-   * @param {Object} e - 事件对象
+   * 閫夋嫨瑙勬牸
+   * @param {Object} e - 浜嬩欢瀵硅薄
    * @returns {void}
    */
   selectSpec(e) {
@@ -252,7 +249,7 @@ Page({
   },
 
   /**
-   * 增加数量
+   * 澧炲姞鏁伴噺
    * @returns {void}
    */
   increaseQuantity() {
@@ -263,7 +260,7 @@ Page({
   },
 
   /**
-   * 减少数量
+   * 鍑忓皯鏁伴噺
    * @returns {void}
    */
   decreaseQuantity() {
@@ -274,24 +271,24 @@ Page({
   },
 
   /**
-   * 添加到购物车
+   * 娣诲姞鍒拌喘鐗╄溅
    * @returns {void}
    */
   addToCart() {
-    // 实际项目中应该调用API添加到购物车
+    // 瀹為檯椤圭洰涓簲璇ヨ皟鐢ˋPI娣诲姞鍒拌喘鐗╄溅
     wx.showToast({
-      title: i18n.translate('已添加到购物车'),
+      title: i18n.translate('宸叉坊鍔犲埌璐墿杞?),
       icon: 'success'
     });
     this.hideSpecModal();
   },
 
   /**
-   * 立即购买
+   * 绔嬪嵆璐拱
    * @returns {void}
    */
   buyNow() {
-    // 实际项目中应该跳转到订单确认页面
+    // 瀹為檯椤圭洰涓簲璇ヨ烦杞埌璁㈠崟纭椤甸潰
     this.hideSpecModal();
     wx.navigateTo({
       url: `/pages/order/confirm?productId=${this.data.productId}&quantity=${this.data.quantity}`
@@ -299,16 +296,16 @@ Page({
   },
 
   /**
-   * 收藏商品
+   * 鏀惰棌鍟嗗搧
    * @returns {void}
    */
   toggleFavorite() {
-    // 实际项目中应该调用API收藏/取消收藏
+    // 瀹為檯椤圭洰涓簲璇ヨ皟鐢ˋPI鏀惰棌/鍙栨秷鏀惰棌
     const { product } = this.data;
     const isFavorited = product.isFavorited;
     
     wx.showToast({
-      title: isFavorited ? i18n.translate('已取消收藏') : i18n.translate('已收藏'),
+      title: isFavorited ? i18n.translate('宸插彇娑堟敹钘?) : i18n.translate('宸叉敹钘?),
       icon: 'success'
     });
     
@@ -318,8 +315,8 @@ Page({
   },
 
   /**
-   * 跳转到商品详情页
-   * @param {Object} e - 事件对象
+   * 璺宠浆鍒板晢鍝佽鎯呴〉
+   * @param {Object} e - 浜嬩欢瀵硅薄
    * @returns {void}
    */
   goToProductDetail(e) {

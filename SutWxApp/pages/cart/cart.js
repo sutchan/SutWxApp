@@ -1,9 +1,8 @@
 /**
- * 文件名: cart.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 购物车页面
- */
+ * 鏂囦欢鍚? cart.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 璐墿杞﹂〉闈? */
 const i18n = require('../../utils/i18n');
 
 Page({
@@ -18,7 +17,7 @@ Page({
   },
 
   /**
-   * 生命周期函数--监听页面加载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
    * @returns {void}
    */
   onLoad() {
@@ -26,27 +25,26 @@ Page({
   },
 
   /**
-   * 生命周期函数--监听页面卸载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍗歌浇
    * @returns {void}
    */
   onUnload() {
-    // 清理定时器，防止内存泄漏
+    // 娓呯悊瀹氭椂鍣紝闃叉鍐呭瓨娉勬紡
     if (this.data.timer) {
       clearTimeout(this.data.timer);
     }
   },
 
   /**
-   * 页面显示时触发
-   * @returns {void}
+   * 椤甸潰鏄剧ず鏃惰Е鍙?   * @returns {void}
    */
   onShow() {
-    // 每次显示页面时刷新购物车数据
+    // 姣忔鏄剧ず椤甸潰鏃跺埛鏂拌喘鐗╄溅鏁版嵁
     this.loadCartData();
   },
 
   /**
-   * 下拉刷新回调
+   * 涓嬫媺鍒锋柊鍥炶皟
    * @returns {void}
    */
   onPullDownRefresh() {
@@ -56,8 +54,7 @@ Page({
   },
 
   /**
-   * 加载购物车数据
-   * @param {Function} done - 完成回调
+   * 鍔犺浇璐墿杞︽暟鎹?   * @param {Function} done - 瀹屾垚鍥炶皟
    * @returns {void}
    */
   loadCartData(done) {
@@ -66,7 +63,7 @@ Page({
       const mockCartItems = [
         { 
           id: 1, 
-          name: i18n.translate('商品A'), 
+          name: i18n.translate('鍟嗗搧A'), 
           image: '/assets/images/product1.jpg', 
           price: '99.00',
           quantity: 1,
@@ -74,7 +71,7 @@ Page({
         },
         { 
           id: 2, 
-          name: i18n.translate('商品B'), 
+          name: i18n.translate('鍟嗗搧B'), 
           image: '/assets/images/product2.jpg', 
           price: '129.00',
           quantity: 2,
@@ -96,7 +93,7 @@ Page({
   },
 
   /**
-   * 计算总价
+   * 璁＄畻鎬讳环
    * @returns {void}
    */
   calculateTotal() {
@@ -119,8 +116,7 @@ Page({
   },
 
   /**
-   * 切换商品选中状态
-   * @param {Object} e - 事件对象
+   * 鍒囨崲鍟嗗搧閫変腑鐘舵€?   * @param {Object} e - 浜嬩欢瀵硅薄
    * @returns {void}
    */
   toggleItemSelection(e) {
@@ -134,8 +130,7 @@ Page({
   },
 
   /**
-   * 全选/取消全选
-   * @returns {void}
+   * 鍏ㄩ€?鍙栨秷鍏ㄩ€?   * @returns {void}
    */
   toggleSelectAll() {
     const { cartItems, selectedAll } = this.data;
@@ -154,8 +149,8 @@ Page({
   },
 
   /**
-   * 增加商品数量
-   * @param {Object} e - 事件对象
+   * 澧炲姞鍟嗗搧鏁伴噺
+   * @param {Object} e - 浜嬩欢瀵硅薄
    * @returns {void}
    */
   increaseQuantity(e) {
@@ -169,8 +164,8 @@ Page({
   },
 
   /**
-   * 减少商品数量
-   * @param {Object} e - 事件对象
+   * 鍑忓皯鍟嗗搧鏁伴噺
+   * @param {Object} e - 浜嬩欢瀵硅薄
    * @returns {void}
    */
   decreaseQuantity(e) {
@@ -185,8 +180,8 @@ Page({
   },
 
   /**
-   * 删除商品
-   * @param {Object} e - 事件对象
+   * 鍒犻櫎鍟嗗搧
+   * @param {Object} e - 浜嬩欢瀵硅薄
    * @returns {void}
    */
   removeItem(e) {
@@ -194,8 +189,8 @@ Page({
     const { cartItems } = this.data;
     
     wx.showModal({
-      title: i18n.translate('提示'),
-      content: i18n.translate('确定要删除这个商品吗？'),
+      title: i18n.translate('鎻愮ず'),
+      content: i18n.translate('纭畾瑕佸垹闄よ繖涓晢鍝佸悧锛?),
       success: (res) => {
         if (res.confirm) {
           cartItems.splice(index, 1);
@@ -207,15 +202,14 @@ Page({
   },
 
   /**
-   * 跳转到结算页面
-   * @returns {void}
+   * 璺宠浆鍒扮粨绠楅〉闈?   * @returns {void}
    */
   goToCheckout() {
     const { selectedItems } = this.data;
     
     if (selectedItems.length === 0) {
       wx.showToast({
-        title: i18n.translate('请选择商品'),
+        title: i18n.translate('璇烽€夋嫨鍟嗗搧'),
         icon: 'none'
       });
       return;
@@ -227,8 +221,8 @@ Page({
   },
 
   /**
-   * 跳转到商品详情页
-   * @param {Object} e - 事件对象
+   * 璺宠浆鍒板晢鍝佽鎯呴〉
+   * @param {Object} e - 浜嬩欢瀵硅薄
    * @returns {void}
    */
   goToProductDetail(e) {

@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "鍒嗛攢璇︽儏",
+  "enablePullDownRefresh": false,
+  "usingComponents": {
+    "product-card": "../../components/productCard/productCard"
+  }
+}

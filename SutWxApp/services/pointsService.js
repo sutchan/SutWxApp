@@ -1,7 +1,7 @@
 /**
  * 文件名: pointsService.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
+ * 版本号: 1.0.1
+ * 更新日期: 2025-11-28
  * 描述: 积分服务
  */
 
@@ -91,7 +91,7 @@ class PointsService {
    * 获取积分商城商品列表
    * @param {Object} options - 查询参数
    * @param {string} options.categoryId - 分类ID
-   * @param {string} options.sort - 排序方式：default/points_asc/points_asc/sales
+   * @param {string} options.sort - 排序方式：default/points_asc/points_desc/sales
    * @param {number} options.page - 页码，默认为1
    * @param {number} options.pageSize - 每页数量，默认为20
    * @returns {Promise<Object>} 商品列表和分页信息
@@ -244,11 +244,11 @@ class PointsService {
   }
 
   /**
-   * 积分退款回退
-   * @param {Object} data - 回退参数
+   * 积分退款返还
+   * @param {Object} data - 返还参数
    * @param {string} data.orderId - 订单ID
-   * @param {number} data.points - 回退积分数量
-   * @returns {Promise<Object>} 回退结果
+   * @param {number} data.points - 返还积分数量
+   * @returns {Promise<Object>} 返还结果
    */
   static async refundPoints(data) {
     return request.post('/points/refund', data);

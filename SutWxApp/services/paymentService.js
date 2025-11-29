@@ -1,7 +1,7 @@
 /**
  * 文件名: paymentService.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-24
+ * 版本号: 1.0.1
+ * 更新日期: 2025-11-28
  * 作者: Sut
  * 描述: 支付服务
  */
@@ -69,7 +69,7 @@ class PaymentService {
    * @param {string} data.orderId - 订单ID
    * @param {number} data.refundAmount - 退款金额
    * @param {string} data.reason - 退款原因
-   * @returns {Promise<Object>} 退款申请结果
+   * @returns {Promise<Object>} 退款请求结果
    */
   static async requestRefund(data) {
     return request.post('/payment/refund', data);

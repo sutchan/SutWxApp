@@ -1,18 +1,17 @@
 /**
- * 文件名: user.js
- * 版本号: 1.0.1
- * 更新日期: 2025-11-24
- * 用户中心页面
+ * 鏂囦欢鍚? user.js
+ * 鐗堟湰鍙? 1.0.1
+ * 鏇存柊鏃ユ湡: 2025-11-24
+ * 鐢ㄦ埛涓績椤甸潰
  */
 const i18n = require('../../utils/i18n');
 const { createPage } = require('../../utils/store');
 
 createPage({
-  // 映射状态到页面
+  // 鏄犲皠鐘舵€佸埌椤甸潰
   mapState: ['user.isLoggedIn', 'user.userInfo', 'ui.loading'],
   
-  // 映射mutations到页面方法
-  mapMutations: { 
+  // 鏄犲皠mutations鍒伴〉闈㈡柟娉?  mapMutations: { 
     setLoading: 'SET_LOADING',
     setUserInfo: 'SET_USER_INFO',
     logoutUser: 'LOGOUT_USER'
@@ -20,17 +19,17 @@ createPage({
   data: {
     i18n: i18n,
     menuItems: [
-      { id: 'orders', name: i18n.translate('我的订单'), icon: '/assets/images/icon_orders.png' },
-      { id: 'favorites', name: i18n.translate('我的收藏'), icon: '/assets/images/icon_favorites.png' },
-      { id: 'points', name: i18n.translate('积分中心'), icon: '/assets/images/icon_points.png' },
-      { id: 'coupon', name: i18n.translate('优惠券'), icon: '/assets/images/icon_coupon.png' },
-      { id: 'address', name: i18n.translate('收货地址'), icon: '/assets/images/icon_address.png' },
-      { id: 'settings', name: i18n.translate('设置'), icon: '/assets/images/icon_settings.png' }
+      { id: 'orders', name: i18n.translate('鎴戠殑璁㈠崟'), icon: '/assets/images/icon_orders.png' },
+      { id: 'favorites', name: i18n.translate('鎴戠殑鏀惰棌'), icon: '/assets/images/icon_favorites.png' },
+      { id: 'points', name: i18n.translate('绉垎涓績'), icon: '/assets/images/icon_points.png' },
+      { id: 'coupon', name: i18n.translate('浼樻儬鍒?), icon: '/assets/images/icon_coupon.png' },
+      { id: 'address', name: i18n.translate('鏀惰揣鍦板潃'), icon: '/assets/images/icon_address.png' },
+      { id: 'settings', name: i18n.translate('璁剧疆'), icon: '/assets/images/icon_settings.png' }
     ]
   },
 
   /**
-   * 生命周期函数--监听页面加载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
    * @returns {void}
    */
   onLoad() {
@@ -38,16 +37,14 @@ createPage({
   },
 
   /**
-   * 页面显示时触发
-   * @returns {void}
+   * 椤甸潰鏄剧ず鏃惰Е鍙?   * @returns {void}
    */
   onShow() {
-    // 每次显示页面时检查登录状态
-    this.checkLoginStatus();
+    // 姣忔鏄剧ず椤甸潰鏃舵鏌ョ櫥褰曠姸鎬?    this.checkLoginStatus();
   },
 
   /**
-   * 下拉刷新回调
+   * 涓嬫媺鍒锋柊鍥炶皟
    * @returns {void}
    */
   onPullDownRefresh() {
@@ -57,19 +54,17 @@ createPage({
   },
 
   /**
-   * 检查登录状态
-   * @param {Function} done - 完成回调
+   * 妫€鏌ョ櫥褰曠姸鎬?   * @param {Function} done - 瀹屾垚鍥炶皟
    * @returns {void}
    */
   checkLoginStatus(done) {
     this.setLoading(true);
     
-    // 检查本地存储的登录状态
-    const token = wx.getStorageSync('token');
+    // 妫€鏌ユ湰鍦板瓨鍌ㄧ殑鐧诲綍鐘舵€?    const token = wx.getStorageSync('token');
     const userInfo = wx.getStorageSync('userInfo');
     
     if (token && userInfo) {
-      // 更新到store
+      // 鏇存柊鍒皊tore
       this.setUserInfo(userInfo);
     }
     
@@ -79,8 +74,7 @@ createPage({
   },
 
   /**
-   * 跳转到登录页面
-   * @returns {void}
+   * 璺宠浆鍒扮櫥褰曢〉闈?   * @returns {void}
    */
   goToLogin() {
     wx.navigateTo({
@@ -89,20 +83,18 @@ createPage({
   },
 
   /**
-   * 退出登录
-   * @returns {void}
+   * 閫€鍑虹櫥褰?   * @returns {void}
    */
   logout() {
     wx.showModal({
-      title: i18n.translate('提示'),
-      content: i18n.translate('确定要退出登录吗？'),
+      title: i18n.translate('鎻愮ず'),
+      content: i18n.translate('纭畾瑕侀€€鍑虹櫥褰曞悧锛?),
       success: (res) => {
         if (res.confirm) {
-          // 通过store退出登录
-          this.logoutUser();
+          // 閫氳繃store閫€鍑虹櫥褰?          this.logoutUser();
           
           wx.showToast({
-            title: i18n.translate('已退出登录'),
+            title: i18n.translate('宸查€€鍑虹櫥褰?),
             icon: 'success'
           });
         }
@@ -111,21 +103,18 @@ createPage({
   },
 
   /**
-   * 处理菜单项点击
-   * @param {Object} e - 事件对象
+   * 澶勭悊鑿滃崟椤圭偣鍑?   * @param {Object} e - 浜嬩欢瀵硅薄
    * @returns {void}
    */
   handleMenuTap(e) {
     const { id } = e.currentTarget.dataset;
     
-    // 检查是否需要登录
-    if (!this.data.isLoggedIn && id !== 'settings') {
+    // 妫€鏌ユ槸鍚﹂渶瑕佺櫥褰?    if (!this.data.isLoggedIn && id !== 'settings') {
       this.goToLogin();
       return;
     }
     
-    // 根据不同的菜单项跳转到不同页面
-    switch (id) {
+    // 鏍规嵁涓嶅悓鐨勮彍鍗曢」璺宠浆鍒颁笉鍚岄〉闈?    switch (id) {
       case 'orders':
         wx.navigateTo({
           url: '/pages/user/order/list/list'
@@ -162,8 +151,7 @@ createPage({
   },
 
   /**
-   * 跳转到个人资料页面
-   * @returns {void}
+   * 璺宠浆鍒颁釜浜鸿祫鏂欓〉闈?   * @returns {void}
    */
   goToProfile() {
     if (!this.data.isLoggedIn) {

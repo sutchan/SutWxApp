@@ -1,26 +1,26 @@
 /**
- * 文件名: list.wxml
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: list 页面结构文件
+ * 鏂囦欢鍚? list.wxml
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: list 椤甸潰缁撴瀯鏂囦欢
  */
 <!--pages/user/address/list.wxml-->
 <view class="container">
-  <view wx:if="{{loading}}" class="loading-tip">加载中...</view>
+  <view wx:if="{{loading}}" class="loading-tip">鍔犺浇涓?..</view>
   <block wx:else>
-    <view wx:if="{{addressList.length === 0}}" class="empty-tip">暂无收货地址</view>
+    <view wx:if="{{addressList.length === 0}}" class="empty-tip">鏆傛棤鏀惰揣鍦板潃</view>
     <view wx:else class="address-list">
       <view wx:for="{{addressList}}" wx:key="id" class="address-item" data-id="{{item.id}}" bindtap="editAddress">
         <view class="address-info">
           <text class="name">{{item.name}}</text>
           <text class="phone">{{item.phone}}</text>
-          <text wx:if="{{item.isDefault}}" class="default-tag">默认</text>
+          <text wx:if="{{item.isDefault}}" class="default-tag">榛樿</text>
         </view>
         <view class="address-detail">{{item.province}}{{item.city}}{{item.district}}{{item.detail}}</view>
       </view>
     </view>
   </block>
   <view class="add-address-btn-area">
-    <button class="weui-btn" type="primary" bindtap="addAddress">新增收货地址</button>
+    <button class="weui-btn" type="primary" bindtap="addAddress">鏂板鏀惰揣鍦板潃</button>
   </view>
 </view>

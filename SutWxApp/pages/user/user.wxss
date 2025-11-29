@@ -1,19 +1,19 @@
-/* pages/user/user.wxss - 版本号: 1.0.1 - 2025-11-24 */
+/* pages/user/user.wxss - 鐗堟湰鍙? 1.0.1 - 2025-11-24 */
 
-/* 全局样式 */
+/* 鍏ㄥ眬鏍峰紡 */
 page {
   background-color: #f5f5f5;
   -webkit-font-smoothing: antialiased;
 }
 
-/* 容器样式 */
+/* 瀹瑰櫒鏍峰紡 */
 .user-center-container {
   width: 100%;
   min-height: 100vh;
   background-color: #f5f5f5;
 }
 
-/* 用户信息头部 */
+/* 鐢ㄦ埛淇℃伅澶撮儴 */
 .user-header {
   background-color: #fff;
   padding: 30rpx 40rpx;
@@ -79,7 +79,7 @@ page {
   color: #333;
 }
 
-/* 统计信息区域 */
+/* 缁熻淇℃伅鍖哄煙 */
 .stats-section {
   background-color: #fff;
   padding: 30rpx 0;
@@ -112,7 +112,7 @@ page {
   background-color: #eee;
 }
 
-/* 功能菜单 */
+/* 鍔熻兘鑿滃崟 */
 .menu-section {
   background-color: #fff;
   padding: 20rpx 0;
@@ -144,7 +144,7 @@ page {
   color: #333;
 }
 
-/* 退出登录按钮 */
+/* 閫€鍑虹櫥褰曟寜閽?*/
 .logout-section {
   padding: 40rpx;
 }
@@ -162,7 +162,7 @@ page {
   opacity: 0.8;
 }
 
-/* 版本信息 */
+/* 鐗堟湰淇℃伅 */
 .version-info {
   padding: 40rpx 0;
   text-align: center;

@@ -1,37 +1,34 @@
 /**
- * 文件名: result.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: 搜索结果页面
+ * 鏂囦欢鍚? result.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: 鎼滅储缁撴灉椤甸潰
  */
 Page({
   /**
-   * 页面的初始数据
-   */
+   * 椤甸潰鐨勫垵濮嬫暟鎹?   */
   data: {
-    keyword: '', // 搜索关键词
-    searchHistory: [], // 搜索历史
-    hotSearches: [], // 热门搜索
-    activeTab: 'all', // 当前激活的标签：all(全部)、product(商品)、article(文章)、user(用户)
+    keyword: '', // 鎼滅储鍏抽敭璇?    searchHistory: [], // 鎼滅储鍘嗗彶
+    hotSearches: [], // 鐑棬鎼滅储
+    activeTab: 'all', // 褰撳墠婵€娲荤殑鏍囩锛歛ll(鍏ㄩ儴)銆乸roduct(鍟嗗搧)銆乤rticle(鏂囩珷)銆乽ser(鐢ㄦ埛)
     tabs: [
-      { key: 'all', value: '全部' },
-      { key: 'product', value: '商品' },
-      { key: 'article', value: '文章' },
-      { key: 'user', value: '用户' }
+      { key: 'all', value: '鍏ㄩ儴' },
+      { key: 'product', value: '鍟嗗搧' },
+      { key: 'article', value: '鏂囩珷' },
+      { key: 'user', value: '鐢ㄦ埛' }
     ],
-    searchResults: [], // 搜索结果
-    loading: false, // 加载状态
-    page: 1, // 当前页码
-    pageSize: 20, // 每页数量
-    hasMore: true, // 是否还有更多数据
-    showResult: false // 是否显示搜索结果
+    searchResults: [], // 鎼滅储缁撴灉
+    loading: false, // 鍔犺浇鐘舵€?    page: 1, // 褰撳墠椤电爜
+    pageSize: 20, // 姣忛〉鏁伴噺
+    hasMore: true, // 鏄惁杩樻湁鏇村鏁版嵁
+    showResult: false // 鏄惁鏄剧ず鎼滅储缁撴灉
   },
 
   /**
-   * 生命周期函数--监听页面加载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
    */
   onLoad: function (options) {
-    // 获取传入的关键词
+    // 鑾峰彇浼犲叆鐨勫叧閿瘝
     if (options.keyword) {
       this.setData({
         keyword: options.keyword,
@@ -41,41 +38,40 @@ Page({
       });
     }
     
-    // 加载搜索历史和热门搜索
-    this.loadSearchHistory();
+    // 鍔犺浇鎼滅储鍘嗗彶鍜岀儹闂ㄦ悳绱?    this.loadSearchHistory();
     this.loadHotSearches();
   },
 
   /**
-   * 生命周期函数--监听页面初次渲染完成
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍒濇娓叉煋瀹屾垚
    */
   onReady: function () {
     
   },
 
   /**
-   * 生命周期函数--监听页面显示
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
    */
   onShow: function () {
     
   },
 
   /**
-   * 生命周期函数--监听页面隐藏
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰闅愯棌
    */
   onHide: function () {
     
   },
 
   /**
-   * 生命周期函数--监听页面卸载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍗歌浇
    */
   onUnload: function () {
     
   },
 
   /**
-   * 页面相关事件处理函数--监听用户下拉动作
+   * 椤甸潰鐩稿叧浜嬩欢澶勭悊鍑芥暟--鐩戝惉鐢ㄦ埛涓嬫媺鍔ㄤ綔
    */
   onPullDownRefresh: function () {
     if (this.data.showResult) {
@@ -93,8 +89,7 @@ Page({
   },
 
   /**
-   * 页面上拉触底事件的处理函数
-   */
+   * 椤甸潰涓婃媺瑙﹀簳浜嬩欢鐨勫鐞嗗嚱鏁?   */
   onReachBottom: function () {
     if (this.data.showResult && this.data.hasMore && !this.data.loading) {
       this.loadSearchResults();
@@ -102,18 +97,16 @@ Page({
   },
 
   /**
-   * 用户点击右上角分享
-   */
+   * 鐢ㄦ埛鐐瑰嚮鍙充笂瑙掑垎浜?   */
   onShareAppMessage: function () {
     return {
-      title: `搜索"${this.data.keyword}"的结果`,
+      title: `鎼滅储"${this.data.keyword}"鐨勭粨鏋渀,
       path: `/pages/search/result/result?keyword=${this.data.keyword}`
     };
   },
 
   /**
-   * 输入框内容变化
-   */
+   * 杈撳叆妗嗗唴瀹瑰彉鍖?   */
   onInputChange: function(e) {
     this.setData({
       keyword: e.detail.value
@@ -121,8 +114,7 @@ Page({
   },
 
   /**
-   * 清空输入框
-   */
+   * 娓呯┖杈撳叆妗?   */
   onClearInput: function() {
     this.setData({
       keyword: '',
@@ -132,22 +124,22 @@ Page({
   },
 
   /**
-   * 点击搜索按钮
+   * 鐐瑰嚮鎼滅储鎸夐挳
    */
   onSearch: function() {
     const keyword = this.data.keyword.trim();
     if (!keyword) {
       wx.showToast({
-        title: '请输入搜索关键词',
+        title: '璇疯緭鍏ユ悳绱㈠叧閿瘝',
         icon: 'none'
       });
       return;
     }
     
-    // 保存搜索历史
+    // 淇濆瓨鎼滅储鍘嗗彶
     this.saveSearchHistory(keyword);
     
-    // 显示搜索结果
+    // 鏄剧ず鎼滅储缁撴灉
     this.setData({
       showResult: true,
       page: 1,
@@ -160,7 +152,7 @@ Page({
   },
 
   /**
-   * 切换标签
+   * 鍒囨崲鏍囩
    */
   onTabChange: function(e) {
     const tab = e.currentTarget.dataset.tab;
@@ -177,7 +169,7 @@ Page({
   },
 
   /**
-   * 点击搜索历史
+   * 鐐瑰嚮鎼滅储鍘嗗彶
    */
   onHistoryTap: function(e) {
     const keyword = e.currentTarget.dataset.keyword;
@@ -194,7 +186,7 @@ Page({
   },
 
   /**
-   * 点击热门搜索
+   * 鐐瑰嚮鐑棬鎼滅储
    */
   onHotSearchTap: function(e) {
     const keyword = e.currentTarget.dataset.keyword;
@@ -211,12 +203,12 @@ Page({
   },
 
   /**
-   * 清空搜索历史
+   * 娓呯┖鎼滅储鍘嗗彶
    */
   onClearHistory: function() {
     wx.showModal({
-      title: '提示',
-      content: '确定要清空搜索历史吗？',
+      title: '鎻愮ず',
+      content: '纭畾瑕佹竻绌烘悳绱㈠巻鍙插悧锛?,
       success: (res) => {
         if (res.confirm) {
           wx.removeStorageSync('searchHistory');
@@ -229,8 +221,7 @@ Page({
   },
 
   /**
-   * 点击搜索结果项
-   */
+   * 鐐瑰嚮鎼滅储缁撴灉椤?   */
   onResultTap: function(e) {
     const { type, id } = e.currentTarget.dataset;
     
@@ -254,15 +245,15 @@ Page({
   },
 
   /**
-   * 加载搜索结果
+   * 鍔犺浇鎼滅储缁撴灉
    */
   loadSearchResults: function() {
     if (this.data.loading || !this.data.hasMore) return;
     
     this.setData({ loading: true });
     
-    // 这里应该调用服务进行搜索
-    // 模拟数据
+    // 杩欓噷搴旇璋冪敤鏈嶅姟杩涜鎼滅储
+    // 妯℃嫙鏁版嵁
     setTimeout(() => {
       const mockResults = this.generateMockResults(
         this.data.keyword, 
@@ -281,28 +272,28 @@ Page({
   },
 
   /**
-   * 生成模拟搜索结果
+   * 鐢熸垚妯℃嫙鎼滅储缁撴灉
    */
   generateMockResults: function(keyword, type, page, pageSize) {
     const allProducts = [
-      { id: 1, type: 'product', title: '优质苹果', desc: '新鲜红富士苹果，产地直供', image: '/images/product1.jpg', price: 29.9 },
-      { id: 2, type: 'product', title: '有机蔬菜', desc: '无农药残留，健康安全', image: '/images/product2.jpg', price: 18.8 },
-      { id: 3, type: 'product', title: '精选牛肉', desc: '澳洲进口，肉质鲜嫩', image: '/images/product3.jpg', price: 89.9 }
+      { id: 1, type: 'product', title: '浼樿川鑻规灉', desc: '鏂伴矞绾㈠瘜澹嫻鏋滐紝浜у湴鐩翠緵', image: '/images/product1.jpg', price: 29.9 },
+      { id: 2, type: 'product', title: '鏈夋満钄彍', desc: '鏃犲啘鑽畫鐣欙紝鍋ュ悍瀹夊叏', image: '/images/product2.jpg', price: 18.8 },
+      { id: 3, type: 'product', title: '绮鹃€夌墰鑲?, desc: '婢虫床杩涘彛锛岃倝璐ㄩ矞瀚?, image: '/images/product3.jpg', price: 89.9 }
     ];
     
     const allArticles = [
-      { id: 1, type: 'article', title: '如何选择新鲜水果', desc: '教你挑选水果的小技巧', image: '/images/article1.jpg', publishTime: '2023-06-15' },
-      { id: 2, type: 'article', title: '健康饮食指南', desc: '营养均衡的饮食建议', image: '/images/article2.jpg', publishTime: '2023-06-14' },
-      { id: 3, type: 'article', title: '夏季养生食谱', desc: '清凉解暑的美食推荐', image: '/images/article3.jpg', publishTime: '2023-06-13' }
+      { id: 1, type: 'article', title: '濡備綍閫夋嫨鏂伴矞姘存灉', desc: '鏁欎綘鎸戦€夋按鏋滅殑灏忔妧宸?, image: '/images/article1.jpg', publishTime: '2023-06-15' },
+      { id: 2, type: 'article', title: '鍋ュ悍楗鎸囧崡', desc: '钀ュ吇鍧囪　鐨勯ギ椋熷缓璁?, image: '/images/article2.jpg', publishTime: '2023-06-14' },
+      { id: 3, type: 'article', title: '澶忓鍏荤敓椋熻氨', desc: '娓呭噳瑙ｆ殤鐨勭編椋熸帹鑽?, image: '/images/article3.jpg', publishTime: '2023-06-13' }
     ];
     
     const allUsers = [
-      { id: 1, type: 'user', title: '美食达人', desc: '专注分享美食制作技巧', image: '/images/user1.jpg', fans: 1280 },
-      { id: 2, type: 'user', title: '营养专家', desc: '专业营养师，健康饮食顾问', image: '/images/user2.jpg', fans: 3560 },
-      { id: 3, type: 'user', title: '生活小能手', desc: '分享生活小妙招', image: '/images/user3.jpg', fans: 980 }
+      { id: 1, type: 'user', title: '缇庨杈句汉', desc: '涓撴敞鍒嗕韩缇庨鍒朵綔鎶€宸?, image: '/images/user1.jpg', fans: 1280 },
+      { id: 2, type: 'user', title: '钀ュ吇涓撳', desc: '涓撲笟钀ュ吇甯堬紝鍋ュ悍楗椤鹃棶', image: '/images/user2.jpg', fans: 3560 },
+      { id: 3, type: 'user', title: '鐢熸椿灏忚兘鎵?, desc: '鍒嗕韩鐢熸椿灏忓鎷?, image: '/images/user3.jpg', fans: 980 }
     ];
     
-    // 根据类型过滤数据
+    // 鏍规嵁绫诲瀷杩囨护鏁版嵁
     let filteredResults = [];
     if (type === 'all') {
       filteredResults = [...allProducts, ...allArticles, ...allUsers];
@@ -314,67 +305,61 @@ Page({
       filteredResults = allUsers;
     }
     
-    // 模拟关键词过滤
-    filteredResults = filteredResults.filter(item => 
+    // 妯℃嫙鍏抽敭璇嶈繃婊?    filteredResults = filteredResults.filter(item => 
       item.title.includes(keyword) || item.desc.includes(keyword)
     );
     
-    // 分页
+    // 鍒嗛〉
     const start = (page - 1) * pageSize;
     const end = start + pageSize;
     return filteredResults.slice(start, end);
   },
 
   /**
-   * 加载搜索历史
+   * 鍔犺浇鎼滅储鍘嗗彶
    */
   loadSearchHistory: function() {
     try {
       const history = wx.getStorageSync('searchHistory') || [];
       this.setData({
-        searchHistory: history.slice(0, 10) // 只显示最近10条
-      });
+        searchHistory: history.slice(0, 10) // 鍙樉绀烘渶杩?0鏉?      });
     } catch (e) {
-      console.error('加载搜索历史失败', e);
+      console.error('鍔犺浇鎼滅储鍘嗗彶澶辫触', e);
     }
   },
 
   /**
-   * 保存搜索历史
+   * 淇濆瓨鎼滅储鍘嗗彶
    */
   saveSearchHistory: function(keyword) {
     try {
       let history = wx.getStorageSync('searchHistory') || [];
       
-      // 移除重复项
-      history = history.filter(item => item !== keyword);
+      // 绉婚櫎閲嶅椤?      history = history.filter(item => item !== keyword);
       
-      // 添加到开头
-      history.unshift(keyword);
+      // 娣诲姞鍒板紑澶?      history.unshift(keyword);
       
-      // 最多保存20条
-      history = history.slice(0, 20);
+      // 鏈€澶氫繚瀛?0鏉?      history = history.slice(0, 20);
       
       wx.setStorageSync('searchHistory', history);
       this.setData({
-        searchHistory: history.slice(0, 10) // 只显示最近10条
-      });
+        searchHistory: history.slice(0, 10) // 鍙樉绀烘渶杩?0鏉?      });
     } catch (e) {
-      console.error('保存搜索历史失败', e);
+      console.error('淇濆瓨鎼滅储鍘嗗彶澶辫触', e);
     }
   },
 
   /**
-   * 加载热门搜索
+   * 鍔犺浇鐑棬鎼滅储
    */
   loadHotSearches: function() {
-    // 这里应该调用服务获取热门搜索
-    // 模拟数据
+    // 杩欓噷搴旇璋冪敤鏈嶅姟鑾峰彇鐑棬鎼滅储
+    // 妯℃嫙鏁版嵁
     setTimeout(() => {
       this.setData({
         hotSearches: [
-          '新鲜水果', '有机蔬菜', '进口牛肉', '健康饮食', '美食制作',
-          '营养搭配', '夏季食谱', '养生指南', '美食达人', '生活技巧'
+          '鏂伴矞姘存灉', '鏈夋満钄彍', '杩涘彛鐗涜倝', '鍋ュ悍楗', '缇庨鍒朵綔',
+          '钀ュ吇鎼厤', '澶忓椋熻氨', '鍏荤敓鎸囧崡', '缇庨杈句汉', '鐢熸椿鎶€宸?
         ]
       });
     }, 500);

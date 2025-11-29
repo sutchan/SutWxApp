@@ -1,10 +1,10 @@
 /**
- * 文件名: .eslintrc.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-24
- * 描述: ESLint配置文件
- * 为微信小程序项目提供代码规范检查
- */
+ * 鏂囦欢鍚? .eslintrc.js
+ * 鐗堟湰鍙? 1.0.2
+ * 鏇存柊鏃ユ湡: 2025-11-29
+ * 浣滆€? Sut
+ * 鎻忚堪: ESLint閰嶇疆鏂囦欢
+ * 涓哄井淇″皬绋嬪簭椤圭洰鎻愪緵浠ｇ爜瑙勮寖妫€鏌? */
 module.exports = {
   root: true,
   env: {
@@ -12,14 +12,17 @@ module.exports = {
     es6: true
   },
   extends: [
-    'eslint:recommended'
+    'eslint:recommended',
+    'standard'
   ],
+  plugins: [
+    // 寰俊灏忕▼搴忕壒瀹氳鍒欐彃浠?  ],
   parserOptions: {
     ecmaVersion: 2020,
     sourceType: 'module'
   },
   globals: {
-    // 微信小程序全局对象
+    // 寰俊灏忕▼搴忓叏灞€瀵硅薄
     wx: 'readonly',
     getApp: 'readonly',
     getCurrentPages: 'readonly',
@@ -29,17 +32,14 @@ module.exports = {
     Behavior: 'readonly',
     requirePlugin: 'readonly',
     requireMiniProgram: 'readonly',
-    // 控制台
-    console: 'readonly',
-    // 定时器
-    setTimeout: 'readonly',
+    // 鎺у埗鍙?    console: 'readonly',
+    // 瀹氭椂鍣?    setTimeout: 'readonly',
     clearTimeout: 'readonly',
     setInterval: 'readonly',
     clearInterval: 'readonly'
   },
   rules: {
-    // 基础错误检查
-    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    // 鍩虹閿欒妫€鏌?    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-unused-vars': ['error', { args: 'none', ignoreRestSiblings: true }],
     'no-undef': 'error',
@@ -66,7 +66,7 @@ module.exports = {
     'use-isnan': 'error',
     'valid-typeof': 'error',
     
-    // 代码风格规则
+    // 浠ｇ爜椋庢牸瑙勫垯
     'indent': ['error', 2, { SwitchCase: 1 }],
     'linebreak-style': ['error', 'unix'],
     'quotes': ['error', 'single'],
@@ -92,8 +92,7 @@ module.exports = {
     'space-unary-ops': ['error', { words: true, nonwords: false }],
     'spaced-comment': ['error', 'always'],
     
-    // 变量和结构规则
-    'camelcase': ['error', { properties: 'always' }],
+    // 鍙橀噺鍜岀粨鏋勮鍒?    'camelcase': ['error', { properties: 'always' }],
     'consistent-this': ['error', 'self'],
     'no-array-constructor': 'error',
     'no-new-object': 'error',
@@ -101,13 +100,12 @@ module.exports = {
     'prefer-const': 'error',
     'prefer-template': 'error',
     
-    // 微信小程序特定规则
-    'no-restricted-globals': ['error', {
+    // 寰俊灏忕▼搴忕壒瀹氳鍒?    'no-restricted-globals': ['error', {
       name: 'onmessage',
-      message: '使用 wx.onMessage 替代'
+      message: '浣跨敤 wx.onMessage 鏇夸唬'
     }, {
       name: 'postMessage',
-      message: '使用 wx.postMessage 替代'
+      message: '浣跨敤 wx.postMessage 鏇夸唬'
     }]
   },
   overrides: [

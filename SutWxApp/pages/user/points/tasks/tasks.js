@@ -1,45 +1,42 @@
 /**
- * 文件名: tasks.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: 
+ * 鏂囦欢鍚? tasks.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: 
  */
 
-// 积分任务页面
+// 绉垎浠诲姟椤甸潰
 const pointsService = require('../../../services/pointsService.js');
 
 Page({
   /**
-   * 页面的初始数据
-   */
+   * 椤甸潰鐨勫垵濮嬫暟鎹?   */
   data: {
-    // 任务类型筛选
-    taskTypes: [
-      { key: 'all', name: '全部任务', count: 0 },
-      { key: 'once', name: '新手任务', count: 0 },
-      { key: 'daily', name: '每日任务', count: 0 },
-      { key: 'weekly', name: '每周任务', count: 0 },
-      { key: 'monthly', name: '每月任务', count: 0 }
+    // 浠诲姟绫诲瀷绛涢€?    taskTypes: [
+      { key: 'all', name: '鍏ㄩ儴浠诲姟', count: 0 },
+      { key: 'once', name: '鏂版墜浠诲姟', count: 0 },
+      { key: 'daily', name: '姣忔棩浠诲姟', count: 0 },
+      { key: 'weekly', name: '姣忓懆浠诲姟', count: 0 },
+      { key: 'monthly', name: '姣忔湀浠诲姟', count: 0 }
     ],
     currentType: 'all',
     
-    // 任务状态筛选
-    taskStatuses: [
-      { key: 'all', name: '全部状态' },
-      { key: 'pending', name: '未完成' },
-      { key: 'completed', name: '已完成' },
-      { key: 'unclaimed', name: '待领取' }
+    // 浠诲姟鐘舵€佺瓫閫?    taskStatuses: [
+      { key: 'all', name: '鍏ㄩ儴鐘舵€? },
+      { key: 'pending', name: '鏈畬鎴? },
+      { key: 'completed', name: '宸插畬鎴? },
+      { key: 'unclaimed', name: '寰呴鍙? }
     ],
     currentStatus: 'all',
     
-    // 任务列表
+    // 浠诲姟鍒楄〃
     taskList: [],
     loading: false,
     hasMore: true,
     page: 1,
     pageSize: 10,
     
-    // 用户积分信息
+    // 鐢ㄦ埛绉垎淇℃伅
     userPoints: {
       availablePoints: 0,
       todayEarned: 0
@@ -47,51 +44,49 @@ Page({
   },
 
   /**
-   * 生命周期函数--监听页面加载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
    */
   onLoad: function (options) {
-    // 加载用户积分信息
+    // 鍔犺浇鐢ㄦ埛绉垎淇℃伅
     this.loadUserPoints();
     
-    // 加载任务列表
+    // 鍔犺浇浠诲姟鍒楄〃
     this.loadTaskList(true);
   },
 
   /**
-   * 生命周期函数--监听页面初次渲染完成
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍒濇娓叉煋瀹屾垚
    */
   onReady: function () {
-    // 设置导航栏标题
-    wx.setNavigationBarTitle({
-      title: '积分任务'
+    // 璁剧疆瀵艰埅鏍忔爣棰?    wx.setNavigationBarTitle({
+      title: '绉垎浠诲姟'
     });
   },
 
   /**
-   * 生命周期函数--监听页面显示
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
    */
   onShow: function () {
-    // 页面显示时刷新数据
-    this.loadUserPoints();
+    // 椤甸潰鏄剧ず鏃跺埛鏂版暟鎹?    this.loadUserPoints();
     this.loadTaskList(true);
   },
 
   /**
-   * 生命周期函数--监听页面隐藏
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰闅愯棌
    */
   onHide: function () {
     
   },
 
   /**
-   * 生命周期函数--监听页面卸载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍗歌浇
    */
   onUnload: function () {
     
   },
 
   /**
-   * 页面相关事件处理函数--监听用户下拉动作
+   * 椤甸潰鐩稿叧浜嬩欢澶勭悊鍑芥暟--鐩戝惉鐢ㄦ埛涓嬫媺鍔ㄤ綔
    */
   onPullDownRefresh: function () {
     this.loadTaskList(true).then(() => {
@@ -100,8 +95,7 @@ Page({
   },
 
   /**
-   * 页面上拉触底事件的处理函数
-   */
+   * 椤甸潰涓婃媺瑙﹀簳浜嬩欢鐨勫鐞嗗嚱鏁?   */
   onReachBottom: function () {
     if (this.data.hasMore && !this.data.loading) {
       this.loadTaskList(false);
@@ -109,17 +103,16 @@ Page({
   },
 
   /**
-   * 用户点击右上角分享
-   */
+   * 鐢ㄦ埛鐐瑰嚮鍙充笂瑙掑垎浜?   */
   onShareAppMessage: function () {
     return {
-      title: '做任务赚积分，好礼等你来拿',
+      title: '鍋氫换鍔¤禋绉垎锛屽ソ绀肩瓑浣犳潵鎷?,
       path: '/pages/user/points/tasks/tasks'
     };
   },
 
   /**
-   * 加载用户积分信息
+   * 鍔犺浇鐢ㄦ埛绉垎淇℃伅
    */
   loadUserPoints: async function() {
     try {
@@ -130,12 +123,12 @@ Page({
         });
       }
     } catch (error) {
-      console.error('加载用户积分信息失败:', error);
+      console.error('鍔犺浇鐢ㄦ埛绉垎淇℃伅澶辫触:', error);
     }
   },
 
   /**
-   * 加载任务列表
+   * 鍔犺浇浠诲姟鍒楄〃
    */
   loadTaskList: async function(reset = false) {
     if (this.data.loading) return;
@@ -159,7 +152,7 @@ Page({
         const newTasks = result.data.list || [];
         const hasMore = newTasks.length === this.data.pageSize;
         
-        // 更新任务类型计数
+        // 鏇存柊浠诲姟绫诲瀷璁℃暟
         if (reset && result.data.typeCounts) {
           const taskTypes = this.data.taskTypes.map(type => {
             const count = result.data.typeCounts[type.key] || 0;
@@ -179,24 +172,24 @@ Page({
           loading: false
         });
         wx.showToast({
-          title: result.message || '加载任务失败',
+          title: result.message || '鍔犺浇浠诲姟澶辫触',
           icon: 'none'
         });
       }
     } catch (error) {
-      console.error('加载任务列表失败:', error);
+      console.error('鍔犺浇浠诲姟鍒楄〃澶辫触:', error);
       this.setData({
         loading: false
       });
       wx.showToast({
-        title: '网络错误，请重试',
+        title: '缃戠粶閿欒锛岃閲嶈瘯',
         icon: 'none'
       });
     }
   },
 
   /**
-   * 切换任务类型
+   * 鍒囨崲浠诲姟绫诲瀷
    */
   switchTaskType: function(e) {
     const type = e.currentTarget.dataset.type;
@@ -213,8 +206,7 @@ Page({
   },
 
   /**
-   * 切换任务状态
-   */
+   * 鍒囨崲浠诲姟鐘舵€?   */
   switchTaskStatus: function(e) {
     const status = e.currentTarget.dataset.status;
     if (status === this.data.currentStatus) return;
@@ -230,14 +222,14 @@ Page({
   },
 
   /**
-   * 完成任务
+   * 瀹屾垚浠诲姟
    */
   completeTask: async function(e) {
     const taskId = e.currentTarget.dataset.id;
     
     try {
       wx.showLoading({
-        title: '正在完成任务...',
+        title: '姝ｅ湪瀹屾垚浠诲姟...',
       });
       
       const result = await pointsService.completeTask(taskId);
@@ -246,40 +238,40 @@ Page({
       
       if (result.success) {
         wx.showToast({
-          title: '任务完成',
+          title: '浠诲姟瀹屾垚',
           icon: 'success'
         });
         
-        // 刷新任务列表
+        // 鍒锋柊浠诲姟鍒楄〃
         this.loadTaskList(true);
         
-        // 刷新用户积分
+        // 鍒锋柊鐢ㄦ埛绉垎
         this.loadUserPoints();
       } else {
         wx.showToast({
-          title: result.message || '完成任务失败',
+          title: result.message || '瀹屾垚浠诲姟澶辫触',
           icon: 'none'
         });
       }
     } catch (error) {
       wx.hideLoading();
-      console.error('完成任务失败:', error);
+      console.error('瀹屾垚浠诲姟澶辫触:', error);
       wx.showToast({
-        title: '网络错误，请重试',
+        title: '缃戠粶閿欒锛岃閲嶈瘯',
         icon: 'none'
       });
     }
   },
 
   /**
-   * 领取任务奖励
+   * 棰嗗彇浠诲姟濂栧姳
    */
   claimTaskReward: async function(e) {
     const taskId = e.currentTarget.dataset.id;
     
     try {
       wx.showLoading({
-        title: '正在领取奖励...',
+        title: '姝ｅ湪棰嗗彇濂栧姳...',
       });
       
       const result = await pointsService.claimTaskReward(taskId);
@@ -288,33 +280,33 @@ Page({
       
       if (result.success) {
         wx.showToast({
-          title: `获得${result.data.points}积分`,
+          title: `鑾峰緱${result.data.points}绉垎`,
           icon: 'success'
         });
         
-        // 刷新任务列表
+        // 鍒锋柊浠诲姟鍒楄〃
         this.loadTaskList(true);
         
-        // 刷新用户积分
+        // 鍒锋柊鐢ㄦ埛绉垎
         this.loadUserPoints();
       } else {
         wx.showToast({
-          title: result.message || '领取奖励失败',
+          title: result.message || '棰嗗彇濂栧姳澶辫触',
           icon: 'none'
         });
       }
     } catch (error) {
       wx.hideLoading();
-      console.error('领取任务奖励失败:', error);
+      console.error('棰嗗彇浠诲姟濂栧姳澶辫触:', error);
       wx.showToast({
-        title: '网络错误，请重试',
+        title: '缃戠粶閿欒锛岃閲嶈瘯',
         icon: 'none'
       });
     }
   },
 
   /**
-   * 跳转到任务详情页
+   * 璺宠浆鍒颁换鍔¤鎯呴〉
    */
   goToTaskDetail: function(e) {
     const taskId = e.currentTarget.dataset.id;
@@ -324,8 +316,7 @@ Page({
   },
 
   /**
-   * 跳转到积分页面
-   */
+   * 璺宠浆鍒扮Н鍒嗛〉闈?   */
   goToPoints: function() {
     wx.switchTab({
       url: '/pages/user/points/points'
@@ -333,15 +324,13 @@ Page({
   },
 
   /**
-   * 格式化任务进度
-   */
+   * 鏍煎紡鍖栦换鍔¤繘搴?   */
   formatTaskProgress: function(current, target) {
     return `${current}/${target}`;
   },
 
   /**
-   * 计算任务进度百分比
-   */
+   * 璁＄畻浠诲姟杩涘害鐧惧垎姣?   */
   getTaskProgressPercent: function(current, target) {
     if (!target || target <= 0) return 0;
     const percent = (current / target) * 100;
