@@ -2,9 +2,8 @@
  * 鏂囦欢鍚? app.json
  * 鐗堟湰鍙? 1.0.2
  * 鏇存柊鏃ユ湡: 2025-11-29
- * 浣滆€? Sut
- * 灏忕▼搴忓叏灞€閰嶇疆鏂囦欢锛屽寘鍚〉闈㈣矾寰勩€佺獥鍙ｈ缃€乼abBar閰嶇疆绛夊叏灞€閰嶇疆
- */
+ * 娴ｆ粏鈧? Sut
+ * 鐏忓繒鈻兼惔蹇撳弿鐏炩偓閰嶇疆鏂囦欢閿涘苯瀵橀崥顐︺€夐棃銏ｇ熅瀵板嫨鈧胶鐛ラ崣锝堫啎缂冾喓鈧辜abBar闁板秶鐤嗙粵澶婂弿鐏炩偓闁板秶鐤? */
 {
   "pages": [
     "pages/index/index",
@@ -63,19 +62,19 @@
     "list": [
       {
         "pagePath": "pages/index/index",
-        "text": "棣栭〉",
+        "text": "妫ｆ牠銆?,
         "iconPath": "images/tabbar/home.png",
         "selectedIconPath": "images/tabbar/home-active.png"
       },
       {
         "pagePath": "pages/category/category",
-        "text": "鍒嗙被",
+        "text": "閸掑棛琚?,
         "iconPath": "images/tabbar/category.png",
         "selectedIconPath": "images/tabbar/category-active.png"
       },
       {
         "pagePath": "pages/user/user",
-        "text": "鎴戠殑",
+        "text": "閹存垹娈?,
         "iconPath": "images/tabbar/user.png",
         "selectedIconPath": "images/tabbar/user-active.png"
       }

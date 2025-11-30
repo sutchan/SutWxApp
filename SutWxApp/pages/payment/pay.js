@@ -1,8 +1,8 @@
 /**
- * 鏂囦欢鍚? pay.js
- * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: 鏀粯椤甸潰
+ * 文件名: pay.js
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: 鏀粯椤甸潰
  */
 
 const paymentService = require('../../services/paymentService');

@@ -1,8 +1,8 @@
 /**
- * 鏂囦欢鍚? list.wxml
- * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: list 椤甸潰缁撴瀯鏂囦欢
+ * 文件名: list.wxml
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: list 椤甸潰缁撴瀯鏂囦欢
  */
 <view class="container">
   <mp-tabs activeTab="{{activeTab}}" tabs="{{tabs}}" bindtabclick="onTabChange"></mp-tabs>

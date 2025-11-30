@@ -1,8 +1,8 @@
 /**
- * 鏂囦欢鍚? sut-wechat-mini-en_US.json
- * 鐗堟湰鍙? 1.0.1
- * 鏇存柊鏃ユ湡: 2025-11-24
- * 鎻忚堪: sut-wechat-mini-en_US JSON 閰嶇疆鏂囦欢
+ * 文件名: sut-wechat-mini-en_US.json
+ * 版本号: 1.0.1
+ * 更新日期: 2025-11-24
+ * 描述: sut-wechat-mini-en_US JSON 配置文件
  */
 {
   "loading": "Loading...",

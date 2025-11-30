@@ -1,8 +1,8 @@
 /**
- * 鏂囦欢鍚? project.config.json
- * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: project.config JSON 閰嶇疆鏂囦欢
+ * 文件名: project.config.json
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: project.config JSON 配置文件
  */
 {
   "description": "鑻忕壒寰俊灏忕▼搴忛」鐩厤缃?,

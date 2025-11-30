@@ -1,8 +1,8 @@
 /**
- * 鏂囦欢鍚? emptyState.wxss
- * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: emptyState 椤甸潰鏍峰紡鏂囦欢
+ * 文件名: emptyState.wxss
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: emptyState 页面样式文件
  */
 /* 绌虹姸鎬佸鍣?*/
 .empty-state-container {

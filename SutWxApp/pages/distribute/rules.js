@@ -1,8 +1,8 @@
 /**
- * 鏂囦欢鍚? rules.js
- * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-29
- * 鎻忚堪: 鍒嗛攢瑙勫垯璁剧疆椤甸潰
+ * 文件名: rules.js
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-29
+ * 描述: 鍒嗛攢瑙勫垯璁剧疆椤甸潰
  */
 
 const distributeService = require('../../services/distributeService');

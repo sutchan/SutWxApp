@@ -1,8 +1,8 @@
 /**
- * 鏂囦欢鍚? pointsDetail.wxml
- * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: pointsDetail 椤甸潰缁撴瀯鏂囦欢
+ * 文件名: pointsDetail.wxml
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: pointsDetail 椤甸潰缁撴瀯鏂囦欢
  */
 <view class="container">
   <!-- 褰撳墠绉垎鍗＄墖 -->

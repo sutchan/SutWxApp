@@ -1,7 +1,7 @@
 /**
- * 鏂囦欢鍚? po2json.js
- * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-24
+ * 文件名: po2json.js
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-24
  * PO鏂囦欢杞崲涓篔SON宸ュ叿
  * 鐢ㄤ簬灏?po缈昏瘧鏂囦欢杞崲涓篔SON鏍煎紡锛岀‘淇濈炕璇戝悓姝? */
 
@@ -64,7 +64,7 @@ function toJsonString(translations) {
 
 /**
  * 鐢熸垚鏂囦欢澶撮儴娉ㄩ噴
- * @param {string} filename - 鏂囦欢鍚? * @param {string} language - 璇█浠ｇ爜
+ * @param {string} filename - 文件名: * @param {string} language - 璇█浠ｇ爜
  * @returns {string} 鏂囦欢澶撮儴娉ㄩ噴
  */
 function generateHeaderComment(filename, language) {
@@ -75,16 +75,16 @@ function generateHeaderComment(filename, language) {
   const dateStr = `${year}-${month}-${day}`;
 
   return `/**
- * 鏂囦欢鍚? ${filename}
- * 鐗堟湰鍙? 1.0.1
- * 鏇存柊鏃ユ湡: ${dateStr}
- * 鎻忚堪: ${filename} JSON 閰嶇疆鏂囦欢 - 鑷姩鐢熸垚锛岃鍕挎墜鍔ㄤ慨鏀? */`;
+ * 文件名: ${filename}
+ * 版本号: 1.0.1
+ * 更新日期: ${dateStr}
+ * 描述: ${filename} JSON 配置文件 - 鑷姩鐢熸垚锛岃鍕挎墜鍔ㄤ慨鏀? */`;
 }
 
 /**
  * 杞崲PO鏂囦欢涓篔SON
  * @param {string} poContent - PO鏂囦欢鍐呭
- * @param {string} filename - 杈撳嚭鏂囦欢鍚? * @param {string} language - 璇█浠ｇ爜
+ * @param {string} filename - 杈撳嚭文件名: * @param {string} language - 璇█浠ｇ爜
  * @returns {string} 瀹屾暣鐨凧SON鏂囦欢鍐呭
  */
 function convertPoToJson(poContent, filename, language) {

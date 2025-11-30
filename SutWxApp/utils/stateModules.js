@@ -1,9 +1,9 @@
 /**
- * 鏂囦欢鍚? stateModules.js
- * 鐗堟湰鍙? 1.1.0
- * 鏇存柊鏃ユ湡: 2025-11-24
+ * 文件名: stateModules.js
+ * 版本号: 1.1.0
+ * 更新日期: 2025-11-24
  * 浣滆€? Sut
- * 鎻忚堪: 棰勫畾涔夌姸鎬佹ā鍧楅泦鍚堬紝涓烘牳蹇冨姛鑳芥彁渚涙爣鍑嗗寲鐨勭姸鎬佺鐞嗘ā鍧? */
+ * 描述: 棰勫畾涔夌姸鎬佹ā鍧楅泦鍚堬紝涓烘牳蹇冨姛鑳芥彁渚涙爣鍑嗗寲鐨勭姸鎬佺鐞嗘ā鍧? */
 
 // 瀵煎叆WebSocket鏈嶅姟
 const webSocketService = require('./webSocketService.js').instance;

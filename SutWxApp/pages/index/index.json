@@ -1,8 +1,8 @@
 /**
- * 鏂囦欢鍚? index.json
- * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: index JSON 閰嶇疆鏂囦欢
+ * 文件名: index.json
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: index JSON 配置文件
  */
 {
   "navigationBarTitleText": "棣栭〉",

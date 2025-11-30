@@ -1,8 +1,8 @@
 /**
- * 鏂囦欢鍚? orderCard.wxml
- * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: orderCard 椤甸潰缁撴瀯鏂囦欢
+ * 文件名: orderCard.wxml
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: orderCard 椤甸潰缁撴瀯鏂囦欢
  */
 <view class="order-card {{bordered ? 'bordered' : ''}}" style="width: {{width}}" bindtap="onOrderTap">
   <!-- 璁㈠崟澶撮儴 -->

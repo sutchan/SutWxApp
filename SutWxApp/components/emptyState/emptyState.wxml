@@ -1,8 +1,8 @@
 /**
- * 鏂囦欢鍚? emptyState.wxml
- * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: emptyState 椤甸潰缁撴瀯鏂囦欢
+ * 文件名: emptyState.wxml
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: emptyState 椤甸潰缁撴瀯鏂囦欢
  */
 <view class="empty-state-container">
   <!-- 绌虹姸鎬佸浘鐗?-->
