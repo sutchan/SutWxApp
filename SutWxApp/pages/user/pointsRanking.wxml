@@ -88,10 +88,10 @@
       <view class="empty-tip">蹇幓瀹屾垚浠诲姟璧氬彇绉垎鍚?/view>
     </view>
 
-    <!-- 鍔犺浇鐘舵€?-->
+    <!-- 加载状态-->
     <view class="loading-state" wx:if="{{isLoading && rankingList.length === 0}}">
       <view class="loading-spinner"></view>
-      <text>鍔犺浇涓?..</text>
+      <text>加载中..</text>
     </view>
 
     <!-- 娌℃湁鏇村鏁版嵁 -->

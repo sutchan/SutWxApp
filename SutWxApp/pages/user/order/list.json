@@ -5,7 +5,7 @@
  * 描述: list JSON 配置文件
  */
 {
-  "navigationBarTitleText": "鎴戠殑璁㈠崟",
+  "navigationBarTitleText": "鎴戠殑订单",
   "usingComponents": {
     "mp-tabs": "/weui/tabs/tabs",
     "mp-tab": "/weui/tab/tab",

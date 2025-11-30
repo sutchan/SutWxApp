@@ -2,7 +2,7 @@
  * 文件名: detail.js
  * 版本号: 1.0.1
  * 更新日期: 2025-11-27
- * 璁㈠崟璇︽儏椤甸潰
+ * 订单璇︽儏椤甸潰
  */
 const i18n = require('../../../utils/i18n');
 const PointsService = require('../../../services/pointsService');
@@ -22,7 +22,7 @@ Page({
   /**
    * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
    * @param {Object} options - 椤甸潰鍙傛暟
-   * @param {string} options.id - 璁㈠崟ID
+   * @param {string} options.id - 订单ID
    * @returns {void}
    */
   onLoad(options) {
@@ -62,8 +62,8 @@ Page({
   },
 
   /**
-   * 鍔犺浇璁㈠崟璇︽儏
-   * @param {string} id - 璁㈠崟ID
+   * 鍔犺浇订单璇︽儏
+   * @param {string} id - 订单ID
    * @param {Function} done - 瀹屾垚鍥炶皟
    * @returns {void}
    */
@@ -134,7 +134,7 @@ Page({
 
   /**
    * 鍔犺浇鐗╂祦淇℃伅
-   * @param {string} id - 璁㈠崟ID
+   * @param {string} id - 订单ID
    * @returns {void}
    */
   loadLogistics(id) {
@@ -144,7 +144,7 @@ Page({
         {
           time: '2023-09-29 10:15:00',
           status: i18n.translate('宸插彂璐?),
-          description: i18n.translate('鎮ㄧ殑璁㈠崟宸插彂璐э紝椤轰赴蹇€掑崟鍙凤細SF1234567890')
+          description: i18n.translate('鎮ㄧ殑订单宸插彂璐э紝椤轰赴蹇€掑崟鍙凤細SF1234567890')
         },
         {
           time: '2023-09-29 18:30:00',
@@ -178,7 +178,7 @@ Page({
   },
 
   /**
-   * 澶嶅埗璁㈠崟鍙?   * @returns {void}
+   * 澶嶅埗订单鍙?   * @returns {void}
    */
   copyOrderId() {
     wx.setClipboardData({
@@ -220,18 +220,18 @@ Page({
   },
 
   /**
-   * 鍙栨秷璁㈠崟
+   * 鍙栨秷订单
    * @returns {void}
    */
   cancelOrder() {
     wx.showModal({
       title: i18n.translate('鎻愮ず'),
-      content: i18n.translate('纭畾瑕佸彇娑堣璁㈠崟鍚楋紵'),
+      content: i18n.translate('纭畾瑕佸彇娑堣订单鍚楋紵'),
       success: (res) => {
         if (res.confirm) {
-          // 瀹為檯椤圭洰涓簲璇ヨ皟鐢ˋPI鍙栨秷璁㈠崟
+          // 瀹為檯椤圭洰涓簲璇ヨ皟鐢ˋPI鍙栨秷订单
           wx.showToast({
-            title: i18n.translate('璁㈠崟宸插彇娑?),
+            title: i18n.translate('订单宸插彇娑?),
             icon: 'success'
           });
           this.loadOrderDetail(this.data.orderId);
@@ -286,7 +286,7 @@ Page({
   },
 
   /**
-   * 璇勪环璁㈠崟
+   * 璇勪环订单
    * @returns {void}
    */
   reviewOrder() {
@@ -297,7 +297,7 @@ Page({
   },
 
   /**
-   * 鍐嶆璐拱
+   * 鍐嶆购买
    * @returns {void}
    */
   buyAgain() {
@@ -322,7 +322,7 @@ Page({
           this.setData({ loading: true });
           
           // 妯℃嫙閫€娆惧鐞?          setTimeout(() => {
-            // 濡傛灉璁㈠崟浣跨敤浜嗙Н鍒嗘姷鎵ｏ紝璋冪敤绉垎閫€娆惧洖閫€鎺ュ彛
+            // 濡傛灉订单浣跨敤浜嗙Н鍒嗘姷鎵ｏ紝璋冪敤绉垎閫€娆惧洖閫€鎺ュ彛
             if (order.pointsDeduction && order.pointsDeduction.points > 0) {
               this.refundPoints(order.id, order.pointsDeduction.points);
             }
@@ -334,7 +334,7 @@ Page({
               icon: 'success'
             });
             
-            // 鍒锋柊璁㈠崟璇︽儏
+            // 鍒锋柊订单璇︽儏
             this.loadOrderDetail(order.id);
           }, 1000);
         }
@@ -344,7 +344,7 @@ Page({
 
   /**
    * 绉垎閫€娆惧洖閫€
-   * @param {string} orderId - 璁㈠崟ID
+   * @param {string} orderId - 订单ID
    * @param {number} points - 鍥為€€绉垎鏁伴噺
    * @returns {void}
    */

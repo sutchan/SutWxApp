@@ -15,7 +15,7 @@
     <view wx:else class="not-login" bindtap="goToLogin">
       <image src="/assets/images/default_avatar.png" class="avatar" mode="aspectFill"></image>
       <view class="login-prompt">
-        <text>{{i18n.translate('鐐瑰嚮鐧诲綍')}}</text>
+        <text>{{i18n.translate('鐐瑰嚮登录')}}</text>
       </view>
       <image src="/assets/images/icon_arrow_right.png" class="arrow-icon" mode="aspectFit"></image>
     </view>
@@ -35,7 +35,7 @@
     <view class="stat-divider"></view>
     <view class="stat-item">
       <view class="stat-value">{{userInfo.orders || 0}}</view>
-      <view class="stat-label">{{i18n.translate('璁㈠崟')}}</view>
+      <view class="stat-label">{{i18n.translate('订单')}}</view>
     </view>
   </view>
 

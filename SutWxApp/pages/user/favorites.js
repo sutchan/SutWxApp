@@ -12,7 +12,7 @@ Page({
     tabs: ['鍟嗗搧', '鏂囩珷'],
     productFavorites: [], // 鍟嗗搧鏀惰棌鍒楄〃
     articleFavorites: [], // 鏂囩珷鏀惰棌鍒楄〃
-    loading: false, // 鍔犺浇鐘舵€?    hasMore: {
+    loading: false, // 加载状态    hasMore: {
       product: true, // 鍟嗗搧鏄惁杩樻湁鏇村鏁版嵁
       article: true  // 鏂囩珷鏄惁杩樻湁鏇村鏁版嵁
     },

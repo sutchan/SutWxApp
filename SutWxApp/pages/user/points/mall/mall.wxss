@@ -155,7 +155,7 @@
   padding: 10px 15px;
 }
 
-/* 鍔犺浇鐘舵€?*/
+/* 加载状态*/
 .loading-container {
   display: flex;
   flex-direction: column;
@@ -243,7 +243,7 @@
   border-radius: 4px;
 }
 
-/* 鍟嗗搧淇℃伅 */
+/* 产品信息 */
 .product-info {
   padding: 15px;
 }

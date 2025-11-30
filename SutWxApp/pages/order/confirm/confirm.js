@@ -2,7 +2,7 @@
  * 文件名: confirm.js
  * 版本号: 1.0.1
  * 更新日期: 2025-11-27
- * 璁㈠崟纭椤甸潰
+ * 订单纭椤甸潰
  */
 const i18n = require('../../../utils/i18n');
 const PointsService = require('../../../services/pointsService');
@@ -284,7 +284,7 @@ Page({
   },
 
   /**
-   * 閫夋嫨鏀粯鏂瑰紡
+   * 閫夋嫨支付方式
    * @param {Object} e - 浜嬩欢瀵硅薄
    * @returns {void}
    */
@@ -303,7 +303,7 @@ Page({
   },
 
   /**
-   * 鎻愪氦璁㈠崟
+   * 鎻愪氦订单
    * @returns {void}
    */
   submitOrder() {
@@ -312,7 +312,7 @@ Page({
     // 妫€鏌ユ槸鍚﹂€夋嫨浜嗗湴鍧€
     if (!address) {
       wx.showToast({
-        title: i18n.translate('璇烽€夋嫨鏀惰揣鍦板潃'),
+        title: i18n.translate('璇烽€夋嫨收货地址'),
         icon: 'none'
       });
       return;
@@ -320,13 +320,13 @@ Page({
     
     // 妫€鏌ュ晢鍝佷俊鎭槸鍚﹀畬鏁?    if (!product) {
       wx.showToast({
-        title: i18n.translate('鍟嗗搧淇℃伅涓嶅畬鏁?),
+        title: i18n.translate('产品信息涓嶅畬鏁?),
         icon: 'none'
       });
       return;
     }
     
-    // 鏋勫缓璁㈠崟鏁版嵁
+    // 鏋勫缓订单鏁版嵁
     const orderData = {
       items: [{
         productId: product.id,
@@ -350,11 +350,11 @@ Page({
     
     this.setData({ loading: true });
     
-    // 瀹為檯椤圭洰涓簲璇ヨ皟鐢ˋPI鎻愪氦璁㈠崟
+    // 瀹為檯椤圭洰涓簲璇ヨ皟鐢ˋPI鎻愪氦订单
     const submitTimer = setTimeout(() => {
       this.setData({ loading: false });
       
-      // 妯℃嫙璁㈠崟鎻愪氦鎴愬姛
+      // 妯℃嫙订单鎻愪氦鎴愬姛
       const orderId = 'ORD' + new Date().getTime();
       
       // 濡傛灉浣跨敤浜嗙Н鍒嗘姷鎵ｏ紝璋冪敤绉垎鎶垫墸API
@@ -363,11 +363,11 @@ Page({
       }
       
       wx.showToast({
-        title: i18n.translate('璁㈠崟鎻愪氦鎴愬姛'),
+        title: i18n.translate('订单鎻愪氦鎴愬姛'),
         icon: 'success',
         duration: 1500,
         success: () => {
-          // 璺宠浆鍒版敮浠橀〉闈㈡垨璁㈠崟璇︽儏椤?          setTimeout(() => {
+          // 璺宠浆鍒版敮浠橀〉闈㈡垨订单璇︽儏椤?          setTimeout(() => {
             wx.redirectTo({
               url: `/pages/order/detail/detail?id=${orderId}`
             });
@@ -383,7 +383,7 @@ Page({
 
   /**
    * 浣跨敤绉垎鎶垫墸
-   * @param {string} orderId - 璁㈠崟ID
+   * @param {string} orderId - 订单ID
    * @param {number} points - 鎶垫墸绉垎鏁伴噺
    * @returns {void}
    */
@@ -394,6 +394,6 @@ Page({
     }).then(result => {
       // 绉垎鎶垫墸鎴愬姛锛屾棤闇€棰濆澶勭悊
     }).catch(error => {
-      // 绉垎鎶垫墸澶辫触锛屽彲浠ヨ€冭檻鍥炴粴璁㈠崟鎴栧叾浠栧鐞?    });
+      // 绉垎鎶垫墸澶辫触锛屽彲浠ヨ€冭檻鍥炴粴订单鎴栧叾浠栧鐞?    });
   }
 });

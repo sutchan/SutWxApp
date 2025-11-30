@@ -1,8 +1,8 @@
 <!-- 鍒嗛攢璇︽儏椤甸潰 -->
 <view class="distribute-detail-page">
-  <!-- 鍔犺浇涓?-->
+  <!-- 加载中-->
   <view class="loading-container" wx:if="{{loading}}">
-    <text>鍔犺浇涓?..</text>
+    <text>加载中..</text>
   </view>
 
   <!-- 閿欒鐘舵€?-->

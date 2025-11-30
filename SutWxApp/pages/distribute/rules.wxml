@@ -1,8 +1,8 @@
 <!-- 鍒嗛攢瑙勫垯璁剧疆椤甸潰 -->
 <view class="distribute-rules-page">
-  <!-- 鍔犺浇涓?-->
+  <!-- 加载中-->
   <view class="loading-container" wx:if="{{loading}}">
-    <text>鍔犺浇涓?..</text>
+    <text>加载中..</text>
   </view>
 
   <!-- 閿欒鐘舵€?-->
@@ -57,7 +57,7 @@
         <view class="rule-item">
           <view class="rule-label">
             <text class="label-text">鏈€楂樹剑閲戦噾棰?/text>
-            <text class="label-desc">鍗曚釜璁㈠崟鐨勬渶楂樹剑閲戦噾棰濓紝鍗曚綅锛氬厓</text>
+            <text class="label-desc">鍗曚釜订单鐨勬渶楂樹剑閲戦噾棰濓紝鍗曚綅锛氬厓</text>
           </view>
           <view class="rule-input-group">
             <input class="rule-input" type="number" value="{{distributeRules.maxCommissionAmount}}" bindinput="onInputChange" data-field="maxCommissionAmount" />
@@ -89,7 +89,7 @@
         <view class="rule-item">
           <view class="rule-label">
             <text class="label-text">鑷姩缁撶畻鍛ㄦ湡</text>
-            <text class="label-desc">璁㈠崟瀹屾垚鍚庣殑鑷姩缁撶畻鍛ㄦ湡锛屽崟浣嶏細澶?/text>
+            <text class="label-desc">订单瀹屾垚鍚庣殑鑷姩缁撶畻鍛ㄦ湡锛屽崟浣嶏細澶?/text>
           </view>
           <view class="rule-input-group">
             <input class="rule-input" type="number" value="{{distributeRules.autoSettlementPeriod}}" bindinput="onInputChange" data-field="autoSettlementPeriod" />

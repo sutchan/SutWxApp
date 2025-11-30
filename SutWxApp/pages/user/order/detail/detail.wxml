@@ -6,15 +6,15 @@
  */
 <view class="container">
   <block wx:if="{{orderDetail}}">
-    <!-- 璁㈠崟鐘舵€?-->
+    <!-- 订单鐘舵€?-->
     <view class="order-status-card">
       <view class="status-text">{{orderDetail.status}}</view>
-      <view class="status-tip" wx:if="{{orderDetail.status === '寰呬粯娆?}}">璇峰湪30鍒嗛挓鍐呭畬鎴愭敮浠橈紝閫炬湡璁㈠崟灏嗚嚜鍔ㄥ彇娑?/view>
+      <view class="status-tip" wx:if="{{orderDetail.status === '寰呬粯娆?}}">璇峰湪30鍒嗛挓鍐呭畬鎴愭敮浠橈紝閫炬湡订单灏嗚嚜鍔ㄥ彇娑?/view>
     </view>
 
-    <!-- 鏀惰揣鍦板潃 -->
+    <!-- 收货地址 -->
     <mp-cells ext-class="address-card">
-      <mp-cell value="鏀惰揣鍦板潃" footer="">
+      <mp-cell value="收货地址" footer="">
         <view slot="title">
           <view class="address-info">
             <text class="name">{{orderDetail.address.name}}</text>
@@ -32,37 +32,37 @@
         <image class="goods-image" src="{{goods.image}}" mode="aspectFill"></image>
         <view class="goods-info">
           <text class="goods-name">{{goods.name}}</text>
-          <text class="goods-price">楼{{goods.price}} x {{goods.quantity}}</text>
+          <text class="goods-price">¥{{goods.price}} x {{goods.quantity}}</text>
         </view>
       </view>
     </mp-cells>
 
-    <!-- 璁㈠崟淇℃伅 -->
+    <!-- 订单淇℃伅 -->
     <mp-cells ext-class="order-info-card">
-      <mp-cell value="璁㈠崟淇℃伅" footer=""></mp-cell>
-      <mp-cell value="璁㈠崟缂栧彿" footer="{{orderDetail.orderNo}}"></mp-cell>
+      <mp-cell value="订单淇℃伅" footer=""></mp-cell>
+      <mp-cell value="订单缂栧彿" footer="{{orderDetail.orderNo}}"></mp-cell>
       <mp-cell value="涓嬪崟鏃堕棿" footer="{{orderDetail.createTime}}"></mp-cell>
       <mp-cell value="鏀粯鏃堕棿" footer="{{orderDetail.payTime || '鏆傛棤'}}"></mp-cell>
       <mp-cell value="鍙戣揣鏃堕棿" footer="{{orderDetail.deliveryTime || '鏆傛棤'}}"></mp-cell>
       <mp-cell value="鏀惰揣鏃堕棿" footer="{{orderDetail.receiveTime || '鏆傛棤'}}"></mp-cell>
     </mp-cells>
 
-    <!-- 璐圭敤鏄庣粏 -->
+    <!-- 使用鏄庣粏 -->
     <mp-cells ext-class="price-detail-card">
-      <mp-cell value="鍟嗗搧鎬讳环" footer="楼{{orderDetail.totalPrice}}"></mp-cell>
-      <mp-cell value="杩愯垂" footer="楼{{orderDetail.freight}}"></mp-cell>
-      <mp-cell value="瀹炰粯娆? footer="楼{{orderDetail.actualPrice}}" ext-class="actual-price"></mp-cell>
+      <mp-cell value="鍟嗗搧鎬讳环" footer="¥{{orderDetail.totalPrice}}"></mp-cell>
+      <mp-cell value="杩愯垂" footer="¥{{orderDetail.freight}}"></mp-cell>
+      <mp-cell value="瀹炰粯娆? footer="¥{{orderDetail.actualPrice}}" ext-class="actual-price"></mp-cell>
     </mp-cells>
 
     <!-- 搴曢儴鎿嶄綔鎸夐挳 -->
     <view class="footer-buttons">
-      <button class="weui-btn weui-btn_plain-default" wx:if="{{orderDetail.status === '寰呬粯娆?}}" bindtap="cancelOrder">鍙栨秷璁㈠崟</button>
+      <button class="weui-btn weui-btn_plain-default" wx:if="{{orderDetail.status === '寰呬粯娆?}}" bindtap="cancelOrder">鍙栨秷订单</button>
       <button class="weui-btn weui-btn_primary" wx:if="{{orderDetail.status === '寰呬粯娆?}}" bindtap="payOrder">绔嬪嵆鏀粯</button>
       <button class="weui-btn weui-btn_primary" wx:if="{{orderDetail.status === '寰呮敹璐?}}" bindtap="confirmReceipt">纭鏀惰揣</button>
     </view>
   </block>
   <block wx:else>
-    <view class="loading-text" wx:if="{{loading}}">鍔犺浇涓?..</view>
-    <view class="empty-text" wx:else>璁㈠崟涓嶅瓨鍦?/view>
+    <view class="loading-text" wx:if="{{loading}}">加载中..</view>
+    <view class="empty-text" wx:else>订单涓嶅瓨鍦?/view>
   </block>
 </view>

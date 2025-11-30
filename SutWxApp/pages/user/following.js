@@ -14,7 +14,7 @@ Page({
     tabs: ['鎴戝叧娉ㄧ殑', '鍏虫敞鎴戠殑'],
     followingList: [], // 鎴戝叧娉ㄧ殑鍒楄〃
     followersList: [], // 鍏虫敞鎴戠殑鍒楄〃
-    loading: false, // 鍔犺浇鐘舵€?    noMoreData: false, // 鏄惁娌℃湁鏇村鏁版嵁
+    loading: false, // 加载状态    noMoreData: false, // 鏄惁娌℃湁鏇村鏁版嵁
     isEmpty: false, // 鏄惁涓虹┖
     page: 1, // 褰撳墠椤电爜
     pageSize: 20, // 姣忛〉鏁伴噺

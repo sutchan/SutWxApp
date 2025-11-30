@@ -4,7 +4,7 @@
   min-height: 100vh;
 }
 
-/* 鍔犺浇涓?*/
+/* 加载中*/
 .loading-container {
   display: flex;
   justify-content: center;

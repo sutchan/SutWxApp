@@ -34,7 +34,7 @@ Page({
       this.startCountdown();
     } else {
       wx.showToast({
-        title: '璁㈠崟淇℃伅閿欒',
+        title: '订单淇℃伅閿欒',
         icon: 'none'
       });
       setTimeout(() => {
@@ -53,7 +53,7 @@ Page({
   },
 
   /**
-   * 鍔犺浇璁㈠崟璇︽儏
+   * 鍔犺浇订单璇︽儏
    */
   async loadOrderDetail(orderId) {
     try {
@@ -97,17 +97,17 @@ Page({
       }, 800);
       
     } catch (error) {
-      console.error('鍔犺浇璁㈠崟璇︽儏澶辫触:', error);
+      console.error('鍔犺浇订单璇︽儏澶辫触:', error);
       this.setData({ loading: false });
       wx.showToast({
-        title: '鍔犺浇璁㈠崟淇℃伅澶辫触',
+        title: '鍔犺浇订单淇℃伅澶辫触',
         icon: 'none'
       });
     }
   },
 
   /**
-   * 鍔犺浇鏀粯鏂瑰紡
+   * 鍔犺浇支付方式
    */
   async loadPaymentMethods() {
     try {
@@ -151,9 +151,9 @@ Page({
       }, 500);
       
     } catch (error) {
-      console.error('鍔犺浇鏀粯鏂瑰紡澶辫触:', error);
+      console.error('鍔犺浇支付方式澶辫触:', error);
       wx.showToast({
-        title: '鍔犺浇鏀粯鏂瑰紡澶辫触',
+        title: '鍔犺浇支付方式澶辫触',
         icon: 'none'
       });
     }
@@ -162,7 +162,7 @@ Page({
   /**
    * 寮€濮嬪€掕鏃?   */
   startCountdown() {
-    // 璁剧疆璁㈠崟鏀粯鍊掕鏃朵负15鍒嗛挓
+    // 璁剧疆订单鏀粯鍊掕鏃朵负15鍒嗛挓
     let countdown = 15 * 60; // 15鍒嗛挓锛屽崟浣嶏細绉?    
     this.setData({ countdown });
     
@@ -178,7 +178,7 @@ Page({
         
         wx.showModal({
           title: '鏀粯瓒呮椂',
-          content: '璁㈠崟鏀粯宸茶秴鏃讹紝璁㈠崟宸茶嚜鍔ㄥ彇娑?,
+          content: '订单鏀粯宸茶秴鏃讹紝订单宸茶嚜鍔ㄥ彇娑?,
           showCancel: false,
           success: () => {
             wx.redirectTo({
@@ -204,7 +204,7 @@ Page({
   },
 
   /**
-   * 閫夋嫨鏀粯鏂瑰紡
+   * 閫夋嫨支付方式
    */
   selectPaymentMethod(e) {
     const { method } = e.currentTarget.dataset;
@@ -219,7 +219,7 @@ Page({
   async submitPayment() {
     if (!this.data.selectedPaymentMethod) {
       wx.showToast({
-        title: '璇烽€夋嫨鏀粯鏂瑰紡',
+        title: '璇烽€夋嫨支付方式',
         icon: 'none'
       });
       return;
@@ -228,7 +228,7 @@ Page({
     // 妫€鏌ヤ綑棰濇槸鍚﹁冻澶?    if (this.data.selectedPaymentMethod.id === 'balance' && 
         this.data.selectedPaymentMethod.balance < this.data.orderData.actualAmount) {
       wx.showToast({
-        title: '浣欓涓嶈冻锛岃閫夋嫨鍏朵粬鏀粯鏂瑰紡',
+        title: '浣欓涓嶈冻锛岃閫夋嫨鍏朵粬支付方式',
         icon: 'none'
       });
       return;
@@ -247,7 +247,7 @@ Page({
       setTimeout(() => {
         this.setData({ submitting: false });
         
-        // 鏍规嵁涓嶅悓鏀粯鏂瑰紡澶勭悊
+        // 鏍规嵁涓嶅悓支付方式澶勭悊
         if (this.data.selectedPaymentMethod.id === 'wechat') {
           this.processWechatPay();
         } else if (this.data.selectedPaymentMethod.id === 'alipay') {
@@ -358,7 +358,7 @@ Page({
   },
 
   /**
-   * 鏌ョ湅璁㈠崟璇︽儏
+   * 鏌ョ湅订单璇︽儏
    */
   viewOrderDetail() {
     wx.navigateTo({

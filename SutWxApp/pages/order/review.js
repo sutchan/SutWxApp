@@ -2,7 +2,7 @@
  * 文件名: review.js
  * 版本号: 1.0.0
  * 更新日期: 2025-11-23
- * 璁㈠崟璇勪环椤甸潰
+ * 订单璇勪环椤甸潰
  * @author Sut
  */
 const i18n = require('../../utils/i18n');
@@ -30,7 +30,7 @@ Page({
       title: i18n.translate('review.title')
     });
 
-    // 妯℃嫙鑾峰彇鍟嗗搧淇℃伅
+    // 妯℃嫙鑾峰彇产品信息
     this.setData({
       goodsName: i18n.translate('review.goodsName'),
       goodsPrice: '妤?99.00' // 绀轰緥浠锋牸

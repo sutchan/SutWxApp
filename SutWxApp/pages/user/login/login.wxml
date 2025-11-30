@@ -15,7 +15,7 @@
       </mp-cell>
     </mp-cells>
     <view class="weui-btn-area">
-      <button class="weui-btn" type="primary" bindtap="handleLogin" loading="{{loading}}" disabled="{{loading}}">鐧诲綍</button>
+      <button class="weui-btn" type="primary" bindtap="handleLogin" loading="{{loading}}" disabled="{{loading}}">登录</button>
     </view>
   </mp-form>
 </view>

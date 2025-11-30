@@ -5,7 +5,7 @@
  * 描述: edit JSON 配置文件
  */
 {
-  "navigationBarTitleText": "缂栬緫鏀惰揣鍦板潃",
+  "navigationBarTitleText": "缂栬緫收货地址",
   "usingComponents": {
     "mp-form": "weui-miniprogram/form/form",
     "mp-cells": "weui-miniprogram/cells/cells",

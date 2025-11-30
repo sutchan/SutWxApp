@@ -79,7 +79,7 @@ const { createPage } = require('../../utils/useStore.js');
    * @param {Function} done - 瀹屾垚鍥炶皟
    */
   loadData(done) {
-    // 浣跨敤store璁剧疆鍔犺浇鐘舵€?    this.setLoading(true);
+    // 浣跨敤store璁剧疆加载状态    this.setLoading(true);
     
     // 灏濊瘯浠庣紦瀛樿幏鍙栨暟鎹?    const cachedData = this.getCachedData();
     

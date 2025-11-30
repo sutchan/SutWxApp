@@ -137,10 +137,10 @@
       </view>
     </view>
 
-    <!-- 鍔犺浇鐘舵€?-->
+    <!-- 加载状态-->
     <view wx:if="{{loading}}" class="loading-state">
       <view class="loading-spinner"></view>
-      <text>鍔犺浇涓?..</text>
+      <text>加载中..</text>
     </view>
 
     <!-- 娌℃湁鏇村鏁版嵁 -->

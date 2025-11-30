@@ -4,7 +4,7 @@
  * 更新日期: 2025-11-23
  * 描述: methods 页面样式文件
  */
-/* 鏀粯鏂瑰紡閫夋嫨椤甸潰鏍峰紡 */
+/* 支付方式閫夋嫨椤甸潰鏍峰紡 */
 .payment-methods-container {
   min-height: 100vh;
   background-color: #f5f5f5;
@@ -12,7 +12,7 @@
   flex-direction: column;
 }
 
-/* 璁㈠崟閲戦淇℃伅 */
+/* 订单閲戦淇℃伅 */
 .order-amount {
   background-color: #fff;
   padding: 24px 20px;
@@ -33,7 +33,7 @@
   color: #f56c6c;
 }
 
-/* 鍔犺浇鐘舵€?*/
+/* 加载状态*/
 .loading-container {
   display: flex;
   flex-direction: column;
@@ -62,7 +62,7 @@
   100% { transform: rotate(360deg); }
 }
 
-/* 鏀粯鏂瑰紡鍒楄〃 */
+/* 支付方式鍒楄〃 */
 .payment-methods-list {
   flex: 1;
   background-color: #fff;
@@ -89,7 +89,7 @@
   background-color: rgba(7, 193, 96, 0.05);
 }
 
-/* 鏀粯鏂瑰紡鍥炬爣 */
+/* 支付方式鍥炬爣 */
 .method-icon {
   width: 40px;
   height: 40px;
@@ -101,7 +101,7 @@
   height: 100%;
 }
 
-/* 鏀粯鏂瑰紡淇℃伅 */
+/* 支付方式淇℃伅 */
 .method-info {
   flex: 1;
 }

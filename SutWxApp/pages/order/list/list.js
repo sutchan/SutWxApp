@@ -2,7 +2,7 @@
  * 文件名: list.js
  * 版本号: 1.0.0
  * 更新日期: 2025-11-23
- * 璁㈠崟鍒楄〃椤甸潰
+ * 订单鍒楄〃椤甸潰
  */
 const i18n = require('../../../utils/i18n');
 
@@ -25,7 +25,7 @@ Page({
   /**
    * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
    * @param {Object} options - 椤甸潰鍙傛暟
-   * @param {string} options.status - 璁㈠崟鐘舵€?   * @returns {void}
+   * @param {string} options.status - 订单鐘舵€?   * @returns {void}
    */
   onLoad(options) {
     if (options.status) {
@@ -52,7 +52,7 @@ Page({
    * 椤甸潰鏄剧ず鏃惰Е鍙?   * @returns {void}
    */
   onShow() {
-    // 浠庡叾浠栭〉闈㈣繑鍥炴椂鍒锋柊璁㈠崟鍒楄〃
+    // 浠庡叾浠栭〉闈㈣繑鍥炴椂鍒锋柊订单鍒楄〃
     this.loadOrders();
   },
 
@@ -81,7 +81,7 @@ Page({
   },
 
   /**
-   * 鍔犺浇璁㈠崟鍒楄〃
+   * 鍔犺浇订单鍒楄〃
    * @param {Function} done - 瀹屾垚鍥炶皟
    * @returns {void}
    */
@@ -164,7 +164,7 @@ Page({
   },
 
   /**
-   * 鍔犺浇鏇村璁㈠崟
+   * 鍔犺浇鏇村订单
    * @returns {void}
    */
   loadMoreOrders() {
@@ -234,21 +234,21 @@ Page({
   },
 
   /**
-   * 鍙栨秷璁㈠崟
+   * 鍙栨秷订单
    * @param {Object} e - 浜嬩欢瀵硅薄
    * @returns {void}
    */
   cancelOrder(e) {
     const { id } = e.currentTarget.dataset;
-    console.log('鍙栨秷璁㈠崟锛孖D:', id);
+    console.log('鍙栨秷订单锛孖D:', id);
     wx.showModal({
       title: i18n.translate('鎻愮ず'),
-      content: i18n.translate('纭畾瑕佸彇娑堣璁㈠崟鍚楋紵'),
+      content: i18n.translate('纭畾瑕佸彇娑堣订单鍚楋紵'),
       success: (res) => {
         if (res.confirm) {
-          // 瀹為檯椤圭洰涓簲璇ヨ皟鐢ˋPI鍙栨秷璁㈠崟
+          // 瀹為檯椤圭洰涓簲璇ヨ皟鐢ˋPI鍙栨秷订单
           wx.showToast({
-            title: i18n.translate('璁㈠崟宸插彇娑?),
+            title: i18n.translate('订单宸插彇娑?),
             icon: 'success'
           });
           this.loadOrders();

@@ -82,10 +82,10 @@
       <button class="empty-btn" bindtap="onGoToTasks">鍘昏禋绉垎</button>
     </view>
 
-    <!-- 鍔犺浇鐘舵€?-->
+    <!-- 加载状态-->
     <view class="loading-state" wx:if="{{isLoading && detailList.length === 0}}">
       <view class="loading-spinner"></view>
-      <text>鍔犺浇涓?..</text>
+      <text>加载中..</text>
     </view>
 
     <!-- 娌℃湁鏇村鏁版嵁 -->

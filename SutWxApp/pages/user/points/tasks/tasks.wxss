@@ -142,7 +142,7 @@
   padding: 10px 15px;
 }
 
-/* 鍔犺浇鐘舵€?*/
+/* 加载状态*/
 .loading-container {
   display: flex;
   flex-direction: column;

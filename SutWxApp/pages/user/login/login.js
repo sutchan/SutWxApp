@@ -9,7 +9,7 @@ const authService = require('../../../services/authService');
 
 /**
  * 文件名: login.js
- * 鐢ㄦ埛鐧诲綍椤甸潰
+ * 鐢ㄦ埛登录椤甸潰
  */
 Page({
   /**
@@ -40,7 +40,7 @@ Page({
   },
 
   /**
-   * 澶勭悊鐧诲綍閫昏緫
+   * 澶勭悊登录閫昏緫
    */
   async handleLogin() {
     const { username, password } = this.data;
@@ -58,13 +58,13 @@ Page({
     try {
       const user = await authService.login(username, password);
       wx.showToast({
-        title: `鐧诲綍鎴愬姛锛屾杩?${user.username}`,
+        title: `登录鎴愬姛锛屾杩?${user.username}`,
         icon: 'success'
       });
-      // 鐧诲綍鎴愬姛鍚庤烦杞埌棣栭〉鎴栧叾浠栭〉闈?      wx.navigateBack(); 
+      // 登录鎴愬姛鍚庤烦杞埌棣栭〉鎴栧叾浠栭〉闈?      wx.navigateBack(); 
     } catch (error) {
       wx.showToast({
-        title: error.message || '鐧诲綍澶辫触',
+        title: error.message || '登录澶辫触',
         icon: 'none'
       });
     } finally {

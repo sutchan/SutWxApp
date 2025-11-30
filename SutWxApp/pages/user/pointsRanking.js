@@ -31,7 +31,7 @@ Page({
     pageSize: 20,
     hasMore: true,
     
-    // 鍔犺浇鐘舵€?    isLoading: false,
+    // 加载状态    isLoading: false,
     isEmpty: false,
     
     // 鍒锋柊鐘舵€?    isRefreshing: false

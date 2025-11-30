@@ -6,7 +6,7 @@
  */
 <!-- 鏀粯缁撴灉椤甸潰 -->
 <view class="payment-result-container">
-  <!-- 鍔犺浇鐘舵€?-->
+  <!-- 加载状态-->
   <view wx:if="{{loading}}" class="loading-container">
     <view class="loading-spinner"></view>
     <text class="loading-text">姝ｅ湪鑾峰彇鏀粯缁撴灉...</text>
@@ -20,17 +20,17 @@
         <text class="iconfont icon-success"></text>
       </view>
       <view class="result-title">鏀粯鎴愬姛</view>
-      <view class="result-desc">鎮ㄧ殑璁㈠崟宸叉垚鍔熸敮浠?/view>
+      <view class="result-desc">鎮ㄧ殑订单宸叉垚鍔熸敮浠?/view>
       
-      <!-- 璁㈠崟淇℃伅 -->
+      <!-- 订单淇℃伅 -->
       <view class="order-info">
         <view class="order-item">
-          <text class="order-label">璁㈠崟缂栧彿锛?/text>
+          <text class="order-label">订单缂栧彿锛?/text>
           <text class="order-value">{{orderData.orderNo}}</text>
         </view>
         <view class="order-item">
           <text class="order-label">鏀粯閲戦锛?/text>
-          <text class="order-value price">楼{{orderData.actualAmount}}</text>
+          <text class="order-value price">¥{{orderData.actualAmount}}</text>
         </view>
         <view class="order-item">
           <text class="order-label">鏀粯鏃堕棿锛?/text>
@@ -40,7 +40,7 @@
       
       <!-- 鎿嶄綔鎸夐挳 -->
       <view class="action-buttons">
-        <button class="btn primary" bindtap="goToOrderDetail">鏌ョ湅璁㈠崟璇︽儏</button>
+        <button class="btn primary" bindtap="goToOrderDetail">鏌ョ湅订单璇︽儏</button>
         <button class="btn secondary" bindtap="continueShopping">缁х画璐墿</button>
       </view>
       
@@ -61,7 +61,7 @@
       <!-- 閿欒淇℃伅 -->
       <view class="error-info">
         <text class="error-code">閿欒浠ｇ爜锛歅AY_FAILED</text>
-        <text class="error-desc">鏀粯璇锋眰琚嫆缁濓紝璇锋鏌ユ偍鐨勮处鎴蜂綑棰濇垨鏇存崲鏀粯鏂瑰紡</text>
+        <text class="error-desc">鏀粯璇锋眰琚嫆缁濓紝璇锋鏌ユ偍鐨勮处鎴蜂綑棰濇垨鏇存崲支付方式</text>
       </view>
       
       <!-- 鎿嶄綔鎸夐挳 -->
@@ -84,22 +84,22 @@
       <view class="result-title">鏀粯宸插彇娑?/view>
       <view class="result-desc">鎮ㄥ凡鍙栨秷鏈鏀粯</view>
       
-      <!-- 璁㈠崟淇℃伅 -->
+      <!-- 订单淇℃伅 -->
       <view class="order-info">
         <view class="order-item">
-          <text class="order-label">璁㈠崟缂栧彿锛?/text>
+          <text class="order-label">订单缂栧彿锛?/text>
           <text class="order-value">{{orderData.orderNo}}</text>
         </view>
         <view class="order-item">
-          <text class="order-label">璁㈠崟閲戦锛?/text>
-          <text class="order-value price">楼{{orderData.actualAmount}}</text>
+          <text class="order-label">订单閲戦锛?/text>
+          <text class="order-value price">¥{{orderData.actualAmount}}</text>
         </view>
       </view>
       
       <!-- 鎿嶄綔鎸夐挳 -->
       <view class="action-buttons">
         <button class="btn primary" bindtap="retryPayment">閲嶆柊鏀粯</button>
-        <button class="btn secondary" bindtap="goToOrderList">鏌ョ湅璁㈠崟</button>
+        <button class="btn secondary" bindtap="goToOrderList">鏌ョ湅订单</button>
       </view>
       
       <!-- 鍊掕鏃舵彁绀?-->

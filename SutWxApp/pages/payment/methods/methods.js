@@ -2,7 +2,7 @@
  * 文件名: methods.js
  * 版本号: 1.0.0
  * 更新日期: 2025-11-23
- * 描述: 鏀粯鏂瑰紡閫夋嫨椤甸潰
+ * 描述: 支付方式閫夋嫨椤甸潰
  */
 
 const paymentService = require('../../../services/paymentService');
@@ -51,7 +51,7 @@ Page({
   },
 
   /**
-   * 鍔犺浇鏀粯鏂瑰紡鍒楄〃
+   * 鍔犺浇支付方式鍒楄〃
    */
   async loadPaymentMethods() {
     try {
@@ -91,7 +91,7 @@ Page({
             id: 'points',
             name: '绉垎鎶垫墸',
             icon: '/images/payment/points.png',
-            desc: `鍙敤绉垎锛?250锛屽彲鎶垫墸楼12.50`,
+            desc: `鍙敤绉垎锛?250锛屽彲鎶垫墸¥12.50`,
             enabled: true,
             recommended: false
           }
@@ -108,17 +108,17 @@ Page({
       }, 800);
       
     } catch (error) {
-      console.error('鍔犺浇鏀粯鏂瑰紡澶辫触:', error);
+      console.error('鍔犺浇支付方式澶辫触:', error);
       this.setData({ loading: false });
       wx.showToast({
-        title: '鍔犺浇鏀粯鏂瑰紡澶辫触',
+        title: '鍔犺浇支付方式澶辫触',
         icon: 'none'
       });
     }
   },
 
   /**
-   * 閫夋嫨鏀粯鏂瑰紡
+   * 閫夋嫨支付方式
    */
   selectPaymentMethod(e) {
     const { method } = e.currentTarget.dataset;
@@ -134,7 +134,7 @@ Page({
   async confirmPayment() {
     if (!this.data.selectedMethod) {
       wx.showToast({
-        title: '璇烽€夋嫨鏀粯鏂瑰紡',
+        title: '璇烽€夋嫨支付方式',
         icon: 'none'
       });
       return;
@@ -160,7 +160,7 @@ Page({
       
       // 妯℃嫙鏀粯杩囩▼
       setTimeout(() => {
-        // 鏍规嵁鏀粯鏂瑰紡璋冪敤涓嶅悓鐨勬敮浠楢PI
+        // 鏍规嵁支付方式璋冪敤涓嶅悓鐨勬敮浠楢PI
         if (this.data.selectedMethod === 'wechat') {
           // 寰俊鏀粯
           this.processWechatPayment();

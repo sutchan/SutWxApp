@@ -90,6 +90,6 @@
 
   <!-- 鍔犺浇鏇村 -->
   <view class="loading-more" wx:if="{{loading}}">
-    <text>鍔犺浇涓?..</text>
+    <text>加载中..</text>
   </view>
 </view>

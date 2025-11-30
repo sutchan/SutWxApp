@@ -5,7 +5,7 @@
  * 描述: detail JSON 配置文件
  */
 {
-  "navigationBarTitleText": "璁㈠崟璇︽儏",
+  "navigationBarTitleText": "订单璇︽儏",
   "usingComponents": {
     "mp-cells": "/weui/cells/cells",
     "mp-cell": "/weui/cell/cell"

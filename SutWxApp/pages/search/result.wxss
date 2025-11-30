@@ -174,7 +174,7 @@
   border-radius: 4rpx;
 }
 
-/* 鍔犺浇鐘舵€?*/
+/* 加载状态*/
 .loading {
   text-align: center;
   padding: 40rpx 0;

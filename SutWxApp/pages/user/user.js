@@ -19,11 +19,11 @@ createPage({
   data: {
     i18n: i18n,
     menuItems: [
-      { id: 'orders', name: i18n.translate('鎴戠殑璁㈠崟'), icon: '/assets/images/icon_orders.png' },
+      { id: 'orders', name: i18n.translate('鎴戠殑订单'), icon: '/assets/images/icon_orders.png' },
       { id: 'favorites', name: i18n.translate('鎴戠殑鏀惰棌'), icon: '/assets/images/icon_favorites.png' },
       { id: 'points', name: i18n.translate('绉垎涓績'), icon: '/assets/images/icon_points.png' },
       { id: 'coupon', name: i18n.translate('浼樻儬鍒?), icon: '/assets/images/icon_coupon.png' },
-      { id: 'address', name: i18n.translate('鏀惰揣鍦板潃'), icon: '/assets/images/icon_address.png' },
+      { id: 'address', name: i18n.translate('收货地址'), icon: '/assets/images/icon_address.png' },
       { id: 'settings', name: i18n.translate('璁剧疆'), icon: '/assets/images/icon_settings.png' }
     ]
   },
@@ -60,7 +60,7 @@ createPage({
   checkLoginStatus(done) {
     this.setLoading(true);
     
-    // 妫€鏌ユ湰鍦板瓨鍌ㄧ殑鐧诲綍鐘舵€?    const token = wx.getStorageSync('token');
+    // 妫€鏌ユ湰鍦板瓨鍌ㄧ殑登录鐘舵€?    const token = wx.getStorageSync('token');
     const userInfo = wx.getStorageSync('userInfo');
     
     if (token && userInfo) {

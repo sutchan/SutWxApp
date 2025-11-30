@@ -67,7 +67,7 @@
       <text class="section-more" bindtap="goToPointsExchangeRecords">鏌ョ湅鍏ㄩ儴</text>
     </view>
     
-    <!-- 鍔犺浇鐘舵€?-->
+    <!-- 加载状态-->
     <view wx:if="{{loading && pointsRecords.length === 0}}" class="loading-container">
       <view class="loading-spinner"></view>
       <text class="loading-text">姝ｅ湪鍔犺浇绉垎璁板綍...</text>
@@ -84,7 +84,7 @@
         <view class="record-info">
           <view class="record-title">{{item.reason}}</view>
           <view class="record-time">{{formatTime(item.createTime)}}</view>
-          <view wx:if="{{item.orderNo}}" class="record-order">璁㈠崟鍙凤細{{item.orderNo}}</view>
+          <view wx:if="{{item.orderNo}}" class="record-order">订单鍙凤細{{item.orderNo}}</view>
         </view>
         
         <view class="record-amount {{item.type}}">

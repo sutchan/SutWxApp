@@ -18,7 +18,7 @@ Page({
       { key: 'user', value: '鐢ㄦ埛' }
     ],
     searchResults: [], // 鎼滅储缁撴灉
-    loading: false, // 鍔犺浇鐘舵€?    page: 1, // 褰撳墠椤电爜
+    loading: false, // 加载状态    page: 1, // 褰撳墠椤电爜
     pageSize: 20, // 姣忛〉鏁伴噺
     hasMore: true, // 鏄惁杩樻湁鏇村鏁版嵁
     showResult: false // 鏄惁鏄剧ず鎼滅储缁撴灉

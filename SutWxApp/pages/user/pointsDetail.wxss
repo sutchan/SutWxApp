@@ -258,7 +258,7 @@
   border: none;
 }
 
-/* 鍔犺浇鐘舵€?*/
+/* 加载状态*/
 .loading-state {
   display: flex;
   flex-direction: column;

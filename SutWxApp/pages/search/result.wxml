@@ -54,7 +54,7 @@
           <view class="result-desc">{{item.desc}}</view>
           <view class="result-meta">
             <block wx:if="{{item.type === 'product'}}">
-              <text class="result-price">楼{{item.price}}</text>
+              <text class="result-price">¥{{item.price}}</text>
             </block>
             <block wx:elif="{{item.type === 'article'}}">
               <text class="result-time">{{item.publishTime}}</text>
@@ -71,9 +71,9 @@
         </view>
       </view>
       
-      <!-- 鍔犺浇鐘舵€?-->
+      <!-- 加载状态-->
       <view wx:if="{{loading}}" class="loading">
-        <text>鍔犺浇涓?..</text>
+        <text>加载中..</text>
       </view>
       
       <!-- 鏃犳洿澶氭暟鎹?-->

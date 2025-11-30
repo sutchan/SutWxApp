@@ -284,11 +284,11 @@ Page({
   },
 
   /**
-   * 绔嬪嵆璐拱
+   * 绔嬪嵆购买
    * @returns {void}
    */
   buyNow() {
-    // 瀹為檯椤圭洰涓簲璇ヨ烦杞埌璁㈠崟纭椤甸潰
+    // 瀹為檯椤圭洰涓簲璇ヨ烦杞埌订单纭椤甸潰
     this.hideSpecModal();
     wx.navigateTo({
       url: `/pages/order/confirm?productId=${this.data.productId}&quantity=${this.data.quantity}`

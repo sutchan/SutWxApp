@@ -15,7 +15,7 @@ Page({
       { key: 'use', value: '浣跨敤' }
     ],
     pointsRecords: [], // 绉垎璁板綍鍒楄〃
-    loading: false, // 鍔犺浇鐘舵€?    page: 1, // 褰撳墠椤电爜
+    loading: false, // 加载状态    page: 1, // 褰撳墠椤电爜
     pageSize: 20, // 姣忛〉鏁伴噺
     hasMore: true, // 鏄惁杩樻湁鏇村鏁版嵁
     totalPoints: 0 // 鐢ㄦ埛鎬荤Н鍒?  },
@@ -149,7 +149,7 @@ Page({
       { id: 4, type: 'earn', amount: 20, title: '璇勪环鍟嗗搧', desc: '璇勪环宸茶喘涔板晢鍝?, time: '2023-06-12 14:45:00' },
       { id: 5, type: 'use', amount: -200, title: '绉垎鍏戞崲', desc: '鍏戞崲20鍏冧紭鎯犲埜', time: '2023-06-10 09:30:00' },
       { id: 6, type: 'earn', amount: 30, title: '鍒嗕韩鍟嗗搧', desc: '鍒嗕韩鍟嗗搧缁欏ソ鍙?, time: '2023-06-08 16:20:00' },
-      { id: 7, type: 'earn', amount: 100, title: '鏂扮敤鎴峰鍔?, desc: '娉ㄥ唽閫佺Н鍒?, time: '2023-06-01 12:00:00' },
+      { id: 7, type: 'earn', amount: 100, title: '鏂扮敤鎴峰鍔?, desc: '注册閫佺Н鍒?, time: '2023-06-01 12:00:00' },
       { id: 8, type: 'use', amount: -50, title: '绉垎鍏戞崲', desc: '鍏戞崲5鍏冧紭鎯犲埜', time: '2023-05-28 11:10:00' }
     ];
     

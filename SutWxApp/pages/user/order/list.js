@@ -2,7 +2,7 @@
  * 文件名: list.js
  * 版本号: 1.0.0
  * 更新日期: 2025-11-23
- * 璁㈠崟鍒楄〃椤甸潰
+ * 订单鍒楄〃椤甸潰
  */
 Page({
   /**
@@ -58,7 +58,7 @@ Page({
   },
 
   /**
-   * 鍔犺浇璁㈠崟鍒楄〃
+   * 鍔犺浇订单鍒楄〃
    */
   loadOrderList() {
     if (this.data.loading || !this.data.hasMore) {

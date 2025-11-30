@@ -8,12 +8,12 @@
 <view class="container">
   <mp-tabs activeTab="{{activeTab}}" tabs="{{tabs}}" bindtabclick="onTabChange"></mp-tabs>
 
-  <view wx:if="{{loading}}" class="loading-tip">鍔犺浇涓?..</view>
+  <view wx:if="{{loading}}" class="loading-tip">加载中..</view>
   <block wx:else>
     <view wx:if="{{couponList.length === 0}}" class="empty-tip">鏆傛棤浼樻儬鍒?/view>
     <view wx:else class="coupon-list">
       <view wx:for="{{couponList}}" wx:key="id" class="coupon-item">
-        <view class="coupon-value">楼{{item.value}}</view>
+        <view class="coupon-value">¥{{item.value}}</view>
         <view class="coupon-info">
           <view class="coupon-name">{{item.name}}</view>
           <view class="coupon-condition">{{item.condition}}</view>

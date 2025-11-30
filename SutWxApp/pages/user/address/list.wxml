@@ -6,9 +6,9 @@
  */
 <!--pages/user/address/list.wxml-->
 <view class="container">
-  <view wx:if="{{loading}}" class="loading-tip">鍔犺浇涓?..</view>
+  <view wx:if="{{loading}}" class="loading-tip">加载中..</view>
   <block wx:else>
-    <view wx:if="{{addressList.length === 0}}" class="empty-tip">鏆傛棤鏀惰揣鍦板潃</view>
+    <view wx:if="{{addressList.length === 0}}" class="empty-tip">鏆傛棤收货地址</view>
     <view wx:else class="address-list">
       <view wx:for="{{addressList}}" wx:key="id" class="address-item" data-id="{{item.id}}" bindtap="editAddress">
         <view class="address-info">
@@ -21,6 +21,6 @@
     </view>
   </block>
   <view class="add-address-btn-area">
-    <button class="weui-btn" type="primary" bindtap="addAddress">鏂板鏀惰揣鍦板潃</button>
+    <button class="weui-btn" type="primary" bindtap="addAddress">鏂板收货地址</button>
   </view>
 </view>

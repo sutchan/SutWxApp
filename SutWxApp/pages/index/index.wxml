@@ -1,6 +1,6 @@
 <!-- pages/index/index.wxml -->
 <view class="container">
-  <view wx:if="{{loading}}" class="loading-tip">{{i18n.translate('loading') || '鍔犺浇涓?..'}}</view>
+  <view wx:if="{{loading}}" class="loading-tip">{{i18n.translate('loading') || '加载中..'}}</view>
   <block wx:else>
     <!-- 杞挱鍥?-->
     <swiper class="swiper-container" indicator-dots="true" autoplay="true" interval="3000" duration="500" circular="true" display-multiple-items="1">
@@ -25,7 +25,7 @@
           <image src="{{item.image}}" class="product-image" mode="aspectFill" lazy-load="true"></image>
           <view class="product-info">
             <text class="product-name">{{item.name}}</text>
-            <text class="product-price">楼{{item.price}}</text>
+            <text class="product-price">¥{{item.price}}</text>
           </view>
         </view>
       </view>

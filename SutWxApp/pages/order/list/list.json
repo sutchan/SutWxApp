@@ -5,7 +5,7 @@
  * 描述: list JSON 配置文件
  */
 {
-  "navigationBarTitleText": "璁㈠崟鍒楄〃",
+  "navigationBarTitleText": "订单鍒楄〃",
   "enablePullDownRefresh": true,
   "backgroundTextStyle": "dark"
 }

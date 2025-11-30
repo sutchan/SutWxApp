@@ -5,7 +5,7 @@
  * 描述: review 椤甸潰缁撴瀯鏂囦欢
  */
 <!--
-  璁㈠崟璇勪环椤甸潰
+  订单璇勪环椤甸潰
   浣滆€? Sut
   鏃ユ湡: 2025-11-15
 -->
@@ -15,7 +15,7 @@
     <text class="title">{{i18n.reviewTitle}}</text>
   </view>
 
-  <!-- 鍟嗗搧淇℃伅鍖哄煙 -->
+  <!-- 产品信息鍖哄煙 -->
   <view class="goods-info">
     <image class="goods-image" src="/assets/images/default-goods.png" mode="aspectFill"></image>
     <view class="goods-detail">

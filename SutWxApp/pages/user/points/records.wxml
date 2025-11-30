@@ -46,9 +46,9 @@
       </view>
     </view>
     
-    <!-- 鍔犺浇鐘舵€?-->
+    <!-- 加载状态-->
     <view wx:if="{{loading}}" class="loading">
-      <text>鍔犺浇涓?..</text>
+      <text>加载中..</text>
     </view>
     
     <!-- 鏃犳洿澶氭暟鎹?-->

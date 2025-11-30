@@ -2,7 +2,7 @@
  * 文件名: detail.js
  * 版本号: 1.0.0
  * 更新日期: 2025-11-23
- * 璁㈠崟璇︽儏椤甸潰
+ * 订单璇︽儏椤甸潰
  */
 Page({
   /**
@@ -23,8 +23,8 @@ Page({
   },
 
   /**
-   * 鍔犺浇璁㈠崟璇︽儏
-   * @param {string} orderId - 璁㈠崟ID
+   * 鍔犺浇订单璇︽儏
+   * @param {string} orderId - 订单ID
    */
   loadOrderDetail(orderId) {
     this.setData({ loading: true });
@@ -71,7 +71,7 @@ Page({
   },
 
   /**
-   * 鏀粯璁㈠崟
+   * 鏀粯订单
    */
   payOrder() {
     wx.showToast({
@@ -82,16 +82,16 @@ Page({
   },
 
   /**
-   * 鍙栨秷璁㈠崟
+   * 鍙栨秷订单
    */
   cancelOrder() {
     wx.showModal({
-      title: '鍙栨秷璁㈠崟',
-      content: '纭畾瑕佸彇娑堣璁㈠崟鍚楋紵',
+      title: '鍙栨秷订单',
+      content: '纭畾瑕佸彇娑堣订单鍚楋紵',
       success: (res) => {
         if (res.confirm) {
           wx.showToast({
-            title: '璁㈠崟宸插彇娑?,
+            title: '订单宸插彇娑?,
             icon: 'success'
           });
           // 瀹為檯鍙栨秷閫昏緫

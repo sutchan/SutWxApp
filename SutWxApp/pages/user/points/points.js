@@ -144,7 +144,7 @@ Page({
             id: '2',
             type: 'earn',
             amount: 50,
-            reason: '瀹屾垚璁㈠崟璇勪环',
+            reason: '瀹屾垚订单璇勪环',
             createTime: '2023-12-19 14:30:00',
             orderNo: 'ORD20231219001'
           },

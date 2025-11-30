@@ -150,7 +150,7 @@ Page({
   },
 
   /**
-   * 鏌ョ湅璁㈠崟璇︽儏
+   * 鏌ョ湅订单璇︽儏
    */
   goToOrderDetail() {
     if (this.data.countdownTimer) {
@@ -164,7 +164,7 @@ Page({
   },
 
   /**
-   * 杩斿洖璁㈠崟鍒楄〃
+   * 杩斿洖订单鍒楄〃
    */
   goToOrderList() {
     if (this.data.countdownTimer) {

@@ -22,7 +22,7 @@ Page({
     // 浠诲姟鍒楄〃
     taskList: [],
     
-    // 鍔犺浇鐘舵€?    loading: true,
+    // 加载状态    loading: true,
     refreshing: false,
     loadingMore: false,
     hasMore: true,
@@ -132,7 +132,7 @@ Page({
   loadTaskList: function(refresh = false) {
     const self = this;
     
-    // 璁剧疆鍔犺浇鐘舵€?    if (refresh) {
+    // 璁剧疆加载状态    if (refresh) {
       this.setData({
         loading: true,
         page: 1,

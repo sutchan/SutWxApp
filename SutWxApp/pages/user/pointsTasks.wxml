@@ -40,7 +40,7 @@
   <view class="content">
     <view wx:if="{{loading && taskList.length === 0}}" class="loading-state">
       <view class="loading-spinner"></view>
-      <text>鍔犺浇涓?..</text>
+      <text>加载中..</text>
     </view>
     
     <view wx:elif="{{taskList.length === 0 && !loading}}" class="empty-state">

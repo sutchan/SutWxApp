@@ -7,7 +7,7 @@
 -->
 <!--pages/article/detail/detail.wxml-->
 <view class="container">
-  <view wx:if="{{loading}}" class="loading-tip">鍔犺浇涓?..</view>
+  <view wx:if="{{loading}}" class="loading-tip">加载中..</view>
   
   <view wx:elif="{{error}}" class="error-container">
     <view class="error-icon">鈿狅笍</view>
