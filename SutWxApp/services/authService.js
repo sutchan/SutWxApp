@@ -1,9 +1,9 @@
-﻿﻿/**
- * 文件名 authService.js
- * 版本号 1.0.2
+﻿﻿﻿﻿/**
+ * 文件名: authService.js
+ * 版本号: 1.0.2
  * 更新日期: 2025-11-29
- * 作者 Sut
- * 描述: 璁よ瘉鏈嶅姟锛屽鐞嗙敤鎴风櫥褰曘€佹敞鍐屻€佺櫥鍑恒€佷細璇濈鐞嗙瓑
+ * 作者: Sut
+ * 描述: 认证服务，处理用户登录、登出、会话管理等
  */
 
 const request = require('../utils/request');
@@ -12,9 +12,10 @@ const TOKEN_KEY = 'authToken';
 
 const authService = {
   /**
-   * 鐢ㄦ埛鐧诲綍
-   * @param {string} username - 鐢ㄦ埛鍚?   * @param {string} password - 瀵嗙爜
-   * @returns {Promise<Object>} 鍖呭惈鐢ㄦ埛淇℃伅鐨凱romise
+   * 用户登录
+   * @param {string} username - 用户名
+   * @param {string} password - 密码
+   * @returns {Promise<Object>} 包含用户信息的Promise
    */
   async login(username, password) {
     try {
@@ -23,39 +24,43 @@ const authService = {
       });
       
       if (response && response.token) {
-        // 娣囨繂鐡╰oken閸掔増婀伴崷鏉跨摠閸?        wx.setStorageSync(TOKEN_KEY, response.token);
-        // 閺囧瓨鏌妔tore娑擃厾娈戦悽銊﹀煕娣団剝浼?        store.commit('SET_TOKEN', response.token);
+        // 保存token到本地存储
+        wx.setStorageSync(TOKEN_KEY, response.token);
+        // 保存到store中
+        store.commit('SET_TOKEN', response.token);
         store.commit('SET_USER_INFO', response.user);
       }
       
       return response;
     } catch (error) {
-      console.error('鐧诲綍澶辫触:', error);
+      console.error('登录失败:', error);
       throw error;
     }
   },
 
   /**
-   * 鐢ㄦ埛鐧诲嚭
+   * 用户登出
    * @returns {Promise<void>} Promise
    */
   async logout() {
     try {
       await request.post('/auth/logout');
       
-      // 濞撳懘娅庨張顒€婀寸€涙ê鍋嶉崪瀹籺ore娑擃厾娈戦悽銊﹀煕娣団剝浼?      wx.removeStorageSync(TOKEN_KEY);
+      // 清除本地token和store中的用户信息
+      wx.removeStorageSync(TOKEN_KEY);
       store.commit('SET_TOKEN', null);
       store.commit('SET_USER_INFO', null);
     } catch (error) {
-      console.error('鐧诲嚭澶辫触:', error);
-      // 閸楀厖濞嘇PI鐠嬪啰鏁ゆ径杈Е閿涘奔绡冪憰浣圭闂勩倖婀伴崷鎵Ц閹?      wx.removeStorageSync(TOKEN_KEY);
+      console.error('登出失败:', error);
+      // 即使API调用失败，也要清除本地token
+      wx.removeStorageSync(TOKEN_KEY);
       store.commit('SET_TOKEN', null);
       store.commit('SET_USER_INFO', null);
     }
   },
 
   /**
-   * 鑾峰彇褰撳墠璁よ瘉token
+   * 获取当前认证token
    * @returns {string | null} token
    */
   getToken() {
@@ -63,7 +68,7 @@ const authService = {
   },
 
   /**
-   * 妫€鏌ョ敤鎴锋槸鍚﹀凡鐧诲綍
+   * 检查用户是否已登录
    * @returns {boolean}
    */
   isLoggedIn() {
@@ -71,7 +76,8 @@ const authService = {
   },
 
   /**
-   * 妫€鏌ヤ細璇濈姸鎬?   * @returns {Promise<boolean>} 浼氳瘽鏄惁鏈夋晥
+   * 检查会话状态
+   * @returns {Promise<boolean>} 会话是否有效
    */
   async checkSession() {
     const token = this.getToken();
@@ -83,110 +89,110 @@ const authService = {
       await request.get('/auth/check-session');
       return true;
     } catch (error) {
-      // 娴兼俺鐦介弮鐘虫櫏閿涘本绔婚梽顦歰ken
+      // 会话无效，清除token
       this.logout();
       return false;
     }
   },
 
   /**
-   * 鑾峰彇鐢ㄦ埛鏀惰棌鍒楄〃
-   * @returns {Promise<Array>} 鐢ㄦ埛鏀惰棌鍒楄〃
+   * 获取用户收藏列表
+   * @returns {Promise<Array>} 用户收藏列表
    */
   async getUserFavorites() {
     try {
       return await request.get('/user/favorites');
     } catch (error) {
-      console.error('鑾峰彇鐢ㄦ埛鏀惰棌鍒楄〃澶辫触:', error);
+      console.error('获取用户收藏列表失败:', error);
       throw error;
     }
   },
 
   /**
-   * 鑾峰彇鐢ㄦ埛鍦板潃鍒楄〃
-   * @returns {Promise<Array>} 鐢ㄦ埛鍦板潃鍒楄〃
+   * 获取用户地址列表
+   * @returns {Promise<Array>} 用户地址列表
    */
   async getUserAddresses() {
     try {
       return await request.get('/user/addresses');
     } catch (error) {
-      console.error('鑾峰彇鐢ㄦ埛鍦板潃鍒楄〃澶辫触:', error);
+      console.error('获取用户地址列表失败:', error);
       throw error;
     }
   },
 
   /**
-   * 娣诲姞鐢ㄦ埛鍦板潃
-   * @param {Object} address - 鍦板潃淇℃伅
-   * @returns {Promise<Object>} 娣诲姞缁撴灉
+   * 添加用户地址
+   * @param {Object} address - 地址信息
+   * @returns {Promise<Object>} 添加结果
    */
   async addUserAddress(address) {
     try {
       const response = await request.post('/user/addresses', address);
       
       wx.showToast({
-        title: '娣诲姞鎴愬姛',
+        title: '添加成功',
         icon: 'success'
       });
       
       return response;
     } catch (error) {
       wx.showToast({
-        title: '娣诲姞澶辫触',
+        title: '添加失败',
         icon: 'none'
       });
-      console.error('娣诲姞鐢ㄦ埛鍦板潃澶辫触:', error);
+      console.error('添加用户地址失败:', error);
       throw error;
     }
   },
 
   /**
-   * 鏇存柊鐢ㄦ埛鍦板潃
-   * @param {number} addressId - 鍦板潃ID
-   * @param {Object} address - 鍦板潃淇℃伅
-   * @returns {Promise<Object>} 鏇存柊缁撴灉
+   * 更新用户地址
+   * @param {number} addressId - 地址ID
+   * @param {Object} address - 地址信息
+   * @returns {Promise<Object>} 更新结果
    */
   async updateUserAddress(addressId, address) {
     try {
       const response = await request.put(`/user/addresses/${addressId}`, address);
       
       wx.showToast({
-        title: '鏇存柊鎴愬姛',
+        title: '更新成功',
         icon: 'success'
       });
       
       return response;
     } catch (error) {
       wx.showToast({
-        title: '鏇存柊澶辫触',
+        title: '更新失败',
         icon: 'none'
       });
-      console.error('鏇存柊鐢ㄦ埛鍦板潃澶辫触:', error);
+      console.error('更新用户地址失败:', error);
       throw error;
     }
   },
 
   /**
-   * 鍒犻櫎鐢ㄦ埛鍦板潃
-   * @param {number} addressId - 鍦板潃ID
-   * @returns {Promise<Object>} 鍒犻櫎缁撴灉
+   * 删除用户地址
+   * @param {number} addressId - 地址ID
+   * @returns {Promise<Object>} 删除结果
    */
   async deleteUserAddress(addressId) {
     try {
       const response = await request.delete(`/user/addresses/${addressId}`);
       
       wx.showToast({
-        title: '鍒犻櫎鎴愬姛',
+        title: '删除成功',
         icon: 'success'
       });
       
       return response;
     } catch (error) {
       wx.showToast({
-        title: '鍒犻櫎澶辫触',
+        title: '删除失败',
         icon: 'none'
       });
-      console.error('鍒犻櫎鐢ㄦ埛鍦板潃澶辫触:', error);
+      console.error('删除用户地址失败:', error);
       throw error;
     }
   }

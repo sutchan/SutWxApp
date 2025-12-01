@@ -1,18 +1,18 @@
-﻿﻿/**
- * 文件名 app.wxss
- * 版本号 1.0.2
+﻿/**
+ * 文件名: app.wxss
+ * 版本号: 1.0.2
  * 更新日期: 2025-11-29
- * 娴ｆ粏鈧? Sut
- * 鐏忓繒鈻兼惔蹇撳弿鐏炩偓閺嶅嘲绱￠弬鍥︽閿涘苯鐣炬稊澶婄安閻劎娈戦崺铏诡攨閺嶅嘲绱? */
+ * 作者: Sut
+ * 描述: 小程序全局样式文件，定义全局样式变量、基础样式和通用类 */
 
-/* 閸╄櫣顢呴柌宥囩枂閺嶅嘲绱?*/
+/* 重置样式 */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* 閸忋劌鐪€涙ぞ缍嬬拋鍓х枂 */
+/* 页面基础样式 */
 page {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   font-size: 14px;
@@ -21,7 +21,7 @@ page {
   background-color: #f7f7f7;
 }
 
-/* 鐢摜鏁ゆ０婊嗗閸欐﹢鍣?*/
+/* 颜色变量定义 */
 :root {
   --primary-color: #07c160;
   --secondary-color: #1989fa;
@@ -36,19 +36,19 @@ page {
   --white: #ffffff;
 }
 
-/* 濞撳懘娅庡ù顔煎З */
+/* 清除浮动 */
 .clearfix::after {
   content: '';
   display: block;
   clear: both;
 }
 
-/* 闂呮劘妫岄崗鍐 */
+/* 隐藏元素 */
 .hidden {
   display: none !important;
 }
 
-/* 閺傚洦婀板┃銏犲毉婢跺嫮鎮?*/
+/* 文本溢出处理 */
 .text-ellipsis {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -63,7 +63,7 @@ page {
   -webkit-box-orient: vertical;
 }
 
-/* 鐢摜鏁ら梻纾嬬獩缁?*/
+/* 外边距工具类 */
 .mt-10 { margin-top: 10rpx; }
 .mt-20 { margin-top: 20rpx; }
 .mt-30 { margin-top: 30rpx; }
@@ -77,7 +77,7 @@ page {
 .mr-20 { margin-right: 20rpx; }
 .mr-30 { margin-right: 30rpx; }
 
-/* 鐢摜鏁ら崘鍛扮珶鐠烘繄琚?*/
+/* 内边距工具类 */
 .p-10 { padding: 10rpx; }
 .p-20 { padding: 20rpx; }
 .p-30 { padding: 30rpx; }

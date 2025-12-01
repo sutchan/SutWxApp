@@ -1,46 +1,57 @@
-﻿/**
- * 文件名 cacheService.js
- * 版本号 1.0.19
+/**
+ * 文件名: cacheService.js
+ * 版本号: 1.0.19
  * 更新日期: 2025-11-29
- * 娴ｆ粏鈧? Sut
- * 描述: 缂傛挸鐡ㄩ張宥呭閿涘本褰佹笟娑氱埠娑撯偓閻ㄥ嫭婀伴崷鎵处鐎涙顓搁悶鍡楀閼虫枻绱濋弨顖涘瘮閺佺増宓佺紓鎾崇摠閵嗕礁娴橀悧鍥╃处鐎涙ê鎷扮紓鎾崇摠缁涙牜鏆? */
+ * 作者: Sut
+ * 描述: 缓存服务，提供数据缓存、图片缓存、缓存策略管理等功能 */
 
 /**
- * 缂傛挸鐡ㄧ粵鏍殣鐢悂鍣? */
+ * 缓存策略常量
+ */
 const CACHE_POLICY = {
-  // 娑撳秳濞囬悽銊х处鐎?  NO_CACHE: 'no_cache',
-  // 娴兼ê鍘涙担璺ㄦ暏缂傛挸鐡ㄩ敍灞筋洤閺嬫粎绱︾€涙ü绗夌€涙ê婀崚娆掝嚞濮瑰倻缍夌紒?  CACHE_FIRST: 'cache_first',
-  // 娴兼ê鍘涙担璺ㄦ暏缂冩垹绮堕敍灞筋洤閺嬫粎缍夌紒婊冦亼鐠愩儱鍨担璺ㄦ暏缂傛挸鐡?  NETWORK_FIRST: 'network_first',
-  // 閸氬本妞傛担璺ㄦ暏缂傛挸鐡ㄩ崪宀€缍夌紒婊愮礉娴兼ê鍘涢弰鍓с仛缂傛挸鐡ㄩ敍宀€缍夌紒婊嗙箲閸ョ偛鎮楅弴瀛樻煀
+  // 不使用缓存
+  NO_CACHE: 'no_cache',
+  // 优先使用缓存，缓存不存在时从网络获取
+  CACHE_FIRST: 'cache_first',
+  // 优先从网络获取，网络失败时使用缓存
+  NETWORK_FIRST: 'network_first',
+  // 同时使用缓存和网络，先返回缓存数据，再更新缓存
   CACHE_AND_NETWORK: 'cache_and_network'
 };
 
 /**
- * 缂傛挸鐡ㄧ猾璇茬€风敮鎼佸櫤
+ * 缓存类型常量
  */
 const CACHE_TYPE = {
-  // 閺佺増宓佺紓鎾崇摠
+  // 数据缓存
   DATA: 'data',
-  // 閸ュ墽澧栫紓鎾崇摠
+  // 图片缓存
   IMAGE: 'image',
-  // 閻劍鍩涢柊宥囩枂缂傛挸鐡?  CONFIG: 'config',
-  // 娑撳瓨妞傜紓鎾崇摠
+  // 配置缓存
+  CONFIG: 'config',
+  // 临时缓存
   TEMP: 'temp'
 };
 
 /**
- * 缂傛挸鐡ㄦ潻鍥ㄦ埂閺冨爼妫块敍鍫燁嚑缁夋帪绱? */
+ * 缓存过期时间常量，单位毫秒
+ */
 const EXPIRY_TIME = {
-  // 5閸掑棝鎸?  SHORT: 5 * 60 * 1000,
-  // 1鐏忓繑妞?  MEDIUM: 60 * 60 * 1000,
-  // 24鐏忓繑妞?  LONG: 24 * 60 * 60 * 1000,
-  // 7婢?  WEEK: 7 * 24 * 60 * 60 * 1000,
-  // 濮橀晲绗夋潻鍥ㄦ埂
+  // 5分钟
+  SHORT: 5 * 60 * 1000,
+  // 1小时
+  MEDIUM: 60 * 60 * 1000,
+  // 24小时
+  LONG: 24 * 60 * 60 * 1000,
+  // 7天
+  WEEK: 7 * 24 * 60 * 60 * 1000,
+  // 永不过期
   NEVER: null
 };
 
 /**
- * 缂傛挸鐡ㄩ張宥呭缁? */
+ * 缓存服务类
+ */
 class CacheService {
   constructor() {
     this.cachePrefix = 'sut_cache_';
@@ -48,21 +59,33 @@ class CacheService {
   }
 
   /**
-   * 閻㈢喐鍨氱紓鎾崇摠闁?   * @param {string} key - 閸樼喎顫愮紓鎾崇摠闁?   * @param {string} type - 缂傛挸鐡ㄧ猾璇茬€?   * @returns {string} 閻㈢喐鍨氶惃鍕处鐎涙﹢鏁?   */
+   * 生成缓存键
+   * @param {string} key - 原始键
+   * @param {string} type - 缓存类型
+   * @returns {string} 完整缓存键
+   */
   _getCacheKey(key, type = CACHE_TYPE.DATA) {
     return `${this.cachePrefix}${type}_${key}`;
   }
 
   /**
-   * 閻㈢喐鍨氱紓鎾崇摠閸忓啯鏆熼幑顕€鏁?   * @param {string} key - 閸樼喎顫愮紓鎾崇摠闁?   * @param {string} type - 缂傛挸鐡ㄧ猾璇茬€?   * @returns {string} 閻㈢喐鍨氶惃鍕处鐎涙ê鍘撻弫鐗堝祦闁?   */
+   * 生成元数据键
+   * @param {string} key - 原始键
+   * @param {string} type - 缓存类型
+   * @returns {string} 元数据键
+   */
   _getMetaKey(key, type = CACHE_TYPE.DATA) {
     return `${this._getCacheKey(key, type)}_meta`;
   }
 
   /**
-   * 鐠佸墽鐤嗙紓鎾崇摠
-   * @param {string} key - 缂傛挸鐡ㄩ柨?   * @param {*} data - 缂傛挸鐡ㄩ弫鐗堝祦
-   * @param {Object} options - 缂傛挸鐡ㄩ柅澶愩€?   * @param {string} options.type - 缂傛挸鐡ㄧ猾璇茬€?   * @param {number|null} options.expiry - 鏉╁洦婀￠弮鍫曟？閿涘牊顕犵粔鎺炵礆閿涘ull鐞涖劎銇氬闀愮瑝鏉╁洦婀?   * @param {string} options.group - 缂傛挸鐡ㄩ崚鍡欑矋
+   * 设置缓存
+   * @param {string} key - 缓存键
+   * @param {*} data - 缓存数据
+   * @param {Object} options - 缓存选项
+   * @param {string} options.type - 缓存类型
+   * @param {number|null} options.expiry - 过期时间，单位毫秒，null表示永不过期
+   * @param {string} options.group - 缓存分组
    * @returns {Promise<void>}
    */
   async set(key, data, options = {}) {
@@ -76,22 +99,25 @@ class CacheService {
       const cacheKey = this._getCacheKey(key, type);
       const metaKey = this._getMetaKey(key, type);
 
-      // 閻㈢喐鍨氱紓鎾崇摠閸忓啯鏆熼幑?      const metadata = {
+      // 生成元数据
+      const metadata = {
         type,
         group,
         createdAt: Date.now(),
         expiry: expiry !== null ? Date.now() + expiry : null
       };
 
-      // 濡偓閺屻儳绱︾€涙ê銇囩亸蹇涙閸?      await this._checkCacheSize();
+      // 检查缓存大小
+      await this._checkCacheSize();
 
-      // 鐎涙ê鍋嶉弫鐗堝祦閸滃苯鍘撻弫鐗堝祦
+      // 保存数据和元数据
       await Promise.all([
         wx.setStorage({ key: cacheKey, data }),
         wx.setStorage({ key: metaKey, data: metadata })
       ]);
 
-      // 濞ｈ濮為崚鎵处鐎涙鍌ㄥ?      await this._addToCacheIndex(key, type, group);
+      // 添加到缓存索引
+      await this._addToCacheIndex(key, type, group);
     } catch (error) {
       console.error('Cache set error:', error);
       throw error;
@@ -99,8 +125,11 @@ class CacheService {
   }
 
   /**
-   * 閼惧嘲褰囩紓鎾崇摠
-   * @param {string} key - 缂傛挸鐡ㄩ柨?   * @param {Object} options - 缂傛挸鐡ㄩ柅澶愩€?   * @param {string} options.type - 缂傛挸鐡ㄧ猾璇茬€?   * @returns {Promise<*|null>} 缂傛挸鐡ㄩ弫鐗堝祦閿涘苯顩ч弸婊€绗夌€涙ê婀幋鏍у嚒鏉╁洦婀￠崚娆掔箲閸ョ€梪ll
+   * 获取缓存
+   * @param {string} key - 缓存键
+   * @param {Object} options - 缓存选项
+   * @param {string} options.type - 缓存类型
+   * @returns {Promise<*|null>} 缓存数据，过期或不存在时返回null
    */
   async get(key, options = {}) {
     try {
@@ -108,14 +137,16 @@ class CacheService {
       const cacheKey = this._getCacheKey(key, type);
       const metaKey = this._getMetaKey(key, type);
 
-      // 閼惧嘲褰囬崗鍐╂殶閹?      const [metadata, data] = await Promise.all([
+      // 获取元数据和数据
+      const [metadata, data] = await Promise.all([
         wx.getStorage({ key: metaKey }),
         wx.getStorage({ key: cacheKey })
       ]);
 
-      // 濡偓閺屻儲妲搁崥锕佺箖閺?      if (metadata.data && metadata.data.expiry) {
+      // 检查是否过期
+      if (metadata.data && metadata.data.expiry) {
         if (Date.now() > metadata.data.expiry) {
-          // 缂傛挸鐡ㄥ鑼剁箖閺堢噦绱濋崚鐘绘珟
+          // 缓存过期，移除缓存
           await this.remove(key, { type });
           return null;
         }
@@ -123,7 +154,8 @@ class CacheService {
 
       return data.data;
     } catch (error) {
-      // 缂傛挸鐡ㄦ稉宥呯摠閸?      if (error.errMsg && error.errMsg.includes('getStorage:fail')) {
+      // 缓存不存在
+      if (error.errMsg && error.errMsg.includes('getStorage:fail')) {
         return null;
       }
       console.error('Cache get error:', error);
@@ -132,20 +164,26 @@ class CacheService {
   }
 
   /**
-   * 缁夊娅庣紓鎾崇摠
-   * @param {string} key - 缂傛挸鐡ㄩ柨?   * @param {Object} options - 缂傛挸鐡ㄩ柅澶愩€?   * @param {string} options.type - 缂傛挸鐡ㄧ猾璇茬€?   * @returns {Promise<boolean>} 閺勵垰鎯佺粔濠氭珟閹存劕濮?   */
+   * 移除缓存
+   * @param {string} key - 缓存键
+   * @param {Object} options - 缓存选项
+   * @param {string} options.type - 缓存类型
+   * @returns {Promise<boolean>} 移除结果
+   */
   async remove(key, options = {}) {
     try {
       const { type = CACHE_TYPE.DATA } = options;
       const cacheKey = this._getCacheKey(key, type);
       const metaKey = this._getMetaKey(key, type);
 
-      // 閸掔娀娅庣紓鎾崇摠閺佺増宓侀崪灞藉帗閺佺増宓?      await Promise.all([
+      // 移除缓存数据和元数据
+      await Promise.all([
         wx.removeStorage({ key: cacheKey }),
         wx.removeStorage({ key: metaKey })
       ]);
 
-      // 娴犲海绱︾€涙鍌ㄥ鏇氳厬缁夊娅?      await this._removeFromCacheIndex(key, type);
+      // 从缓存索引中移除
+      await this._removeFromCacheIndex(key, type);
       return true;
     } catch (error) {
       console.error('Cache remove error:', error);
@@ -154,7 +192,9 @@ class CacheService {
   }
 
   /**
-   * 濞撳懘娅庨幍鈧張澶岀处鐎?   * @returns {Promise<boolean>} 閺勵垰鎯佸〒鍛存珟閹存劕濮?   */
+   * 清空所有缓存
+   * @returns {Promise<boolean>} 清空结果
+   */
   async clear() {
     try {
       const keys = await wx.getStorageInfo();
@@ -164,7 +204,8 @@ class CacheService {
         await wx.removeStorage({ key: cacheKeys });
       }
       
-      // 濞撳懘娅庣紓鎾崇摠缁便垹绱?      await wx.removeStorage({ key: `${this.cachePrefix}index` });
+      // 清空缓存索引
+      await wx.removeStorage({ key: `${this.cachePrefix}index` });
       return true;
     } catch (error) {
       console.error('Cache clear error:', error);
@@ -173,7 +214,10 @@ class CacheService {
   }
 
   /**
-   * 濞撳懘娅庨幐鍥х暰缁鐎烽惃鍕处鐎?   * @param {string} type - 缂傛挸鐡ㄧ猾璇茬€?   * @returns {Promise<boolean>} 閺勵垰鎯佸〒鍛存珟閹存劕濮?   */
+   * 按类型清空缓存
+   * @param {string} type - 缓存类型
+   * @returns {Promise<boolean>} 清空结果
+   */
   async clearByType(type) {
     try {
       const index = await this._getCacheIndex();
@@ -189,7 +233,7 @@ class CacheService {
           await Promise.all(keysToRemove.map(key => wx.removeStorage({ key })));
         }
 
-        // 閺囧瓨鏌婄槐銏犵穿
+        // 更新索引
         delete index[type];
         await wx.setStorage({ key: `${this.cachePrefix}index`, data: index });
       }
@@ -202,21 +246,24 @@ class CacheService {
   }
 
   /**
-   * 濞撳懘娅庨幐鍥х暰閸掑棛绮嶉惃鍕处鐎?   * @param {string} group - 缂傛挸鐡ㄩ崚鍡欑矋
-   * @returns {Promise<boolean>} 閺勵垰鎯佸〒鍛存珟閹存劕濮?   */
+   * 按分组清空缓存
+   * @param {string} group - 缓存分组
+   * @returns {Promise<boolean>} 清空结果
+   */
   async clearByGroup(group) {
     try {
       const index = await this._getCacheIndex();
       const keysToRemove = [];
 
-      // 闁秴宸婚幍鈧張澶岃閸?      Object.keys(index).forEach(type => {
+      // 遍历所有类型
+      Object.keys(index).forEach(type => {
         if (index[type] && index[type][group]) {
           index[type][group].forEach(key => {
             keysToRemove.push(this._getCacheKey(key, type));
             keysToRemove.push(this._getMetaKey(key, type));
           });
           
-          // 閺囧瓨鏌婄槐銏犵穿
+          // 更新索引
           delete index[type][group];
         }
       });
@@ -225,7 +272,7 @@ class CacheService {
         await Promise.all(keysToRemove.map(key => wx.removeStorage({ key })));
       }
 
-      // 娣囨繂鐡ㄩ弴瀛樻煀閸氬海娈戠槐銏犵穿
+      // 保存更新后的索引
       await wx.setStorage({ key: `${this.cachePrefix}index`, data: index });
       return true;
     } catch (error) {
@@ -235,8 +282,9 @@ class CacheService {
   }
 
   /**
-   * 閼惧嘲褰囩紓鎾崇摠婢堆冪毈
-   * @returns {Promise<number>} 缂傛挸鐡ㄦ径褍鐨敍鍫濈摟閼哄偊绱?   */
+   * 获取缓存大小
+   * @returns {Promise<number>} 缓存大小，单位KB
+   */
   async getCacheSize() {
     try {
       const info = await wx.getStorageInfo();
@@ -248,12 +296,14 @@ class CacheService {
   }
 
   /**
-   * 缂傛挸鐡ㄧ純鎴犵捕鐠囬攱鐪伴弫鐗堝祦
-   * @param {string} url - 鐠囬攱鐪癠RL
-   * @param {Function} requestFn - 鐠囬攱鐪伴崙鑺ユ殶
-   * @param {Object} options - 缂傛挸鐡ㄩ柅澶愩€?   * @param {string} options.policy - 缂傛挸鐡ㄧ粵鏍殣
-   * @param {number|null} options.expiry - 鏉╁洦婀￠弮鍫曟？
-   * @param {string} options.type - 缂傛挸鐡ㄧ猾璇茬€?   * @returns {Promise<*>} 鐠囬攱鐪扮紒鎾寸亯
+   * 缓存请求
+   * @param {string} url - 请求URL
+   * @param {Function} requestFn - 请求函数
+   * @param {Object} options - 缓存选项
+   * @param {string} options.policy - 缓存策略
+   * @param {number|null} options.expiry - 过期时间
+   * @param {string} options.type - 缓存类型
+   * @returns {Promise<*>} 请求结果
    */
   async cachedRequest(url, requestFn, options = {}) {
     const {
@@ -262,18 +312,21 @@ class CacheService {
       type = CACHE_TYPE.DATA
     } = options;
 
-    // 閻㈢喐鍨氱紓鎾崇摠闁?    const cacheKey = this._generateRequestCacheKey(url);
+    // 生成缓存键
+    const cacheKey = this._generateRequestCacheKey(url);
 
     switch (policy) {
       case CACHE_POLICY.NO_CACHE:
         return requestFn();
 
       case CACHE_POLICY.CACHE_FIRST:
-        // 娴兼ê鍘涙担璺ㄦ暏缂傛挸鐡?        const cachedData = await this.get(cacheKey, { type });
+        // 优先使用缓存
+        const cachedData = await this.get(cacheKey, { type });
         if (cachedData !== null) {
           return cachedData;
         }
-        // 缂傛挸鐡ㄦ稉宥呯摠閸︻煉绱濈拠閿嬬湴缂冩垹绮堕獮鍓佺处鐎?        try {
+        // 缓存不存在时从网络获取并缓存
+        try {
           const data = await requestFn();
           await this.set(cacheKey, data, { type, expiry });
           return data;
@@ -283,25 +336,30 @@ class CacheService {
         }
 
       case CACHE_POLICY.NETWORK_FIRST:
-        // 娴兼ê鍘涙担璺ㄦ暏缂冩垹绮?        try {
+        // 优先从网络获取
+        try {
           const data = await requestFn();
           await this.set(cacheKey, data, { type, expiry });
           return data;
         } catch (error) {
           console.error('Network request failed, trying cache:', error);
-          // 缂冩垹绮舵径杈Е閿涘苯鐨剧拠鏇氬▏閻劎绱︾€?          const cachedData = await this.get(cacheKey, { type });
+          // 网络失败时尝试使用缓存
+          const cachedData = await this.get(cacheKey, { type });
           if (cachedData !== null) {
             return cachedData;
           }
-          // 缂傛挸鐡ㄦ稊鐔剁瑝鐎涙ê婀敍灞惧閸戞椽鏁婄拠?          throw error;
+          // 缓存也不存在时抛出错误
+          throw error;
         }
 
       case CACHE_POLICY.CACHE_AND_NETWORK:
-        // 閸氬本妞傛担璺ㄦ暏缂傛挸鐡ㄩ崪宀€缍夌紒?        const cached = await this.get(cacheKey, { type });
+        // 同时使用缓存和网络
+        const cached = await this.get(cacheKey, { type });
         
-        // 缁斿宓嗘潻鏂挎礀缂傛挸鐡ㄩ敍鍫濐洤閺嬫粌鐡ㄩ崷顭掔礆
+        // 如果有缓存，先返回缓存数据，然后异步更新缓存
         if (cached !== null) {
-          // 瀵倹顒為弴瀛樻煀缂傛挸鐡?          requestFn().then(data => {
+          // 后台更新缓存
+          requestFn().then(data => {
             this.set(cacheKey, data, { type, expiry });
           }).catch(error => {
             console.error('Background network update failed:', error);
@@ -309,7 +367,7 @@ class CacheService {
           return cached;
         }
         
-        // 缂傛挸鐡ㄦ稉宥呯摠閸︻煉绱濈粵澶婄窡缂冩垹绮剁拠閿嬬湴
+        // 没有缓存时从网络获取并缓存
         try {
           const data = await requestFn();
           await this.set(cacheKey, data, { type, expiry });
@@ -325,26 +383,29 @@ class CacheService {
   }
 
   /**
-   * 缂傛挸鐡ㄩ崶鍓у
-   * @param {string} url - 閸ュ墽澧朥RL
-   * @returns {Promise<string>} 閺堫剙婀寸紓鎾崇摠鐠侯垰绶?   */
+   * 缓存图片
+   * @param {string} url - 图片URL
+   * @returns {Promise<string>} 缓存后的图片路径
+   */
   async cacheImage(url) {
     try {
       const cacheKey = this._generateImageCacheKey(url);
       
-      // 濡偓閺屻儲妲搁崥锕€鍑＄紓鎾崇摠
+      // 检查是否已缓存
       const cachedPath = await this.get(cacheKey, { type: CACHE_TYPE.IMAGE });
       if (cachedPath) {
-        // 濡偓閺屻儳绱︾€涙ɑ鏋冩禒鑸垫Ц閸氾箑鐡ㄩ崷?        try {
+        // 检查文件是否存在
+        try {
           await wx.getFileInfo({ filePath: cachedPath });
           return cachedPath;
         } catch (e) {
-          // 閺傚洣娆㈡稉宥呯摠閸︻煉绱濋崚鐘绘珟缂傛挸鐡ㄧ拋鏉跨秿
+          // 文件不存在，移除失效缓存
           await this.remove(cacheKey, { type: CACHE_TYPE.IMAGE });
         }
       }
 
-      // 娑撳娴囬獮鍓佺处鐎涙ê娴橀悧?      const downloadResult = await wx.downloadFile({
+      // 下载图片
+      const downloadResult = await wx.downloadFile({
         url,
         success: res => {
           if (res.statusCode === 200) {
@@ -354,9 +415,11 @@ class CacheService {
         }
       });
 
-      // 娣囨繂鐡ㄩ崚棰佸閺冭埖鏋冩禒?      const tempFilePath = downloadResult.tempFilePath;
+      // 获取临时文件路径
+      const tempFilePath = downloadResult.tempFilePath;
       
-      // 娣囨繂鐡ㄧ紓鎾崇摠鐠佹澘缍?      await this.set(cacheKey, tempFilePath, { 
+      // 缓存图片
+      await this.set(cacheKey, tempFilePath, { 
         type: CACHE_TYPE.IMAGE,
         expiry: EXPIRY_TIME.WEEK 
       });
@@ -364,34 +427,41 @@ class CacheService {
       return tempFilePath;
     } catch (error) {
       console.error('Cache image error:', error);
-      // 婢惰精瑙﹂弮鎯扮箲閸ョ偛甯慨濠綬L
+      // 缓存失败时返回原URL
       return url;
     }
   }
 
   /**
-   * 閹靛綊鍣虹紓鎾崇摠閸ュ墽澧?   * @param {Array<string>} urls - 閸ュ墽澧朥RL閺佹壆绮?   * @returns {Promise<Array<string>>} 閺堫剙婀寸紓鎾崇摠鐠侯垰绶為弫鎵矋
+   * 缓存多张图片
+   * @param {Array<string>} urls - 图片URL数组
+   * @returns {Promise<Array<string>>} 缓存后的图片路径数组
    */
   async cacheImages(urls) {
     return Promise.all(urls.map(url => this.cacheImage(url)));
   }
 
   /**
-   * 閻㈢喐鍨氱拠閿嬬湴缂傛挸鐡ㄩ柨?   * @param {string} url - 鐠囬攱鐪癠RL
-   * @returns {string} 缂傛挸鐡ㄩ柨?   */
+   * 生成请求缓存键
+   * @param {string} url - 请求URL
+   * @returns {string} 缓存键
+   */
   _generateRequestCacheKey(url) {
     return `req_${url}`;
   }
 
   /**
-   * 閻㈢喐鍨氶崶鍓у缂傛挸鐡ㄩ柨?   * @param {string} url - 閸ュ墽澧朥RL
-   * @returns {string} 缂傛挸鐡ㄩ柨?   */
+   * 生成图片缓存键
+   * @param {string} url - 图片URL
+   * @returns {string} 缓存键
+   */
   _generateImageCacheKey(url) {
     return `img_${url}`;
   }
 
   /**
-   * 閼惧嘲褰囩紓鎾崇摠缁便垹绱?   * @returns {Promise<Object>} 缂傛挸鐡ㄧ槐銏犵穿
+   * 获取缓存索引
+   * @returns {Promise<Object>} 缓存索引
    */
   async _getCacheIndex() {
     try {
@@ -403,7 +473,10 @@ class CacheService {
   }
 
   /**
-   * 濞ｈ濮為崚鎵处鐎涙鍌ㄥ?   * @param {string} key - 缂傛挸鐡ㄩ柨?   * @param {string} type - 缂傛挸鐡ㄧ猾璇茬€?   * @param {string} group - 缂傛挸鐡ㄩ崚鍡欑矋
+   * 添加到缓存索引
+   * @param {string} key - 缓存键
+   * @param {string} type - 缓存类型
+   * @param {string} group - 缓存分组
    * @returns {Promise<void>}
    */
   async _addToCacheIndex(key, type, group) {
@@ -423,7 +496,7 @@ class CacheService {
         }
       }
       
-      // 鐠佹澘缍嶉幍鈧張澶愭暛
+      // 添加到所有列表
       if (!index[type].all) {
         index[type].all = [];
       }
@@ -438,14 +511,17 @@ class CacheService {
   }
 
   /**
-   * 娴犲海绱︾€涙鍌ㄥ鏇氳厬缁夊娅?   * @param {string} key - 缂傛挸鐡ㄩ柨?   * @param {string} type - 缂傛挸鐡ㄧ猾璇茬€?   * @returns {Promise<void>}
+   * 从缓存索引中移除
+   * @param {string} key - 缓存键
+   * @param {string} type - 缓存类型
+   * @returns {Promise<void>}
    */
   async _removeFromCacheIndex(key, type) {
     try {
       const index = await this._getCacheIndex();
       
       if (index[type]) {
-        // 娴犲孩澧嶉張澶婂瀻缂佸嫪鑵戠粔濠氭珟
+        // 从所有分组中移除
         Object.keys(index[type]).forEach(group => {
           if (Array.isArray(index[type][group])) {
             const indexToRemove = index[type][group].indexOf(key);
@@ -463,14 +539,16 @@ class CacheService {
   }
 
   /**
-   * 濡偓閺屻儳绱︾€涙ê銇囩亸蹇涙閸?   * @returns {Promise<void>}
+   * 检查缓存大小
+   * @returns {Promise<void>}
    */
   async _checkCacheSize() {
     try {
       const currentSize = await this.getCacheSize();
       
-      // 婵″倹鐏夌紓鎾崇摠婢堆冪毈鐡掑懓绻冮梽鎰煑閿涘本绔婚悶鍡樻付閺冣晝娈戠紓鎾崇摠
-      if (currentSize > this.maxCacheSize * 0.9) { // 鏉堟儳鍩?0%閺冭泛绱戞慨瀣閻?        await this._cleanupOldCache();
+      // 当缓存大小超过90%时清理旧缓存
+      if (currentSize > this.maxCacheSize * 0.9) { // 超过90%时清理
+        await this._cleanupOldCache();
       }
     } catch (error) {
       console.error('Check cache size error:', error);
@@ -478,14 +556,16 @@ class CacheService {
   }
 
   /**
-   * 濞撳懐鎮婇弮褏绱︾€?   * @returns {Promise<void>}
+   * 清理旧缓存
+   * @returns {Promise<void>}
    */
   async _cleanupOldCache() {
     try {
       const index = await this._getCacheIndex();
       const cacheItems = [];
 
-      // 閺€鍫曟肠閹碘偓閺堝绱︾€涙﹢銆嶉崣濠傚従閸忓啯鏆熼幑?      for (const type in index) {
+      // 收集所有缓存项
+      for (const type in index) {
         if (index[type].all) {
           for (const key of index[type].all) {
             const metaKey = this._getMetaKey(key, type);
@@ -500,16 +580,17 @@ class CacheService {
                 });
               }
             } catch (e) {
-              // 韫囩晫鏆愭稉宥呯摠閸︺劎娈戠紓鎾崇摠
+              // 元数据不存在，跳过
             }
           }
         }
       }
 
-      // 閹稿鍨卞鐑樻闂傚瓨甯撴惔蹇ョ礉閸忓牊绔婚悶鍡樻付閺冣晝娈戠紓鎾崇摠
+      // 按创建时间排序，先清理最早的缓存
       cacheItems.sort((a, b) => a.createdAt - b.createdAt);
 
-      // 濞撳懐鎮婄痪?0%閻ㄥ嫮绱︾€?      const itemsToRemove = Math.floor(cacheItems.length * 0.3);
+      // 清理30%的旧缓存
+      const itemsToRemove = Math.floor(cacheItems.length * 0.3);
       for (let i = 0; i < itemsToRemove && i < cacheItems.length; i++) {
         await this.remove(cacheItems[i].key, { type: cacheItems[i].type });
       }
@@ -519,16 +600,19 @@ class CacheService {
   }
 }
 
-// 鐎电厧鍤紓鎾崇摠閺堝秴濮熺€圭偘绶?const cacheService = new CacheService();
+// 创建缓存服务实例
+const cacheService = new CacheService();
 
-// 鐎电厧鍤敮鎼佸櫤
+// 导出实例
 const instance = cacheService;
 
-// 鐎电厧鍤€圭偘绶ラ崪灞界埗闁?module.exports = {
+// 导出模块
+module.exports = {
   instance,
   CACHE_POLICY,
   CACHE_TYPE,
   EXPIRY_TIME
 };
 
-// 閸氬本妞傞弨顖涘瘮閻╁瓨甯村鏇犳暏鐎圭偘绶?module.exports.default = cacheService;
+// 默认导出
+module.exports.default = cacheService;
