@@ -1,10 +1,10 @@
-﻿﻿/**
- * 鏂囦欢鍚? productCard.wxss
- * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: productCard 椤甸潰鏍峰紡鏂囦欢
+/**
+ * 文件名: productCard.wxss
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: productCard 页面样式文件
  */
-/* 閸熷棗鎼ч崡锛勫鐎圭懓娅?*/
+/* 商品卡片容器 */
 .product-card {
   background-color: #fff;
   border-radius: 12rpx;
@@ -22,7 +22,7 @@
   transform: scale(0.98);
 }
 
-/* 閸熷棗鎼ч崶鍓у鐎圭懓娅?*/
+/* 商品图片容器 */
 .product-image-container {
   position: relative;
   width: 100%;
@@ -35,7 +35,7 @@
   display: block;
 }
 
-/* 閹舵ɑ澧搁弽鍥╊劮 */
+/* 折扣标签 */
 .discount-badge {
   position: absolute;
   top: 0;
@@ -48,7 +48,7 @@
   font-weight: 500;
 }
 
-/* 閺€鎯版閸ョ偓鐖?*/
+/* 收藏图标 */
 .favorite-icon {
   position: absolute;
   top: 12rpx;
@@ -76,12 +76,12 @@
   color: #fff;
 }
 
-/* 閸熷棗鎼ф穱鈩冧紖閸栧搫鐓?*/
+/* 商品信息区域 */
 .product-info {
   padding: 20rpx;
 }
 
-/* 閸熷棗鎼ч崥宥囆?*/
+/* 商品名称 */
 .product-name {
   font-size: 26rpx;
   color: #333;
@@ -97,7 +97,7 @@
   box-orient: vertical;
 }
 
-/* 閸熷棗鎼ч幓蹇氬牚 */
+/* 商品描述 */
 .product-desc {
   font-size: 24rpx;
   color: #666;
@@ -113,7 +113,7 @@
   box-orient: vertical;
 }
 
-/* 閸熷棗鎼ч弽鍥╊劮 */
+/* 商品标签 */
 .product-tags {
   display: flex;
   flex-wrap: wrap;
@@ -130,7 +130,7 @@
   margin-bottom: 8rpx;
 }
 
-/* 娴犻攱鐗搁崠鍝勭厵 */
+/* 价格区域 */
 .price-area {
   display: flex;
   justify-content: space-between;
@@ -143,14 +143,14 @@
   align-items: baseline;
 }
 
-/* 瑜版挸澧犳禒閿嬬壐 */
+/* 当前价格 */
 .current-price {
   font-size: 32rpx;
   color: #ff4757;
   font-weight: 600;
 }
 
-/* 閸樼喍鐜?*/
+/* 原价 */
 .original-price {
   font-size: 24rpx;
   color: #999;
@@ -158,13 +158,13 @@
   margin-left: 8rpx;
 }
 
-/* 闁库偓闁插繋淇婇幁?*/
+/* 销量信息 */
 .sales-info {
   font-size: 22rpx;
   color: #999;
 }
 
-/* 閹垮秳缍旈幐澶愭尦 */
+/* 操作按钮 */
 .action-buttons {
   display: flex;
   justify-content: flex-end;

@@ -1,9 +1,3 @@
-﻿/**
- * 鏂囦欢鍚? productCard.json
- * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: productCard JSON 閰嶇疆鏂囦欢
- */
 {
   "component": true,
   "usingComponents": {

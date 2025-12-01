@@ -1,8 +1,8 @@
 ﻿/**
  * 鏂囦欢鍚? pointsDetail.js
  * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: 缁夘垰鍨庨弰搴ｇ矎妞ょ敻娼? */
+ * 更新日期: 2025-11-23
+ * 描述: 缁夘垰鍨庨弰搴ｇ矎妞ょ敻娼? */
 const pointsService = require('../../services/pointsService');
 
 Page({

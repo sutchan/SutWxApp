@@ -1,8 +1,8 @@
 ﻿/**
  * 鏂囦欢鍚? points.js
  * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: 缁夘垰鍨庢い鐢告桨
+ * 更新日期: 2025-11-23
+ * 描述: 缁夘垰鍨庢い鐢告桨
  */
 
 const pointsService = require('../../../services/pointsService');

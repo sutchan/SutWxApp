@@ -25,7 +25,7 @@
           <image src="{{item.image}}" class="product-image" mode="aspectFill" lazy-load="true"></image>
           <view class="product-info">
             <text class="product-name">{{item.name}}</text>
-            <text class="product-price">楼{{item.price}}</text>
+            <text class="product-price">¥{{item.price}}</text>
           </view>
         </view>
       </view>

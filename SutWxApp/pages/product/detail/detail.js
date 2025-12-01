@@ -1,7 +1,7 @@
 ﻿/**
  * 鏂囦欢鍚? detail.js
  * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
+ * 更新日期: 2025-11-23
  * 閸熷棗鎼х拠锔藉剰妞ょ敻娼? */
 const i18n = require('../../../utils/i18n');
 const socialService = require('../../../services/socialService');

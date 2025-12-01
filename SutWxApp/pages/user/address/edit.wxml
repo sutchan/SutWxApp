@@ -1,8 +1,8 @@
 ﻿/**
  * 鏂囦欢鍚? edit.wxml
  * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: edit 妞ょ敻娼扮紒鎾寸€弬鍥︽
+ * 更新日期: 2025-11-23
+ * 描述: edit 妞ょ敻娼扮紒鎾寸€弬鍥︽
  */
 <!--pages/user/address/edit.wxml-->
 <mp-form id="form" rules="{{rules}}" models="{{formData}}">

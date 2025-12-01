@@ -1,8 +1,8 @@
 ﻿/**
  * 鏂囦欢鍚? pay.js
  * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: 閺€顖欑帛妞ょ敻娼? */
+ * 更新日期: 2025-11-23
+ * 描述: 閺€顖欑帛妞ょ敻娼? */
 
 const paymentService = require('../../services/paymentService');
 const userService = require('../../services/userService');

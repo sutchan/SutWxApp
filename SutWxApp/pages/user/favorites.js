@@ -1,15 +1,15 @@
 ﻿/**
  * 鏂囦欢鍚? favorites.js
  * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: 閺€鎯版閸掓銆冩い鐢告桨
+ * 更新日期: 2025-11-23
+ * 描述: 閺€鎯版閸掓銆冩い鐢告桨
  */
 Page({
   /**
    * 妞ょ敻娼伴惃鍕灥婵鏆熼幑?   */
   data: {
     activeTab: 0, // 瑜版挸澧犲┑鈧ú鑽ゆ畱閺嶅洨顒?0:閸熷棗鎼?1:閺傚洨鐝?    tabs: ['閸熷棗鎼?, '閺傚洨鐝?],
-    productFavorites: [], // 閸熷棗鎼ч弨鎯版閸掓銆?    articleFavorites: [], // 閺傚洨鐝烽弨鎯版閸掓銆?    loading: false, // 鍔犺浇鐘舵€?   hasMore: {
+    productFavorites: [], // 閸熷棗鎼ч弨鎯版閸掓銆?    articleFavorites: [], // 閺傚洨鐝烽弨鎯版閸掓銆?    loading: false, // 加载状态   hasMore: {
       product: true, // 閸熷棗鎼ч弰顖氭儊鏉╂ɑ婀侀弴鏉戭樋閺佺増宓?      article: true  // 閺傚洨鐝烽弰顖氭儊鏉╂ɑ婀侀弴鏉戭樋閺佺増宓?    },
     page: {
       product: 1, // 閸熷棗鎼цぐ鎾冲妞ょ數鐖?      article: 1  // 閺傚洨鐝疯ぐ鎾冲妞ょ數鐖?    },

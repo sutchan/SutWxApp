@@ -1,8 +1,8 @@
 ﻿﻿/**
  * 鏂囦欢鍚? searchService.js
  * 鐗堟湰鍙? 1.0.1
- * 鏇存柊鏃ユ湡: 2025-11-28
- * 鎻忚堪: 鎼滅储鏈嶅姟
+ * 更新日期: 2025-11-28
+ * 描述: 鎼滅储鏈嶅姟
  */
 
 const request = require('../utils/request');

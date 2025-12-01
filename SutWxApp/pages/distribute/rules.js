@@ -1,8 +1,8 @@
 ﻿/**
  * 鏂囦欢鍚? rules.js
  * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-29
- * 鎻忚堪: 閸掑棝鏀㈢憴鍕灟鐠佸墽鐤嗘い鐢告桨
+ * 更新日期: 2025-11-29
+ * 描述: 閸掑棝鏀㈢憴鍕灟鐠佸墽鐤嗘い鐢告桨
  */
 
 const distributeService = require('../../services/distributeService');

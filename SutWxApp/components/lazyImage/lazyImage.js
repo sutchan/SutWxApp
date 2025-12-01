@@ -1,13 +1,15 @@
-﻿/**
- * 鏂囦欢鍚? lazyImage.js
- * 鐗堟湰鍙? 1.0.2
- * 鏇存柊鏃ユ湡: 2025-11-29
- * 浣滆€? Sut
- * 鎻忚堪: 鍥剧墖鎳掑姞杞界粍浠?*/
+/**
+ * 文件名: lazyImage.js
+ * 版本号: 1.0.2
+ * 更新日期: 2025-11-29
+ * 作者: Sut
+ * 描述: 图片懒加载组件，用于优化图片加载性能
+ */
 
 const lazyImage = {
   /**
-   * 缁勪欢鍒涘缓鏃舵墽琛?   * @returns {void}
+   * 组件创建时执行
+   * @returns {void}
    */
   created() {
     this.setData({
@@ -18,16 +20,21 @@ const lazyImage = {
   },
 
   /**
-   * 缁勪欢鎸傝浇鍒拌妭鐐规爲鏃舵墽琛?   * @returns {void}
+   * 组件挂载到节点树时执行
+   * @returns {void}
    */
   attached() {
     if (this.data.lazy) {
-      // 鍒涘缓浜ゅ弶瑙傚療鍣紝鐢ㄤ簬妫€娴嬪浘鐗囨槸鍚﹁繘鍏ヨ鍙?      // 褰撳浘鐗囪繘鍏ヨ鍙ｆ椂锛屽紑濮嬪姞杞藉浘鐗?      this.observer = wx.createIntersectionObserver(this, {
+      // 创建交叉观察器，用于检测图片是否进入视口
+      // 当图片进入视口时，触发加载
+      this.observer = wx.createIntersectionObserver(this, {
         thresholds: [this.data.threshold / 100],
-        observeAll: false, // 涓嶈瀵熸墍鏈夊尮閰嶅厓绱?        initialRatio: 0.1 // 鍒濆鐩镐氦姣斾緥
+        observeAll: false, // 不观察所有匹配的元素
+        initialRatio: 0.1 // 初始相交比例
       }).relativeToViewport().observe('.lazy-image', this.handleIntersection);
     } else {
-      // 闈炴噿鍔犺浇妯″紡锛岀洿鎺ュ姞杞藉浘鐗?      this.setData({
+      // 非懒加载模式，直接加载图片
+      this.setData({
         inView: true
       });
       this.loadImage();
@@ -35,7 +42,8 @@ const lazyImage = {
   },
 
   /**
-   * 缁勪欢浠庤妭鐐规爲绉婚櫎鏃舵墽琛?   * @returns {void}
+   * 组件从节点树移除时执行
+   * @returns {void}
    */
   detached() {
     if (this.observer) {
@@ -44,7 +52,8 @@ const lazyImage = {
   },
 
   /**
-   * 鏁版嵁鐩戝惉鍣?   */
+   * 数据监听器
+   */
   observers: {
     'inView': function(inView) {
       if (inView && !this.data.loaded && !this.data.error) {
@@ -54,8 +63,9 @@ const lazyImage = {
   },
 
   /**
-   * src灞炴€у彉鍖栨椂鎵ц
-   * @param {Object} newProps - 鏂板睘鎬?   * @returns {void}
+   * src属性变化时触发
+   * @param {Object} newProps - 新属性值
+   * @returns {void}
    */
   onSrcChange(newProps) {
     if (newProps.value !== this.data.src) {
@@ -65,7 +75,7 @@ const lazyImage = {
         error: false
       });
 
-      // 濡傛灉鍥剧墖宸插湪瑙嗗彛涓紝閲嶆柊鍔犺浇
+      // 如果图片已经在视口中，重新加载
       if (this.data.inView) {
         this.loadImage();
       }
@@ -73,17 +83,17 @@ const lazyImage = {
   },
 
   /**
-   * 鍔犺浇鍥剧墖
+   * 加载图片
    * @returns {void}
    */
   loadImage() {
     if (!this.data.src) return;
     
-    // 鍥剧墖鍔犺浇閫昏緫浼氬湪wxml涓€氳繃bindload鍜宐inderror浜嬩欢澶勭悊
+    // 图片加载逻辑由wxml中的bindload和binderror事件处理
   },
 
   /**
-   * 鍥剧墖鍔犺浇鎴愬姛浜嬩欢澶勭悊
+   * 图片加载成功时触发
    * @returns {void}
    */
   onLoad() {
@@ -94,7 +104,7 @@ const lazyImage = {
   },
 
   /**
-   * 鍥剧墖鍔犺浇澶辫触浜嬩欢澶勭悊
+   * 图片加载失败时触发
    * @returns {void}
    */
   onError() {
@@ -104,7 +114,8 @@ const lazyImage = {
   },
 
   /**
-   * 浜ゅ弶瑙傚療鍣ㄥ洖璋冨嚱鏁?   * @param {Object} event - 浜ゅ弶瑙傚療浜嬩欢
+   * 交叉观察器回调函数
+   * @param {Object} event - 交叉观察器事件
    * @returns {void}
    */
   handleIntersection(event) {
@@ -116,8 +127,8 @@ const lazyImage = {
   },
 
   /**
-   * 鑾峰彇褰撳墠搴旇鏄剧ず鐨勫浘鐗囧湴鍧€
-   * @returns {string} 鍥剧墖鍦板潃
+   * 获取当前应该显示的图片地址
+   * @returns {string} 图片地址
    */
   getImageSrc() {
     if (this.data.error) {
@@ -132,7 +143,7 @@ const lazyImage = {
   }
 };
 
-// 瀵煎嚭缁勪欢
+// 注册组件
 if (typeof Component !== 'undefined') {
   Component({
     properties: {
@@ -195,5 +206,6 @@ if (typeof Component !== 'undefined') {
     }
   });
 } else {
-  // 鍏煎闈炵粍浠剁幆澧?  module.exports = lazyImage;
+  // 兼容非组件环境
+  module.exports = lazyImage;
 }

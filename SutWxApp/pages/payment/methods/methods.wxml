@@ -1,18 +1,18 @@
 ﻿/**
  * 鏂囦欢鍚? methods.wxml
  * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: methods 妞ょ敻娼扮紒鎾寸€弬鍥︽
+ * 更新日期: 2025-11-23
+ * 描述: methods 妞ょ敻娼扮紒鎾寸€弬鍥︽
  */
 <!-- 鏀粯鏂瑰紡闁瀚ㄦい鐢告桨 -->
 <view class="payment-methods-container">
   <!-- 璁㈠崟闁叉垿顤傛穱鈩冧紖 -->
   <view class="order-amount">
     <text class="amount-label">閺€顖欑帛闁叉垿顤?/text>
-    <text class="amount-value">楼{{orderAmount}}</text>
+    <text class="amount-value">¥{{orderAmount}}</text>
   </view>
   
-  <!-- 鍔犺浇鐘舵€?->
+  <!-- 加载状态->
   <view wx:if="{{loading}}" class="loading-container">
     <view class="loading-spinner"></view>
     <text class="loading-text">濮濓絽婀崝鐘烘祰鏀粯鏂瑰紡...</text>

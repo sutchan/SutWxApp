@@ -1,8 +1,8 @@
 ﻿﻿/**
  * 鏂囦欢鍚? README_en.md
  * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: README_en 鏂囨。鏂囦欢
+ * 更新日期: 2025-11-23
+ * 描述: README_en 鏂囨。鏂囦欢
  */
 # SUT WeChat Mini Program Project
 

@@ -1,17 +1,17 @@
 ﻿/**
  * 鏂囦欢鍚? index.js
  * 鐗堟湰鍙? 1.0.2
- * 鏇存柊鏃ユ湡: 2025-11-29
- * 浣滆€? Sut
- * 鎻忚堪: 棣栭〉椤甸潰閫昏緫 */
+ * 更新日期: 2025-11-29
+ * 作者 Sut
+ * 描述: 首页页面逻辑 */
 
 const i18n = require('../../utils/i18n');
 const { createPage } = require('../../utils/useStore.js');
 
-// 鍒涘缓椤甸潰瀹炰緥
+// 创建页面实例
 Page(createPage(
-  // 渚濊禆鐨勭姸鎬?  ['user.isLoggedIn', 'ui.loading'],
-  // 鐘舵€佸彉鏇存柟娉?  {
+  // 依赖的状态  ['user.isLoggedIn', 'ui.loading'],
+  // 状态变更方法  {
     setLoading: 'SET_LOADING'
   }
 )({
@@ -24,13 +24,13 @@ Page(createPage(
   },
 
   /**
-   * 椤甸潰鍔犺浇鏃舵墽琛?   */
+   * 页面加载时执行   */
   onLoad() {
     this.loadData();
   },
 
   /**
-   * 鍔犺浇椤甸潰鏁版嵁
+   * 加载页面数据
    */
   loadData() {
     // 杩欓噷搴旇鏄姞杞芥暟鎹殑閫昏緫

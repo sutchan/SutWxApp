@@ -1,8 +1,8 @@
 ﻿/**
  * 鏂囦欢鍚? pointsExchange.wxml
  * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: pointsExchange 妞ょ敻娼扮紒鎾寸€弬鍥︽
+ * 更新日期: 2025-11-23
+ * 描述: pointsExchange 妞ょ敻娼扮紒鎾寸€弬鍥︽
  */
 <view class="container">
   <!-- 缁夘垰鍨庢径鎾劥 -->
@@ -106,7 +106,7 @@
       <view class="empty-tip">閺侇剝顕張鐔风窡閺囨潙顦跨划鎯у兊閸熷棗鎼?/view>
     </view>
 
-    <!-- 鍔犺浇鐘舵€?->
+    <!-- 加载状态->
     <view class="loading-state" wx:if="{{isLoading && exchangeList.length === 0}}">
       <view class="loading-spinner"></view>
       <text>鍔犺浇涓?.</text>

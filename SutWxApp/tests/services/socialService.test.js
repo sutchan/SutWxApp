@@ -1,27 +1,412 @@
-﻿/**\n * 鏂囦欢鍚? socialService.test.js\n * 鐗堟湰鍙? 1.0.0\n * 鏇存柊鏃ユ湡: 2025-11-30\n * 浣滆€? Sut\n * 鎻忚堪: 绀句氦鏈嶅姟鍗曞厓娴嬭瘯\n */\n\n// 妯℃嫙渚濊禆妯″潡\njest.mock('../../utils/request', () => ({\n  post: jest.fn(),\n  get: jest.fn(),\n  put: jest.fn(),\n  delete: jest.fn()\n}));\n\n// 妯℃嫙寰俊API\njest.mock('wx', () => ({\n  showToast: jest.fn()\n}));\n\nconst request = require('../../utils/request');\nconst wx = require('wx');\nconst socialService = require('../../services/socialService');\n\ndescribe('socialService', () => {\n  beforeEach(() => {\n    // 娓呴櫎鎵€鏈夋ā鎷熻皟鐢?
-    jest.clearAllMocks();\n  });\n\n  describe('shareProduct', () => {\n    it('should share product successfully', async () => {\n      // 鍑嗗娴嬭瘯鏁版嵁\n      const mockOptions = {\n        productId: '1',\n        title: '娴嬭瘯鍟嗗搧',\n        description: '娴嬭瘯鍟嗗搧鎻忚堪',\n        imageUrl: 'https://example.com/image.jpg',\n        shareChannel: 'wechat'\n      };\n      const mockResponse = { success: true, shareId: 'share_123' };\n      \n      // 璁剧疆妯℃嫙杩斿洖鍊?
-      request.post.mockResolvedValue(mockResponse);\n      \n      // 鎵ц娴嬭瘯\n      const result = await socialService.shareProduct(mockOptions);\n      \n      // 楠岃瘉缁撴灉\n      expect(result).toEqual(mockResponse);\n      expect(request.post).toHaveBeenCalledWith('/social/share/product', mockOptions);\n    });\n\n    it('should use default shareChannel if not provided', async () => {\n      // 鍑嗗娴嬭瘯鏁版嵁\n      const mockOptions = {\n        productId: '1',\n        title: '娴嬭瘯鍟嗗搧'\n      };\n      const mockResponse = { success: true, shareId: 'share_123' };\n      \n      // 璁剧疆妯℃嫙杩斿洖鍊?
-      request.post.mockResolvedValue(mockResponse);\n      \n      // 鎵ц娴嬭瘯\n      await socialService.shareProduct(mockOptions);\n      \n      // 楠岃瘉缁撴灉\n      expect(request.post).toHaveBeenCalledWith('/social/share/product', {\n        ...mockOptions,\n        shareChannel: 'wechat',\n        description: undefined,\n        imageUrl: undefined\n      });\n    });\n\n    it('should throw error if productId is not provided', async () => {\n      // 鎵ц娴嬭瘯骞堕獙璇佺粨鏋?
-      await expect(socialService.shareProduct({})).rejects.toThrow('鍟嗗搧ID涓嶈兘涓虹┖');\n      expect(request.post).not.toHaveBeenCalled();\n    });\n  });\n\n  describe('getShareRecords', () => {\n    it('should get share records successfully', async () => {\n      // 鍑嗗娴嬭瘯鏁版嵁\n      const mockRecords = [\n        { id: 'share_1', productId: '1', shareChannel: 'wechat', createdAt: '2025-11-30' },\n        { id: 'share_2', productId: '2', shareChannel: 'friend', createdAt: '2025-11-29' }\n      ];\n      const mockResponse = { data: mockRecords, total: 2, page: 1, pageSize: 20 };\n      \n      // 璁剧疆妯℃嫙杩斿洖鍊?
-      request.get.mockResolvedValue(mockResponse);\n      \n      // 鎵ц娴嬭瘯\n      const result = await socialService.getShareRecords();\n      \n      // 楠岃瘉缁撴灉\n      expect(result).toEqual(mockResponse);\n      expect(request.get).toHaveBeenCalledWith('/social/share/records', {\n        page: 1,\n        pageSize: 20,\n        sort: 'newest'\n      });\n    });\n\n    it('should use custom options when provided', async () => {\n      // 鍑嗗娴嬭瘯鏁版嵁\n      const mockOptions = {\n        page: 2,\n        pageSize: 10,\n        sort: 'oldest'\n      };\n      const mockResponse = { data: [], total: 0, page: 2, pageSize: 10 };\n      \n      // 璁剧疆妯℃嫙杩斿洖鍊?
-      request.get.mockResolvedValue(mockResponse);\n      \n      // 鎵ц娴嬭瘯\n      await socialService.getShareRecords(mockOptions);\n      \n      // 楠岃瘉缁撴灉\n      expect(request.get).toHaveBeenCalledWith('/social/share/records', mockOptions);\n    });\n  });\n\n  describe('getShareStats', () => {\n    it('should get user share stats successfully', async () => {\n      // 鍑嗗娴嬭瘯鏁版嵁\n      const mockStats = { totalShares: 10, totalProducts: 5, topChannels: ['wechat', 'friend'] };\n      \n      // 璁剧疆妯℃嫙杩斿洖鍊?
-      request.get.mockResolvedValue(mockStats);\n      \n      // 鎵ц娴嬭瘯\n      const result = await socialService.getShareStats();\n      \n      // 楠岃瘉缁撴灉\n      expect(result).toEqual(mockStats);\n      expect(request.get).toHaveBeenCalledWith('/social/share/stats');\n    });\n\n    it('should get product share stats successfully', async () => {\n      // 鍑嗗娴嬭瘯鏁版嵁\n      const productId = '1';\n      const mockStats = { totalShares: 5, shareChannels: ['wechat', 'circle'] };\n      \n      // 璁剧疆妯℃嫙杩斿洖鍊?
-      request.get.mockResolvedValue(mockStats);\n      \n      // 鎵ц娴嬭瘯\n      const result = await socialService.getShareStats(productId);\n      \n      // 楠岃瘉缁撴灉\n      expect(result).toEqual(mockStats);\n      expect(request.get).toHaveBeenCalledWith(`/social/share/stats/product/${productId}`);\n    });\n  });\n\n  describe('getProductComments', () => {\n    it('should get product comments successfully', async () => {\n      // 鍑嗗娴嬭瘯鏁版嵁\n      const productId = '1';\n      const mockComments = [\n        { id: 'comment_1', content: '娴嬭瘯璇勮1', rating: 5, createdAt: '2025-11-30' },\n        { id: 'comment_2', content: '娴嬭瘯璇勮2', rating: 4, createdAt: '2025-11-29' }\n      ];\n      const mockResponse = { data: mockComments, total: 2, page: 1, pageSize: 20 };\n      \n      // 璁剧疆妯℃嫙杩斿洖鍊?
-      request.get.mockResolvedValue(mockResponse);\n      \n      // 鎵ц娴嬭瘯\n      const result = await socialService.getProductComments({ productId });\n      \n      // 楠岃瘉缁撴灉\n      expect(result).toEqual(mockResponse);\n      expect(request.get).toHaveBeenCalledWith(`/products/${productId}/comments`, {\n        page: 1,\n        pageSize: 20,\n        sort: 'newest'\n      });\n    });\n\n    it('should throw error if productId is not provided', async () => {\n      // 鎵ц娴嬭瘯骞堕獙璇佺粨鏋?
-      await expect(socialService.getProductComments({})).rejects.toThrow('鍟嗗搧ID涓嶈兘涓虹┖');\n      expect(request.get).not.toHaveBeenCalled();\n    });\n\n    it('should use custom options when provided', async () => {\n      // 鍑嗗娴嬭瘯鏁版嵁\n      const mockOptions = {\n        productId: '1',\n        page: 2,\n        pageSize: 10,\n        sort: 'highest',\n        minRating: 4,\n        withImages: true\n      };\n      const mockResponse = { data: [], total: 0, page: 2, pageSize: 10 };\n      \n      // 璁剧疆妯℃嫙杩斿洖鍊?
-      request.get.mockResolvedValue(mockResponse);\n      \n      // 鎵ц娴嬭瘯\n      await socialService.getProductComments(mockOptions);\n      \n      // 楠岃瘉缁撴灉\n      expect(request.get).toHaveBeenCalledWith(`/products/${mockOptions.productId}/comments`, {\n        page: mockOptions.page,\n        pageSize: mockOptions.pageSize,\n        sort: mockOptions.sort,\n        minRating: mockOptions.minRating,\n        withImages: mockOptions.withImages\n      });\n    });\n  });\n\n  describe('addProductComment', () => {\n    it('should add product comment successfully', async () => {\n      // 鍑嗗娴嬭瘯鏁版嵁\n      const mockCommentData = {\n        productId: '1',\n        content: '娴嬭瘯璇勮鍐呭',\n        rating: 5,\n        anonymous: false,\n        images: []\n      };\n      const mockResponse = { id: 'comment_1', ...mockCommentData, createdAt: '2025-11-30' };\n      \n      // 璁剧疆妯℃嫙杩斿洖鍊?
-      request.post.mockResolvedValue(mockResponse);\n      \n      // 鎵ц娴嬭瘯\n      const result = await socialService.addProductComment(mockCommentData);\n      \n      // 楠岃瘉缁撴灉\n      expect(result).toEqual(mockResponse);\n      expect(request.post).toHaveBeenCalledWith('/social/comments/product', mockCommentData);\n    });\n\n    it('should throw error if productId is not provided', async () => {\n      // 鍑嗗娴嬭瘯鏁版嵁\n      const mockCommentData = {\n        content: '娴嬭瘯璇勮鍐呭',\n        rating: 5\n      };\n      \n      // 鎵ц娴嬭瘯骞堕獙璇佺粨鏋?
-      await expect(socialService.addProductComment(mockCommentData)).rejects.toThrow('鍟嗗搧ID涓嶈兘涓虹┖');\n      expect(request.post).not.toHaveBeenCalled();\n    });\n\n    it('should throw error if content is empty', async () => {\n      // 鍑嗗娴嬭瘯鏁版嵁\n      const mockCommentData = {\n        productId: '1',\n        content: '',\n        rating: 5\n      };\n      \n      // 鎵ц娴嬭瘯骞堕獙璇佺粨鏋?
-      await expect(socialService.addProductComment(mockCommentData)).rejects.toThrow('璇勮鍐呭涓嶈兘涓虹┖');\n      expect(request.post).not.toHaveBeenCalled();\n    });\n\n    it('should throw error if rating is invalid', async () => {\n      // 鍑嗗娴嬭瘯鏁版嵁\n      const mockCommentData = {\n        productId: '1',\n        content: '娴嬭瘯璇勮鍐呭',\n        rating: 6 // 瓒呭嚭鑼冨洿1-5\n      };\n      \n      // 鎵ц娴嬭瘯骞堕獙璇佺粨鏋?
-      await expect(socialService.addProductComment(mockCommentData)).rejects.toThrow('璇勫垎蹇呴』鍦?-5涔嬮棿');\n      expect(request.post).not.toHaveBeenCalled();\n    });\n  });\n\n  describe('likeProduct', () => {\n    it('should like product successfully', async () => {\n      // 鍑嗗娴嬭瘯鏁版嵁\n      const productId = '1';\n      const mockResponse = { success: true, likeId: 'like_123' };\n      \n      // 璁剧疆妯℃嫙杩斿洖鍊?
-      request.post.mockResolvedValue(mockResponse);\n      \n      // 鎵ц娴嬭瘯\n      const result = await socialService.likeProduct(productId);\n      \n      // 楠岃瘉缁撴灉\n      expect(result).toEqual(mockResponse);\n      expect(request.post).toHaveBeenCalledWith(`/social/like/product/${productId}`);\n    });\n\n    it('should throw error if productId is not provided', async () => {\n      // 鎵ц娴嬭瘯骞堕獙璇佺粨鏋?
-      await expect(socialService.likeProduct()).rejects.toThrow('鍟嗗搧ID涓嶈兘涓虹┖');\n      expect(request.post).not.toHaveBeenCalled();\n    });\n  });\n\n  describe('unlikeProduct', () => {\n    it('should unlike product successfully', async () => {\n      // 鍑嗗娴嬭瘯鏁版嵁\n      const productId = '1';\n      const mockResponse = { success: true };\n      \n      // 璁剧疆妯℃嫙杩斿洖鍊?
-      request.delete.mockResolvedValue(mockResponse);\n      \n      // 鎵ц娴嬭瘯\n      const result = await socialService.unlikeProduct(productId);\n      \n      // 楠岃瘉缁撴灉\n      expect(result).toEqual(mockResponse);\n      expect(request.delete).toHaveBeenCalledWith(`/social/like/product/${productId}`);\n    });\n\n    it('should throw error if productId is not provided', async () => {\n      // 鎵ц娴嬭瘯骞堕獙璇佺粨鏋?
-      await expect(socialService.unlikeProduct()).rejects.toThrow('鍟嗗搧ID涓嶈兘涓虹┖');\n      expect(request.delete).not.toHaveBeenCalled();\n    });\n  });\n\n  describe('checkLikeStatus', () => {\n    it('should check like status successfully', async () => {\n      // 鍑嗗娴嬭瘯鏁版嵁\n      const mockOptions = {\n        targetId: '1',\n        targetType: 'product'\n      };\n      const mockResponse = { isLiked: true, likeId: 'like_123' };\n      \n      // 璁剧疆妯℃嫙杩斿洖鍊?
-      request.get.mockResolvedValue(mockResponse);\n      \n      // 鎵ц娴嬭瘯\n      const result = await socialService.checkLikeStatus(mockOptions);\n      \n      // 楠岃瘉缁撴灉\n      expect(result).toEqual(mockResponse);\n      expect(request.get).toHaveBeenCalledWith('/social/like/check', mockOptions);\n    });\n\n    it('should throw error if targetId is not provided', async () => {\n      // 鎵ц娴嬭瘯骞堕獙璇佺粨鏋?
-      await expect(socialService.checkLikeStatus({ targetType: 'product' })).rejects.toThrow('鐩爣ID鍜岀被鍨嬩笉鑳戒负绌?);\n      expect(request.get).not.toHaveBeenCalled();\n    });\n\n    it('should throw error if targetType is not provided', async () => {\n      // 鎵ц娴嬭瘯骞堕獙璇佺粨鏋?
-      await expect(socialService.checkLikeStatus({ targetId: '1' })).rejects.toThrow('鐩爣ID鍜岀被鍨嬩笉鑳戒负绌?);\n      expect(request.get).not.toHaveBeenCalled();\n    });\n  });\n\n  describe('likeComment', () => {\n    it('should like comment successfully', async () => {\n      // 鍑嗗娴嬭瘯鏁版嵁\n      const commentId = '1';\n      const mockResponse = { success: true, likeId: 'like_123' };\n      \n      // 璁剧疆妯℃嫙杩斿洖鍊?
-      request.post.mockResolvedValue(mockResponse);\n      \n      // 鎵ц娴嬭瘯\n      const result = await socialService.likeComment(commentId);\n      \n      // 楠岃瘉缁撴灉\n      expect(result).toEqual(mockResponse);\n      expect(request.post).toHaveBeenCalledWith(`/social/comments/${commentId}/like`);\n    });\n\n    it('should throw error if commentId is not provided', async () => {\n      // 鎵ц娴嬭瘯骞堕獙璇佺粨鏋?
-      await expect(socialService.likeComment()).rejects.toThrow('璇勮ID涓嶈兘涓虹┖');\n      expect(request.post).not.toHaveBeenCalled();\n    });\n  });\n\n  describe('unlikeComment', () => {\n    it('should unlike comment successfully', async () => {\n      // 鍑嗗娴嬭瘯鏁版嵁\n      const commentId = '1';\n      const mockResponse = { success: true };\n      \n      // 璁剧疆妯℃嫙杩斿洖鍊?
-      request.delete.mockResolvedValue(mockResponse);\n      \n      // 鎵ц娴嬭瘯\n      const result = await socialService.unlikeComment(commentId);\n      \n      // 楠岃瘉缁撴灉\n      expect(result).toEqual(mockResponse);\n      expect(request.delete).toHaveBeenCalledWith(`/social/comments/${commentId}/like`);\n    });\n\n    it('should throw error if commentId is not provided', async () => {\n      // 鎵ц娴嬭瘯骞堕獙璇佺粨鏋?
-      await expect(socialService.unlikeComment()).rejects.toThrow('璇勮ID涓嶈兘涓虹┖');\n      expect(request.delete).not.toHaveBeenCalled();\n    });\n  });\n});\n
+/**
+ * 文件名: socialService.test.js
+ * 版本号: 1.0.2
+ * 更新日期: 2025-12-01
+ * 作者: Sut
+ * 描述: 社交服务单元测试
+ */
+
+// 模拟依赖模块
+jest.mock('../../utils/request', () => ({
+  post: jest.fn(),
+  get: jest.fn(),
+  put: jest.fn(),
+  delete: jest.fn()
+}));
+
+// 模拟微信API
+jest.mock('wx', () => ({
+  showToast: jest.fn()
+}));
+
+const request = require('../../utils/request');
+const wx = require('wx');
+const socialService = require('../../services/socialService');
+
+describe('socialService', () => {
+  beforeEach(() => {
+    // 清除所有模拟调用
+    jest.clearAllMocks();
+  });
+
+  describe('shareProduct', () => {
+    it('should share product successfully', async () => {
+      // 准备测试数据
+      const mockOptions = {
+        productId: '1',
+        title: '测试产品',
+        description: '测试产品描述',
+        imageUrl: 'https://example.com/image.jpg',
+        shareChannel: 'wechat'
+      };
+      const mockResponse = { success: true, shareId: 'share_123' };
+      
+      // 设置模拟返回值
+      request.post.mockResolvedValue(mockResponse);
+      
+      // 执行测试
+      const result = await socialService.shareProduct(mockOptions);
+      
+      // 验证结果
+      expect(result).toEqual(mockResponse);
+      expect(request.post).toHaveBeenCalledWith('/social/share/product', mockOptions);
+    });
+
+    it('should use default shareChannel if not provided', async () => {
+      // 准备测试数据
+      const mockOptions = {
+        productId: '1',
+        title: '测试产品'
+      };
+      const mockResponse = { success: true, shareId: 'share_123' };
+      
+      // 设置模拟返回值
+      request.post.mockResolvedValue(mockResponse);
+      
+      // 执行测试
+      await socialService.shareProduct(mockOptions);
+      
+      // 验证结果
+      expect(request.post).toHaveBeenCalledWith('/social/share/product', {
+        ...mockOptions,
+        shareChannel: 'wechat',
+        description: undefined,
+        imageUrl: undefined
+      });
+    });
+
+    it('should throw error if productId is not provided', async () => {
+      // 执行测试并验证结果
+      await expect(socialService.shareProduct({})).rejects.toThrow('产品ID不能为空');
+      expect(request.post).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('getShareRecords', () => {
+    it('should get share records successfully', async () => {
+      // 准备测试数据
+      const mockRecords = [
+        { id: 'share_1', productId: '1', shareChannel: 'wechat', createdAt: '2025-11-30' },
+        { id: 'share_2', productId: '2', shareChannel: 'friend', createdAt: '2025-11-29' }
+      ];
+      const mockResponse = { data: mockRecords, total: 2, page: 1, pageSize: 20 };
+      
+      // 设置模拟返回值
+      request.get.mockResolvedValue(mockResponse);
+      
+      // 执行测试
+      const result = await socialService.getShareRecords();
+      
+      // 验证结果
+      expect(result).toEqual(mockResponse);
+      expect(request.get).toHaveBeenCalledWith('/social/share/records', {
+        page: 1,
+        pageSize: 20,
+        sort: 'newest'
+      });
+    });
+
+    it('should use custom options when provided', async () => {
+      // 准备测试数据
+      const mockOptions = {
+        page: 2,
+        pageSize: 10,
+        sort: 'oldest'
+      };
+      const mockResponse = { data: [], total: 0, page: 2, pageSize: 10 };
+      
+      // 设置模拟返回值
+      request.get.mockResolvedValue(mockResponse);
+      
+      // 执行测试
+      await socialService.getShareRecords(mockOptions);
+      
+      // 验证结果
+      expect(request.get).toHaveBeenCalledWith('/social/share/records', mockOptions);
+    });
+  });
+
+  describe('getShareStats', () => {
+    it('should get user share stats successfully', async () => {
+      // 准备测试数据
+      const mockStats = { totalShares: 10, totalProducts: 5, topChannels: ['wechat', 'friend'] };
+      
+      // 设置模拟返回值
+      request.get.mockResolvedValue(mockStats);
+      
+      // 执行测试
+      const result = await socialService.getShareStats();
+      
+      // 验证结果
+      expect(result).toEqual(mockStats);
+      expect(request.get).toHaveBeenCalledWith('/social/share/stats');
+    });
+
+    it('should get product share stats successfully', async () => {
+      // 准备测试数据
+      const productId = '1';
+      const mockStats = { totalShares: 5, shareChannels: ['wechat', 'circle'] };
+      
+      // 设置模拟返回值
+      request.get.mockResolvedValue(mockStats);
+      
+      // 执行测试
+      const result = await socialService.getShareStats(productId);
+      
+      // 验证结果
+      expect(result).toEqual(mockStats);
+      expect(request.get).toHaveBeenCalledWith(`/social/share/stats/product/${productId}`);
+    });
+  });
+
+  describe('getProductComments', () => {
+    it('should get product comments successfully', async () => {
+      // 准备测试数据
+      const productId = '1';
+      const mockComments = [
+        { id: 'comment_1', content: '测试评论1', rating: 5, createdAt: '2025-11-30' },
+        { id: 'comment_2', content: '测试评论2', rating: 4, createdAt: '2025-11-29' }
+      ];
+      const mockResponse = { data: mockComments, total: 2, page: 1, pageSize: 20 };
+      
+      // 设置模拟返回值
+      request.get.mockResolvedValue(mockResponse);
+      
+      // 执行测试
+      const result = await socialService.getProductComments({ productId });
+      
+      // 验证结果
+      expect(result).toEqual(mockResponse);
+      expect(request.get).toHaveBeenCalledWith(`/products/${productId}/comments`, {
+        page: 1,
+        pageSize: 20,
+        sort: 'newest'
+      });
+    });
+
+    it('should throw error if productId is not provided', async () => {
+      // 执行测试并验证结果
+      await expect(socialService.getProductComments({})).rejects.toThrow('产品ID不能为空');
+      expect(request.get).not.toHaveBeenCalled();
+    });
+
+    it('should use custom options when provided', async () => {
+      // 准备测试数据
+      const mockOptions = {
+        productId: '1',
+        page: 2,
+        pageSize: 10,
+        sort: 'highest',
+        minRating: 4,
+        withImages: true
+      };
+      const mockResponse = { data: [], total: 0, page: 2, pageSize: 10 };
+      
+      // 设置模拟返回值
+      request.get.mockResolvedValue(mockResponse);
+      
+      // 执行测试
+      await socialService.getProductComments(mockOptions);
+      
+      // 验证结果
+      expect(request.get).toHaveBeenCalledWith(`/products/${mockOptions.productId}/comments`, {
+        page: mockOptions.page,
+        pageSize: mockOptions.pageSize,
+        sort: mockOptions.sort,
+        minRating: mockOptions.minRating,
+        withImages: mockOptions.withImages
+      });
+    });
+  });
+
+  describe('addProductComment', () => {
+    it('should add product comment successfully', async () => {
+      // 准备测试数据
+      const mockCommentData = {
+        productId: '1',
+        content: '测试评论内容',
+        rating: 5,
+        anonymous: false,
+        images: []
+      };
+      const mockResponse = { id: 'comment_1', ...mockCommentData, createdAt: '2025-11-30' };
+      
+      // 设置模拟返回值
+      request.post.mockResolvedValue(mockResponse);
+      
+      // 执行测试
+      const result = await socialService.addProductComment(mockCommentData);
+      
+      // 验证结果
+      expect(result).toEqual(mockResponse);
+      expect(request.post).toHaveBeenCalledWith('/social/comments/product', mockCommentData);
+    });
+
+    it('should throw error if productId is not provided', async () => {
+      // 准备测试数据
+      const mockCommentData = {
+        content: '测试评论内容',
+        rating: 5
+      };
+      
+      // 执行测试并验证结果
+      await expect(socialService.addProductComment(mockCommentData)).rejects.toThrow('产品ID不能为空');
+      expect(request.post).not.toHaveBeenCalled();
+    });
+
+    it('should throw error if content is empty', async () => {
+      // 准备测试数据
+      const mockCommentData = {
+        productId: '1',
+        content: '',
+        rating: 5
+      };
+      
+      // 执行测试并验证结果
+      await expect(socialService.addProductComment(mockCommentData)).rejects.toThrow('评论内容不能为空');
+      expect(request.post).not.toHaveBeenCalled();
+    });
+
+    it('should throw error if rating is invalid', async () => {
+      // 准备测试数据
+      const mockCommentData = {
+        productId: '1',
+        content: '测试评论内容',
+        rating: 6 // 超出范围1-5
+      };
+      
+      // 执行测试并验证结果
+      await expect(socialService.addProductComment(mockCommentData)).rejects.toThrow('评分必须在1-5之间');
+      expect(request.post).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('likeProduct', () => {
+    it('should like product successfully', async () => {
+      // 准备测试数据
+      const productId = '1';
+      const mockResponse = { success: true, likeId: 'like_123' };
+      
+      // 设置模拟返回值
+      request.post.mockResolvedValue(mockResponse);
+      
+      // 执行测试
+      const result = await socialService.likeProduct(productId);
+      
+      // 验证结果
+      expect(result).toEqual(mockResponse);
+      expect(request.post).toHaveBeenCalledWith(`/social/like/product/${productId}`);
+    });
+
+    it('should throw error if productId is not provided', async () => {
+      // 执行测试并验证结果
+      await expect(socialService.likeProduct()).rejects.toThrow('产品ID不能为空');
+      expect(request.post).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('unlikeProduct', () => {
+    it('should unlike product successfully', async () => {
+      // 准备测试数据
+      const productId = '1';
+      const mockResponse = { success: true };
+      
+      // 设置模拟返回值
+      request.delete.mockResolvedValue(mockResponse);
+      
+      // 执行测试
+      const result = await socialService.unlikeProduct(productId);
+      
+      // 验证结果
+      expect(result).toEqual(mockResponse);
+      expect(request.delete).toHaveBeenCalledWith(`/social/like/product/${productId}`);
+    });
+
+    it('should throw error if productId is not provided', async () => {
+      // 执行测试并验证结果
+      await expect(socialService.unlikeProduct()).rejects.toThrow('产品ID不能为空');
+      expect(request.delete).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('checkLikeStatus', () => {
+    it('should check like status successfully', async () => {
+      // 准备测试数据
+      const mockOptions = {
+        targetId: '1',
+        targetType: 'product'
+      };
+      const mockResponse = { isLiked: true, likeId: 'like_123' };
+      
+      // 设置模拟返回值
+      request.get.mockResolvedValue(mockResponse);
+      
+      // 执行测试
+      const result = await socialService.checkLikeStatus(mockOptions);
+      
+      // 验证结果
+      expect(result).toEqual(mockResponse);
+      expect(request.get).toHaveBeenCalledWith('/social/like/check', mockOptions);
+    });
+
+    it('should throw error if targetId is not provided', async () => {
+      // 执行测试并验证结果
+      await expect(socialService.checkLikeStatus({ targetType: 'product' })).rejects.toThrow('目标ID和类型不能为空');
+      expect(request.get).not.toHaveBeenCalled();
+    });
+
+    it('should throw error if targetType is not provided', async () => {
+      // 执行测试并验证结果
+      await expect(socialService.checkLikeStatus({ targetId: '1' })).rejects.toThrow('目标ID和类型不能为空');
+      expect(request.get).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('likeComment', () => {
+    it('should like comment successfully', async () => {
+      // 准备测试数据
+      const commentId = '1';
+      const mockResponse = { success: true, likeId: 'like_123' };
+      
+      // 设置模拟返回值
+      request.post.mockResolvedValue(mockResponse);
+      
+      // 执行测试
+      const result = await socialService.likeComment(commentId);
+      
+      // 验证结果
+      expect(result).toEqual(mockResponse);
+      expect(request.post).toHaveBeenCalledWith(`/social/comments/${commentId}/like`);
+    });
+
+    it('should throw error if commentId is not provided', async () => {
+      // 执行测试并验证结果
+      await expect(socialService.likeComment()).rejects.toThrow('评论ID不能为空');
+      expect(request.post).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('unlikeComment', () => {
+    it('should unlike comment successfully', async () => {
+      // 准备测试数据
+      const commentId = '1';
+      const mockResponse = { success: true };
+      
+      // 设置模拟返回值
+      request.delete.mockResolvedValue(mockResponse);
+      
+      // 执行测试
+      const result = await socialService.unlikeComment(commentId);
+      
+      // 验证结果
+      expect(result).toEqual(mockResponse);
+      expect(request.delete).toHaveBeenCalledWith(`/social/comments/${commentId}/like`);
+    });
+
+    it('should throw error if commentId is not provided', async () => {
+      // 执行测试并验证结果
+      await expect(socialService.unlikeComment()).rejects.toThrow('评论ID不能为空');
+      expect(request.delete).not.toHaveBeenCalled();
+    });
+  });
+});

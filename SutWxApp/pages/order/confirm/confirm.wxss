@@ -1,8 +1,8 @@
 ﻿/**
  * 鏂囦欢鍚? confirm.wxss
  * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-27
- * 鎻忚堪: 璁㈠崟绾喛顓婚〉闈㈡牱寮忔枃浠? */
+ * 更新日期: 2025-11-27
+ * 描述: 璁㈠崟绾喛顓婚〉闈㈡牱寮忔枃浠? */
 
 .order-confirm {
   background-color: #f7f7f7;
@@ -10,7 +10,7 @@
   padding-bottom: 80rpx;
 }
 
-/* 鍔犺浇鐘舵€?/
+/* 加载状态/
 .loading-container {
   display: flex;
   flex-direction: column;

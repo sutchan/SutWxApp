@@ -1,8 +1,8 @@
 ﻿/**
  * 鏂囦欢鍚? tasks.wxml
  * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: tasks 妞ょ敻娼扮紒鎾寸€弬鍥︽
+ * 更新日期: 2025-11-23
+ * 描述: tasks 妞ょ敻娼扮紒鎾寸€弬鍥︽
  */
 <!-- 缁夘垰鍨庢禒璇插妞ょ敻娼?-->
 <view class="tasks-container">
@@ -47,7 +47,7 @@
   
   <!-- 娴犺濮熼崚妤勩€?-->
   <view class="tasks-list">
-    <!-- 鍔犺浇鐘舵€?->
+    <!-- 加载状态->
     <view wx:if="{{loading && taskList.length === 0}}" class="loading-container">
       <view class="loading-spinner"></view>
       <text class="loading-text">濮濓絽婀崝鐘烘祰娴犺濮?..</text>

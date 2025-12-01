@@ -1,8 +1,8 @@
 ﻿/**
  * 鏂囦欢鍚? records.wxml
  * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: records 妞ょ敻娼扮紒鎾寸€弬鍥︽
+ * 更新日期: 2025-11-23
+ * 描述: records 妞ょ敻娼扮紒鎾寸€弬鍥︽
  */
 <view class="container">
   <!-- 缁夘垰鍨庡鍌濐潔 -->
@@ -46,7 +46,7 @@
       </view>
     </view>
     
-    <!-- 鍔犺浇鐘舵€?->
+    <!-- 加载状态->
     <view wx:if="{{loading}}" class="loading">
       <text>鍔犺浇涓?.</text>
     </view>

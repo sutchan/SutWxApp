@@ -1,8 +1,8 @@
 ﻿/**
  * 鏂囦欢鍚? list.wxml
  * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: list 妞ょ敻娼扮紒鎾寸€弬鍥︽
+ * 更新日期: 2025-11-23
+ * 描述: list 妞ょ敻娼扮紒鎾寸€弬鍥︽
  */
 <view class="container">
   <mp-tabs activeTab="{{activeTab}}" tabs="{{tabs}}" bindtabclick="onTabChange"></mp-tabs>
@@ -20,12 +20,12 @@
               <image class="goods-image" src="{{goods.image}}" mode="aspectFill"></image>
               <view class="goods-info">
                 <text class="goods-name">{{goods.name}}</text>
-                <text class="goods-price">楼{{goods.price}} x {{goods.quantity}}</text>
+                <text class="goods-price">¥{{goods.price}} x {{goods.quantity}}</text>
               </view>
             </view>
           </view>
           <view class="order-footer">
-            <text class="order-total">鐎圭偘绮? 楼{{item.totalPrice}}</text>
+            <text class="order-total">鐎圭偘绮? ¥{{item.totalPrice}}</text>
             <text class="order-time">{{item.createTime}}</text>
           </view>
         </view>

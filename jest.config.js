@@ -1,15 +1,15 @@
 ﻿/**
  * 鏂囦欢鍚? jest.config.js
  * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: Jest 娴嬭瘯閰嶇疆鏂囦欢
+ * 更新日期: 2025-11-23
+ * 描述: Jest 娴嬭瘯閰嶇疆鏂囦欢
  */
 
 module.exports = {
   // 娴嬭瘯鐜
   testEnvironment: 'node',
   
-  // 娴嬭瘯鏂囦欢鍖归厤妯″紡
+  // 测试文件鍖归厤妯″紡
   testMatch: [
     '**/__tests__/**/*.test.js',
     '**/?(*.)+(spec|test).js'

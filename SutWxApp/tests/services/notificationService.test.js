@@ -1,31 +1,408 @@
-﻿/**\n * 鏂囦欢鍚? notificationService.test.js\n * 鐗堟湰鍙? 1.0.0\n * 鏇存柊鏃ユ湡: 2025-12-01\n * 浣滆€? Sut\n * 鎻忚堪: 閫氱煡鏈嶅姟鍗曞厓娴嬭瘯\n */\n\n// 妯℃嫙渚濊禆妯″潡\njest.mock('../../utils/request', () => ({\n  post: jest.fn(),\n  get: jest.fn(),\n  put: jest.fn(),\n  delete: jest.fn()\n}));\n\n// 妯℃嫙寰俊API\njest.mock('wx', () => ({\n  showToast: jest.fn()\n}));\n\nconst request = require('../../utils/request');\nconst wx = require('wx');\nconst notificationService = require('../../services/notificationService');\n\ndescribe('notificationService', () => {\n  beforeEach(() => {\n    // 娓呴櫎鎵€鏈夋ā鎷熻皟鐢?
-    jest.clearAllMocks();\n    // 娓呯┖閲嶈瘯闃熷垪\n    notificationService.clearRetryQueue();\n  });\n\n  describe('getNotificationList', () => {\n    it('should get notification list successfully', async () => {\n      // 鍑嗗娴嬭瘯鏁版嵁\n      const mockNotifications = [\n        { id: '1', title: '娴嬭瘯閫氱煡1', content: '娴嬭瘯鍐呭1', type: 'system', isRead: false },\n        { id: '2', title: '娴嬭瘯閫氱煡2', content: '娴嬭瘯鍐呭2', type: 'order', isRead: true }\n      ];\n      const mockResponse = { data: mockNotifications, total: 2, page: 1, pageSize: 20 };\n      \n      // 璁剧疆妯℃嫙杩斿洖鍊?
-      request.get.mockResolvedValue(mockResponse);\n      \n      // 鎵ц娴嬭瘯\n      const result = await notificationService.getNotificationList();\n      \n      // 楠岃瘉缁撴灉\n      expect(result).toEqual(mockResponse);\n      expect(request.get).toHaveBeenCalledWith('/notifications', {\n        type: 'all',\n        status: 'all',\n        page: 1,\n        pageSize: 20\n      });\n    });\n\n    it('should use custom options when provided', async () => {\n      // 鍑嗗娴嬭瘯鏁版嵁\n      const mockOptions = {\n        type: 'order',\n        status: 'unread',\n        page: 2,\n        pageSize: 10\n      };\n      const mockResponse = { data: [], total: 0, page: 2, pageSize: 10 };\n      \n      // 璁剧疆妯℃嫙杩斿洖鍊?
-      request.get.mockResolvedValue(mockResponse);\n      \n      // 鎵ц娴嬭瘯\n      await notificationService.getNotificationList(mockOptions);\n      \n      // 楠岃瘉缁撴灉\n      expect(request.get).toHaveBeenCalledWith('/notifications', mockOptions);\n    });\n  });\n\n  describe('getNotificationDetail', () => {\n    it('should get notification detail successfully', async () => {\n      // 鍑嗗娴嬭瘯鏁版嵁\n      const notificationId = '1';\n      const mockResponse = { id: notificationId, title: '娴嬭瘯閫氱煡', content: '娴嬭瘯鍐呭', type: 'system' };\n      \n      // 璁剧疆妯℃嫙杩斿洖鍊?
-      request.get.mockResolvedValue(mockResponse);\n      \n      // 鎵ц娴嬭瘯\n      const result = await notificationService.getNotificationDetail(notificationId);\n      \n      // 楠岃瘉缁撴灉\n      expect(result).toEqual(mockResponse);\n      expect(request.get).toHaveBeenCalledWith(`/notifications/${notificationId}`);\n    });\n\n    it('should throw error if id is not provided', async () => {\n      // 鎵ц娴嬭瘯骞堕獙璇佺粨鏋?
-      await expect(notificationService.getNotificationDetail()).rejects.toThrow('閫氱煡ID涓嶈兘涓虹┖');\n      expect(request.get).not.toHaveBeenCalled();\n    });\n  });\n\n  describe('markAsRead', () => {\n    it('should mark single notification as read successfully', async () => {\n      // 鍑嗗娴嬭瘯鏁版嵁\n      const notificationId = '1';\n      const mockResponse = { success: true };\n      \n      // 璁剧疆妯℃嫙杩斿洖鍊?
-      request.put.mockResolvedValue(mockResponse);\n      \n      // 鎵ц娴嬭瘯\n      const result = await notificationService.markAsRead(notificationId);\n      \n      // 楠岃瘉缁撴灉\n      expect(result).toEqual(mockResponse);\n      expect(request.put).toHaveBeenCalledWith(`/notifications/${notificationId}/read`);\n    });\n\n    it('should mark all notifications as read successfully', async () => {\n      // 鍑嗗娴嬭瘯鏁版嵁\n      const mockResponse = { success: true };\n      \n      // 璁剧疆妯℃嫙杩斿洖鍊?
-      request.put.mockResolvedValue(mockResponse);\n      \n      // 鎵ц娴嬭瘯\n      const result = await notificationService.markAsRead();\n      \n      // 楠岃瘉缁撴灉\n      expect(result).toEqual(mockResponse);\n      expect(request.put).toHaveBeenCalledWith('/notifications/read-all');\n    });\n  });\n\n  describe('deleteNotification', () => {\n    it('should delete single notification successfully', async () => {\n      // 鍑嗗娴嬭瘯鏁版嵁\n      const notificationId = '1';\n      const mockResponse = { success: true };\n      \n      // 璁剧疆妯℃嫙杩斿洖鍊?
-      request.delete.mockResolvedValue(mockResponse);\n      \n      // 鎵ц娴嬭瘯\n      const result = await notificationService.deleteNotification(notificationId);\n      \n      // 楠岃瘉缁撴灉\n      expect(result).toEqual(mockResponse);\n      expect(request.delete).toHaveBeenCalledWith(`/notifications/${notificationId}`);\n    });\n\n    it('should delete all read notifications successfully', async () => {\n      // 鍑嗗娴嬭瘯鏁版嵁\n      const mockResponse = { success: true };\n      \n      // 璁剧疆妯℃嫙杩斿洖鍊?
-      request.delete.mockResolvedValue(mockResponse);\n      \n      // 鎵ц娴嬭瘯\n      const result = await notificationService.deleteNotification();\n      \n      // 楠岃瘉缁撴灉\n      expect(result).toEqual(mockResponse);\n      expect(request.delete).toHaveBeenCalledWith('/notifications/clear-read');\n    });\n  });\n\n  describe('getUnreadCount', () => {\n    it('should get unread count successfully', async () => {\n      // 鍑嗗娴嬭瘯鏁版嵁\n      const mockResponse = { count: 5 };\n      \n      // 璁剧疆妯℃嫙杩斿洖鍊?
-      request.get.mockResolvedValue(mockResponse);\n      \n      // 鎵ц娴嬭瘯\n      const result = await notificationService.getUnreadCount();\n      \n      // 楠岃瘉缁撴灉\n      expect(result).toEqual(mockResponse);\n      expect(request.get).toHaveBeenCalledWith('/notifications/unread-count');\n    });\n  });\n\n  describe('getNotificationSettings', () => {\n    it('should get notification settings successfully', async () => {\n      // 鍑嗗娴嬭瘯鏁版嵁\n      const mockResponse = {\n        systemNotification: true,\n        orderNotification: true,\n        promotionNotification: false,\n        activityNotification: true\n      };\n      \n      // 璁剧疆妯℃嫙杩斿洖鍊?
-      request.get.mockResolvedValue(mockResponse);\n      \n      // 鎵ц娴嬭瘯\n      const result = await notificationService.getNotificationSettings();\n      \n      // 楠岃瘉缁撴灉\n      expect(result).toEqual(mockResponse);\n      expect(request.get).toHaveBeenCalledWith('/notifications/settings');\n    });\n  });\n\n  describe('updateNotificationSettings', () => {\n    it('should update notification settings successfully', async () => {\n      // 鍑嗗娴嬭瘯鏁版嵁\n      const mockSettings = {\n        systemNotification: true,\n        orderNotification: false,\n        promotionNotification: true,\n        activityNotification: false\n      };\n      const mockResponse = { success: true, ...mockSettings };\n      \n      // 璁剧疆妯℃嫙杩斿洖鍊?
-      request.put.mockResolvedValue(mockResponse);\n      \n      // 鎵ц娴嬭瘯\n      const result = await notificationService.updateNotificationSettings(mockSettings);\n      \n      // 楠岃瘉缁撴灉\n      expect(result).toEqual(mockResponse);\n      expect(request.put).toHaveBeenCalledWith('/notifications/settings', mockSettings);\n    });\n  });\n\n  describe('subscribePushNotification', () => {\n    it('should subscribe push notification successfully', async () => {\n      // 鍑嗗娴嬭瘯鏁版嵁\n      const mockSubscription = {\n        platform: 'web',\n        token: 'test-token',\n        userId: 'user-123'\n      };\n      const mockResponse = { success: true, subscriptionId: 'sub-123' };\n      \n      // 璁剧疆妯℃嫙杩斿洖鍊?
-      request.post.mockResolvedValue(mockResponse);\n      \n      // 鎵ц娴嬭瘯\n      const result = await notificationService.subscribePushNotification(mockSubscription);\n      \n      // 楠岃瘉缁撴灉\n      expect(result).toEqual(mockResponse);\n      expect(request.post).toHaveBeenCalledWith('/notifications/subscribe', mockSubscription);\n    });\n\n    it('should throw error if platform is not provided', async () => {\n      // 鍑嗗娴嬭瘯鏁版嵁\n      const mockSubscription = {\n        token: 'test-token',\n        userId: 'user-123'\n      };\n      \n      // 鎵ц娴嬭瘯骞堕獙璇佺粨鏋?
-      await expect(notificationService.subscribePushNotification(mockSubscription)).rejects.toThrow('骞冲彴鍜岃澶囦护鐗屼笉鑳戒负绌?);\n      expect(request.post).not.toHaveBeenCalled();\n    });\n\n    it('should throw error if token is not provided', async () => {\n      // 鍑嗗娴嬭瘯鏁版嵁\n      const mockSubscription = {\n        platform: 'web',\n        userId: 'user-123'\n      };\n      \n      // 鎵ц娴嬭瘯骞堕獙璇佺粨鏋?
-      await expect(notificationService.subscribePushNotification(mockSubscription)).rejects.toThrow('骞冲彴鍜岃澶囦护鐗屼笉鑳戒负绌?);\n      expect(request.post).not.toHaveBeenCalled();\n    });\n  });\n\n  describe('unsubscribePushNotification', () => {\n    it('should unsubscribe push notification successfully', async () => {\n      // 鍑嗗娴嬭瘯鏁版嵁\n      const token = 'test-token';\n      const mockResponse = { success: true };\n      \n      // 璁剧疆妯℃嫙杩斿洖鍊?
-      request.post.mockResolvedValue(mockResponse);\n      \n      // 鎵ц娴嬭瘯\n      const result = await notificationService.unsubscribePushNotification(token);\n      \n      // 楠岃瘉缁撴灉\n      expect(result).toEqual(mockResponse);\n      expect(request.post).toHaveBeenCalledWith('/notifications/unsubscribe', { token });\n    });\n\n    it('should throw error if token is not provided', async () => {\n      // 鎵ц娴嬭瘯骞堕獙璇佺粨鏋?
-      await expect(notificationService.unsubscribePushNotification()).rejects.toThrow('璁惧浠ょ墝涓嶈兘涓虹┖');\n      expect(request.post).not.toHaveBeenCalled();\n    });\n  });\n\n  describe('sendNotification', () => {\n    it('should send notification successfully', async () => {\n      // 鍑嗗娴嬭瘯鏁版嵁\n      const mockNotification = {\n        title: '娴嬭瘯閫氱煡',\n        content: '娴嬭瘯鍐呭',\n        type: 'system',\n        targetUsers: ['user-123', 'user-456']\n      };\n      const mockResponse = { success: true, notificationId: 'notify-123' };\n      \n      // 璁剧疆妯℃嫙杩斿洖鍊?
-      request.post.mockResolvedValue(mockResponse);\n      \n      // 鎵ц娴嬭瘯\n      const result = await notificationService.sendNotification(mockNotification);\n      \n      // 楠岃瘉缁撴灉\n      expect(result).toEqual(mockResponse);\n      expect(request.post).toHaveBeenCalledWith('/notifications/send', mockNotification);\n    });\n\n    it('should throw error if title is not provided', async () => {\n      // 鍑嗗娴嬭瘯鏁版嵁\n      const mockNotification = {\n        content: '娴嬭瘯鍐呭',\n        type: 'system'\n      };\n      \n      // 鎵ц娴嬭瘯骞堕獙璇佺粨鏋?
-      await expect(notificationService.sendNotification(mockNotification)).rejects.toThrow('閫氱煡鏍囬銆佸唴瀹瑰拰绫诲瀷涓嶈兘涓虹┖');\n      expect(request.post).not.toHaveBeenCalled();\n    });\n\n    it('should throw error if content is not provided', async () => {\n      // 鍑嗗娴嬭瘯鏁版嵁\n      const mockNotification = {\n        title: '娴嬭瘯閫氱煡',\n        type: 'system'\n      };\n      \n      // 鎵ц娴嬭瘯骞堕獙璇佺粨鏋?
-      await expect(notificationService.sendNotification(mockNotification)).rejects.toThrow('閫氱煡鏍囬銆佸唴瀹瑰拰绫诲瀷涓嶈兘涓虹┖');\n      expect(request.post).not.toHaveBeenCalled();\n    });\n\n    it('should throw error if type is not provided', async () => {\n      // 鍑嗗娴嬭瘯鏁版嵁\n      const mockNotification = {\n        title: '娴嬭瘯閫氱煡',\n        content: '娴嬭瘯鍐呭'\n      };\n      \n      // 鎵ц娴嬭瘯骞堕獙璇佺粨鏋?
-      await expect(notificationService.sendNotification(mockNotification)).rejects.toThrow('閫氱煡鏍囬銆佸唴瀹瑰拰绫诲瀷涓嶈兘涓虹┖');\n      expect(request.post).not.toHaveBeenCalled();\n    });\n  });\n\n  describe('sendSubscribeMessage', () => {\n    it('should send subscribe message successfully', async () => {\n      // 鍑嗗娴嬭瘯鏁版嵁\n      const mockMessage = {\n        templateId: 'template-123',\n        data: { title: '娴嬭瘯妯℃澘娑堟伅', content: '娴嬭瘯鍐呭' },\n        openId: 'openid-123'\n      };\n      const mockResponse = { success: true, messageId: 'msg-123' };\n      \n      // 璁剧疆妯℃嫙杩斿洖鍊?
-      request.post.mockResolvedValue(mockResponse);\n      \n      // 鎵ц娴嬭瘯\n      const result = await notificationService.sendSubscribeMessage(mockMessage);\n      \n      // 楠岃瘉缁撴灉\n      expect(result).toEqual(mockResponse);\n      expect(request.post).toHaveBeenCalledWith('/notifications/subscribe-message', mockMessage);\n    });\n\n    it('should throw error if templateId is not provided', async () => {\n      // 鍑嗗娴嬭瘯鏁版嵁\n      const mockMessage = {\n        data: { title: '娴嬭瘯妯℃澘娑堟伅', content: '娴嬭瘯鍐呭' },\n        openId: 'openid-123'\n      };\n      \n      // 鎵ц娴嬭瘯骞堕獙璇佺粨鏋?
-      await expect(notificationService.sendSubscribeMessage(mockMessage)).rejects.toThrow('妯℃澘ID銆佹秷鎭暟鎹拰鐢ㄦ埛openId涓嶈兘涓虹┖');\n      expect(request.post).not.toHaveBeenCalled();\n    });\n\n    it('should add to retry queue if send failed and retry count not exceeded', async () => {\n      // 鍑嗗娴嬭瘯鏁版嵁\n      const mockMessage = {\n        templateId: 'template-123',\n        data: { title: '娴嬭瘯妯℃澘娑堟伅', content: '娴嬭瘯鍐呭' },\n        openId: 'openid-123'\n      };\n      \n      // 璁剧疆妯℃嫙杩斿洖鍊?
-      request.post.mockRejectedValue(new Error('鍙戦€佸け璐?));\n      \n      // 鎵ц娴嬭瘯\n      const result = await notificationService.sendSubscribeMessage(mockMessage);\n      \n      // 楠岃瘉缁撴灉\n      expect(result).toEqual({ success: false, retry: true, retryCount: 1 });\n      expect(request.post).toHaveBeenCalledWith('/notifications/subscribe-message', mockMessage);\n      \n      // 楠岃瘉閲嶈瘯闃熷垪鐘舵€?
-      const queueStatus = notificationService.getRetryQueueStatus();\n      expect(queueStatus.queueLength).toBe(1);\n    });\n\n    it('should throw error if retry count exceeded', async () => {\n      // 鍑嗗娴嬭瘯鏁版嵁\n      const mockMessage = {\n        templateId: 'template-123',\n        data: { title: '娴嬭瘯妯℃澘娑堟伅', content: '娴嬭瘯鍐呭' },\n        openId: 'openid-123'\n      };\n      \n      // 璁剧疆妯℃嫙杩斿洖鍊?
-      request.post.mockRejectedValue(new Error('鍙戦€佸け璐?));\n      \n      // 鎵ц娴嬭瘯骞堕獙璇佺粨鏋?
-      await expect(notificationService.sendSubscribeMessage(mockMessage, 3)).rejects.toThrow('鍙戦€佽闃呮秷鎭け璐ワ紝宸查噸璇?娆? 鍙戦€佸け璐?);\n      expect(request.post).toHaveBeenCalledWith('/notifications/subscribe-message', mockMessage);\n    });\n  });\n\n  describe('retry queue management', () => {\n    it('should add message to retry queue with correct delay', () => {\n      // 鍑嗗娴嬭瘯鏁版嵁\n      const mockMessage = {\n        templateId: 'template-123',\n        data: { title: '娴嬭瘯妯℃澘娑堟伅', content: '娴嬭瘯鍐呭' },\n        openId: 'openid-123'\n      };\n      \n      // 鎵ц娴嬭瘯\n      notificationService.addToRetryQueue(mockMessage, 1);\n      \n      // 楠岃瘉閲嶈瘯闃熷垪鐘舵€?
-      const queueStatus = notificationService.getRetryQueueStatus();\n      expect(queueStatus.queueLength).toBe(1);\n    });\n\n    it('should clear retry queue successfully', () => {\n      // 鍑嗗娴嬭瘯鏁版嵁\n      const mockMessage = {\n        templateId: 'template-123',\n        data: { title: '娴嬭瘯妯℃澘娑堟伅', content: '娴嬭瘯鍐呭' },\n        openId: 'openid-123'\n      };\n      \n      // 娣诲姞娑堟伅鍒伴噸璇曢槦鍒?
-      notificationService.addToRetryQueue(mockMessage, 1);\n      \n      // 鎵ц娴嬭瘯\n      notificationService.clearRetryQueue();\n      \n      // 楠岃瘉閲嶈瘯闃熷垪鐘舵€?
-      const queueStatus = notificationService.getRetryQueueStatus();\n      expect(queueStatus.queueLength).toBe(0);\n      expect(queueStatus.isProcessing).toBe(false);\n    });\n  });\n});\n
+/**
+ * 文件名: notificationService.test.js
+ * 版本号: 1.0.2
+ * 更新日期: 2025-12-01
+ * 作者: Sut
+ * 描述: 通知服务单元测试
+ */
+
+// 模拟依赖模块
+jest.mock('../../utils/request', () => ({
+  post: jest.fn(),
+  get: jest.fn(),
+  put: jest.fn(),
+  delete: jest.fn()
+}));
+
+// 模拟微信API
+jest.mock('wx', () => ({
+  showToast: jest.fn()
+}));
+
+const request = require('../../utils/request');
+const wx = require('wx');
+const notificationService = require('../../services/notificationService');
+
+describe('notificationService', () => {
+  beforeEach(() => {
+    // 清除所有模拟调用
+    jest.clearAllMocks();
+  });
+
+  describe('getNotificationList', () => {
+    it('should get notification list successfully', async () => {
+      // 准备测试数据
+      const mockNotifications = [
+        { id: '1', title: '测试通知1', content: '测试内容1', type: 'system', isRead: false },
+        { id: '2', title: '测试通知2', content: '测试内容2', type: 'order', isRead: true }
+      ];
+      const mockResponse = { data: mockNotifications, total: 2, page: 1, pageSize: 20 };
+      
+      // 设置模拟返回值
+      request.get.mockResolvedValue(mockResponse);
+      
+      // 执行测试
+      const result = await notificationService.getNotificationList();
+      
+      // 验证结果
+      expect(result).toEqual(mockResponse);
+      expect(request.get).toHaveBeenCalledWith('/notifications', {
+        type: 'all',
+        status: 'all',
+        page: 1,
+        pageSize: 20
+      });
+    });
+
+    it('should use custom options when provided', async () => {
+      // 准备测试数据
+      const mockOptions = {
+        type: 'order',
+        status: 'unread',
+        page: 2,
+        pageSize: 10
+      };
+      const mockResponse = { data: [], total: 0, page: 2, pageSize: 10 };
+      
+      // 设置模拟返回值
+      request.get.mockResolvedValue(mockResponse);
+      
+      // 执行测试
+      await notificationService.getNotificationList(mockOptions);
+      
+      // 验证结果
+      expect(request.get).toHaveBeenCalledWith('/notifications', mockOptions);
+    });
+  });
+
+  describe('getNotificationDetail', () => {
+    it('should get notification detail successfully', async () => {
+      // 准备测试数据
+      const notificationId = '1';
+      const mockResponse = { id: notificationId, title: '测试通知', content: '测试内容', type: 'system' };
+      
+      // 设置模拟返回值
+      request.get.mockResolvedValue(mockResponse);
+      
+      // 执行测试
+      const result = await notificationService.getNotificationDetail(notificationId);
+      
+      // 验证结果
+      expect(result).toEqual(mockResponse);
+      expect(request.get).toHaveBeenCalledWith(`/notifications/${notificationId}`);
+    });
+
+    it('should throw error if id is not provided', async () => {
+      // 执行测试并验证结果
+      await expect(notificationService.getNotificationDetail()).rejects.toThrow('通知ID不能为空');
+      expect(request.get).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('markAsRead', () => {
+    it('should mark single notification as read successfully', async () => {
+      // 准备测试数据
+      const notificationId = '1';
+      const mockResponse = { success: true };
+      
+      // 设置模拟返回值
+      request.put.mockResolvedValue(mockResponse);
+      
+      // 执行测试
+      const result = await notificationService.markAsRead(notificationId);
+      
+      // 验证结果
+      expect(result).toEqual(mockResponse);
+      expect(request.put).toHaveBeenCalledWith(`/notifications/${notificationId}/read`);
+    });
+
+    it('should mark all notifications as read successfully', async () => {
+      // 准备测试数据
+      const mockResponse = { success: true };
+      
+      // 设置模拟返回值
+      request.put.mockResolvedValue(mockResponse);
+      
+      // 执行测试
+      const result = await notificationService.markAsRead();
+      
+      // 验证结果
+      expect(result).toEqual(mockResponse);
+      expect(request.put).toHaveBeenCalledWith('/notifications/read-all');
+    });
+  });
+
+  describe('deleteNotification', () => {
+    it('should delete single notification successfully', async () => {
+      // 准备测试数据
+      const notificationId = '1';
+      const mockResponse = { success: true };
+      
+      // 设置模拟返回值
+      request.delete.mockResolvedValue(mockResponse);
+      
+      // 执行测试
+      const result = await notificationService.deleteNotification(notificationId);
+      
+      // 验证结果
+      expect(result).toEqual(mockResponse);
+      expect(request.delete).toHaveBeenCalledWith(`/notifications/${notificationId}`);
+    });
+
+    it('should delete all read notifications successfully', async () => {
+      // 准备测试数据
+      const mockResponse = { success: true };
+      
+      // 设置模拟返回值
+      request.delete.mockResolvedValue(mockResponse);
+      
+      // 执行测试
+      const result = await notificationService.deleteNotification();
+      
+      // 验证结果
+      expect(result).toEqual(mockResponse);
+      expect(request.delete).toHaveBeenCalledWith('/notifications/clear-read');
+    });
+  });
+
+  describe('getUnreadCount', () => {
+    it('should get unread count successfully', async () => {
+      // 准备测试数据
+      const mockResponse = { count: 5 };
+      
+      // 设置模拟返回值
+      request.get.mockResolvedValue(mockResponse);
+      
+      // 执行测试
+      const result = await notificationService.getUnreadCount();
+      
+      // 验证结果
+      expect(result).toEqual(mockResponse);
+      expect(request.get).toHaveBeenCalledWith('/notifications/unread-count');
+    });
+  });
+
+  describe('getNotificationSettings', () => {
+    it('should get notification settings successfully', async () => {
+      // 准备测试数据
+      const mockResponse = {
+        systemNotification: true,
+        orderNotification: true,
+        promotionNotification: false,
+        activityNotification: true
+      };
+      
+      // 设置模拟返回值
+      request.get.mockResolvedValue(mockResponse);
+      
+      // 执行测试
+      const result = await notificationService.getNotificationSettings();
+      
+      // 验证结果
+      expect(result).toEqual(mockResponse);
+      expect(request.get).toHaveBeenCalledWith('/notifications/settings');
+    });
+  });
+
+  describe('updateNotificationSettings', () => {
+    it('should update notification settings successfully', async () => {
+      // 准备测试数据
+      const mockSettings = {
+        systemNotification: true,
+        orderNotification: false,
+        promotionNotification: true,
+        activityNotification: false
+      };
+      const mockResponse = { success: true, ...mockSettings };
+      
+      // 设置模拟返回值
+      request.put.mockResolvedValue(mockResponse);
+      
+      // 执行测试
+      const result = await notificationService.updateNotificationSettings(mockSettings);
+      
+      // 验证结果
+      expect(result).toEqual(mockResponse);
+      expect(request.put).toHaveBeenCalledWith('/notifications/settings', mockSettings);
+    });
+  });
+
+  describe('subscribePushNotification', () => {
+    it('should subscribe push notification successfully', async () => {
+      // 准备测试数据
+      const mockSubscription = {
+        platform: 'web',
+        token: 'test-token',
+        userId: 'user-123'
+      };
+      const mockResponse = { success: true, subscriptionId: 'sub-123' };
+      
+      // 设置模拟返回值
+      request.post.mockResolvedValue(mockResponse);
+      
+      // 执行测试
+      const result = await notificationService.subscribePushNotification(mockSubscription);
+      
+      // 验证结果
+      expect(result).toEqual(mockResponse);
+      expect(request.post).toHaveBeenCalledWith('/notifications/subscribe', mockSubscription);
+    });
+
+    it('should throw error if platform is not provided', async () => {
+      // 准备测试数据
+      const mockSubscription = {
+        token: 'test-token',
+        userId: 'user-123'
+      };
+      
+      // 执行测试并验证结果
+      await expect(notificationService.subscribePushNotification(mockSubscription)).rejects.toThrow('平台和设备令牌不能为空');
+      expect(request.post).not.toHaveBeenCalled();
+    });
+
+    it('should throw error if token is not provided', async () => {
+      // 准备测试数据
+      const mockSubscription = {
+        platform: 'web',
+        userId: 'user-123'
+      };
+      
+      // 执行测试并验证结果
+      await expect(notificationService.subscribePushNotification(mockSubscription)).rejects.toThrow('平台和设备令牌不能为空');
+      expect(request.post).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('unsubscribePushNotification', () => {
+    it('should unsubscribe push notification successfully', async () => {
+      // 准备测试数据
+      const token = 'test-token';
+      const mockResponse = { success: true };
+      
+      // 设置模拟返回值
+      request.post.mockResolvedValue(mockResponse);
+      
+      // 执行测试
+      const result = await notificationService.unsubscribePushNotification(token);
+      
+      // 验证结果
+      expect(result).toEqual(mockResponse);
+      expect(request.post).toHaveBeenCalledWith('/notifications/unsubscribe', { token });
+    });
+
+    it('should throw error if token is not provided', async () => {
+      // 执行测试并验证结果
+      await expect(notificationService.unsubscribePushNotification()).rejects.toThrow('设备令牌不能为空');
+      expect(request.post).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('sendNotification', () => {
+    it('should send notification successfully', async () => {
+      // 准备测试数据
+      const mockNotification = {
+        title: '测试通知',
+        content: '测试内容',
+        type: 'system',
+        targetUsers: ['user-123', 'user-456']
+      };
+      const mockResponse = { success: true, notificationId: 'notify-123' };
+      
+      // 设置模拟返回值
+      request.post.mockResolvedValue(mockResponse);
+      
+      // 执行测试
+      const result = await notificationService.sendNotification(mockNotification);
+      
+      // 验证结果
+      expect(result).toEqual(mockResponse);
+      expect(request.post).toHaveBeenCalledWith('/notifications/send', mockNotification);
+    });
+
+    it('should throw error if title is not provided', async () => {
+      // 准备测试数据
+      const mockNotification = {
+        content: '测试内容',
+        type: 'system'
+      };
+      
+      // 执行测试并验证结果
+      await expect(notificationService.sendNotification(mockNotification)).rejects.toThrow('通知标题、内容和类型不能为空');
+      expect(request.post).not.toHaveBeenCalled();
+    });
+
+    it('should throw error if content is not provided', async () => {
+      // 准备测试数据
+      const mockNotification = {
+        title: '测试通知',
+        type: 'system'
+      };
+      
+      // 执行测试并验证结果
+      await expect(notificationService.sendNotification(mockNotification)).rejects.toThrow('通知标题、内容和类型不能为空');
+      expect(request.post).not.toHaveBeenCalled();
+    });
+
+    it('should throw error if type is not provided', async () => {
+      // 准备测试数据
+      const mockNotification = {
+        title: '测试通知',
+        content: '测试内容'
+      };
+      
+      // 执行测试并验证结果
+      await expect(notificationService.sendNotification(mockNotification)).rejects.toThrow('通知标题、内容和类型不能为空');
+      expect(request.post).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('sendSubscribeMessage', () => {
+    it('should send subscribe message successfully', async () => {
+      // 准备测试数据
+      const mockMessage = {
+        templateId: 'template-123',
+        data: { title: '测试模板消息', content: '测试内容' },
+        openId: 'openid-123'
+      };
+      const mockResponse = { success: true, messageId: 'msg-123' };
+      
+      // 设置模拟返回值
+      request.post.mockResolvedValue(mockResponse);
+      
+      // 执行测试
+      const result = await notificationService.sendSubscribeMessage(mockMessage);
+      
+      // 验证结果
+      expect(result).toEqual(mockResponse);
+      expect(request.post).toHaveBeenCalledWith('/notifications/subscribe-message', mockMessage);
+    });
+
+    it('should throw error if templateId is not provided', async () => {
+      // 准备测试数据
+      const mockMessage = {
+        data: { title: '测试模板消息', content: '测试内容' },
+        openId: 'openid-123'
+      };
+      
+      // 执行测试并验证结果
+      await expect(notificationService.sendSubscribeMessage(mockMessage)).rejects.toThrow('模板ID、消息数据和用户openId不能为空');
+      expect(request.post).not.toHaveBeenCalled();
+    });
+
+    it('should handle send failure', async () => {
+      // 准备测试数据
+      const mockMessage = {
+        templateId: 'template-123',
+        data: { title: '测试模板消息', content: '测试内容' },
+        openId: 'openid-123'
+      };
+      
+      // 设置模拟返回值
+      request.post.mockRejectedValue(new Error('发送失败'));
+      
+      // 执行测试并验证结果
+      await expect(notificationService.sendSubscribeMessage(mockMessage)).rejects.toThrow('发送失败');
+      expect(request.post).toHaveBeenCalledWith('/notifications/subscribe-message', mockMessage);
+    });
+  });
+});

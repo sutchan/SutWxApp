@@ -1,8 +1,8 @@
 ﻿/**
  * 鏂囦欢鍚? pointsTasks.js
  * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: 缁夘垰鍨庢禒璇插妞ょ敻娼? */
+ * 更新日期: 2025-11-23
+ * 描述: 缁夘垰鍨庢禒璇插妞ょ敻娼? */
 const app = getApp();
 const pointsService = require('../../services/pointsService');
 
@@ -19,7 +19,7 @@ Page({
     
     // 娴犺濮熼崚妤勩€?    taskList: [],
     
-    // 鍔犺浇鐘舵€?   loading: true,
+    // 加载状态   loading: true,
     refreshing: false,
     loadingMore: false,
     hasMore: true,

@@ -1,7 +1,7 @@
 ﻿# 杞崲椤圭洰鏂囦欢缂栫爜涓?UTF8 with BOM锛屾崲琛岀 Unix LF
-# 浣滆€? Sut
+# 作者 Sut
 # 鐗堟湰: 1.0.0
-# 鏇存柊鏃ユ湡: 2025-11-30
+# 更新日期: 2025-11-30
 
 # 瀹氫箟鏂囨湰鏂囦欢鎵╁睍鍚?$textExtensions = @(".js", ".json", ".md", ".wxml", ".wxss", ".po", ".pot", ".ps1", ".txt", ".code-workspace")
 

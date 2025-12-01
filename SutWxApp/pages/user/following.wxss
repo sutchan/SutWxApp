@@ -1,8 +1,8 @@
 ﻿/**
  * 鏂囦欢鍚? following.wxss
  * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: following 椤甸潰鏍峰紡鏂囦欢
+ * 更新日期: 2025-11-23
+ * 描述: following 椤甸潰鏍峰紡鏂囦欢
  */
 /* 閸忚櫕鏁為崚妤勩€冩い鐢告桨閺嶅嘲绱?*/
 .container {
@@ -289,7 +289,7 @@
   color: #ccc;
 }
 
-/* 鍔犺浇鐘舵€?/
+/* 加载状态/
 .loading-state {
   display: flex;
   flex-direction: column;

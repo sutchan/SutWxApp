@@ -1,8 +1,8 @@
 ﻿/**
  * 鏂囦欢鍚? detail.js
  * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-30
- * 鎻忚堪: 閫氱煡璇︽儏椤甸潰
+ * 更新日期: 2025-11-30
+ * 描述: 閫氱煡璇︽儏椤甸潰
  */
 const notificationService = require('../../services/notificationService');
 

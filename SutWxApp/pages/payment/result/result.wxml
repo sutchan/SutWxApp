@@ -1,12 +1,12 @@
 ﻿/**
  * 鏂囦欢鍚? result.wxml
  * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: result 妞ょ敻娼扮紒鎾寸€弬鍥︽
+ * 更新日期: 2025-11-23
+ * 描述: result 妞ょ敻娼扮紒鎾寸€弬鍥︽
  */
 <!-- 閺€顖欑帛缂佹挻鐏夋い鐢告桨 -->
 <view class="payment-result-container">
-  <!-- 鍔犺浇鐘舵€?->
+  <!-- 加载状态->
   <view wx:if="{{loading}}" class="loading-container">
     <view class="loading-spinner"></view>
     <text class="loading-text">濮濓絽婀懢宄板絿閺€顖欑帛缂佹挻鐏?..</text>
@@ -30,7 +30,7 @@
         </view>
         <view class="order-item">
           <text class="order-label">閺€顖欑帛闁叉垿顤傞敍?/text>
-          <text class="order-value price">楼{{orderData.actualAmount}}</text>
+          <text class="order-value price">¥{{orderData.actualAmount}}</text>
         </view>
         <view class="order-item">
           <text class="order-label">閺€顖欑帛閺冨爼妫块敍?/text>
@@ -92,7 +92,7 @@
         </view>
         <view class="order-item">
           <text class="order-label">璁㈠崟闁叉垿顤傞敍?/text>
-          <text class="order-value price">楼{{orderData.actualAmount}}</text>
+          <text class="order-value price">¥{{orderData.actualAmount}}</text>
         </view>
       </view>
       

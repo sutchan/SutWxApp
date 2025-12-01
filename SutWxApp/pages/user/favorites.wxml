@@ -1,8 +1,8 @@
 ﻿/**
  * 鏂囦欢鍚? favorites.wxml
  * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: favorites 妞ょ敻娼扮紒鎾寸€弬鍥︽
+ * 更新日期: 2025-11-23
+ * 描述: favorites 妞ょ敻娼扮紒鎾寸€弬鍥︽
  */
 <view class="container">
   <!-- 閺嶅洨顒烽崚鍥ㄥ床 -->
@@ -53,8 +53,8 @@
         <view class="product-info">
           <view class="product-name">{{item.name}}</view>
           <view class="product-price">
-            <text class="current-price">楼{{item.price}}</text>
-            <text class="original-price" wx:if="{{item.originalPrice > item.price}}">楼{{item.originalPrice}}</text>
+            <text class="current-price">¥{{item.price}}</text>
+            <text class="original-price" wx:if="{{item.originalPrice > item.price}}">¥{{item.originalPrice}}</text>
           </view>
           <view class="product-meta">
             <text class="sales">瀹告彃鏁瓄{item.sales}}娴?/text>
@@ -127,7 +127,7 @@
     </view>
   </view>
 
-  <!-- 鍔犺浇鐘舵€?->
+  <!-- 加载状态->
   <view class="loading" wx:if="{{loading}}">
     <view class="loading-spinner"></view>
     <text>鍔犺浇涓?.</text>

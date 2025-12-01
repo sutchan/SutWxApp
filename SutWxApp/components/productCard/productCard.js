@@ -1,15 +1,16 @@
-﻿/**
+/**
  * 文件名: productCard.js
  * 版本号: 1.0.2
  * 更新日期: 2025-11-29
  * 作者: Sut
- * 描述: 产品卡片组件 */
+ * 描述: 商品卡片组件
+ */
 Component({
   /**
    * 组件的属性列表
    */
   properties: {
-    // 产品数据
+    // 商品数据
     product: {
       type: Object,
       value: {}
@@ -42,7 +43,7 @@ Component({
   data: {
     // 默认图片
     defaultImage: '/assets/images/product-placeholder.png',
-    // 本地产品数据，用于处理图片加载失败等情况
+    // 本地商品数据，用于处理图片加载失败等情况
     localProduct: {}
   },
 
@@ -62,7 +63,7 @@ Component({
    */
   methods: {
     /**
-     * 点击产品卡片
+     * 点击商品卡片
      * @returns {void}
      */
     onProductTap() {
@@ -97,7 +98,7 @@ Component({
     },
 
     /**
-     * 图片加载失败处理
+     * 图片加载错误处理
      * @returns {void}
      */
     onImageError() {

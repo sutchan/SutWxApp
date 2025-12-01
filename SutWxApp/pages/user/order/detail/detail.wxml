@@ -1,8 +1,8 @@
 ﻿/**
  * 鏂囦欢鍚? detail.wxml
  * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: detail 妞ょ敻娼扮紒鎾寸€弬鍥︽
+ * 更新日期: 2025-11-23
+ * 描述: detail 妞ょ敻娼扮紒鎾寸€弬鍥︽
  */
 <view class="container">
   <block wx:if="{{orderDetail}}">
@@ -32,7 +32,7 @@
         <image class="goods-image" src="{{goods.image}}" mode="aspectFill"></image>
         <view class="goods-info">
           <text class="goods-name">{{goods.name}}</text>
-          <text class="goods-price">楼{{goods.price}} x {{goods.quantity}}</text>
+          <text class="goods-price">¥{{goods.price}} x {{goods.quantity}}</text>
         </view>
       </view>
     </mp-cells>
@@ -49,9 +49,9 @@
 
     <!-- 浣跨敤閺勫海绮?-->
     <mp-cells ext-class="price-detail-card">
-      <mp-cell value="閸熷棗鎼ч幀璁崇幆" footer="楼{{orderDetail.totalPrice}}"></mp-cell>
-      <mp-cell value="鏉╂劘鍨? footer="楼{{orderDetail.freight}}"></mp-cell>
-      <mp-cell value="鐎圭偘绮▎? footer="楼{{orderDetail.actualPrice}}" ext-class="actual-price"></mp-cell>
+      <mp-cell value="閸熷棗鎼ч幀璁崇幆" footer="¥{{orderDetail.totalPrice}}"></mp-cell>
+      <mp-cell value="鏉╂劘鍨? footer="¥{{orderDetail.freight}}"></mp-cell>
+      <mp-cell value="鐎圭偘绮▎? footer="¥{{orderDetail.actualPrice}}" ext-class="actual-price"></mp-cell>
     </mp-cells>
 
     <!-- 鎼存洟鍎撮幙宥勭稊閹稿鎸?-->

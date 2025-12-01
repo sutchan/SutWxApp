@@ -1,8 +1,8 @@
 ﻿/**
  * 鏂囦欢鍚? methods.js
  * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: 鏀粯鏂瑰紡闁瀚ㄦい鐢告桨
+ * 更新日期: 2025-11-23
+ * 描述: 鏀粯鏂瑰紡闁瀚ㄦい鐢告桨
  */
 
 const paymentService = require('../../../services/paymentService');
@@ -87,7 +87,7 @@ Page({
             id: 'points',
             name: '缁夘垰鍨庨幎鍨⒏',
             icon: '/images/payment/points.png',
-            desc: `閸欘垳鏁ょ粔顖氬瀻閿?250閿涘苯褰查幎鍨⒏楼12.50`,
+            desc: `閸欘垳鏁ょ粔顖氬瀻閿?250閿涘苯褰查幎鍨⒏¥12.50`,
             enabled: true,
             recommended: false
           }

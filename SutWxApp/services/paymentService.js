@@ -1,9 +1,9 @@
 ﻿﻿/**
  * 鏂囦欢鍚? paymentService.js
  * 鐗堟湰鍙? 1.0.1
- * 鏇存柊鏃ユ湡: 2025-11-28
- * 浣滆€? Sut
- * 鎻忚堪: 鏀粯鏈嶅姟
+ * 更新日期: 2025-11-28
+ * 作者 Sut
+ * 描述: 鏀粯鏈嶅姟
  */
 
 const request = require('../utils/request');

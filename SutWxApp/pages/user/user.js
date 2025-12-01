@@ -1,7 +1,7 @@
 ﻿/**
  * 鏂囦欢鍚? user.js
  * 鐗堟湰鍙? 1.0.1
- * 鏇存柊鏃ユ湡: 2025-11-24
+ * 更新日期: 2025-11-24
  * 閻劍鍩涙稉顓炵妇妞ょ敻娼? */
 const i18n = require('../../utils/i18n');
 const { createPage } = require('../../utils/store');

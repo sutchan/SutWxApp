@@ -1,8 +1,8 @@
 ﻿/**
  * 鏂囦欢鍚? pointsRanking.wxml
  * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: pointsRanking 妞ょ敻娼扮紒鎾寸€弬鍥︽
+ * 更新日期: 2025-11-23
+ * 描述: pointsRanking 妞ょ敻娼扮紒鎾寸€弬鍥︽
  */
 <view class="container">
   <!-- 瑜版挸澧犻悽銊﹀煕娣団剝浼?-->
@@ -88,7 +88,7 @@
       <view class="empty-tip">韫囶偄骞撶€瑰本鍨氭禒璇插鐠ф艾褰囩粔顖氬瀻閸?/view>
     </view>
 
-    <!-- 鍔犺浇鐘舵€?->
+    <!-- 加载状态->
     <view class="loading-state" wx:if="{{isLoading && rankingList.length === 0}}">
       <view class="loading-spinner"></view>
       <text>鍔犺浇涓?.</text>

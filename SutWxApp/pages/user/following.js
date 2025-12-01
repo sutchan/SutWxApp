@@ -1,8 +1,8 @@
 ﻿/**
  * 鏂囦欢鍚? following.js
  * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: 閸忚櫕鏁為崚妤勩€冩い鐢告桨
+ * 更新日期: 2025-11-23
+ * 描述: 閸忚櫕鏁為崚妤勩€冩い鐢告桨
  */
 const favoriteService = require('../../../services/favoriteService');
 
@@ -12,7 +12,7 @@ Page({
   data: {
     activeTab: 0, // 瑜版挸澧犲┑鈧ú鑽ゆ畱閺嶅洨顒?0-閹存垵鍙у▔銊ф畱 1-閸忚櫕鏁為幋鎴犳畱
     tabs: ['閹存垵鍙у▔銊ф畱', '閸忚櫕鏁為幋鎴犳畱'],
-    followingList: [], // 閹存垵鍙у▔銊ф畱閸掓銆?    followersList: [], // 閸忚櫕鏁為幋鎴犳畱閸掓銆?    loading: false, // 鍔犺浇鐘舵€?   noMoreData: false, // 閺勵垰鎯佸▽鈩冩箒閺囨潙顦块弫鐗堝祦
+    followingList: [], // 閹存垵鍙у▔銊ф畱閸掓銆?    followersList: [], // 閸忚櫕鏁為幋鎴犳畱閸掓銆?    loading: false, // 加载状态   noMoreData: false, // 閺勵垰鎯佸▽鈩冩箒閺囨潙顦块弫鐗堝祦
     isEmpty: false, // 閺勵垰鎯佹稉铏光敄
     page: 1, // 瑜版挸澧犳い鐢电垳
     pageSize: 20, // 濮ｅ繘銆夐弫浼村櫤

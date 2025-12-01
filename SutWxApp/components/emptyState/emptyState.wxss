@@ -1,10 +1,10 @@
-﻿/**
- * 鏂囦欢鍚? emptyState.wxss
- * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: emptyState 椤甸潰鏍峰紡鏂囦欢
+/**
+ * 文件名: emptyState.wxss
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-23
+ * 描述: 空状态组件样式
  */
-/* 缁岃櫣濮搁幀浣割啇閸?*/
+/* 空状态容器 */
 .empty-state-container {
   display: flex;
   flex-direction: column;
@@ -14,7 +14,7 @@
   box-sizing: border-box;
 }
 
-/* 缁岃櫣濮搁幀浣告禈閻楀洤顔愰崳?*/
+/* 空状态图片容器 */
 .empty-image-container {
   margin-bottom: 40rpx;
 }
@@ -23,7 +23,7 @@
   display: block;
 }
 
-/* 缁岃櫣濮搁幀浣圭垼妫?*/
+/* 空状态标题 */
 .empty-title {
   font-size: 32rpx;
   color: #333;
@@ -31,7 +31,7 @@
   text-align: center;
 }
 
-/* 缁岃櫣濮搁幀浣瑰伎鏉?*/
+/* 空状态描述 */
 .empty-description {
   font-size: 26rpx;
   color: #999;
@@ -40,7 +40,7 @@
   line-height: 1.5;
 }
 
-/* 缁岃櫣濮搁幀浣瑰瘻闁?*/
+/* 空状态按钮 */
 .empty-button {
   background-color: #07c160;
   color: #fff;

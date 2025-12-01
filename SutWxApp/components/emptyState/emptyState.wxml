@@ -1,11 +1,11 @@
-﻿/**
- * 鏂囦欢鍚? emptyState.wxml
- * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: emptyState 妞ょ敻娼扮紒鎾寸€弬鍥︽
- */
+<!--
+文件名: emptyState.wxml
+版本号: 1.0.0
+更新日期: 2025-11-23
+描述: 空状态组件模板
+-->
 <view class="empty-state-container">
-  <!-- 缁岃櫣濮搁幀浣告禈閻?-->
+  <!-- 空状态图片 -->
   <view class="empty-image-container">
     <lazy-image 
       src="{{image || defaultImages[type]}}" 
@@ -15,15 +15,15 @@
     />
   </view>
   
-  <!-- 閺嶅洭顣?-->
+  <!-- 空状态标题 -->
   <view class="empty-title">{{title || defaultTitles[type]}}</view>
   
-  <!-- 閹诲繗鍫?-->
+  <!-- 空状态描述 -->
   <view class="empty-description" wx:if="{{description || defaultDescriptions[type]}}">
     {{description || defaultDescriptions[type]}}
   </view>
   
-  <!-- 閹稿鎸?-->
+  <!-- 空状态按钮 -->
   <button class="empty-button" wx:if="{{showButton}}" bindtap="onButtonTap">
     {{buttonText}}
   </button>

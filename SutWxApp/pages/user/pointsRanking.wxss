@@ -1,8 +1,8 @@
 ﻿/**
  * 鏂囦欢鍚? pointsRanking.wxss
  * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: pointsRanking 椤甸潰鏍峰紡鏂囦欢
+ * 更新日期: 2025-11-23
+ * 描述: pointsRanking 椤甸潰鏍峰紡鏂囦欢
  */
 /* 缁夘垰鍨庨幒鎺曨攽濮掓粓銆夐棃銏＄壉瀵?*/
 
@@ -268,7 +268,7 @@
   margin-top: 20rpx;
 }
 
-/* 鍔犺浇鐘舵€?/
+/* 加载状态/
 .loading-state {
   display: flex;
   flex-direction: column;

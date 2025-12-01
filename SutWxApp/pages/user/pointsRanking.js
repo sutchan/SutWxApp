@@ -1,8 +1,8 @@
 ﻿/**
  * 鏂囦欢鍚? pointsRanking.js
  * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: 缁夘垰鍨庨幒鎺曨攽濮掓粓銆夐棃? */
+ * 更新日期: 2025-11-23
+ * 描述: 缁夘垰鍨庨幒鎺曨攽濮掓粓銆夐棃? */
 const pointsService = require('../../services/pointsService');
 
 Page({
@@ -30,7 +30,7 @@ Page({
     pageSize: 20,
     hasMore: true,
     
-    // 鍔犺浇鐘舵€?   isLoading: false,
+    // 加载状态   isLoading: false,
     isEmpty: false,
     
     // 閸掗攱鏌婇悩鑸碘偓?    isRefreshing: false

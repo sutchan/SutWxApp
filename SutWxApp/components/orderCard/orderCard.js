@@ -1,29 +1,31 @@
-﻿/**
- * 鏂囦欢鍚? orderCard.js
- * 鐗堟湰鍙? 1.0.2
- * 鏇存柊鏃ユ湡: 2025-11-29
- * 浣滆€? Sut
- * 鎻忚堪: 璁㈠崟鍗＄墖缁勪欢 */
+/**
+ * 文件名: orderCard.js
+ * 版本号: 1.0.2
+ * 更新日期: 2025-11-29
+ * 作者: Sut
+ * 描述: 订单卡片组件
+ */
 Component({
   /**
-   * 缁勪欢鐨勫睘鎬у垪琛?   */
+   * 组件的属性列表
+   */
   properties: {
-    // 璁㈠崟鏁版嵁
+    // 订单数据
     order: {
       type: Object,
       value: {}
     },
-    // 鏄惁鏄剧ず杈规
+    // 是否显示边框
     bordered: {
       type: Boolean,
       value: true
     },
-    // 鏄惁鏄剧ず鎿嶄綔鎸夐挳
+    // 是否显示操作按钮
     showActions: {
       type: Boolean,
       value: true
     },
-    // 鍗＄墖瀹藉害锛岄粯璁?00%
+    // 卡片宽度，默认100%
     width: {
       type: String,
       value: '100%'
@@ -31,23 +33,26 @@ Component({
   },
 
   /**
-   * 缁勪欢鐨勫垵濮嬫暟鎹?   */
+   * 组件的初始数据
+   */
   data: {
-    // 璁㈠崟鐘舵€佹槧灏?    statusMap: {
-      'pending': { text: '寰呬粯娆?, color: '#ff9500' },
-      'paid': { text: '寰呭彂璐?, color: '#007aff' },
-      'shipped': { text: '寰呮敹璐?, color: '#4cd964' },
-      'completed': { text: '宸插畬鎴?, color: '#8e8e93' },
-      'cancelled': { text: '宸插彇娑?, color: '#8e8e93' },
-      'refunded': { text: '宸查€€娆?, color: '#8e8e93' }
+    // 订单状态映射
+    statusMap: {
+      'pending': { text: '待支付', color: '#ff9500' },
+      'paid': { text: '已支付', color: '#007aff' },
+      'shipped': { text: '已发货', color: '#4cd964' },
+      'completed': { text: '已完成', color: '#8e8e93' },
+      'cancelled': { text: '已取消', color: '#8e8e93' },
+      'refunded': { text: '已退款', color: '#8e8e93' }
     }
   },
 
   /**
-   * 缁勪欢鐨勬柟娉曞垪琛?   */
+   * 组件的方法列表
+   */
   methods: {
     /**
-     * 鐐瑰嚮璁㈠崟鍗＄墖
+     * 点击订单卡片
      * @returns {void}
      */
     onOrderTap() {
@@ -57,8 +62,8 @@ Component({
     },
 
     /**
-     * 鐐瑰嚮鍙栨秷璁㈠崟鎸夐挳
-     * @param {Object} e - 浜嬩欢瀵硅薄
+     * 点击取消订单按钮
+     * @param {Object} e - 事件对象
      * @returns {void}
      */
     onCancelOrder(e) {
@@ -69,8 +74,8 @@ Component({
     },
 
     /**
-     * 鐐瑰嚮纭鏀惰揣鎸夐挳
-     * @param {Object} e - 浜嬩欢瀵硅薄
+     * 点击确认收货按钮
+     * @param {Object} e - 事件对象
      * @returns {void}
      */
     onConfirmReceive(e) {
@@ -81,8 +86,8 @@ Component({
     },
 
     /**
-     * 鐐瑰嚮鍒犻櫎璁㈠崟鎸夐挳
-     * @param {Object} e - 浜嬩欢瀵硅薄
+     * 点击删除订单按钮
+     * @param {Object} e - 事件对象
      * @returns {void}
      */
     onDeleteOrder(e) {
@@ -93,8 +98,8 @@ Component({
     },
 
     /**
-     * 鐐瑰嚮璇勪环璁㈠崟鎸夐挳
-     * @param {Object} e - 浜嬩欢瀵硅薄
+     * 点击评价订单按钮
+     * @param {Object} e - 事件对象
      * @returns {void}
      */
     onReviewOrder(e) {
@@ -105,8 +110,8 @@ Component({
     },
 
     /**
-     * 鐐瑰嚮鏌ョ湅鐗╂祦鎸夐挳
-     * @param {Object} e - 浜嬩欢瀵硅薄
+     * 点击查看物流按钮
+     * @param {Object} e - 事件对象
      * @returns {void}
      */
     onViewLogistics(e) {
@@ -117,9 +122,12 @@ Component({
     },
 
     /**
-     * 鏍煎紡鍖栬鍗曠姸鎬?     * @param {string} status - 璁㈠崟鐘舵€?     * @returns {Object} 鐘舵€佹樉绀洪厤缃?     */
+     * 格式化订单状态
+     * @param {string} status - 订单状态
+     * @returns {Object} 格式化后的状态信息
+     */
     formatOrderStatus(status) {
-      return this.data.statusMap[status] || { text: '鏈煡鐘舵€?, color: '#8e8e93' };
+      return this.data.statusMap[status] || { text: '未知状态', color: '#8e8e93' };
     }
   }
 });
