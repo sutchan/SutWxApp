@@ -1,6 +1,6 @@
 ﻿/**
- * 鏂囦欢鍚? pointsDetail.js
- * 鐗堟湰鍙? 1.0.0
+ * 文件名 pointsDetail.js
+ * 版本号 1.0.0
  * 更新日期: 2025-11-23
  * 描述: 缁夘垰鍨庨弰搴ｇ矎妞ょ敻娼? */
 const pointsService = require('../../services/pointsService');

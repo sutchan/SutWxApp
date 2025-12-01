@@ -1,71 +1,43 @@
-# 修复文档编码和换行符的脚本
-$docsPath = "e:\Dropbox\GitHub\SutWxApp\docs"
-$outputPath = "e:\Dropbox\GitHub\SutWxApp\fixed_docs"
+# 修复文件编码和换行符的PowerShell脚本
+# 目标：将文件转换为UTF-8 with BOM编码，换行符统一为Unix LF
 
-# 创建输出目录
-if (-not (Test-Path $outputPath)) {
-    New-Item -ItemType Directory -Path $outputPath -Force
-}
-
-# 获取所有.md文件
-$mdFiles = Get-ChildItem -Path $docsPath -Recurse -Filter "*.md"
-
-# 支持的编码列表
-$encodings = @(
-    [System.Text.Encoding]::UTF8,
-    [System.Text.Encoding]::Unicode,
-    [System.Text.Encoding]::Default
+# 设置要处理的文件列表
+$files = @(
+    "e:\Dropbox\GitHub\SutWxApp\docs\02-管理员指南\01-环境搭建.md",
+    "e:\Dropbox\GitHub\SutWxApp\docs\02-管理员指南\02-系统配置.md",
+    "e:\Dropbox\GitHub\SutWxApp\docs\02-管理员指南\03-权限管理.md",
+    "e:\Dropbox\GitHub\SutWxApp\docs\02-管理员指南\README.md",
+    "e:\Dropbox\GitHub\SutWxApp\docs\03-开发者指南\01-开发环境配置.md",
+    "e:\Dropbox\GitHub\SutWxApp\docs\03-开发者指南\02-架构设计文档.md",
+    "e:\Dropbox\GitHub\SutWxApp\docs\03-开发者指南\03-API接口文档.md",
+    "e:\Dropbox\GitHub\SutWxApp\docs\03-开发者指南\04-API开发指南.md",
+    "e:\Dropbox\GitHub\SutWxApp\docs\03-开发者指南\05-服务层API文档.md",
+    "e:\Dropbox\GitHub\SutWxApp\docs\03-开发者指南\06-技术设计文档.md",
+    "e:\Dropbox\GitHub\SutWxApp\docs\03-开发者指南\07-开发手册.md",
+    "e:\Dropbox\GitHub\SutWxApp\docs\03-开发者指南\08-代码规范.md",
+    "e:\Dropbox\GitHub\SutWxApp\docs\03-开发者指南\09-版本发布说明.md",
+    "e:\Dropbox\GitHub\SutWxApp\docs\03-开发者指南\README.md"
 )
 
-# 处理每个文件
-foreach ($file in $mdFiles) {
-    Write-Host "处理文件: $($file.FullName)"
+# 遍历每个文件进行处理
+foreach ($file in $files) {
+    Write-Host "正在处理文件: $file"
     
-    # 读取文件字节
-    $bytes = [System.IO.File]::ReadAllBytes($file.FullName)
-    
-    # 检测文件编码
-    $detectedEncoding = $null
-    foreach ($encoding in $encodings) {
-        try {
-            $content = $encoding.GetString($bytes)
-            # 简单验证：如果包含大量乱码字符（如连续的问号或不可打印字符），则不是正确编码
-            $hasManyInvalidChars = ($content | Select-String -Pattern "\?{5,}" -Quiet) -or ($content | Select-String -Pattern "\p{Cc}{5,}" -Quiet)
-            if (-not $hasManyInvalidChars) {
-                $detectedEncoding = $encoding
-                break
-            }
-        } catch {
-            # 忽略解码错误
-        }
+    try {
+        # 使用.NET方法读取文件内容，自动检测编码
+        $content = [System.IO.File]::ReadAllText($file, [System.Text.Encoding]::Default)
+        
+        # 转换换行符为Unix LF
+        $content = $content -replace "\r\n", "\n"
+        $content = $content -replace "\r", "\n"
+        
+        # 写入文件，使用UTF-8 with BOM编码
+        [System.IO.File]::WriteAllText($file, $content, [System.Text.Encoding]::UTF8)
+        
+        Write-Host "  ✅ 处理成功"
+    } catch {
+        Write-Host "  ❌ 处理失败: $_"
     }
-    
-    if (-not $detectedEncoding) {
-        $detectedEncoding = [System.Text.Encoding]::Default
-        Write-Warning "无法确定 $($file.FullName) 的编码，使用默认编码"
-    }
-    
-    # 读取文件内容
-    $content = $detectedEncoding.GetString($bytes)
-    
-    # 转换换行符为LF
-    $content = $content -replace "\r\n", "\n"
-    $content = $content -replace "\r", "\n"
-    
-    # 构建输出文件路径
-    $relativePath = $file.FullName.Substring($docsPath.Length)
-    $outputFilePath = Join-Path -Path $outputPath -ChildPath $relativePath
-    
-    # 创建输出目录结构
-    $outputDir = Split-Path -Path $outputFilePath -Parent
-    if (-not (Test-Path $outputDir)) {
-        New-Item -ItemType Directory -Path $outputDir -Force
-    }
-    
-    # 写入文件（UTF-8 with BOM）
-    [System.IO.File]::WriteAllText($outputFilePath, $content, [System.Text.Encoding]::UTF8)
-    
-    Write-Host "已修复: $($file.FullName) -> $outputFilePath"
 }
 
-Write-Host "所有文件处理完成！"
+Write-Host "\n所有文件处理完成！"

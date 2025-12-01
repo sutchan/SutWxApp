@@ -1,6 +1,6 @@
 ﻿/**
- * 鏂囦欢鍚? po2json.js
- * 鐗堟湰鍙? 1.0.0
+ * 文件名 po2json.js
+ * 版本号 1.0.0
  * 更新日期: 2025-11-24
  * PO閺傚洣娆㈡潪顒佸床娑撶瘮SON瀹搞儱鍙? * 閻劋绨亸?po缂堟槒鐦ч弬鍥︽鏉烆剚宕叉稉绡擲ON閺嶇厧绱￠敍宀€鈥樻穱婵堢倳鐠囨垵鎮撳? */
 
@@ -60,7 +60,7 @@ function toJsonString(translations) {
 
 /**
  * 閻㈢喐鍨氶弬鍥︽婢舵挳鍎村▔銊╁櫞
- * @param {string} filename - 鏂囦欢鍚? * @param {string} language - 鐠囶叀鈻堟禒锝囩垳
+ * @param {string} filename - 文件名 * @param {string} language - 鐠囶叀鈻堟禒锝囩垳
  * @returns {string} 閺傚洣娆㈡径鎾劥濞夈劑鍣? */
 function generateHeaderComment(filename, language) {
   const now = new Date();
@@ -70,8 +70,8 @@ function generateHeaderComment(filename, language) {
   const dateStr = `${year}-${month}-${day}`;
 
   return `/**
- * 鏂囦欢鍚? ${filename}
- * 鐗堟湰鍙? 1.0.1
+ * 文件名 ${filename}
+ * 版本号 1.0.1
  * 更新日期: ${dateStr}
  * 描述: ${filename} JSON 閰嶇疆鏂囦欢 - 閼奉亜濮╅悽鐔稿灇閿涘矁顕崟鎸庡閸斻劋鎱ㄩ弨? */`;
 }

@@ -56,7 +56,7 @@
 
   <!-- 閻楀牊婀版穱鈩冧紖 -->
   <view class="version-info">
-    <text>{{i18n.translate('鐗堟湰鍙?)}} 1.0.1</text>
+    <text>{{i18n.translate('版本号)}} 1.0.1</text>
   </view>
 </view>
 
