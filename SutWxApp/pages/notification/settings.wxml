@@ -1,17 +1,17 @@
 ﻿<!--
- * 鏂囦欢鍚? settings.wxml
- * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-30
- * 鎻忚堪: 閫氱煡璁剧疆椤甸潰
+ * 文件名: settings.wxml
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-30
+ * 描述: 通知设置页面
 -->
 <view class="container">
-  <!-- 閫氱煡璁剧疆鍒楄〃 -->
+  <!-- 通知设置列表 -->
   <view class="settings-list" wx:if="{{settings}}">
-    <!-- 绯荤粺閫氱煡 -->
+    <!-- 系统通知 -->
     <view class="setting-item">
       <view class="setting-info">
-        <text class="setting-title">绯荤粺閫氱煡</text>
-        <text class="setting-desc">鎺ユ敹绯荤粺鐩稿叧閫氱煡锛屽璐﹀彿瀹夊叏銆佺増鏈洿鏂扮瓑</text>
+        <text class="setting-title">系统通知</text>
+        <text class="setting-desc">接收系统相关通知，如账号安全、版本更新等</text>
       </view>
       <switch 
         checked="{{settings.systemNotification}}" 
@@ -20,11 +20,11 @@
       />
     </view>
     
-    <!-- 璁㈠崟閫氱煡 -->
+    <!-- 订单通知 -->
     <view class="setting-item">
       <view class="setting-info">
-        <text class="setting-title">璁㈠崟閫氱煡</text>
-        <text class="setting-desc">鎺ユ敹璁㈠崟鐘舵€佸彉鍖栭€氱煡锛屽鍙戣揣銆佺鏀剁瓑</text>
+        <text class="setting-title">订单通知</text>
+        <text class="setting-desc">接收订单状态变化通知，如发货、签收等</text>
       </view>
       <switch 
         checked="{{settings.orderNotification}}" 
@@ -33,11 +33,11 @@
       />
     </view>
     
-    <!-- 淇冮攢閫氱煡 -->
+    <!-- 促销通知 -->
     <view class="setting-item">
       <view class="setting-info">
-        <text class="setting-title">淇冮攢閫氱煡</text>
-        <text class="setting-desc">鎺ユ敹鍟嗗搧淇冮攢銆佷紭鎯犲埜鍙戞斁绛夐€氱煡</text>
+        <text class="setting-title">促销通知</text>
+        <text class="setting-desc">接收产品促销、优惠券发放等通知</text>
       </view>
       <switch 
         checked="{{settings.promotionNotification}}" 
@@ -46,11 +46,11 @@
       />
     </view>
     
-    <!-- 娲诲姩閫氱煡 -->
+    <!-- 活动通知 -->
     <view class="setting-item">
       <view class="setting-info">
-        <text class="setting-title">娲诲姩閫氱煡</text>
-        <text class="setting-desc">鎺ユ敹骞冲彴娲诲姩銆侀檺鏃舵姠璐瓑閫氱煡</text>
+        <text class="setting-title">活动通知</text>
+        <text class="setting-desc">接收平台活动、限时特惠等通知</text>
       </view>
       <switch 
         checked="{{settings.activityNotification}}" 
@@ -59,31 +59,31 @@
       />
     </view>
     
-    <!-- 娓呯┖閫氱煡 -->
+    <!-- 清空通知 -->
     <view class="setting-item action-item" bindtap="onClearNotifications">
       <view class="setting-info">
-        <text class="setting-title danger">娓呯┖鎵€鏈夐€氱煡</text>
-        <text class="setting-desc">灏嗗垹闄ゆ墍鏈夊凡璇婚€氱煡</text>
+        <text class="setting-title danger">清空所有通知</text>
+        <text class="setting-desc">将删除所有已读通知</text>
       </view>
-      <text class="action-arrow">鈫?/text>
+      <text class="action-arrow">→</text>
     </view>
     
-    <!-- 閫氱煡鏁伴噺 -->
+    <!-- 通知数量 -->
     <view class="setting-item info-item">
       <view class="setting-info">
-        <text class="setting-title">鏈閫氱煡鏁伴噺</text>
+        <text class="setting-title">未读通知数量</text>
       </view>
       <text class="info-value">{{unreadCount}}</text>
     </view>
   </view>
   
-  <!-- 鍔犺浇涓?-->
+  <!-- 加载中 -->
   <view class="loading" wx:elif="{{loading}}">
-    <text>鍔犺浇涓?..</text>
+    <text>加载中...</text>
   </view>
   
-  <!-- 绌虹姸鎬?-->
+  <!-- 空状态 -->
   <view class="empty" wx:else>
-    <text>鍔犺浇璁剧疆澶辫触</text>
+    <text>加载设置失败</text>
   </view>
 </view>

@@ -1,7 +1,177 @@
-﻿/**\n * 鏂囦欢鍚? settings.js\n * 鐗堟湰鍙? 1.0.0\n * 鏇存柊鏃ユ湡: 2025-11-30\n * 鎻忚堪: 閫氱煡璁剧疆椤甸潰\n */\nconst notificationService = require('../../services/notificationService');\n\nPage({\n  /**\n   * 椤甸潰鐨勫垵濮嬫暟鎹?
-   */\n  data: {\n    settings: null,\n    loading: true,\n    unreadCount: 0\n  },\n\n  /**\n   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇\n   */\n  onLoad: function () {\n    this.loadNotificationSettings();\n    this.loadUnreadCount();\n  },\n\n  /**\n   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず\n   */\n  onShow: function () {\n    this.loadNotificationSettings();\n    this.loadUnreadCount();\n  },\n\n  /**\n   * 鍔犺浇閫氱煡璁剧疆\n   */\n  loadNotificationSettings: function () {\n    this.setData({\n      loading: true\n    });\n    \n    notificationService.getNotificationSettings()\n      .then(res => {\n        this.setData({\n          settings: res,\n          loading: false\n        });\n      })\n      .catch(err => {\n        this.setData({\n          loading: false\n        });\n        \n        wx.showToast({\n          title: err.message || '鍔犺浇閫氱煡璁剧疆澶辫触',\n          icon: 'none'\n        });\n      });\n  },\n\n  /**\n   * 鍔犺浇鏈閫氱煡鏁伴噺\n   */\n  loadUnreadCount: function () {\n    notificationService.getUnreadCount()\n      .then(res => {\n        this.setData({\n          unreadCount: res.count || 0\n        });\n      })\n      .catch(err => {\n        console.error('鍔犺浇鏈閫氱煡鏁伴噺澶辫触:', err);\n      });\n  },\n\n  /**\n   * 鏇存柊閫氱煡璁剧疆\n   * @param {Object} newSettings - 鏂扮殑璁剧疆\n   */\n  updateSettings: function (newSettings) {\n    const settings = { ...this.data.settings, ...newSettings };\n    \n    this.setData({\n      settings\n    });\n    \n    notificationService.updateNotificationSettings(settings)\n      .catch(err => {\n        wx.showToast({\n          title: err.message || '鏇存柊閫氱煡璁剧疆澶辫触',\n          icon: 'none'\n        });\n        \n        // 鎭㈠鍘熻缃?
-        this.loadNotificationSettings();\n      });\n  },\n\n  /**\n   * 绯荤粺閫氱煡寮€鍏冲彉鍖?
-   * @param {Object} e - 浜嬩欢瀵硅薄\n   */\n  onSystemNotificationChange: function (e) {\n    const { value } = e.detail;\n    this.updateSettings({ systemNotification: value });\n  },\n\n  /**\n   * 璁㈠崟閫氱煡寮€鍏冲彉鍖?
-   * @param {Object} e - 浜嬩欢瀵硅薄\n   */\n  onOrderNotificationChange: function (e) {\n    const { value } = e.detail;\n    this.updateSettings({ orderNotification: value });\n  },\n\n  /**\n   * 淇冮攢閫氱煡寮€鍏冲彉鍖?
-   * @param {Object} e - 浜嬩欢瀵硅薄\n   */\n  onPromotionNotificationChange: function (e) {\n    const { value } = e.detail;\n    this.updateSettings({ promotionNotification: value });\n  },\n\n  /**\n   * 娲诲姩閫氱煡寮€鍏冲彉鍖?
-   * @param {Object} e - 浜嬩欢瀵硅薄\n   */\n  onActivityNotificationChange: function (e) {\n    const { value } = e.detail;\n    this.updateSettings({ activityNotification: value });\n  },\n\n  /**\n   * 娓呯┖鎵€鏈夐€氱煡\n   */\n  onClearNotifications: function () {\n    wx.showModal({\n      title: '纭娓呯┖',\n      content: '纭畾瑕佹竻绌烘墍鏈夊凡璇婚€氱煡鍚楋紵',\n      success: (res) => {\n        if (res.confirm) {\n          this.setData({\n            loading: true\n          });\n          \n          notificationService.deleteNotification()\n            .then(() => {\n              this.setData({\n                loading: false\n              });\n              \n              wx.showToast({\n                title: '娓呯┖鎴愬姛',\n                icon: 'success'\n              });\n              \n              // 鍒锋柊鏈鏁伴噺\n              this.loadUnreadCount();\n            })\n            .catch(err => {\n              this.setData({\n                loading: false\n              });\n              \n              wx.showToast({\n                title: err.message || '娓呯┖閫氱煡澶辫触',\n                icon: 'none'\n              });\n            });\n        }\n      }\n    });\n  }\n});
+/**
+ * 文件名: settings.js
+ * 版本号: 1.0.0
+ * 更新日期: 2025-11-30
+ * 描述: 通知设置页面
+ */
+const notificationService = require('../../services/notificationService');
+
+Page({
+  /**
+   * 页面的初始数据
+   */
+  data: {
+    settings: null,
+    loading: true,
+    unreadCount: 0
+  },
+
+  /**
+   * 生命周期函数--监听页面加载
+   */
+  onLoad: function () {
+    this.loadNotificationSettings();
+    this.loadUnreadCount();
+  },
+
+  /**
+   * 生命周期函数--监听页面显示
+   */
+  onShow: function () {
+    this.loadNotificationSettings();
+    this.loadUnreadCount();
+  },
+
+  /**
+   * 加载通知设置
+   */
+  loadNotificationSettings: function () {
+    this.setData({
+      loading: true
+    });
+    
+    notificationService.getNotificationSettings()
+      .then(res => {
+        this.setData({
+          settings: res,
+          loading: false
+        });
+      })
+      .catch(err => {
+        this.setData({
+          loading: false
+        });
+        
+        wx.showToast({
+          title: err.message || '加载通知设置失败',
+          icon: 'none'
+        });
+      });
+  },
+
+  /**
+   * 加载未读通知数量
+   */
+  loadUnreadCount: function () {
+    notificationService.getUnreadCount()
+      .then(res => {
+        this.setData({
+          unreadCount: res.count || 0
+        });
+      })
+      .catch(err => {
+        console.error('加载未读通知数量失败:', err);
+      });
+  },
+
+  /**
+   * 更新通知设置
+   * @param {Object} newSettings - 新的设置
+   */
+  updateSettings: function (newSettings) {
+    const settings = { ...this.data.settings, ...newSettings };
+    
+    this.setData({
+      settings
+    });
+    
+    notificationService.updateNotificationSettings(settings)
+      .catch(err => {
+        wx.showToast({
+          title: err.message || '更新通知设置失败',
+          icon: 'none'
+        });
+        
+        // 恢复原设置
+        this.loadNotificationSettings();
+      });
+  },
+
+  /**
+   * 系统通知开关变化
+   * @param {Object} e - 事件对象
+   */
+  onSystemNotificationChange: function (e) {
+    const { value } = e.detail;
+    this.updateSettings({ systemNotification: value });
+  },
+
+  /**
+   * 订单通知开关变化
+   * @param {Object} e - 事件对象
+   */
+  onOrderNotificationChange: function (e) {
+    const { value } = e.detail;
+    this.updateSettings({ orderNotification: value });
+  },
+
+  /**
+   * 促销通知开关变化
+   * @param {Object} e - 事件对象
+   */
+  onPromotionNotificationChange: function (e) {
+    const { value } = e.detail;
+    this.updateSettings({ promotionNotification: value });
+  },
+
+  /**
+   * 活动通知开关变化
+   * @param {Object} e - 事件对象
+   */
+  onActivityNotificationChange: function (e) {
+    const { value } = e.detail;
+    this.updateSettings({ activityNotification: value });
+  },
+
+  /**
+   * 清空所有通知
+   */
+  onClearNotifications: function () {
+    wx.showModal({
+      title: '确认清空',
+      content: '确定要清空所有已读通知吗？',
+      success: (res) => {
+        if (res.confirm) {
+          this.setData({
+            loading: true
+          });
+          
+          notificationService.deleteNotification()
+            .then(() => {
+              this.setData({
+                loading: false
+              });
+              
+              wx.showToast({
+                title: '清空成功',
+                icon: 'success'
+              });
+              
+              // 更新未读数量
+              this.loadUnreadCount();
+            })
+            .catch(err => {
+              this.setData({
+                loading: false
+              });
+              
+              wx.showToast({
+                title: err.message || '清空通知失败',
+                icon: 'none'
+              });
+            });
+        }
+      }
+    });
+  }
+});

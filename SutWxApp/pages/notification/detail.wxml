@@ -1,1 +1,45 @@
-﻿<!--\n * 鏂囦欢鍚? detail.wxml\n * 鐗堟湰鍙? 1.0.0\n * 鏇存柊鏃ユ湡: 2025-11-30\n * 鎻忚堪: 閫氱煡璇︽儏椤甸潰\n-->\n<view class="container">\n  <!-- 閫氱煡璇︽儏 -->\n  <view class="notification-detail" wx:if="{{notification}}">\n    <!-- 鏍囬 -->\n    <view class="title">{{notification.title}}</view>\n    \n    <!-- 鏃堕棿 -->\n    <view class="time">{{notification.createTime}}</view>\n    \n    <!-- 鍐呭 -->\n    <view class="content">{{notification.content}}</view>\n    \n    <!-- 鎿嶄綔鎸夐挳 -->\n    <view class="action-buttons" wx:if="{{notification.actionUrl}}">\n      <button class="action-btn" bindtap="onActionTap">\n        {{notification.actionText || '鏌ョ湅璇︽儏'}}\n      </button>\n    </view>\n    \n    <!-- 鐩稿叧閾炬帴 -->\n    <view class="related-links" wx:if="{{notification.relatedLinks && notification.relatedLinks.length > 0}}">\n      <view class="links-title">鐩稿叧閾炬帴</view>\n      <view class="link-item" wx:for="{{notification.relatedLinks}}" wx:key="index" bindtap="onLinkTap" data-url="{{item.url}}">\n        <text class="link-text">{{item.title}}</text>\n        <text class="link-arrow">鈫?/text>\n      </view>\n    </view>\n  </view>\n  \n  <!-- 鍔犺浇涓?-->\n  <view class="loading" wx:elif="{{loading}}">\n    <text>鍔犺浇涓?..</text>\n  </view>\n  \n  <!-- 绌虹姸鎬?-->\n  <view class="empty" wx:else>\n    <text>閫氱煡涓嶅瓨鍦ㄦ垨宸茶鍒犻櫎</text>\n  </view>\n</view>
+﻿<!--
+ * 鏂囦欢鍚? detail.wxml
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-30
+ * 鎻忚堪: 閫氱煡璇︽儏椤甸潰
+-->
+<view class="container">
+  <!-- 閫氱煡璇︽儏 -->
+  <view class="notification-detail" wx:if="{{notification}}">
+    <!-- 鏍囬 -->
+    <view class="title">{{notification.title}}</view>
+    
+    <!-- 鏃堕棿 -->
+    <view class="time">{{notification.createTime}}</view>
+    
+    <!-- 鍐呭 -->
+    <view class="content">{{notification.content}}</view>
+    
+    <!-- 鎿嶄綔鎸夐挳 -->
+    <view class="action-buttons" wx:if="{{notification.actionUrl}}">
+      <button class="action-btn" bindtap="onActionTap">
+        {{notification.actionText || '鏌ョ湅璇︽儏'}}
+      </button>
+    </view>
+    
+    <!-- 鐩稿叧閾炬帴 -->
+    <view class="related-links" wx:if="{{notification.relatedLinks && notification.relatedLinks.length > 0}}">
+      <view class="links-title">鐩稿叧閾炬帴</view>
+      <view class="link-item" wx:for="{{notification.relatedLinks}}" wx:key="index" bindtap="onLinkTap" data-url="{{item.url}}">
+        <text class="link-text">{{item.title}}</text>
+        <text class="link-arrow">鈫?/text>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 鍔犺浇涓?-->
+  <view class="loading" wx:elif="{{loading}}">
+    <text>鍔犺浇涓?..</text>
+  </view>
+  
+  <!-- 绌虹姸鎬?-->
+  <view class="empty" wx:else>
+    <text>閫氱煡涓嶅瓨鍦ㄦ垨宸茶鍒犻櫎</text>
+  </view>
+</view>

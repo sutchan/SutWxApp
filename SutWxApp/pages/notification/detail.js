@@ -1,4 +1,142 @@
-﻿/**\n * 鏂囦欢鍚? detail.js\n * 鐗堟湰鍙? 1.0.0\n * 鏇存柊鏃ユ湡: 2025-11-30\n * 鎻忚堪: 閫氱煡璇︽儏椤甸潰\n */\nconst notificationService = require('../../services/notificationService');\n\nPage({\n  /**\n   * 椤甸潰鐨勫垵濮嬫暟鎹?
-   */\n  data: {\n    notification: null,\n    loading: true,\n    notificationId: null\n  },\n\n  /**\n   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇\n   */\n  onLoad: function (options) {\n    if (options.id) {\n      this.setData({\n        notificationId: options.id\n      });\n      this.loadNotificationDetail(options.id);\n    }\n  },\n\n  /**\n   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず\n   */\n  onShow: function () {\n    if (this.data.notificationId) {\n      this.loadNotificationDetail(this.data.notificationId);\n    }\n  },\n\n  /**\n   * 鍔犺浇閫氱煡璇︽儏\n   * @param {string} id - 閫氱煡ID\n   */\n  loadNotificationDetail: function (id) {\n    if (!id) return;\n    \n    this.setData({\n      loading: true\n    });\n    \n    notificationService.getNotificationDetail(id)\n      .then(res => {\n        this.setData({\n          notification: res,\n          loading: false\n        });\n        \n        // 鏍囪涓哄凡璇?
-        if (!res.isRead) {\n          notificationService.markAsRead(id)\n            .catch(err => {\n              console.error('鏍囪閫氱煡涓哄凡璇诲け璐?', err);\n            });\n        }\n      })\n      .catch(err => {\n        this.setData({\n          loading: false\n        });\n        \n        wx.showToast({\n          title: err.message || '鍔犺浇閫氱煡璇︽儏澶辫触',\n          icon: 'none'\n        });\n        \n        // 寤惰繜杩斿洖涓婁竴椤?
-        setTimeout(() => {\n          wx.navigateBack();\n        }, 1500);\n      });\n  },\n\n  /**\n   * 鐐瑰嚮鎿嶄綔鎸夐挳\n   */\n  onActionTap: function () {\n    const { notification } = this.data;\n    if (notification && notification.actionUrl) {\n      this.navigateToUrl(notification.actionUrl);\n    }\n  },\n\n  /**\n   * 鐐瑰嚮鐩稿叧閾炬帴\n   * @param {Object} e - 浜嬩欢瀵硅薄\n   */\n  onLinkTap: function (e) {\n    const { url } = e.currentTarget.dataset;\n    if (url) {\n      this.navigateToUrl(url);\n    }\n  },\n\n  /**\n   * 璺宠浆鍒版寚瀹歎RL\n   * @param {string} url - 鐩爣URL\n   */\n  navigateToUrl: function (url) {\n    if (!url) return;\n    \n    // 鍒ゆ柇URL绫诲瀷锛岃繘琛岀浉搴旂殑璺宠浆\n    if (url.startsWith('/')) {\n      // 鍐呴儴椤甸潰璺宠浆\n      wx.navigateTo({\n        url: url\n      });\n    } else if (url.startsWith('http://') || url.startsWith('https://')) {\n      // 澶栭儴閾炬帴璺宠浆\n      wx.navigateTo({\n        url: `/pages/webview/webview?url=${encodeURIComponent(url)}`\n      });\n    } else {\n      // 鍏朵粬绫诲瀷閾炬帴\n      console.error('涓嶆敮鎸佺殑URL绫诲瀷:', url);\n      wx.showToast({\n        title: '涓嶆敮鎸佺殑閾炬帴绫诲瀷',\n        icon: 'none'\n      });\n    }\n  },\n\n  /**\n   * 鍒嗕韩鍔熻兘\n   */\n  onShareAppMessage: function () {\n    const { notification } = this.data;\n    return {\n      title: notification ? notification.title : '閫氱煡璇︽儏',\n      path: `/pages/notification/detail/detail?id=${this.data.notificationId}`\n    };\n  }\n});
+﻿/**
+ * 鏂囦欢鍚? detail.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-30
+ * 鎻忚堪: 閫氱煡璇︽儏椤甸潰
+ */
+const notificationService = require('../../services/notificationService');
+
+Page({
+  /**
+   * 椤甸潰鐨勫垵濮嬫暟鎹?
+   */
+  data: {
+    notification: null,
+    loading: true,
+    notificationId: null
+  },
+
+  /**
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
+   */
+  onLoad: function (options) {
+    if (options.id) {
+      this.setData({
+        notificationId: options.id
+      });
+      this.loadNotificationDetail(options.id);
+    }
+  },
+
+  /**
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
+   */
+  onShow: function () {
+    if (this.data.notificationId) {
+      this.loadNotificationDetail(this.data.notificationId);
+    }
+  },
+
+  /**
+   * 鍔犺浇閫氱煡璇︽儏
+   * @param {string} id - 閫氱煡ID
+   */
+  loadNotificationDetail: function (id) {
+    if (!id) return;
+    
+    this.setData({
+      loading: true
+    });
+    
+    notificationService.getNotificationDetail(id)
+      .then(res => {
+        this.setData({
+          notification: res,
+          loading: false
+        });
+        
+        // 鏍囪涓哄凡璇?
+        if (!res.isRead) {
+          notificationService.markAsRead(id)
+            .catch(err => {
+              console.error('鏍囪閫氱煡涓哄凡璇诲け璐?', err);
+            });
+        }
+      })
+      .catch(err => {
+        this.setData({
+          loading: false
+        });
+        
+        wx.showToast({
+          title: err.message || '鍔犺浇閫氱煡璇︽儏澶辫触',
+          icon: 'none'
+        });
+        
+        // 寤惰繜杩斿洖涓婁竴椤?
+        setTimeout(() => {
+          wx.navigateBack();
+        }, 1500);
+      });
+  },
+
+  /**
+   * 鐐瑰嚮鎿嶄綔鎸夐挳
+   */
+  onActionTap: function () {
+    const { notification } = this.data;
+    if (notification && notification.actionUrl) {
+      this.navigateToUrl(notification.actionUrl);
+    }
+  },
+
+  /**
+   * 鐐瑰嚮鐩稿叧閾炬帴
+   * @param {Object} e - 浜嬩欢瀵硅薄
+   */
+  onLinkTap: function (e) {
+    const { url } = e.currentTarget.dataset;
+    if (url) {
+      this.navigateToUrl(url);
+    }
+  },
+
+  /**
+   * 璺宠浆鍒版寚瀹歎RL
+   * @param {string} url - 鐩爣URL
+   */
+  navigateToUrl: function (url) {
+    if (!url) return;
+    
+    // 鍒ゆ柇URL绫诲瀷锛岃繘琛岀浉搴旂殑璺宠浆
+    if (url.startsWith('/')) {
+      // 鍐呴儴椤甸潰璺宠浆
+      wx.navigateTo({
+        url: url
+      });
+    } else if (url.startsWith('http://') || url.startsWith('https://')) {
+      // 澶栭儴閾炬帴璺宠浆
+      wx.navigateTo({
+        url: `/pages/webview/webview?url=${encodeURIComponent(url)}`
+      });
+    } else {
+      // 鍏朵粬绫诲瀷閾炬帴
+      console.error('涓嶆敮鎸佺殑URL绫诲瀷:', url);
+      wx.showToast({
+        title: '涓嶆敮鎸佺殑閾炬帴绫诲瀷',
+        icon: 'none'
+      });
+    }
+  },
+
+  /**
+   * 鍒嗕韩鍔熻兘
+   */
+  onShareAppMessage: function () {
+    const { notification } = this.data;
+    return {
+      title: notification ? notification.title : '閫氱煡璇︽儏',
+      path: `/pages/notification/detail/detail?id=${this.data.notificationId}`
+    };
+  }
+});

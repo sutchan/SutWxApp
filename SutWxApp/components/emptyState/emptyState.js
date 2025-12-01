@@ -1,48 +1,51 @@
 ﻿/**
- * 鏂囦欢鍚? emptyState.js
- * 鐗堟湰鍙? 1.0.2
- * 鏇存柊鏃ユ湡: 2025-11-29
- * 浣滆€? Sut
- * 鎻忚堪: 绌虹姸鎬佺粍浠?/
+ * 文件名: emptyState.js
+ * 版本号: 1.0.2
+ * 更新日期: 2025-11-29
+ * 作者: Sut
+ * 描述: 空状态组件
+ */
 Component({
   /**
-   * 缁勪欢鐨勫睘鎬у垪琛?   */
+   * 组件的属性列表
+   */
   properties: {
-    // 绌虹姸鎬佺被鍨? default, search, cart, order, network, error
+    // 空状态类型: default, search, cart, order, network, error
     type: {
       type: String,
       value: 'default'
     },
-    // 鑷畾涔夊浘鐗?    image: {
+    // 自定义图片
+    image: {
       type: String,
       value: ''
     },
-    // 鏍囬鏂囨湰
+    // 标题文本
     title: {
       type: String,
       value: ''
     },
-    // 鎻忚堪鏂囨湰
+    // 描述文本
     description: {
       type: String,
       value: ''
     },
-    // 鏄惁鏄剧ず鎸夐挳
+    // 是否显示按钮
     showButton: {
       type: Boolean,
       value: false
     },
-    // 鎸夐挳鏂囨湰
+    // 按钮文本
     buttonText: {
       type: String,
-      value: '閲嶆柊灏濊瘯'
+      value: '重新尝试'
     },
-    // 鍥剧墖瀹藉害
+    // 图片宽度
     imageWidth: {
       type: String,
       value: '200rpx'
     },
-    // 鍥剧墖楂樺害
+    // 图片高度
     imageHeight: {
       type: String,
       value: '200rpx'
@@ -50,9 +53,11 @@ Component({
   },
 
   /**
-   * 缁勪欢鐨勫垵濮嬫暟鎹?   */
+   * 组件的初始数据
+   */
   data: {
-    // 榛樿绌虹姸鎬佸浘鐗囨槧灏?    defaultImages: {
+    // 默认空状态图片映射
+    defaultImages: {
       'default': '/assets/images/empty.svg',
       'search': '/assets/images/empty-search.svg',
       'cart': '/assets/images/empty-cart.svg',
@@ -60,48 +65,49 @@ Component({
       'network': '/assets/images/error.svg',
       'error': '/assets/images/error.svg'
     },
-    // 榛樿鏍囬鏄犲皠
+    // 默认标题映射
     defaultTitles: {
-      'default': '鏆傛棤鏁版嵁',
-      'search': '娌℃湁鎵惧埌鐩稿叧鍐呭',
-      'cart': '璐墿杞︽槸绌虹殑',
-      'order': '鏆傛棤璁㈠崟',
-      'network': '缃戠粶杩炴帴澶辫触',
-      'error': '鍑洪敊浜?
+      'default': '暂无数据',
+      'search': '没有找到相关内容',
+      'cart': '购物车是空的',
+      'order': '暂无订单',
+      'network': '网络连接失败',
+      'error': '出错了'
     },
-    // 榛樿鎻忚堪鏄犲皠
+    // 默认描述映射
     defaultDescriptions: {
       'default': '',
-      'search': '鎹釜鍏抽敭璇嶈瘯璇?,
-      'cart': '蹇幓閫夋嫨鍠滄鐨勫晢鍝佸惂',
-      'order': '鎮ㄨ繕娌℃湁璁㈠崟璁板綍',
-      'network': '璇锋鏌ョ綉缁滆繛鎺ュ悗閲嶈瘯',
-      'error': '璇风◢鍚庡啀璇?
+      'search': '换个关键词试试',
+      'cart': '快去选择喜欢的商品吧',
+      'order': '您还没有订单记录',
+      'network': '请检查网络连接后重试',
+      'error': '请稍后再试'
     }
   },
 
   /**
-   * 璁＄畻灞炴€?   */
+   * 计算属性
+   */
   computed: {
     /**
-     * 鑾峰彇鏈€缁堟樉绀虹殑鍥剧墖
-     * @returns {string} 鍥剧墖璺緞
+     * 获取最终显示的图片
+     * @returns {string} 图片路径
      */
     displayImage() {
       return this.properties.image || this.data.defaultImages[this.properties.type] || this.data.defaultImages.default;
     },
     
     /**
-     * 鑾峰彇鏈€缁堟樉绀虹殑鏍囬
-     * @returns {string} 鏍囬鏂囨湰
+     * 获取最终显示的标题
+     * @returns {string} 标题文本
      */
     displayTitle() {
       return this.properties.title || this.data.defaultTitles[this.properties.type] || this.data.defaultTitles.default;
     },
     
     /**
-     * 鑾峰彇鏈€缁堟樉绀虹殑鎻忚堪
-     * @returns {string} 鎻忚堪鏂囨湰
+     * 获取最终显示的描述
+     * @returns {string} 描述文本
      */
     displayDescription() {
       return this.properties.description || this.data.defaultDescriptions[this.properties.type] || this.data.defaultDescriptions.default;
@@ -109,10 +115,11 @@ Component({
   },
 
   /**
-   * 缁勪欢鐨勬柟娉曞垪琛?   */
+   * 组件的方法列表
+   */
   methods: {
     /**
-     * 鐐瑰嚮鎸夐挳
+     * 点击按钮
      * @returns {void}
      */
     onButtonTap() {
