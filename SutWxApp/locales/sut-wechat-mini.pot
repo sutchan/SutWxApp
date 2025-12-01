@@ -1,4 +1,4 @@
-msgid ""
+﻿msgid ""
 msgstr ""
 "Project-Id-Version: Sut WeChat Mini 1.0.16\n"
 "Report-Msgid-Bugs-To: \n"
@@ -123,797 +123,797 @@ msgstr ""
 
 
 #: pages/index/index.js
-msgid "新品"
+msgid "鏂板搧"
 msgstr ""
 
 #: pages/index/index.js
-msgid "推荐"
+msgid "鎺ㄨ崘"
 msgstr ""
 
 #: pages/index/index.js
-msgid "热卖"
+msgid "鐑崠"
 msgstr ""
 
 #: pages/index/index.js
-msgid "分类"
+msgid "鍒嗙被"
 msgstr ""
 
 #: pages/index/index.js
-msgid "商品A"
+msgid "鍟嗗搧A"
 msgstr ""
 
 #: pages/index/index.js
-msgid "商品B"
+msgid "鍟嗗搧B"
 msgstr ""
 
 #: pages/index/index.js
-msgid "商品C"
+msgid "鍟嗗搧C"
 msgstr ""
 
 #: pages/index/index.js
-msgid "商品D"
+msgid "鍟嗗搧D"
 msgstr ""
 
 #: pages/index/index.wxml
-msgid "加载中..."
+msgid "鍔犺浇涓?.."
 msgstr ""
 
 #: pages/index/index.wxml
-msgid "推荐商品"
+msgid "鎺ㄨ崘鍟嗗搧"
 msgstr ""
 
 #: pages/user/user.js
-msgid "我的订单"
+msgid "鎴戠殑璁㈠崟"
 msgstr ""
 
 #: pages/user/user.js
-msgid "我的收藏"
+msgid "鎴戠殑鏀惰棌"
 msgstr ""
 
 #: pages/user/user.js
-msgid "积分中心"
+msgid "绉垎涓績"
 msgstr ""
 
 #: pages/user/user.js
-msgid "优惠券"
+msgid "浼樻儬鍒?
 msgstr ""
 
 #: pages/user/user.js
-msgid "收货地址"
+msgid "鏀惰揣鍦板潃"
 msgstr ""
 
 #: pages/user/user.js
-msgid "设置"
+msgid "璁剧疆"
 msgstr ""
 
 #: pages/user/user.js
-msgid "提示"
+msgid "鎻愮ず"
 msgstr ""
 
 #: pages/user/user.js
-msgid "确定要退出登录吗？"
+msgid "纭畾瑕侀€€鍑虹櫥褰曞悧锛?
 msgstr ""
 
 #: pages/user/user.js
-msgid "已退出登录"
+msgid "宸查€€鍑虹櫥褰?
 msgstr ""
 
 #: pages/cart/cart.js
-msgid "确定要删除这个商品吗？"
+msgid "纭畾瑕佸垹闄よ繖涓晢鍝佸悧锛?
 msgstr ""
 
 #: pages/cart/cart.js
-msgid "删除成功"
+msgid "鍒犻櫎鎴愬姛"
 msgstr ""
 
 #: pages/cart/cart.js
-msgid "结算"
+msgid "缁撶畻"
 msgstr ""
 
 #: pages/cart/cart.js
-msgid "购物车为空"
+msgid "璐墿杞︿负绌?
 msgstr ""
 
 #: pages/cart/cart.js
-msgid "去逛逛"
+msgid "鍘婚€涢€?
 msgstr ""
 
 #: pages/cart/cart.js
-msgid "全选"
+msgid "鍏ㄩ€?
 msgstr ""
 
 #: pages/cart/cart.js
-msgid "合计"
+msgid "鍚堣"
 msgstr ""
 
 #: pages/cart/cart.js
-msgid "删除"
+msgid "鍒犻櫎"
 msgstr ""
 
 #: pages/cart/cart.js
-msgid "编辑"
+msgid "缂栬緫"
 msgstr ""
 
 #: pages/cart/cart.js
-msgid "完成"
+msgid "瀹屾垚"
 msgstr ""
 
 #: pages/cart/cart.js
-msgid "数量"
+msgid "鏁伴噺"
 msgstr ""
 
 #: pages/cart/cart.js
-msgid "单价"
+msgid "鍗曚环"
 msgstr ""
 
 #: pages/cart/cart.js
-msgid "小计"
+msgid "灏忚"
 msgstr ""
 
 #: pages/product/detail/detail.js
-msgid "商品详情"
+msgid "鍟嗗搧璇︽儏"
 msgstr ""
 
 #: pages/product/detail/detail.js
-msgid "商品评价"
+msgid "鍟嗗搧璇勪环"
 msgstr ""
 
 #: pages/product/detail/detail.js
-msgid "加入购物车"
+msgid "鍔犲叆璐墿杞?
 msgstr ""
 
 #: pages/product/detail/detail.js
-msgid "立即购买"
+msgid "绔嬪嵆璐拱"
 msgstr ""
 
 #: pages/product/detail/detail.js
-msgid "库存不足"
+msgid "搴撳瓨涓嶈冻"
 msgstr ""
 
 #: pages/product/detail/detail.js
-msgid "商品已下架"
+msgid "鍟嗗搧宸蹭笅鏋?
 msgstr ""
 
 #: pages/product/detail/detail.js
-msgid "规格选择"
+msgid "瑙勬牸閫夋嫨"
 msgstr ""
 
 #: pages/product/detail/detail.js
-msgid "数量选择"
+msgid "鏁伴噺閫夋嫨"
 msgstr ""
 
 #: pages/product/detail/detail.js
-msgid "配送方式"
+msgid "閰嶉€佹柟寮?
 msgstr ""
 
 #: pages/product/detail/detail.js
-msgid "服务说明"
+msgid "鏈嶅姟璇存槑"
 msgstr ""
 
 #: pages/product/detail/detail.js
-msgid "商品参数"
+msgid "鍟嗗搧鍙傛暟"
 msgstr ""
 
 #: pages/product/detail/detail.js
-msgid "包装清单"
+msgid "鍖呰娓呭崟"
 msgstr ""
 
 #: pages/product/detail/detail.js
-msgid "售后保障"
+msgid "鍞悗淇濋殰"
 msgstr ""
 
 #: pages/product/detail/detail.js
-msgid "价格说明"
+msgid "浠锋牸璇存槑"
 msgstr ""
 
 #: pages/order/list/list.js
-msgid "全部订单"
+msgid "鍏ㄩ儴璁㈠崟"
 msgstr ""
 
 #: pages/order/list/list.js
-msgid "待付款"
+msgid "寰呬粯娆?
 msgstr ""
 
 #: pages/order/list/list.js
-msgid "待发货"
+msgid "寰呭彂璐?
 msgstr ""
 
 #: pages/order/list/list.js
-msgid "待收货"
+msgid "寰呮敹璐?
 msgstr ""
 
 #: pages/order/list/list.js
-msgid "待评价"
+msgid "寰呰瘎浠?
 msgstr ""
 
 #: pages/order/list/list.js
-msgid "售后"
+msgid "鍞悗"
 msgstr ""
 
 #: pages/order/list/list.js
-msgid "取消订单"
+msgid "鍙栨秷璁㈠崟"
 msgstr ""
 
 #: pages/order/list/list.js
-msgid "删除订单"
+msgid "鍒犻櫎璁㈠崟"
 msgstr ""
 
 #: pages/order/list/list.js
-msgid "确认收货"
+msgid "纭鏀惰揣"
 msgstr ""
 
 #: pages/order/list/list.js
-msgid "查看物流"
+msgid "鏌ョ湅鐗╂祦"
 msgstr ""
 
 #: pages/order/list/list.js
-msgid "申请售后"
+msgid "鐢宠鍞悗"
 msgstr ""
 
 #: pages/order/list/list.js
-msgid "评价订单"
+msgid "璇勪环璁㈠崟"
 msgstr ""
 
 #: pages/order/list/list.js
-msgid "再次购买"
+msgid "鍐嶆璐拱"
 msgstr ""
 
 #: pages/order/list/list.js
-msgid "订单详情"
+msgid "璁㈠崟璇︽儏"
 msgstr ""
 
 #: pages/order/list/list.js
-msgid "订单状态"
+msgid "璁㈠崟鐘舵€?
 msgstr ""
 
 #: pages/order/list/list.js
-msgid "订单编号"
+msgid "璁㈠崟缂栧彿"
 msgstr ""
 
 #: pages/order/list/list.js
-msgid "下单时间"
+msgid "涓嬪崟鏃堕棿"
 msgstr ""
 
 #: pages/order/list/list.js
-msgid "支付方式"
+msgid "鏀粯鏂瑰紡"
 msgstr ""
 
 #: pages/order/list/list.js
-msgid "配送信息"
+msgid "閰嶉€佷俊鎭?
 msgstr ""
 
 #: pages/order/list/list.js
-msgid "商品信息"
+msgid "鍟嗗搧淇℃伅"
 msgstr ""
 
 #: pages/order/list/list.js
-msgid "订单金额"
+msgid "璁㈠崟閲戦"
 msgstr ""
 
 #: pages/order/list/list.js
-msgid "优惠金额"
+msgid "浼樻儬閲戦"
 msgstr ""
 
 #: pages/order/list/list.js
-msgid "实付金额"
+msgid "瀹炰粯閲戦"
 msgstr ""
 
 #: pages/order/list/list.js
-msgid "发票信息"
+msgid "鍙戠エ淇℃伅"
 msgstr ""
 
 #: pages/order/list/list.js
-msgid "备注信息"
+msgid "澶囨敞淇℃伅"
 msgstr ""
 
 #: pages/payment/pay.js
-msgid "支付方式选择"
+msgid "鏀粯鏂瑰紡閫夋嫨"
 msgstr ""
 
 #: pages/payment/pay.js
-msgid "微信支付"
+msgid "寰俊鏀粯"
 msgstr ""
 
 #: pages/payment/pay.js
-msgid "支付宝支付"
+msgid "鏀粯瀹濇敮浠?
 msgstr ""
 
 #: pages/payment/pay.js
-msgid "银行卡支付"
+msgid "閾惰鍗℃敮浠?
 msgstr ""
 
 #: pages/payment/pay.js
-msgid "余额支付"
+msgid "浣欓鏀粯"
 msgstr ""
 
 #: pages/payment/pay.js
-msgid "支付成功"
+msgid "鏀粯鎴愬姛"
 msgstr ""
 
 #: pages/payment/pay.js
-msgid "支付失败"
+msgid "鏀粯澶辫触"
 msgstr ""
 
 #: pages/payment/pay.js
-msgid "支付取消"
+msgid "鏀粯鍙栨秷"
 msgstr ""
 
 #: pages/payment/pay.js
-msgid "支付处理中"
+msgid "鏀粯澶勭悊涓?
 msgstr ""
 
 #: pages/payment/pay.js
-msgid "请选择支付方式"
+msgid "璇烽€夋嫨鏀粯鏂瑰紡"
 msgstr ""
 
 #: pages/payment/pay.js
-msgid "确认支付"
+msgid "纭鏀粯"
 msgstr ""
 
 #: pages/payment/pay.js
-msgid "支付金额"
+msgid "鏀粯閲戦"
 msgstr ""
 
 #: pages/payment/pay.js
-msgid "订单信息"
+msgid "璁㈠崟淇℃伅"
 msgstr ""
 
 #: pages/search/result.js
-msgid "搜索结果"
+msgid "鎼滅储缁撴灉"
 msgstr ""
 
 #: pages/search/result.js
-msgid "搜索历史"
+msgid "鎼滅储鍘嗗彶"
 msgstr ""
 
 #: pages/search/result.js
-msgid "热门搜索"
+msgid "鐑棬鎼滅储"
 msgstr ""
 
 #: pages/search/result.js
-msgid "搜索建议"
+msgid "鎼滅储寤鸿"
 msgstr ""
 
 #: pages/search/result.js
-msgid "暂无搜索结果"
+msgid "鏆傛棤鎼滅储缁撴灉"
 msgstr ""
 
 #: pages/search/result.js
-msgid "清空搜索历史"
+msgid "娓呯┖鎼滅储鍘嗗彶"
 msgstr ""
 
 #: pages/search/result.js
-msgid "搜索"
+msgid "鎼滅储"
 msgstr ""
 
 #: pages/search/result.js
-msgid "取消"
+msgid "鍙栨秷"
 msgstr ""
 
 #: pages/search/result.js
-msgid "筛选"
+msgid "绛涢€?
 msgstr ""
 
 #: pages/search/result.js
-msgid "排序"
+msgid "鎺掑簭"
 msgstr ""
 
 #: pages/search/result.js
-msgid "价格从低到高"
+msgid "浠锋牸浠庝綆鍒伴珮"
 msgstr ""
 
 #: pages/search/result.js
-msgid "价格从高到低"
+msgid "浠锋牸浠庨珮鍒颁綆"
 msgstr ""
 
 #: pages/search/result.js
-msgid "销量从高到低"
+msgid "閿€閲忎粠楂樺埌浣?
 msgstr ""
 
 #: pages/search/result.js
-msgid "好评优先"
+msgid "濂借瘎浼樺厛"
 msgstr ""
 
 #: pages/search/result.js
-msgid "最新上架"
+msgid "鏈€鏂颁笂鏋?
 msgstr ""
 
 #: pages/search/result.js
-msgid "综合排序"
+msgid "缁煎悎鎺掑簭"
 msgstr ""
 
 #: pages/category/category.js
-msgid "商品分类"
+msgid "鍟嗗搧鍒嗙被"
 msgstr ""
 
 #: pages/category/category.js
-msgid "全部分类"
+msgid "鍏ㄩ儴鍒嗙被"
 msgstr ""
 
 #: pages/category/category.js
-msgid "子分类"
+msgid "瀛愬垎绫?
 msgstr ""
 
 #: pages/category/category.js
-msgid "分类商品"
+msgid "鍒嗙被鍟嗗搧"
 msgstr ""
 
 #: pages/notification/list.js
-msgid "消息通知"
+msgid "娑堟伅閫氱煡"
 msgstr ""
 
 #: pages/notification/list.js
-msgid "系统通知"
+msgid "绯荤粺閫氱煡"
 msgstr ""
 
 #: pages/notification/list.js
-msgid "订单通知"
+msgid "璁㈠崟閫氱煡"
 msgstr ""
 
 #: pages/notification/list.js
-msgid "活动通知"
+msgid "娲诲姩閫氱煡"
 msgstr ""
 
 #: pages/notification/list.js
-msgid "全部标记为已读"
+msgid "鍏ㄩ儴鏍囪涓哄凡璇?
 msgstr ""
 
 #: pages/notification/list.js
-msgid "暂无通知"
+msgid "鏆傛棤閫氱煡"
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "登录"
+msgid "鐧诲綍"
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "注册"
+msgid "娉ㄥ唽"
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "用户名"
+msgid "鐢ㄦ埛鍚?
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "密码"
+msgid "瀵嗙爜"
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "确认密码"
+msgid "纭瀵嗙爜"
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "忘记密码"
+msgid "蹇樿瀵嗙爜"
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "验证码"
+msgid "楠岃瘉鐮?
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "获取验证码"
+msgid "鑾峰彇楠岃瘉鐮?
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "登录成功"
+msgid "鐧诲綍鎴愬姛"
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "注册成功"
+msgid "娉ㄥ唽鎴愬姛"
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "用户名或密码错误"
+msgid "鐢ㄦ埛鍚嶆垨瀵嗙爜閿欒"
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "验证码错误"
+msgid "楠岃瘉鐮侀敊璇?
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "请输入用户名"
+msgid "璇疯緭鍏ョ敤鎴峰悕"
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "请输入密码"
+msgid "璇疯緭鍏ュ瘑鐮?
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "请输入验证码"
+msgid "璇疯緭鍏ラ獙璇佺爜"
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "密码不一致"
+msgid "瀵嗙爜涓嶄竴鑷?
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "账号已存在"
+msgid "璐﹀彿宸插瓨鍦?
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "账号不存在"
+msgid "璐﹀彿涓嶅瓨鍦?
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "账号已被禁用"
+msgid "璐﹀彿宸茶绂佺敤"
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "登录已过期"
+msgid "鐧诲綍宸茶繃鏈?
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "请重新登录"
+msgid "璇烽噸鏂扮櫥褰?
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "微信登录"
+msgid "寰俊鐧诲綍"
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "手机号登录"
+msgid "鎵嬫満鍙风櫥褰?
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "邮箱登录"
+msgid "閭鐧诲綍"
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "手机号"
+msgid "鎵嬫満鍙?
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "邮箱"
+msgid "閭"
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "请输入手机号"
+msgid "璇疯緭鍏ユ墜鏈哄彿"
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "请输入邮箱"
+msgid "璇疯緭鍏ラ偖绠?
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "手机号格式错误"
+msgid "鎵嬫満鍙锋牸寮忛敊璇?
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "邮箱格式错误"
+msgid "閭鏍煎紡閿欒"
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "密码长度不能少于6位"
+msgid "瀵嗙爜闀垮害涓嶈兘灏戜簬6浣?
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "验证码已发送"
+msgid "楠岃瘉鐮佸凡鍙戦€?
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "验证码发送失败"
+msgid "楠岃瘉鐮佸彂閫佸け璐?
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "请稍后重试"
+msgid "璇风◢鍚庨噸璇?
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "操作过于频繁"
+msgid "鎿嶄綔杩囦簬棰戠箒"
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "账号或密码错误"
+msgid "璐﹀彿鎴栧瘑鐮侀敊璇?
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "登录失败"
+msgid "鐧诲綍澶辫触"
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "注册失败"
+msgid "娉ㄥ唽澶辫触"
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "网络错误"
+msgid "缃戠粶閿欒"
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "服务器错误"
+msgid "鏈嶅姟鍣ㄩ敊璇?
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "未知错误"
+msgid "鏈煡閿欒"
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "请检查网络连接"
+msgid "璇锋鏌ョ綉缁滆繛鎺?
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "请稍后再试"
+msgid "璇风◢鍚庡啀璇?
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "系统繁忙"
+msgid "绯荤粺绻佸繖"
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "系统维护中"
+msgid "绯荤粺缁存姢涓?
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "功能暂未开放"
+msgid "鍔熻兘鏆傛湭寮€鏀?
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "敬请期待"
+msgid "鏁鏈熷緟"
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "感谢您的支持"
+msgid "鎰熻阿鎮ㄧ殑鏀寔"
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "欢迎回来"
+msgid "娆㈣繋鍥炴潵"
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "欢迎加入"
+msgid "娆㈣繋鍔犲叆"
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "开始您的购物之旅"
+msgid "寮€濮嬫偍鐨勮喘鐗╀箣鏃?
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "探索更多精彩内容"
+msgid "鎺㈢储鏇村绮惧僵鍐呭"
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "享受更多会员权益"
+msgid "浜彈鏇村浼氬憳鏉冪泭"
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "获取更多优惠信息"
+msgid "鑾峰彇鏇村浼樻儬淇℃伅"
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "随时随地轻松购物"
+msgid "闅忔椂闅忓湴杞绘澗璐墿"
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "品质生活从这里开始"
+msgid "鍝佽川鐢熸椿浠庤繖閲屽紑濮?
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "让购物成为一种享受"
+msgid "璁╄喘鐗╂垚涓轰竴绉嶄韩鍙?
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "发现更多好物"
+msgid "鍙戠幇鏇村濂界墿"
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "精选优质商品"
+msgid "绮鹃€変紭璐ㄥ晢鍝?
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "品质保证"
+msgid "鍝佽川淇濊瘉"
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "极速发货"
+msgid "鏋侀€熷彂璐?
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "无忧售后"
+msgid "鏃犲咖鍞悗"
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "正品保障"
+msgid "姝ｅ搧淇濋殰"
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "七天无理由退换"
+msgid "涓冨ぉ鏃犵悊鐢遍€€鎹?
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "假一赔十"
+msgid "鍋囦竴璧斿崄"
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "先行赔付"
+msgid "鍏堣璧斾粯"
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "全程保障"
+msgid "鍏ㄧ▼淇濋殰"
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "专业客服"
+msgid "涓撲笟瀹㈡湇"
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "24小时在线"
+msgid "24灏忔椂鍦ㄧ嚎"
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "快速响应"
+msgid "蹇€熷搷搴?
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "贴心服务"
+msgid "璐村績鏈嶅姟"
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "用心服务每一位用户"
+msgid "鐢ㄥ績鏈嶅姟姣忎竴浣嶇敤鎴?
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "为您提供最优质的购物体验"
+msgid "涓烘偍鎻愪緵鏈€浼樿川鐨勮喘鐗╀綋楠?
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "感谢您的信任与支持"
+msgid "鎰熻阿鎮ㄧ殑淇′换涓庢敮鎸?
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "我们将不断努力做得更好"
+msgid "鎴戜滑灏嗕笉鏂姫鍔涘仛寰楁洿濂?
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "期待您的再次光临"
+msgid "鏈熷緟鎮ㄧ殑鍐嶆鍏変复"
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "祝您购物愉快"
+msgid "绁濇偍璐墿鎰夊揩"
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "生活因您而精彩"
+msgid "鐢熸椿鍥犳偍鑰岀簿褰?
 msgstr ""
 
 #: pages/user/login/login.js
-msgid "让美好触手可及"
+msgid "璁╃編濂借Е鎵嬪彲鍙?
 msgstr ""
 
 #: components/article-detail/article-detail.js
 msgid "article_detail.load_failed"
-msgstr "加载文章失败"
+msgstr "鍔犺浇鏂囩珷澶辫触"
 
 #: components/article-detail/article-detail.js
 msgid "article_detail.missing_id"
-msgstr "文章ID不能为空"
+msgstr "鏂囩珷ID涓嶈兘涓虹┖"
 
 #: components/article-detail/article-detail.js
 msgid "article_detail.default_title"
-msgstr "文章详情"
+msgstr "鏂囩珷璇︽儏"
 
 #: components/article-detail/article-detail.js
 msgid "article_detail.share_title"
-msgstr "分享文章"
+msgstr "鍒嗕韩鏂囩珷"
 
 #: components/article-detail/article-detail.js
 msgid "article_detail.retry"
-msgstr "重试"
+msgstr "閲嶈瘯"
 
 #: components/article-detail/article-detail.js
 msgid "article_detail.copy_link"
-msgstr "复制链接"
+msgstr "澶嶅埗閾炬帴"
 
 #: components/article-detail/article-detail.js
 msgid "article_detail.share"
-msgstr "分享"
+msgstr "鍒嗕韩"
 
 #: components/common/common.js
 msgid "common.copy_success"
-msgstr "复制成功"
+msgstr "澶嶅埗鎴愬姛"
 
 #: components/common/common.js
 msgid "common.copy_failed"
-msgstr "复制失败"
+msgstr "澶嶅埗澶辫触"
 
 #: pages/index/index.js
-msgid "欢迎使用 SutWxApp"
+msgid "娆㈣繋浣跨敤 SutWxApp"
 msgstr ""

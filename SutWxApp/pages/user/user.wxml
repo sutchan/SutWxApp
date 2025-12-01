@@ -1,13 +1,13 @@
-<!-- pages/user/user.wxml -->
+﻿<!-- pages/user/user.wxml -->
 <view class="user-center-container">
-  <!-- 鐢ㄦ埛淇℃伅澶撮儴 -->
+  <!-- 閻劍鍩涙穱鈩冧紖婢舵挳鍎?-->
   <view class="user-header" bindtap="goToProfile">
     <view wx:if="{{isLoggedIn}}" class="user-info">
       <image src="{{userInfo.avatar || '/assets/images/default_avatar.png'}}" class="avatar" mode="aspectFill"></image>
       <view class="user-details">
-        <view class="user-name">{{userInfo.nickname || i18n.translate('鐢ㄦ埛')}}</view>
+        <view class="user-name">{{userInfo.nickname || i18n.translate('閻劍鍩?)}}</view>
         <view class="user-level">
-          <text class="level-tag">{{userInfo.level || i18n.translate('鏅€氱敤鎴?)}}</text>
+          <text class="level-tag">{{userInfo.level || i18n.translate('閺咁噣鈧氨鏁ら幋?)}}</text>
         </view>
       </view>
       <image src="/assets/images/icon_arrow_right.png" class="arrow-icon" mode="aspectFit"></image>
@@ -15,31 +15,31 @@
     <view wx:else class="not-login" bindtap="goToLogin">
       <image src="/assets/images/default_avatar.png" class="avatar" mode="aspectFill"></image>
       <view class="login-prompt">
-        <text>{{i18n.translate('鐐瑰嚮登录')}}</text>
+        <text>{{i18n.translate('閻愮懓鍤櫥褰?)}}</text>
       </view>
       <image src="/assets/images/icon_arrow_right.png" class="arrow-icon" mode="aspectFit"></image>
     </view>
   </view>
 
-  <!-- 缁熻淇℃伅鍖哄煙 -->
+  <!-- 缂佺喕顓告穱鈩冧紖閸栧搫鐓?-->
   <view class="stats-section" wx:if="{{isLoggedIn}}">
     <view class="stat-item">
       <view class="stat-value">{{userInfo.points || 0}}</view>
-      <view class="stat-label">{{i18n.translate('绉垎')}}</view>
+      <view class="stat-label">{{i18n.translate('缁夘垰鍨?)}}</view>
     </view>
     <view class="stat-divider"></view>
     <view class="stat-item">
       <view class="stat-value">{{userInfo.coupons || 0}}</view>
-      <view class="stat-label">{{i18n.translate('浼樻儬鍒?)}}</view>
+      <view class="stat-label">{{i18n.translate('娴兼ɑ鍎崚?)}}</view>
     </view>
     <view class="stat-divider"></view>
     <view class="stat-item">
       <view class="stat-value">{{userInfo.orders || 0}}</view>
-      <view class="stat-label">{{i18n.translate('订单')}}</view>
+      <view class="stat-label">{{i18n.translate('璁㈠崟')}}</view>
     </view>
   </view>
 
-  <!-- 鍔熻兘鑿滃崟 -->
+  <!-- 閸旂喕鍏橀懣婊冨礋 -->
   <view class="menu-section">
     <view class="menu-grid">
       <view class="menu-item" wx:for="{{menuItems}}" wx:key="id" bindtap="handleMenuTap" data-id="{{item.id}}">
@@ -49,14 +49,14 @@
     </view>
   </view>
 
-  <!-- 閫€鍑虹櫥褰曟寜閽?-->
+  <!-- 闁偓閸戣櫣娅ヨぐ鏇熷瘻闁?-->
   <view class="logout-section" wx:if="{{isLoggedIn}}">
-    <button class="logout-btn" bindtap="logout" type="warn">{{i18n.translate('閫€鍑虹櫥褰?)}}</button>
+    <button class="logout-btn" bindtap="logout" type="warn">{{i18n.translate('闁偓閸戣櫣娅ヨぐ?)}}</button>
   </view>
 
-  <!-- 鐗堟湰淇℃伅 -->
+  <!-- 閻楀牊婀版穱鈩冧紖 -->
   <view class="version-info">
-    <text>{{i18n.translate('版本号:)}} 1.0.1</text>
+    <text>{{i18n.translate('鐗堟湰鍙?)}} 1.0.1</text>
   </view>
 </view>
 

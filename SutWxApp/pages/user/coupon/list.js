@@ -1,38 +1,34 @@
-/**
- * 文件名: list.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 鐢ㄦ埛浼樻儬鍒稿垪琛ㄩ〉闈? */
+﻿/**
+ * 鏂囦欢鍚? list.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 閻劍鍩涙导妯诲劕閸掔鍨悰銊┿€夐棃? */
 Page({
   data: {
     couponList: [],
     loading: true,
-    activeTab: 0, // 0: 鍙敤, 1: 宸蹭娇鐢? 2: 宸茶繃鏈?    tabs: ['鍙敤', '宸蹭娇鐢?, '宸茶繃鏈?],
+    activeTab: 0, // 0: 閸欘垳鏁? 1: 瀹歌弓濞囬悽? 2: 瀹歌尪绻冮張?    tabs: ['閸欘垳鏁?, '瀹歌弓濞囬悽?, '瀹歌尪绻冮張?],
     timer: null
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
-   * @returns {void}
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸旂姾娴?   * @returns {void}
    */
   onLoad() {
     this.loadCouponList(this.data.activeTab);
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍗歌浇
-   * @returns {void}
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸楁瓕娴?   * @returns {void}
    */
   onUnload() {
-    // 娓呯悊瀹氭椂鍣紝闃叉鍐呭瓨娉勬紡
-    if (this.data.timer) {
+    // 濞撳懐鎮婄€规碍妞傞崳顭掔礉闂冨弶顒涢崘鍛摠濞夊嫭绱?    if (this.data.timer) {
       clearTimeout(this.data.timer);
     }
   },
 
   /**
-   * 鍒囨崲浼樻儬鍒哥被鍨?   * @param {Object} e - 浜嬩欢瀵硅薄
-   * @returns {void}
+   * 閸掑洦宕叉导妯诲劕閸掑摜琚崹?   * @param {Object} e - 娴滃娆㈢€电钖?   * @returns {void}
    */
   onTabChange(e) {
     const index = e.detail.index;
@@ -41,26 +37,25 @@ Page({
   },
 
   /**
-   * 鍔犺浇浼樻儬鍒稿垪琛?   * @param {number} type - 浼樻儬鍒哥被鍨?(0: 鍙敤, 1: 宸蹭娇鐢? 2: 宸茶繃鏈?
+   * 閸旂姾娴囨导妯诲劕閸掔鍨悰?   * @param {number} type - 娴兼ɑ鍎崚鍝ヨ閸?(0: 閸欘垳鏁? 1: 瀹歌弓濞囬悽? 2: 瀹歌尪绻冮張?
    * @returns {void}
    */
   loadCouponList(type) {
     this.setData({ loading: true });
-    // 妯℃嫙鏁版嵁璇锋眰
-    const timer = setTimeout(() => {
+    // 濡剝瀚欓弫鐗堝祦鐠囬攱鐪?    const timer = setTimeout(() => {
       let mockList = [];
       if (type === 0) {
         mockList = [
-          { id: 1, name: '婊?00鍑?0鍏?, value: 10, condition: '婊?00鍏冨彲鐢?, endDate: '2023-12-31' },
-          { id: 2, name: '鏂颁汉涓撲韩鍒?, value: 5, condition: '鏃犻棬妲?, endDate: '2023-11-30' }
+          { id: 1, name: '濠?00閸?0閸?, value: 10, condition: '濠?00閸忓啫褰查悽?, endDate: '2023-12-31' },
+          { id: 2, name: '閺傞姹夋稉鎾查煩閸?, value: 5, condition: '閺冪娀妫Σ?, endDate: '2023-11-30' }
         ];
       } else if (type === 1) {
         mockList = [
-          { id: 3, name: '宸蹭娇鐢ㄤ紭鎯犲埜', value: 20, condition: '婊?00鍏冨彲鐢?, endDate: '2023-10-31' }
+          { id: 3, name: '瀹歌弓濞囬悽銊ょ喘閹姴鍩?, value: 20, condition: '濠?00閸忓啫褰查悽?, endDate: '2023-10-31' }
         ];
       } else if (type === 2) {
         mockList = [
-          { id: 4, name: '宸茶繃鏈熶紭鎯犲埜', value: 15, condition: '婊?50鍏冨彲鐢?, endDate: '2023-09-30' }
+          { id: 4, name: '瀹歌尪绻冮張鐔剁喘閹姴鍩?, value: 15, condition: '濠?50閸忓啫褰查悽?, endDate: '2023-09-30' }
         ];
       }
       this.setData({

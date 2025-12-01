@@ -1,17 +1,17 @@
-/**
- * 文件名: result.wxml
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: result 椤甸潰缁撴瀯鏂囦欢
+﻿/**
+ * 鏂囦欢鍚? result.wxml
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: result 妞ょ敻娼扮紒鎾寸€弬鍥︽
  */
 <view class="container">
-  <!-- 鎼滅储妗?-->
+  <!-- 閹兼粎鍌ㄥ?-->
   <view class="search-bar">
     <view class="search-input-wrapper">
       <icon class="search-icon" type="search" size="16"></icon>
       <input 
         class="search-input" 
-        placeholder="鎼滅储鍟嗗搧銆佹枃绔犮€佺敤鎴? 
+        placeholder="閹兼粎鍌ㄩ崯鍡楁惂閵嗕焦鏋冪粩鐘偓浣烘暏閹? 
         value="{{keyword}}"
         bindinput="onInputChange"
         bindconfirm="onSearch"
@@ -20,12 +20,12 @@
         <icon type="clear" size="16"></icon>
       </view>
     </view>
-    <view class="search-btn" bindtap="onSearch">鎼滅储</view>
+    <view class="search-btn" bindtap="onSearch">閹兼粎鍌?/view>
   </view>
   
-  <!-- 鎼滅储缁撴灉 -->
+  <!-- 閹兼粎鍌ㄧ紒鎾寸亯 -->
   <view wx:if="{{showResult}}" class="search-result">
-    <!-- 鏍囩鍒囨崲 -->
+    <!-- 閺嶅洨顒烽崚鍥ㄥ床 -->
     <view class="tabs">
       <view 
         wx:for="{{tabs}}" 
@@ -38,7 +38,7 @@
       </view>
     </view>
     
-    <!-- 鎼滅储缁撴灉鍒楄〃 -->
+    <!-- 閹兼粎鍌ㄧ紒鎾寸亯閸掓銆?-->
     <view class="result-list">
       <view 
         wx:for="{{searchResults}}" 
@@ -54,47 +54,47 @@
           <view class="result-desc">{{item.desc}}</view>
           <view class="result-meta">
             <block wx:if="{{item.type === 'product'}}">
-              <text class="result-price">¥{{item.price}}</text>
+              <text class="result-price">楼{{item.price}}</text>
             </block>
             <block wx:elif="{{item.type === 'article'}}">
               <text class="result-time">{{item.publishTime}}</text>
             </block>
             <block wx:elif="{{item.type === 'user'}}">
-              <text class="result-fans">{{item.fans}}绮変笣</text>
+              <text class="result-fans">{{item.fans}}缁绗?/text>
             </block>
           </view>
         </view>
         <view class="result-type">
-          <block wx:if="{{item.type === 'product'}}">鍟嗗搧</block>
-          <block wx:elif="{{item.type === 'article'}}">鏂囩珷</block>
-          <block wx:elif="{{item.type === 'user'}}">鐢ㄦ埛</block>
+          <block wx:if="{{item.type === 'product'}}">閸熷棗鎼?/block>
+          <block wx:elif="{{item.type === 'article'}}">閺傚洨鐝?/block>
+          <block wx:elif="{{item.type === 'user'}}">閻劍鍩?/block>
         </view>
       </view>
       
-      <!-- 加载状态-->
+      <!-- 鍔犺浇鐘舵€?->
       <view wx:if="{{loading}}" class="loading">
-        <text>加载中..</text>
+        <text>鍔犺浇涓?.</text>
       </view>
       
-      <!-- 鏃犳洿澶氭暟鎹?-->
+      <!-- 閺冪姵娲挎径姘殶閹?-->
       <view wx:if="{{!hasMore && searchResults.length > 0}}" class="no-more">
-        <text>娌℃湁鏇村缁撴灉浜?/text>
+        <text>濞屸剝婀侀弴鏉戭樋缂佹挻鐏夋禍?/text>
       </view>
       
-      <!-- 绌虹姸鎬?-->
+      <!-- 缁岃櫣濮搁幀?-->
       <view wx:if="{{!loading && searchResults.length === 0}}" class="empty-state">
-        <text>鏈壘鍒扮浉鍏崇粨鏋?/text>
+        <text>閺堫亝澹橀崚鎵祲閸忓磭绮ㄩ弸?/text>
       </view>
     </view>
   </view>
   
-  <!-- 鎼滅储鍘嗗彶鍜岀儹闂ㄦ悳绱?-->
+  <!-- 閹兼粎鍌ㄩ崢鍡楀蕉閸滃瞼鍎归梻銊︽偝缁?-->
   <view wx:else class="search-suggest">
-    <!-- 鎼滅储鍘嗗彶 -->
+    <!-- 閹兼粎鍌ㄩ崢鍡楀蕉 -->
     <view wx:if="{{searchHistory.length > 0}}" class="search-history">
       <view class="section-header">
-        <text class="section-title">鎼滅储鍘嗗彶</text>
-        <text class="clear-history" bindtap="onClearHistory">娓呯┖</text>
+        <text class="section-title">閹兼粎鍌ㄩ崢鍡楀蕉</text>
+        <text class="clear-history" bindtap="onClearHistory">濞撳懐鈹?/text>
       </view>
       <view class="history-list">
         <view 
@@ -109,10 +109,10 @@
       </view>
     </view>
     
-    <!-- 鐑棬鎼滅储 -->
+    <!-- 閻戭參妫幖婊呭偍 -->
     <view wx:if="{{hotSearches.length > 0}}" class="hot-search">
       <view class="section-header">
-        <text class="section-title">鐑棬鎼滅储</text>
+        <text class="section-title">閻戭參妫幖婊呭偍</text>
       </view>
       <view class="hot-list">
         <view 

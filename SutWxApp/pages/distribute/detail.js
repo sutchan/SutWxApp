@@ -1,9 +1,8 @@
-/**
- * 文件名: detail.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-29
- * 描述: 鍒嗛攢璇︽儏椤甸潰
- */
+﻿/**
+ * 鏂囦欢鍚? detail.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-29
+ * 鎻忚堪: 閸掑棝鏀㈢拠锔藉剰妞ょ敻娼? */
 
 const distributeService = require('../../services/distributeService');
 const store = require('../../utils/store');
@@ -28,15 +27,14 @@ Page({
         error: true
       });
       wx.showToast({
-        title: '鍒嗛攢ID涓嶈兘涓虹┖',
+        title: '閸掑棝鏀D娑撳秷鍏樻稉铏光敄',
         icon: 'none'
       });
     }
   },
 
   /**
-   * 鑾峰彇鍒嗛攢璇︽儏
-   */
+   * 閼惧嘲褰囬崚鍡涙敘鐠囷附鍎?   */
   getDistributeDetail() {
     this.setData({ loading: true });
 
@@ -49,31 +47,30 @@ Page({
         });
       })
       .catch(err => {
-        console.error('鑾峰彇鍒嗛攢璇︽儏澶辫触:', err);
+        console.error('閼惧嘲褰囬崚鍡涙敘鐠囷附鍎忔径杈Е:', err);
         this.setData({
           loading: false,
           error: true
         });
         wx.showToast({
-          title: '鑾峰彇鍒嗛攢璇︽儏澶辫触',
+          title: '閼惧嘲褰囬崚鍡涙敘鐠囷附鍎忔径杈Е',
           icon: 'none'
         });
       });
   },
 
   /**
-   * 杩斿洖鍒楄〃椤?   */
+   * 鏉╂柨娲栭崚妤勩€冩い?   */
   goBack() {
     wx.navigateBack();
   },
 
   /**
-   * 瀹℃牳閫氳繃鍒嗛攢
-   */
+   * 鐎光剝鐗抽柅姘崇箖閸掑棝鏀?   */
   approveDistribute() {
     wx.showModal({
-      title: '瀹℃牳鍒嗛攢',
-      content: '纭畾瑕佸鏍搁€氳繃璇ュ垎閿€鍚楋紵',
+      title: '鐎光剝鐗抽崚鍡涙敘',
+      content: '绾喖鐣剧憰浣割吀閺嶆悂鈧俺绻冪拠銉ュ瀻闁库偓閸氭绱?,
       success: (res) => {
         if (res.confirm) {
           this.handleApprove();
@@ -83,39 +80,39 @@ Page({
   },
 
   /**
-   * 澶勭悊瀹℃牳閫氳繃
+   * 婢跺嫮鎮婄€光剝鐗抽柅姘崇箖
    */
   handleApprove() {
     wx.showLoading({
-      title: '瀹℃牳涓?..'
+      title: '鐎光剝鐗虫稉?..'
     });
 
     distributeService.approveDistribute(this.data.distributeId)
       .then(() => {
         wx.hideLoading();
         wx.showToast({
-          title: '瀹℃牳閫氳繃鎴愬姛'
+          title: '鐎光剝鐗抽柅姘崇箖閹存劕濮?
         });
-        // 鍒锋柊璇︽儏
+        // 閸掗攱鏌婄拠锔藉剰
         this.getDistributeDetail();
       })
       .catch(err => {
         wx.hideLoading();
-        console.error('瀹℃牳閫氳繃澶辫触:', err);
+        console.error('鐎光剝鐗抽柅姘崇箖婢惰精瑙?', err);
         wx.showToast({
-          title: '瀹℃牳閫氳繃澶辫触',
+          title: '鐎光剝鐗抽柅姘崇箖婢惰精瑙?,
           icon: 'none'
         });
       });
   },
 
   /**
-   * 椹冲洖鍒嗛攢
+   * 妞瑰啿娲栭崚鍡涙敘
    */
   rejectDistribute() {
     wx.showModal({
-      title: '椹冲洖鍒嗛攢',
-      content: '纭畾瑕侀┏鍥炶鍒嗛攢鍚楋紵',
+      title: '妞瑰啿娲栭崚鍡涙敘',
+      content: '绾喖鐣剧憰渚€鈹忛崶鐐额嚉閸掑棝鏀㈤崥妤嬬吹',
       success: (res) => {
         if (res.confirm) {
           this.showRejectReasonInput();
@@ -125,12 +122,12 @@ Page({
   },
 
   /**
-   * 鏄剧ず椹冲洖鍘熷洜杈撳叆妗?   */
+   * 閺勫墽銇氭す鍐叉礀閸樼喎娲滄潏鎾冲弳濡?   */
   showRejectReasonInput() {
     wx.showModal({
-      title: '璇疯緭鍏ラ┏鍥炲師鍥?,
+      title: '鐠囩柉绶崗銉┾攺閸ョ偛甯崶?,
       editable: true,
-      placeholderText: '璇疯緭鍏ラ┏鍥炲師鍥?,
+      placeholderText: '鐠囩柉绶崗銉┾攺閸ョ偛甯崶?,
       success: (res) => {
         if (res.confirm && res.content.trim()) {
           this.handleReject(res.content.trim());
@@ -140,40 +137,40 @@ Page({
   },
 
   /**
-   * 澶勭悊椹冲洖
-   * @param {string} reason - 椹冲洖鍘熷洜
+   * 婢跺嫮鎮婃す鍐叉礀
+   * @param {string} reason - 妞瑰啿娲栭崢鐔锋礈
    */
   handleReject(reason) {
     wx.showLoading({
-      title: '椹冲洖涓?..'
+      title: '妞瑰啿娲栨稉?..'
     });
 
     distributeService.rejectDistribute(this.data.distributeId, reason)
       .then(() => {
         wx.hideLoading();
         wx.showToast({
-          title: '椹冲洖鎴愬姛'
+          title: '妞瑰啿娲栭幋鎰'
         });
-        // 鍒锋柊璇︽儏
+        // 閸掗攱鏌婄拠锔藉剰
         this.getDistributeDetail();
       })
       .catch(err => {
         wx.hideLoading();
-        console.error('椹冲洖澶辫触:', err);
+        console.error('妞瑰啿娲栨径杈Е:', err);
         wx.showToast({
-          title: '椹冲洖澶辫触',
+          title: '妞瑰啿娲栨径杈Е',
           icon: 'none'
         });
       });
   },
 
   /**
-   * 鍒犻櫎鍒嗛攢
+   * 閸掔娀娅庨崚鍡涙敘
    */
   deleteDistribute() {
     wx.showModal({
-      title: '鍒犻櫎鍒嗛攢',
-      content: '纭畾瑕佸垹闄よ鍒嗛攢鍚楋紵',
+      title: '閸掔娀娅庨崚鍡涙敘',
+      content: '绾喖鐣剧憰浣稿灩闂勩倛顕氶崚鍡涙敘閸氭绱?,
       success: (res) => {
         if (res.confirm) {
           this.showDeleteReasonInput();
@@ -183,12 +180,12 @@ Page({
   },
 
   /**
-   * 鏄剧ず鍒犻櫎鍘熷洜杈撳叆妗?   */
+   * 閺勫墽銇氶崚鐘绘珟閸樼喎娲滄潏鎾冲弳濡?   */
   showDeleteReasonInput() {
     wx.showModal({
-      title: '璇疯緭鍏ュ垹闄ゅ師鍥?,
+      title: '鐠囩柉绶崗銉ュ灩闂勩倕甯崶?,
       editable: true,
-      placeholderText: '璇疯緭鍏ュ垹闄ゅ師鍥?,
+      placeholderText: '鐠囩柉绶崗銉ュ灩闂勩倕甯崶?,
       success: (res) => {
         if (res.confirm && res.content.trim()) {
           this.handleDelete(res.content.trim());
@@ -198,27 +195,27 @@ Page({
   },
 
   /**
-   * 澶勭悊鍒犻櫎
-   * @param {string} reason - 鍒犻櫎鍘熷洜
+   * 婢跺嫮鎮婇崚鐘绘珟
+   * @param {string} reason - 閸掔娀娅庨崢鐔锋礈
    */
   handleDelete(reason) {
     wx.showLoading({
-      title: '鍒犻櫎涓?..'
+      title: '閸掔娀娅庢稉?..'
     });
 
     distributeService.deleteDistribute(this.data.distributeId, reason)
       .then(() => {
         wx.hideLoading();
         wx.showToast({
-          title: '鍒犻櫎鎴愬姛'
+          title: '閸掔娀娅庨幋鎰'
         });
-        // 杩斿洖鍒楄〃椤?        wx.navigateBack();
+        // 鏉╂柨娲栭崚妤勩€冩い?        wx.navigateBack();
       })
       .catch(err => {
         wx.hideLoading();
-        console.error('鍒犻櫎澶辫触:', err);
+        console.error('閸掔娀娅庢径杈Е:', err);
         wx.showToast({
-          title: '鍒犻櫎澶辫触',
+          title: '閸掔娀娅庢径杈Е',
           icon: 'none'
         });
       });

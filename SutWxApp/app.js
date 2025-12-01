@@ -1,9 +1,9 @@
-/**
- * 鏂囦欢鍚? app.js
- * 鐗堟湰鍙? 1.0.2
- * 鏇存柊鏃ユ湡: 2025-11-27
- * 娴ｆ粏鈧? Sut
- * 鐏忓繒鈻兼惔蹇撳弳閸欙絾鏋冩禒璁圭礉鐠愮喕鐭楅崚婵嗩潗閸栨牕鍙忕仦鈧張宥呭閵嗕胶濮搁幀浣侯吀閻炲棗鎷扮紒鍕濞夈劌鍞? */
+﻿﻿/**
+ * 文件名: app.js
+ * 版本号: 1.0.2
+ * 更新日期: 2025-11-27
+ * 作者: Sut
+ * 描述: 小程序入口文件，负责初始化应用、配置全局状态、管理组件和服务等 */
 
 const i18n = require('./utils/i18n');
 const store = require('./utils/store.js');
@@ -13,43 +13,55 @@ const cacheConfig = require('./utils/cacheConfig.js').getConfig();
 const webSocketService = require('./utils/webSocketService.js').instance;
 
 /**
- * 鎼存梻鏁ら崗銉ュ經
+ * 小程序应用实例
  * @returns {void}
  */
 App({
   /**
-   * 鎼存梻鏁ら崥顖氬З閸ョ偠鐨?   * @returns {void}
+   * 应用启动时执行
+   * @returns {void}
    */
   onLaunch() {
-    // 閸掓繂顫愰崠鏍у弿鐏炩偓閻樿埖鈧?    this.globalData = {
+    // 初始化全局数据
+    this.globalData = {
       startedAt: Date.now(),
       websocketConnected: false
     };
     
-    // 閸掓繂顫愰崠鏍Ц閹胶顓搁悶?    this.initStore();
+    // 初始化状态管理
+    this.initStore();
     
-    // 閸掓繂顫愰崠鏍ф禇闂勫懎瀵?    this.initI18n();
+    // 初始化国际化
+    this.initI18n();
     
-    // 閸掓繂顫愰崠鏍处鐎涙ɑ婀囬崝?    this.initCache();
+    // 初始化缓存
+    this.initCache();
     
-    // 閸掓繂顫愰崠鏍矋娴?    this.initComponents();
+    // 初始化组件
+    this.initComponents();
     
-    // 閸掓繂顫愰崠鏈〆bSocket閺堝秴濮?    this.initWebSocket();
+    // 初始化WebSocket
+    this.initWebSocket();
     
-    // 閸掓繂顫愰崠鏍晩鐠囶垰顦╅悶?    this.initErrorHandler();
+    // 初始化错误处理器
+    this.initErrorHandler();
   },
 
   /**
-   * 閸掓繂顫愰崠鏍у弿鐏炩偓閻樿埖鈧胶顓搁悶?   * @returns {void}
+   * 初始化状态管理
+   * @returns {void}
    */
   initStore() {
-    // 娴犲孩婀伴崷鏉跨摠閸屻劍浠径宥囧Ц閹?    store.restore();
+    // 恢复状态
+    store.restore();
     
-    // 鐏忓敄tore閹稿倽娴囬崚鐧畃p鐎圭偘绶ユ稉濠忕礉閺傞€涚┒鐠佸潡妫?    this.globalData.store = store;
+    // 将store实例添加到全局数据中
+    this.globalData.store = store;
   },
   
   /**
-   * 閸掓繂顫愰崠鏍嚔鐟封偓鐠佸墽鐤?   * @returns {void}
+   * 初始化语言设置
+   * @returns {void}
    */
   initLanguage() {
     try {
@@ -61,161 +73,186 @@ App({
         i18n.setLocale('zh_CN');
       }
     } catch {
-      // 閸忕厧顔愰弮鐘甸兇缂佺喍淇婇幁顖滄畱閸︾儤娅欓敍灞肩箽閹镐線绮拋銈堫嚔鐟封偓
+      // 语言设置失败时的容错处理
     }
   },
   
   /**
-   * 閸掓繂顫愰崠鏍у弿鐏炩偓闁挎瑨顕ゆ径鍕倞
+   * 初始化错误处理器
    * @returns {void}
    */
   initErrorHandler() {
     wx.onError((error) => {
       console.error('App Error:', error);
       
-      // 閺囧瓨鏌妔tore娑擃厾娈戦柨娆掝嚖閻樿埖鈧?      if (this.globalData.store) {
+      // 如果store可用，保存错误信息
+      if (this.globalData.store) {
         store.commit('SET_ERROR', error);
       }
       
       try {
-        wx.showToast({ title: '閸欐垹鏁撻柨娆掝嚖', icon: 'none' });
+        wx.showToast({ title: '系统出错了', icon: 'none' });
       } catch {
-        // 闂堟瑩绮径杈Е
+        // 显示提示失败时的容错处理
       }
     });
   },
 
   /**
-   * 閸掓繂顫愰崠鏍у弿鐏炩偓缂佸嫪娆?   * @returns {void}
+   * 初始化组件
+   * @returns {void}
    */
   initComponents() {
     componentManager.registerGlobalComponents(this);
   },
   
   /**
-   * 閸掓繂顫愰崠鏍处鐎涙ɑ婀囬崝?   * @returns {Promise<void>}
+   * 初始化缓存
+   * @returns {Promise<void>}
    */
   async initCache() {
     try {
-      // 閸掓繂顫愰崠鏍处鐎涙ɑ婀囬崝?      await cacheService.init(cacheConfig);
-      console.log('缂傛挸鐡ㄩ張宥呭閸掓繂顫愰崠鏍ㄥ灇閸?);
+      // 初始化缓存服务
+      await cacheService.init(cacheConfig);
+      console.log('缓存服务初始化成功');
       
-      // 閻╂垵鎯夌純鎴犵捕閻樿埖鈧礁褰夐崠鏍电礉閼奉亜濮╁〒鍛倞鏉╁洦婀＄紓鎾崇摠
+      // 监听网络状态变化
       wx.onNetworkStatusChange((res) => {
         if (res.isConnected) {
-          console.log('缂冩垹绮跺鑼剁箾閹恒儻绱濆鈧慨瀣閻炲棜绻冮張鐔虹处鐎?);
+          console.log('网络已连接，清理过期缓存');
           cacheService.cleanupExpired();
-          // 缂冩垹绮堕幁銏狀槻閺冭绱濈亸婵婄槸闁插秷绻沇ebSocket
+          // 如果用户已登录，重新连接WebSocket
           if (this.globalData.userInfo) {
-            console.log('鐏忔繆鐦柌宥嗘煀鏉╃偞甯碬ebSocket...');
+            console.log('用户已登录，重新连接WebSocket...');
             webSocketService.connect();
           }
         } else {
-          console.log('缂冩垹绮堕弬顓炵磻鏉╃偞甯?);
+          console.log('网络已断开');
         }
       });
     } catch (error) {
-      console.error('缂傛挸鐡ㄩ張宥呭閸掓繂顫愰崠鏍с亼鐠?', error);
+      console.error('缓存服务初始化失败:', error);
     }
   },
   
   /**
-   * 閸掓繂顫愰崠鏍ф禇闂勫懎瀵?   * @returns {void}
+   * 初始化国际化
+   * @returns {void}
    */
   initI18n() {
     this.initLanguage();
   },
   
   /**
-   * 閸掓繂顫愰崠鏈〆bSocket閺堝秴濮?   * @returns {Promise<void>}
+   * 初始化WebSocket
+   * @returns {Promise<void>}
    */
   async initWebSocket() {
     try {
-      // 閸欘亝婀侀崷銊ф暏閹村嘲鍑￠惂璇茬秿閻ㄥ嫭鍎忛崘鍏哥瑓閹靛秴鍨垫慨瀣WebSocket
+      // 获取用户信息和令牌
       const userInfo = store.getState('user.userInfo');
       const token = store.getState('user.token');
       
       if (userInfo && token) {
-        // 閸欘亝鏁為崘灞肩濞嗭紕娲冮崥顒€娅?        if (!this._webSocketListenersRegistered) {
-          // 濞夈劌鍞絎ebSocket娴滃娆㈤惄鎴濇儔閸?          this._registerWebSocketListeners();
+        // 注册WebSocket监听器
+        if (!this._webSocketListenersRegistered) {
+          // 注册WebSocket事件监听器
+          this._registerWebSocketListeners();
           this._webSocketListenersRegistered = true;
         }
         
-        // 瀵よ櫣鐝沇ebSocket鏉╃偞甯?        await webSocketService.connect();
+        // 连接WebSocket
+        await webSocketService.connect();
       }
     } catch (error) {
-      console.error('WebSocket閸掓繂顫愰崠鏍с亼鐠?', error);
+      console.error('WebSocket初始化失败:', error);
     }
   },
   
   /**
-   * 濞夈劌鍞絎ebSocket娴滃娆㈤惄鎴濇儔閸?   * @private
+   * 注册WebSocket监听器
+   * @private
    * @returns {void}
    */
   _registerWebSocketListeners() {
-    // 閻╂垵鎯夋潻鐐村复閻樿埖鈧礁褰夐崠?    webSocketService.on('connected', () => {
-      console.log('WebSocket鏉╃偞甯撮幋鎰');
+    // 连接成功事件
+    webSocketService.on('connected', () => {
+      console.log('WebSocket连接成功');
       this.globalData.websocketConnected = true;
     });
     
+    // 断开连接事件
     webSocketService.on('disconnected', () => {
-      console.log('WebSocket鏉╃偞甯撮弬顓炵磻');
+      console.log('WebSocket连接断开');
       this.globalData.websocketConnected = false;
     });
     
+    // 错误事件
     webSocketService.on('error', (error) => {
-      console.error('WebSocket闁挎瑨顕?', error);
-      // 閸欘垯浜掗崷銊ㄧ箹闁插本鍧婇崝鐘绘晩鐠囶垰顦╅悶鍡涒偓鏄忕帆閿涘奔绶ユ俊鍌涙▔缁€娲晩鐠囶垱褰佺粈?    });
-    
-    // 閻╂垵鎯夐悽銊﹀煕濞戝牊浼?    webSocketService.on('userMessage', (data) => {
-      console.log('閺€璺哄煂閻劍鍩涘☉鍫熶紖:', data);
-      // 婢跺嫮鎮婇悽銊﹀煕濞戝牊浼呴敍灞肩伐婵″倹娲块弬鐧營閹存牕鐡ㄩ崒銊ュ煂濞戝牊浼呴崚妤勩€?      this._handleUserMessage(data);
+      console.error('WebSocket错误:', error);
+      // 错误处理逻辑
     });
     
-    // 閻╂垵鎯夌化鑽ょ埠闁氨鐓?    webSocketService.on('systemNotification', (data) => {
-      console.log('閺€璺哄煂缁崵绮洪柅姘辩叀:', data);
-      // 婢跺嫮鎮婄化鑽ょ埠闁氨鐓￠敍灞肩伐婵″倹妯夌粈娲偓姘辩叀閹绘劗銇?      this._handleSystemNotification(data);
+    // 用户消息事件
+    webSocketService.on('userMessage', (data) => {
+      console.log('收到用户消息:', data);
+      // 处理用户消息
+      this._handleUserMessage(data);
     });
     
-    // 閻╂垵鎯夐柌宥堢箾鐏忔繆鐦潏鎯у煂閺堚偓婢堆勵偧閺?    webSocketService.on('maxReconnectAttemptsReached', (info) => {
-      console.warn(`WebSocket闁插秷绻涙径杈Е閿涘苯鍑℃潏鎯у煂閺堚偓婢堆冪毦鐠囨洘顐奸弫?${info.maxAttempts})`);
-      // 閸欘垯浜掗崷銊ㄧ箹闁插本鍧婇崝鐘垫暏閹撮攱褰佺粈鐚寸礉娓氬顩ч幓鎰仛閻劍鍩涘Λ鈧弻銉х秹缂佹粏绻涢幒?    });
+    // 系统通知事件
+    webSocketService.on('systemNotification', (data) => {
+      console.log('收到系统通知:', data);
+      // 处理系统通知
+      this._handleSystemNotification(data);
+    });
+    
+    // 最大重连尝试次数达到事件
+    webSocketService.on('maxReconnectAttemptsReached', (info) => {
+      console.warn(`WebSocket重连失败，已达到最大尝试次数(${info.maxAttempts})`);
+      // 重连失败处理逻辑
+    });
   },
   
   /**
-   * 婢跺嫮鎮婇悽銊﹀煕濞戝牊浼?   * @private
-   * @param {Object} messageData - 濞戝牊浼呴弫鐗堝祦
+   * 处理用户消息
+   * @private
+   * @param {Object} messageData - 消息数据
    * @returns {void}
    */
   _handleUserMessage(messageData) {
-    // 閺嶈宓佸☉鍫熶紖缁鐎锋潻娑滎攽娑撳秴鎮撴径鍕倞
+    // 解构消息数据
     const { type, content, sender } = messageData;
     
-    // 閺勫墽銇氬☉鍫熶紖閹绘劗銇?    wx.showToast({
+    // 显示消息提示
+    wx.showToast({
       title: `${sender}: ${content.substring(0, 20)}...`,
       icon: 'none',
       duration: 3000
     });
     
-    // 鏉╂瑩鍣烽崣顖欎簰濞ｈ濮為弴鏉戭樋閻ㄥ嫭绉烽幁顖氼槱閻炲棝鈧槒绶?    // 娓氬顩ч弴瀛樻煀濞戝牊浼呴崚妤勩€冮妴浣哥摠閸屻劍绉烽幁顖滅搼
+    // 可以在这里添加更多消息处理逻辑
   },
   
   /**
-   * 婢跺嫮鎮婄化鑽ょ埠闁氨鐓?   * @private
-   * @param {Object} notificationData - 闁氨鐓￠弫鐗堝祦
+   * 处理系统通知
+   * @private
+   * @param {Object} notificationData - 通知数据
    * @returns {void}
    */
   _handleSystemNotification(notificationData) {
     const { title, content, priority = 'normal' } = notificationData;
     
-    // 閺嶈宓侀柅姘辩叀娴兼ê鍘涚痪褑绻樼悰灞肩瑝閸氬苯顦╅悶?    if (priority === 'high') {
-      // 妤傛ü绱崗鍫㈤獓闁氨鐓￠弰鍓с仛瀵湱鐛?      wx.showModal({
-        title: title || '缁崵绮洪柅姘辩叀',
+    // 根据优先级显示不同的提示
+    if (priority === 'high') {
+      // 高优先级通知使用模态框
+      wx.showModal({
+        title: title || '系统通知',
         content: content,
         showCancel: false
       });
     } else {
-      // 閺咁噣鈧矮绱崗鍫㈤獓闁氨鐓￠弰鍓с仛Toast
+      // 普通优先级通知使用Toast
       wx.showToast({
         title: content,
         icon: 'none',
@@ -223,50 +260,58 @@ App({
       });
     }
     
-    // 鏉╂瑩鍣烽崣顖欎簰濞ｈ濮為弴鏉戭樋閻ㄥ嫰鈧氨鐓℃径鍕倞闁槒绶?    // 娓氬顩ч弴瀛樻煀闁氨鐓￠崚妤勩€冮妴浣哥摠閸屻劑鈧氨鐓＄粵?  },
+    // 可以在这里添加更多通知处理逻辑
+  },
   
   /**
-   * 閸忋劌鐪柨娆掝嚖婢跺嫮鎮?   * @param {string} error - 闁挎瑨顕ゆ穱鈩冧紖
+   * 应用错误事件处理
+   * @param {string} error - 错误信息
    * @returns {void}
    */
   onError(error) {
-    console.error('閸忋劌鐪柨娆掝嚖:', error);
-    // 缂佺喍绔撮柨娆掝嚖婢跺嫮鎮婇敍宀勪缉閸忓秹鍣告径宥嗘暈閸?    if (this.globalData.store) {
+    console.error('应用错误:', error);
+    // 保存错误信息到store
+    if (this.globalData.store) {
       this.globalData.store.commit('SET_ERROR', error);
     }
     
     try {
-      wx.showToast({ title: '閸欐垹鏁撻柨娆掝嚖', icon: 'none' });
+      wx.showToast({ title: '系统出错了', icon: 'none' });
     } catch {
-      // 闂堟瑩绮径杈Е
+      // 显示提示失败时的容错处理
     }
   },
   
   /**
-   * 鎼存梻鏁ら弰鍓с仛閺冨墎娈戞径鍕倞
+   * 应用显示事件处理
    * @returns {void}
    */
   onShow() {
-    // 鎼存梻鏁ら弰鍓с仛閺冭绱濇俊鍌涚亯瀹歌尙娅ヨぐ鏇氱瑬WebSocket閺堫亣绻涢幒銉礉鐏忔繆鐦柌宥嗘煀鏉╃偞甯?    const userInfo = store.getState('user.userInfo');
+    // 检查用户登录状态和WebSocket连接状态
+    const userInfo = store.getState('user.userInfo');
     const token = store.getState('user.token');
     
     if (userInfo && token && !this.globalData.websocketConnected) {
-      console.log('鎼存梻鏁ら弰鍓с仛閿涘苯鐨剧拠鏇㈠櫢閺傛媽绻涢幒顧漞bSocket');
-      // 閻╁瓨甯寸拫鍐暏connect閺傝纭堕敍宀勪缉閸忓秹鍣告径宥呭灥婵瀵?      webSocketService.connect();
+      console.log('用户已登录但WebSocket未连接，尝试重新连接');
+      // 重新连接WebSocket
+      webSocketService.connect();
     }
   },
   
   /**
-   * 鎼存梻鏁ら梾鎰閺冨墎娈戞径鍕倞
+   * 应用隐藏事件处理
    * @returns {void}
    */
   onHide() {
-    // 鎼存梻鏁ら梾鎰閺冭绱濋崣顖欎簰闁瀚ㄩ弰顖氭儊娣囨繃瀵擶ebSocket鏉╃偞甯?    // 鏉╂瑩鍣烽幋鎴滄粦娣囨繃瀵旀潻鐐村复閿涘奔浜掗幒銉︽暪闁插秷顩﹂柅姘辩叀
-    // 婵″倹鐏夐棁鈧憰浣规焽瀵偓鏉╃偞甯撮敍灞藉讲娴犮儱褰囧☉鍫熸暈闁插﹣绗呴棃銏㈡畱娴狅絿鐖?    // webSocketService.disconnect(1000, '鎼存梻鏁ら梾鎰');
+    // 应用隐藏时的处理逻辑
+    // 通常不建议在这里断开WebSocket连接，除非有特殊需求
+    // webSocketService.disconnect(1000, '应用隐藏');
   },
   
   /**
-   * 閼惧嘲褰嘩ebSocket閺堝秴濮熺€圭偘绶?   * @returns {Object} WebSocket閺堝秴濮熺€圭偘绶?   */
+   * 获取WebSocket服务实例
+   * @returns {Object} WebSocket服务实例
+   */
   getWebSocketService() {
     return webSocketService;
   }

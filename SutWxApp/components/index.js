@@ -1,17 +1,15 @@
-/**
- * 文件名: index.js
- * 版本号: 1.0.2
- * 更新日期: 2025-11-29
- * 描述: 缁勪欢绠＄悊宸ュ叿 - 鐢ㄤ簬闆嗕腑绠＄悊鍜屾敞鍐屽叏灞€缁勪欢
+﻿﻿/**
+ * 鏂囦欢鍚? index.js
+ * 鐗堟湰鍙? 1.0.2
+ * 鏇存柊鏃ユ湡: 2025-11-29
+ * 鎻忚堪: 缂佸嫪娆㈢粻锛勬倞瀹搞儱鍙?- 閻劋绨梿鍡曡厬缁狅紕鎮婇崪灞炬暈閸愬苯鍙忕仦鈧紒鍕
  */
 
 /**
- * 缁勪欢鍒楄〃閰嶇疆
- * 姣忎釜缁勪欢鍖呭惈浠ヤ笅灞炴€э細
- * - name: 缁勪欢鍚嶇О
- * - path: 缁勪欢璺緞
- * - global: 鏄惁鍏ㄥ眬娉ㄥ唽
- */
+ * 缂佸嫪娆㈤崚妤勩€冮柊宥囩枂
+ * 濮ｅ繋閲滅紒鍕閸栧懎鎯堟禒銉ょ瑓鐏炵偞鈧嶇窗
+ * - name: 缂佸嫪娆㈤崥宥囆? * - path: 缂佸嫪娆㈢捄顖氱窞
+ * - global: 閺勵垰鎯侀崗銊ョ湰濞夈劌鍞? */
 const components = [
   {
     name: 'lazyImage',
@@ -36,13 +34,11 @@ const components = [
 ];
 
 /**
- * 鍏ㄥ眬娉ㄥ唽缁勪欢
- * @param {Object} app - App瀹炰緥
- * @returns {void}
+ * 閸忋劌鐪▔銊ュ斀缂佸嫪娆? * @param {Object} app - App鐎圭偘绶? * @returns {void}
  */
 function registerGlobalComponents(app) {
   if (!app) {
-    console.error('娉ㄥ唽缁勪欢澶辫触: App瀹炰緥涓嶅瓨鍦?);
+    console.error('濞夈劌鍞界紒鍕婢惰精瑙? App鐎圭偘绶ユ稉宥呯摠閸?);
     return;
   }
   
@@ -55,49 +51,44 @@ function registerGlobalComponents(app) {
           app.component(comp.name, componentConfig);
           registeredComponents.push(comp.name);
         } catch (error) {
-          console.error(`缁勪欢 ${comp.name} 娉ㄥ唽澶辫触:`, error);
+          console.error(`缂佸嫪娆?${comp.name} 濞夈劌鍞芥径杈Е:`, error);
         }
       }
     });
-    console.log(`鍏ㄥ眬缁勪欢娉ㄥ唽瀹屾垚锛屾垚鍔熸敞鍐?${registeredComponents.length}/${components.filter(c => c.global).length} 涓粍浠?`, registeredComponents);
+    console.log(`閸忋劌鐪紒鍕濞夈劌鍞界€瑰本鍨氶敍灞惧灇閸旂喐鏁為崘?${registeredComponents.length}/${components.filter(c => c.global).length} 娑擃亞绮嶆禒?`, registeredComponents);
   } catch (error) {
-    console.error('鍏ㄥ眬缁勪欢娉ㄥ唽澶辫触:', error);
+    console.error('閸忋劌鐪紒鍕濞夈劌鍞芥径杈Е:', error);
   }
 }
 
 /**
- * 鑾峰彇缁勪欢閰嶇疆
- * @param {string} componentName - 缁勪欢鍚嶇О
- * @returns {Object|null} 缁勪欢閰嶇疆鎴杗ull
+ * 閼惧嘲褰囩紒鍕闁板秶鐤? * @param {string} componentName - 缂佸嫪娆㈤崥宥囆? * @returns {Object|null} 缂佸嫪娆㈤柊宥囩枂閹存潡ull
  */
 function getComponent(componentName) {
   return components.find(comp => comp.name === componentName) || null;
 }
 
 /**
- * 鑾峰彇鎵€鏈夌粍浠跺垪琛? * @returns {Array<Object>} 缁勪欢鍒楄〃
- */
+ * 閼惧嘲褰囬幍鈧張澶岀矋娴犺泛鍨悰? * @returns {Array<Object>} 缂佸嫪娆㈤崚妤勩€? */
 function getAllComponents() {
   return components;
 }
 
 /**
- * 娣诲姞鏂扮粍浠跺埌閰嶇疆
- * @param {Object} componentConfig - 缁勪欢閰嶇疆
- * @param {string} componentConfig.name - 缁勪欢鍚嶇О
- * @param {string} componentConfig.path - 缁勪欢璺緞
- * @param {boolean} [componentConfig.global=false] - 鏄惁鍏ㄥ眬娉ㄥ唽
- * @returns {boolean} 娣诲姞缁撴灉
+ * 濞ｈ濮為弬鎵矋娴犺泛鍩岄柊宥囩枂
+ * @param {Object} componentConfig - 缂佸嫪娆㈤柊宥囩枂
+ * @param {string} componentConfig.name - 缂佸嫪娆㈤崥宥囆? * @param {string} componentConfig.path - 缂佸嫪娆㈢捄顖氱窞
+ * @param {boolean} [componentConfig.global=false] - 閺勵垰鎯侀崗銊ョ湰濞夈劌鍞? * @returns {boolean} 濞ｈ濮炵紒鎾寸亯
  */
 function addComponent(componentConfig) {
   if (!componentConfig || !componentConfig.name || !componentConfig.path) {
-    console.error('娣诲姞缁勪欢澶辫触: 閰嶇疆涓嶅畬鏁?);
+    console.error('濞ｈ濮炵紒鍕婢惰精瑙? 闁板秶鐤嗘稉宥呯暚閺?);
     return false;
   }
   
   const existingIndex = components.findIndex(comp => comp.name === componentConfig.name);
   if (existingIndex >= 0) {
-    console.warn(`缁勪欢 ${componentConfig.name} 宸插瓨鍦紝灏嗚瑕嗙洊`);
+    console.warn(`缂佸嫪娆?${componentConfig.name} 瀹告彃鐡ㄩ崷顭掔礉鐏忓棜顫︾憰鍡欐磰`);
     components[existingIndex] = componentConfig;
   } else {
     components.push(componentConfig);

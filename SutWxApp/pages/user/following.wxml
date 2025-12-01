@@ -1,16 +1,16 @@
-/**
- * 文件名: following.wxml
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: following 椤甸潰缁撴瀯鏂囦欢
+﻿/**
+ * 鏂囦欢鍚? following.wxml
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: following 妞ょ敻娼扮紒鎾寸€弬鍥︽
  */
-<!-- 鍏虫敞鍒楄〃椤甸潰 -->
+<!-- 閸忚櫕鏁為崚妤勩€冩い鐢告桨 -->
 <view class="container">
-  <!-- 鎼滅储妗?-->
+  <!-- 閹兼粎鍌ㄥ?-->
   <view class="search-bar">
     <view class="search-input-wrapper">
       <input class="search-input" 
-             placeholder="鎼滅储鐢ㄦ埛" 
+             placeholder="閹兼粎鍌ㄩ悽銊﹀煕" 
              value="{{searchKeyword}}" 
              bindinput="onSearchInput" 
              bindconfirm="onSearch" />
@@ -19,7 +19,7 @@
     </view>
   </view>
 
-  <!-- 鏍囩鍒囨崲 -->
+  <!-- 閺嶅洨顒烽崚鍥ㄥ床 -->
   <view class="tab-bar">
     <view wx:for="{{tabs}}" 
           wx:key="index" 
@@ -30,24 +30,24 @@
     </view>
   </view>
 
-  <!-- 缂栬緫妯″紡鎿嶄綔鏍?-->
+  <!-- 缂傛牞绶Ο鈥崇础閹垮秳缍旈弽?-->
   <view class="edit-bar" wx:if="{{editMode}}">
     <view class="select-all" bindtap="toggleSelectAll">
       <view class="checkbox {{selectedItems.length === (activeTab === 0 ? followingList.length : followersList.length) ? 'checked' : ''}}"></view>
-      <text>鍏ㄩ€?/text>
+      <text>閸忋劑鈧?/text>
     </view>
     <view class="edit-actions">
-      <text class="cancel-btn" bindtap="toggleEditMode">鍙栨秷</text>
-      <text class="action-btn" bindtap="unfollowUsers">鍙栨秷鍏虫敞({{selectedItems.length}})</text>
+      <text class="cancel-btn" bindtap="toggleEditMode">閸欐牗绉?/text>
+      <text class="action-btn" bindtap="unfollowUsers">閸欐牗绉烽崗铏暈({{selectedItems.length}})</text>
     </view>
   </view>
 
-  <!-- 鍐呭鍖哄煙 -->
+  <!-- 閸愬懎顔愰崠鍝勭厵 -->
   <view class="content">
-    <!-- 鎼滅储缁撴灉 -->
+    <!-- 閹兼粎鍌ㄧ紒鎾寸亯 -->
     <view wx:if="{{showSearchResults}}" class="search-results">
       <view class="list-header">
-        <text>鎼滅储缁撴灉</text>
+        <text>閹兼粎鍌ㄧ紒鎾寸亯</text>
       </view>
       <view class="user-list">
         <view wx:for="{{searchResults}}" 
@@ -60,24 +60,24 @@
           </view>
           <view class="user-info">
             <view class="user-name">{{item.name}}</view>
-            <view class="user-desc">{{item.description || '杩欎釜浜哄緢鎳掞紝浠€涔堥兘娌＄暀涓?}}</view>
+            <view class="user-desc">{{item.description || '鏉╂瑤閲滄禍鍝勭发閹虫帪绱濇禒鈧稊鍫ュ厴濞岋紕鏆€娑?}}</view>
           </view>
           <view class="follow-btn" 
                 data-id="{{item.id}}" 
-                catchtap="followUser">鍏虫敞</view>
+                catchtap="followUser">閸忚櫕鏁?/view>
         </view>
       </view>
       <view wx:if="{{searchResults.length === 0}}" class="empty-state">
         <image src="/images/empty.svg" class="empty-icon"></image>
-        <text>娌℃湁鎵惧埌鐩稿叧鐢ㄦ埛</text>
+        <text>濞屸剝婀侀幍鎯у煂閻╃鍙ч悽銊﹀煕</text>
       </view>
     </view>
 
-    <!-- 鎴戝叧娉ㄧ殑鍒楄〃 -->
+    <!-- 閹存垵鍙у▔銊ф畱閸掓銆?-->
     <view wx:if="{{!showSearchResults && activeTab === 0}}" class="following-list">
       <view class="list-header">
-        <text>鎴戝叧娉ㄧ殑</text>
-        <text class="edit-btn" bindtap="toggleEditMode">{{editMode ? '瀹屾垚' : '绠＄悊'}}</text>
+        <text>閹存垵鍙у▔銊ф畱</text>
+        <text class="edit-btn" bindtap="toggleEditMode">{{editMode ? '鐎瑰本鍨? : '缁狅紕鎮?}}</text>
       </view>
       <view class="user-list">
         <view wx:for="{{followingList}}" 
@@ -91,24 +91,24 @@
           </view>
           <view class="user-info">
             <view class="user-name">{{item.name}}</view>
-            <view class="user-desc">{{item.description || '杩欎釜浜哄緢鎳掞紝浠€涔堥兘娌＄暀涓?}}</view>
+            <view class="user-desc">{{item.description || '鏉╂瑤閲滄禍鍝勭发閹虫帪绱濇禒鈧稊鍫ュ厴濞岋紕鏆€娑?}}</view>
           </view>
-          <view wx:if="{{!editMode}}" class="follow-status">宸插叧娉?/view>
+          <view wx:if="{{!editMode}}" class="follow-status">瀹告彃鍙у▔?/view>
         </view>
       </view>
       
-      <!-- 绌虹姸鎬?-->
+      <!-- 缁岃櫣濮搁幀?-->
       <view wx:if="{{isEmpty && followingList.length === 0}}" class="empty-state">
         <image src="/images/empty.svg" class="empty-icon"></image>
-        <text>杩樻病鏈夊叧娉ㄤ换浣曚汉</text>
-        <text class="empty-tip">鍘诲彂鐜伴〉闈㈡壘鎵炬劅鍏磋叮鐨勪汉鍚?/text>
+        <text>鏉╂ɑ鐥呴張澶婂彠濞夈劋鎹㈡担鏇氭眽</text>
+        <text class="empty-tip">閸樿褰傞悳浼淬€夐棃銏″閹电偓鍔呴崗纾嬪彯閻ㄥ嫪姹夐崥?/text>
       </view>
     </view>
 
-    <!-- 鍏虫敞鎴戠殑鍒楄〃 -->
+    <!-- 閸忚櫕鏁為幋鎴犳畱閸掓銆?-->
     <view wx:if="{{!showSearchResults && activeTab === 1}}" class="followers-list">
       <view class="list-header">
-        <text>鍏虫敞鎴戠殑</text>
+        <text>閸忚櫕鏁為幋鎴犳畱</text>
       </view>
       <view class="user-list">
         <view wx:for="{{followersList}}" 
@@ -121,31 +121,31 @@
           </view>
           <view class="user-info">
             <view class="user-name">{{item.name}}</view>
-            <view class="user-desc">{{item.description || '杩欎釜浜哄緢鎳掞紝浠€涔堥兘娌＄暀涓?}}</view>
+            <view class="user-desc">{{item.description || '鏉╂瑤閲滄禍鍝勭发閹虫帪绱濇禒鈧稊鍫ュ厴濞岋紕鏆€娑?}}</view>
           </view>
           <view class="follow-btn" 
                 data-id="{{item.id}}" 
-                catchtap="followUser">鍏虫敞</view>
+                catchtap="followUser">閸忚櫕鏁?/view>
         </view>
       </view>
       
-      <!-- 绌虹姸鎬?-->
+      <!-- 缁岃櫣濮搁幀?-->
       <view wx:if="{{isEmpty && followersList.length === 0}}" class="empty-state">
         <image src="/images/empty.svg" class="empty-icon"></image>
-        <text>杩樻病鏈変汉鍏虫敞浣?/text>
-        <text class="empty-tip">澶氬彂涓€浜涗紭璐ㄥ唴瀹癸紝鍚稿紩鏇村鍏虫敞鍚?/text>
+        <text>鏉╂ɑ鐥呴張澶夋眽閸忚櫕鏁炴担?/text>
+        <text class="empty-tip">婢舵艾褰傛稉鈧禍娑楃喘鐠愩劌鍞寸€圭櫢绱濋崥绋跨穿閺囨潙顦块崗铏暈閸?/text>
       </view>
     </view>
 
-    <!-- 加载状态-->
+    <!-- 鍔犺浇鐘舵€?->
     <view wx:if="{{loading}}" class="loading-state">
       <view class="loading-spinner"></view>
-      <text>加载中..</text>
+      <text>鍔犺浇涓?.</text>
     </view>
 
-    <!-- 娌℃湁鏇村鏁版嵁 -->
+    <!-- 濞屸剝婀侀弴鏉戭樋閺佺増宓?-->
     <view wx:if="{{noMoreData && !isEmpty && !loading && !showSearchResults}}" class="no-more-data">
-      <text>娌℃湁鏇村鏁版嵁浜?/text>
+      <text>濞屸剝婀侀弴鏉戭樋閺佺増宓佹禍?/text>
     </view>
   </view>
 </view>

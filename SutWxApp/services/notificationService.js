@@ -1,35 +1,30 @@
-/**
- * 文件名: notificationService.js
- * 版本号: 1.0.2
- * 更新日期: 2025-11-29
- * 描述: 通知服务，包含用户消息失败重试机制
- */
+﻿﻿/**
+ * 鏂囦欢鍚? notificationService.js
+ * 鐗堟湰鍙? 1.0.2
+ * 鏇存柊鏃ユ湡: 2025-11-29
+ * 鎻忚堪: 閫氱煡鏈嶅姟锛屽寘鍚敤鎴锋秷鎭け璐ラ噸璇曟満鍒? */
 
 const request = require('../utils/request');
 
-// 订阅消息重试配置
+// 璁㈤槄娑堟伅閲嶈瘯閰嶇疆
 const RETRY_CONFIG = {
-  MAX_RETRIES: 3, // 最大重试次数
-  INITIAL_DELAY: 1000, // 初始重试延迟（毫秒）
-  BACKOFF_FACTOR: 2, // 指数退避因子
-  MAX_DELAY: 30000 // 最大重试延迟（毫秒）
-};
+  MAX_RETRIES: 3, // 鏈€澶ч噸璇曟鏁?  INITIAL_DELAY: 1000, // 鍒濆閲嶈瘯寤惰繜锛堟绉掞級
+  BACKOFF_FACTOR: 2, // 鎸囨暟閫€閬垮洜瀛?  MAX_DELAY: 30000 // 鏈€澶ч噸璇曞欢杩燂紙姣锛?};
 
-// 重试队列
+// 閲嶈瘯闃熷垪
 let retryQueue = [];
-// 重试队列是否正在处理
+// 閲嶈瘯闃熷垪鏄惁姝ｅ湪澶勭悊
 let isProcessingRetryQueue = false;
 
 const notificationService = {
   /**
-   * 获取通知列表
-   * @param {Object} options - 查询参数
-   * @param {string} options.type - 通知类型：all/system/order/promotion/activity
-   * @param {string} options.status - 通知状态：all/read/unread
-   * @param {number} options.page - 页码，默认为1
-   * @param {number} options.pageSize - 每页数量，默认为20
-   * @returns {Promise<Object>} 通知列表和分页信息
-   */
+   * 鑾峰彇閫氱煡鍒楄〃
+   * @param {Object} options - 鏌ヨ鍙傛暟
+   * @param {string} options.type - 閫氱煡绫诲瀷锛歛ll/system/order/promotion/activity
+   * @param {string} options.status - 閫氱煡鐘舵€侊細all/read/unread
+   * @param {number} options.page - 椤电爜锛岄粯璁や负1
+   * @param {number} options.pageSize - 姣忛〉鏁伴噺锛岄粯璁や负20
+   * @returns {Promise<Object>} 閫氱煡鍒楄〃鍜屽垎椤典俊鎭?   */
   getNotificationList(options = {}) {
     const params = {
       type: options.type || 'all',
@@ -42,22 +37,20 @@ const notificationService = {
   },
 
   /**
-   * 获取通知详情
-   * @param {string} id - 通知ID
-   * @returns {Promise<Object>} 通知详情
+   * 鑾峰彇閫氱煡璇︽儏
+   * @param {string} id - 閫氱煡ID
+   * @returns {Promise<Object>} 閫氱煡璇︽儏
    */
   getNotificationDetail(id) {
     if (!id) {
-      return Promise.reject(new Error('通知ID不能为空'));
+      return Promise.reject(new Error('閫氱煡ID涓嶈兘涓虹┖'));
     }
     
     return request.get(`/notifications/${id}`);
   },
 
   /**
-   * 标记通知为已读
-   * @param {string} id - 通知ID，如果不提供则标记所有未读通知为已读
-   * @returns {Promise<Object>} 操作结果
+   * 鏍囪閫氱煡涓哄凡璇?   * @param {string} id - 閫氱煡ID锛屽鏋滀笉鎻愪緵鍒欐爣璁版墍鏈夋湭璇婚€氱煡涓哄凡璇?   * @returns {Promise<Object>} 鎿嶄綔缁撴灉
    */
   markAsRead(id) {
     if (id) {
@@ -68,9 +61,9 @@ const notificationService = {
   },
 
   /**
-   * 删除通知
-   * @param {string} id - 通知ID，如果不提供则删除所有已读通知
-   * @returns {Promise<Object>} 操作结果
+   * 鍒犻櫎閫氱煡
+   * @param {string} id - 閫氱煡ID锛屽鏋滀笉鎻愪緵鍒欏垹闄ゆ墍鏈夊凡璇婚€氱煡
+   * @returns {Promise<Object>} 鎿嶄綔缁撴灉
    */
   deleteNotification(id) {
     if (id) {
@@ -81,110 +74,103 @@ const notificationService = {
   },
 
   /**
-   * 获取未读通知数量
-   * @returns {Promise<Object>} 未读通知数量
+   * 鑾峰彇鏈閫氱煡鏁伴噺
+   * @returns {Promise<Object>} 鏈閫氱煡鏁伴噺
    */
   getUnreadCount() {
     return request.get('/notifications/unread-count');
   },
 
   /**
-   * 获取通知设置
-   * @returns {Promise<Object>} 通知设置
+   * 鑾峰彇閫氱煡璁剧疆
+   * @returns {Promise<Object>} 閫氱煡璁剧疆
    */
   getNotificationSettings() {
     return request.get('/notifications/settings');
   },
 
   /**
-   * 更新通知设置
-   * @param {Object} settings - 通知设置
-   * @param {boolean} settings.systemNotification - 是否接收系统通知
-   * @param {boolean} settings.orderNotification - 是否接收订单通知
-   * @param {boolean} settings.promotionNotification - 是否接收促销通知
-   * @param {boolean} settings.activityNotification - 是否接收活动通知
-   * @returns {Promise<Object>} 更新结果
+   * 鏇存柊閫氱煡璁剧疆
+   * @param {Object} settings - 閫氱煡璁剧疆
+   * @param {boolean} settings.systemNotification - 鏄惁鎺ユ敹绯荤粺閫氱煡
+   * @param {boolean} settings.orderNotification - 鏄惁鎺ユ敹璁㈠崟閫氱煡
+   * @param {boolean} settings.promotionNotification - 鏄惁鎺ユ敹淇冮攢閫氱煡
+   * @param {boolean} settings.activityNotification - 鏄惁鎺ユ敹娲诲姩閫氱煡
+   * @returns {Promise<Object>} 鏇存柊缁撴灉
    */
   updateNotificationSettings(settings) {
     return request.put('/notifications/settings', settings);
   },
 
   /**
-   * 订阅推送通知
-   * @param {Object} subscription - 订阅信息
-   * @param {string} subscription.platform - 平台：ios/android/web
-   * @param {string} subscription.token - 设备令牌
-   * @param {string} subscription.userId - 用户ID
-   * @returns {Promise<Object>} 订阅结果
+   * 璁㈤槄鎺ㄩ€侀€氱煡
+   * @param {Object} subscription - 璁㈤槄淇℃伅
+   * @param {string} subscription.platform - 骞冲彴锛歩os/android/web
+   * @param {string} subscription.token - 璁惧浠ょ墝
+   * @param {string} subscription.userId - 鐢ㄦ埛ID
+   * @returns {Promise<Object>} 璁㈤槄缁撴灉
    */
   subscribePushNotification(subscription) {
     if (!subscription.platform || !subscription.token) {
-      return Promise.reject(new Error('平台和设备令牌不能为空'));
+      return Promise.reject(new Error('骞冲彴鍜岃澶囦护鐗屼笉鑳戒负绌?));
     }
     
     return request.post('/notifications/subscribe', subscription);
   },
 
   /**
-   * 取消订阅推送通知
-   * @param {string} token - 设备令牌
-   * @returns {Promise<Object>} 取消订阅结果
+   * 鍙栨秷璁㈤槄鎺ㄩ€侀€氱煡
+   * @param {string} token - 璁惧浠ょ墝
+   * @returns {Promise<Object>} 鍙栨秷璁㈤槄缁撴灉
    */
   unsubscribePushNotification(token) {
     if (!token) {
-      return Promise.reject(new Error('设备令牌不能为空'));
+      return Promise.reject(new Error('璁惧浠ょ墝涓嶈兘涓虹┖'));
     }
     
     return request.post('/notifications/unsubscribe', { token });
   },
 
   /**
-   * 发送自定义通知（管理员功能）
-   * @param {Object} notification - 通知内容
-   * @param {string} notification.title - 通知标题
-   * @param {string} notification.content - 通知内容
-   * @param {string} notification.type - 通知类型
-   * @param {Array} notification.targetUsers - 目标用户ID列表，为空则发送给所有用户
-   * @returns {Promise<Object>} 发送结果
-   */
+   * 鍙戦€佽嚜瀹氫箟閫氱煡锛堢鐞嗗憳鍔熻兘锛?   * @param {Object} notification - 閫氱煡鍐呭
+   * @param {string} notification.title - 閫氱煡鏍囬
+   * @param {string} notification.content - 閫氱煡鍐呭
+   * @param {string} notification.type - 閫氱煡绫诲瀷
+   * @param {Array} notification.targetUsers - 鐩爣鐢ㄦ埛ID鍒楄〃锛屼负绌哄垯鍙戦€佺粰鎵€鏈夌敤鎴?   * @returns {Promise<Object>} 鍙戦€佺粨鏋?   */
   sendNotification(notification) {
     if (!notification.title || !notification.content || !notification.type) {
-      return Promise.reject(new Error('通知标题、内容和类型不能为空'));
+      return Promise.reject(new Error('閫氱煡鏍囬銆佸唴瀹瑰拰绫诲瀷涓嶈兘涓虹┖'));
     }
     
     return request.post('/notifications/send', notification);
   },
 
   /**
-   * 发送订阅消息
-   * @param {Object} message - 消息内容
-   * @param {string} message.templateId - 模板ID
-   * @param {Object} message.data - 消息数据
-   * @param {string} message.openId - 用户openId
-   * @param {number} retries - 当前重试次数
-   * @returns {Promise<Object>} 发送结果
-   */
+   * 鍙戦€佽闃呮秷鎭?   * @param {Object} message - 娑堟伅鍐呭
+   * @param {string} message.templateId - 妯℃澘ID
+   * @param {Object} message.data - 娑堟伅鏁版嵁
+   * @param {string} message.openId - 鐢ㄦ埛openId
+   * @param {number} retries - 褰撳墠閲嶈瘯娆℃暟
+   * @returns {Promise<Object>} 鍙戦€佺粨鏋?   */
   sendSubscribeMessage(message, retries = 0) {
     if (!message.templateId || !message.data || !message.openId) {
-      return Promise.reject(new Error('模板ID、消息数据和用户openId不能为空'));
+      return Promise.reject(new Error('妯℃澘ID銆佹秷鎭暟鎹拰鐢ㄦ埛openId涓嶈兘涓虹┖'));
     }
     
     return request.post('/notifications/subscribe-message', message)
       .catch(error => {
-        // 如果重试次数未达到最大值，将消息加入重试队列
-        if (retries < RETRY_CONFIG.MAX_RETRIES) {
+        // 濡傛灉閲嶈瘯娆℃暟鏈揪鍒版渶澶у€硷紝灏嗘秷鎭姞鍏ラ噸璇曢槦鍒?        if (retries < RETRY_CONFIG.MAX_RETRIES) {
           this.addToRetryQueue(message, retries + 1);
           return Promise.resolve({ success: false, retry: true, retryCount: retries + 1 });
         }
-        // 重试次数达到最大值，返回错误
-        return Promise.reject(new Error(`发送订阅消息失败，已重试${retries}次: ${error.message}`));
+        // 閲嶈瘯娆℃暟杈惧埌鏈€澶у€硷紝杩斿洖閿欒
+        return Promise.reject(new Error(`鍙戦€佽闃呮秷鎭け璐ワ紝宸查噸璇?{retries}娆? ${error.message}`));
       });
   },
 
   /**
-   * 将消息加入重试队列
-   * @param {Object} message - 消息内容
-   * @param {number} retries - 当前重试次数
+   * 灏嗘秷鎭姞鍏ラ噸璇曢槦鍒?   * @param {Object} message - 娑堟伅鍐呭
+   * @param {number} retries - 褰撳墠閲嶈瘯娆℃暟
    */
   addToRetryQueue(message, retries) {
     const delay = Math.min(
@@ -199,14 +185,14 @@ const notificationService = {
       timestamp: Date.now() + delay
     });
     
-    // 如果重试队列未在处理中，启动处理
+    // 濡傛灉閲嶈瘯闃熷垪鏈湪澶勭悊涓紝鍚姩澶勭悊
     if (!isProcessingRetryQueue) {
       this.processRetryQueue();
     }
   },
 
   /**
-   * 处理重试队列
+   * 澶勭悊閲嶈瘯闃熷垪
    */
   processRetryQueue() {
     if (isProcessingRetryQueue || retryQueue.length === 0) {
@@ -215,7 +201,7 @@ const notificationService = {
     
     isProcessingRetryQueue = true;
     
-    // 按时间戳排序，先处理最早需要重试的消息
+    // 鎸夋椂闂存埑鎺掑簭锛屽厛澶勭悊鏈€鏃╅渶瑕侀噸璇曠殑娑堟伅
     retryQueue.sort((a, b) => a.timestamp - b.timestamp);
     
     const processNext = () => {
@@ -227,16 +213,14 @@ const notificationService = {
       const now = Date.now();
       const nextItem = retryQueue[0];
       
-      // 如果还没到重试时间，设置定时器
-      if (nextItem.timestamp > now) {
+      // 濡傛灉杩樻病鍒伴噸璇曟椂闂达紝璁剧疆瀹氭椂鍣?      if (nextItem.timestamp > now) {
         setTimeout(() => {
           this.sendSubscribeMessage(nextItem.message, nextItem.retries)
             .finally(processNext);
           retryQueue.shift();
         }, nextItem.timestamp - now);
       } else {
-        // 到了重试时间，立即发送
-        this.sendSubscribeMessage(nextItem.message, nextItem.retries)
+        // 鍒颁簡閲嶈瘯鏃堕棿锛岀珛鍗冲彂閫?        this.sendSubscribeMessage(nextItem.message, nextItem.retries)
           .finally(processNext);
         retryQueue.shift();
       }
@@ -246,9 +230,7 @@ const notificationService = {
   },
 
   /**
-   * 获取重试队列状态
-   * @returns {Object} 重试队列状态
-   */
+   * 鑾峰彇閲嶈瘯闃熷垪鐘舵€?   * @returns {Object} 閲嶈瘯闃熷垪鐘舵€?   */
   getRetryQueueStatus() {
     return {
       queueLength: retryQueue.length,
@@ -257,7 +239,7 @@ const notificationService = {
   },
 
   /**
-   * 清空重试队列
+   * 娓呯┖閲嶈瘯闃熷垪
    */
   clearRetryQueue() {
     retryQueue = [];

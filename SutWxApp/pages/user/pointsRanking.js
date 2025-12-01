@@ -1,80 +1,74 @@
-/**
- * 文件名: pointsRanking.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: 绉垎鎺掕姒滈〉闈? */
+﻿/**
+ * 鏂囦欢鍚? pointsRanking.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: 缁夘垰鍨庨幒鎺曨攽濮掓粓銆夐棃? */
 const pointsService = require('../../services/pointsService');
 
 Page({
   data: {
-    // 褰撳墠鐢ㄦ埛绉垎淇℃伅
+    // 瑜版挸澧犻悽銊﹀煕缁夘垰鍨庢穱鈩冧紖
     userInfo: {
       avatar: '/images/default-avatar.png',
-      nickname: '鐢ㄦ埛鏄电О',
+      nickname: '閻劍鍩涢弰鐢敌?,
       points: 0,
       rank: 0
     },
     
-    // 姒滃崟绫诲瀷
-    activeTab: 'total',
+    // 濮掓粌宕熺猾璇茬€?    activeTab: 'total',
     tabs: [
-      { key: 'total', label: '鎬绘' },
-      { key: 'daily', label: '鏃ユ' },
-      { key: 'weekly', label: '鍛ㄦ' },
-      { key: 'monthly', label: '鏈堟' }
+      { key: 'total', label: '閹粯顪? },
+      { key: 'daily', label: '閺冦儲顪? },
+      { key: 'weekly', label: '閸涖劍顪? },
+      { key: 'monthly', label: '閺堝牊顪? }
     ],
     
-    // 鎺掕姒滃垪琛?    rankingList: [],
+    // 閹烘帟顢戝婊冨灙鐞?    rankingList: [],
     
-    // 鍒嗛〉鍙傛暟
+    // 閸掑棝銆夐崣鍌涙殶
     page: 1,
     pageSize: 20,
     hasMore: true,
     
-    // 加载状态    isLoading: false,
+    // 鍔犺浇鐘舵€?   isLoading: false,
     isEmpty: false,
     
-    // 鍒锋柊鐘舵€?    isRefreshing: false
+    // 閸掗攱鏌婇悩鑸碘偓?    isRefreshing: false
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸旂姾娴?   */
   onLoad: function (options) {
     this.loadUserInfo();
     this.loadRankingList();
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍒濇娓叉煋瀹屾垚
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸掓繃顐煎〒鍙夌厠鐎瑰本鍨?   */
   onReady: function () {
     
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閺勫墽銇?   */
   onShow: function () {
     
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰闅愯棌
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨闂呮劘妫?   */
   onHide: function () {
     
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍗歌浇
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸楁瓕娴?   */
   onUnload: function () {
     
   },
 
   /**
-   * 椤甸潰鐩稿叧浜嬩欢澶勭悊鍑芥暟--鐩戝惉鐢ㄦ埛涓嬫媺鍔ㄤ綔
+   * 妞ょ敻娼伴惄绋垮彠娴滃娆㈡径鍕倞閸戣姤鏆?-閻╂垵鎯夐悽銊﹀煕娑撳濯洪崝銊ょ稊
    */
   onPullDownRefresh: function () {
     this.setData({
@@ -96,7 +90,7 @@ Page({
   },
 
   /**
-   * 椤甸潰涓婃媺瑙﹀簳浜嬩欢鐨勫鐞嗗嚱鏁?   */
+   * 妞ょ敻娼版稉濠冨鐟欙箑绨虫禍瀣╂閻ㄥ嫬顦╅悶鍡楀毐閺?   */
   onReachBottom: function () {
     if (this.data.hasMore && !this.data.isLoading) {
       this.loadRankingList();
@@ -104,16 +98,16 @@ Page({
   },
 
   /**
-   * 鐢ㄦ埛鐐瑰嚮鍙充笂瑙掑垎浜?   */
+   * 閻劍鍩涢悙鐟板毊閸欏厖绗傜憴鎺戝瀻娴?   */
   onShareAppMessage: function () {
     return {
-      title: '绉垎鎺掕姒?,
+      title: '缁夘垰鍨庨幒鎺曨攽濮?,
       path: '/pages/user/pointsRanking/pointsRanking'
     };
   },
 
   /**
-   * 鍔犺浇褰撳墠鐢ㄦ埛淇℃伅
+   * 閸旂姾娴囪ぐ鎾冲閻劍鍩涙穱鈩冧紖
    */
   loadUserInfo: function() {
     pointsService.getUserPoints()
@@ -123,17 +117,17 @@ Page({
             'userInfo.points': res.data.points,
             'userInfo.rank': res.data.rank,
             'userInfo.avatar': res.data.avatar || '/images/default-avatar.png',
-            'userInfo.nickname': res.data.nickname || '鐢ㄦ埛鏄电О'
+            'userInfo.nickname': res.data.nickname || '閻劍鍩涢弰鐢敌?
           });
         }
       })
       .catch(err => {
-        console.error('鑾峰彇鐢ㄦ埛绉垎淇℃伅澶辫触', err);
+        console.error('閼惧嘲褰囬悽銊﹀煕缁夘垰鍨庢穱鈩冧紖婢惰精瑙?, err);
       });
   },
 
   /**
-   * 鍔犺浇鎺掕姒滃垪琛?   */
+   * 閸旂姾娴囬幒鎺曨攽濮掓粌鍨悰?   */
   loadRankingList: function() {
     if (this.data.isLoading || !this.data.hasMore) return;
     
@@ -161,15 +155,15 @@ Page({
           });
         } else {
           wx.showToast({
-            title: res.message || '鍔犺浇澶辫触',
+            title: res.message || '閸旂姾娴囨径杈Е',
             icon: 'none'
           });
         }
       })
       .catch(err => {
-        console.error('鍔犺浇鎺掕姒滃け璐?, err);
+        console.error('閸旂姾娴囬幒鎺曨攽濮掓粌銇戠拹?, err);
         wx.showToast({
-          title: '缃戠粶閿欒',
+          title: '缂冩垹绮堕柨娆掝嚖',
           icon: 'none'
         });
       })
@@ -181,8 +175,7 @@ Page({
   },
 
   /**
-   * 鍒囨崲姒滃崟绫诲瀷
-   */
+   * 閸掑洦宕插婊冨礋缁鐎?   */
   onTabChange: function(e) {
     const tab = e.currentTarget.dataset.tab;
     if (tab === this.data.activeTab) return;
@@ -199,8 +192,7 @@ Page({
   },
 
   /**
-   * 鏌ョ湅鐢ㄦ埛璇︽儏
-   */
+   * 閺屻儳婀呴悽銊﹀煕鐠囷附鍎?   */
   onViewUser: function(e) {
     const userId = e.currentTarget.dataset.id;
     wx.navigateTo({
@@ -209,7 +201,7 @@ Page({
   },
 
   /**
-   * 璺宠浆鍒扮Н鍒嗕换鍔￠〉闈?   */
+   * 鐠哄疇娴嗛崚鎵濋崚鍡曟崲閸旓繝銆夐棃?   */
   onGoToTasks: function() {
     wx.navigateTo({
       url: '/pages/user/pointsTasks/pointsTasks'
@@ -217,7 +209,7 @@ Page({
   },
 
   /**
-   * 璺宠浆鍒扮Н鍒嗘槑缁嗛〉闈?   */
+   * 鐠哄疇娴嗛崚鎵濋崚鍡樻缂佸棝銆夐棃?   */
   onGoToDetail: function() {
     wx.navigateTo({
       url: '/pages/user/pointsDetail/pointsDetail'

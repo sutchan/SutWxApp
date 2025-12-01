@@ -1,54 +1,46 @@
-/**
- * 文件名: cacheService.js
- * 版本号: 1.0.19
- * 更新日期: 2025-11-29
- * 浣滆€? Sut
- * 描述: 缂撳瓨鏈嶅姟锛屾彁渚涚粺涓€鐨勬湰鍦扮紦瀛樼鐞嗗姛鑳斤紝鏀寔鏁版嵁缂撳瓨銆佸浘鐗囩紦瀛樺拰缂撳瓨绛栫暐
- */
+﻿/**
+ * 鏂囦欢鍚? cacheService.js
+ * 鐗堟湰鍙? 1.0.19
+ * 鏇存柊鏃ユ湡: 2025-11-29
+ * 娴ｆ粏鈧? Sut
+ * 鎻忚堪: 缂傛挸鐡ㄩ張宥呭閿涘本褰佹笟娑氱埠娑撯偓閻ㄥ嫭婀伴崷鎵处鐎涙顓搁悶鍡楀閼虫枻绱濋弨顖涘瘮閺佺増宓佺紓鎾崇摠閵嗕礁娴橀悧鍥╃处鐎涙ê鎷扮紓鎾崇摠缁涙牜鏆? */
 
 /**
- * 缂撳瓨绛栫暐甯搁噺
- */
+ * 缂傛挸鐡ㄧ粵鏍殣鐢悂鍣? */
 const CACHE_POLICY = {
-  // 涓嶄娇鐢ㄧ紦瀛?  NO_CACHE: 'no_cache',
-  // 浼樺厛浣跨敤缂撳瓨锛屽鏋滅紦瀛樹笉瀛樺湪鍒欒姹傜綉缁?  CACHE_FIRST: 'cache_first',
-  // 浼樺厛浣跨敤缃戠粶锛屽鏋滅綉缁滃け璐ュ垯浣跨敤缂撳瓨
-  NETWORK_FIRST: 'network_first',
-  // 鍚屾椂浣跨敤缂撳瓨鍜岀綉缁滐紝浼樺厛鏄剧ず缂撳瓨锛岀綉缁滆繑鍥炲悗鏇存柊
+  // 娑撳秳濞囬悽銊х处鐎?  NO_CACHE: 'no_cache',
+  // 娴兼ê鍘涙担璺ㄦ暏缂傛挸鐡ㄩ敍灞筋洤閺嬫粎绱︾€涙ü绗夌€涙ê婀崚娆掝嚞濮瑰倻缍夌紒?  CACHE_FIRST: 'cache_first',
+  // 娴兼ê鍘涙担璺ㄦ暏缂冩垹绮堕敍灞筋洤閺嬫粎缍夌紒婊冦亼鐠愩儱鍨担璺ㄦ暏缂傛挸鐡?  NETWORK_FIRST: 'network_first',
+  // 閸氬本妞傛担璺ㄦ暏缂傛挸鐡ㄩ崪宀€缍夌紒婊愮礉娴兼ê鍘涢弰鍓с仛缂傛挸鐡ㄩ敍宀€缍夌紒婊嗙箲閸ョ偛鎮楅弴瀛樻煀
   CACHE_AND_NETWORK: 'cache_and_network'
 };
 
 /**
- * 缂撳瓨绫诲瀷甯搁噺
+ * 缂傛挸鐡ㄧ猾璇茬€风敮鎼佸櫤
  */
 const CACHE_TYPE = {
-  // 鏁版嵁缂撳瓨
+  // 閺佺増宓佺紓鎾崇摠
   DATA: 'data',
-  // 鍥剧墖缂撳瓨
+  // 閸ュ墽澧栫紓鎾崇摠
   IMAGE: 'image',
-  // 鐢ㄦ埛閰嶇疆缂撳瓨
-  CONFIG: 'config',
-  // 涓存椂缂撳瓨
+  // 閻劍鍩涢柊宥囩枂缂傛挸鐡?  CONFIG: 'config',
+  // 娑撳瓨妞傜紓鎾崇摠
   TEMP: 'temp'
 };
 
 /**
- * 缂撳瓨杩囨湡鏃堕棿锛堟绉掞級
- */
+ * 缂傛挸鐡ㄦ潻鍥ㄦ埂閺冨爼妫块敍鍫燁嚑缁夋帪绱? */
 const EXPIRY_TIME = {
-  // 5鍒嗛挓
-  SHORT: 5 * 60 * 1000,
-  // 1灏忔椂
-  MEDIUM: 60 * 60 * 1000,
-  // 24灏忔椂
-  LONG: 24 * 60 * 60 * 1000,
-  // 7澶?  WEEK: 7 * 24 * 60 * 60 * 1000,
-  // 姘镐笉杩囨湡
+  // 5閸掑棝鎸?  SHORT: 5 * 60 * 1000,
+  // 1鐏忓繑妞?  MEDIUM: 60 * 60 * 1000,
+  // 24鐏忓繑妞?  LONG: 24 * 60 * 60 * 1000,
+  // 7婢?  WEEK: 7 * 24 * 60 * 60 * 1000,
+  // 濮橀晲绗夋潻鍥ㄦ埂
   NEVER: null
 };
 
 /**
- * 缂撳瓨鏈嶅姟绫? */
+ * 缂傛挸鐡ㄩ張宥呭缁? */
 class CacheService {
   constructor() {
     this.cachePrefix = 'sut_cache_';
@@ -56,28 +48,21 @@ class CacheService {
   }
 
   /**
-   * 鐢熸垚缂撳瓨閿?   * @param {string} key - 鍘熷缂撳瓨閿?   * @param {string} type - 缂撳瓨绫诲瀷
-   * @returns {string} 鐢熸垚鐨勭紦瀛橀敭
-   */
+   * 閻㈢喐鍨氱紓鎾崇摠闁?   * @param {string} key - 閸樼喎顫愮紓鎾崇摠闁?   * @param {string} type - 缂傛挸鐡ㄧ猾璇茬€?   * @returns {string} 閻㈢喐鍨氶惃鍕处鐎涙﹢鏁?   */
   _getCacheKey(key, type = CACHE_TYPE.DATA) {
     return `${this.cachePrefix}${type}_${key}`;
   }
 
   /**
-   * 鐢熸垚缂撳瓨鍏冩暟鎹敭
-   * @param {string} key - 鍘熷缂撳瓨閿?   * @param {string} type - 缂撳瓨绫诲瀷
-   * @returns {string} 鐢熸垚鐨勭紦瀛樺厓鏁版嵁閿?   */
+   * 閻㈢喐鍨氱紓鎾崇摠閸忓啯鏆熼幑顕€鏁?   * @param {string} key - 閸樼喎顫愮紓鎾崇摠闁?   * @param {string} type - 缂傛挸鐡ㄧ猾璇茬€?   * @returns {string} 閻㈢喐鍨氶惃鍕处鐎涙ê鍘撻弫鐗堝祦闁?   */
   _getMetaKey(key, type = CACHE_TYPE.DATA) {
     return `${this._getCacheKey(key, type)}_meta`;
   }
 
   /**
-   * 璁剧疆缂撳瓨
-   * @param {string} key - 缂撳瓨閿?   * @param {*} data - 缂撳瓨鏁版嵁
-   * @param {Object} options - 缂撳瓨閫夐」
-   * @param {string} options.type - 缂撳瓨绫诲瀷
-   * @param {number|null} options.expiry - 杩囨湡鏃堕棿锛堟绉掞級锛宯ull琛ㄧず姘镐笉杩囨湡
-   * @param {string} options.group - 缂撳瓨鍒嗙粍
+   * 鐠佸墽鐤嗙紓鎾崇摠
+   * @param {string} key - 缂傛挸鐡ㄩ柨?   * @param {*} data - 缂傛挸鐡ㄩ弫鐗堝祦
+   * @param {Object} options - 缂傛挸鐡ㄩ柅澶愩€?   * @param {string} options.type - 缂傛挸鐡ㄧ猾璇茬€?   * @param {number|null} options.expiry - 鏉╁洦婀￠弮鍫曟？閿涘牊顕犵粔鎺炵礆閿涘ull鐞涖劎銇氬闀愮瑝鏉╁洦婀?   * @param {string} options.group - 缂傛挸鐡ㄩ崚鍡欑矋
    * @returns {Promise<void>}
    */
   async set(key, data, options = {}) {
@@ -91,22 +76,22 @@ class CacheService {
       const cacheKey = this._getCacheKey(key, type);
       const metaKey = this._getMetaKey(key, type);
 
-      // 鐢熸垚缂撳瓨鍏冩暟鎹?      const metadata = {
+      // 閻㈢喐鍨氱紓鎾崇摠閸忓啯鏆熼幑?      const metadata = {
         type,
         group,
         createdAt: Date.now(),
         expiry: expiry !== null ? Date.now() + expiry : null
       };
 
-      // 妫€鏌ョ紦瀛樺ぇ灏忛檺鍒?      await this._checkCacheSize();
+      // 濡偓閺屻儳绱︾€涙ê銇囩亸蹇涙閸?      await this._checkCacheSize();
 
-      // 瀛樺偍鏁版嵁鍜屽厓鏁版嵁
+      // 鐎涙ê鍋嶉弫鐗堝祦閸滃苯鍘撻弫鐗堝祦
       await Promise.all([
         wx.setStorage({ key: cacheKey, data }),
         wx.setStorage({ key: metaKey, data: metadata })
       ]);
 
-      // 娣诲姞鍒扮紦瀛樼储寮?      await this._addToCacheIndex(key, type, group);
+      // 濞ｈ濮為崚鎵处鐎涙鍌ㄥ?      await this._addToCacheIndex(key, type, group);
     } catch (error) {
       console.error('Cache set error:', error);
       throw error;
@@ -114,10 +99,8 @@ class CacheService {
   }
 
   /**
-   * 鑾峰彇缂撳瓨
-   * @param {string} key - 缂撳瓨閿?   * @param {Object} options - 缂撳瓨閫夐」
-   * @param {string} options.type - 缂撳瓨绫诲瀷
-   * @returns {Promise<*|null>} 缂撳瓨鏁版嵁锛屽鏋滀笉瀛樺湪鎴栧凡杩囨湡鍒欒繑鍥瀗ull
+   * 閼惧嘲褰囩紓鎾崇摠
+   * @param {string} key - 缂傛挸鐡ㄩ柨?   * @param {Object} options - 缂傛挸鐡ㄩ柅澶愩€?   * @param {string} options.type - 缂傛挸鐡ㄧ猾璇茬€?   * @returns {Promise<*|null>} 缂傛挸鐡ㄩ弫鐗堝祦閿涘苯顩ч弸婊€绗夌€涙ê婀幋鏍у嚒鏉╁洦婀￠崚娆掔箲閸ョ€梪ll
    */
   async get(key, options = {}) {
     try {
@@ -125,14 +108,14 @@ class CacheService {
       const cacheKey = this._getCacheKey(key, type);
       const metaKey = this._getMetaKey(key, type);
 
-      // 鑾峰彇鍏冩暟鎹?      const [metadata, data] = await Promise.all([
+      // 閼惧嘲褰囬崗鍐╂殶閹?      const [metadata, data] = await Promise.all([
         wx.getStorage({ key: metaKey }),
         wx.getStorage({ key: cacheKey })
       ]);
 
-      // 妫€鏌ユ槸鍚﹁繃鏈?      if (metadata.data && metadata.data.expiry) {
+      // 濡偓閺屻儲妲搁崥锕佺箖閺?      if (metadata.data && metadata.data.expiry) {
         if (Date.now() > metadata.data.expiry) {
-          // 缂撳瓨宸茶繃鏈燂紝鍒犻櫎
+          // 缂傛挸鐡ㄥ鑼剁箖閺堢噦绱濋崚鐘绘珟
           await this.remove(key, { type });
           return null;
         }
@@ -140,7 +123,7 @@ class CacheService {
 
       return data.data;
     } catch (error) {
-      // 缂撳瓨涓嶅瓨鍦?      if (error.errMsg && error.errMsg.includes('getStorage:fail')) {
+      // 缂傛挸鐡ㄦ稉宥呯摠閸?      if (error.errMsg && error.errMsg.includes('getStorage:fail')) {
         return null;
       }
       console.error('Cache get error:', error);
@@ -149,25 +132,20 @@ class CacheService {
   }
 
   /**
-   * 绉婚櫎缂撳瓨
-   * @param {string} key - 缂撳瓨閿?   * @param {Object} options - 缂撳瓨閫夐」
-   * @param {string} options.type - 缂撳瓨绫诲瀷
-   * @returns {Promise<boolean>} 鏄惁绉婚櫎鎴愬姛
-   */
+   * 缁夊娅庣紓鎾崇摠
+   * @param {string} key - 缂傛挸鐡ㄩ柨?   * @param {Object} options - 缂傛挸鐡ㄩ柅澶愩€?   * @param {string} options.type - 缂傛挸鐡ㄧ猾璇茬€?   * @returns {Promise<boolean>} 閺勵垰鎯佺粔濠氭珟閹存劕濮?   */
   async remove(key, options = {}) {
     try {
       const { type = CACHE_TYPE.DATA } = options;
       const cacheKey = this._getCacheKey(key, type);
       const metaKey = this._getMetaKey(key, type);
 
-      // 鍒犻櫎缂撳瓨鏁版嵁鍜屽厓鏁版嵁
-      await Promise.all([
+      // 閸掔娀娅庣紓鎾崇摠閺佺増宓侀崪灞藉帗閺佺増宓?      await Promise.all([
         wx.removeStorage({ key: cacheKey }),
         wx.removeStorage({ key: metaKey })
       ]);
 
-      // 浠庣紦瀛樼储寮曚腑绉婚櫎
-      await this._removeFromCacheIndex(key, type);
+      // 娴犲海绱︾€涙鍌ㄥ鏇氳厬缁夊娅?      await this._removeFromCacheIndex(key, type);
       return true;
     } catch (error) {
       console.error('Cache remove error:', error);
@@ -176,8 +154,7 @@ class CacheService {
   }
 
   /**
-   * 娓呴櫎鎵€鏈夌紦瀛?   * @returns {Promise<boolean>} 鏄惁娓呴櫎鎴愬姛
-   */
+   * 濞撳懘娅庨幍鈧張澶岀处鐎?   * @returns {Promise<boolean>} 閺勵垰鎯佸〒鍛存珟閹存劕濮?   */
   async clear() {
     try {
       const keys = await wx.getStorageInfo();
@@ -187,8 +164,7 @@ class CacheService {
         await wx.removeStorage({ key: cacheKeys });
       }
       
-      // 娓呴櫎缂撳瓨绱㈠紩
-      await wx.removeStorage({ key: `${this.cachePrefix}index` });
+      // 濞撳懘娅庣紓鎾崇摠缁便垹绱?      await wx.removeStorage({ key: `${this.cachePrefix}index` });
       return true;
     } catch (error) {
       console.error('Cache clear error:', error);
@@ -197,9 +173,7 @@ class CacheService {
   }
 
   /**
-   * 娓呴櫎鎸囧畾绫诲瀷鐨勭紦瀛?   * @param {string} type - 缂撳瓨绫诲瀷
-   * @returns {Promise<boolean>} 鏄惁娓呴櫎鎴愬姛
-   */
+   * 濞撳懘娅庨幐鍥х暰缁鐎烽惃鍕处鐎?   * @param {string} type - 缂傛挸鐡ㄧ猾璇茬€?   * @returns {Promise<boolean>} 閺勵垰鎯佸〒鍛存珟閹存劕濮?   */
   async clearByType(type) {
     try {
       const index = await this._getCacheIndex();
@@ -215,7 +189,7 @@ class CacheService {
           await Promise.all(keysToRemove.map(key => wx.removeStorage({ key })));
         }
 
-        // 鏇存柊绱㈠紩
+        // 閺囧瓨鏌婄槐銏犵穿
         delete index[type];
         await wx.setStorage({ key: `${this.cachePrefix}index`, data: index });
       }
@@ -228,22 +202,21 @@ class CacheService {
   }
 
   /**
-   * 娓呴櫎鎸囧畾鍒嗙粍鐨勭紦瀛?   * @param {string} group - 缂撳瓨鍒嗙粍
-   * @returns {Promise<boolean>} 鏄惁娓呴櫎鎴愬姛
-   */
+   * 濞撳懘娅庨幐鍥х暰閸掑棛绮嶉惃鍕处鐎?   * @param {string} group - 缂傛挸鐡ㄩ崚鍡欑矋
+   * @returns {Promise<boolean>} 閺勵垰鎯佸〒鍛存珟閹存劕濮?   */
   async clearByGroup(group) {
     try {
       const index = await this._getCacheIndex();
       const keysToRemove = [];
 
-      // 閬嶅巻鎵€鏈夌被鍨?      Object.keys(index).forEach(type => {
+      // 闁秴宸婚幍鈧張澶岃閸?      Object.keys(index).forEach(type => {
         if (index[type] && index[type][group]) {
           index[type][group].forEach(key => {
             keysToRemove.push(this._getCacheKey(key, type));
             keysToRemove.push(this._getMetaKey(key, type));
           });
           
-          // 鏇存柊绱㈠紩
+          // 閺囧瓨鏌婄槐銏犵穿
           delete index[type][group];
         }
       });
@@ -252,7 +225,7 @@ class CacheService {
         await Promise.all(keysToRemove.map(key => wx.removeStorage({ key })));
       }
 
-      // 淇濆瓨鏇存柊鍚庣殑绱㈠紩
+      // 娣囨繂鐡ㄩ弴瀛樻煀閸氬海娈戠槐銏犵穿
       await wx.setStorage({ key: `${this.cachePrefix}index`, data: index });
       return true;
     } catch (error) {
@@ -262,9 +235,8 @@ class CacheService {
   }
 
   /**
-   * 鑾峰彇缂撳瓨澶у皬
-   * @returns {Promise<number>} 缂撳瓨澶у皬锛堝瓧鑺傦級
-   */
+   * 閼惧嘲褰囩紓鎾崇摠婢堆冪毈
+   * @returns {Promise<number>} 缂傛挸鐡ㄦ径褍鐨敍鍫濈摟閼哄偊绱?   */
   async getCacheSize() {
     try {
       const info = await wx.getStorageInfo();
@@ -276,14 +248,12 @@ class CacheService {
   }
 
   /**
-   * 缂撳瓨缃戠粶璇锋眰鏁版嵁
-   * @param {string} url - 璇锋眰URL
-   * @param {Function} requestFn - 璇锋眰鍑芥暟
-   * @param {Object} options - 缂撳瓨閫夐」
-   * @param {string} options.policy - 缂撳瓨绛栫暐
-   * @param {number|null} options.expiry - 杩囨湡鏃堕棿
-   * @param {string} options.type - 缂撳瓨绫诲瀷
-   * @returns {Promise<*>} 璇锋眰缁撴灉
+   * 缂傛挸鐡ㄧ純鎴犵捕鐠囬攱鐪伴弫鐗堝祦
+   * @param {string} url - 鐠囬攱鐪癠RL
+   * @param {Function} requestFn - 鐠囬攱鐪伴崙鑺ユ殶
+   * @param {Object} options - 缂傛挸鐡ㄩ柅澶愩€?   * @param {string} options.policy - 缂傛挸鐡ㄧ粵鏍殣
+   * @param {number|null} options.expiry - 鏉╁洦婀￠弮鍫曟？
+   * @param {string} options.type - 缂傛挸鐡ㄧ猾璇茬€?   * @returns {Promise<*>} 鐠囬攱鐪扮紒鎾寸亯
    */
   async cachedRequest(url, requestFn, options = {}) {
     const {
@@ -292,19 +262,18 @@ class CacheService {
       type = CACHE_TYPE.DATA
     } = options;
 
-    // 鐢熸垚缂撳瓨閿?    const cacheKey = this._generateRequestCacheKey(url);
+    // 閻㈢喐鍨氱紓鎾崇摠闁?    const cacheKey = this._generateRequestCacheKey(url);
 
     switch (policy) {
       case CACHE_POLICY.NO_CACHE:
         return requestFn();
 
       case CACHE_POLICY.CACHE_FIRST:
-        // 浼樺厛浣跨敤缂撳瓨
-        const cachedData = await this.get(cacheKey, { type });
+        // 娴兼ê鍘涙担璺ㄦ暏缂傛挸鐡?        const cachedData = await this.get(cacheKey, { type });
         if (cachedData !== null) {
           return cachedData;
         }
-        // 缂撳瓨涓嶅瓨鍦紝璇锋眰缃戠粶骞剁紦瀛?        try {
+        // 缂傛挸鐡ㄦ稉宥呯摠閸︻煉绱濈拠閿嬬湴缂冩垹绮堕獮鍓佺处鐎?        try {
           const data = await requestFn();
           await this.set(cacheKey, data, { type, expiry });
           return data;
@@ -314,27 +283,25 @@ class CacheService {
         }
 
       case CACHE_POLICY.NETWORK_FIRST:
-        // 浼樺厛浣跨敤缃戠粶
-        try {
+        // 娴兼ê鍘涙担璺ㄦ暏缂冩垹绮?        try {
           const data = await requestFn();
           await this.set(cacheKey, data, { type, expiry });
           return data;
         } catch (error) {
           console.error('Network request failed, trying cache:', error);
-          // 缃戠粶澶辫触锛屽皾璇曚娇鐢ㄧ紦瀛?          const cachedData = await this.get(cacheKey, { type });
+          // 缂冩垹绮舵径杈Е閿涘苯鐨剧拠鏇氬▏閻劎绱︾€?          const cachedData = await this.get(cacheKey, { type });
           if (cachedData !== null) {
             return cachedData;
           }
-          // 缂撳瓨涔熶笉瀛樺湪锛屾姏鍑洪敊璇?          throw error;
+          // 缂傛挸鐡ㄦ稊鐔剁瑝鐎涙ê婀敍灞惧閸戞椽鏁婄拠?          throw error;
         }
 
       case CACHE_POLICY.CACHE_AND_NETWORK:
-        // 鍚屾椂浣跨敤缂撳瓨鍜岀綉缁?        const cached = await this.get(cacheKey, { type });
+        // 閸氬本妞傛担璺ㄦ暏缂傛挸鐡ㄩ崪宀€缍夌紒?        const cached = await this.get(cacheKey, { type });
         
-        // 绔嬪嵆杩斿洖缂撳瓨锛堝鏋滃瓨鍦級
+        // 缁斿宓嗘潻鏂挎礀缂傛挸鐡ㄩ敍鍫濐洤閺嬫粌鐡ㄩ崷顭掔礆
         if (cached !== null) {
-          // 寮傛鏇存柊缂撳瓨
-          requestFn().then(data => {
+          // 瀵倹顒為弴瀛樻煀缂傛挸鐡?          requestFn().then(data => {
             this.set(cacheKey, data, { type, expiry });
           }).catch(error => {
             console.error('Background network update failed:', error);
@@ -342,7 +309,7 @@ class CacheService {
           return cached;
         }
         
-        // 缂撳瓨涓嶅瓨鍦紝绛夊緟缃戠粶璇锋眰
+        // 缂傛挸鐡ㄦ稉宥呯摠閸︻煉绱濈粵澶婄窡缂冩垹绮剁拠閿嬬湴
         try {
           const data = await requestFn();
           await this.set(cacheKey, data, { type, expiry });
@@ -358,27 +325,26 @@ class CacheService {
   }
 
   /**
-   * 缂撳瓨鍥剧墖
-   * @param {string} url - 鍥剧墖URL
-   * @returns {Promise<string>} 鏈湴缂撳瓨璺緞
-   */
+   * 缂傛挸鐡ㄩ崶鍓у
+   * @param {string} url - 閸ュ墽澧朥RL
+   * @returns {Promise<string>} 閺堫剙婀寸紓鎾崇摠鐠侯垰绶?   */
   async cacheImage(url) {
     try {
       const cacheKey = this._generateImageCacheKey(url);
       
-      // 妫€鏌ユ槸鍚﹀凡缂撳瓨
+      // 濡偓閺屻儲妲搁崥锕€鍑＄紓鎾崇摠
       const cachedPath = await this.get(cacheKey, { type: CACHE_TYPE.IMAGE });
       if (cachedPath) {
-        // 妫€鏌ョ紦瀛樻枃浠舵槸鍚﹀瓨鍦?        try {
+        // 濡偓閺屻儳绱︾€涙ɑ鏋冩禒鑸垫Ц閸氾箑鐡ㄩ崷?        try {
           await wx.getFileInfo({ filePath: cachedPath });
           return cachedPath;
         } catch (e) {
-          // 鏂囦欢涓嶅瓨鍦紝鍒犻櫎缂撳瓨璁板綍
+          // 閺傚洣娆㈡稉宥呯摠閸︻煉绱濋崚鐘绘珟缂傛挸鐡ㄧ拋鏉跨秿
           await this.remove(cacheKey, { type: CACHE_TYPE.IMAGE });
         }
       }
 
-      // 涓嬭浇骞剁紦瀛樺浘鐗?      const downloadResult = await wx.downloadFile({
+      // 娑撳娴囬獮鍓佺处鐎涙ê娴橀悧?      const downloadResult = await wx.downloadFile({
         url,
         success: res => {
           if (res.statusCode === 200) {
@@ -388,10 +354,9 @@ class CacheService {
         }
       });
 
-      // 淇濆瓨鍒颁复鏃舵枃浠?      const tempFilePath = downloadResult.tempFilePath;
+      // 娣囨繂鐡ㄩ崚棰佸閺冭埖鏋冩禒?      const tempFilePath = downloadResult.tempFilePath;
       
-      // 淇濆瓨缂撳瓨璁板綍
-      await this.set(cacheKey, tempFilePath, { 
+      // 娣囨繂鐡ㄧ紓鎾崇摠鐠佹澘缍?      await this.set(cacheKey, tempFilePath, { 
         type: CACHE_TYPE.IMAGE,
         expiry: EXPIRY_TIME.WEEK 
       });
@@ -399,37 +364,34 @@ class CacheService {
       return tempFilePath;
     } catch (error) {
       console.error('Cache image error:', error);
-      // 澶辫触鏃惰繑鍥炲師濮婾RL
+      // 婢惰精瑙﹂弮鎯扮箲閸ョ偛甯慨濠綬L
       return url;
     }
   }
 
   /**
-   * 鎵归噺缂撳瓨鍥剧墖
-   * @param {Array<string>} urls - 鍥剧墖URL鏁扮粍
-   * @returns {Promise<Array<string>>} 鏈湴缂撳瓨璺緞鏁扮粍
+   * 閹靛綊鍣虹紓鎾崇摠閸ュ墽澧?   * @param {Array<string>} urls - 閸ュ墽澧朥RL閺佹壆绮?   * @returns {Promise<Array<string>>} 閺堫剙婀寸紓鎾崇摠鐠侯垰绶為弫鎵矋
    */
   async cacheImages(urls) {
     return Promise.all(urls.map(url => this.cacheImage(url)));
   }
 
   /**
-   * 鐢熸垚璇锋眰缂撳瓨閿?   * @param {string} url - 璇锋眰URL
-   * @returns {string} 缂撳瓨閿?   */
+   * 閻㈢喐鍨氱拠閿嬬湴缂傛挸鐡ㄩ柨?   * @param {string} url - 鐠囬攱鐪癠RL
+   * @returns {string} 缂傛挸鐡ㄩ柨?   */
   _generateRequestCacheKey(url) {
     return `req_${url}`;
   }
 
   /**
-   * 鐢熸垚鍥剧墖缂撳瓨閿?   * @param {string} url - 鍥剧墖URL
-   * @returns {string} 缂撳瓨閿?   */
+   * 閻㈢喐鍨氶崶鍓у缂傛挸鐡ㄩ柨?   * @param {string} url - 閸ュ墽澧朥RL
+   * @returns {string} 缂傛挸鐡ㄩ柨?   */
   _generateImageCacheKey(url) {
     return `img_${url}`;
   }
 
   /**
-   * 鑾峰彇缂撳瓨绱㈠紩
-   * @returns {Promise<Object>} 缂撳瓨绱㈠紩
+   * 閼惧嘲褰囩紓鎾崇摠缁便垹绱?   * @returns {Promise<Object>} 缂傛挸鐡ㄧ槐銏犵穿
    */
   async _getCacheIndex() {
     try {
@@ -441,8 +403,7 @@ class CacheService {
   }
 
   /**
-   * 娣诲姞鍒扮紦瀛樼储寮?   * @param {string} key - 缂撳瓨閿?   * @param {string} type - 缂撳瓨绫诲瀷
-   * @param {string} group - 缂撳瓨鍒嗙粍
+   * 濞ｈ濮為崚鎵处鐎涙鍌ㄥ?   * @param {string} key - 缂傛挸鐡ㄩ柨?   * @param {string} type - 缂傛挸鐡ㄧ猾璇茬€?   * @param {string} group - 缂傛挸鐡ㄩ崚鍡欑矋
    * @returns {Promise<void>}
    */
   async _addToCacheIndex(key, type, group) {
@@ -462,7 +423,7 @@ class CacheService {
         }
       }
       
-      // 璁板綍鎵€鏈夐敭
+      // 鐠佹澘缍嶉幍鈧張澶愭暛
       if (!index[type].all) {
         index[type].all = [];
       }
@@ -477,16 +438,14 @@ class CacheService {
   }
 
   /**
-   * 浠庣紦瀛樼储寮曚腑绉婚櫎
-   * @param {string} key - 缂撳瓨閿?   * @param {string} type - 缂撳瓨绫诲瀷
-   * @returns {Promise<void>}
+   * 娴犲海绱︾€涙鍌ㄥ鏇氳厬缁夊娅?   * @param {string} key - 缂傛挸鐡ㄩ柨?   * @param {string} type - 缂傛挸鐡ㄧ猾璇茬€?   * @returns {Promise<void>}
    */
   async _removeFromCacheIndex(key, type) {
     try {
       const index = await this._getCacheIndex();
       
       if (index[type]) {
-        // 浠庢墍鏈夊垎缁勪腑绉婚櫎
+        // 娴犲孩澧嶉張澶婂瀻缂佸嫪鑵戠粔濠氭珟
         Object.keys(index[type]).forEach(group => {
           if (Array.isArray(index[type][group])) {
             const indexToRemove = index[type][group].indexOf(key);
@@ -504,14 +463,14 @@ class CacheService {
   }
 
   /**
-   * 妫€鏌ョ紦瀛樺ぇ灏忛檺鍒?   * @returns {Promise<void>}
+   * 濡偓閺屻儳绱︾€涙ê銇囩亸蹇涙閸?   * @returns {Promise<void>}
    */
   async _checkCacheSize() {
     try {
       const currentSize = await this.getCacheSize();
       
-      // 濡傛灉缂撳瓨澶у皬瓒呰繃闄愬埗锛屾竻鐞嗘渶鏃╃殑缂撳瓨
-      if (currentSize > this.maxCacheSize * 0.9) { // 杈惧埌90%鏃跺紑濮嬫竻鐞?        await this._cleanupOldCache();
+      // 婵″倹鐏夌紓鎾崇摠婢堆冪毈鐡掑懓绻冮梽鎰煑閿涘本绔婚悶鍡樻付閺冣晝娈戠紓鎾崇摠
+      if (currentSize > this.maxCacheSize * 0.9) { // 鏉堟儳鍩?0%閺冭泛绱戞慨瀣閻?        await this._cleanupOldCache();
       }
     } catch (error) {
       console.error('Check cache size error:', error);
@@ -519,14 +478,14 @@ class CacheService {
   }
 
   /**
-   * 娓呯悊鏃х紦瀛?   * @returns {Promise<void>}
+   * 濞撳懐鎮婇弮褏绱︾€?   * @returns {Promise<void>}
    */
   async _cleanupOldCache() {
     try {
       const index = await this._getCacheIndex();
       const cacheItems = [];
 
-      // 鏀堕泦鎵€鏈夌紦瀛橀」鍙婂叾鍏冩暟鎹?      for (const type in index) {
+      // 閺€鍫曟肠閹碘偓閺堝绱︾€涙﹢銆嶉崣濠傚従閸忓啯鏆熼幑?      for (const type in index) {
         if (index[type].all) {
           for (const key of index[type].all) {
             const metaKey = this._getMetaKey(key, type);
@@ -541,16 +500,16 @@ class CacheService {
                 });
               }
             } catch (e) {
-              // 蹇界暐涓嶅瓨鍦ㄧ殑缂撳瓨
+              // 韫囩晫鏆愭稉宥呯摠閸︺劎娈戠紓鎾崇摠
             }
           }
         }
       }
 
-      // 鎸夊垱寤烘椂闂存帓搴忥紝鍏堟竻鐞嗘渶鏃╃殑缂撳瓨
+      // 閹稿鍨卞鐑樻闂傚瓨甯撴惔蹇ョ礉閸忓牊绔婚悶鍡樻付閺冣晝娈戠紓鎾崇摠
       cacheItems.sort((a, b) => a.createdAt - b.createdAt);
 
-      // 娓呯悊绾?0%鐨勭紦瀛?      const itemsToRemove = Math.floor(cacheItems.length * 0.3);
+      // 濞撳懐鎮婄痪?0%閻ㄥ嫮绱︾€?      const itemsToRemove = Math.floor(cacheItems.length * 0.3);
       for (let i = 0; i < itemsToRemove && i < cacheItems.length; i++) {
         await this.remove(cacheItems[i].key, { type: cacheItems[i].type });
       }
@@ -560,18 +519,16 @@ class CacheService {
   }
 }
 
-// 瀵煎嚭缂撳瓨鏈嶅姟瀹炰緥
-const cacheService = new CacheService();
+// 鐎电厧鍤紓鎾崇摠閺堝秴濮熺€圭偘绶?const cacheService = new CacheService();
 
-// 瀵煎嚭甯搁噺
+// 鐎电厧鍤敮鎼佸櫤
 const instance = cacheService;
 
-// 瀵煎嚭瀹炰緥鍜屽父閲?module.exports = {
+// 鐎电厧鍤€圭偘绶ラ崪灞界埗闁?module.exports = {
   instance,
   CACHE_POLICY,
   CACHE_TYPE,
   EXPIRY_TIME
 };
 
-// 鍚屾椂鏀寔鐩存帴寮曠敤瀹炰緥
-module.exports.default = cacheService;
+// 閸氬本妞傞弨顖涘瘮閻╁瓨甯村鏇犳暏鐎圭偘绶?module.exports.default = cacheService;

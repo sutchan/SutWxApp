@@ -1,105 +1,91 @@
-/**
- * 文件名: favorites.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: 鏀惰棌鍒楄〃椤甸潰
+﻿/**
+ * 鏂囦欢鍚? favorites.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: 閺€鎯版閸掓銆冩い鐢告桨
  */
 Page({
   /**
-   * 椤甸潰鐨勫垵濮嬫暟鎹?   */
+   * 妞ょ敻娼伴惃鍕灥婵鏆熼幑?   */
   data: {
-    activeTab: 0, // 褰撳墠婵€娲荤殑鏍囩 0:鍟嗗搧 1:鏂囩珷
-    tabs: ['鍟嗗搧', '鏂囩珷'],
-    productFavorites: [], // 鍟嗗搧鏀惰棌鍒楄〃
-    articleFavorites: [], // 鏂囩珷鏀惰棌鍒楄〃
-    loading: false, // 加载状态    hasMore: {
-      product: true, // 鍟嗗搧鏄惁杩樻湁鏇村鏁版嵁
-      article: true  // 鏂囩珷鏄惁杩樻湁鏇村鏁版嵁
-    },
+    activeTab: 0, // 瑜版挸澧犲┑鈧ú鑽ゆ畱閺嶅洨顒?0:閸熷棗鎼?1:閺傚洨鐝?    tabs: ['閸熷棗鎼?, '閺傚洨鐝?],
+    productFavorites: [], // 閸熷棗鎼ч弨鎯版閸掓銆?    articleFavorites: [], // 閺傚洨鐝烽弨鎯版閸掓銆?    loading: false, // 鍔犺浇鐘舵€?   hasMore: {
+      product: true, // 閸熷棗鎼ч弰顖氭儊鏉╂ɑ婀侀弴鏉戭樋閺佺増宓?      article: true  // 閺傚洨鐝烽弰顖氭儊鏉╂ɑ婀侀弴鏉戭樋閺佺増宓?    },
     page: {
-      product: 1, // 鍟嗗搧褰撳墠椤电爜
-      article: 1  // 鏂囩珷褰撳墠椤电爜
-    },
-    pageSize: 10, // 姣忛〉鏁伴噺
+      product: 1, // 閸熷棗鎼цぐ鎾冲妞ょ數鐖?      article: 1  // 閺傚洨鐝疯ぐ鎾冲妞ょ數鐖?    },
+    pageSize: 10, // 濮ｅ繘銆夐弫浼村櫤
     isEmpty: {
-      product: false, // 鍟嗗搧鏀惰棌鏄惁涓虹┖
-      article: false  // 鏂囩珷鏀惰棌鏄惁涓虹┖
+      product: false, // 閸熷棗鎼ч弨鎯版閺勵垰鎯佹稉铏光敄
+      article: false  // 閺傚洨鐝烽弨鎯版閺勵垰鎯佹稉铏光敄
     },
-    editMode: false, // 鏄惁澶勪簬缂栬緫妯″紡
+    editMode: false, // 閺勵垰鎯佹径鍕艾缂傛牞绶Ο鈥崇础
     selectedItems: {
-      product: [], // 閫変腑鐨勫晢鍝?      article: []  // 閫変腑鐨勬枃绔?    },
+      product: [], // 闁鑵戦惃鍕櫌閸?      article: []  // 闁鑵戦惃鍕瀮缁?    },
     selectAll: {
-      product: false, // 鍟嗗搧鏄惁鍏ㄩ€?      article: false  // 鏂囩珷鏄惁鍏ㄩ€?    }
+      product: false, // 閸熷棗鎼ч弰顖氭儊閸忋劑鈧?      article: false  // 閺傚洨鐝烽弰顖氭儊閸忋劑鈧?    }
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸旂姾娴?   */
   onLoad: function (options) {
-    // 鍔犺浇鏀惰棌鍒楄〃
-    this.loadFavorites();
+    // 閸旂姾娴囬弨鎯版閸掓銆?    this.loadFavorites();
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍒濇娓叉煋瀹屾垚
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸掓繃顐煎〒鍙夌厠鐎瑰本鍨?   */
   onReady: function () {
 
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閺勫墽銇?   */
   onShow: function () {
-    // 椤甸潰鏄剧ず鏃跺埛鏂版暟鎹?    this.refreshFavorites();
+    // 妞ょ敻娼伴弰鍓с仛閺冭泛鍩涢弬鐗堟殶閹?    this.refreshFavorites();
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰闅愯棌
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨闂呮劘妫?   */
   onHide: function () {
 
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍗歌浇
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸楁瓕娴?   */
   onUnload: function () {
 
   },
 
   /**
-   * 椤甸潰鐩稿叧浜嬩欢澶勭悊鍑芥暟--鐩戝惉鐢ㄦ埛涓嬫媺鍔ㄤ綔
+   * 妞ょ敻娼伴惄绋垮彠娴滃娆㈡径鍕倞閸戣姤鏆?-閻╂垵鎯夐悽銊﹀煕娑撳濯洪崝銊ょ稊
    */
   onPullDownRefresh: function () {
     this.refreshFavorites();
   },
 
   /**
-   * 椤甸潰涓婃媺瑙﹀簳浜嬩欢鐨勫鐞嗗嚱鏁?   */
+   * 妞ょ敻娼版稉濠冨鐟欙箑绨虫禍瀣╂閻ㄥ嫬顦╅悶鍡楀毐閺?   */
   onReachBottom: function () {
-    // 鍔犺浇鏇村鏁版嵁
-    if (this.data.hasMore[this.data.activeTab === 0 ? 'product' : 'article'] && !this.data.loading) {
+    // 閸旂姾娴囬弴鏉戭樋閺佺増宓?    if (this.data.hasMore[this.data.activeTab === 0 ? 'product' : 'article'] && !this.data.loading) {
       this.loadMoreFavorites();
     }
   },
 
   /**
-   * 鐢ㄦ埛鐐瑰嚮鍙充笂瑙掑垎浜?   */
+   * 閻劍鍩涢悙鐟板毊閸欏厖绗傜憴鎺戝瀻娴?   */
   onShareAppMessage: function () {
 
   },
 
   /**
-   * 鍒囨崲鏍囩
+   * 閸掑洦宕查弽鍥╊劮
    */
   onTabChange: function(e) {
     const index = e.currentTarget.dataset.index;
     this.setData({
       activeTab: index,
-      editMode: false // 鍒囨崲鏍囩鏃堕€€鍑虹紪杈戞ā寮?    });
+      editMode: false // 閸掑洦宕查弽鍥╊劮閺冨爼鈧偓閸戣櫣绱潏鎴災佸?    });
     
-    // 濡傛灉璇ユ爣绛捐繕娌℃湁鏁版嵁锛屽垯鍔犺浇鏁版嵁
+    // 婵″倹鐏夌拠銉︾垼缁涙崘绻曞▽鈩冩箒閺佺増宓侀敍灞藉灟閸旂姾娴囬弫鐗堝祦
     const tabType = index === 0 ? 'product' : 'article';
     if (this.data[`${tabType}Favorites`].length === 0 && !this.data.isEmpty[tabType]) {
       this.loadFavorites();
@@ -107,10 +93,9 @@ Page({
   },
 
   /**
-   * 鍒锋柊鏀惰棌鍒楄〃
-   */
+   * 閸掗攱鏌婇弨鎯版閸掓銆?   */
   refreshFavorites: function() {
-    // 閲嶇疆鏁版嵁
+    // 闁插秶鐤嗛弫鐗堝祦
     const tabType = this.data.activeTab === 0 ? 'product' : 'article';
     this.setData({
       [`page.${tabType}`]: 1,
@@ -122,13 +107,12 @@ Page({
       [`selectAll.${tabType}`]: false
     });
     
-    // 鍔犺浇鏁版嵁
+    // 閸旂姾娴囬弫鐗堝祦
     this.loadFavorites();
   },
 
   /**
-   * 鍔犺浇鏀惰棌鍒楄〃
-   */
+   * 閸旂姾娴囬弨鎯版閸掓銆?   */
   loadFavorites: function() {
     const tabType = this.data.activeTab === 0 ? 'product' : 'article';
     const page = this.data.page[tabType];
@@ -136,12 +120,11 @@ Page({
     
     this.setData({ loading: true });
     
-    // 妯℃嫙API璇锋眰
-    setTimeout(() => {
-      // 妯℃嫙鏁版嵁
+    // 濡剝瀚橝PI鐠囬攱鐪?    setTimeout(() => {
+      // 濡剝瀚欓弫鐗堝祦
       const mockData = tabType === 'product' ? this.generateMockProducts(page, pageSize) : this.generateMockArticles(page, pageSize);
       
-      // 鏇存柊鏁版嵁
+      // 閺囧瓨鏌婇弫鐗堝祦
       this.setData({
         [`${tabType}Favorites`]: this.data[`${tabType}Favorites`].concat(mockData.list),
         [`hasMore.${tabType}`]: mockData.hasMore,
@@ -149,13 +132,12 @@ Page({
         loading: false
       });
       
-      // 鍋滄涓嬫媺鍒锋柊
-      wx.stopPullDownRefresh();
+      // 閸嬫粍顒涙稉瀣閸掗攱鏌?      wx.stopPullDownRefresh();
     }, 500);
   },
 
   /**
-   * 鍔犺浇鏇村鏀惰棌
+   * 閸旂姾娴囬弴鏉戭樋閺€鎯版
    */
   loadMoreFavorites: function() {
     const tabType = this.data.activeTab === 0 ? 'product' : 'article';
@@ -166,18 +148,18 @@ Page({
   },
 
   /**
-   * 鐢熸垚妯℃嫙鍟嗗搧鏁版嵁
+   * 閻㈢喐鍨氬Ο鈩冨珯閸熷棗鎼ч弫鐗堝祦
    */
   generateMockProducts: function(page, pageSize) {
     const products = [];
-    const total = 25; // 鎬诲叡25鏉℃暟鎹?    
+    const total = 25; // 閹鍙?5閺夆剝鏆熼幑?    
     const start = (page - 1) * pageSize;
     const end = Math.min(start + pageSize, total);
     
     for (let i = start; i < end; i++) {
       products.push({
         id: `product_${i + 1}`,
-        name: `绮鹃€夊晢鍝?${i + 1}`,
+        name: `缁箖鈧鏅㈤崫?${i + 1}`,
         price: Math.floor(Math.random() * 1000) + 100,
         originalPrice: Math.floor(Math.random() * 1200) + 200,
         image: `/images/product/product${(i % 5) + 1}.jpg`,
@@ -193,21 +175,21 @@ Page({
   },
 
   /**
-   * 鐢熸垚妯℃嫙鏂囩珷鏁版嵁
+   * 閻㈢喐鍨氬Ο鈩冨珯閺傚洨鐝烽弫鐗堝祦
    */
   generateMockArticles: function(page, pageSize) {
     const articles = [];
-    const total = 20; // 鎬诲叡20鏉℃暟鎹?    
+    const total = 20; // 閹鍙?0閺夆剝鏆熼幑?    
     const start = (page - 1) * pageSize;
     const end = Math.min(start + pageSize, total);
     
     for (let i = start; i < end; i++) {
       articles.push({
         id: `article_${i + 1}`,
-        title: `鐑棬鏂囩珷鏍囬 ${i + 1}`,
-        summary: `杩欐槸鏂囩珷${i + 1}鐨勭畝浠嬪唴瀹癸紝浠嬬粛浜嗙浉鍏崇煡璇嗗拰鎶€宸?..`,
+        title: `閻戭參妫弬鍥╃彿閺嶅洭顣?${i + 1}`,
+        summary: `鏉╂瑦妲搁弬鍥╃彿${i + 1}閻ㄥ嫮鐣濇禒瀣敶鐎圭櫢绱濇禒瀣矝娴滃棛娴夐崗宕囩叀鐠囧棗鎷伴幎鈧?..`,
         image: `/images/article/article${(i % 4) + 1}.jpg`,
-        author: `浣滆€?{(i % 3) + 1}`,
+        author: `娴ｆ粏鈧?{(i % 3) + 1}`,
         publishTime: this.formatTime(new Date(Date.now() - Math.random() * 60 * 24 * 60 * 60 * 1000)),
         collectTime: this.formatTime(new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000)),
         readCount: Math.floor(Math.random() * 5000) + 100
@@ -221,7 +203,7 @@ Page({
   },
 
   /**
-   * 鏍煎紡鍖栨椂闂?   */
+   * 閺嶇厧绱￠崠鏍ㄦ闂?   */
   formatTime: function(date) {
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
@@ -231,7 +213,7 @@ Page({
   },
 
   /**
-   * 杩涘叆缂栬緫妯″紡
+   * 鏉╂稑鍙嗙紓鏍帆濡€崇础
    */
   onEditMode: function() {
     this.setData({
@@ -240,7 +222,7 @@ Page({
   },
 
   /**
-   * 閫€鍑虹紪杈戞ā寮?   */
+   * 闁偓閸戣櫣绱潏鎴災佸?   */
   onCancelEdit: function() {
     const tabType = this.data.activeTab === 0 ? 'product' : 'article';
     this.setData({
@@ -251,8 +233,7 @@ Page({
   },
 
   /**
-   * 閫夋嫨/鍙栨秷閫夋嫨椤圭洰
-   */
+   * 闁瀚?閸欐牗绉烽柅澶嬪妞ゅ湱娲?   */
   onSelectItem: function(e) {
     const { id, type } = e.currentTarget.dataset;
     const tabType = type === 'product' ? 'product' : 'article';
@@ -260,10 +241,10 @@ Page({
     const index = selectedItems.indexOf(id);
     
     if (index > -1) {
-      // 鍙栨秷閫夋嫨
+      // 閸欐牗绉烽柅澶嬪
       selectedItems.splice(index, 1);
     } else {
-      // 娣诲姞閫夋嫨
+      // 濞ｈ濮為柅澶嬪
       selectedItems.push(id);
     }
     
@@ -274,7 +255,7 @@ Page({
   },
 
   /**
-   * 鍏ㄩ€?鍙栨秷鍏ㄩ€?   */
+   * 閸忋劑鈧?閸欐牗绉烽崗銊┾偓?   */
   onSelectAll: function() {
     const tabType = this.data.activeTab === 0 ? 'product' : 'article';
     const selectAll = !this.data.selectAll[tabType];
@@ -286,25 +267,25 @@ Page({
   },
 
   /**
-   * 鍒犻櫎閫変腑鐨勬敹钘?   */
+   * 閸掔娀娅庨柅澶夎厬閻ㄥ嫭鏁归挊?   */
   onDeleteSelected: function() {
     const tabType = this.data.activeTab === 0 ? 'product' : 'article';
     const selectedItems = this.data.selectedItems[tabType];
     
     if (selectedItems.length === 0) {
       wx.showToast({
-        title: '璇烽€夋嫨瑕佸垹闄ょ殑椤圭洰',
+        title: '鐠囩兘鈧瀚ㄧ憰浣稿灩闂勩倗娈戞い鍦窗',
         icon: 'none'
       });
       return;
     }
     
     wx.showModal({
-      title: '纭鍒犻櫎',
-      content: `纭畾瑕佸垹闄ら€変腑鐨?{selectedItems.length}涓敹钘忓悧锛焋,
+      title: '绾喛顓婚崚鐘绘珟',
+      content: `绾喖鐣剧憰浣稿灩闂勩倝鈧鑵戦惃?{selectedItems.length}娑擃亝鏁归挊蹇撴偋閿涚剫,
       success: (res) => {
         if (res.confirm) {
-          // 浠庡垪琛ㄤ腑绉婚櫎閫変腑鐨勯」鐩?          const favorites = this.data[`${tabType}Favorites`].filter(item => !selectedItems.includes(item.id));
+          // 娴犲骸鍨悰銊よ厬缁夊娅庨柅澶夎厬閻ㄥ嫰銆嶉惄?          const favorites = this.data[`${tabType}Favorites`].filter(item => !selectedItems.includes(item.id));
           
           this.setData({
             [`${tabType}Favorites`]: favorites,
@@ -314,7 +295,7 @@ Page({
           });
           
           wx.showToast({
-            title: '鍒犻櫎鎴愬姛',
+            title: '閸掔娀娅庨幋鎰',
             icon: 'success'
           });
         }
@@ -323,7 +304,7 @@ Page({
   },
 
   /**
-   * 璺宠浆鍒板晢鍝佽鎯?   */
+   * 鐠哄疇娴嗛崚鏉挎櫌閸濅浇顕涢幆?   */
   onProductTap: function(e) {
     if (this.data.editMode) return;
     
@@ -334,7 +315,7 @@ Page({
   },
 
   /**
-   * 璺宠浆鍒版枃绔犺鎯?   */
+   * 鐠哄疇娴嗛崚鐗堟瀮缁旂姾顕涢幆?   */
   onArticleTap: function(e) {
     if (this.data.editMode) return;
     

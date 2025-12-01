@@ -1,76 +1,69 @@
-/**
- * 文件名: crypto.js
- * 版本号: 1.0.2
- * 更新日期: 2025-11-29
- * 浣滆€? Sut
- * 鍔犲瘑宸ュ叿绫伙紝鎻愪緵HMAC-SHA256绛惧悕銆丮D5鍝堝笇銆侀殢鏈哄瓧绗︿覆鐢熸垚鍜屽畨鍏ㄦ瘮杈冨姛鑳? */
+﻿/**
+ * 鏂囦欢鍚? crypto.js
+ * 鐗堟湰鍙? 1.0.2
+ * 鏇存柊鏃ユ湡: 2025-11-29
+ * 娴ｆ粏鈧? Sut
+ * 閸旂姴鐦戝銉ュ徔缁紮绱濋幓鎰返HMAC-SHA256缁涙儳鎮曢妴涓瓺5閸濆牆绗囬妴渚€娈㈤張鍝勭摟缁楋缚瑕嗛悽鐔稿灇閸滃苯鐣ㄩ崗銊︾槷鏉堝啫濮涢懗? */
 
 /**
- * 鍔犲瘑宸ュ叿绫? */
+ * 閸旂姴鐦戝銉ュ徔缁? */
 class Crypto {
   /**
-   * 鐢熸垚HMAC-SHA256绛惧悕
-   * @param {string} data - 寰呯鍚嶆暟鎹?   * @param {string} key - 瀵嗛挜
-   * @returns {string} 绛惧悕缁撴灉锛堝崄鍏繘鍒跺瓧绗︿覆锛?   */
+   * 閻㈢喐鍨欻MAC-SHA256缁涙儳鎮?   * @param {string} data - 瀵板懐顒烽崥宥嗘殶閹?   * @param {string} key - 鐎靛棝鎸?   * @returns {string} 缁涙儳鎮曠紒鎾寸亯閿涘牆宕勯崗顓＄箻閸掕泛鐡х粭锔胯閿?   */
   static hmacSHA256(data, key) {
     if (!key) {
-      throw new Error('瀵嗛挜涓嶈兘涓虹┖');
+      throw new Error('鐎靛棝鎸滄稉宥堝厴娑撹櫣鈹?);
     }
     
     try {
-      // 鍦ㄥ皬绋嬪簭鐜涓紝浣跨敤寰俊鎻愪緵鐨勫姞瀵嗘帴鍙?      // 娉ㄦ剰锛氬井淇″皬绋嬪簭鐨刢rypto://鍗忚鍙兘涓嶈鎵€鏈夌増鏈敮鎸?      const sign = wx.getFileSystemManager().readFileSync(
+      // 閸︺劌鐨粙瀣碍閻滎垰顣ㄦ稉顓ㄧ礉娴ｈ法鏁ゅ顔讳繆閹绘劒绶甸惃鍕鐎靛棙甯撮崣?      // 濞夈劍鍓伴敍姘簳娣団€崇毈缁嬪绨惃鍒ypto://閸楀繗顔呴崣顖濆厴娑撳秷顫﹂幍鈧張澶屽閺堫剚鏁幐?      const sign = wx.getFileSystemManager().readFileSync(
         `crypto://hmac_sha256/${encodeURIComponent(data)}/${encodeURIComponent(key)}`,
         'utf8'
       );
       return sign;
     } catch (error) {
-      // 闄嶇骇鏂规锛氫娇鐢ㄦ洿瀹夊叏鐨勫姞瀵嗗疄鐜?      console.warn('浣跨敤闄嶇骇鍔犲瘑瀹炵幇:', error);
-      // 浣跨敤鏇村畨鍏ㄧ殑闄嶇骇鏂规锛岃€屼笉鏄畝鍗曠殑鍝堝笇
-      return this._secureFallbackHash(data, key);
+      // 闂勫秶楠囬弬瑙勵攳閿涙矮濞囬悽銊︽纯鐎瑰鍙忛惃鍕鐎靛棗鐤勯悳?      console.warn('娴ｈ法鏁ら梽宥囬獓閸旂姴鐦戠€圭偟骞?', error);
+      // 娴ｈ法鏁ら弴鏉戠暔閸忋劎娈戦梽宥囬獓閺傝顢嶉敍宀冣偓灞肩瑝閺勵垳鐣濋崡鏇犳畱閸濆牆绗?      return this._secureFallbackHash(data, key);
     }
   }
   
   /**
-   * 鐢熸垚MD5鍝堝笇
-   * @param {string} data - 寰呭搱甯屾暟鎹?   * @returns {string} MD5鍝堝笇鍊硷紙鍗佸叚杩涘埗瀛楃涓诧級
+   * 閻㈢喐鍨歁D5閸濆牆绗?   * @param {string} data - 瀵板懎鎼辩敮灞炬殶閹?   * @returns {string} MD5閸濆牆绗囬崐纭风礄閸椾礁鍙氭潻娑樺煑鐎涙顑佹稉璇х礆
    */
   static md5(data) {
     try {
-      // 鍦ㄥ皬绋嬪簭鐜涓紝浣跨敤寰俊鎻愪緵鐨勫姞瀵嗘帴鍙?      const hash = wx.getFileSystemManager().readFileSync(
+      // 閸︺劌鐨粙瀣碍閻滎垰顣ㄦ稉顓ㄧ礉娴ｈ法鏁ゅ顔讳繆閹绘劒绶甸惃鍕鐎靛棙甯撮崣?      const hash = wx.getFileSystemManager().readFileSync(
         `crypto://md5/${encodeURIComponent(data)}`,
         'utf8'
       );
       return hash;
     } catch (error) {
-      // 闄嶇骇鏂规锛氫娇鐢ㄦ洿瀹夊叏鐨勫搱甯屽疄鐜?      console.warn('浣跨敤闄嶇骇MD5瀹炵幇:', error);
+      // 闂勫秶楠囬弬瑙勵攳閿涙矮濞囬悽銊︽纯鐎瑰鍙忛惃鍕惐鐢苯鐤勯悳?      console.warn('娴ｈ法鏁ら梽宥囬獓MD5鐎圭偟骞?', error);
       return this._secureFallbackHash(data);
     }
   }
   
   /**
-   * 鏇村畨鍏ㄧ殑闄嶇骇鍝堝笇瀹炵幇
-   * @private
-   * @param {string} str - 杈撳叆瀛楃涓?   * @param {string} key - 鍙€夊瘑閽ワ紝鐢ㄤ簬HMAC
-   * @returns {string} 鍝堝笇缁撴灉
+   * 閺囨潙鐣ㄩ崗銊ф畱闂勫秶楠囬崫鍫濈瑖鐎圭偟骞?   * @private
+   * @param {string} str - 鏉堟挸鍙嗙€涙顑佹稉?   * @param {string} key - 閸欘垶鈧鐦戦柦銉礉閻劋绨琀MAC
+   * @returns {string} 閸濆牆绗囩紒鎾寸亯
    */
   static _secureFallbackHash(str, key = '') {
-    // 浣跨敤鏇村畨鍏ㄧ殑鍝堝笇绠楁硶瀹炵幇锛屽熀浜嶧NV-1a绠楁硶鏀硅繘
-    let hash = 2166136261; // FNV-1a鍒濆鍊?    const prime = 16777619; // FNV-1a璐ㄦ暟
-    
-    // 鍏堝鐞嗗瘑閽ワ紙濡傛灉鏈夛級
-    for (let i = 0; i < key.length; i++) {
+    // 娴ｈ法鏁ら弴鏉戠暔閸忋劎娈戦崫鍫濈瑖缁犳纭剁€圭偟骞囬敍灞界唨娴滃锭NV-1a缁犳纭堕弨纭呯箻
+    let hash = 2166136261; // FNV-1a閸掓繂顫愰崐?    const prime = 16777619; // FNV-1a鐠愩劍鏆?    
+    // 閸忓牆顦╅悶鍡楃槕闁姐儻绱欐俊鍌涚亯閺堝绱?    for (let i = 0; i < key.length; i++) {
       hash ^= key.charCodeAt(i);
       hash *= prime;
-      hash >>>= 0; // 纭繚涓?2浣嶆棤绗﹀彿鏁存暟
+      hash >>>= 0; // 绾喕绻氭稉?2娴ｅ秵妫ょ粭锕€褰块弫瀛樻殶
     }
     
-    // 鍐嶅鐞嗘暟鎹?    for (let i = 0; i < str.length; i++) {
+    // 閸愬秴顦╅悶鍡樻殶閹?    for (let i = 0; i < str.length; i++) {
       hash ^= str.charCodeAt(i);
       hash *= prime;
-      hash >>>= 0; // 纭繚涓?2浣嶆棤绗﹀彿鏁存暟
+      hash >>>= 0; // 绾喕绻氭稉?2娴ｅ秵妫ょ粭锕€褰块弫瀛樻殶
     }
     
-    // 杞崲涓哄崄鍏繘鍒跺瓧绗︿覆锛岀‘淇濋暱搴︿负8浣?    let hex = hash.toString(16);
+    // 鏉烆剚宕叉稉鍝勫磩閸忣叀绻橀崚璺虹摟缁楋缚瑕嗛敍宀€鈥樻穱婵嬫毐鎼达缚璐?娴?    let hex = hash.toString(16);
     while (hex.length < 8) {
       hex = '0' + hex;
     }
@@ -78,7 +71,7 @@ class Crypto {
   }
   
   /**
-   * 鐢熸垚闅忔満瀛楃涓?   * @param {number} length - 瀛楃涓查暱搴?   * @returns {string} 闅忔満瀛楃涓?   */
+   * 閻㈢喐鍨氶梾蹇旀簚鐎涙顑佹稉?   * @param {number} length - 鐎涙顑佹稉鏌ユ毐鎼?   * @returns {string} 闂呭繑婧€鐎涙顑佹稉?   */
   static randomString(length = 16) {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let result = '';
@@ -92,10 +85,8 @@ class Crypto {
   }
   
   /**
-   * 瀹夊叏鐨勫瓧绗︿覆姣旇緝锛堥槻姝㈡椂闂存敾鍑伙級
-   * @param {string} a - 瀛楃涓瞐
-   * @param {string} b - 瀛楃涓瞓
-   * @returns {boolean} 鏄惁鐩哥瓑
+   * 鐎瑰鍙忛惃鍕摟缁楋缚瑕嗗В鏃囩窛閿涘牓妲诲銏℃闂傚瓨鏁鹃崙浼欑礆
+   * @param {string} a - 鐎涙顑佹稉鐬?   * @param {string} b - 鐎涙顑佹稉鐬?   * @returns {boolean} 閺勵垰鎯侀惄鍝ョ搼
    */
   static secureCompare(a, b) {
     if (a.length !== b.length) {

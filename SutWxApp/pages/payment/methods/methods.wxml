@@ -1,24 +1,24 @@
-/**
- * 文件名: methods.wxml
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: methods 椤甸潰缁撴瀯鏂囦欢
+﻿/**
+ * 鏂囦欢鍚? methods.wxml
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: methods 妞ょ敻娼扮紒鎾寸€弬鍥︽
  */
-<!-- 支付方式閫夋嫨椤甸潰 -->
+<!-- 鏀粯鏂瑰紡闁瀚ㄦい鐢告桨 -->
 <view class="payment-methods-container">
-  <!-- 订单閲戦淇℃伅 -->
+  <!-- 璁㈠崟闁叉垿顤傛穱鈩冧紖 -->
   <view class="order-amount">
-    <text class="amount-label">鏀粯閲戦</text>
-    <text class="amount-value">¥{{orderAmount}}</text>
+    <text class="amount-label">閺€顖欑帛闁叉垿顤?/text>
+    <text class="amount-value">楼{{orderAmount}}</text>
   </view>
   
-  <!-- 加载状态-->
+  <!-- 鍔犺浇鐘舵€?->
   <view wx:if="{{loading}}" class="loading-container">
     <view class="loading-spinner"></view>
-    <text class="loading-text">姝ｅ湪鍔犺浇支付方式...</text>
+    <text class="loading-text">濮濓絽婀崝鐘烘祰鏀粯鏂瑰紡...</text>
   </view>
   
-  <!-- 支付方式鍒楄〃 -->
+  <!-- 鏀粯鏂瑰紡閸掓銆?-->
   <view wx:else class="payment-methods-list">
     <view 
       wx:for="{{paymentMethods}}" 
@@ -34,7 +34,7 @@
       <view class="method-info">
         <view class="method-name">
           {{item.name}}
-          <text wx:if="{{item.recommended}}" class="recommended-tag">鎺ㄨ崘</text>
+          <text wx:if="{{item.recommended}}" class="recommended-tag">閹恒劏宕?/text>
         </view>
         <view class="method-desc">{{item.desc}}</view>
       </view>
@@ -45,14 +45,14 @@
     </view>
   </view>
   
-  <!-- 纭鏀粯鎸夐挳 -->
+  <!-- 绾喛顓婚弨顖欑帛閹稿鎸?-->
   <view class="payment-actions">
     <button 
       class="confirm-btn {{submitting ? 'submitting' : ''}}" 
       bindtap="confirmPayment"
       disabled="{{submitting || !selectedMethod}}"
     >
-      {{submitting ? '鏀粯涓?..' : '纭鏀粯'}}
+      {{submitting ? '閺€顖欑帛娑?..' : '绾喛顓婚弨顖欑帛'}}
     </button>
   </view>
 </view>

@@ -1,32 +1,32 @@
-<!--
- * 文件名: detail.wxml
- * 版本号: 1.0.1
- * 更新日期: 2025-11-24
- * 浣滆€? Sut
- * 描述: 鏂囩珷璇︽儏椤甸潰妯℃澘
+﻿<!--
+ * 鏂囦欢鍚? detail.wxml
+ * 鐗堟湰鍙? 1.0.1
+ * 鏇存柊鏃ユ湡: 2025-11-24
+ * 娴ｆ粏鈧? Sut
+ * 鎻忚堪: 閺傚洨鐝风拠锔藉剰妞ょ敻娼板Ο鈩冩緲
 -->
 <!--pages/article/detail/detail.wxml-->
 <view class="container">
-  <view wx:if="{{loading}}" class="loading-tip">加载中..</view>
+  <view wx:if="{{loading}}" class="loading-tip">鍔犺浇涓?.</view>
   
   <view wx:elif="{{error}}" class="error-container">
-    <view class="error-icon">鈿狅笍</view>
+    <view class="error-icon">閳跨媴绗?/view>
     <view class="error-message">{{error}}</view>
-    <button class="retry-button" bindtap="handleRetry">閲嶈瘯</button>
+    <button class="retry-button" bindtap="handleRetry">闁插秷鐦?/button>
   </view>
   
   <block wx:else>
     <view class="article-header">
       <view class="article-title">{{article.title}}</view>
       <view class="article-meta">
-        <text class="article-author">浣滆€? {{article.author}}</text>
-        <text class="article-date">鏃ユ湡: {{article.date}}</text>
-        <text class="article-category" wx:if="{{article.category}}">鍒嗙被: {{article.category}}</text>
+        <text class="article-author">娴ｆ粏鈧? {{article.author}}</text>
+        <text class="article-date">閺冦儲婀? {{article.date}}</text>
+        <text class="article-category" wx:if="{{article.category}}">閸掑棛琚? {{article.category}}</text>
       </view>
       <view class="article-stats">
-        <text class="stat-item">馃憗 {{article.viewCount || 0}}</text>
-        <text class="stat-item">馃憤 {{article.likeCount || 0}}</text>
-        <text class="stat-item">馃挰 {{article.commentCount || 0}}</text>
+        <text class="stat-item">棣冩啑 {{article.viewCount || 0}}</text>
+        <text class="stat-item">棣冩啢 {{article.likeCount || 0}}</text>
+        <text class="stat-item">棣冩尠 {{article.commentCount || 0}}</text>
       </view>
     </view>
     
@@ -36,12 +36,12 @@
     
     <view class="article-actions">
       <button class="action-button" bindtap="copyArticleLink">
-        <text class="button-icon">馃搵</text>
-        <text>澶嶅埗閾炬帴</text>
+        <text class="button-icon">棣冩惖</text>
+        <text>婢跺秴鍩楅柧鐐复</text>
       </button>
       <button class="action-button" open-type="share">
-        <text class="button-icon">馃摛</text>
-        <text>鍒嗕韩</text>
+        <text class="button-icon">棣冩憶</text>
+        <text>閸掑棔闊?/text>
       </button>
     </view>
   </block>

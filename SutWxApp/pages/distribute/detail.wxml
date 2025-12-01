@@ -1,77 +1,77 @@
-<!-- 鍒嗛攢璇︽儏椤甸潰 -->
+﻿<!-- 閸掑棝鏀㈢拠锔藉剰妞ょ敻娼?-->
 <view class="distribute-detail-page">
-  <!-- 加载中-->
+  <!-- 鍔犺浇涓?->
   <view class="loading-container" wx:if="{{loading}}">
-    <text>加载中..</text>
+    <text>鍔犺浇涓?.</text>
   </view>
 
-  <!-- 閿欒鐘舵€?-->
+  <!-- 闁挎瑨顕ら悩鑸碘偓?-->
   <view class="error-container" wx:elif="{{error}}">
     <image src="../../images/error.svg" class="error-image" />
-    <text class="error-text">鍔犺浇澶辫触</text>
-    <button class="retry-btn" bindtap="getDistributeDetail">閲嶈瘯</button>
+    <text class="error-text">閸旂姾娴囨径杈Е</text>
+    <button class="retry-btn" bindtap="getDistributeDetail">闁插秷鐦?/button>
   </view>
 
-  <!-- 璇︽儏鍐呭 -->
+  <!-- 鐠囷附鍎忛崘鍛啇 -->
   <view class="detail-content" wx:else>
-    <!-- 鍒嗛攢鍩烘湰淇℃伅 -->
+    <!-- 閸掑棝鏀㈤崺鐑樻拱娣団剝浼?-->
     <view class="detail-section">
       <view class="section-header">
-        <text class="section-title">鍩烘湰淇℃伅</text>
+        <text class="section-title">閸╃儤婀版穱鈩冧紖</text>
       </view>
       <view class="section-content">
         <view class="info-item">
-          <text class="info-label">鍒嗛攢ID</text>
+          <text class="info-label">閸掑棝鏀D</text>
           <text class="info-value">{{distributeDetail.id}}</text>
         </view>
         <view class="info-item">
-          <text class="info-label">鏍囬</text>
+          <text class="info-label">閺嶅洭顣?/text>
           <text class="info-value">{{distributeDetail.title}}</text>
         </view>
         <view class="info-item">
-          <text class="info-label">绫诲瀷</text>
-          <text class="info-value">{{distributeDetail.type === 'product' ? '鍟嗗搧' : '鏂囩珷'}}</text>
+          <text class="info-label">缁鐎?/text>
+          <text class="info-value">{{distributeDetail.type === 'product' ? '閸熷棗鎼? : '閺傚洨鐝?}}</text>
         </view>
         <view class="info-item">
-          <text class="info-label">鐘舵€?/text>
+          <text class="info-label">閻樿埖鈧?/text>
           <text class="info-value" wx:if="{{distributeDetail.status === 'pending'}}">
-            <text class="status-pending">寰呭鏍?/text>
+            <text class="status-pending">瀵板懎顓搁弽?/text>
           </text>
           <text class="info-value" wx:elif="{{distributeDetail.status === 'approved'}}">
-            <text class="status-approved">宸查€氳繃</text>
+            <text class="status-approved">瀹告煡鈧俺绻?/text>
           </text>
           <text class="info-value" wx:elif="{{distributeDetail.status === 'rejected'}}">
-            <text class="status-rejected">宸查┏鍥?/text>
+            <text class="status-rejected">瀹告煡鈹忛崶?/text>
           </text>
           <text class="info-value" wx:else>
-            <text class="status-deleted">宸插垹闄?/text>
+            <text class="status-deleted">瀹告彃鍨归梽?/text>
           </text>
         </view>
         <view class="info-item">
-          <text class="info-label">鍒涘缓鏃堕棿</text>
+          <text class="info-label">閸掓稑缂撻弮鍫曟？</text>
           <text class="info-value">{{distributeDetail.createTime}}</text>
         </view>
         <view class="info-item">
-          <text class="info-label">鏇存柊鏃堕棿</text>
+          <text class="info-label">閺囧瓨鏌婇弮鍫曟？</text>
           <text class="info-value">{{distributeDetail.updateTime}}</text>
         </view>
       </view>
     </view>
 
-    <!-- 鍒嗛攢鎻忚堪 -->
+    <!-- 閸掑棝鏀㈤幓蹇氬牚 -->
     <view class="detail-section">
       <view class="section-header">
-        <text class="section-title">鎻忚堪</text>
+        <text class="section-title">閹诲繗鍫?/text>
       </view>
       <view class="section-content">
         <text class="description-text">{{distributeDetail.description}}</text>
       </view>
     </view>
 
-    <!-- 鍒嗛攢鍏冩暟鎹?-->
+    <!-- 閸掑棝鏀㈤崗鍐╂殶閹?-->
     <view class="detail-section" wx:if="{{distributeDetail.metadata}}">
       <view class="section-header">
-        <text class="section-title">鍏冩暟鎹?/text>
+        <text class="section-title">閸忓啯鏆熼幑?/text>
       </view>
       <view class="section-content">
         <view class="info-item" wx:for="{{distributeDetail.metadata}}" wx:key="key">
@@ -81,10 +81,10 @@
       </view>
     </view>
 
-    <!-- 瀹℃牳璁板綍 -->
+    <!-- 鐎光剝鐗崇拋鏉跨秿 -->
     <view class="detail-section" wx:if="{{distributeDetail.auditLogs && distributeDetail.auditLogs.length > 0}}">
       <view class="section-header">
-        <text class="section-title">瀹℃牳璁板綍</text>
+        <text class="section-title">鐎光剝鐗崇拋鏉跨秿</text>
       </view>
       <view class="section-content">
         <view class="audit-log-item" wx:for="{{distributeDetail.auditLogs}}" wx:key="id">
@@ -93,34 +93,30 @@
             <text class="log-time">{{item.createTime}}</text>
           </view>
           <view class="log-content">
-            <text class="log-action">{{item.action === 'approve' ? '瀹℃牳閫氳繃' : item.action === 'reject' ? '椹冲洖' : '鍒犻櫎'}}</text>
-            <text class="log-reason" wx:if="{{item.reason}}">鍘熷洜锛歿{item.reason}}</text>
+            <text class="log-action">{{item.action === 'approve' ? '鐎光剝鐗抽柅姘崇箖' : item.action === 'reject' ? '妞瑰啿娲? : '閸掔娀娅?}}</text>
+            <text class="log-reason" wx:if="{{item.reason}}">閸樼喎娲滈敍姝縶item.reason}}</text>
           </view>
         </view>
       </view>
     </view>
 
-    <!-- 鎿嶄綔鎸夐挳 -->
+    <!-- 閹垮秳缍旈幐澶愭尦 -->
     <view class="action-section">
       <view class="action-buttons" wx:if="{{distributeDetail.status === 'pending'}}">
         <button class="action-btn approve-btn" bindtap="approveDistribute">
-          瀹℃牳閫氳繃
+          鐎光剝鐗抽柅姘崇箖
         </button>
         <button class="action-btn reject-btn" bindtap="rejectDistribute">
-          椹冲洖
-        </button>
+          妞瑰啿娲?        </button>
         <button class="action-btn delete-btn" bindtap="deleteDistribute">
-          鍒犻櫎
-        </button>
+          閸掔娀娅?        </button>
       </view>
       <view class="action-buttons" wx:elif="{{distributeDetail.status === 'approved' || distributeDetail.status === 'rejected'}}">
         <button class="action-btn delete-btn" bindtap="deleteDistribute">
-          鍒犻櫎
-        </button>
+          閸掔娀娅?        </button>
       </view>
       <button class="action-btn back-btn" bindtap="goBack">
-        杩斿洖鍒楄〃
-      </button>
+        鏉╂柨娲栭崚妤勩€?      </button>
     </view>
   </view>
 </view>

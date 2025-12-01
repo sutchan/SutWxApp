@@ -1,10 +1,10 @@
-/**
- * 文件名: pointsDetail.wxss
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: pointsDetail 页面样式文件
+﻿/**
+ * 鏂囦欢鍚? pointsDetail.wxss
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: pointsDetail 椤甸潰鏍峰紡鏂囦欢
  */
-/* 绉垎鏄庣粏椤甸潰鏍峰紡 */
+/* 缁夘垰鍨庨弰搴ｇ矎妞ょ敻娼伴弽宄扮础 */
 .container {
   display: flex;
   flex-direction: column;
@@ -12,7 +12,7 @@
   background-color: #f5f5f5;
 }
 
-/* 绉垎鍗＄墖 */
+/* 缁夘垰鍨庨崡锛勫 */
 .points-card {
   display: flex;
   justify-content: space-between;
@@ -62,13 +62,13 @@
   border-color: #fff;
 }
 
-/* 绛涢€夊尯鍩?*/
+/* 缁涙盯鈧灏崺?*/
 .filter-section {
   background-color: #fff;
   margin-bottom: 16rpx;
 }
 
-/* 绫诲瀷绛涢€夋爣绛?*/
+/* 缁鐎风粵娑⑩偓澶嬬垼缁?*/
 .tab-bar {
   display: flex;
   border-bottom: 1rpx solid #eee;
@@ -100,7 +100,7 @@
   border-radius: 2rpx;
 }
 
-/* 鏃堕棿绛涢€?*/
+/* 閺冨爼妫跨粵娑⑩偓?*/
 .time-filter {
   display: flex;
   padding: 16rpx 24rpx;
@@ -120,13 +120,13 @@
   background-color: rgba(7, 193, 96, 0.1);
 }
 
-/* 鍐呭鍖哄煙 */
+/* 閸愬懎顔愰崠鍝勭厵 */
 .content {
   flex: 1;
   padding: 0 24rpx;
 }
 
-/* 绉垎鏄庣粏鍒楄〃 */
+/* 缁夘垰鍨庨弰搴ｇ矎閸掓銆?*/
 .detail-list {
   margin-top: 24rpx;
 }
@@ -140,7 +140,7 @@
   margin-bottom: 16rpx;
 }
 
-/* 鏄庣粏鍥炬爣 */
+/* 閺勫海绮忛崶鐐垼 */
 .detail-icon {
   width: 80rpx;
   height: 80rpx;
@@ -172,7 +172,7 @@
   color: #ff6b35;
 }
 
-/* 鏄庣粏淇℃伅 */
+/* 閺勫海绮忔穱鈩冧紖 */
 .detail-info {
   flex: 1;
   display: flex;
@@ -205,7 +205,7 @@
   color: #ccc;
 }
 
-/* 绉垎鍙樺寲 */
+/* 缁夘垰鍨庨崣妯哄 */
 .detail-points {
   font-size: 32rpx;
   font-weight: 500;
@@ -219,7 +219,7 @@
   color: #ff6b35;
 }
 
-/* 绌虹姸鎬?*/
+/* 缁岃櫣濮搁幀?*/
 .empty-state {
   display: flex;
   flex-direction: column;
@@ -258,7 +258,7 @@
   border: none;
 }
 
-/* 加载状态*/
+/* 鍔犺浇鐘舵€?/
 .loading-state {
   display: flex;
   flex-direction: column;
@@ -287,7 +287,7 @@
   color: #999;
 }
 
-/* 娌℃湁鏇村鏁版嵁 */
+/* 濞屸剝婀侀弴鏉戭樋閺佺増宓?*/
 .no-more-data {
   text-align: center;
   padding: 40rpx 0;

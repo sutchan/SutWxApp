@@ -1,9 +1,9 @@
-/**
- * 文件名: profile.json
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: profile JSON 配置文件
+﻿/**
+ * 鏂囦欢鍚? profile.json
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: profile JSON 閰嶇疆鏂囦欢
  */
 {
-  "navigationBarTitleText": "涓汉璧勬枡"
+  "navigationBarTitleText": "娑擃亙姹夌挧鍕灐"
 }

@@ -1,36 +1,25 @@
-/**
- * 文件名: cacheConfig.js
- * 版本号: 1.0.18
- * 更新日期: 2025-11-24
- * 浣滆€? Sut
- * 缂撳瓨閰嶇疆绠＄悊锛屾彁渚涚紦瀛樼瓥鐣ラ厤缃拰绠＄悊鍔熻兘
- */
+﻿/**
+ * 鏂囦欢鍚? cacheConfig.js
+ * 鐗堟湰鍙? 1.0.18
+ * 鏇存柊鏃ユ湡: 2025-11-24
+ * 娴ｆ粏鈧? Sut
+ * 缂傛挸鐡ㄩ柊宥囩枂缁狅紕鎮婇敍灞惧絹娓氭稓绱︾€涙鐡ラ悾銉╁帳缂冾喖鎷扮粻锛勬倞閸旂喕鍏? */
 
 /**
- * 榛樿缂撳瓨閰嶇疆
- */
+ * 姒涙顓荤紓鎾崇摠闁板秶鐤? */
 const DEFAULT_CONFIG = {
-  // 鏄惁鍚敤缂撳瓨
-  enabled: true,
-  // 缂撳瓨澶у皬闄愬埗锛堝瓧鑺傦級
+  // 閺勵垰鎯侀崥顖滄暏缂傛挸鐡?  enabled: true,
+  // 缂傛挸鐡ㄦ径褍鐨梽鎰煑閿涘牆鐡ч懞鍌︾礆
   maxSize: 1024 * 1024 * 100, // 100MB
-  // 榛樿杩囨湡鏃堕棿锛堟绉掞級
-  defaultExpiry: 60 * 60 * 1000, // 1灏忔椂
-  // 鏄惁鑷姩娓呯悊杩囨湡缂撳瓨
-  autoClean: true,
-  // 鑷姩娓呯悊闂撮殧锛堟绉掞級
-  cleanInterval: 24 * 60 * 60 * 1000, // 24灏忔椂
-  // 鏄惁缂撳瓨鍥剧墖
-  cacheImages: true,
-  // 鍥剧墖缂撳瓨鏈€澶ф暟閲?  maxImageCacheCount: 100,
-  // 璇锋眰缂撳瓨閰嶇疆
-  requestCache: {
-    // 榛樿缂撳瓨绛栫暐
-    defaultPolicy: 'cache_first',
-    // 鐗瑰畾URL鐨勭紦瀛樼瓥鐣?    policies: {
-      // 绀轰緥閰嶇疆锛?/api/user/profile': 'network_first'
+  // 姒涙顓绘潻鍥ㄦ埂閺冨爼妫块敍鍫燁嚑缁夋帪绱?  defaultExpiry: 60 * 60 * 1000, // 1鐏忓繑妞?  // 閺勵垰鎯侀懛顏勫З濞撳懐鎮婃潻鍥ㄦ埂缂傛挸鐡?  autoClean: true,
+  // 閼奉亜濮╁〒鍛倞闂傛挳娈ч敍鍫燁嚑缁夋帪绱?  cleanInterval: 24 * 60 * 60 * 1000, // 24鐏忓繑妞?  // 閺勵垰鎯佺紓鎾崇摠閸ュ墽澧?  cacheImages: true,
+  // 閸ュ墽澧栫紓鎾崇摠閺堚偓婢堆勬殶闁?  maxImageCacheCount: 100,
+  // 鐠囬攱鐪扮紓鎾崇摠闁板秶鐤?  requestCache: {
+    // 姒涙顓荤紓鎾崇摠缁涙牜鏆?    defaultPolicy: 'cache_first',
+    // 閻楃懓鐣綰RL閻ㄥ嫮绱︾€涙鐡ラ悾?    policies: {
+      // 缁€杞扮伐闁板秶鐤嗛敍?/api/user/profile': 'network_first'
     },
-    // 涓嶇紦瀛樼殑URL妯″紡
+    // 娑撳秶绱︾€涙娈慤RL濡€崇础
     noCachePatterns: [
       '/api/auth/',
       '/api/payment/',
@@ -40,7 +29,7 @@ const DEFAULT_CONFIG = {
 };
 
 /**
- * 缂撳瓨閰嶇疆绠＄悊绫? */
+ * 缂傛挸鐡ㄩ柊宥囩枂缁狅紕鎮婄猾? */
 class CacheConfigManager {
   constructor() {
     this.configKey = 'sut_cache_config';
@@ -49,27 +38,24 @@ class CacheConfigManager {
   }
 
   /**
-   * 鍒濆鍖栭厤缃?   * @returns {Promise<void>}
+   * 閸掓繂顫愰崠鏍帳缂?   * @returns {Promise<void>}
    */
   async init() {
-    // 灏濊瘯浠庡瓨鍌ㄤ腑鍔犺浇閰嶇疆
-    try {
+    // 鐏忔繆鐦禒搴＄摠閸屻劋鑵戦崝鐘烘祰闁板秶鐤?    try {
       const storedConfig = await wx.getStorage({ key: this.configKey });
       this.config = { ...DEFAULT_CONFIG, ...storedConfig.data };
     } catch (error) {
-      // 濡傛灉鍔犺浇澶辫触锛屼娇鐢ㄩ粯璁ら厤缃?      this.config = { ...DEFAULT_CONFIG };
+      // 婵″倹鐏夐崝鐘烘祰婢惰精瑙﹂敍灞煎▏閻劑绮拋銈夊帳缂?      this.config = { ...DEFAULT_CONFIG };
     }
 
-    // 鍚姩鑷姩娓呯悊
-    if (this.config.autoClean) {
+    // 閸氼垰濮╅懛顏勫З濞撳懐鎮?    if (this.config.autoClean) {
       this.startAutoCleanup();
     }
   }
 
   /**
-   * 鑾峰彇閰嶇疆
-   * @returns {Object} 缂撳瓨閰嶇疆瀵硅薄
-   */
+   * 閼惧嘲褰囬柊宥囩枂
+   * @returns {Object} 缂傛挸鐡ㄩ柊宥囩枂鐎电钖?   */
   getConfig() {
     if (!this.config) {
       return { ...DEFAULT_CONFIG };
@@ -78,14 +64,14 @@ class CacheConfigManager {
   }
 
   /**
-   * 鏇存柊閰嶇疆
-   * @param {Object} newConfig - 鏂伴厤缃?   * @returns {Promise<void>}
+   * 閺囧瓨鏌婇柊宥囩枂
+   * @param {Object} newConfig - 閺備即鍘ょ純?   * @returns {Promise<void>}
    */
   async updateConfig(newConfig) {
     this.config = { ...this.config, ...newConfig };
     await wx.setStorage({ key: this.configKey, data: this.config });
 
-    // 閲嶆柊閰嶇疆鑷姩娓呯悊
+    // 闁插秵鏌婇柊宥囩枂閼奉亜濮╁〒鍛倞
     this.stopAutoCleanup();
     if (this.config.autoClean) {
       this.startAutoCleanup();
@@ -93,32 +79,31 @@ class CacheConfigManager {
   }
 
   /**
-   * 鑾峰彇鐗瑰畾URL鐨勭紦瀛樼瓥鐣?   * @param {string} url - 璇锋眰URL
-   * @returns {string} 缂撳瓨绛栫暐
+   * 閼惧嘲褰囬悧鐟扮暰URL閻ㄥ嫮绱︾€涙鐡ラ悾?   * @param {string} url - 鐠囬攱鐪癠RL
+   * @returns {string} 缂傛挸鐡ㄧ粵鏍殣
    */
   getRequestPolicy(url) {
     const config = this.getConfig();
     
-    // 妫€鏌ユ槸鍚﹀尮閰嶄笉缂撳瓨妯″紡
+    // 濡偓閺屻儲妲搁崥锕€灏柊宥勭瑝缂傛挸鐡ㄥΟ鈥崇础
     for (const pattern of config.requestCache.noCachePatterns) {
       if (url.includes(pattern)) {
         return 'no_cache';
       }
     }
 
-    // 妫€鏌ョ壒瀹歎RL鐨勭紦瀛樼瓥鐣?    for (const [pattern, policy] of Object.entries(config.requestCache.policies)) {
+    // 濡偓閺屻儳澹掔€规瓗RL閻ㄥ嫮绱︾€涙鐡ラ悾?    for (const [pattern, policy] of Object.entries(config.requestCache.policies)) {
       if (url.includes(pattern)) {
         return policy;
       }
     }
 
-    // 杩斿洖榛樿绛栫暐
-    return config.requestCache.defaultPolicy;
+    // 鏉╂柨娲栨妯款吇缁涙牜鏆?    return config.requestCache.defaultPolicy;
   }
 
   /**
-   * 娣诲姞鐗瑰畾URL鐨勭紦瀛樼瓥鐣?   * @param {string} pattern - URL妯″紡
-   * @param {string} policy - 缂撳瓨绛栫暐
+   * 濞ｈ濮為悧鐟扮暰URL閻ㄥ嫮绱︾€涙鐡ラ悾?   * @param {string} pattern - URL濡€崇础
+   * @param {string} policy - 缂傛挸鐡ㄧ粵鏍殣
    * @returns {Promise<void>}
    */
   async addRequestPolicy(pattern, policy) {
@@ -127,7 +112,7 @@ class CacheConfigManager {
   }
 
   /**
-   * 绉婚櫎鐗瑰畾URL鐨勭紦瀛樼瓥鐣?   * @param {string} pattern - URL妯″紡
+   * 缁夊娅庨悧鐟扮暰URL閻ㄥ嫮绱︾€涙鐡ラ悾?   * @param {string} pattern - URL濡€崇础
    * @returns {Promise<void>}
    */
   async removeRequestPolicy(pattern) {
@@ -136,8 +121,8 @@ class CacheConfigManager {
   }
 
   /**
-   * 娣诲姞涓嶇紦瀛樼殑URL妯″紡
-   * @param {string} pattern - URL妯″紡
+   * 濞ｈ濮炴稉宥囩处鐎涙娈慤RL濡€崇础
+   * @param {string} pattern - URL濡€崇础
    * @returns {Promise<void>}
    */
   async addNoCachePattern(pattern) {
@@ -148,8 +133,8 @@ class CacheConfigManager {
   }
 
   /**
-   * 绉婚櫎涓嶇紦瀛樼殑URL妯″紡
-   * @param {string} pattern - URL妯″紡
+   * 缁夊娅庢稉宥囩处鐎涙娈慤RL濡€崇础
+   * @param {string} pattern - URL濡€崇础
    * @returns {Promise<void>}
    */
   async removeNoCachePattern(pattern) {
@@ -161,30 +146,26 @@ class CacheConfigManager {
   }
 
   /**
-   * 鍚姩鑷姩娓呯悊
-   */
+   * 閸氼垰濮╅懛顏勫З濞撳懐鎮?   */
   startAutoCleanup() {
-    this.stopAutoCleanup(); // 鍏堝仠姝箣鍓嶇殑瀹氭椂鍣?    
+    this.stopAutoCleanup(); // 閸忓牆浠犲顫閸撳秶娈戠€规碍妞傞崳?    
     this.cleanupTimer = setInterval(async () => {
       try {
-        // 鍔ㄦ€佸鍏ヤ互閬垮厤寰幆渚濊禆
-        const cacheService = require('./cacheService').default;
+        // 閸斻劍鈧礁顕遍崗銉や簰闁灝鍘ゅ顏嗗箚娓氭繆绂?        const cacheService = require('./cacheService').default;
         
-        // 杩欓噷鍙互娣诲姞鏇村鐨勬竻鐞嗛€昏緫
+        // 鏉╂瑩鍣烽崣顖欎簰濞ｈ濮為弴鏉戭樋閻ㄥ嫭绔婚悶鍡涒偓鏄忕帆
         console.log('Running scheduled cache cleanup');
         
-        // 娓呯悊涓存椂缂撳瓨
-        await cacheService.clearByType('temp');
+        // 濞撳懐鎮婃稉瀛樻缂傛挸鐡?        await cacheService.clearByType('temp');
         
-        // 鍙互娣诲姞鍏朵粬绫诲瀷鐨勭紦瀛樻竻鐞?      } catch (error) {
+        // 閸欘垯浜掑ǎ璇插閸忔湹绮猾璇茬€烽惃鍕处鐎涙ɑ绔婚悶?      } catch (error) {
         console.error('Auto cleanup error:', error);
       }
     }, this.config.cleanInterval);
   }
 
   /**
-   * 鍋滄鑷姩娓呯悊
-   */
+   * 閸嬫粍顒涢懛顏勫З濞撳懐鎮?   */
   stopAutoCleanup() {
     if (this.cleanupTimer) {
       clearInterval(this.cleanupTimer);
@@ -193,13 +174,13 @@ class CacheConfigManager {
   }
 
   /**
-   * 閲嶇疆涓洪粯璁ら厤缃?   * @returns {Promise<void>}
+   * 闁插秶鐤嗘稉娲帛鐠併倝鍘ょ純?   * @returns {Promise<void>}
    */
   async reset() {
     this.config = { ...DEFAULT_CONFIG };
     await wx.setStorage({ key: this.configKey, data: this.config });
     
-    // 閲嶆柊閰嶇疆鑷姩娓呯悊
+    // 闁插秵鏌婇柊宥囩枂閼奉亜濮╁〒鍛倞
     this.stopAutoCleanup();
     if (this.config.autoClean) {
       this.startAutoCleanup();
@@ -207,7 +188,7 @@ class CacheConfigManager {
   }
 
   /**
-   * 鑾峰彇缂撳瓨浣跨敤鐘舵€?   * @returns {Promise<Object>} 缂撳瓨鐘舵€佷俊鎭?   */
+   * 閼惧嘲褰囩紓鎾崇摠娴ｈ法鏁ら悩鑸碘偓?   * @returns {Promise<Object>} 缂傛挸鐡ㄩ悩鑸碘偓浣蜂繆閹?   */
   async getCacheStatus() {
     try {
       const info = await wx.getStorageInfo();
@@ -227,9 +208,9 @@ class CacheConfigManager {
   }
 }
 
-// 瀵煎嚭缂撳瓨閰嶇疆绠＄悊鍣ㄥ疄渚?const cacheConfigManager = new CacheConfigManager();
+// 鐎电厧鍤紓鎾崇摠闁板秶鐤嗙粻锛勬倞閸ｃ劌鐤勬笟?const cacheConfigManager = new CacheConfigManager();
 
-// 鍒濆鍖栭厤缃?cacheConfigManager.init().catch(error => {
+// 閸掓繂顫愰崠鏍帳缂?cacheConfigManager.init().catch(error => {
   console.error('Failed to initialize cache config:', error);
 });
 

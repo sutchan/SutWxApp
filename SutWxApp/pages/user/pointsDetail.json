@@ -1,11 +1,11 @@
-/**
- * 文件名: pointsDetail.json
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: pointsDetail JSON 配置文件
+﻿/**
+ * 鏂囦欢鍚? pointsDetail.json
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: pointsDetail JSON 閰嶇疆鏂囦欢
  */
 {
-  "navigationBarTitleText": "绉垎鏄庣粏",
+  "navigationBarTitleText": "缁夘垰鍨庨弰搴ｇ矎",
   "enablePullDownRefresh": true,
   "onReachBottomDistance": 50
 }

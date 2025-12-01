@@ -1,35 +1,35 @@
-/**
+﻿/**
  * 文件名: productCard.js
  * 版本号: 1.0.2
  * 更新日期: 2025-11-29
- * 浣滆€? Sut
- * 描述: 鍟嗗搧鍗＄墖缁勪欢
- */
+ * 作者: Sut
+ * 描述: 产品卡片组件 */
 Component({
   /**
-   * 缁勪欢鐨勫睘鎬у垪琛?   */
+   * 组件的属性列表
+   */
   properties: {
-    // 鍟嗗搧淇℃伅
+    // 产品数据
     product: {
       type: Object,
       value: {}
     },
-    // 鏄惁鏄剧ず杈规
+    // 是否显示边框
     bordered: {
       type: Boolean,
       value: true
     },
-    // 鏄惁鏄剧ず鎿嶄綔鎸夐挳
+    // 是否显示操作按钮
     showActions: {
       type: Boolean,
       value: true
     },
-    // 鍗＄墖瀹藉害锛岄粯璁?00%
+    // 卡片宽度，默认100%
     width: {
       type: String,
       value: '100%'
     },
-    // 鍥剧墖楂樺害
+    // 图片高度
     imageHeight: {
       type: String,
       value: '200rpx'
@@ -37,16 +37,18 @@ Component({
   },
 
   /**
-   * 缁勪欢鐨勫垵濮嬫暟鎹?   */
+   * 组件的初始数据
+   */
   data: {
-    // 榛樿鍟嗗搧鍥剧墖
+    // 默认图片
     defaultImage: '/assets/images/product-placeholder.png',
-    // 鏈湴鍟嗗搧鏁版嵁锛岀敤浜庡鐞嗗浘鐗囧姞杞藉け璐ョ瓑鎯呭喌
+    // 本地产品数据，用于处理图片加载失败等情况
     localProduct: {}
   },
 
   /**
-   * 鐩戝惉灞炴€у彉鍖?   */
+   * 数据监听器
+   */
   observers: {
     'product': function(product) {
       this.setData({
@@ -56,10 +58,11 @@ Component({
   },
 
   /**
-   * 缁勪欢鐨勬柟娉曞垪琛?   */
+   * 组件的方法列表
+   */
   methods: {
     /**
-     * 鐐瑰嚮鍟嗗搧鍗＄墖
+     * 点击产品卡片
      * @returns {void}
      */
     onProductTap() {
@@ -69,8 +72,8 @@ Component({
     },
 
     /**
-     * 鐐瑰嚮娣诲姞鍒拌喘鐗╄溅
-     * @param {Object} e - 浜嬩欢瀵硅薄
+     * 点击加入购物车按钮
+     * @param {Object} e - 事件对象
      * @returns {void}
      */
     onAddToCart(e) {
@@ -81,8 +84,8 @@ Component({
     },
 
     /**
-     * 鐐瑰嚮鏀惰棌
-     * @param {Object} e - 浜嬩欢瀵硅薄
+     * 点击收藏按钮
+     * @param {Object} e - 事件对象
      * @returns {void}
      */
     onFavorite(e) {
@@ -94,7 +97,7 @@ Component({
     },
 
     /**
-     * 鍥剧墖鍔犺浇澶辫触澶勭悊
+     * 图片加载失败处理
      * @returns {void}
      */
     onImageError() {

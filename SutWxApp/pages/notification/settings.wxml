@@ -1,0 +1,89 @@
+﻿<!--
+ * 鏂囦欢鍚? settings.wxml
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-30
+ * 鎻忚堪: 閫氱煡璁剧疆椤甸潰
+-->
+<view class="container">
+  <!-- 閫氱煡璁剧疆鍒楄〃 -->
+  <view class="settings-list" wx:if="{{settings}}">
+    <!-- 绯荤粺閫氱煡 -->
+    <view class="setting-item">
+      <view class="setting-info">
+        <text class="setting-title">绯荤粺閫氱煡</text>
+        <text class="setting-desc">鎺ユ敹绯荤粺鐩稿叧閫氱煡锛屽璐﹀彿瀹夊叏銆佺増鏈洿鏂扮瓑</text>
+      </view>
+      <switch 
+        checked="{{settings.systemNotification}}" 
+        bindchange="onSystemNotificationChange"
+        color="#07c160"
+      />
+    </view>
+    
+    <!-- 璁㈠崟閫氱煡 -->
+    <view class="setting-item">
+      <view class="setting-info">
+        <text class="setting-title">璁㈠崟閫氱煡</text>
+        <text class="setting-desc">鎺ユ敹璁㈠崟鐘舵€佸彉鍖栭€氱煡锛屽鍙戣揣銆佺鏀剁瓑</text>
+      </view>
+      <switch 
+        checked="{{settings.orderNotification}}" 
+        bindchange="onOrderNotificationChange"
+        color="#07c160"
+      />
+    </view>
+    
+    <!-- 淇冮攢閫氱煡 -->
+    <view class="setting-item">
+      <view class="setting-info">
+        <text class="setting-title">淇冮攢閫氱煡</text>
+        <text class="setting-desc">鎺ユ敹鍟嗗搧淇冮攢銆佷紭鎯犲埜鍙戞斁绛夐€氱煡</text>
+      </view>
+      <switch 
+        checked="{{settings.promotionNotification}}" 
+        bindchange="onPromotionNotificationChange"
+        color="#07c160"
+      />
+    </view>
+    
+    <!-- 娲诲姩閫氱煡 -->
+    <view class="setting-item">
+      <view class="setting-info">
+        <text class="setting-title">娲诲姩閫氱煡</text>
+        <text class="setting-desc">鎺ユ敹骞冲彴娲诲姩銆侀檺鏃舵姠璐瓑閫氱煡</text>
+      </view>
+      <switch 
+        checked="{{settings.activityNotification}}" 
+        bindchange="onActivityNotificationChange"
+        color="#07c160"
+      />
+    </view>
+    
+    <!-- 娓呯┖閫氱煡 -->
+    <view class="setting-item action-item" bindtap="onClearNotifications">
+      <view class="setting-info">
+        <text class="setting-title danger">娓呯┖鎵€鏈夐€氱煡</text>
+        <text class="setting-desc">灏嗗垹闄ゆ墍鏈夊凡璇婚€氱煡</text>
+      </view>
+      <text class="action-arrow">鈫?/text>
+    </view>
+    
+    <!-- 閫氱煡鏁伴噺 -->
+    <view class="setting-item info-item">
+      <view class="setting-info">
+        <text class="setting-title">鏈閫氱煡鏁伴噺</text>
+      </view>
+      <text class="info-value">{{unreadCount}}</text>
+    </view>
+  </view>
+  
+  <!-- 鍔犺浇涓?-->
+  <view class="loading" wx:elif="{{loading}}">
+    <text>鍔犺浇涓?..</text>
+  </view>
+  
+  <!-- 绌虹姸鎬?-->
+  <view class="empty" wx:else>
+    <text>鍔犺浇璁剧疆澶辫触</text>
+  </view>
+</view>

@@ -1,32 +1,30 @@
-/**
- * 文件名: signature.js
- * 版本号: 1.0.1
- * 更新日期: 2025-11-24
- * 浣滆€? Sut
- * 璇锋眰绛惧悕楠岃瘉宸ュ叿锛屾彁渚汚PI璇锋眰绛惧悕鐢熸垚銆侀獙璇佸拰璇锋眰澶存坊鍔犲姛鑳? */
+﻿/**
+ * 鏂囦欢鍚? signature.js
+ * 鐗堟湰鍙? 1.0.1
+ * 鏇存柊鏃ユ湡: 2025-11-24
+ * 娴ｆ粏鈧? Sut
+ * 鐠囬攱鐪扮粵鎯ф倳妤犲矁鐦夊銉ュ徔閿涘本褰佹笟姹歅I鐠囬攱鐪扮粵鎯ф倳閻㈢喐鍨氶妴渚€鐛欑拠浣告嫲鐠囬攱鐪版径瀛樺潑閸旂姴濮涢懗? */
 
 const Crypto = require('./crypto.js');
 
 /**
- * 绛惧悕鐢熸垚鍜岄獙璇佺被
+ * 缁涙儳鎮曢悽鐔稿灇閸滃矂鐛欑拠浣鸿
  */
 class Signature {
   /**
-   * 鐢熸垚API璇锋眰绛惧悕
-   * @param {Object} params - 璇锋眰鍙傛暟
-   * @param {string} secretKey - 瀵嗛挜
-   * @returns {string} 鐢熸垚鐨勭鍚?   */
+   * 閻㈢喐鍨欰PI鐠囬攱鐪扮粵鎯ф倳
+   * @param {Object} params - 鐠囬攱鐪伴崣鍌涙殶
+   * @param {string} secretKey - 鐎靛棝鎸?   * @returns {string} 閻㈢喐鍨氶惃鍕劮閸?   */
   static generate(params, secretKey) {
-    // 鍙傛暟鎺掑簭
+    // 閸欏倹鏆熼幒鎺戠碍
     const sortedParams = this._sortParams(params);
     
-    // 鎷兼帴鍙傛暟瀛楃涓?    const paramString = this._buildParamString(sortedParams);
+    // 閹峰吋甯撮崣鍌涙殶鐎涙顑佹稉?    const paramString = this._buildParamString(sortedParams);
     
-    // 鍔犲叆鏃堕棿鎴抽槻姝㈤噸鏀炬敾鍑?    const timestamp = Date.now();
+    // 閸旂姴鍙嗛弮鍫曟？閹存娊妲诲銏ゅ櫢閺€鐐暰閸?    const timestamp = Date.now();
     const stringToSign = `${paramString}&timestamp=${timestamp}`;
     
-    // 浣跨敤瀵嗛挜杩涜HMAC绛惧悕
-    const signature = Crypto.hmacSHA256(stringToSign, secretKey);
+    // 娴ｈ法鏁ょ€靛棝鎸滄潻娑滎攽HMAC缁涙儳鎮?    const signature = Crypto.hmacSHA256(stringToSign, secretKey);
     
     return {
       signature,
@@ -35,29 +33,24 @@ class Signature {
   }
   
   /**
-   * 楠岃瘉API璇锋眰绛惧悕
-   * @param {Object} params - 璇锋眰鍙傛暟锛堝寘鍚玸ignature鍜宼imestamp锛?   * @param {string} secretKey - 瀵嗛挜
-   * @param {number} expireTime - 绛惧悕杩囨湡鏃堕棿锛堟绉掞級锛岄粯璁?鍒嗛挓
-   * @returns {boolean} 绛惧悕鏄惁鏈夋晥
-   */
+   * 妤犲矁鐦堿PI鐠囬攱鐪扮粵鎯ф倳
+   * @param {Object} params - 鐠囬攱鐪伴崣鍌涙殶閿涘牆瀵橀崥鐜竔gnature閸滃imestamp閿?   * @param {string} secretKey - 鐎靛棝鎸?   * @param {number} expireTime - 缁涙儳鎮曟潻鍥ㄦ埂閺冨爼妫块敍鍫燁嚑缁夋帪绱氶敍宀勭帛鐠?閸掑棝鎸?   * @returns {boolean} 缁涙儳鎮曢弰顖氭儊閺堝鏅?   */
   static verify(params, secretKey, expireTime = 5 * 60 * 1000) {
     const { signature, timestamp, ...requestParams } = params;
     
-    // 妫€鏌ユ椂闂存埑鏄惁杩囨湡
+    // 濡偓閺屻儲妞傞梻瀛樺煈閺勵垰鎯佹潻鍥ㄦ埂
     if (Date.now() - timestamp > expireTime) {
       return false;
     }
     
-    // 閲嶆柊鐢熸垚绛惧悕骞舵瘮瀵?    const generatedSign = this.generate(requestParams, secretKey);
+    // 闁插秵鏌婇悽鐔稿灇缁涙儳鎮曢獮鑸电槷鐎?    const generatedSign = this.generate(requestParams, secretKey);
     
     return generatedSign.signature === signature;
   }
   
   /**
-   * 瀵瑰弬鏁拌繘琛屾帓搴?   * @private
-   * @param {Object} params - 鍙傛暟瀵硅薄
-   * @returns {Object} 鎺掑簭鍚庣殑鍙傛暟瀵硅薄
-   */
+   * 鐎电懓寮弫鎷岀箻鐞涘本甯撴惔?   * @private
+   * @param {Object} params - 閸欏倹鏆熺€电钖?   * @returns {Object} 閹烘帒绨崥搴ｆ畱閸欏倹鏆熺€电钖?   */
   static _sortParams(params) {
     const sorted = {};
     const keys = Object.keys(params).sort();
@@ -72,14 +65,12 @@ class Signature {
   }
   
   /**
-   * 鏋勫缓鍙傛暟瀛楃涓?   * @private
-   * @param {Object} params - 鎺掑簭鍚庣殑鍙傛暟瀵硅薄
-   * @returns {string} 鍙傛暟瀛楃涓?   */
+   * 閺嬪嫬缂撻崣鍌涙殶鐎涙顑佹稉?   * @private
+   * @param {Object} params - 閹烘帒绨崥搴ｆ畱閸欏倹鏆熺€电钖?   * @returns {string} 閸欏倹鏆熺€涙顑佹稉?   */
   static _buildParamString(params) {
     return Object.entries(params)
       .map(([key, value]) => {
-        // 澶勭悊宓屽瀵硅薄
-        if (typeof value === 'object' && value !== null) {
+        // 婢跺嫮鎮婂畵灞筋殰鐎电钖?        if (typeof value === 'object' && value !== null) {
           value = JSON.stringify(value);
         }
         return `${key}=${encodeURIComponent(value)}`;
@@ -88,19 +79,15 @@ class Signature {
   }
   
   /**
-   * 娣诲姞绛惧悕鍒拌姹傚ご
-   * @param {Object} options - 璇锋眰閫夐」
-   * @param {string} secretKey - 瀵嗛挜
-   * @returns {Object} 澧炲己鍚庣殑璇锋眰閫夐」
-   */
+   * 濞ｈ濮炵粵鎯ф倳閸掓媽顕Ч鍌氥仈
+   * @param {Object} options - 鐠囬攱鐪伴柅澶愩€?   * @param {string} secretKey - 鐎靛棝鎸?   * @returns {Object} 婢х偛宸遍崥搴ｆ畱鐠囬攱鐪伴柅澶愩€?   */
   static addSignatureToHeaders(options, secretKey) {
     const { data, ...rest } = options;
     
-    // 鐢熸垚绛惧悕
+    // 閻㈢喐鍨氱粵鎯ф倳
     const { signature, timestamp } = this.generate(data || {}, secretKey);
     
-    // 娣诲姞鍒拌姹傚ご
-    return {
+    // 濞ｈ濮為崚鎷岊嚞濮瑰倸銇?    return {
       ...rest,
       data,
       header: {

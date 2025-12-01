@@ -1,5 +1,5 @@
-{
-  "navigationBarTitleText": "閸掑棝鏀㈢拠锔藉剰",
+﻿{
+  "navigationBarTitleText": "闁告帒妫濋弨銏㈡嫚閿旇棄鍓?,
   "enablePullDownRefresh": false,
   "usingComponents": {
     "product-card": "../../components/productCard/productCard"

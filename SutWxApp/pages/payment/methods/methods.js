@@ -1,15 +1,15 @@
-/**
- * 文件名: methods.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: 支付方式閫夋嫨椤甸潰
+﻿/**
+ * 鏂囦欢鍚? methods.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: 鏀粯鏂瑰紡闁瀚ㄦい鐢告桨
  */
 
 const paymentService = require('../../../services/paymentService');
 
 Page({
   /**
-   * 椤甸潰鐨勫垵濮嬫暟鎹?   */
+   * 妞ょ敻娼伴惃鍕灥婵鏆熼幑?   */
   data: {
     orderId: '',
     orderAmount: 0,
@@ -20,8 +20,7 @@ Page({
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸旂姾娴?   */
   onLoad(options) {
     const { orderId, amount } = options;
     
@@ -34,7 +33,7 @@ Page({
       this.loadPaymentMethods();
     } else {
       wx.showToast({
-        title: '鍙傛暟閿欒',
+        title: '閸欏倹鏆熼柨娆掝嚖',
         icon: 'none'
       });
       setTimeout(() => {
@@ -44,60 +43,57 @@ Page({
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍗歌浇
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸楁瓕娴?   */
   onUnload() {
-    // 椤甸潰鍗歌浇鏃剁殑娓呯悊宸ヤ綔
-  },
+    // 妞ょ敻娼伴崡姝屾祰閺冨墎娈戝〒鍛倞瀹搞儰缍?  },
 
   /**
-   * 鍔犺浇支付方式鍒楄〃
-   */
+   * 閸旂姾娴囨敮浠樻柟寮忛崚妤勩€?   */
   async loadPaymentMethods() {
     try {
       this.setData({ loading: true });
       
-      // 杩欓噷搴旇璋冪敤瀹為檯鐨勬敮浠樻柟寮廇PI
+      // 鏉╂瑩鍣锋惔鏃囶嚉鐠嬪啰鏁ょ€圭偤妾惃鍕暜娴犳ɑ鏌熷寤嘝I
       // const methods = await paymentService.getPaymentMethods();
       
-      // 妯℃嫙鏁版嵁
+      // 濡剝瀚欓弫鐗堝祦
       setTimeout(() => {
         const paymentMethods = [
           {
             id: 'wechat',
-            name: '寰俊鏀粯',
+            name: '瀵邦喕淇婇弨顖欑帛',
             icon: '/images/payment/wechat.png',
-            desc: '鎺ㄨ崘浣跨敤寰俊鏀粯锛屽畨鍏ㄥ揩鎹?,
+            desc: '閹恒劏宕樻担璺ㄦ暏瀵邦喕淇婇弨顖欑帛閿涘苯鐣ㄩ崗銊ユ彥閹?,
             enabled: true,
             recommended: true
           },
           {
             id: 'alipay',
-            name: '鏀粯瀹?,
+            name: '閺€顖欑帛鐎?,
             icon: '/images/payment/alipay.png',
-            desc: '浣跨敤鏀粯瀹濆畨鍏ㄦ敮浠?,
+            desc: '娴ｈ法鏁ら弨顖欑帛鐎规繂鐣ㄩ崗銊︽暜娴?,
             enabled: true,
             recommended: false
           },
           {
             id: 'balance',
-            name: '浣欓鏀粯',
+            name: '娴ｆ瑩顤傞弨顖欑帛',
             icon: '/images/payment/balance.png',
-            desc: `褰撳墠浣欓锛毬?8.50`,
+            desc: `瑜版挸澧犳担娆擃杺閿涙?8.50`,
             enabled: true,
             recommended: false
           },
           {
             id: 'points',
-            name: '绉垎鎶垫墸',
+            name: '缁夘垰鍨庨幎鍨⒏',
             icon: '/images/payment/points.png',
-            desc: `鍙敤绉垎锛?250锛屽彲鎶垫墸¥12.50`,
+            desc: `閸欘垳鏁ょ粔顖氬瀻閿?250閿涘苯褰查幎鍨⒏楼12.50`,
             enabled: true,
             recommended: false
           }
         ];
         
-        // 榛樿閫夋嫨鎺ㄨ崘鏂瑰紡
+        // 姒涙顓婚柅澶嬪閹恒劏宕橀弬鐟扮础
         const selectedMethod = paymentMethods.find(method => method.recommended)?.id || '';
         
         this.setData({
@@ -108,18 +104,17 @@ Page({
       }, 800);
       
     } catch (error) {
-      console.error('鍔犺浇支付方式澶辫触:', error);
+      console.error('閸旂姾娴囨敮浠樻柟寮忔径杈Е:', error);
       this.setData({ loading: false });
       wx.showToast({
-        title: '鍔犺浇支付方式澶辫触',
+        title: '閸旂姾娴囨敮浠樻柟寮忔径杈Е',
         icon: 'none'
       });
     }
   },
 
   /**
-   * 閫夋嫨支付方式
-   */
+   * 闁瀚ㄦ敮浠樻柟寮?   */
   selectPaymentMethod(e) {
     const { method } = e.currentTarget.dataset;
     
@@ -129,12 +124,12 @@ Page({
   },
 
   /**
-   * 纭鏀粯
+   * 绾喛顓婚弨顖欑帛
    */
   async confirmPayment() {
     if (!this.data.selectedMethod) {
       wx.showToast({
-        title: '璇烽€夋嫨支付方式',
+        title: '鐠囩兘鈧瀚ㄦ敮浠樻柟寮?,
         icon: 'none'
       });
       return;
@@ -147,49 +142,47 @@ Page({
     try {
       this.setData({ submitting: true });
       
-      // 璋冪敤鏀粯鎺ュ彛
-      const paymentData = {
+      // 鐠嬪啰鏁ら弨顖欑帛閹恒儱褰?      const paymentData = {
         orderId: this.data.orderId,
         paymentMethod: this.data.selectedMethod,
         amount: this.data.orderAmount,
         returnUrl: `/pages/payment/result/result?orderId=${this.data.orderId}`
       };
       
-      // 杩欓噷搴旇璋冪敤瀹為檯鐨勬敮浠楢PI
+      // 鏉╂瑩鍣锋惔鏃囶嚉鐠嬪啰鏁ょ€圭偤妾惃鍕暜娴犳アPI
       // const result = await paymentService.createPayment(paymentData);
       
-      // 妯℃嫙鏀粯杩囩▼
-      setTimeout(() => {
-        // 鏍规嵁支付方式璋冪敤涓嶅悓鐨勬敮浠楢PI
+      // 濡剝瀚欓弨顖欑帛鏉╁洨鈻?      setTimeout(() => {
+        // 閺嶈宓佹敮浠樻柟寮忕拫鍐暏娑撳秴鎮撻惃鍕暜娴犳アPI
         if (this.data.selectedMethod === 'wechat') {
-          // 寰俊鏀粯
+          // 瀵邦喕淇婇弨顖欑帛
           this.processWechatPayment();
         } else if (this.data.selectedMethod === 'alipay') {
-          // 鏀粯瀹濇敮浠?          this.processAlipayPayment();
+          // 閺€顖欑帛鐎规繃鏁禒?          this.processAlipayPayment();
         } else if (this.data.selectedMethod === 'balance') {
-          // 浣欓鏀粯
+          // 娴ｆ瑩顤傞弨顖欑帛
           this.processBalancePayment();
         } else if (this.data.selectedMethod === 'points') {
-          // 绉垎鏀粯
+          // 缁夘垰鍨庨弨顖欑帛
           this.processPointsPayment();
         }
       }, 1000);
       
     } catch (error) {
-      console.error('鍙戣捣鏀粯澶辫触:', error);
+      console.error('閸欐垼鎹ｉ弨顖欑帛婢惰精瑙?', error);
       this.setData({ submitting: false });
       wx.showToast({
-        title: '鍙戣捣鏀粯澶辫触',
+        title: '閸欐垼鎹ｉ弨顖欑帛婢惰精瑙?,
         icon: 'none'
       });
     }
   },
 
   /**
-   * 澶勭悊寰俊鏀粯
+   * 婢跺嫮鎮婂顔讳繆閺€顖欑帛
    */
   processWechatPayment() {
-    // 璋冪敤寰俊鏀粯API
+    // 鐠嬪啰鏁ゅ顔讳繆閺€顖欑帛API
     wx.requestPayment({
       timeStamp: String(Date.now()),
       nonceStr: 'random_string',
@@ -197,18 +190,18 @@ Page({
       signType: 'MD5',
       paySign: 'sign_string',
       success: (res) => {
-        // 鏀粯鎴愬姛锛岃烦杞埌缁撴灉椤?        wx.redirectTo({
+        // 閺€顖欑帛閹存劕濮涢敍宀冪儲鏉烆剙鍩岀紒鎾寸亯妞?        wx.redirectTo({
           url: `/pages/payment/result/result?orderId=${this.data.orderId}&status=success`
         });
       },
       fail: (err) => {
-        console.error('寰俊鏀粯澶辫触:', err);
+        console.error('瀵邦喕淇婇弨顖欑帛婢惰精瑙?', err);
         this.setData({ submitting: false });
         
-        // 鏍规嵁閿欒绫诲瀷鏄剧ず涓嶅悓鎻愮ず
+        // 閺嶈宓侀柨娆掝嚖缁鐎烽弰鍓с仛娑撳秴鎮撻幓鎰仛
         if (err.errMsg === 'requestPayment:fail cancel') {
           wx.showToast({
-            title: '鏀粯宸插彇娑?,
+            title: '閺€顖欑帛瀹告彃褰囧☉?,
             icon: 'none'
           });
           setTimeout(() => {
@@ -218,7 +211,7 @@ Page({
           }, 1500);
         } else {
           wx.showToast({
-            title: '鏀粯澶辫触锛岃閲嶈瘯',
+            title: '閺€顖欑帛婢惰精瑙﹂敍宀冾嚞闁插秷鐦?,
             icon: 'none'
           });
         }
@@ -227,11 +220,10 @@ Page({
   },
 
   /**
-   * 澶勭悊鏀粯瀹濇敮浠?   */
+   * 婢跺嫮鎮婇弨顖欑帛鐎规繃鏁禒?   */
   processAlipayPayment() {
-    // 妯℃嫙鏀粯瀹濇敮浠?    setTimeout(() => {
-      // 妯℃嫙鏀粯鎴愬姛
-      this.setData({ submitting: false });
+    // 濡剝瀚欓弨顖欑帛鐎规繃鏁禒?    setTimeout(() => {
+      // 濡剝瀚欓弨顖欑帛閹存劕濮?      this.setData({ submitting: false });
       wx.redirectTo({
         url: `/pages/payment/result/result?orderId=${this.data.orderId}&status=success`
       });
@@ -239,13 +231,12 @@ Page({
   },
 
   /**
-   * 澶勭悊浣欓鏀粯
+   * 婢跺嫮鎮婃担娆擃杺閺€顖欑帛
    */
   processBalancePayment() {
-    // 妯℃嫙浣欓鏀粯
+    // 濡剝瀚欐担娆擃杺閺€顖欑帛
     setTimeout(() => {
-      // 妯℃嫙鏀粯鎴愬姛
-      this.setData({ submitting: false });
+      // 濡剝瀚欓弨顖欑帛閹存劕濮?      this.setData({ submitting: false });
       wx.redirectTo({
         url: `/pages/payment/result/result?orderId=${this.data.orderId}&status=success`
       });
@@ -253,13 +244,12 @@ Page({
   },
 
   /**
-   * 澶勭悊绉垎鏀粯
+   * 婢跺嫮鎮婄粔顖氬瀻閺€顖欑帛
    */
   processPointsPayment() {
-    // 妯℃嫙绉垎鏀粯
+    // 濡剝瀚欑粔顖氬瀻閺€顖欑帛
     setTimeout(() => {
-      // 妯℃嫙鏀粯鎴愬姛
-      this.setData({ submitting: false });
+      // 濡剝瀚欓弨顖欑帛閹存劕濮?      this.setData({ submitting: false });
       wx.redirectTo({
         url: `/pages/payment/result/result?orderId=${this.data.orderId}&status=success`
       });
@@ -267,7 +257,7 @@ Page({
   },
 
   /**
-   * 杩斿洖涓婁竴椤?   */
+   * 鏉╂柨娲栨稉濠佺妞?   */
   goBack() {
     wx.navigateBack();
   }

@@ -1,15 +1,15 @@
-<!-- pages/index/index.wxml -->
+﻿<!-- pages/index/index.wxml -->
 <view class="container">
-  <view wx:if="{{loading}}" class="loading-tip">{{i18n.translate('loading') || '加载中..'}}</view>
+  <view wx:if="{{loading}}" class="loading-tip">{{i18n.translate('loading') || '鍔犺浇涓?.'}}</view>
   <block wx:else>
-    <!-- 杞挱鍥?-->
+    <!-- 鏉烆喗鎸遍崶?-->
     <swiper class="swiper-container" indicator-dots="true" autoplay="true" interval="3000" duration="500" circular="true" display-multiple-items="1">
       <swiper-item wx:for="{{banners}}" wx:key="id">
         <image src="{{item.image}}" class="swiper-image" mode="aspectFill" lazy-load="true"></image>
       </swiper-item>
     </swiper>
 
-    <!-- 鍒嗙被鍏ュ彛 -->
+    <!-- 閸掑棛琚崗銉ュ經 -->
     <view class="category-grid">
       <view class="category-item" wx:for="{{categories}}" wx:key="id" bindtap="goToCategory" data-id="{{item.id}}">
         <image src="{{item.icon}}" class="category-icon" lazy-load="true"></image>
@@ -17,15 +17,15 @@
       </view>
     </view>
 
-    <!-- 鎺ㄨ崘鍟嗗搧鍒楄〃 -->
+    <!-- 閹恒劏宕橀崯鍡楁惂閸掓銆?-->
     <view class="recommend-products">
-      <view class="section-title">{{i18n.translate('鎺ㄨ崘鍟嗗搧')}}</view>
+      <view class="section-title">{{i18n.translate('閹恒劏宕橀崯鍡楁惂')}}</view>
       <view class="product-list">
         <view class="product-item" wx:for="{{products}}" wx:key="id" bindtap="goToProductDetail" data-id="{{item.id}}">
           <image src="{{item.image}}" class="product-image" mode="aspectFill" lazy-load="true"></image>
           <view class="product-info">
             <text class="product-name">{{item.name}}</text>
-            <text class="product-price">¥{{item.price}}</text>
+            <text class="product-price">楼{{item.price}}</text>
           </view>
         </view>
       </view>

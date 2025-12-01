@@ -1,90 +1,77 @@
-/**
- * 文件名: README.md
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: README 文档文件
+﻿﻿/**
+ * 鏂囦欢鍚? README.md
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: README 鏂囨。鏂囦欢
  */
-# 服务层架构文档
+# 鏈嶅姟灞傛灦鏋勬枃妗?
+## 姒傝堪
 
-## 概述
-
-SutWxApp服务层是小程序的核心业务逻辑层，负责处理数据获取、业务逻辑处理和状态管理。
-
-## 目录结构
+SutWxApp鏈嶅姟灞傛槸灏忕▼搴忕殑鏍稿績涓氬姟閫昏緫灞傦紝璐熻矗澶勭悊鏁版嵁鑾峰彇銆佷笟鍔￠€昏緫澶勭悊鍜岀姸鎬佺鐞嗐€?
+## 鐩綍缁撴瀯
 
 ```
 services/
-├── index.js               # 服务入口和导出
-├── service-manager.js     # 服务管理器，负责服务的注册和初始化
-├── service-adapter.js     # 服务适配器，用于统一不同服务的接口
-├── service-integration.js # 服务集成，处理服务间的依赖关系
-├── app-initializer.js     # 应用初始化器，负责整个应用的初始化流程
-└── README.md              # 本文档
-```
+鈹溾攢鈹€ index.js               # 鏈嶅姟鍏ュ彛鍜屽鍑?鈹溾攢鈹€ service-manager.js     # 鏈嶅姟绠＄悊鍣紝璐熻矗鏈嶅姟鐨勬敞鍐屽拰鍒濆鍖?鈹溾攢鈹€ service-adapter.js     # 鏈嶅姟閫傞厤鍣紝鐢ㄤ簬缁熶竴涓嶅悓鏈嶅姟鐨勬帴鍙?鈹溾攢鈹€ service-integration.js # 鏈嶅姟闆嗘垚锛屽鐞嗘湇鍔￠棿鐨勪緷璧栧叧绯?鈹溾攢鈹€ app-initializer.js     # 搴旂敤鍒濆鍖栧櫒锛岃礋璐ｆ暣涓簲鐢ㄧ殑鍒濆鍖栨祦绋?鈹斺攢鈹€ README.md              # 鏈枃妗?```
 
-## 核心服务
+## 鏍稿績鏈嶅姟
 
-### 1. 认证服务 (authService.js)
+### 1. 璁よ瘉鏈嶅姟 (authService.js)
 
-认证服务负责处理用户登录、登出和会话管理。
-
-**主要功能：**
-- 用户登录验证
-- 用户登出处理
-- 认证令牌管理
-- 登录状态检查
-
-**使用示例：**
+璁よ瘉鏈嶅姟璐熻矗澶勭悊鐢ㄦ埛鐧诲綍銆佺櫥鍑哄拰浼氳瘽绠＄悊銆?
+**涓昏鍔熻兘锛?*
+- 鐢ㄦ埛鐧诲綍楠岃瘉
+- 鐢ㄦ埛鐧诲嚭澶勭悊
+- 璁よ瘉浠ょ墝绠＄悊
+- 鐧诲綍鐘舵€佹鏌?
+**浣跨敤绀轰緥锛?*
 ```javascript
-// 导入认证服务
+// 瀵煎叆璁よ瘉鏈嶅姟
 const authService = require('./services/authService');
 
-// 用户登录
+// 鐢ㄦ埛鐧诲綍
 authService.login('username', 'password')
   .then(user => {
-    console.log('登录成功', user);
+    console.log('鐧诲綍鎴愬姛', user);
   })
   .catch(error => {
-    console.error('登录失败', error);
+    console.error('鐧诲綍澶辫触', error);
   });
 
-// 检查登录状态
-if (authService.isLoggedIn()) {
-  // 用户已登录
-}
+// 妫€鏌ョ櫥褰曠姸鎬?if (authService.isLoggedIn()) {
+  // 鐢ㄦ埛宸茬櫥褰?}
 
-// 用户登出
+// 鐢ㄦ埛鐧诲嚭
 authService.logout().then(() => {
-  console.log('已登出');
+  console.log('宸茬櫥鍑?);
 });
 ```
 
-## 服务依赖关系
+## 鏈嶅姟渚濊禆鍏崇郴
 
-服务之间存在依赖关系，初始化时需要按照正确的顺序加载：
-
+鏈嶅姟涔嬮棿瀛樺湪渚濊禆鍏崇郴锛屽垵濮嬪寲鏃堕渶瑕佹寜鐓ф纭殑椤哄簭鍔犺浇锛?
 ```
-cache -> api -> config -> auth -> 业务服务
+cache -> api -> config -> auth -> 涓氬姟鏈嶅姟
 ```
 
-### 核心依赖顺序
+### 鏍稿績渚濊禆椤哄簭
 
-- **基础服务：**
+- **鍩虹鏈嶅姟锛?*
   - cache: []
   - api: [cache]
   - config: [cache, api]
 
-- **用户相关服务：**
+- **鐢ㄦ埛鐩稿叧鏈嶅姟锛?*
   - auth: [api, cache, config]
   - user: [api, cache, auth]
   - following: [api, auth]
 
-- **内容相关服务：**
+- **鍐呭鐩稿叧鏈嶅姟锛?*
   - category: [api, cache]
   - article: [api, cache, category]
   - comment: [api, auth, article]
 
-- **电商相关服务：**
+- **鐢靛晢鐩稿叧鏈嶅姟锛?*
   - product: [api, cache, category]
   - cart: [api, auth, cache]
   - address: [api, auth, cache]
@@ -92,16 +79,16 @@ cache -> api -> config -> auth -> 业务服务
   - order: [api, auth, cache, payment, address]
   - points: [api, auth, cache]
 
-- **其他服务：**
+- **鍏朵粬鏈嶅姟锛?*
   - file: [api, auth]
   - feedback: [api, auth]
   - analytics: [api, cache, config]
   - notification: [api, cache, auth]
   - search: [api, cache, config]
 
-## 在应用中使用服务
+## 鍦ㄥ簲鐢ㄤ腑浣跨敤鏈嶅姟
 
-### 在app.js中初始化服务
+### 鍦╝pp.js涓垵濮嬪寲鏈嶅姟
 
 ```javascript
 // app.js
@@ -109,8 +96,7 @@ const { initializeApp } = require('./services/app-initializer');
 
 App({
   onLaunch: async function() {
-    // 初始化所有服务
-    const success = await initializeApp({
+    // 鍒濆鍖栨墍鏈夋湇鍔?    const success = await initializeApp({
       services: {
         useAdapters: true,
         enableCache: true
@@ -121,13 +107,13 @@ App({
     });
     
     if (success) {
-      console.log('服务初始化成功');
+      console.log('鏈嶅姟鍒濆鍖栨垚鍔?);
     } else {
-      console.error('服务初始化失败');
+      console.error('鏈嶅姟鍒濆鍖栧け璐?);
     }
   },
   
-  // 提供获取服务的全局方法
+  // 鎻愪緵鑾峰彇鏈嶅姟鐨勫叏灞€鏂规硶
   getService: function(serviceName) {
     const { getService } = require('./services/service-integration');
     return getService(serviceName);
@@ -135,7 +121,7 @@ App({
 });
 ```
 
-### 在页面中使用服务
+### 鍦ㄩ〉闈腑浣跨敤鏈嶅姟
 
 ```javascript
 // pages/index/index.js
@@ -148,34 +134,31 @@ Page({
   
   onLoad: async function() {
     try {
-      // 获取文章服务实例
+      // 鑾峰彇鏂囩珷鏈嶅姟瀹炰緥
       const articleService = app.getService('article');
       
-      // 使用服务获取文章列表
+      // 浣跨敤鏈嶅姟鑾峰彇鏂囩珷鍒楄〃
       const articles = await articleService.getArticles({ page: 1, limit: 10 });
       
       this.setData({ articles });
     } catch (error) {
-      console.error('获取文章列表失败', error);
+      console.error('鑾峰彇鏂囩珷鍒楄〃澶辫触', error);
     }
   }
 });
 ```
 
-## 最佳实践
+## 鏈€浣冲疄璺?
+1. **鏈嶅姟璁捐鍘熷垯锛?*
+   - 鍗曚竴鑱岃矗鍘熷垯
+   - 渚濊禆娉ㄥ叆
+   - 鎺ュ彛缁熶竴
+   - 閿欒澶勭悊
 
-1. **服务设计原则：**
-   - 单一职责原则
-   - 依赖注入
-   - 接口统一
-   - 错误处理
-
-2. **性能优化：**
-   - 合理使用缓存
-   - 避免重复请求
-   - 数据预加载
-
-3. **错误处理：**
-   - 统一错误处理
-   - 用户友好的错误提示
-   - 错误日志记录
+2. **鎬ц兘浼樺寲锛?*
+   - 鍚堢悊浣跨敤缂撳瓨
+   - 閬垮厤閲嶅璇锋眰
+   - 鏁版嵁棰勫姞杞?
+3. **閿欒澶勭悊锛?*
+   - 缁熶竴閿欒澶勭悊
+   - 鐢ㄦ埛鍙嬪ソ鐨勯敊璇彁绀?   - 閿欒鏃ュ織璁板綍\n

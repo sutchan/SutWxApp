@@ -1,19 +1,19 @@
-/**
- * 文件名: records.wxml
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: records 椤甸潰缁撴瀯鏂囦欢
+﻿/**
+ * 鏂囦欢鍚? records.wxml
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: records 妞ょ敻娼扮紒鎾寸€弬鍥︽
  */
 <view class="container">
-  <!-- 绉垎姒傝 -->
+  <!-- 缁夘垰鍨庡鍌濐潔 -->
   <view class="points-summary">
     <view class="total-points">
       <text class="points-value">{{totalPoints}}</text>
-      <text class="points-label">褰撳墠绉垎</text>
+      <text class="points-label">瑜版挸澧犵粔顖氬瀻</text>
     </view>
   </view>
   
-  <!-- 鏍囩鍒囨崲 -->
+  <!-- 閺嶅洨顒烽崚鍥ㄥ床 -->
   <view class="tabs">
     <view 
       wx:for="{{tabs}}" 
@@ -26,7 +26,7 @@
     </view>
   </view>
   
-  <!-- 绉垎璁板綍鍒楄〃 -->
+  <!-- 缁夘垰鍨庣拋鏉跨秿閸掓銆?-->
   <view class="records-list">
     <view 
       wx:for="{{pointsRecords}}" 
@@ -46,19 +46,19 @@
       </view>
     </view>
     
-    <!-- 加载状态-->
+    <!-- 鍔犺浇鐘舵€?->
     <view wx:if="{{loading}}" class="loading">
-      <text>加载中..</text>
+      <text>鍔犺浇涓?.</text>
     </view>
     
-    <!-- 鏃犳洿澶氭暟鎹?-->
+    <!-- 閺冪姵娲挎径姘殶閹?-->
     <view wx:if="{{!hasMore && pointsRecords.length > 0}}" class="no-more">
-      <text>娌℃湁鏇村璁板綍浜?/text>
+      <text>濞屸剝婀侀弴鏉戭樋鐠佹澘缍嶆禍?/text>
     </view>
     
-    <!-- 绌虹姸鎬?-->
+    <!-- 缁岃櫣濮搁幀?-->
     <view wx:if="{{!loading && pointsRecords.length === 0}}" class="empty-state">
-      <text>鏆傛棤绉垎璁板綍</text>
+      <text>閺嗗倹妫ょ粔顖氬瀻鐠佹澘缍?/text>
     </view>
   </view>
 </view>

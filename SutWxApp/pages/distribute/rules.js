@@ -1,8 +1,8 @@
-/**
- * 文件名: rules.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-29
- * 描述: 鍒嗛攢瑙勫垯璁剧疆椤甸潰
+﻿/**
+ * 鏂囦欢鍚? rules.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-29
+ * 鎻忚堪: 閸掑棝鏀㈢憴鍕灟鐠佸墽鐤嗘い鐢告桨
  */
 
 const distributeService = require('../../services/distributeService');
@@ -21,8 +21,7 @@ Page({
   },
 
   /**
-   * 鑾峰彇鍒嗛攢瑙勫垯
-   */
+   * 閼惧嘲褰囬崚鍡涙敘鐟欏嫬鍨?   */
   getDistributeRules() {
     this.setData({ loading: true });
 
@@ -35,21 +34,20 @@ Page({
         });
       })
       .catch(err => {
-        console.error('鑾峰彇鍒嗛攢瑙勫垯澶辫触:', err);
+        console.error('閼惧嘲褰囬崚鍡涙敘鐟欏嫬鍨径杈Е:', err);
         this.setData({
           loading: false,
           error: true
         });
         wx.showToast({
-          title: '鑾峰彇鍒嗛攢瑙勫垯澶辫触',
+          title: '閼惧嘲褰囬崚鍡涙敘鐟欏嫬鍨径杈Е',
           icon: 'none'
         });
       });
   },
 
   /**
-   * 鏇存柊鍒嗛攢瑙勫垯
-   */
+   * 閺囧瓨鏌婇崚鍡涙敘鐟欏嫬鍨?   */
   updateDistributeRules() {
     this.setData({ saving: true });
 
@@ -57,27 +55,26 @@ Page({
       .then(() => {
         this.setData({ saving: false });
         wx.showToast({
-          title: '鏇存柊鎴愬姛'
+          title: '閺囧瓨鏌婇幋鎰'
         });
       })
       .catch(err => {
-        console.error('鏇存柊鍒嗛攢瑙勫垯澶辫触:', err);
+        console.error('閺囧瓨鏌婇崚鍡涙敘鐟欏嫬鍨径杈Е:', err);
         this.setData({ saving: false });
         wx.showToast({
-          title: '鏇存柊澶辫触',
+          title: '閺囧瓨鏌婃径杈Е',
           icon: 'none'
         });
       });
   },
 
   /**
-   * 杈撳叆妗嗗唴瀹瑰彉鍖?   * @param {Object} e - 浜嬩欢瀵硅薄
-   */
+   * 鏉堟挸鍙嗗鍡楀敶鐎圭懓褰夐崠?   * @param {Object} e - 娴滃娆㈢€电钖?   */
   onInputChange(e) {
     const { field, value } = e.currentTarget.dataset;
     const { distributeRules } = this.data;
     
-    // 鏍规嵁瀛楁绫诲瀷杞崲鍊?    let parsedValue = value;
+    // 閺嶈宓佺€涙顔岀猾璇茬€锋潪顒佸床閸?    let parsedValue = value;
     if (field === 'commissionRate' || field === 'minOrderAmount' || field === 'maxCommissionAmount') {
       parsedValue = parseFloat(value) || 0;
     } else if (field === 'enableDistribute') {
@@ -90,8 +87,7 @@ Page({
   },
 
   /**
-   * 寮€鍏冲彉鍖?   * @param {Object} e - 浜嬩欢瀵硅薄
-   */
+   * 瀵偓閸忓啿褰夐崠?   * @param {Object} e - 娴滃娆㈢€电钖?   */
   onSwitchChange(e) {
     const { field } = e.currentTarget.dataset;
     this.setData({
@@ -100,18 +96,18 @@ Page({
   },
 
   /**
-   * 杩斿洖鍒楄〃椤?   */
+   * 鏉╂柨娲栭崚妤勩€冩い?   */
   goBack() {
     wx.navigateBack();
   },
 
   /**
-   * 淇濆瓨瑙勫垯
+   * 娣囨繂鐡ㄧ憴鍕灟
    */
   saveRules() {
     wx.showModal({
-      title: '淇濆瓨瑙勫垯',
-      content: '纭畾瑕佷繚瀛樺綋鍓嶈缃殑鍒嗛攢瑙勫垯鍚楋紵',
+      title: '娣囨繂鐡ㄧ憴鍕灟',
+      content: '绾喖鐣剧憰浣风箽鐎涙ê缍嬮崜宥堫啎缂冾喚娈戦崚鍡涙敘鐟欏嫬鍨崥妤嬬吹',
       success: (res) => {
         if (res.confirm) {
           this.updateDistributeRules();

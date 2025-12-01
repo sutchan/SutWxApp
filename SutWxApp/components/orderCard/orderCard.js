@@ -1,15 +1,14 @@
-/**
- * 文件名: orderCard.js
- * 版本号: 1.0.2
- * 更新日期: 2025-11-29
+﻿/**
+ * 鏂囦欢鍚? orderCard.js
+ * 鐗堟湰鍙? 1.0.2
+ * 鏇存柊鏃ユ湡: 2025-11-29
  * 浣滆€? Sut
- * 描述: 璁㈠崟鍗＄墖缁勪欢
- */
+ * 鎻忚堪: 璁㈠崟鍗＄墖缁勪欢 */
 Component({
   /**
    * 缁勪欢鐨勫睘鎬у垪琛?   */
   properties: {
-    // 璁㈠崟淇℃伅
+    // 璁㈠崟鏁版嵁
     order: {
       type: Object,
       value: {}
@@ -58,7 +57,7 @@ Component({
     },
 
     /**
-     * 鐐瑰嚮鍙栨秷璁㈠崟
+     * 鐐瑰嚮鍙栨秷璁㈠崟鎸夐挳
      * @param {Object} e - 浜嬩欢瀵硅薄
      * @returns {void}
      */
@@ -70,7 +69,7 @@ Component({
     },
 
     /**
-     * 鐐瑰嚮纭鏀惰揣
+     * 鐐瑰嚮纭鏀惰揣鎸夐挳
      * @param {Object} e - 浜嬩欢瀵硅薄
      * @returns {void}
      */
@@ -82,7 +81,7 @@ Component({
     },
 
     /**
-     * 鐐瑰嚮鍒犻櫎璁㈠崟
+     * 鐐瑰嚮鍒犻櫎璁㈠崟鎸夐挳
      * @param {Object} e - 浜嬩欢瀵硅薄
      * @returns {void}
      */
@@ -94,7 +93,7 @@ Component({
     },
 
     /**
-     * 鐐瑰嚮璇勪环璁㈠崟
+     * 鐐瑰嚮璇勪环璁㈠崟鎸夐挳
      * @param {Object} e - 浜嬩欢瀵硅薄
      * @returns {void}
      */
@@ -106,7 +105,7 @@ Component({
     },
 
     /**
-     * 鐐瑰嚮鏌ョ湅鐗╂祦
+     * 鐐瑰嚮鏌ョ湅鐗╂祦鎸夐挳
      * @param {Object} e - 浜嬩欢瀵硅薄
      * @returns {void}
      */
@@ -118,7 +117,7 @@ Component({
     },
 
     /**
-     * 鏍煎紡鍖栬鍗曠姸鎬?     * @param {string} status - 璁㈠崟鐘舵€?     * @returns {Object} 鏍煎紡鍖栧悗鐨勭姸鎬佷俊鎭?     */
+     * 鏍煎紡鍖栬鍗曠姸鎬?     * @param {string} status - 璁㈠崟鐘舵€?     * @returns {Object} 鐘舵€佹樉绀洪厤缃?     */
     formatOrderStatus(status) {
       return this.data.statusMap[status] || { text: '鏈煡鐘舵€?, color: '#8e8e93' };
     }

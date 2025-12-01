@@ -1,24 +1,24 @@
-/**
- * 文件名: tasks.wxml
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: tasks 椤甸潰缁撴瀯鏂囦欢
+﻿/**
+ * 鏂囦欢鍚? tasks.wxml
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: tasks 妞ょ敻娼扮紒鎾寸€弬鍥︽
  */
-<!-- 绉垎浠诲姟椤甸潰 -->
+<!-- 缁夘垰鍨庢禒璇插妞ょ敻娼?-->
 <view class="tasks-container">
-  <!-- 鐢ㄦ埛绉垎淇℃伅 -->
+  <!-- 閻劍鍩涚粔顖氬瀻娣団剝浼?-->
   <view class="points-header">
     <view class="points-info">
       <text class="points-value">{{userPoints.availablePoints}}</text>
-      <text class="points-label">鎴戠殑绉垎</text>
+      <text class="points-label">閹存垹娈戠粔顖氬瀻</text>
     </view>
     <view class="today-earned">
       <text class="earned-value">+{{userPoints.todayEarned}}</text>
-      <text class="earned-label">浠婃棩鑾峰緱</text>
+      <text class="earned-label">娴犲﹥妫╅懢宄扮繁</text>
     </view>
   </view>
   
-  <!-- 浠诲姟绫诲瀷绛涢€?-->
+  <!-- 娴犺濮熺猾璇茬€风粵娑⑩偓?-->
   <view class="task-types">
     <scroll-view scroll-x="true" class="types-scroll">
       <view class="types-list">
@@ -32,7 +32,7 @@
     </scroll-view>
   </view>
   
-  <!-- 浠诲姟鐘舵€佺瓫閫?-->
+  <!-- 娴犺濮熼悩鑸碘偓浣虹摣闁?-->
   <view class="task-statuses">
     <scroll-view scroll-x="true" class="statuses-scroll">
       <view class="statuses-list">
@@ -45,18 +45,18 @@
     </scroll-view>
   </view>
   
-  <!-- 浠诲姟鍒楄〃 -->
+  <!-- 娴犺濮熼崚妤勩€?-->
   <view class="tasks-list">
-    <!-- 加载状态-->
+    <!-- 鍔犺浇鐘舵€?->
     <view wx:if="{{loading && taskList.length === 0}}" class="loading-container">
       <view class="loading-spinner"></view>
-      <text class="loading-text">姝ｅ湪鍔犺浇浠诲姟...</text>
+      <text class="loading-text">濮濓絽婀崝鐘烘祰娴犺濮?..</text>
     </view>
     
-    <!-- 浠诲姟椤?-->
+    <!-- 娴犺濮熸い?-->
     <view wx:else class="task-items">
       <view wx:for="{{taskList}}" wx:key="id" class="task-item" data-id="{{item.id}}" bindtap="goToTaskDetail">
-        <!-- 浠诲姟鍥炬爣鍜屽熀鏈俊鎭?-->
+        <!-- 娴犺濮熼崶鐐垼閸滃苯鐔€閺堫兛淇婇幁?-->
         <view class="task-header">
           <view class="task-icon {{item.type}}">
             <image src="{{item.icon}}" mode="aspectFit"></image>
@@ -69,11 +69,11 @@
           
           <view class="task-reward">
             <text class="reward-value">+{{item.points}}</text>
-            <text class="reward-label">绉垎</text>
+            <text class="reward-label">缁夘垰鍨?/text>
           </view>
         </view>
         
-        <!-- 浠诲姟杩涘害 -->
+        <!-- 娴犺濮熸潻娑樺 -->
         <view wx:if="{{item.target > 1}}" class="task-progress">
           <view class="progress-bar">
             <view class="progress-fill" style="width: {{getTaskProgressPercent(item.current, item.target)}}%"></view>
@@ -83,13 +83,13 @@
           </view>
         </view>
         
-        <!-- 浠诲姟鐘舵€佸拰鎿嶄綔 -->
+        <!-- 娴犺濮熼悩鑸碘偓浣告嫲閹垮秳缍?-->
         <view class="task-footer">
           <view class="task-status {{item.status}}">
-            <text wx:if="{{item.status === 'pending'}}">鏈畬鎴?/text>
-            <text wx:elif="{{item.status === 'completed'}}">宸插畬鎴?/text>
-            <text wx:elif="{{item.status === 'unclaimed'}}">寰呴鍙?/text>
-            <text wx:elif="{{item.status === 'claimed'}}">宸查鍙?/text>
+            <text wx:if="{{item.status === 'pending'}}">閺堫亜鐣幋?/text>
+            <text wx:elif="{{item.status === 'completed'}}">瀹告彃鐣幋?/text>
+            <text wx:elif="{{item.status === 'unclaimed'}}">瀵板懘顣崣?/text>
+            <text wx:elif="{{item.status === 'claimed'}}">瀹告煡顣崣?/text>
           </view>
           
           <view class="task-actions">
@@ -97,39 +97,39 @@
                     class="action-btn primary" 
                     data-id="{{item.id}}" 
                     catchtap="completeTask">
-              {{item.actionText || '鍘诲畬鎴?}}
+              {{item.actionText || '閸樿鐣幋?}}
             </button>
             
             <button wx:elif="{{item.status === 'unclaimed'}}" 
                     class="action-btn primary" 
                     data-id="{{item.id}}" 
                     catchtap="claimTaskReward">
-              棰嗗彇濂栧姳
+              妫板棗褰囨總鏍уС
             </button>
             
             <button wx:else class="action-btn disabled" disabled>
-              {{item.statusText || '宸插畬鎴?}}
+              {{item.statusText || '瀹告彃鐣幋?}}
             </button>
           </view>
         </view>
       </view>
       
-      <!-- 鍔犺浇鏇村 -->
+      <!-- 閸旂姾娴囬弴鏉戭樋 -->
       <view wx:if="{{hasMore && loading}}" class="loading-more">
         <view class="loading-spinner small"></view>
-        <text class="loading-text">鍔犺浇鏇村...</text>
+        <text class="loading-text">閸旂姾娴囬弴鏉戭樋...</text>
       </view>
       
-      <!-- 娌℃湁鏇村鏁版嵁 -->
+      <!-- 濞屸剝婀侀弴鏉戭樋閺佺増宓?-->
       <view wx:if="{{!hasMore && taskList.length > 0}}" class="no-more">
-        <text>娌℃湁鏇村浠诲姟浜?/text>
+        <text>濞屸剝婀侀弴鏉戭樋娴犺濮熸禍?/text>
       </view>
       
-      <!-- 绌虹姸鎬?-->
+      <!-- 缁岃櫣濮搁幀?-->
       <view wx:if="{{taskList.length === 0 && !loading}}" class="empty-state">
         <view class="empty-icon"></view>
-        <text class="empty-text">鏆傛棤浠诲姟</text>
-        <text class="empty-desc">褰撳墠绛涢€夋潯浠朵笅娌℃湁浠诲姟</text>
+        <text class="empty-text">閺嗗倹妫ゆ禒璇插</text>
+        <text class="empty-desc">瑜版挸澧犵粵娑⑩偓澶嬫蒋娴犳湹绗呭▽鈩冩箒娴犺濮?/text>
       </view>
     </view>
   </view>

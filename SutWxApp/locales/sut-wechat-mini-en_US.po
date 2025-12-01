@@ -1,4 +1,4 @@
-msgid ""
+﻿msgid ""
 msgstr ""
 "Project-Id-Version: Sut WeChat Mini 1.0.16\n"
 "Report-Msgid-Bugs-To: \n"
@@ -241,759 +241,759 @@ msgid "no_tasks"
 msgstr "No Tasks"
 
 #: pages/index/index.js
-msgid "新品"
+msgid "鏂板搧"
 msgstr "New"
 
 #: pages/index/index.js
-msgid "推荐"
+msgid "鎺ㄨ崘"
 msgstr "Recommend"
 
 #: pages/index/index.js
-msgid "热卖"
+msgid "鐑崠"
 msgstr "Hot Sale"
 
 #: pages/index/index.js
-msgid "分类"
+msgid "鍒嗙被"
 msgstr "Category"
 
 #: pages/index/index.js
-msgid "商品A"
+msgid "鍟嗗搧A"
 msgstr "Product A"
 
 #: pages/index/index.js
-msgid "商品B"
+msgid "鍟嗗搧B"
 msgstr "Product B"
 
 #: pages/index/index.js
-msgid "商品C"
+msgid "鍟嗗搧C"
 msgstr "Product C"
 
 #: pages/index/index.js
-msgid "商品D"
+msgid "鍟嗗搧D"
 msgstr "Product D"
 
 #: pages/index/index.wxml
-msgid "加载中..."
+msgid "鍔犺浇涓?.."
 msgstr "Loading..."
 
 #: pages/index/index.wxml
-msgid "推荐商品"
+msgid "鎺ㄨ崘鍟嗗搧"
 msgstr "Recommended Products"
 
 #: pages/user/user.js
-msgid "我的订单"
+msgid "鎴戠殑璁㈠崟"
 msgstr "My Orders"
 
 #: pages/user/user.js
-msgid "我的收藏"
+msgid "鎴戠殑鏀惰棌"
 msgstr "My Favorites"
 
 #: pages/user/user.js
-msgid "积分中心"
+msgid "绉垎涓績"
 msgstr "Points Center"
 
 #: pages/user/user.js
-msgid "优惠券"
+msgid "浼樻儬鍒?
 msgstr "Coupons"
 
 #: pages/user/user.js
-msgid "收货地址"
+msgid "鏀惰揣鍦板潃"
 msgstr "Shipping Address"
 
 #: pages/user/user.js
-msgid "设置"
+msgid "璁剧疆"
 msgstr "Settings"
 
 #: pages/user/user.js
-msgid "提示"
+msgid "鎻愮ず"
 msgstr "Tips"
 
 #: pages/user/user.js
-msgid "确定要退出登录吗？"
+msgid "纭畾瑕侀€€鍑虹櫥褰曞悧锛?
 msgstr "Are you sure you want to log out?"
 
 #: pages/user/user.js
-msgid "已退出登录"
+msgid "宸查€€鍑虹櫥褰?
 msgstr "You have logged out"
 
 #: pages/cart/cart.js
-msgid "确定要删除这个商品吗？"
+msgid "纭畾瑕佸垹闄よ繖涓晢鍝佸悧锛?
 msgstr "Are you sure you want to delete this product?"
 
 #: pages/cart/cart.js
-msgid "删除成功"
+msgid "鍒犻櫎鎴愬姛"
 msgstr "Deleted successfully"
 
 #: pages/cart/cart.js
-msgid "结算"
+msgid "缁撶畻"
 msgstr "Checkout"
 
 #: pages/cart/cart.js
-msgid "购物车为空"
+msgid "璐墿杞︿负绌?
 msgstr "Shopping cart is empty"
 
 #: pages/cart/cart.js
-msgid "去逛逛"
+msgid "鍘婚€涢€?
 msgstr "Go Shopping"
 
 #: pages/cart/cart.js
-msgid "全选"
+msgid "鍏ㄩ€?
 msgstr "Select All"
 
 #: pages/cart/cart.js
-msgid "合计"
+msgid "鍚堣"
 msgstr "Total"
 
 #: pages/cart/cart.js
-msgid "删除"
+msgid "鍒犻櫎"
 msgstr "Delete"
 
 #: pages/cart/cart.js
-msgid "编辑"
+msgid "缂栬緫"
 msgstr "Edit"
 
 #: pages/cart/cart.js
-msgid "完成"
+msgid "瀹屾垚"
 msgstr "Done"
 
 #: pages/cart/cart.js
-msgid "数量"
+msgid "鏁伴噺"
 msgstr "Quantity"
 
 #: pages/cart/cart.js
-msgid "单价"
+msgid "鍗曚环"
 msgstr "Unit Price"
 
 #: pages/cart/cart.js
-msgid "小计"
+msgid "灏忚"
 msgstr "Subtotal"
 
 #: pages/product/detail/detail.js
-msgid "商品详情"
+msgid "鍟嗗搧璇︽儏"
 msgstr "Product Details"
 
 #: pages/product/detail/detail.js
-msgid "商品评价"
+msgid "鍟嗗搧璇勪环"
 msgstr "Product Reviews"
 
 #: pages/product/detail/detail.js
-msgid "加入购物车"
+msgid "鍔犲叆璐墿杞?
 msgstr "Add to Cart"
 
 #: pages/product/detail/detail.js
-msgid "立即购买"
+msgid "绔嬪嵆璐拱"
 msgstr "Buy Now"
 
 #: pages/product/detail/detail.js
-msgid "库存不足"
+msgid "搴撳瓨涓嶈冻"
 msgstr "Insufficient Stock"
 
 #: pages/product/detail/detail.js
-msgid "商品已下架"
+msgid "鍟嗗搧宸蹭笅鏋?
 msgstr "Product is Off the Shelf"
 
 #: pages/product/detail/detail.js
-msgid "规格选择"
+msgid "瑙勬牸閫夋嫨"
 msgstr "Specification Selection"
 
 #: pages/product/detail/detail.js
-msgid "数量选择"
+msgid "鏁伴噺閫夋嫨"
 msgstr "Quantity Selection"
 
 #: pages/product/detail/detail.js
-msgid "配送方式"
+msgid "閰嶉€佹柟寮?
 msgstr "Delivery Method"
 
 #: pages/product/detail/detail.js
-msgid "服务说明"
+msgid "鏈嶅姟璇存槑"
 msgstr "Service Description"
 
 #: pages/product/detail/detail.js
-msgid "商品参数"
+msgid "鍟嗗搧鍙傛暟"
 msgstr "Product Parameters"
 
 #: pages/product/detail/detail.js
-msgid "包装清单"
+msgid "鍖呰娓呭崟"
 msgstr "Package List"
 
 #: pages/product/detail/detail.js
-msgid "售后保障"
+msgid "鍞悗淇濋殰"
 msgstr "After-sales Guarantee"
 
 #: pages/product/detail/detail.js
-msgid "价格说明"
+msgid "浠锋牸璇存槑"
 msgstr "Price Description"
 
 #: pages/order/list/list.js
-msgid "全部订单"
+msgid "鍏ㄩ儴璁㈠崟"
 msgstr "All Orders"
 
 #: pages/order/list/list.js
-msgid "待付款"
+msgid "寰呬粯娆?
 msgstr "Pending Payment"
 
 #: pages/order/list/list.js
-msgid "待发货"
+msgid "寰呭彂璐?
 msgstr "Pending Shipment"
 
 #: pages/order/list/list.js
-msgid "待收货"
+msgid "寰呮敹璐?
 msgstr "Pending Receipt"
 
 #: pages/order/list/list.js
-msgid "待评价"
+msgid "寰呰瘎浠?
 msgstr "Pending Review"
 
 #: pages/order/list/list.js
-msgid "售后"
+msgid "鍞悗"
 msgstr "After-sales"
 
 #: pages/order/list/list.js
-msgid "取消订单"
+msgid "鍙栨秷璁㈠崟"
 msgstr "Cancel Order"
 
 #: pages/order/list/list.js
-msgid "删除订单"
+msgid "鍒犻櫎璁㈠崟"
 msgstr "Delete Order"
 
 #: pages/order/list/list.js
-msgid "确认收货"
+msgid "纭鏀惰揣"
 msgstr "Confirm Receipt"
 
 #: pages/order/list/list.js
-msgid "查看物流"
+msgid "鏌ョ湅鐗╂祦"
 msgstr "View Logistics"
 
 #: pages/order/list/list.js
-msgid "申请售后"
+msgid "鐢宠鍞悗"
 msgstr "Apply for After-sales"
 
 #: pages/order/list/list.js
-msgid "评价订单"
+msgid "璇勪环璁㈠崟"
 msgstr "Review Order"
 
 #: pages/order/list/list.js
-msgid "再次购买"
+msgid "鍐嶆璐拱"
 msgstr "Buy Again"
 
 #: pages/order/list/list.js
-msgid "订单详情"
+msgid "璁㈠崟璇︽儏"
 msgstr "Order Details"
 
 #: pages/order/list/list.js
-msgid "订单状态"
+msgid "璁㈠崟鐘舵€?
 msgstr "Order Status"
 
 #: pages/order/list/list.js
-msgid "订单编号"
+msgid "璁㈠崟缂栧彿"
 msgstr "Order Number"
 
 #: pages/order/list/list.js
-msgid "下单时间"
+msgid "涓嬪崟鏃堕棿"
 msgstr "Order Time"
 
 #: pages/order/list/list.js
-msgid "支付方式"
+msgid "鏀粯鏂瑰紡"
 msgstr "Payment Method"
 
 #: pages/order/list/list.js
-msgid "配送信息"
+msgid "閰嶉€佷俊鎭?
 msgstr "Delivery Information"
 
 #: pages/order/list/list.js
-msgid "商品信息"
+msgid "鍟嗗搧淇℃伅"
 msgstr "Product Information"
 
 #: pages/order/list/list.js
-msgid "订单金额"
+msgid "璁㈠崟閲戦"
 msgstr "Order Amount"
 
 #: pages/order/list/list.js
-msgid "优惠金额"
+msgid "浼樻儬閲戦"
 msgstr "Discount Amount"
 
 #: pages/order/list/list.js
-msgid "实付金额"
+msgid "瀹炰粯閲戦"
 msgstr "Paid Amount"
 
 #: pages/order/list/list.js
-msgid "发票信息"
+msgid "鍙戠エ淇℃伅"
 msgstr "Invoice Information"
 
 #: pages/order/list/list.js
-msgid "备注信息"
+msgid "澶囨敞淇℃伅"
 msgstr "Remark Information"
 
 #: pages/payment/pay.js
-msgid "支付方式选择"
+msgid "鏀粯鏂瑰紡閫夋嫨"
 msgstr "Payment Method Selection"
 
 #: pages/payment/pay.js
-msgid "微信支付"
+msgid "寰俊鏀粯"
 msgstr "WeChat Pay"
 
 #: pages/payment/pay.js
-msgid "支付宝支付"
+msgid "鏀粯瀹濇敮浠?
 msgstr "Alipay"
 
 #: pages/payment/pay.js
-msgid "银行卡支付"
+msgid "閾惰鍗℃敮浠?
 msgstr "Bank Card Payment"
 
 #: pages/payment/pay.js
-msgid "余额支付"
+msgid "浣欓鏀粯"
 msgstr "Balance Payment"
 
 #: pages/payment/pay.js
-msgid "支付成功"
+msgid "鏀粯鎴愬姛"
 msgstr "Payment Successful"
 
 #: pages/payment/pay.js
-msgid "支付失败"
+msgid "鏀粯澶辫触"
 msgstr "Payment Failed"
 
 #: pages/payment/pay.js
-msgid "支付取消"
+msgid "鏀粯鍙栨秷"
 msgstr "Payment Canceled"
 
 #: pages/payment/pay.js
-msgid "支付处理中"
+msgid "鏀粯澶勭悊涓?
 msgstr "Payment Processing"
 
 #: pages/payment/pay.js
-msgid "请选择支付方式"
+msgid "璇烽€夋嫨鏀粯鏂瑰紡"
 msgstr "Please select a payment method"
 
 #: pages/payment/pay.js
-msgid "确认支付"
+msgid "纭鏀粯"
 msgstr "Confirm Payment"
 
 #: pages/payment/pay.js
-msgid "支付金额"
+msgid "鏀粯閲戦"
 msgstr "Payment Amount"
 
 #: pages/payment/pay.js
-msgid "订单信息"
+msgid "璁㈠崟淇℃伅"
 msgstr "Order Information"
 
 #: pages/search/result.js
-msgid "搜索结果"
+msgid "鎼滅储缁撴灉"
 msgstr "Search Results"
 
 #: pages/search/result.js
-msgid "搜索历史"
+msgid "鎼滅储鍘嗗彶"
 msgstr "Search History"
 
 #: pages/search/result.js
-msgid "热门搜索"
+msgid "鐑棬鎼滅储"
 msgstr "Hot Searches"
 
 #: pages/search/result.js
-msgid "搜索建议"
+msgid "鎼滅储寤鸿"
 msgstr "Search Suggestions"
 
 #: pages/search/result.js
-msgid "暂无搜索结果"
+msgid "鏆傛棤鎼滅储缁撴灉"
 msgstr "No search results"
 
 #: pages/search/result.js
-msgid "清空搜索历史"
+msgid "娓呯┖鎼滅储鍘嗗彶"
 msgstr "Clear Search History"
 
 #: pages/search/result.js
-msgid "搜索"
+msgid "鎼滅储"
 msgstr "Search"
 
 #: pages/search/result.js
-msgid "取消"
+msgid "鍙栨秷"
 msgstr "Cancel"
 
 #: pages/search/result.js
-msgid "筛选"
+msgid "绛涢€?
 msgstr "Filter"
 
 #: pages/search/result.js
-msgid "排序"
+msgid "鎺掑簭"
 msgstr "Sort"
 
 #: pages/search/result.js
-msgid "价格从低到高"
+msgid "浠锋牸浠庝綆鍒伴珮"
 msgstr "Price: Low to High"
 
 #: pages/search/result.js
-msgid "价格从高到低"
+msgid "浠锋牸浠庨珮鍒颁綆"
 msgstr "Price: High to Low"
 
 #: pages/search/result.js
-msgid "销量从高到低"
+msgid "閿€閲忎粠楂樺埌浣?
 msgstr "Sales: High to Low"
 
 #: pages/search/result.js
-msgid "好评优先"
+msgid "濂借瘎浼樺厛"
 msgstr "Good Reviews First"
 
 #: pages/search/result.js
-msgid "最新上架"
+msgid "鏈€鏂颁笂鏋?
 msgstr "Newest Arrivals"
 
 #: pages/search/result.js
-msgid "综合排序"
+msgid "缁煎悎鎺掑簭"
 msgstr "Comprehensive Sorting"
 
 #: pages/category/category.js
-msgid "商品分类"
+msgid "鍟嗗搧鍒嗙被"
 msgstr "Product Categories"
 
 #: pages/category/category.js
-msgid "全部分类"
+msgid "鍏ㄩ儴鍒嗙被"
 msgstr "All Categories"
 
 #: pages/category/category.js
-msgid "子分类"
+msgid "瀛愬垎绫?
 msgstr "Subcategories"
 
 #: pages/category/category.js
-msgid "分类商品"
+msgid "鍒嗙被鍟嗗搧"
 msgstr "Category Products"
 
 #: pages/notification/list.js
-msgid "消息通知"
+msgid "娑堟伅閫氱煡"
 msgstr "Notifications"
 
 #: pages/notification/list.js
-msgid "系统通知"
+msgid "绯荤粺閫氱煡"
 msgstr "System Notifications"
 
 #: pages/notification/list.js
-msgid "订单通知"
+msgid "璁㈠崟閫氱煡"
 msgstr "Order Notifications"
 
 #: pages/notification/list.js
-msgid "活动通知"
+msgid "娲诲姩閫氱煡"
 msgstr "Activity Notifications"
 
 #: pages/notification/list.js
-msgid "全部标记为已读"
+msgid "鍏ㄩ儴鏍囪涓哄凡璇?
 msgstr "Mark All as Read"
 
 #: pages/notification/list.js
-msgid "暂无通知"
+msgid "鏆傛棤閫氱煡"
 msgstr "No notifications"
 
 #: pages/user/login/login.js
-msgid "登录"
+msgid "鐧诲綍"
 msgstr "Login"
 
 #: pages/user/login/login.js
-msgid "注册"
+msgid "娉ㄥ唽"
 msgstr "Register"
 
 #: pages/user/login/login.js
-msgid "用户名"
+msgid "鐢ㄦ埛鍚?
 msgstr "Username"
 
 #: pages/user/login/login.js
-msgid "密码"
+msgid "瀵嗙爜"
 msgstr "Password"
 
 #: pages/user/login/login.js
-msgid "确认密码"
+msgid "纭瀵嗙爜"
 msgstr "Confirm Password"
 
 #: pages/user/login/login.js
-msgid "忘记密码"
+msgid "蹇樿瀵嗙爜"
 msgstr "Forgot Password"
 
 #: pages/user/login/login.js
-msgid "验证码"
+msgid "楠岃瘉鐮?
 msgstr "Verification Code"
 
 #: pages/user/login/login.js
-msgid "获取验证码"
+msgid "鑾峰彇楠岃瘉鐮?
 msgstr "Get Verification Code"
 
 #: pages/user/login/login.js
-msgid "登录成功"
+msgid "鐧诲綍鎴愬姛"
 msgstr "Login Successful"
 
 #: pages/user/login/login.js
-msgid "注册成功"
+msgid "娉ㄥ唽鎴愬姛"
 msgstr "Registration Successful"
 
 #: pages/user/login/login.js
-msgid "用户名或密码错误"
+msgid "鐢ㄦ埛鍚嶆垨瀵嗙爜閿欒"
 msgstr "Incorrect username or password"
 
 #: pages/user/login/login.js
-msgid "验证码错误"
+msgid "楠岃瘉鐮侀敊璇?
 msgstr "Incorrect verification code"
 
 #: pages/user/login/login.js
-msgid "请输入用户名"
+msgid "璇疯緭鍏ョ敤鎴峰悕"
 msgstr "Please enter username"
 
 #: pages/user/login/login.js
-msgid "请输入密码"
+msgid "璇疯緭鍏ュ瘑鐮?
 msgstr "Please enter password"
 
 #: pages/user/login/login.js
-msgid "请输入验证码"
+msgid "璇疯緭鍏ラ獙璇佺爜"
 msgstr "Please enter verification code"
 
 #: pages/user/login/login.js
-msgid "密码不一致"
+msgid "瀵嗙爜涓嶄竴鑷?
 msgstr "Passwords do not match"
 
 #: pages/user/login/login.js
-msgid "账号已存在"
+msgid "璐﹀彿宸插瓨鍦?
 msgstr "Account already exists"
 
 #: pages/user/login/login.js
-msgid "账号不存在"
+msgid "璐﹀彿涓嶅瓨鍦?
 msgstr "Account does not exist"
 
 #: pages/user/login/login.js
-msgid "账号已被禁用"
+msgid "璐﹀彿宸茶绂佺敤"
 msgstr "Account has been disabled"
 
 #: pages/user/login/login.js
-msgid "登录已过期"
+msgid "鐧诲綍宸茶繃鏈?
 msgstr "Login has expired"
 
 #: pages/user/login/login.js
-msgid "请重新登录"
+msgid "璇烽噸鏂扮櫥褰?
 msgstr "Please log in again"
 
 #: pages/user/login/login.js
-msgid "微信登录"
+msgid "寰俊鐧诲綍"
 msgstr "WeChat Login"
 
 #: pages/user/login/login.js
-msgid "手机号登录"
+msgid "鎵嬫満鍙风櫥褰?
 msgstr "Phone Login"
 
 #: pages/user/login/login.js
-msgid "邮箱登录"
+msgid "閭鐧诲綍"
 msgstr "Email Login"
 
 #: pages/user/login/login.js
-msgid "手机号"
+msgid "鎵嬫満鍙?
 msgstr "Phone Number"
 
 #: pages/user/login/login.js
-msgid "邮箱"
+msgid "閭"
 msgstr "Email"
 
 #: pages/user/login/login.js
-msgid "请输入手机号"
+msgid "璇疯緭鍏ユ墜鏈哄彿"
 msgstr "Please enter phone number"
 
 #: pages/user/login/login.js
-msgid "请输入邮箱"
+msgid "璇疯緭鍏ラ偖绠?
 msgstr "Please enter email"
 
 #: pages/user/login/login.js
-msgid "手机号格式错误"
+msgid "鎵嬫満鍙锋牸寮忛敊璇?
 msgstr "Invalid phone number format"
 
 #: pages/user/login/login.js
-msgid "邮箱格式错误"
+msgid "閭鏍煎紡閿欒"
 msgstr "Invalid email format"
 
 #: pages/user/login/login.js
-msgid "密码长度不能少于6位"
+msgid "瀵嗙爜闀垮害涓嶈兘灏戜簬6浣?
 msgstr "Password must be at least 6 characters"
 
 #: pages/user/login/login.js
-msgid "验证码已发送"
+msgid "楠岃瘉鐮佸凡鍙戦€?
 msgstr "Verification code sent"
 
 #: pages/user/login/login.js
-msgid "验证码发送失败"
+msgid "楠岃瘉鐮佸彂閫佸け璐?
 msgstr "Failed to send verification code"
 
 #: pages/user/login/login.js
-msgid "请稍后重试"
+msgid "璇风◢鍚庨噸璇?
 msgstr "Please try again later"
 
 #: pages/user/login/login.js
-msgid "操作过于频繁"
+msgid "鎿嶄綔杩囦簬棰戠箒"
 msgstr "Operation too frequent"
 
 #: pages/user/login/login.js
-msgid "账号或密码错误"
+msgid "璐﹀彿鎴栧瘑鐮侀敊璇?
 msgstr "Account or password error"
 
 #: pages/user/login/login.js
-msgid "登录失败"
+msgid "鐧诲綍澶辫触"
 msgstr "Login failed"
 
 #: pages/user/login/login.js
-msgid "注册失败"
+msgid "娉ㄥ唽澶辫触"
 msgstr "Registration failed"
 
 #: pages/user/login/login.js
-msgid "网络错误"
+msgid "缃戠粶閿欒"
 msgstr "Network error"
 
 #: pages/user/login/login.js
-msgid "服务器错误"
+msgid "鏈嶅姟鍣ㄩ敊璇?
 msgstr "Server error"
 
 #: pages/user/login/login.js
-msgid "未知错误"
+msgid "鏈煡閿欒"
 msgstr "Unknown error"
 
 #: pages/user/login/login.js
-msgid "请检查网络连接"
+msgid "璇锋鏌ョ綉缁滆繛鎺?
 msgstr "Please check your network connection"
 
 #: pages/user/login/login.js
-msgid "请稍后再试"
+msgid "璇风◢鍚庡啀璇?
 msgstr "Please try again later"
 
 #: pages/user/login/login.js
-msgid "系统繁忙"
+msgid "绯荤粺绻佸繖"
 msgstr "System is busy"
 
 #: pages/user/login/login.js
-msgid "系统维护中"
+msgid "绯荤粺缁存姢涓?
 msgstr "System under maintenance"
 
 #: pages/user/login/login.js
-msgid "功能暂未开放"
+msgid "鍔熻兘鏆傛湭寮€鏀?
 msgstr "Feature not yet available"
 
 #: pages/user/login/login.js
-msgid "敬请期待"
+msgid "鏁鏈熷緟"
 msgstr "Stay tuned"
 
 #: pages/user/login/login.js
-msgid "感谢您的支持"
+msgid "鎰熻阿鎮ㄧ殑鏀寔"
 msgstr "Thank you for your support"
 
 #: pages/user/login/login.js
-msgid "欢迎回来"
+msgid "娆㈣繋鍥炴潵"
 msgstr "Welcome back"
 
 #: pages/user/login/login.js
-msgid "欢迎加入"
+msgid "娆㈣繋鍔犲叆"
 msgstr "Welcome to join"
 
 #: pages/user/login/login.js
-msgid "开始您的购物之旅"
+msgid "寮€濮嬫偍鐨勮喘鐗╀箣鏃?
 msgstr "Start your shopping journey"
 
 #: pages/user/login/login.js
-msgid "探索更多精彩内容"
+msgid "鎺㈢储鏇村绮惧僵鍐呭"
 msgstr "Explore more exciting content"
 
 #: pages/user/login/login.js
-msgid "享受更多会员权益"
+msgid "浜彈鏇村浼氬憳鏉冪泭"
 msgstr "Enjoy more member benefits"
 
 #: pages/user/login/login.js
-msgid "获取更多优惠信息"
+msgid "鑾峰彇鏇村浼樻儬淇℃伅"
 msgstr "Get more discount information"
 
 #: pages/user/login/login.js
-msgid "随时随地轻松购物"
+msgid "闅忔椂闅忓湴杞绘澗璐墿"
 msgstr "Shop anytime, anywhere"
 
 #: pages/user/login/login.js
-msgid "品质生活从这里开始"
+msgid "鍝佽川鐢熸椿浠庤繖閲屽紑濮?
 msgstr "Quality life starts here"
 
 #: pages/user/login/login.js
-msgid "让购物成为一种享受"
+msgid "璁╄喘鐗╂垚涓轰竴绉嶄韩鍙?
 msgstr "Make shopping a pleasure"
 
 #: pages/user/login/login.js
-msgid "发现更多好物"
+msgid "鍙戠幇鏇村濂界墿"
 msgstr "Discover more good things"
 
 #: pages/user/login/login.js
-msgid "精选优质商品"
+msgid "绮鹃€変紭璐ㄥ晢鍝?
 msgstr "Selected quality products"
 
 #: pages/user/login/login.js
-msgid "品质保证"
+msgid "鍝佽川淇濊瘉"
 msgstr "Quality guarantee"
 
 #: pages/user/login/login.js
-msgid "极速发货"
+msgid "鏋侀€熷彂璐?
 msgstr "Fast delivery"
 
 #: pages/user/login/login.js
-msgid "无忧售后"
+msgid "鏃犲咖鍞悗"
 msgstr "Worry-free after-sales"
 
 #: pages/user/login/login.js
-msgid "正品保障"
+msgid "姝ｅ搧淇濋殰"
 msgstr "Authentic guarantee"
 
 #: pages/user/login/login.js
-msgid "七天无理由退换"
+msgid "涓冨ぉ鏃犵悊鐢遍€€鎹?
 msgstr "7-day no reason return"
 
 #: pages/user/login/login.js
-msgid "假一赔十"
+msgid "鍋囦竴璧斿崄"
 msgstr "Ten times compensation for fakes"
 
 #: pages/user/login/login.js
-msgid "先行赔付"
+msgid "鍏堣璧斾粯"
 msgstr "Advance compensation"
 
 #: pages/user/login/login.js
-msgid "全程保障"
+msgid "鍏ㄧ▼淇濋殰"
 msgstr "Full protection"
 
 #: pages/user/login/login.js
-msgid "专业客服"
+msgid "涓撲笟瀹㈡湇"
 msgstr "Professional customer service"
 
 #: pages/user/login/login.js
-msgid "24小时在线"
+msgid "24灏忔椂鍦ㄧ嚎"
 msgstr "24 hours online"
 
 #: pages/user/login/login.js
-msgid "快速响应"
+msgid "蹇€熷搷搴?
 msgstr "Quick response"
 
 #: pages/user/login/login.js
-msgid "贴心服务"
+msgid "璐村績鏈嶅姟"
 msgstr "Considerate service"
 
 #: pages/user/login/login.js
-msgid "用心服务每一位用户"
+msgid "鐢ㄥ績鏈嶅姟姣忎竴浣嶇敤鎴?
 msgstr "Serve every user with heart"
 
 #: pages/user/login/login.js
-msgid "为您提供最优质的购物体验"
+msgid "涓烘偍鎻愪緵鏈€浼樿川鐨勮喘鐗╀綋楠?
 msgstr "Provide you with the best shopping experience"
 
 #: pages/user/login/login.js
-msgid "感谢您的信任与支持"
+msgid "鎰熻阿鎮ㄧ殑淇′换涓庢敮鎸?
 msgstr "Thank you for your trust and support"
 
 #: pages/user/login/login.js
-msgid "我们将不断努力做得更好"
+msgid "鎴戜滑灏嗕笉鏂姫鍔涘仛寰楁洿濂?
 msgstr "We will continue to work hard to do better"
 
 #: pages/user/login/login.js
-msgid "期待您的再次光临"
+msgid "鏈熷緟鎮ㄧ殑鍐嶆鍏変复"
 msgstr "Look forward to your next visit"
 
 #: pages/user/login/login.js
-msgid "祝您购物愉快"
+msgid "绁濇偍璐墿鎰夊揩"
 msgstr "Happy shopping"
 
 #: pages/user/login/login.js
-msgid "生活因您而精彩"
+msgid "鐢熸椿鍥犳偍鑰岀簿褰?
 msgstr "Life is wonderful because of you"
 
 #: pages/user/login/login.js
-msgid "让美好触手可及"
+msgid "璁╃編濂借Е鎵嬪彲鍙?
 msgstr "Make beauty within reach"
 
 #: pages/article/detail.js

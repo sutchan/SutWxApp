@@ -1,19 +1,19 @@
-/**
- * 文件名: login.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: 
+﻿/**
+ * 鏂囦欢鍚? login.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: 
  */
 
 const authService = require('../../../services/authService');
 
 /**
- * 文件名: login.js
- * 鐢ㄦ埛登录椤甸潰
+ * 鏂囦欢鍚? login.js
+ * 閻劍鍩涚櫥褰曟い鐢告桨
  */
 Page({
   /**
-   * 椤甸潰鐨勫垵濮嬫暟鎹?   */
+   * 妞ょ敻娼伴惃鍕灥婵鏆熼幑?   */
   data: {
     username: '',
     password: '',
@@ -21,8 +21,7 @@ Page({
   },
 
   /**
-   * 澶勭悊鐢ㄦ埛鍚嶈緭鍏?   * @param {Object} e - 浜嬩欢瀵硅薄
-   */
+   * 婢跺嫮鎮婇悽銊﹀煕閸氬秷绶崗?   * @param {Object} e - 娴滃娆㈢€电钖?   */
   handleUsernameInput(e) {
     this.setData({
       username: e.detail.value
@@ -30,9 +29,8 @@ Page({
   },
 
   /**
-   * 澶勭悊瀵嗙爜杈撳叆
-   * @param {Object} e - 浜嬩欢瀵硅薄
-   */
+   * 婢跺嫮鎮婄€靛棛鐖滄潏鎾冲弳
+   * @param {Object} e - 娴滃娆㈢€电钖?   */
   handlePasswordInput(e) {
     this.setData({
       password: e.detail.value
@@ -40,14 +38,14 @@ Page({
   },
 
   /**
-   * 澶勭悊登录閫昏緫
+   * 婢跺嫮鎮婄櫥褰曢柅鏄忕帆
    */
   async handleLogin() {
     const { username, password } = this.data;
 
     if (!username || !password) {
       wx.showToast({
-        title: '璇疯緭鍏ョ敤鎴峰悕鍜屽瘑鐮?,
+        title: '鐠囩柉绶崗銉ф暏閹村嘲鎮曢崪灞界槕閻?,
         icon: 'none'
       });
       return;
@@ -58,13 +56,13 @@ Page({
     try {
       const user = await authService.login(username, password);
       wx.showToast({
-        title: `登录鎴愬姛锛屾杩?${user.username}`,
+        title: `鐧诲綍閹存劕濮涢敍灞绢偨鏉?${user.username}`,
         icon: 'success'
       });
-      // 登录鎴愬姛鍚庤烦杞埌棣栭〉鎴栧叾浠栭〉闈?      wx.navigateBack(); 
+      // 鐧诲綍閹存劕濮涢崥搴ょ儲鏉烆剙鍩屾＃鏍€夐幋鏍у従娴犳牠銆夐棃?      wx.navigateBack(); 
     } catch (error) {
       wx.showToast({
-        title: error.message || '登录澶辫触',
+        title: error.message || '鐧诲綍婢惰精瑙?,
         icon: 'none'
       });
     } finally {

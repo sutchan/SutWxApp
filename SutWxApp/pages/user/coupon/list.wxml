@@ -1,23 +1,23 @@
-/**
- * 文件名: list.wxml
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: list 椤甸潰缁撴瀯鏂囦欢
+﻿/**
+ * 鏂囦欢鍚? list.wxml
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: list 妞ょ敻娼扮紒鎾寸€弬鍥︽
  */
 <!--pages/user/coupon/list.wxml-->
 <view class="container">
   <mp-tabs activeTab="{{activeTab}}" tabs="{{tabs}}" bindtabclick="onTabChange"></mp-tabs>
 
-  <view wx:if="{{loading}}" class="loading-tip">加载中..</view>
+  <view wx:if="{{loading}}" class="loading-tip">鍔犺浇涓?.</view>
   <block wx:else>
-    <view wx:if="{{couponList.length === 0}}" class="empty-tip">鏆傛棤浼樻儬鍒?/view>
+    <view wx:if="{{couponList.length === 0}}" class="empty-tip">閺嗗倹妫ゆ导妯诲劕閸?/view>
     <view wx:else class="coupon-list">
       <view wx:for="{{couponList}}" wx:key="id" class="coupon-item">
-        <view class="coupon-value">¥{{item.value}}</view>
+        <view class="coupon-value">楼{{item.value}}</view>
         <view class="coupon-info">
           <view class="coupon-name">{{item.name}}</view>
           <view class="coupon-condition">{{item.condition}}</view>
-          <view class="coupon-date">鏈夋晥鏈熻嚦: {{item.endDate}}</view>
+          <view class="coupon-date">閺堝鏅ラ張鐔诲殾: {{item.endDate}}</view>
         </view>
       </view>
     </view>

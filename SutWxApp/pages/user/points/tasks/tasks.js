@@ -1,92 +1,83 @@
-/**
- * 文件名: tasks.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: 
+﻿/**
+ * 鏂囦欢鍚? tasks.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: 
  */
 
-// 绉垎浠诲姟椤甸潰
-const pointsService = require('../../../services/pointsService.js');
+// 缁夘垰鍨庢禒璇插妞ょ敻娼?const pointsService = require('../../../services/pointsService.js');
 
 Page({
   /**
-   * 椤甸潰鐨勫垵濮嬫暟鎹?   */
+   * 妞ょ敻娼伴惃鍕灥婵鏆熼幑?   */
   data: {
-    // 浠诲姟绫诲瀷绛涢€?    taskTypes: [
-      { key: 'all', name: '鍏ㄩ儴浠诲姟', count: 0 },
-      { key: 'once', name: '鏂版墜浠诲姟', count: 0 },
-      { key: 'daily', name: '姣忔棩浠诲姟', count: 0 },
-      { key: 'weekly', name: '姣忓懆浠诲姟', count: 0 },
-      { key: 'monthly', name: '姣忔湀浠诲姟', count: 0 }
+    // 娴犺濮熺猾璇茬€风粵娑⑩偓?    taskTypes: [
+      { key: 'all', name: '閸忋劑鍎存禒璇插', count: 0 },
+      { key: 'once', name: '閺傜増澧滄禒璇插', count: 0 },
+      { key: 'daily', name: '濮ｅ繑妫╂禒璇插', count: 0 },
+      { key: 'weekly', name: '濮ｅ繐鎳嗘禒璇插', count: 0 },
+      { key: 'monthly', name: '濮ｅ繑婀€娴犺濮?, count: 0 }
     ],
     currentType: 'all',
     
-    // 浠诲姟鐘舵€佺瓫閫?    taskStatuses: [
-      { key: 'all', name: '鍏ㄩ儴鐘舵€? },
-      { key: 'pending', name: '鏈畬鎴? },
-      { key: 'completed', name: '宸插畬鎴? },
-      { key: 'unclaimed', name: '寰呴鍙? }
+    // 娴犺濮熼悩鑸碘偓浣虹摣闁?    taskStatuses: [
+      { key: 'all', name: '閸忋劑鍎撮悩鑸碘偓? },
+      { key: 'pending', name: '閺堫亜鐣幋? },
+      { key: 'completed', name: '瀹告彃鐣幋? },
+      { key: 'unclaimed', name: '瀵板懘顣崣? }
     ],
     currentStatus: 'all',
     
-    // 浠诲姟鍒楄〃
-    taskList: [],
+    // 娴犺濮熼崚妤勩€?    taskList: [],
     loading: false,
     hasMore: true,
     page: 1,
     pageSize: 10,
     
-    // 鐢ㄦ埛绉垎淇℃伅
-    userPoints: {
+    // 閻劍鍩涚粔顖氬瀻娣団剝浼?    userPoints: {
       availablePoints: 0,
       todayEarned: 0
     }
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸旂姾娴?   */
   onLoad: function (options) {
-    // 鍔犺浇鐢ㄦ埛绉垎淇℃伅
+    // 閸旂姾娴囬悽銊﹀煕缁夘垰鍨庢穱鈩冧紖
     this.loadUserPoints();
     
-    // 鍔犺浇浠诲姟鍒楄〃
-    this.loadTaskList(true);
+    // 閸旂姾娴囨禒璇插閸掓銆?    this.loadTaskList(true);
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍒濇娓叉煋瀹屾垚
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸掓繃顐煎〒鍙夌厠鐎瑰本鍨?   */
   onReady: function () {
-    // 璁剧疆瀵艰埅鏍忔爣棰?    wx.setNavigationBarTitle({
-      title: '绉垎浠诲姟'
+    // 鐠佸墽鐤嗙€佃壈鍩呴弽蹇旂垼妫?    wx.setNavigationBarTitle({
+      title: '缁夘垰鍨庢禒璇插'
     });
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閺勫墽銇?   */
   onShow: function () {
-    // 椤甸潰鏄剧ず鏃跺埛鏂版暟鎹?    this.loadUserPoints();
+    // 妞ょ敻娼伴弰鍓с仛閺冭泛鍩涢弬鐗堟殶閹?    this.loadUserPoints();
     this.loadTaskList(true);
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰闅愯棌
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨闂呮劘妫?   */
   onHide: function () {
     
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍗歌浇
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸楁瓕娴?   */
   onUnload: function () {
     
   },
 
   /**
-   * 椤甸潰鐩稿叧浜嬩欢澶勭悊鍑芥暟--鐩戝惉鐢ㄦ埛涓嬫媺鍔ㄤ綔
+   * 妞ょ敻娼伴惄绋垮彠娴滃娆㈡径鍕倞閸戣姤鏆?-閻╂垵鎯夐悽銊﹀煕娑撳濯洪崝銊ょ稊
    */
   onPullDownRefresh: function () {
     this.loadTaskList(true).then(() => {
@@ -95,7 +86,7 @@ Page({
   },
 
   /**
-   * 椤甸潰涓婃媺瑙﹀簳浜嬩欢鐨勫鐞嗗嚱鏁?   */
+   * 妞ょ敻娼版稉濠冨鐟欙箑绨虫禍瀣╂閻ㄥ嫬顦╅悶鍡楀毐閺?   */
   onReachBottom: function () {
     if (this.data.hasMore && !this.data.loading) {
       this.loadTaskList(false);
@@ -103,16 +94,16 @@ Page({
   },
 
   /**
-   * 鐢ㄦ埛鐐瑰嚮鍙充笂瑙掑垎浜?   */
+   * 閻劍鍩涢悙鐟板毊閸欏厖绗傜憴鎺戝瀻娴?   */
   onShareAppMessage: function () {
     return {
-      title: '鍋氫换鍔¤禋绉垎锛屽ソ绀肩瓑浣犳潵鎷?,
+      title: '閸嬫矮鎹㈤崝陇绂嬬粔顖氬瀻閿涘苯銈界粈鑲╃搼娴ｇ姵娼甸幏?,
       path: '/pages/user/points/tasks/tasks'
     };
   },
 
   /**
-   * 鍔犺浇鐢ㄦ埛绉垎淇℃伅
+   * 閸旂姾娴囬悽銊﹀煕缁夘垰鍨庢穱鈩冧紖
    */
   loadUserPoints: async function() {
     try {
@@ -123,13 +114,12 @@ Page({
         });
       }
     } catch (error) {
-      console.error('鍔犺浇鐢ㄦ埛绉垎淇℃伅澶辫触:', error);
+      console.error('閸旂姾娴囬悽銊﹀煕缁夘垰鍨庢穱鈩冧紖婢惰精瑙?', error);
     }
   },
 
   /**
-   * 鍔犺浇浠诲姟鍒楄〃
-   */
+   * 閸旂姾娴囨禒璇插閸掓銆?   */
   loadTaskList: async function(reset = false) {
     if (this.data.loading) return;
     
@@ -152,7 +142,7 @@ Page({
         const newTasks = result.data.list || [];
         const hasMore = newTasks.length === this.data.pageSize;
         
-        // 鏇存柊浠诲姟绫诲瀷璁℃暟
+        // 閺囧瓨鏌婃禒璇插缁鐎风拋鈩冩殶
         if (reset && result.data.typeCounts) {
           const taskTypes = this.data.taskTypes.map(type => {
             const count = result.data.typeCounts[type.key] || 0;
@@ -172,25 +162,24 @@ Page({
           loading: false
         });
         wx.showToast({
-          title: result.message || '鍔犺浇浠诲姟澶辫触',
+          title: result.message || '閸旂姾娴囨禒璇插婢惰精瑙?,
           icon: 'none'
         });
       }
     } catch (error) {
-      console.error('鍔犺浇浠诲姟鍒楄〃澶辫触:', error);
+      console.error('閸旂姾娴囨禒璇插閸掓銆冩径杈Е:', error);
       this.setData({
         loading: false
       });
       wx.showToast({
-        title: '缃戠粶閿欒锛岃閲嶈瘯',
+        title: '缂冩垹绮堕柨娆掝嚖閿涘矁顕柌宥堢槸',
         icon: 'none'
       });
     }
   },
 
   /**
-   * 鍒囨崲浠诲姟绫诲瀷
-   */
+   * 閸掑洦宕叉禒璇插缁鐎?   */
   switchTaskType: function(e) {
     const type = e.currentTarget.dataset.type;
     if (type === this.data.currentType) return;
@@ -206,7 +195,7 @@ Page({
   },
 
   /**
-   * 鍒囨崲浠诲姟鐘舵€?   */
+   * 閸掑洦宕叉禒璇插閻樿埖鈧?   */
   switchTaskStatus: function(e) {
     const status = e.currentTarget.dataset.status;
     if (status === this.data.currentStatus) return;
@@ -222,14 +211,14 @@ Page({
   },
 
   /**
-   * 瀹屾垚浠诲姟
+   * 鐎瑰本鍨氭禒璇插
    */
   completeTask: async function(e) {
     const taskId = e.currentTarget.dataset.id;
     
     try {
       wx.showLoading({
-        title: '姝ｅ湪瀹屾垚浠诲姟...',
+        title: '濮濓絽婀€瑰本鍨氭禒璇插...',
       });
       
       const result = await pointsService.completeTask(taskId);
@@ -238,40 +227,37 @@ Page({
       
       if (result.success) {
         wx.showToast({
-          title: '浠诲姟瀹屾垚',
+          title: '娴犺濮熺€瑰本鍨?,
           icon: 'success'
         });
         
-        // 鍒锋柊浠诲姟鍒楄〃
-        this.loadTaskList(true);
+        // 閸掗攱鏌婃禒璇插閸掓銆?        this.loadTaskList(true);
         
-        // 鍒锋柊鐢ㄦ埛绉垎
-        this.loadUserPoints();
+        // 閸掗攱鏌婇悽銊﹀煕缁夘垰鍨?        this.loadUserPoints();
       } else {
         wx.showToast({
-          title: result.message || '瀹屾垚浠诲姟澶辫触',
+          title: result.message || '鐎瑰本鍨氭禒璇插婢惰精瑙?,
           icon: 'none'
         });
       }
     } catch (error) {
       wx.hideLoading();
-      console.error('瀹屾垚浠诲姟澶辫触:', error);
+      console.error('鐎瑰本鍨氭禒璇插婢惰精瑙?', error);
       wx.showToast({
-        title: '缃戠粶閿欒锛岃閲嶈瘯',
+        title: '缂冩垹绮堕柨娆掝嚖閿涘矁顕柌宥堢槸',
         icon: 'none'
       });
     }
   },
 
   /**
-   * 棰嗗彇浠诲姟濂栧姳
-   */
+   * 妫板棗褰囨禒璇插婵傛牕濮?   */
   claimTaskReward: async function(e) {
     const taskId = e.currentTarget.dataset.id;
     
     try {
       wx.showLoading({
-        title: '姝ｅ湪棰嗗彇濂栧姳...',
+        title: '濮濓絽婀０鍡楀絿婵傛牕濮?..',
       });
       
       const result = await pointsService.claimTaskReward(taskId);
@@ -280,34 +266,31 @@ Page({
       
       if (result.success) {
         wx.showToast({
-          title: `鑾峰緱${result.data.points}绉垎`,
+          title: `閼惧嘲绶?{result.data.points}缁夘垰鍨巂,
           icon: 'success'
         });
         
-        // 鍒锋柊浠诲姟鍒楄〃
-        this.loadTaskList(true);
+        // 閸掗攱鏌婃禒璇插閸掓銆?        this.loadTaskList(true);
         
-        // 鍒锋柊鐢ㄦ埛绉垎
-        this.loadUserPoints();
+        // 閸掗攱鏌婇悽銊﹀煕缁夘垰鍨?        this.loadUserPoints();
       } else {
         wx.showToast({
-          title: result.message || '棰嗗彇濂栧姳澶辫触',
+          title: result.message || '妫板棗褰囨總鏍уС婢惰精瑙?,
           icon: 'none'
         });
       }
     } catch (error) {
       wx.hideLoading();
-      console.error('棰嗗彇浠诲姟濂栧姳澶辫触:', error);
+      console.error('妫板棗褰囨禒璇插婵傛牕濮虫径杈Е:', error);
       wx.showToast({
-        title: '缃戠粶閿欒锛岃閲嶈瘯',
+        title: '缂冩垹绮堕柨娆掝嚖閿涘矁顕柌宥堢槸',
         icon: 'none'
       });
     }
   },
 
   /**
-   * 璺宠浆鍒颁换鍔¤鎯呴〉
-   */
+   * 鐠哄疇娴嗛崚棰佹崲閸斅ゎ嚊閹懘銆?   */
   goToTaskDetail: function(e) {
     const taskId = e.currentTarget.dataset.id;
     wx.navigateTo({
@@ -316,7 +299,7 @@ Page({
   },
 
   /**
-   * 璺宠浆鍒扮Н鍒嗛〉闈?   */
+   * 鐠哄疇娴嗛崚鎵濋崚鍡涖€夐棃?   */
   goToPoints: function() {
     wx.switchTab({
       url: '/pages/user/points/points'
@@ -324,13 +307,13 @@ Page({
   },
 
   /**
-   * 鏍煎紡鍖栦换鍔¤繘搴?   */
+   * 閺嶇厧绱￠崠鏍︽崲閸斅ょ箻鎼?   */
   formatTaskProgress: function(current, target) {
     return `${current}/${target}`;
   },
 
   /**
-   * 璁＄畻浠诲姟杩涘害鐧惧垎姣?   */
+   * 鐠侊紕鐣绘禒璇插鏉╂稑瀹抽惂鎯у瀻濮?   */
   getTaskProgressPercent: function(current, target) {
     if (!target || target <= 0) return 0;
     const percent = (current / target) * 100;

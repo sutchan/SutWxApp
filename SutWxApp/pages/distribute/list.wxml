@@ -1,28 +1,28 @@
-<!-- 鍒嗛攢鍒楄〃椤甸潰 -->
+﻿<!-- 閸掑棝鏀㈤崚妤勩€冩い鐢告桨 -->
 <view class="distribute-list-page">
-  <!-- 绛涢€夋爮 -->
+  <!-- 缁涙盯鈧鐖?-->
   <view class="filter-bar">
     <view class="filter-item">
-      <text class="filter-label">鐘舵€侊細</text>
+      <text class="filter-label">閻樿埖鈧緤绱?/text>
       <picker bindchange="onStatusChange" value="{{status}}" range="['all', 'pending', 'approved', 'rejected', 'deleted']" range-key="name">
         <view class="filter-picker">
-          {{status === 'all' ? '鍏ㄩ儴' : status === 'pending' ? '寰呭鏍? : status === 'approved' ? '宸查€氳繃' : status === 'rejected' ? '宸查┏鍥? : '宸插垹闄?}}
+          {{status === 'all' ? '閸忋劑鍎? : status === 'pending' ? '瀵板懎顓搁弽? : status === 'approved' ? '瀹告煡鈧俺绻? : status === 'rejected' ? '瀹告煡鈹忛崶? : '瀹告彃鍨归梽?}}
           <image src="../../images/arrow-down.svg" class="arrow-icon" />
         </view>
       </picker>
     </view>
     <view class="filter-item">
-      <text class="filter-label">绫诲瀷锛?/text>
+      <text class="filter-label">缁鐎烽敍?/text>
       <picker bindchange="onTypeChange" value="{{type}}" range="['all', 'product', 'article']" range-key="name">
         <view class="filter-picker">
-          {{type === 'all' ? '鍏ㄩ儴' : type === 'product' ? '鍟嗗搧' : '鏂囩珷'}}
+          {{type === 'all' ? '閸忋劑鍎? : type === 'product' ? '閸熷棗鎼? : '閺傚洨鐝?}}
           <image src="../../images/arrow-down.svg" class="arrow-icon" />
         </view>
       </picker>
     </view>
   </view>
 
-  <!-- 鍒嗛攢鍒楄〃 -->
+  <!-- 閸掑棝鏀㈤崚妤勩€?-->
   <view class="distribute-list">
     <block wx:for="{{distributeList}}" wx:key="id" wx:for-item="item">
       <view class="distribute-item">
@@ -32,16 +32,16 @@
             <text class="distribute-id">ID: {{item.id}}</text>
           </view>
           <view class="distribute-status" wx:if="{{item.status === 'pending'}}">
-            <text class="status-pending">寰呭鏍?/text>
+            <text class="status-pending">瀵板懎顓搁弽?/text>
           </view>
           <view class="distribute-status" wx:elif="{{item.status === 'approved'}}">
-            <text class="status-approved">宸查€氳繃</text>
+            <text class="status-approved">瀹告煡鈧俺绻?/text>
           </view>
           <view class="distribute-status" wx:elif="{{item.status === 'rejected'}}">
-            <text class="status-rejected">宸查┏鍥?/text>
+            <text class="status-rejected">瀹告煡鈹忛崶?/text>
           </view>
           <view class="distribute-status" wx:else>
-            <text class="status-deleted">宸插垹闄?/text>
+            <text class="status-deleted">瀹告彃鍨归梽?/text>
           </view>
         </view>
 
@@ -50,46 +50,43 @@
         </view>
 
         <view class="distribute-meta">
-          <text class="distribute-type">绫诲瀷锛歿{item.type === 'product' ? '鍟嗗搧' : '鏂囩珷'}}</text>
-          <text class="distribute-time">鍒涘缓鏃堕棿锛歿{item.createTime}}</text>
+          <text class="distribute-type">缁鐎烽敍姝縶item.type === 'product' ? '閸熷棗鎼? : '閺傚洨鐝?}}</text>
+          <text class="distribute-time">閸掓稑缂撻弮鍫曟？閿涙{item.createTime}}</text>
         </view>
 
-        <!-- 鎿嶄綔鎸夐挳 -->
+        <!-- 閹垮秳缍旈幐澶愭尦 -->
         <view class="distribute-actions" wx:if="{{item.status === 'pending'}}">
           <button class="action-btn approve-btn" bindtap="approveDistribute" data-id="{{item.id}}">
-            瀹℃牳閫氳繃
+            鐎光剝鐗抽柅姘崇箖
           </button>
           <button class="action-btn reject-btn" bindtap="rejectDistribute" data-id="{{item.id}}">
-            椹冲洖
-          </button>
+            妞瑰啿娲?          </button>
           <button class="action-btn delete-btn" bindtap="deleteDistribute" data-id="{{item.id}}">
-            鍒犻櫎
-          </button>
+            閸掔娀娅?          </button>
         </view>
         <view class="distribute-actions" wx:elif="{{item.status === 'approved' || item.status === 'rejected'}}">
           <button class="action-btn delete-btn" bindtap="deleteDistribute" data-id="{{item.id}}">
-            鍒犻櫎
-          </button>
+            閸掔娀娅?          </button>
         </view>
 
-        <!-- 鏌ョ湅璇︽儏鎸夐挳 -->
+        <!-- 閺屻儳婀呯拠锔藉剰閹稿鎸?-->
         <view class="detail-btn-container">
           <button class="detail-btn" bindtap="goToDetail" data-id="{{item.id}}">
-            鏌ョ湅璇︽儏
+            閺屻儳婀呯拠锔藉剰
           </button>
         </view>
       </view>
     </block>
   </view>
 
-  <!-- 绌虹姸鎬?-->
+  <!-- 缁岃櫣濮搁幀?-->
   <view class="empty-state" wx:if="{{distributeList.length === 0 && !loading}}">
     <image src="../../images/empty.svg" class="empty-image" />
-    <text class="empty-text">鏆傛棤鍒嗛攢鏁版嵁</text>
+    <text class="empty-text">閺嗗倹妫ら崚鍡涙敘閺佺増宓?/text>
   </view>
 
-  <!-- 鍔犺浇鏇村 -->
+  <!-- 閸旂姾娴囬弴鏉戭樋 -->
   <view class="loading-more" wx:if="{{loading}}">
-    <text>加载中..</text>
+    <text>鍔犺浇涓?.</text>
   </view>
 </view>

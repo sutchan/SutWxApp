@@ -1,10 +1,10 @@
-/**
- * 文件名: methods.wxss
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: methods 页面样式文件
+﻿/**
+ * 鏂囦欢鍚? methods.wxss
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: methods 椤甸潰鏍峰紡鏂囦欢
  */
-/* 支付方式閫夋嫨椤甸潰鏍峰紡 */
+/* 鏀粯鏂瑰紡闁瀚ㄦい鐢告桨閺嶅嘲绱?*/
 .payment-methods-container {
   min-height: 100vh;
   background-color: #f5f5f5;
@@ -12,7 +12,7 @@
   flex-direction: column;
 }
 
-/* 订单閲戦淇℃伅 */
+/* 璁㈠崟闁叉垿顤傛穱鈩冧紖 */
 .order-amount {
   background-color: #fff;
   padding: 24px 20px;
@@ -33,7 +33,7 @@
   color: #f56c6c;
 }
 
-/* 加载状态*/
+/* 鍔犺浇鐘舵€?/
 .loading-container {
   display: flex;
   flex-direction: column;
@@ -62,7 +62,7 @@
   100% { transform: rotate(360deg); }
 }
 
-/* 支付方式鍒楄〃 */
+/* 鏀粯鏂瑰紡閸掓銆?*/
 .payment-methods-list {
   flex: 1;
   background-color: #fff;
@@ -89,7 +89,7 @@
   background-color: rgba(7, 193, 96, 0.05);
 }
 
-/* 支付方式鍥炬爣 */
+/* 鏀粯鏂瑰紡閸ョ偓鐖?*/
 .method-icon {
   width: 40px;
   height: 40px;
@@ -101,7 +101,7 @@
   height: 100%;
 }
 
-/* 支付方式淇℃伅 */
+/* 鏀粯鏂瑰紡娣団剝浼?*/
 .method-info {
   flex: 1;
 }
@@ -128,7 +128,7 @@
   color: #999;
 }
 
-/* 鍗曢€夋寜閽?*/
+/* 閸楁洟鈧瀵滈柦?*/
 .method-radio {
   width: 20px;
   height: 20px;
@@ -160,7 +160,7 @@
   border-radius: 50%;
 }
 
-/* 纭鏀粯鎸夐挳 */
+/* 绾喛顓婚弨顖欑帛閹稿鎸?*/
 .payment-actions {
   padding: 20px;
   background-color: #fff;

@@ -1,17 +1,17 @@
-/**
- * 文件名: pointsExchange.wxss
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: pointsExchange 页面样式文件
+﻿﻿/**
+ * 鏂囦欢鍚? pointsExchange.wxss
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: pointsExchange 椤甸潰鏍峰紡鏂囦欢
  */
-/* 绉垎鍏戞崲椤甸潰鏍峰紡 */
+/* 缁夘垰鍨庨崗鎴炲床妞ょ敻娼伴弽宄扮础 */
 
 .container {
   background-color: #f5f5f5;
   min-height: 100vh;
 }
 
-/* 绉垎澶撮儴 */
+/* 缁夘垰鍨庢径鎾劥 */
 .points-header {
   background: linear-gradient(135deg, #ff8a00 0%, #ff5e00 100%);
   color: white;
@@ -51,7 +51,7 @@
   text-align: center;
 }
 
-/* 鍒嗙被鏍囩 */
+/* 閸掑棛琚弽鍥╊劮 */
 .tab-bar {
   background-color: white;
   display: flex;
@@ -85,7 +85,7 @@
   border-radius: 2rpx;
 }
 
-/* 鎺掑簭绛涢€?*/
+/* 閹烘帒绨粵娑⑩偓?*/
 .sort-bar {
   background-color: white;
   padding: 20rpx 30rpx;
@@ -108,12 +108,12 @@
   color: #999;
 }
 
-/* 鍐呭鍖哄煙 */
+/* 閸愬懎顔愰崠鍝勭厵 */
 .content {
   padding: 20rpx 30rpx;
 }
 
-/* 鍏戞崲鍟嗗搧鍒楄〃 */
+/* 閸忔垶宕查崯鍡楁惂閸掓銆?*/
 .exchange-list {
   display: flex;
   flex-direction: column;
@@ -265,7 +265,7 @@
   color: #999;
 }
 
-/* 绌虹姸鎬?*/
+/* 缁岃櫣濮搁幀?*/
 .empty-state {
   display: flex;
   flex-direction: column;
@@ -286,7 +286,7 @@
   margin-top: 20rpx;
 }
 
-/* 加载状态*/
+/* 鍔犺浇鐘舵€?/
 .loading-state {
   display: flex;
   flex-direction: column;
@@ -311,7 +311,7 @@
   100% { transform: rotate(360deg); }
 }
 
-/* 娌℃湁鏇村鏁版嵁 */
+/* 濞屸剝婀侀弴鏉戭樋閺佺増宓?*/
 .no-more-data {
   text-align: center;
   padding: 30rpx 0;
@@ -319,7 +319,7 @@
   font-size: 26rpx;
 }
 
-/* 绛涢€夊脊绐?*/
+/* 缁涙盯鈧鑴婄粣?*/
 .filter-popup {
   position: fixed;
   top: 0;

@@ -1,37 +1,36 @@
-/**
- * 文件名: jest.setup.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: Jest 测试环境设置文件
+﻿/**
+ * 鏂囦欢鍚? jest.setup.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: Jest 娴嬭瘯鐜璁剧疆鏂囦欢
  */
 
-// 模拟微信小程序环境
-global.wx = {
-  // 存储相关
+// 妯℃嫙寰俊灏忕▼搴忕幆澧?global.wx = {
+  // 瀛樺偍鐩稿叧
   setStorageSync: jest.fn(),
   getStorageSync: jest.fn(),
   removeStorageSync: jest.fn(),
   clearStorageSync: jest.fn(),
   getStorageInfoSync: jest.fn(),
   
-  // 网络请求
+  // 缃戠粶璇锋眰
   request: jest.fn(),
   uploadFile: jest.fn(),
   downloadFile: jest.fn(),
   
-  // 媒体相关
+  // 濯掍綋鐩稿叧
   chooseImage: jest.fn(),
   previewImage: jest.fn(),
   getSystemInfoSync: jest.fn(),
   
-  // 导航相关
+  // 瀵艰埅鐩稿叧
   navigateTo: jest.fn(),
   redirectTo: jest.fn(),
   switchTab: jest.fn(),
   navigateBack: jest.fn(),
   reLaunch: jest.fn(),
   
-  // 界面相关
+  // 鐣岄潰鐩稿叧
   showToast: jest.fn(),
   showModal: jest.fn(),
   showLoading: jest.fn(),
@@ -42,7 +41,7 @@ global.wx = {
   startPullDownRefresh: jest.fn(),
   stopPullDownRefresh: jest.fn(),
   
-  // 设备相关
+  // 璁惧鐩稿叧
   getSystemInfo: jest.fn(),
   getSystemInfoSync: jest.fn(() => ({
     platform: 'devtools',
@@ -52,32 +51,32 @@ global.wx = {
     windowHeight: 667
   })),
   
-  // 位置相关
+  // 浣嶇疆鐩稿叧
   getLocation: jest.fn(),
   chooseLocation: jest.fn(),
   openLocation: jest.fn(),
   
-  // 文件相关
+  // 鏂囦欢鐩稿叧
   saveFile: jest.fn(),
   getFileInfo: jest.fn(),
   openDocument: jest.fn(),
   
-  // 支付相关
+  // 鏀粯鐩稿叧
   requestPayment: jest.fn(),
   
-  // 登录相关
+  // 鐧诲綍鐩稿叧
   login: jest.fn(),
   checkSession: jest.fn(),
   getUserInfo: jest.fn(),
   getUserProfile: jest.fn(),
   
-  // 分享相关
+  // 鍒嗕韩鐩稿叧
   showShareMenu: jest.fn(),
   hideShareMenu: jest.fn(),
   updateShareMenu: jest.fn(),
   onShareAppMessage: jest.fn(),
   
-  // 设置相关
+  // 璁剧疆鐩稿叧
   openSetting: jest.fn(),
   getSetting: jest.fn(),
   authorize: jest.fn(),
@@ -96,7 +95,7 @@ global.wx = {
   notifyBLECharacteristicValueChange: jest.fn()
 };
 
-// 模拟微信小程序的 Page 函数
+// 妯℃嫙寰俊灏忕▼搴忕殑 Page 鍑芥暟
 global.Page = (options) => {
   const pageInstance = {
     data: { ...options.data },
@@ -120,13 +119,12 @@ global.Page = (options) => {
     }
   };
 
-  // 将方法合并到实例上
-  Object.assign(pageInstance, options.methods || {});
+  // 灏嗘柟娉曞悎骞跺埌瀹炰緥涓?  Object.assign(pageInstance, options.methods || {});
   
   return pageInstance;
 };
 
-// 模拟微信小程序的 Component 函数
+// 妯℃嫙寰俊灏忕▼搴忕殑 Component 鍑芥暟
 global.Component = (options) => {
   const componentInstance = {
     properties: options.properties || {},
@@ -153,25 +151,23 @@ global.Component = (options) => {
       return componentInstance.behaviors.includes(behavior);
     },
     triggerEvent(name, detail, options) {
-      // 模拟事件触发
+      // 妯℃嫙浜嬩欢瑙﹀彂
       return { name, detail, options };
     }
   };
 
-  // 将 properties 的默认值合并到 data 中
-  for (const key in componentInstance.properties) {
+  // 灏?properties 鐨勯粯璁ゅ€煎悎骞跺埌 data 涓?  for (const key in componentInstance.properties) {
     if (componentInstance.properties[key] && componentInstance.properties[key].value !== undefined) {
       componentInstance.data[key] = componentInstance.properties[key].value;
     }
   }
 
-  // 将方法合并到实例上
-  Object.assign(componentInstance, options.methods || {});
+  // 灏嗘柟娉曞悎骞跺埌瀹炰緥涓?  Object.assign(componentInstance, options.methods || {});
   
   return componentInstance;
 };
 
-// 模拟微信小程序的 App 函数
+// 妯℃嫙寰俊灏忕▼搴忕殑 App 鍑芥暟
 global.App = (options) => {
   const appInstance = {
     globalData: options.globalData || {},
@@ -186,18 +182,17 @@ global.App = (options) => {
   return appInstance;
 };
 
-// 模拟微信小程序的 getApp 函数
+// 妯℃嫙寰俊灏忕▼搴忕殑 getApp 鍑芥暟
 global.getApp = () => ({
   globalData: {}
 });
 
-// 模拟微信小程序的 getCurrentPages 函数
+// 妯℃嫙寰俊灏忕▼搴忕殑 getCurrentPages 鍑芥暟
 global.getCurrentPages = () => [];
 
-// 模拟控制台输出，避免测试时输出过多信息
-global.console = {
+// 妯℃嫙鎺у埗鍙拌緭鍑猴紝閬垮厤娴嬭瘯鏃惰緭鍑鸿繃澶氫俊鎭?global.console = {
   ...console,
-  // 在测试中保留 error 和 warn，静默 log 和 info
+  // 鍦ㄦ祴璇曚腑淇濈暀 error 鍜?warn锛岄潤榛?log 鍜?info
   log: jest.fn(),
   info: jest.fn(),
   warn: console.warn,

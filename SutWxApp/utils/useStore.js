@@ -1,25 +1,21 @@
-/**
- * 文件名: useStore.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-24
- * 浣滆€? Sut
- * 鐘舵€佺鐞嗚緟鍔╁嚱鏁帮紝鎻愪緵鍦ㄩ〉闈㈠拰缁勪欢涓娇鐢╯tore鐨勪究鎹锋柟娉曪紝鏀寔鐘舵€佹槧灏勫拰mutations缁戝畾
- */
+﻿/**
+ * 鏂囦欢鍚? useStore.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-24
+ * 娴ｆ粏鈧? Sut
+ * 閻樿埖鈧胶顓搁悶鍡氱窡閸斺晛鍤遍弫甯礉閹绘劒绶甸崷銊┿€夐棃銏犳嫲缂佸嫪娆㈡稉顓濆▏閻⑩暞tore閻ㄥ嫪绌堕幑閿嬫煙濞夋洩绱濋弨顖涘瘮閻樿埖鈧焦妲х亸鍕嫲mutations缂佹垵鐣? */
 
 const store = require('./store.js');
 
 /**
- * 椤甸潰鍜岀粍浠朵娇鐢╯tore鐨勮緟鍔╂柟娉? * @param {Object} options - 缁勪欢閫夐」
- * @param {Array} mapState - 闇€瑕佹槧灏勭殑鐘舵€佽矾寰勬暟缁? * @param {Object} mapMutations - 闇€瑕佹槧灏勭殑mutations瀵硅薄
- * @returns {Object} 澧炲己鍚庣殑缁勪欢閫夐」
- */
+ * 妞ょ敻娼伴崪宀€绮嶆禒鏈靛▏閻⑩暞tore閻ㄥ嫯绶熼崝鈺傛煙濞? * @param {Object} options - 缂佸嫪娆㈤柅澶愩€? * @param {Array} mapState - 闂団偓鐟曚焦妲х亸鍕畱閻樿埖鈧浇鐭惧鍕殶缂? * @param {Object} mapMutations - 闂団偓鐟曚焦妲х亸鍕畱mutations鐎电钖? * @returns {Object} 婢х偛宸遍崥搴ｆ畱缂佸嫪娆㈤柅澶愩€? */
 function useStore(options = {}, mapState = [], mapMutations = {}) {
   const { onLoad, onUnload, ...restOptions } = options;
   
   return {
     ...restOptions,
     
-    // 缁勪欢鏁版嵁涓垵濮嬪寲store鐘舵€?    data: {
+    // 缂佸嫪娆㈤弫鐗堝祦娑擃厼鍨垫慨瀣store閻樿埖鈧?    data: {
       ...(options.data || {}),
       ...mapState.reduce((stateMap, statePath) => {
         stateMap[getStateKey(statePath)] = store.getState(statePath);
@@ -27,13 +23,12 @@ function useStore(options = {}, mapState = [], mapMutations = {}) {
       }, {})
     },
     
-    // 鐢熷懡鍛ㄦ湡鏂规硶锛氱粍浠跺姞杞芥椂璁㈤槄store
+    // 閻㈢喎鎳￠崨銊︽埂閺傝纭堕敍姘辩矋娴犺泛濮炴潪鑺ユ鐠併垽妲剆tore
     onLoad(options) {
-      // 鐢熸垚鍞竴鏍囪瘑绗︾敤浜庤闃?      this._storeId = `component_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      // 閻㈢喐鍨氶崬顖欑閺嶅洩鐦戠粭锔炬暏娴滃氦顓归梼?      this._storeId = `component_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
       
-      // 璁㈤槄store鍙樺寲
-      store.subscribe(this._storeId, (newState) => {
-        // 鏇存柊鏄犲皠鐨勭姸鎬?        const updateData = {};
+      // 鐠併垽妲剆tore閸欐ê瀵?      store.subscribe(this._storeId, (newState) => {
+        // 閺囧瓨鏌婇弰鐘茬殸閻ㄥ嫮濮搁幀?        const updateData = {};
         mapState.forEach(statePath => {
           const key = getStateKey(statePath);
           const value = store.getState(statePath);
@@ -42,31 +37,30 @@ function useStore(options = {}, mapState = [], mapMutations = {}) {
           }
         });
         
-        // 濡傛灉鏈夋暟鎹彉鍖栵紝鏇存柊缁勪欢鏁版嵁
-        if (Object.keys(updateData).length > 0) {
+        // 婵″倹鐏夐張澶嬫殶閹诡喖褰夐崠鏍电礉閺囧瓨鏌婄紒鍕閺佺増宓?        if (Object.keys(updateData).length > 0) {
           this.setData(updateData);
         }
       });
       
-      // 璋冪敤鍘熷鐨刼nLoad
+      // 鐠嬪啰鏁ら崢鐔奉潗閻ㄥ埣nLoad
       if (onLoad) {
         onLoad.call(this, options);
       }
     },
     
-    // 鐢熷懡鍛ㄦ湡鏂规硶锛氱粍浠跺嵏杞芥椂鍙栨秷璁㈤槄
+    // 閻㈢喎鎳￠崨銊︽埂閺傝纭堕敍姘辩矋娴犺泛宓忔潪鑺ユ閸欐牗绉风拋銏ゆ
     onUnload() {
       if (this._storeId) {
         store.unsubscribe(this._storeId);
       }
       
-      // 璋冪敤鍘熷鐨刼nUnload
+      // 鐠嬪啰鏁ら崢鐔奉潗閻ㄥ埣nUnload
       if (onUnload) {
         onUnload.call(this);
       }
     },
     
-    // 鏄犲皠mutations鍒扮粍浠舵柟娉?    ...Object.keys(mapMutations).reduce((methods, methodName) => {
+    // 閺勭姴鐨爉utations閸掓壆绮嶆禒鑸垫煙濞?    ...Object.keys(mapMutations).reduce((methods, methodName) => {
       methods[methodName] = function(payload) {
         store.commit(mapMutations[methodName], payload);
       };
@@ -76,17 +70,13 @@ function useStore(options = {}, mapState = [], mapMutations = {}) {
 }
 
 /**
- * 灏嗙姸鎬佽矾寰勮浆鎹负缁勪欢鏁版嵁閿悕
- * @param {string} statePath - 鐘舵€佽矾寰? * @returns {string} 杞崲鍚庣殑閿悕
- */
+ * 鐏忓棛濮搁幀浣界熅瀵板嫯娴嗛幑顫礋缂佸嫪娆㈤弫鐗堝祦闁款喖鎮? * @param {string} statePath - 閻樿埖鈧浇鐭惧? * @returns {string} 鏉烆剚宕查崥搴ｆ畱闁款喖鎮? */
 function getStateKey(statePath) {
   return statePath.replace(/\./g, '_');
 }
 
 /**
- * 鍒涘缓store缁戝畾鐨勯〉闈㈤厤缃? * @param {Array} mapState - 闇€瑕佹槧灏勭殑鐘舵€佽矾寰勬暟缁? * @param {Object} mapMutations - 闇€瑕佹槧灏勭殑mutations瀵硅薄
- * @returns {Function} 椤甸潰澧炲己鍑芥暟
- */
+ * 閸掓稑缂搒tore缂佹垵鐣鹃惃鍕€夐棃銏ゅ帳缂? * @param {Array} mapState - 闂団偓鐟曚焦妲х亸鍕畱閻樿埖鈧浇鐭惧鍕殶缂? * @param {Object} mapMutations - 闂団偓鐟曚焦妲х亸鍕畱mutations鐎电钖? * @returns {Function} 妞ょ敻娼版晶鐐插繁閸戣姤鏆? */
 function createPage(mapState = [], mapMutations = {}) {
   return function(options) {
     return useStore(options, mapState, mapMutations);
@@ -94,12 +84,10 @@ function createPage(mapState = [], mapMutations = {}) {
 }
 
 /**
- * 鍒涘缓store缁戝畾鐨勭粍浠堕厤缃? * @param {Array} mapState - 闇€瑕佹槧灏勭殑鐘舵€佽矾寰勬暟缁? * @param {Object} mapMutations - 闇€瑕佹槧灏勭殑mutations瀵硅薄
- * @returns {Function} 缁勪欢澧炲己鍑芥暟
- */
+ * 閸掓稑缂搒tore缂佹垵鐣鹃惃鍕矋娴犲爼鍘ょ純? * @param {Array} mapState - 闂団偓鐟曚焦妲х亸鍕畱閻樿埖鈧浇鐭惧鍕殶缂? * @param {Object} mapMutations - 闂団偓鐟曚焦妲х亸鍕畱mutations鐎电钖? * @returns {Function} 缂佸嫪娆㈡晶鐐插繁閸戣姤鏆? */
 function createComponent(mapState = [], mapMutations = {}) {
   return function(options) {
-    // 瀵逛簬缁勪欢锛屼娇鐢╟reated鍜宒etached鐢熷懡鍛ㄦ湡
+    // 鐎甸€涚艾缂佸嫪娆㈤敍灞煎▏閻⑩暉reated閸滃畳etached閻㈢喎鎳￠崨銊︽埂
     const { created, detached, ...restOptions } = options;
     
     const storeOptions = useStore(restOptions, mapState, mapMutations);
@@ -107,7 +95,7 @@ function createComponent(mapState = [], mapMutations = {}) {
     return {
       ...storeOptions,
       created() {
-        // 缁勪欢鍒涘缓鏃惰闃卻tore
+        // 缂佸嫪娆㈤崚娑樼紦閺冩儼顓归梼鍗籺ore
         this._storeId = `component_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
         
         store.subscribe(this._storeId, (newState) => {
@@ -130,7 +118,7 @@ function createComponent(mapState = [], mapMutations = {}) {
         }
       },
       detached() {
-        // 缁勪欢鍒嗙鏃跺彇娑堣闃?        if (this._storeId) {
+        // 缂佸嫪娆㈤崚鍡欘瀲閺冭泛褰囧☉鍫ｎ吂闂?        if (this._storeId) {
           store.unsubscribe(this._storeId);
         }
         

@@ -1,19 +1,19 @@
-/* pages/user/user.wxss - 版本号: 1.0.1 - 2025-11-24 */
+﻿/* pages/user/user.wxss - 鐗堟湰鍙? 1.0.1 - 2025-11-24 */
 
-/* 鍏ㄥ眬鏍峰紡 */
+/* 閸忋劌鐪弽宄扮础 */
 page {
   background-color: #f5f5f5;
   -webkit-font-smoothing: antialiased;
 }
 
-/* 瀹瑰櫒鏍峰紡 */
+/* 鐎圭懓娅掗弽宄扮础 */
 .user-center-container {
   width: 100%;
   min-height: 100vh;
   background-color: #f5f5f5;
 }
 
-/* 鐢ㄦ埛淇℃伅澶撮儴 */
+/* 閻劍鍩涙穱鈩冧紖婢舵挳鍎?*/
 .user-header {
   background-color: #fff;
   padding: 30rpx 40rpx;
@@ -79,7 +79,7 @@ page {
   color: #333;
 }
 
-/* 缁熻淇℃伅鍖哄煙 */
+/* 缂佺喕顓告穱鈩冧紖閸栧搫鐓?*/
 .stats-section {
   background-color: #fff;
   padding: 30rpx 0;
@@ -112,7 +112,7 @@ page {
   background-color: #eee;
 }
 
-/* 鍔熻兘鑿滃崟 */
+/* 閸旂喕鍏橀懣婊冨礋 */
 .menu-section {
   background-color: #fff;
   padding: 20rpx 0;
@@ -144,7 +144,7 @@ page {
   color: #333;
 }
 
-/* 閫€鍑虹櫥褰曟寜閽?*/
+/* 闁偓閸戣櫣娅ヨぐ鏇熷瘻闁?*/
 .logout-section {
   padding: 40rpx;
 }
@@ -162,7 +162,7 @@ page {
   opacity: 0.8;
 }
 
-/* 鐗堟湰淇℃伅 */
+/* 閻楀牊婀版穱鈩冧紖 */
 .version-info {
   padding: 40rpx 0;
   text-align: center;

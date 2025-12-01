@@ -1,8 +1,8 @@
-/**
- * 文件名: category.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 鍒嗙被椤甸潰
+﻿/**
+ * 鏂囦欢鍚? category.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 閸掑棛琚い鐢告桨
  */
 const i18n = require('../../utils/i18n');
 
@@ -17,9 +17,8 @@ Page({
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
-   * @param {Object} options - 椤甸潰鍙傛暟
-   * @param {string} options.id - 鍒嗙被ID
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸旂姾娴?   * @param {Object} options - 妞ょ敻娼伴崣鍌涙殶
+   * @param {string} options.id - 閸掑棛琚獻D
    * @returns {void}
    */
   onLoad(options) {
@@ -30,11 +29,10 @@ Page({
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍗歌浇
-   * @returns {void}
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸楁瓕娴?   * @returns {void}
    */
   onUnload() {
-    // 娓呯悊鎵€鏈夊畾鏃跺櫒锛岄槻姝㈠唴瀛樻硠婕?    if (this.data.loadTimer) {
+    // 濞撳懐鎮婇幍鈧張澶婄暰閺冭泛娅掗敍宀勬Щ濮濄垹鍞寸€涙ɑ纭犲?    if (this.data.loadTimer) {
       clearTimeout(this.data.loadTimer);
     }
     if (this.data.loadProductsTimer) {
@@ -43,14 +41,13 @@ Page({
   },
 
   /**
-   * 椤甸潰鏄剧ず鏃惰Е鍙?   * @returns {void}
+   * 妞ょ敻娼伴弰鍓с仛閺冩儼袝閸?   * @returns {void}
    */
   onShow() {
-    // 鍙互鍦ㄦ澶勫埛鏂伴儴鍒嗘暟鎹?  },
+    // 閸欘垯浜掗崷銊︻劃婢跺嫬鍩涢弬浼村劥閸掑棙鏆熼幑?  },
 
   /**
-   * 涓嬫媺鍒锋柊鍥炶皟
-   * @returns {void}
+   * 娑撳濯洪崚閿嬫煀閸ョ偠鐨?   * @returns {void}
    */
   onPullDownRefresh() {
     this.loadData(() => {
@@ -59,32 +56,30 @@ Page({
   },
 
   /**
-   * 瑙﹀簳鍔犺浇鏇村
-   * @returns {void}
+   * 鐟欙箑绨抽崝鐘烘祰閺囨潙顦?   * @returns {void}
    */
   onReachBottom() {
-    // 棰勭暀锛氬垎椤靛姞杞?  },
+    // 妫板嫮鏆€閿涙艾鍨庢い闈涘鏉?  },
 
   /**
-   * 鍔犺浇鍒嗙被鏁版嵁
-   * @param {Function} done - 瀹屾垚鍥炶皟
+   * 閸旂姾娴囬崚鍡欒閺佺増宓?   * @param {Function} done - 鐎瑰本鍨氶崶鐐剁殶
    * @returns {void}
    */
   loadData(done) {
     this.setData({ loading: true });
     const loadTimer = setTimeout(() => {
       const mockCategories = [
-        { id: 1, name: i18n.translate('鐢靛瓙浜у搧'), icon: '/assets/images/category_electronics.png' },
-        { id: 2, name: i18n.translate('鏈嶈'), icon: '/assets/images/category_clothing.png' },
-        { id: 3, name: i18n.translate('瀹跺眳'), icon: '/assets/images/category_home.png' },
-        { id: 4, name: i18n.translate('缇庨'), icon: '/assets/images/category_food.png' }
+        { id: 1, name: i18n.translate('閻㈤潧鐡欐禍褍鎼?), icon: '/assets/images/category_electronics.png' },
+        { id: 2, name: i18n.translate('閺堝秷顥?), icon: '/assets/images/category_clothing.png' },
+        { id: 3, name: i18n.translate('鐎硅泛鐪?), icon: '/assets/images/category_home.png' },
+        { id: 4, name: i18n.translate('缂囧酣顥?), icon: '/assets/images/category_food.png' }
       ];
       
       const mockProducts = [
-        { id: 1, name: i18n.translate('鍟嗗搧A'), image: '/assets/images/product1.jpg', price: '99.00' },
-        { id: 2, name: i18n.translate('鍟嗗搧B'), image: '/assets/images/product2.jpg', price: '129.00' },
-        { id: 3, name: i18n.translate('鍟嗗搧C'), image: '/assets/images/product3.jpg', price: '79.00' },
-        { id: 4, name: i18n.translate('鍟嗗搧D'), image: '/assets/images/product4.jpg', price: '159.00' }
+        { id: 1, name: i18n.translate('閸熷棗鎼'), image: '/assets/images/product1.jpg', price: '99.00' },
+        { id: 2, name: i18n.translate('閸熷棗鎼'), image: '/assets/images/product2.jpg', price: '129.00' },
+        { id: 3, name: i18n.translate('閸熷棗鎼'), image: '/assets/images/product3.jpg', price: '79.00' },
+        { id: 4, name: i18n.translate('閸熷棗鎼'), image: '/assets/images/product4.jpg', price: '159.00' }
       ];
 
       this.setData({
@@ -100,28 +95,27 @@ Page({
   },
 
   /**
-   * 鍒囨崲鍒嗙被
-   * @param {Object} e - 浜嬩欢瀵硅薄
-   * @returns {void}
+   * 閸掑洦宕查崚鍡欒
+   * @param {Object} e - 娴滃娆㈢€电钖?   * @returns {void}
    */
   switchCategory(e) {
     const { id } = e.currentTarget.dataset;
     this.setData({ categoryId: id });
-    // 鏍规嵁鍒嗙被ID鍔犺浇瀵瑰簲鍟嗗搧
+    // 閺嶈宓侀崚鍡欒ID閸旂姾娴囩€电懓绨查崯鍡楁惂
     this.loadProductsByCategory(id);
   },
 
   /**
-   * 鏍规嵁鍒嗙被鍔犺浇鍟嗗搧
-   * @param {string} categoryId - 鍒嗙被ID
+   * 閺嶈宓侀崚鍡欒閸旂姾娴囬崯鍡楁惂
+   * @param {string} categoryId - 閸掑棛琚獻D
    * @returns {void}
    */
   loadProductsByCategory(categoryId) {
-    // 瀹為檯椤圭洰涓簲璇ヨ皟鐢ˋPI鑾峰彇瀵瑰簲鍒嗙被鐨勫晢鍝?    this.setData({ loading: true });
+    // 鐎圭偤妾い鍦窗娑擃厼绨茬拠銉ㄧ殶閻⑺婸I閼惧嘲褰囩€电懓绨查崚鍡欒閻ㄥ嫬鏅㈤崫?    this.setData({ loading: true });
     const loadProductsTimer = setTimeout(() => {
-      // 鏍规嵁categoryId鍔犺浇瀵瑰簲鍒嗙被鐨勫晢鍝?      const mockProducts = [
-        { id: 1, name: i18n.translate('鍟嗗搧A'), image: '/assets/images/product1.jpg', price: '99.00' },
-        { id: 2, name: i18n.translate('鍟嗗搧B'), image: '/assets/images/product2.jpg', price: '129.00' }
+      // 閺嶈宓乧ategoryId閸旂姾娴囩€电懓绨查崚鍡欒閻ㄥ嫬鏅㈤崫?      const mockProducts = [
+        { id: 1, name: i18n.translate('閸熷棗鎼'), image: '/assets/images/product1.jpg', price: '99.00' },
+        { id: 2, name: i18n.translate('閸熷棗鎼'), image: '/assets/images/product2.jpg', price: '129.00' }
       ];
       
       this.setData({
@@ -135,9 +129,7 @@ Page({
   },
 
   /**
-   * 璺宠浆鍒板晢鍝佽鎯呴〉
-   * @param {Object} e - 浜嬩欢瀵硅薄
-   * @returns {void}
+   * 鐠哄疇娴嗛崚鏉挎櫌閸濅浇顕涢幆鍛淬€?   * @param {Object} e - 娴滃娆㈢€电钖?   * @returns {void}
    */
   goToProductDetail(e) {
     const { id } = e.currentTarget.dataset;

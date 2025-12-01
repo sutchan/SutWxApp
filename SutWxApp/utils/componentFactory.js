@@ -1,19 +1,17 @@
-/**
- * 文件名: componentFactory.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-24
- * 浣滆€? Sut
- * 缁勪欢宸ュ巶 - 鎻愪緵缁勪欢鍒涘缓鍜岀敓鍛藉懆鏈熺鐞嗗寮哄姛鑳斤紝鑷姩闆嗘垚鐘舵€佺鐞嗗拰鍥介檯鍖? */
+﻿/**
+ * 鏂囦欢鍚? componentFactory.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-24
+ * 娴ｆ粏鈧? Sut
+ * 缂佸嫪娆㈠銉ュ范 - 閹绘劒绶电紒鍕閸掓稑缂撻崪宀€鏁撻崨钘夋噯閺堢喓顓搁悶鍡楊杻瀵搫濮涢懗鏂ょ礉閼奉亜濮╅梿鍡樺灇閻樿埖鈧胶顓搁悶鍡楁嫲閸ヤ粙妾崠? */
 
 const store = require('./store.js');
 const i18n = require('./i18n.js');
 
 /**
- * 缁勪欢鐢熷懡鍛ㄦ湡閽╁瓙鍖呰鍣? * 鎻愪緵缁熶竴鐨勭敓鍛藉懆鏈熷鐞嗗拰閿欒鎹曡幏
- * @param {Function} hook - 鍘熷閽╁瓙鍑芥暟
- * @param {string} hookName - 閽╁瓙鍚嶇О
- * @param {Object} options - 閫夐」閰嶇疆
- * @returns {Function} 鍖呰鍚庣殑閽╁瓙鍑芥暟
+ * 缂佸嫪娆㈤悽鐔锋嚒閸涖劍婀￠柦鈺佺摍閸栧懓顥婇崳? * 閹绘劒绶电紒鐔剁閻ㄥ嫮鏁撻崨钘夋噯閺堢喎顦╅悶鍡楁嫲闁挎瑨顕ら幑鏇″箯
+ * @param {Function} hook - 閸樼喎顫愰柦鈺佺摍閸戣姤鏆? * @param {string} hookName - 闁解晛鐡欓崥宥囆? * @param {Object} options - 闁銆嶉柊宥囩枂
+ * @returns {Function} 閸栧懓顥婇崥搴ｆ畱闁解晛鐡欓崙鑺ユ殶
  */
 function wrapHook(hook, hookName, options = {}) {
   return function(...args) {
@@ -22,7 +20,7 @@ function wrapHook(hook, hookName, options = {}) {
         return hook.apply(this, args);
       }
     } catch (error) {
-      console.error(`缁勪欢鐢熷懡鍛ㄦ湡閽╁瓙 ${hookName} 鎵ц澶辫触:`, error);
+      console.error(`缂佸嫪娆㈤悽鐔锋嚒閸涖劍婀￠柦鈺佺摍 ${hookName} 閹笛嗩攽婢惰精瑙?`, error);
       if (options.errorHandler && typeof options.errorHandler === 'function') {
         options.errorHandler(error, hookName);
       }
@@ -32,11 +30,10 @@ function wrapHook(hook, hookName, options = {}) {
 }
 
 /**
- * 鍒涘缓缁勪欢閰嶇疆瀵硅薄
- * 鑷姩闆嗘垚鐘舵€佺鐞嗐€佸浗闄呭寲鍜岀敓鍛藉懆鏈熼挬瀛愬鐞? * @param {Object} config - 缁勪欢閰嶇疆
- * @returns {Object} 澧炲己鐨勭粍浠堕厤缃? */
+ * 閸掓稑缂撶紒鍕闁板秶鐤嗙€电钖? * 閼奉亜濮╅梿鍡樺灇閻樿埖鈧胶顓搁悶鍡愨偓浣告禇闂勫懎瀵查崪宀€鏁撻崨钘夋噯閺堢喖鎸€涙劕顦╅悶? * @param {Object} config - 缂佸嫪娆㈤柊宥囩枂
+ * @returns {Object} 婢х偛宸遍惃鍕矋娴犲爼鍘ょ純? */
 function createComponent(config = {}) {
-  // 榛樿閰嶇疆
+  // 姒涙顓婚柊宥囩枂
   const defaultConfig = {
     data: {},
     properties: {},
@@ -49,22 +46,22 @@ function createComponent(config = {}) {
     externalClasses: []
   };
 
-  // 鍚堝苟閰嶇疆
+  // 閸氬牆鑻熼柊宥囩枂
   const mergedConfig = { ...defaultConfig, ...config };
   
-  // 鑷姩闆嗘垚鐘舵€佺鐞?  if (config.mapState) {
+  // 閼奉亜濮╅梿鍡樺灇閻樿埖鈧胶顓搁悶?  if (config.mapState) {
     mergedConfig.data = { ...mergedConfig.data, ...mapStateToData(config.mapState) };
     mergedConfig.lifetimes = mergedConfig.lifetimes || {};
     
-    // 澧炲己鐢熷懡鍛ㄦ湡閽╁瓙浠ュ搷搴旂姸鎬佹洿鏂?    const originalAttached = mergedConfig.lifetimes.attached || function() {};
+    // 婢х偛宸遍悽鐔锋嚒閸涖劍婀￠柦鈺佺摍娴犮儱鎼锋惔鏃傚Ц閹焦娲块弬?    const originalAttached = mergedConfig.lifetimes.attached || function() {};
     mergedConfig.lifetimes.attached = wrapHook(function() {
-      // 鍒濆鍖栫姸鎬佹槧灏?      this._stateUnsubscribe = store.subscribe(() => {
+      // 閸掓繂顫愰崠鏍Ц閹焦妲х亸?      this._stateUnsubscribe = store.subscribe(() => {
         this.setData(mapStateToData(config.mapState));
       });
       originalAttached.call(this);
     }, 'attached');
     
-    // 鍦╠etached鏃舵竻鐞嗚闃?    const originalDetached = mergedConfig.lifetimes.detached || function() {};
+    // 閸︹暊etached閺冭埖绔婚悶鍡氼吂闂?    const originalDetached = mergedConfig.lifetimes.detached || function() {};
     mergedConfig.lifetimes.detached = wrapHook(function() {
       if (this._stateUnsubscribe) {
         this._stateUnsubscribe();
@@ -73,14 +70,14 @@ function createComponent(config = {}) {
     }, 'detached');
   }
   
-  // 鑷姩闆嗘垚鍥介檯鍖?  if (config.useI18n !== false) {
+  // 閼奉亜濮╅梿鍡樺灇閸ヤ粙妾崠?  if (config.useI18n !== false) {
     mergedConfig.methods = mergedConfig.methods || {};
     mergedConfig.methods.__ = function(key, options) {
       return i18n.t(key, options);
     };
   }
   
-  // 鍖呰鎵€鏈夌敓鍛藉懆鏈熼挬瀛?  const lifecycleHooks = [
+  // 閸栧懓顥婇幍鈧張澶屾晸閸涜棄鎳嗛張鐔兼尙鐎?  const lifecycleHooks = [
     'created', 'attached', 'ready', 'moved', 'detached', 'error'
   ];
   
@@ -94,8 +91,7 @@ function createComponent(config = {}) {
     }
   });
   
-  // 鍖呰椤甸潰鐢熷懡鍛ㄦ湡閽╁瓙
-  const pageLifecycleHooks = [
+  // 閸栧懓顥婃い鐢告桨閻㈢喎鎳￠崨銊︽埂闁解晛鐡?  const pageLifecycleHooks = [
     'show', 'hide', 'resize', 'routeDone'
   ];
   
@@ -109,7 +105,7 @@ function createComponent(config = {}) {
     }
   });
   
-  // 鍖呰methods涓殑鏂规硶
+  // 閸栧懓顥妋ethods娑擃厾娈戦弬瑙勭《
   if (mergedConfig.methods) {
     Object.keys(mergedConfig.methods).forEach(methodName => {
       if (typeof mergedConfig.methods[methodName] === 'function' && 
@@ -128,9 +124,7 @@ function createComponent(config = {}) {
 }
 
 /**
- * 灏嗙姸鎬佹槧灏勮浆鎹负data瀵硅薄
- * @param {Object|Function} mapState - 鐘舵€佹槧灏勯厤缃? * @returns {Object} 杞崲鍚庣殑data瀵硅薄
- */
+ * 鐏忓棛濮搁幀浣规Ё鐏忓嫯娴嗛幑顫礋data鐎电钖? * @param {Object|Function} mapState - 閻樿埖鈧焦妲х亸鍕帳缂? * @returns {Object} 鏉烆剚宕查崥搴ｆ畱data鐎电钖? */
 function mapStateToData(mapState) {
   const state = store.state;
   const data = {};
@@ -144,7 +138,7 @@ function mapStateToData(mapState) {
       if (typeof mapState[key] === 'function') {
         data[key] = mapState[key](state);
       } else if (typeof mapState[key] === 'string') {
-        // 鏀寔璺緞璁块棶锛屽 'user.info.name'
+        // 閺€顖涘瘮鐠侯垰绶炵拋鍧楁６閿涘苯顩?'user.info.name'
         const pathParts = mapState[key].split('.');
         let value = state;
         for (const part of pathParts) {
@@ -160,34 +154,30 @@ function mapStateToData(mapState) {
 }
 
 /**
- * 缁勪欢閫氫俊鎬荤嚎
- * 鎻愪緵缁勪欢闂寸殑浜嬩欢閫氫俊鏈哄埗
+ * 缂佸嫪娆㈤柅姘繆閹崵鍤? * 閹绘劒绶电紒鍕闂傚娈戞禍瀣╂闁矮淇婇張鍝勫煑
  */
 const eventBus = {
   _events: {},
   
   /**
-   * 璁㈤槄浜嬩欢
-   * @param {string} eventName - 浜嬩欢鍚嶇О
-   * @param {Function} callback - 鍥炶皟鍑芥暟
-   * @returns {Function} 鍙栨秷璁㈤槄鐨勫嚱鏁?   */
+   * 鐠併垽妲勬禍瀣╂
+   * @param {string} eventName - 娴滃娆㈤崥宥囆?   * @param {Function} callback - 閸ョ偠鐨熼崙鑺ユ殶
+   * @returns {Function} 閸欐牗绉风拋銏ゆ閻ㄥ嫬鍤遍弫?   */
   on(eventName, callback) {
     if (!this._events[eventName]) {
       this._events[eventName] = [];
     }
     this._events[eventName].push(callback);
     
-    // 杩斿洖鍙栨秷璁㈤槄鍑芥暟
+    // 鏉╂柨娲栭崣鏍ㄧХ鐠併垽妲勯崙鑺ユ殶
     return () => {
       this.off(eventName, callback);
     };
   },
   
   /**
-   * 鍙栨秷璁㈤槄
-   * @param {string} eventName - 浜嬩欢鍚嶇О
-   * @param {Function} callback - 鍥炶皟鍑芥暟锛堝彲閫夛紝涓嶆彁渚涘垯鍙栨秷璇ヤ簨浠剁殑鎵€鏈夎闃咃級
-   */
+   * 閸欐牗绉风拋銏ゆ
+   * @param {string} eventName - 娴滃娆㈤崥宥囆?   * @param {Function} callback - 閸ョ偠鐨熼崙鑺ユ殶閿涘牆褰查柅澶涚礉娑撳秵褰佹笟娑樺灟閸欐牗绉风拠銉ょ皑娴犲墎娈戦幍鈧張澶庮吂闂冨拑绱?   */
   off(eventName, callback) {
     if (!this._events[eventName]) return;
     
@@ -201,9 +191,8 @@ const eventBus = {
   },
   
   /**
-   * 瑙﹀彂浜嬩欢
-   * @param {string} eventName - 浜嬩欢鍚嶇О
-   * @param {*} data - 浜嬩欢鏁版嵁
+   * 鐟欙箑褰傛禍瀣╂
+   * @param {string} eventName - 娴滃娆㈤崥宥囆?   * @param {*} data - 娴滃娆㈤弫鐗堝祦
    */
   emit(eventName, data) {
     if (!this._events[eventName]) return;
@@ -212,21 +201,19 @@ const eventBus = {
       try {
         callback(data);
       } catch (error) {
-        console.error(`浜嬩欢 ${eventName} 澶勭悊澶辫触:`, error);
+        console.error(`娴滃娆?${eventName} 婢跺嫮鎮婃径杈Е:`, error);
       }
     });
   }
 };
 
 /**
- * 缁勪欢宸ュ叿闆? */
+ * 缂佸嫪娆㈠銉ュ徔闂? */
 const componentUtils = {
   /**
-   * 鑺傛祦鍑芥暟
-   * @param {Function} func - 瑕佽妭娴佺殑鍑芥暟
-   * @param {number} delay - 寤惰繜鏃堕棿锛堟绉掞級
-   * @returns {Function} 鑺傛祦鍚庣殑鍑芥暟
-   */
+   * 閼哄倹绁﹂崙鑺ユ殶
+   * @param {Function} func - 鐟曚浇濡ù浣烘畱閸戣姤鏆?   * @param {number} delay - 瀵ゆ儼绻滈弮鍫曟？閿涘牊顕犵粔鎺炵礆
+   * @returns {Function} 閼哄倹绁﹂崥搴ｆ畱閸戣姤鏆?   */
   throttle(func, delay) {
     let lastCall = 0;
     return function(...args) {
@@ -239,11 +226,9 @@ const componentUtils = {
   },
   
   /**
-   * 闃叉姈鍑芥暟
-   * @param {Function} func - 瑕侀槻鎶栫殑鍑芥暟
-   * @param {number} delay - 寤惰繜鏃堕棿锛堟绉掞級
-   * @returns {Function} 闃叉姈鍚庣殑鍑芥暟
-   */
+   * 闂冨弶濮堥崙鑺ユ殶
+   * @param {Function} func - 鐟曚線妲婚幎鏍畱閸戣姤鏆?   * @param {number} delay - 瀵ゆ儼绻滈弮鍫曟？閿涘牊顕犵粔鎺炵礆
+   * @returns {Function} 闂冨弶濮堥崥搴ｆ畱閸戣姤鏆?   */
   debounce(func, delay) {
     let timeout;
     return function(...args) {
@@ -255,14 +240,12 @@ const componentUtils = {
   },
   
   /**
-   * 瀹夊叏鍦拌缃暟鎹紝閬垮厤涓嶅繀瑕佺殑鏇存柊
-   * @param {Object} component - 缁勪欢瀹炰緥
-   * @param {Object} data - 瑕佽缃殑鏁版嵁
-   */
+   * 鐎瑰鍙忛崷鎷岊啎缂冾喗鏆熼幑顕嗙礉闁灝鍘ゆ稉宥呯箑鐟曚胶娈戦弴瀛樻煀
+   * @param {Object} component - 缂佸嫪娆㈢€圭偘绶?   * @param {Object} data - 鐟曚浇顔曠純顔炬畱閺佺増宓?   */
   safeSetData(component, data) {
     if (!component || typeof component.setData !== 'function') return;
     
-    // 杩囨护鎺変笌褰撳墠鏁版嵁鐩稿悓鐨勫€?    const changedData = {};
+    // 鏉╁洦鎶ら幒澶夌瑢瑜版挸澧犻弫鐗堝祦閻╃鎮撻惃鍕偓?    const changedData = {};
     Object.keys(data).forEach(key => {
       if (component.data[key] !== data[key]) {
         changedData[key] = data[key];

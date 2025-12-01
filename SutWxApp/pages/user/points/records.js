@@ -1,63 +1,56 @@
-/**
- * 文件名: records.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: 绉垎璁板綍椤甸潰
- */
+﻿/**
+ * 鏂囦欢鍚? records.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: 缁夘垰鍨庣拋鏉跨秿妞ょ敻娼? */
 Page({
   /**
-   * 椤甸潰鐨勫垵濮嬫暟鎹?   */
+   * 妞ょ敻娼伴惃鍕灥婵鏆熼幑?   */
   data: {
-    activeTab: 'all', // 褰撳墠婵€娲荤殑鏍囩锛歛ll(鍏ㄩ儴)銆乪arn(鑾峰彇)銆乽se(浣跨敤)
+    activeTab: 'all', // 瑜版挸澧犲┑鈧ú鑽ゆ畱閺嶅洨顒烽敍姝沴l(閸忋劑鍎?閵嗕躬arn(閼惧嘲褰?閵嗕菇se(娴ｈ法鏁?
     tabs: [
-      { key: 'all', value: '鍏ㄩ儴' },
-      { key: 'earn', value: '鑾峰彇' },
-      { key: 'use', value: '浣跨敤' }
+      { key: 'all', value: '閸忋劑鍎? },
+      { key: 'earn', value: '閼惧嘲褰? },
+      { key: 'use', value: '娴ｈ法鏁? }
     ],
-    pointsRecords: [], // 绉垎璁板綍鍒楄〃
-    loading: false, // 加载状态    page: 1, // 褰撳墠椤电爜
-    pageSize: 20, // 姣忛〉鏁伴噺
-    hasMore: true, // 鏄惁杩樻湁鏇村鏁版嵁
-    totalPoints: 0 // 鐢ㄦ埛鎬荤Н鍒?  },
+    pointsRecords: [], // 缁夘垰鍨庣拋鏉跨秿閸掓銆?    loading: false, // 鍔犺浇鐘舵€?   page: 1, // 瑜版挸澧犳い鐢电垳
+    pageSize: 20, // 濮ｅ繘銆夐弫浼村櫤
+    hasMore: true, // 閺勵垰鎯佹潻妯绘箒閺囨潙顦块弫鐗堝祦
+    totalPoints: 0 // 閻劍鍩涢幀鑽ば濋崚?  },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸旂姾娴?   */
   onLoad: function (options) {
     this.loadUserPoints();
     this.loadPointsRecords();
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍒濇娓叉煋瀹屾垚
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸掓繃顐煎〒鍙夌厠鐎瑰本鍨?   */
   onReady: function () {
     
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閺勫墽銇?   */
   onShow: function () {
     
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰闅愯棌
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨闂呮劘妫?   */
   onHide: function () {
     
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍗歌浇
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸楁瓕娴?   */
   onUnload: function () {
     
   },
 
   /**
-   * 椤甸潰鐩稿叧浜嬩欢澶勭悊鍑芥暟--鐩戝惉鐢ㄦ埛涓嬫媺鍔ㄤ綔
+   * 妞ょ敻娼伴惄绋垮彠娴滃娆㈡径鍕倞閸戣姤鏆?-閻╂垵鎯夐悽銊﹀煕娑撳濯洪崝銊ょ稊
    */
   onPullDownRefresh: function () {
     this.setData({
@@ -71,7 +64,7 @@ Page({
   },
 
   /**
-   * 椤甸潰涓婃媺瑙﹀簳浜嬩欢鐨勫鐞嗗嚱鏁?   */
+   * 妞ょ敻娼版稉濠冨鐟欙箑绨虫禍瀣╂閻ㄥ嫬顦╅悶鍡楀毐閺?   */
   onReachBottom: function () {
     if (this.data.hasMore && !this.data.loading) {
       this.loadPointsRecords();
@@ -79,16 +72,16 @@ Page({
   },
 
   /**
-   * 鐢ㄦ埛鐐瑰嚮鍙充笂瑙掑垎浜?   */
+   * 閻劍鍩涢悙鐟板毊閸欏厖绗傜憴鎺戝瀻娴?   */
   onShareAppMessage: function () {
     return {
-      title: '鎴戠殑绉垎璁板綍',
+      title: '閹存垹娈戠粔顖氬瀻鐠佹澘缍?,
       path: '/pages/user/points/records/records'
     };
   },
 
   /**
-   * 鍒囨崲鏍囩
+   * 閸掑洦宕查弽鍥╊劮
    */
   onTabChange: function(e) {
     const tab = e.currentTarget.dataset.tab;
@@ -105,10 +98,9 @@ Page({
   },
 
   /**
-   * 鍔犺浇鐢ㄦ埛鎬荤Н鍒?   */
+   * 閸旂姾娴囬悽銊﹀煕閹崵袧閸?   */
   loadUserPoints: function() {
-    // 杩欓噷搴旇璋冪敤鏈嶅姟鑾峰彇鐢ㄦ埛绉垎
-    // 妯℃嫙鏁版嵁
+    // 鏉╂瑩鍣锋惔鏃囶嚉鐠嬪啰鏁ら張宥呭閼惧嘲褰囬悽銊﹀煕缁夘垰鍨?    // 濡剝瀚欓弫鐗堝祦
     setTimeout(() => {
       this.setData({
         totalPoints: 1280
@@ -117,15 +109,13 @@ Page({
   },
 
   /**
-   * 鍔犺浇绉垎璁板綍
-   */
+   * 閸旂姾娴囩粔顖氬瀻鐠佹澘缍?   */
   loadPointsRecords: function() {
     if (this.data.loading || !this.data.hasMore) return;
     
     this.setData({ loading: true });
     
-    // 杩欓噷搴旇璋冪敤鏈嶅姟鑾峰彇绉垎璁板綍
-    // 妯℃嫙鏁版嵁
+    // 鏉╂瑩鍣锋惔鏃囶嚉鐠嬪啰鏁ら張宥呭閼惧嘲褰囩粔顖氬瀻鐠佹澘缍?    // 濡剝瀚欓弫鐗堝祦
     setTimeout(() => {
       const mockRecords = this.generateMockRecords(this.data.page, this.data.pageSize);
       
@@ -139,30 +129,27 @@ Page({
   },
 
   /**
-   * 鐢熸垚妯℃嫙绉垎璁板綍鏁版嵁
-   */
+   * 閻㈢喐鍨氬Ο鈩冨珯缁夘垰鍨庣拋鏉跨秿閺佺増宓?   */
   generateMockRecords: function(page, pageSize) {
     const allRecords = [
-      { id: 1, type: 'earn', amount: 10, title: '姣忔棩绛惧埌', desc: '杩炵画绛惧埌3澶?, time: '2023-06-15 08:30:00' },
-      { id: 2, type: 'earn', amount: 50, title: '瀹屾垚浠诲姟', desc: '瀹屽杽涓汉璧勬枡', time: '2023-06-14 15:20:00' },
-      { id: 3, type: 'use', amount: -100, title: '绉垎鍏戞崲', desc: '鍏戞崲10鍏冧紭鎯犲埜', time: '2023-06-13 10:15:00' },
-      { id: 4, type: 'earn', amount: 20, title: '璇勪环鍟嗗搧', desc: '璇勪环宸茶喘涔板晢鍝?, time: '2023-06-12 14:45:00' },
-      { id: 5, type: 'use', amount: -200, title: '绉垎鍏戞崲', desc: '鍏戞崲20鍏冧紭鎯犲埜', time: '2023-06-10 09:30:00' },
-      { id: 6, type: 'earn', amount: 30, title: '鍒嗕韩鍟嗗搧', desc: '鍒嗕韩鍟嗗搧缁欏ソ鍙?, time: '2023-06-08 16:20:00' },
-      { id: 7, type: 'earn', amount: 100, title: '鏂扮敤鎴峰鍔?, desc: '注册閫佺Н鍒?, time: '2023-06-01 12:00:00' },
-      { id: 8, type: 'use', amount: -50, title: '绉垎鍏戞崲', desc: '鍏戞崲5鍏冧紭鎯犲埜', time: '2023-05-28 11:10:00' }
+      { id: 1, type: 'earn', amount: 10, title: '濮ｅ繑妫╃粵鎯у煂', desc: '鏉╃偟鐢荤粵鎯у煂3婢?, time: '2023-06-15 08:30:00' },
+      { id: 2, type: 'earn', amount: 50, title: '鐎瑰本鍨氭禒璇插', desc: '鐎瑰苯鏉芥稉顏冩眽鐠у嫭鏋?, time: '2023-06-14 15:20:00' },
+      { id: 3, type: 'use', amount: -100, title: '缁夘垰鍨庨崗鎴炲床', desc: '閸忔垶宕?0閸忓啩绱幆鐘插煖', time: '2023-06-13 10:15:00' },
+      { id: 4, type: 'earn', amount: 20, title: '鐠囧嫪鐜崯鍡楁惂', desc: '鐠囧嫪鐜鑼跺枠娑旀澘鏅㈤崫?, time: '2023-06-12 14:45:00' },
+      { id: 5, type: 'use', amount: -200, title: '缁夘垰鍨庨崗鎴炲床', desc: '閸忔垶宕?0閸忓啩绱幆鐘插煖', time: '2023-06-10 09:30:00' },
+      { id: 6, type: 'earn', amount: 30, title: '閸掑棔闊╅崯鍡楁惂', desc: '閸掑棔闊╅崯鍡楁惂缂佹瑥銈介崣?, time: '2023-06-08 16:20:00' },
+      { id: 7, type: 'earn', amount: 100, title: '閺傛壆鏁ら幋宄邦殯閸?, desc: '娉ㄥ唽闁胶袧閸?, time: '2023-06-01 12:00:00' },
+      { id: 8, type: 'use', amount: -50, title: '缁夘垰鍨庨崗鎴炲床', desc: '閸忔垶宕?閸忓啩绱幆鐘插煖', time: '2023-05-28 11:10:00' }
     ];
     
-    // 鏍规嵁褰撳墠鏍囩杩囨护鏁版嵁
-    let filteredRecords = allRecords;
+    // 閺嶈宓佽ぐ鎾冲閺嶅洨顒锋潻鍥ㄦ姢閺佺増宓?    let filteredRecords = allRecords;
     if (this.data.activeTab === 'earn') {
       filteredRecords = allRecords.filter(record => record.type === 'earn');
     } else if (this.data.activeTab === 'use') {
       filteredRecords = allRecords.filter(record => record.type === 'use');
     }
     
-    // 鍒嗛〉
-    const start = (page - 1) * pageSize;
+    // 閸掑棝銆?    const start = (page - 1) * pageSize;
     const end = start + pageSize;
     return filteredRecords.slice(start, end);
   }

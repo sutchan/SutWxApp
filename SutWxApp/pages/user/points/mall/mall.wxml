@@ -1,35 +1,35 @@
-/**
- * 文件名: mall.wxml
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: mall 椤甸潰缁撴瀯鏂囦欢
+﻿/**
+ * 鏂囦欢鍚? mall.wxml
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: mall 妞ょ敻娼扮紒鎾寸€弬鍥︽
  */
-<!-- 绉垎鍟嗗煄椤甸潰 -->
+<!-- 缁夘垰鍨庨崯鍡楃厔妞ょ敻娼?-->
 <view class="mall-container">
-  <!-- 鐢ㄦ埛绉垎淇℃伅 -->
+  <!-- 閻劍鍩涚粔顖氬瀻娣団剝浼?-->
   <view class="points-header">
     <view class="points-info">
       <text class="points-value">{{userPoints}}</text>
-      <text class="points-label">鎴戠殑绉垎</text>
+      <text class="points-label">閹存垹娈戠粔顖氬瀻</text>
     </view>
     <view class="points-actions">
       <view class="action-item" bindtap="goToPoints">
         <text class="iconfont icon-earn"></text>
-        <text class="action-text">璧氱Н鍒?/text>
+        <text class="action-text">鐠ф氨袧閸?/text>
       </view>
       <view class="action-item" bindtap="goToExchangeRecords">
         <text class="iconfont icon-record"></text>
-        <text class="action-text">鍏戞崲璁板綍</text>
+        <text class="action-text">閸忔垶宕茬拋鏉跨秿</text>
       </view>
     </view>
   </view>
   
-  <!-- 鎼滅储鏍?-->
+  <!-- 閹兼粎鍌ㄩ弽?-->
   <view class="search-bar">
     <view class="search-input-wrapper">
       <text class="iconfont icon-search"></text>
       <input class="search-input" 
-             placeholder="鎼滅储鍟嗗搧" 
+             placeholder="閹兼粎鍌ㄩ崯鍡楁惂" 
              value="{{searchKeyword}}" 
              bindinput="onSearchInput" 
              bindconfirm="onSearch" />
@@ -37,7 +37,7 @@
     </view>
   </view>
   
-  <!-- 鍟嗗搧鍒嗙被 -->
+  <!-- 閸熷棗鎼ч崚鍡欒 -->
   <view class="categories">
     <scroll-view scroll-x="true" class="categories-scroll">
       <view class="categories-list">
@@ -50,88 +50,88 @@
       </view>
     </scroll-view>
     
-    <!-- 鎺掑簭鎸夐挳 -->
+    <!-- 閹烘帒绨幐澶愭尦 -->
     <view class="sort-btn" bindtap="showSortPopup">
       <text class="iconfont icon-sort"></text>
     </view>
   </view>
   
-  <!-- 鍟嗗搧鍒楄〃 -->
+  <!-- 閸熷棗鎼ч崚妤勩€?-->
   <view class="products-container">
-    <!-- 加载状态-->
+    <!-- 鍔犺浇鐘舵€?->
     <view wx:if="{{loading && productList.length === 0}}" class="loading-container">
       <view class="loading-spinner"></view>
-      <text class="loading-text">姝ｅ湪鍔犺浇鍟嗗搧...</text>
+      <text class="loading-text">濮濓絽婀崝鐘烘祰閸熷棗鎼?..</text>
     </view>
     
-    <!-- 鍟嗗搧鍒楄〃 -->
+    <!-- 閸熷棗鎼ч崚妤勩€?-->
     <view wx:else class="products-list">
       <view wx:for="{{productList}}" wx:key="id" class="product-item">
-        <!-- 鍟嗗搧鍥剧墖 -->
+        <!-- 閸熷棗鎼ч崶鍓у -->
         <view class="product-image" data-id="{{item.id}}" bindtap="goToProductDetail">
           <image src="{{item.image}}" mode="aspectFill"></image>
-          <view wx:if="{{item.stock <= 0}}" class="out-of-stock">宸插敭缃?/view>
-          <view wx:elif="{{item.isHot}}" class="hot-tag">鐑棬</view>
+          <view wx:if="{{item.stock <= 0}}" class="out-of-stock">瀹告彃鏁純?/view>
+          <view wx:elif="{{item.isHot}}" class="hot-tag">閻戭參妫?/view>
         </view>
         
-        <!-- 产品信息 -->
+        <!-- 浜у搧淇℃伅 -->
         <view class="product-info" data-id="{{item.id}}" bindtap="goToProductDetail">
           <view class="product-title">{{item.title}}</view>
           <view class="product-desc">{{item.description}}</view>
           
-          <!-- 鍟嗗搧鏍囩 -->
+          <!-- 閸熷棗鎼ч弽鍥╊劮 -->
           <view wx:if="{{item.tags && item.tags.length > 0}}" class="product-tags">
             <view wx:for="{{item.tags}}" wx:key="*this" wx:for-item="tag" class="tag">{{tag}}</view>
           </view>
           
-          <!-- 鍏戞崲閲忓拰搴撳瓨 -->
+          <!-- 閸忔垶宕查柌蹇撴嫲鎼存挸鐡?-->
           <view class="product-stats">
-            <text class="exchange-count">宸插厬鎹{item.exchangeCount || 0}}浠?/text>
-            <text class="stock">搴撳瓨{{item.stock}}</text>
+            <text class="exchange-count">瀹告彃鍘幑顣item.exchangeCount || 0}}娴?/text>
+            <text class="stock">鎼存挸鐡▄{item.stock}}</text>
           </view>
         </view>
         
-        <!-- 绉垎鍜屾搷浣?-->
+        <!-- 缁夘垰鍨庨崪灞炬惙娴?-->
         <view class="product-footer">
           <view class="product-points">
             <text class="points-value">{{item.points}}</text>
-            <text class="points-label">绉垎</text>
+            <text class="points-label">缁夘垰鍨?/text>
           </view>
           
           <button class="exchange-btn {{item.stock <= 0 || userPoints < item.points ? 'disabled' : ''}}" 
                   data-id="{{item.id}}" 
                   bindtap="exchangeProduct"
                   disabled="{{item.stock <= 0 || userPoints < item.points}}">
-            {{item.stock <= 0 ? '宸插敭缃? : (userPoints < item.points ? '绉垎涓嶈冻' : '绔嬪嵆鍏戞崲')}}
+            {{item.stock <= 0 ? '瀹告彃鏁純? : (userPoints < item.points ? '缁夘垰鍨庢稉宥堝喕' : '缁斿宓嗛崗鎴炲床')}}
           </button>
         </view>
       </view>
       
-      <!-- 鍔犺浇鏇村 -->
+      <!-- 閸旂姾娴囬弴鏉戭樋 -->
       <view wx:if="{{hasMore && loading}}" class="loading-more">
         <view class="loading-spinner small"></view>
-        <text class="loading-text">鍔犺浇鏇村...</text>
+        <text class="loading-text">閸旂姾娴囬弴鏉戭樋...</text>
       </view>
       
-      <!-- 娌℃湁鏇村鏁版嵁 -->
+      <!-- 濞屸剝婀侀弴鏉戭樋閺佺増宓?-->
       <view wx:if="{{!hasMore && productList.length > 0}}" class="no-more">
-        <text>娌℃湁鏇村鍟嗗搧浜?/text>
+        <text>濞屸剝婀侀弴鏉戭樋閸熷棗鎼ф禍?/text>
       </view>
       
-      <!-- 绌虹姸鎬?-->
+      <!-- 缁岃櫣濮搁幀?-->
       <view wx:if="{{productList.length === 0 && !loading}}" class="empty-state">
         <view class="empty-icon"></view>
-        <text class="empty-text">鏆傛棤鍟嗗搧</text>
-        <text class="empty-desc">褰撳墠鍒嗙被涓嬫病鏈夊晢鍝?/text>
+        <text class="empty-text">閺嗗倹妫ら崯鍡楁惂</text>
+        <text class="empty-desc">瑜版挸澧犻崚鍡欒娑撳鐥呴張澶婃櫌閸?/text>
       </view>
     </view>
   </view>
   
-  <!-- 鏈€杩戝厬鎹㈣褰?-->
+  <!-- 閺堚偓鏉╂垵鍘幑銏ｎ唶瑜?-->
   <view wx:if="{{exchangeRecords.length > 0}}" class="recent-exchanges">
     <view class="section-header">
-      <text class="section-title">鏈€杩戝厬鎹?/text>
-      <text class="section-more" bindtap="goToExchangeRecords">鏌ョ湅鍏ㄩ儴</text>
+      <text class="section-title">閺堚偓鏉╂垵鍘幑?/text>
+      <text class="section-more" bindtap="goToExchangeRecords">閺屻儳婀呴崗銊╁劥</text>
     </view>
     
     <view class="exchange-list">
@@ -147,13 +147,13 @@
   </view>
 </view>
 
-<!-- 鎺掑簭寮圭獥 -->
+<!-- 閹烘帒绨鍦崶 -->
 <view wx:if="{{showSortPopup}}" class="sort-popup">
   <view class="popup-mask" bindtap="hideSortPopup"></view>
   <view class="popup-content">
     <view class="popup-header">
-      <text class="popup-title">鎺掑簭鏂瑰紡</text>
-      <text class="popup-close" bindtap="hideSortPopup">脳</text>
+      <text class="popup-title">閹烘帒绨弬鐟扮础</text>
+      <text class="popup-close" bindtap="hideSortPopup">鑴?/text>
     </view>
     
     <view class="sort-options">

@@ -1,9 +1,8 @@
-/**
- * 文件名: confirm.wxss
- * 版本号: 1.0.0
- * 更新日期: 2025-11-27
- * 描述: 订单纭页面样式文件
- */
+﻿/**
+ * 鏂囦欢鍚? confirm.wxss
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-27
+ * 鎻忚堪: 璁㈠崟绾喛顓婚〉闈㈡牱寮忔枃浠? */
 
 .order-confirm {
   background-color: #f7f7f7;
@@ -11,7 +10,7 @@
   padding-bottom: 80rpx;
 }
 
-/* 加载状态*/
+/* 鍔犺浇鐘舵€?/
 .loading-container {
   display: flex;
   flex-direction: column;
@@ -35,7 +34,7 @@
   100% { transform: rotate(360deg); }
 }
 
-/* 閫氱敤鍖哄潡鏍峰紡 */
+/* 闁氨鏁ら崠鍝勬健閺嶅嘲绱?*/
 .section {
   background-color: #ffffff;
   margin-bottom: 20rpx;
@@ -49,7 +48,7 @@
   font-weight: 600;
 }
 
-/* 产品信息 */
+/* 浜у搧淇℃伅 */
 .product-item {
   display: flex;
   padding: 10rpx 0;
@@ -117,7 +116,7 @@
   color: #999999;
 }
 
-/* 收货地址 */
+/* 鏀惰揣鍦板潃 */
 .address-item {
   display: flex;
   justify-content: space-between;
@@ -175,7 +174,7 @@
   height: 24rpx;
 }
 
-/* 支付方式 */
+/* 鏀粯鏂瑰紡 */
 .payment-methods {
   display: flex;
   flex-direction: column;
@@ -213,7 +212,7 @@
   color: #ff6b35;
 }
 
-/* 绉垎鎶垫墸 */
+/* 缁夘垰鍨庨幎鍨⒏ */
 .points-deduction {
   padding: 10rpx 0;
 }
@@ -279,7 +278,7 @@
   font-size: 28rpx;
 }
 
-/* 澶囨敞 */
+/* 婢跺洦鏁?*/
 .remark-input {
   width: 100%;
   min-height: 120rpx;
@@ -291,7 +290,7 @@
   box-sizing: border-box;
 }
 
-/* 浠锋牸鏄庣粏 */
+/* 娴犻攱鐗搁弰搴ｇ矎 */
 .price-detail {
   padding: 10rpx 0;
 }
@@ -329,7 +328,7 @@
   color: #ff6b35;
 }
 
-/* 鎻愪氦鎸夐挳 */
+/* 閹绘劒姘﹂幐澶愭尦 */
 .submit-container {
   position: fixed;
   bottom: 0;

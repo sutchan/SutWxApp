@@ -1,34 +1,32 @@
-/**
- * 文件名: result.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: 鎼滅储缁撴灉椤甸潰
- */
+﻿/**
+ * 鏂囦欢鍚? result.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: 閹兼粎鍌ㄧ紒鎾寸亯妞ょ敻娼? */
 Page({
   /**
-   * 椤甸潰鐨勫垵濮嬫暟鎹?   */
+   * 妞ょ敻娼伴惃鍕灥婵鏆熼幑?   */
   data: {
-    keyword: '', // 鎼滅储鍏抽敭璇?    searchHistory: [], // 鎼滅储鍘嗗彶
-    hotSearches: [], // 鐑棬鎼滅储
-    activeTab: 'all', // 褰撳墠婵€娲荤殑鏍囩锛歛ll(鍏ㄩ儴)銆乸roduct(鍟嗗搧)銆乤rticle(鏂囩珷)銆乽ser(鐢ㄦ埛)
+    keyword: '', // 閹兼粎鍌ㄩ崗鎶芥暛鐠?    searchHistory: [], // 閹兼粎鍌ㄩ崢鍡楀蕉
+    hotSearches: [], // 閻戭參妫幖婊呭偍
+    activeTab: 'all', // 瑜版挸澧犲┑鈧ú鑽ゆ畱閺嶅洨顒烽敍姝沴l(閸忋劑鍎?閵嗕垢roduct(閸熷棗鎼?閵嗕工rticle(閺傚洨鐝?閵嗕菇ser(閻劍鍩?
     tabs: [
-      { key: 'all', value: '鍏ㄩ儴' },
-      { key: 'product', value: '鍟嗗搧' },
-      { key: 'article', value: '鏂囩珷' },
-      { key: 'user', value: '鐢ㄦ埛' }
+      { key: 'all', value: '閸忋劑鍎? },
+      { key: 'product', value: '閸熷棗鎼? },
+      { key: 'article', value: '閺傚洨鐝? },
+      { key: 'user', value: '閻劍鍩? }
     ],
-    searchResults: [], // 鎼滅储缁撴灉
-    loading: false, // 加载状态    page: 1, // 褰撳墠椤电爜
-    pageSize: 20, // 姣忛〉鏁伴噺
-    hasMore: true, // 鏄惁杩樻湁鏇村鏁版嵁
-    showResult: false // 鏄惁鏄剧ず鎼滅储缁撴灉
+    searchResults: [], // 閹兼粎鍌ㄧ紒鎾寸亯
+    loading: false, // 鍔犺浇鐘舵€?   page: 1, // 瑜版挸澧犳い鐢电垳
+    pageSize: 20, // 濮ｅ繘銆夐弫浼村櫤
+    hasMore: true, // 閺勵垰鎯佹潻妯绘箒閺囨潙顦块弫鐗堝祦
+    showResult: false // 閺勵垰鎯侀弰鍓с仛閹兼粎鍌ㄧ紒鎾寸亯
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸旂姾娴?   */
   onLoad: function (options) {
-    // 鑾峰彇浼犲叆鐨勫叧閿瘝
+    // 閼惧嘲褰囨导鐘插弳閻ㄥ嫬鍙ч柨顔跨槤
     if (options.keyword) {
       this.setData({
         keyword: options.keyword,
@@ -38,40 +36,36 @@ Page({
       });
     }
     
-    // 鍔犺浇鎼滅储鍘嗗彶鍜岀儹闂ㄦ悳绱?    this.loadSearchHistory();
+    // 閸旂姾娴囬幖婊呭偍閸樺棗褰堕崪宀€鍎归梻銊︽偝缁?    this.loadSearchHistory();
     this.loadHotSearches();
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍒濇娓叉煋瀹屾垚
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸掓繃顐煎〒鍙夌厠鐎瑰本鍨?   */
   onReady: function () {
     
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閺勫墽銇?   */
   onShow: function () {
     
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰闅愯棌
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨闂呮劘妫?   */
   onHide: function () {
     
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍗歌浇
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸楁瓕娴?   */
   onUnload: function () {
     
   },
 
   /**
-   * 椤甸潰鐩稿叧浜嬩欢澶勭悊鍑芥暟--鐩戝惉鐢ㄦ埛涓嬫媺鍔ㄤ綔
+   * 妞ょ敻娼伴惄绋垮彠娴滃娆㈡径鍕倞閸戣姤鏆?-閻╂垵鎯夐悽銊﹀煕娑撳濯洪崝銊ょ稊
    */
   onPullDownRefresh: function () {
     if (this.data.showResult) {
@@ -89,7 +83,7 @@ Page({
   },
 
   /**
-   * 椤甸潰涓婃媺瑙﹀簳浜嬩欢鐨勫鐞嗗嚱鏁?   */
+   * 妞ょ敻娼版稉濠冨鐟欙箑绨虫禍瀣╂閻ㄥ嫬顦╅悶鍡楀毐閺?   */
   onReachBottom: function () {
     if (this.data.showResult && this.data.hasMore && !this.data.loading) {
       this.loadSearchResults();
@@ -97,16 +91,16 @@ Page({
   },
 
   /**
-   * 鐢ㄦ埛鐐瑰嚮鍙充笂瑙掑垎浜?   */
+   * 閻劍鍩涢悙鐟板毊閸欏厖绗傜憴鎺戝瀻娴?   */
   onShareAppMessage: function () {
     return {
-      title: `鎼滅储"${this.data.keyword}"鐨勭粨鏋渀,
+      title: `閹兼粎鍌?${this.data.keyword}"閻ㄥ嫮绮ㄩ弸娓€,
       path: `/pages/search/result/result?keyword=${this.data.keyword}`
     };
   },
 
   /**
-   * 杈撳叆妗嗗唴瀹瑰彉鍖?   */
+   * 鏉堟挸鍙嗗鍡楀敶鐎圭懓褰夐崠?   */
   onInputChange: function(e) {
     this.setData({
       keyword: e.detail.value
@@ -114,7 +108,7 @@ Page({
   },
 
   /**
-   * 娓呯┖杈撳叆妗?   */
+   * 濞撳懐鈹栨潏鎾冲弳濡?   */
   onClearInput: function() {
     this.setData({
       keyword: '',
@@ -124,23 +118,20 @@ Page({
   },
 
   /**
-   * 鐐瑰嚮鎼滅储鎸夐挳
-   */
+   * 閻愮懓鍤幖婊呭偍閹稿鎸?   */
   onSearch: function() {
     const keyword = this.data.keyword.trim();
     if (!keyword) {
       wx.showToast({
-        title: '璇疯緭鍏ユ悳绱㈠叧閿瘝',
+        title: '鐠囩柉绶崗銉︽偝缁便垹鍙ч柨顔跨槤',
         icon: 'none'
       });
       return;
     }
     
-    // 淇濆瓨鎼滅储鍘嗗彶
-    this.saveSearchHistory(keyword);
+    // 娣囨繂鐡ㄩ幖婊呭偍閸樺棗褰?    this.saveSearchHistory(keyword);
     
-    // 鏄剧ず鎼滅储缁撴灉
-    this.setData({
+    // 閺勫墽銇氶幖婊呭偍缂佹挻鐏?    this.setData({
       showResult: true,
       page: 1,
       searchResults: [],
@@ -152,7 +143,7 @@ Page({
   },
 
   /**
-   * 鍒囨崲鏍囩
+   * 閸掑洦宕查弽鍥╊劮
    */
   onTabChange: function(e) {
     const tab = e.currentTarget.dataset.tab;
@@ -169,8 +160,7 @@ Page({
   },
 
   /**
-   * 鐐瑰嚮鎼滅储鍘嗗彶
-   */
+   * 閻愮懓鍤幖婊呭偍閸樺棗褰?   */
   onHistoryTap: function(e) {
     const keyword = e.currentTarget.dataset.keyword;
     this.setData({
@@ -186,8 +176,7 @@ Page({
   },
 
   /**
-   * 鐐瑰嚮鐑棬鎼滅储
-   */
+   * 閻愮懓鍤悜顓㈡，閹兼粎鍌?   */
   onHotSearchTap: function(e) {
     const keyword = e.currentTarget.dataset.keyword;
     this.setData({
@@ -203,12 +192,11 @@ Page({
   },
 
   /**
-   * 娓呯┖鎼滅储鍘嗗彶
-   */
+   * 濞撳懐鈹栭幖婊呭偍閸樺棗褰?   */
   onClearHistory: function() {
     wx.showModal({
-      title: '鎻愮ず',
-      content: '纭畾瑕佹竻绌烘悳绱㈠巻鍙插悧锛?,
+      title: '閹绘劗銇?,
+      content: '绾喖鐣剧憰浣圭缁岀儤鎮崇槐銏犲坊閸欐彃鎮ч敍?,
       success: (res) => {
         if (res.confirm) {
           wx.removeStorageSync('searchHistory');
@@ -221,7 +209,7 @@ Page({
   },
 
   /**
-   * 鐐瑰嚮鎼滅储缁撴灉椤?   */
+   * 閻愮懓鍤幖婊呭偍缂佹挻鐏夋い?   */
   onResultTap: function(e) {
     const { type, id } = e.currentTarget.dataset;
     
@@ -245,15 +233,14 @@ Page({
   },
 
   /**
-   * 鍔犺浇鎼滅储缁撴灉
-   */
+   * 閸旂姾娴囬幖婊呭偍缂佹挻鐏?   */
   loadSearchResults: function() {
     if (this.data.loading || !this.data.hasMore) return;
     
     this.setData({ loading: true });
     
-    // 杩欓噷搴旇璋冪敤鏈嶅姟杩涜鎼滅储
-    // 妯℃嫙鏁版嵁
+    // 鏉╂瑩鍣锋惔鏃囶嚉鐠嬪啰鏁ら張宥呭鏉╂稖顢戦幖婊呭偍
+    // 濡剝瀚欓弫鐗堝祦
     setTimeout(() => {
       const mockResults = this.generateMockResults(
         this.data.keyword, 
@@ -272,29 +259,28 @@ Page({
   },
 
   /**
-   * 鐢熸垚妯℃嫙鎼滅储缁撴灉
+   * 閻㈢喐鍨氬Ο鈩冨珯閹兼粎鍌ㄧ紒鎾寸亯
    */
   generateMockResults: function(keyword, type, page, pageSize) {
     const allProducts = [
-      { id: 1, type: 'product', title: '浼樿川鑻规灉', desc: '鏂伴矞绾㈠瘜澹嫻鏋滐紝浜у湴鐩翠緵', image: '/images/product1.jpg', price: 29.9 },
-      { id: 2, type: 'product', title: '鏈夋満钄彍', desc: '鏃犲啘鑽畫鐣欙紝鍋ュ悍瀹夊叏', image: '/images/product2.jpg', price: 18.8 },
-      { id: 3, type: 'product', title: '绮鹃€夌墰鑲?, desc: '婢虫床杩涘彛锛岃倝璐ㄩ矞瀚?, image: '/images/product3.jpg', price: 89.9 }
+      { id: 1, type: 'product', title: '娴兼宸濋懟瑙勭亯', desc: '閺備即鐭炵痪銏犵槣婢诡偉瀚婚弸婊愮礉娴溠冩勾閻╃繝绶?, image: '/images/product1.jpg', price: 29.9 },
+      { id: 2, type: 'product', title: '閺堝婧€閽勵剝褰?, desc: '閺冪姴鍟橀懡顖涚暙閻ｆ瑱绱濋崑銉ユ倣鐎瑰鍙?, image: '/images/product2.jpg', price: 18.8 },
+      { id: 3, type: 'product', title: '缁箖鈧澧伴懖?, desc: '濠㈣櫕搴婃潻娑樺經閿涘矁鍊濈拹銊╃煘鐎?, image: '/images/product3.jpg', price: 89.9 }
     ];
     
     const allArticles = [
-      { id: 1, type: 'article', title: '濡備綍閫夋嫨鏂伴矞姘存灉', desc: '鏁欎綘鎸戦€夋按鏋滅殑灏忔妧宸?, image: '/images/article1.jpg', publishTime: '2023-06-15' },
-      { id: 2, type: 'article', title: '鍋ュ悍楗鎸囧崡', desc: '钀ュ吇鍧囪　鐨勯ギ椋熷缓璁?, image: '/images/article2.jpg', publishTime: '2023-06-14' },
-      { id: 3, type: 'article', title: '澶忓鍏荤敓椋熻氨', desc: '娓呭噳瑙ｆ殤鐨勭編椋熸帹鑽?, image: '/images/article3.jpg', publishTime: '2023-06-13' }
+      { id: 1, type: 'article', title: '婵″倷缍嶉柅澶嬪閺備即鐭炲瀛樼亯', desc: '閺佹瑤缍橀幐鎴︹偓澶嬫寜閺嬫粎娈戠亸蹇斿Η瀹?, image: '/images/article1.jpg', publishTime: '2023-06-15' },
+      { id: 2, type: 'article', title: '閸嬨儱鎮嶆顕€顥ら幐鍥у础', desc: '閽€銉ュ悋閸у洩銆€閻ㄥ嫰銈鐔风紦鐠?, image: '/images/article2.jpg', publishTime: '2023-06-14' },
+      { id: 3, type: 'article', title: '婢跺繐顒滈崗鑽ゆ晸妞嬬喕姘?, desc: '濞撳懎鍣崇憴锝嗘閻ㄥ嫮绶ㄦ鐔稿腹閼?, image: '/images/article3.jpg', publishTime: '2023-06-13' }
     ];
     
     const allUsers = [
-      { id: 1, type: 'user', title: '缇庨杈句汉', desc: '涓撴敞鍒嗕韩缇庨鍒朵綔鎶€宸?, image: '/images/user1.jpg', fans: 1280 },
-      { id: 2, type: 'user', title: '钀ュ吇涓撳', desc: '涓撲笟钀ュ吇甯堬紝鍋ュ悍楗椤鹃棶', image: '/images/user2.jpg', fans: 3560 },
-      { id: 3, type: 'user', title: '鐢熸椿灏忚兘鎵?, desc: '鍒嗕韩鐢熸椿灏忓鎷?, image: '/images/user3.jpg', fans: 980 }
+      { id: 1, type: 'user', title: '缂囧酣顥ゆ潏鍙ユ眽', desc: '娑撴挻鏁為崚鍡曢煩缂囧酣顥ら崚鏈电稊閹垛偓瀹?, image: '/images/user1.jpg', fans: 1280 },
+      { id: 2, type: 'user', title: '閽€銉ュ悋娑撴挸顔?, desc: '娑撴挷绗熼拃銉ュ悋鐢牞绱濋崑銉ユ倣妤楊噣顥ゆい楣冩６', image: '/images/user2.jpg', fans: 3560 },
+      { id: 3, type: 'user', title: '閻㈢喐妞跨亸蹇氬厴閹?, desc: '閸掑棔闊╅悽鐔告た鐏忓繐顩鹃幏?, image: '/images/user3.jpg', fans: 980 }
     ];
     
-    // 鏍规嵁绫诲瀷杩囨护鏁版嵁
-    let filteredResults = [];
+    // 閺嶈宓佺猾璇茬€锋潻鍥ㄦ姢閺佺増宓?    let filteredResults = [];
     if (type === 'all') {
       filteredResults = [...allProducts, ...allArticles, ...allUsers];
     } else if (type === 'product') {
@@ -305,61 +291,56 @@ Page({
       filteredResults = allUsers;
     }
     
-    // 妯℃嫙鍏抽敭璇嶈繃婊?    filteredResults = filteredResults.filter(item => 
+    // 濡剝瀚欓崗鎶芥暛鐠囧秷绻冨?    filteredResults = filteredResults.filter(item => 
       item.title.includes(keyword) || item.desc.includes(keyword)
     );
     
-    // 鍒嗛〉
-    const start = (page - 1) * pageSize;
+    // 閸掑棝銆?    const start = (page - 1) * pageSize;
     const end = start + pageSize;
     return filteredResults.slice(start, end);
   },
 
   /**
-   * 鍔犺浇鎼滅储鍘嗗彶
-   */
+   * 閸旂姾娴囬幖婊呭偍閸樺棗褰?   */
   loadSearchHistory: function() {
     try {
       const history = wx.getStorageSync('searchHistory') || [];
       this.setData({
-        searchHistory: history.slice(0, 10) // 鍙樉绀烘渶杩?0鏉?      });
+        searchHistory: history.slice(0, 10) // 閸欘亝妯夌粈鐑樻付鏉?0閺?      });
     } catch (e) {
-      console.error('鍔犺浇鎼滅储鍘嗗彶澶辫触', e);
+      console.error('閸旂姾娴囬幖婊呭偍閸樺棗褰舵径杈Е', e);
     }
   },
 
   /**
-   * 淇濆瓨鎼滅储鍘嗗彶
-   */
+   * 娣囨繂鐡ㄩ幖婊呭偍閸樺棗褰?   */
   saveSearchHistory: function(keyword) {
     try {
       let history = wx.getStorageSync('searchHistory') || [];
       
-      // 绉婚櫎閲嶅椤?      history = history.filter(item => item !== keyword);
+      // 缁夊娅庨柌宥咁槻妞?      history = history.filter(item => item !== keyword);
       
-      // 娣诲姞鍒板紑澶?      history.unshift(keyword);
+      // 濞ｈ濮為崚鏉跨磻婢?      history.unshift(keyword);
       
-      // 鏈€澶氫繚瀛?0鏉?      history = history.slice(0, 20);
+      // 閺堚偓婢舵矮绻氱€?0閺?      history = history.slice(0, 20);
       
       wx.setStorageSync('searchHistory', history);
       this.setData({
-        searchHistory: history.slice(0, 10) // 鍙樉绀烘渶杩?0鏉?      });
+        searchHistory: history.slice(0, 10) // 閸欘亝妯夌粈鐑樻付鏉?0閺?      });
     } catch (e) {
-      console.error('淇濆瓨鎼滅储鍘嗗彶澶辫触', e);
+      console.error('娣囨繂鐡ㄩ幖婊呭偍閸樺棗褰舵径杈Е', e);
     }
   },
 
   /**
-   * 鍔犺浇鐑棬鎼滅储
-   */
+   * 閸旂姾娴囬悜顓㈡，閹兼粎鍌?   */
   loadHotSearches: function() {
-    // 杩欓噷搴旇璋冪敤鏈嶅姟鑾峰彇鐑棬鎼滅储
-    // 妯℃嫙鏁版嵁
+    // 鏉╂瑩鍣锋惔鏃囶嚉鐠嬪啰鏁ら張宥呭閼惧嘲褰囬悜顓㈡，閹兼粎鍌?    // 濡剝瀚欓弫鐗堝祦
     setTimeout(() => {
       this.setData({
         hotSearches: [
-          '鏂伴矞姘存灉', '鏈夋満钄彍', '杩涘彛鐗涜倝', '鍋ュ悍楗', '缇庨鍒朵綔',
-          '钀ュ吇鎼厤', '澶忓椋熻氨', '鍏荤敓鎸囧崡', '缇庨杈句汉', '鐢熸椿鎶€宸?
+          '閺備即鐭炲瀛樼亯', '閺堝婧€閽勵剝褰?, '鏉╂稑褰涢悧娑滃€?, '閸嬨儱鎮嶆顕€顥?, '缂囧酣顥ら崚鏈电稊',
+          '閽€銉ュ悋閹碱參鍘?, '婢跺繐顒滄鐔绘皑', '閸忚崵鏁撻幐鍥у础', '缂囧酣顥ゆ潏鍙ユ眽', '閻㈢喐妞块幎鈧?
         ]
       });
     }, 500);

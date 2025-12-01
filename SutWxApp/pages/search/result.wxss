@@ -1,15 +1,15 @@
-/**
- * 文件名: result.wxss
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: result 页面样式文件
+﻿/**
+ * 鏂囦欢鍚? result.wxss
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: result 椤甸潰鏍峰紡鏂囦欢
  */
 .container {
   background-color: #f5f5f5;
   min-height: 100vh;
 }
 
-/* 鎼滅储妗?*/
+/* 閹兼粎鍌ㄥ?*/
 .search-bar {
   display: flex;
   align-items: center;
@@ -51,12 +51,12 @@
   font-weight: bold;
 }
 
-/* 鎼滅储缁撴灉 */
+/* 閹兼粎鍌ㄧ紒鎾寸亯 */
 .search-result {
   background-color: #f5f5f5;
 }
 
-/* 鏍囩鍒囨崲 */
+/* 閺嶅洨顒烽崚鍥ㄥ床 */
 .tabs {
   display: flex;
   background-color: #fff;
@@ -90,7 +90,7 @@
   border-radius: 3rpx;
 }
 
-/* 缁撴灉鍒楄〃 */
+/* 缂佹挻鐏夐崚妤勩€?*/
 .result-list {
   background-color: #fff;
   border-radius: 20rpx;
@@ -174,7 +174,7 @@
   border-radius: 4rpx;
 }
 
-/* 加载状态*/
+/* 鍔犺浇鐘舵€?/
 .loading {
   text-align: center;
   padding: 40rpx 0;
@@ -182,7 +182,7 @@
   font-size: 28rpx;
 }
 
-/* 鏃犳洿澶氭暟鎹?*/
+/* 閺冪姵娲挎径姘殶閹?*/
 .no-more {
   text-align: center;
   padding: 40rpx 0;
@@ -190,7 +190,7 @@
   font-size: 28rpx;
 }
 
-/* 绌虹姸鎬?*/
+/* 缁岃櫣濮搁幀?*/
 .empty-state {
   text-align: center;
   padding: 100rpx 0;
@@ -198,12 +198,12 @@
   font-size: 28rpx;
 }
 
-/* 鎼滅储寤鸿 */
+/* 閹兼粎鍌ㄥ楦款唴 */
 .search-suggest {
   padding: 30rpx;
 }
 
-/* 鎼滅储鍘嗗彶 */
+/* 閹兼粎鍌ㄩ崢鍡楀蕉 */
 .search-history {
   margin-bottom: 40rpx;
 }
@@ -242,7 +242,7 @@
   box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
 }
 
-/* 鐑棬鎼滅储 */
+/* 閻戭參妫幖婊呭偍 */
 .hot-search {
   margin-bottom: 40rpx;
 }

@@ -1,69 +1,65 @@
-/**
- * 文件名: pointsExchange.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: 绉垎鍏戞崲椤甸潰
- */
+﻿/**
+ * 鏂囦欢鍚? pointsExchange.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: 缁夘垰鍨庨崗鎴炲床妞ょ敻娼? */
 const pointsService = require('../../services/pointsService');
 
 Page({
   data: {
-    // 褰撳墠绉垎
+    // 瑜版挸澧犵粔顖氬瀻
     currentPoints: 0,
     
-    // 鍒嗙被鏍囩
+    // 閸掑棛琚弽鍥╊劮
     activeTab: 'all',
     tabs: [
-      { key: 'all', label: '鍏ㄩ儴' },
-      { key: 'coupon', label: '浼樻儬鍒? },
-      { key: 'product', label: '瀹炵墿鍟嗗搧' },
-      { key: 'vip', label: '浼氬憳鐗规潈' }
+      { key: 'all', label: '閸忋劑鍎? },
+      { key: 'coupon', label: '娴兼ɑ鍎崚? },
+      { key: 'product', label: '鐎圭偟澧块崯鍡楁惂' },
+      { key: 'vip', label: '娴兼艾鎲抽悧瑙勬綀' }
     ],
     
-    // 鎺掑簭鏂瑰紡
+    // 閹烘帒绨弬鐟扮础
     sortType: 'default',
     sortOptions: [
-      { key: 'default', label: '榛樿鎺掑簭' },
-      { key: 'points_asc', label: '绉垎浠庝綆鍒伴珮' },
-      { key: 'points_desc', label: '绉垎浠庨珮鍒颁綆' },
-      { key: 'hot', label: '鐑棬鍏戞崲' }
+      { key: 'default', label: '姒涙顓婚幒鎺戠碍' },
+      { key: 'points_asc', label: '缁夘垰鍨庢禒搴濈秵閸掍即鐝? },
+      { key: 'points_desc', label: '缁夘垰鍨庢禒搴ㄧ彯閸掗缍? },
+      { key: 'hot', label: '閻戭參妫崗鎴炲床' }
     ],
     
-    // 鍏戞崲鍟嗗搧鍒楄〃
-    exchangeList: [],
+    // 閸忔垶宕查崯鍡楁惂閸掓銆?    exchangeList: [],
     page: 1,
     pageSize: 20,
     hasMore: true,
     isLoading: false,
     isEmpty: false,
     
-    // 绛涢€夊脊绐?    showFilter: false
+    // 缁涙盯鈧鑴婄粣?    showFilter: false
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸旂姾娴?   */
   onLoad: function (options) {
     this.loadCurrentPoints();
     this.loadExchangeList();
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閺勫墽銇?   */
   onShow: function () {
-    // 浠庡叾浠栭〉闈㈣繑鍥炴椂锛屽埛鏂板綋鍓嶇Н鍒?    this.loadCurrentPoints();
+    // 娴犲骸鍙炬禒鏍€夐棃銏ｇ箲閸ョ偞妞傞敍灞藉煕閺傛澘缍嬮崜宥囆濋崚?    this.loadCurrentPoints();
   },
 
   /**
-   * 椤甸潰鐩稿叧浜嬩欢澶勭悊鍑芥暟--鐩戝惉鐢ㄦ埛涓嬫媺鍔ㄤ綔
+   * 妞ょ敻娼伴惄绋垮彠娴滃娆㈡径鍕倞閸戣姤鏆?-閻╂垵鎯夐悽銊﹀煕娑撳濯洪崝銊ょ稊
    */
   onPullDownRefresh: function () {
     this.refreshData();
   },
 
   /**
-   * 椤甸潰涓婃媺瑙﹀簳浜嬩欢鐨勫鐞嗗嚱鏁?   */
+   * 妞ょ敻娼版稉濠冨鐟欙箑绨虫禍瀣╂閻ㄥ嫬顦╅悶鍡楀毐閺?   */
   onReachBottom: function () {
     if (this.data.hasMore && !this.data.isLoading) {
       this.loadMoreExchangeList();
@@ -71,8 +67,7 @@ Page({
   },
 
   /**
-   * 鍔犺浇褰撳墠绉垎
-   */
+   * 閸旂姾娴囪ぐ鎾冲缁夘垰鍨?   */
   loadCurrentPoints: function() {
     pointsService.getUserPoints()
       .then(res => {
@@ -81,13 +76,12 @@ Page({
         });
       })
       .catch(err => {
-        console.error('鑾峰彇褰撳墠绉垎澶辫触', err);
+        console.error('閼惧嘲褰囪ぐ鎾冲缁夘垰鍨庢径杈Е', err);
       });
   },
 
   /**
-   * 鍔犺浇鍏戞崲鍟嗗搧鍒楄〃
-   */
+   * 閸旂姾娴囬崗鎴炲床閸熷棗鎼ч崚妤勩€?   */
   loadExchangeList: function() {
     if (this.data.isLoading) return;
     
@@ -118,21 +112,21 @@ Page({
         wx.stopPullDownRefresh();
       })
       .catch(err => {
-        console.error('鑾峰彇鍏戞崲鍒楄〃澶辫触', err);
+        console.error('閼惧嘲褰囬崗鎴炲床閸掓銆冩径杈Е', err);
         this.setData({
           isLoading: false
         });
         wx.stopPullDownRefresh();
         
         wx.showToast({
-          title: '鍔犺浇澶辫触锛岃閲嶈瘯',
+          title: '閸旂姾娴囨径杈Е閿涘矁顕柌宥堢槸',
           icon: 'none'
         });
       });
   },
 
   /**
-   * 鍔犺浇鏇村鍏戞崲鍟嗗搧
+   * 閸旂姾娴囬弴鏉戭樋閸忔垶宕查崯鍡楁惂
    */
   loadMoreExchangeList: function() {
     this.setData({
@@ -143,7 +137,7 @@ Page({
   },
 
   /**
-   * 鍒锋柊鏁版嵁
+   * 閸掗攱鏌婇弫鐗堝祦
    */
   refreshData: function() {
     this.setData({
@@ -156,8 +150,7 @@ Page({
   },
 
   /**
-   * 鍒囨崲鍒嗙被鏍囩
-   */
+   * 閸掑洦宕查崚鍡欒閺嶅洨顒?   */
   onTabChange: function(e) {
     const activeTab = e.currentTarget.dataset.tab;
     if (activeTab === this.data.activeTab) return;
@@ -172,7 +165,7 @@ Page({
   },
 
   /**
-   * 鏄剧ず绛涢€夊脊绐?   */
+   * 閺勫墽銇氱粵娑⑩偓澶婅剨缁?   */
   onShowFilter: function() {
     this.setData({
       showFilter: true
@@ -180,7 +173,7 @@ Page({
   },
 
   /**
-   * 闅愯棌绛涢€夊脊绐?   */
+   * 闂呮劘妫岀粵娑⑩偓澶婅剨缁?   */
   onHideFilter: function() {
     this.setData({
       showFilter: false
@@ -188,8 +181,7 @@ Page({
   },
 
   /**
-   * 閫夋嫨鎺掑簭鏂瑰紡
-   */
+   * 闁瀚ㄩ幒鎺戠碍閺傜懓绱?   */
   onSelectSort: function(e) {
     const sortType = e.currentTarget.dataset.sort;
     if (sortType === this.data.sortType) return;
@@ -205,8 +197,7 @@ Page({
   },
 
   /**
-   * 鏌ョ湅鍏戞崲璇︽儏
-   */
+   * 閺屻儳婀呴崗鎴炲床鐠囷附鍎?   */
   onViewDetail: function(e) {
     const id = e.currentTarget.dataset.id;
     wx.navigateTo({
@@ -215,7 +206,7 @@ Page({
   },
 
   /**
-   * 绔嬪嵆鍏戞崲
+   * 缁斿宓嗛崗鎴炲床
    */
   onExchange: function(e) {
     const id = e.currentTarget.dataset.id;
@@ -223,25 +214,25 @@ Page({
     
     if (!item) return;
     
-    // 妫€鏌ョН鍒嗘槸鍚﹁冻澶?    if (this.data.currentPoints < item.points) {
+    // 濡偓閺屻儳袧閸掑棙妲搁崥锕佸喕婢?    if (this.data.currentPoints < item.points) {
       wx.showToast({
-        title: '绉垎涓嶈冻',
+        title: '缁夘垰鍨庢稉宥堝喕',
         icon: 'none'
       });
       return;
     }
     
-    // 妫€鏌ュ簱瀛?    if (item.stock <= 0) {
+    // 濡偓閺屻儱绨辩€?    if (item.stock <= 0) {
       wx.showToast({
-        title: '搴撳瓨涓嶈冻',
+        title: '鎼存挸鐡ㄦ稉宥堝喕',
         icon: 'none'
       });
       return;
     }
     
     wx.showModal({
-      title: '纭鍏戞崲',
-      content: `纭畾浣跨敤${item.points}绉垎鍏戞崲${item.name}鍚楋紵`,
+      title: '绾喛顓婚崗鎴炲床',
+      content: `绾喖鐣炬担璺ㄦ暏${item.points}缁夘垰鍨庨崗鎴炲床${item.name}閸氭绱礰,
       success: (res) => {
         if (res.confirm) {
           this.confirmExchange(id);
@@ -251,11 +242,11 @@ Page({
   },
 
   /**
-   * 纭鍏戞崲
+   * 绾喛顓婚崗鎴炲床
    */
   confirmExchange: function(id) {
     wx.showLoading({
-      title: '鍏戞崲涓?..'
+      title: '閸忔垶宕叉稉?..'
     });
     
     pointsService.exchangePoints(id)
@@ -264,14 +255,14 @@ Page({
         
         if (res.code === 0) {
           wx.showToast({
-            title: '鍏戞崲鎴愬姛',
+            title: '閸忔垶宕查幋鎰',
             icon: 'success'
           });
           
-          // 鍒锋柊褰撳墠绉垎鍜屽垪琛?          this.loadCurrentPoints();
+          // 閸掗攱鏌婅ぐ鎾冲缁夘垰鍨庨崪灞藉灙鐞?          this.loadCurrentPoints();
           this.refreshData();
           
-          // 濡傛灉鏄紭鎯犲埜锛岃烦杞埌浼樻儬鍒稿垪琛?          const item = this.data.exchangeList.find(item => item.id === id);
+          // 婵″倹鐏夐弰顖欑喘閹姴鍩滈敍宀冪儲鏉烆剙鍩屾导妯诲劕閸掔鍨悰?          const item = this.data.exchangeList.find(item => item.id === id);
           if (item && item.category === 'coupon') {
             setTimeout(() => {
               wx.switchTab({
@@ -281,23 +272,23 @@ Page({
           }
         } else {
           wx.showToast({
-            title: res.message || '鍏戞崲澶辫触',
+            title: res.message || '閸忔垶宕叉径杈Е',
             icon: 'none'
           });
         }
       })
       .catch(err => {
         wx.hideLoading();
-        console.error('鍏戞崲澶辫触', err);
+        console.error('閸忔垶宕叉径杈Е', err);
         wx.showToast({
-          title: '鍏戞崲澶辫触锛岃閲嶈瘯',
+          title: '閸忔垶宕叉径杈Е閿涘矁顕柌宥堢槸',
           icon: 'none'
         });
       });
   },
 
   /**
-   * 璺宠浆鍒扮Н鍒嗘槑缁嗛〉闈?   */
+   * 鐠哄疇娴嗛崚鎵濋崚鍡樻缂佸棝銆夐棃?   */
   onGoToDetail: function() {
     wx.navigateTo({
       url: '/pages/user/pointsDetail'
@@ -305,7 +296,7 @@ Page({
   },
 
   /**
-   * 璺宠浆鍒扮Н鍒嗕换鍔￠〉闈?   */
+   * 鐠哄疇娴嗛崚鎵濋崚鍡曟崲閸旓繝銆夐棃?   */
   onGoToTasks: function() {
     wx.navigateTo({
       url: '/pages/user/pointsTasks'

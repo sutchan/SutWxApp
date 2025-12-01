@@ -1,10 +1,10 @@
-/* 鍒嗛攢鍒楄〃椤甸潰鏍峰紡 */
+﻿/* 閸掑棝鏀㈤崚妤勩€冩い鐢告桨閺嶅嘲绱?*/
 .distribute-list-page {
   background-color: #f5f5f5;
   min-height: 100vh;
 }
 
-/* 绛涢€夋爮 */
+/* 缁涙盯鈧鐖?*/
 .filter-bar {
   display: flex;
   padding: 10rpx 20rpx;
@@ -42,7 +42,7 @@
   transition: transform 0.3s;
 }
 
-/* 鍒嗛攢鍒楄〃 */
+/* 閸掑棝鏀㈤崚妤勩€?*/
 .distribute-list {
   padding: 20rpx;
 }
@@ -55,7 +55,7 @@
   box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
 }
 
-/* 鍒嗛攢澶撮儴 */
+/* 閸掑棝鏀㈡径鎾劥 */
 .distribute-header {
   display: flex;
   justify-content: space-between;
@@ -80,7 +80,7 @@
   color: #999;
 }
 
-/* 鐘舵€佹爣绛?*/
+/* 閻樿埖鈧焦鐖ｇ粵?*/
 .distribute-status {
   padding: 5rpx 15rpx;
   border-radius: 15rpx;
@@ -106,7 +106,7 @@
   color: #999;
 }
 
-/* 鍒嗛攢鍐呭 */
+/* 閸掑棝鏀㈤崘鍛啇 */
 .distribute-content {
   margin-bottom: 15rpx;
 }
@@ -117,7 +117,7 @@
   line-height: 1.5;
 }
 
-/* 鍒嗛攢鍏冧俊鎭?*/
+/* 閸掑棝鏀㈤崗鍐т繆閹?*/
 .distribute-meta {
   display: flex;
   justify-content: space-between;
@@ -131,7 +131,7 @@
   color: #999;
 }
 
-/* 鎿嶄綔鎸夐挳 */
+/* 閹垮秳缍旈幐澶愭尦 */
 .distribute-actions {
   display: flex;
   justify-content: flex-start;
@@ -165,7 +165,7 @@
   background-color: #f44336;
 }
 
-/* 鏌ョ湅璇︽儏鎸夐挳 */
+/* 閺屻儳婀呯拠锔藉剰閹稿鎸?*/
 .detail-btn-container {
   display: flex;
   justify-content: center;
@@ -181,7 +181,7 @@
   background-color: #fff;
 }
 
-/* 绌虹姸鎬?*/
+/* 缁岃櫣濮搁幀?*/
 .empty-state {
   display: flex;
   flex-direction: column;
@@ -202,7 +202,7 @@
   color: #999;
 }
 
-/* 鍔犺浇鏇村 */
+/* 閸旂姾娴囬弴鏉戭樋 */
 .loading-more {
   display: flex;
   justify-content: center;

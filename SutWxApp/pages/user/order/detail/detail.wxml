@@ -1,20 +1,20 @@
-/**
- * 文件名: detail.wxml
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: detail 椤甸潰缁撴瀯鏂囦欢
+﻿/**
+ * 鏂囦欢鍚? detail.wxml
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: detail 妞ょ敻娼扮紒鎾寸€弬鍥︽
  */
 <view class="container">
   <block wx:if="{{orderDetail}}">
-    <!-- 订单鐘舵€?-->
+    <!-- 璁㈠崟閻樿埖鈧?-->
     <view class="order-status-card">
       <view class="status-text">{{orderDetail.status}}</view>
-      <view class="status-tip" wx:if="{{orderDetail.status === '寰呬粯娆?}}">璇峰湪30鍒嗛挓鍐呭畬鎴愭敮浠橈紝閫炬湡订单灏嗚嚜鍔ㄥ彇娑?/view>
+      <view class="status-tip" wx:if="{{orderDetail.status === '瀵板懍绮▎?}}">鐠囧嘲婀?0閸掑棝鎸撻崘鍛暚閹存劖鏁禒姗堢礉闁偓婀¤鍗曠亸鍡氬殰閸斻劌褰囧☉?/view>
     </view>
 
-    <!-- 收货地址 -->
+    <!-- 鏀惰揣鍦板潃 -->
     <mp-cells ext-class="address-card">
-      <mp-cell value="收货地址" footer="">
+      <mp-cell value="鏀惰揣鍦板潃" footer="">
         <view slot="title">
           <view class="address-info">
             <text class="name">{{orderDetail.address.name}}</text>
@@ -25,44 +25,44 @@
       </mp-cell>
     </mp-cells>
 
-    <!-- 鍟嗗搧鍒楄〃 -->
+    <!-- 閸熷棗鎼ч崚妤勩€?-->
     <mp-cells ext-class="goods-card">
-      <mp-cell value="鍟嗗搧鍒楄〃" footer=""></mp-cell>
+      <mp-cell value="閸熷棗鎼ч崚妤勩€? footer=""></mp-cell>
       <view class="goods-item" wx:for="{{orderDetail.items}}" wx:key="name" wx:for-item="goods">
         <image class="goods-image" src="{{goods.image}}" mode="aspectFill"></image>
         <view class="goods-info">
           <text class="goods-name">{{goods.name}}</text>
-          <text class="goods-price">¥{{goods.price}} x {{goods.quantity}}</text>
+          <text class="goods-price">楼{{goods.price}} x {{goods.quantity}}</text>
         </view>
       </view>
     </mp-cells>
 
-    <!-- 订单淇℃伅 -->
+    <!-- 璁㈠崟娣団剝浼?-->
     <mp-cells ext-class="order-info-card">
-      <mp-cell value="订单淇℃伅" footer=""></mp-cell>
-      <mp-cell value="订单缂栧彿" footer="{{orderDetail.orderNo}}"></mp-cell>
-      <mp-cell value="涓嬪崟鏃堕棿" footer="{{orderDetail.createTime}}"></mp-cell>
-      <mp-cell value="鏀粯鏃堕棿" footer="{{orderDetail.payTime || '鏆傛棤'}}"></mp-cell>
-      <mp-cell value="鍙戣揣鏃堕棿" footer="{{orderDetail.deliveryTime || '鏆傛棤'}}"></mp-cell>
-      <mp-cell value="鏀惰揣鏃堕棿" footer="{{orderDetail.receiveTime || '鏆傛棤'}}"></mp-cell>
+      <mp-cell value="璁㈠崟娣団剝浼? footer=""></mp-cell>
+      <mp-cell value="璁㈠崟缂傛牕褰? footer="{{orderDetail.orderNo}}"></mp-cell>
+      <mp-cell value="娑撳宕熼弮鍫曟？" footer="{{orderDetail.createTime}}"></mp-cell>
+      <mp-cell value="閺€顖欑帛閺冨爼妫? footer="{{orderDetail.payTime || '閺嗗倹妫?}}"></mp-cell>
+      <mp-cell value="閸欐垼鎻ｉ弮鍫曟？" footer="{{orderDetail.deliveryTime || '閺嗗倹妫?}}"></mp-cell>
+      <mp-cell value="閺€鎯版彛閺冨爼妫? footer="{{orderDetail.receiveTime || '閺嗗倹妫?}}"></mp-cell>
     </mp-cells>
 
-    <!-- 使用鏄庣粏 -->
+    <!-- 浣跨敤閺勫海绮?-->
     <mp-cells ext-class="price-detail-card">
-      <mp-cell value="鍟嗗搧鎬讳环" footer="¥{{orderDetail.totalPrice}}"></mp-cell>
-      <mp-cell value="杩愯垂" footer="¥{{orderDetail.freight}}"></mp-cell>
-      <mp-cell value="瀹炰粯娆? footer="¥{{orderDetail.actualPrice}}" ext-class="actual-price"></mp-cell>
+      <mp-cell value="閸熷棗鎼ч幀璁崇幆" footer="楼{{orderDetail.totalPrice}}"></mp-cell>
+      <mp-cell value="鏉╂劘鍨? footer="楼{{orderDetail.freight}}"></mp-cell>
+      <mp-cell value="鐎圭偘绮▎? footer="楼{{orderDetail.actualPrice}}" ext-class="actual-price"></mp-cell>
     </mp-cells>
 
-    <!-- 搴曢儴鎿嶄綔鎸夐挳 -->
+    <!-- 鎼存洟鍎撮幙宥勭稊閹稿鎸?-->
     <view class="footer-buttons">
-      <button class="weui-btn weui-btn_plain-default" wx:if="{{orderDetail.status === '寰呬粯娆?}}" bindtap="cancelOrder">鍙栨秷订单</button>
-      <button class="weui-btn weui-btn_primary" wx:if="{{orderDetail.status === '寰呬粯娆?}}" bindtap="payOrder">绔嬪嵆鏀粯</button>
-      <button class="weui-btn weui-btn_primary" wx:if="{{orderDetail.status === '寰呮敹璐?}}" bindtap="confirmReceipt">纭鏀惰揣</button>
+      <button class="weui-btn weui-btn_plain-default" wx:if="{{orderDetail.status === '瀵板懍绮▎?}}" bindtap="cancelOrder">閸欐牗绉疯鍗?/button>
+      <button class="weui-btn weui-btn_primary" wx:if="{{orderDetail.status === '瀵板懍绮▎?}}" bindtap="payOrder">缁斿宓嗛弨顖欑帛</button>
+      <button class="weui-btn weui-btn_primary" wx:if="{{orderDetail.status === '瀵板懏鏁圭拹?}}" bindtap="confirmReceipt">绾喛顓婚弨鎯版彛</button>
     </view>
   </block>
   <block wx:else>
-    <view class="loading-text" wx:if="{{loading}}">加载中..</view>
-    <view class="empty-text" wx:else>订单涓嶅瓨鍦?/view>
+    <view class="loading-text" wx:if="{{loading}}">鍔犺浇涓?.</view>
+    <view class="empty-text" wx:else>璁㈠崟娑撳秴鐡ㄩ崷?/view>
   </block>
 </view>

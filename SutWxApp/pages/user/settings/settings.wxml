@@ -1,16 +1,16 @@
-<!--
-文件名: settings.wxml
-版本号: 1.0.0
-更新日期: 2025-11-24
-浣滆€? Sut
-描述: 鐢ㄦ埛璁剧疆椤甸潰缁撴瀯鏂囦欢
+﻿<!--
+鏂囦欢鍚? settings.wxml
+鐗堟湰鍙? 1.0.0
+鏇存柊鏃ユ湡: 2025-11-24
+娴ｆ粏鈧? Sut
+鎻忚堪: 閻劍鍩涚拋鍓х枂妞ょ敻娼扮紒鎾寸€弬鍥︽
 -->
 <view class="container">
   <mp-cells>
-    <mp-cell value="涓汉璧勬枡" link url="/pages/user/profile/profile"></mp-cell>
-    <mp-cell value="鍦板潃绠＄悊" link url="/pages/user/address/list"></mp-cell>
-    <mp-cell value="鍏充簬鎴戜滑" link url="/pages/user/about/about"></mp-cell>
-    <mp-cell value="鐢ㄦ埛鍗忚" link url="/pages/user/agreement/agreement"></mp-cell>
-    <mp-cell value="闅愮鏀跨瓥" link url="/pages/user/privacySettings/privacySettings"></mp-cell>
+    <mp-cell value="娑擃亙姹夌挧鍕灐" link url="/pages/user/profile/profile"></mp-cell>
+    <mp-cell value="閸︽澘娼冪粻锛勬倞" link url="/pages/user/address/list"></mp-cell>
+    <mp-cell value="閸忓厖绨幋鎴滄粦" link url="/pages/user/about/about"></mp-cell>
+    <mp-cell value="閻劍鍩涢崡蹇氼唴" link url="/pages/user/agreement/agreement"></mp-cell>
+    <mp-cell value="闂呮劗顫嗛弨璺ㄧ摜" link url="/pages/user/privacySettings/privacySettings"></mp-cell>
   </mp-cells>
 </view>

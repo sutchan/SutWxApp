@@ -1,37 +1,34 @@
-/**
- * 文件名: pointsTasks.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: 绉垎浠诲姟椤甸潰
- */
+﻿/**
+ * 鏂囦欢鍚? pointsTasks.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: 缁夘垰鍨庢禒璇插妞ょ敻娼? */
 const app = getApp();
 const pointsService = require('../../services/pointsService');
 
 Page({
   data: {
-    // 浠诲姟绫诲瀷
-    activeTab: 'all', // all/daily/weekly/monthly/special
+    // 娴犺濮熺猾璇茬€?    activeTab: 'all', // all/daily/weekly/monthly/special
     tabs: [
-      { key: 'all', name: '鍏ㄩ儴' },
-      { key: 'daily', name: '姣忔棩浠诲姟' },
-      { key: 'weekly', name: '姣忓懆浠诲姟' },
-      { key: 'monthly', name: '姣忔湀浠诲姟' },
-      { key: 'special', name: '鐗规畩浠诲姟' }
+      { key: 'all', name: '閸忋劑鍎? },
+      { key: 'daily', name: '濮ｅ繑妫╂禒璇插' },
+      { key: 'weekly', name: '濮ｅ繐鎳嗘禒璇插' },
+      { key: 'monthly', name: '濮ｅ繑婀€娴犺濮? },
+      { key: 'special', name: '閻楄鐣╂禒璇插' }
     ],
     
-    // 浠诲姟鍒楄〃
-    taskList: [],
+    // 娴犺濮熼崚妤勩€?    taskList: [],
     
-    // 加载状态    loading: true,
+    // 鍔犺浇鐘舵€?   loading: true,
     refreshing: false,
     loadingMore: false,
     hasMore: true,
     
-    // 鍒嗛〉鍙傛暟
+    // 閸掑棝銆夐崣鍌涙殶
     page: 1,
     pageSize: 20,
     
-    // 浠诲姟缁熻
+    // 娴犺濮熺紒鐔活吀
     taskStats: {
       total: 0,
       completed: 0,
@@ -41,11 +38,10 @@ Page({
   },
 
   /**
-   * 椤甸潰鍔犺浇
+   * 妞ょ敻娼伴崝鐘烘祰
    */
   onLoad: function(options) {
-    // 浠庡弬鏁颁腑鑾峰彇鍒濆鏍囩
-    if (options && options.tab) {
+    // 娴犲骸寮弫棰佽厬閼惧嘲褰囬崚婵嗩潗閺嶅洨顒?    if (options && options.tab) {
       this.setData({
         activeTab: options.tab
       });
@@ -56,36 +52,35 @@ Page({
   },
 
   /**
-   * 椤甸潰鏄剧ず
+   * 妞ょ敻娼伴弰鍓с仛
    */
   onShow: function() {
-    // 姣忔鏄剧ず椤甸潰鏃跺埛鏂版暟鎹?    this.refreshData();
+    // 濮ｅ繑顐奸弰鍓с仛妞ょ敻娼伴弮璺哄煕閺傜増鏆熼幑?    this.refreshData();
   },
 
   /**
-   * 椤甸潰闅愯棌
+   * 妞ょ敻娼伴梾鎰
    */
   onHide: function() {
-    // 椤甸潰闅愯棌鏃剁殑澶勭悊
+    // 妞ょ敻娼伴梾鎰閺冨墎娈戞径鍕倞
   },
 
   /**
-   * 椤甸潰鍗歌浇
+   * 妞ょ敻娼伴崡姝屾祰
    */
   onUnload: function() {
-    // 椤甸潰鍗歌浇鏃剁殑澶勭悊
+    // 妞ょ敻娼伴崡姝屾祰閺冨墎娈戞径鍕倞
   },
 
   /**
-   * 涓嬫媺鍒锋柊
+   * 娑撳濯洪崚閿嬫煀
    */
   onPullDownRefresh: function() {
     this.refreshData();
   },
 
   /**
-   * 涓婃媺鍔犺浇鏇村
-   */
+   * 娑撳﹥濯洪崝鐘烘祰閺囨潙顦?   */
   onReachBottom: function() {
     if (!this.data.loadingMore && this.data.hasMore) {
       this.loadTaskList(false);
@@ -93,7 +88,7 @@ Page({
   },
 
   /**
-   * 鍒锋柊鏁版嵁
+   * 閸掗攱鏌婇弫鐗堝祦
    */
   refreshData: function() {
     this.setData({
@@ -107,8 +102,7 @@ Page({
   },
 
   /**
-   * 鍔犺浇浠诲姟缁熻
-   */
+   * 閸旂姾娴囨禒璇插缂佺喕顓?   */
   loadTaskStats: function() {
     const self = this;
     
@@ -121,18 +115,17 @@ Page({
         }
       })
       .catch(err => {
-        console.error('鑾峰彇浠诲姟缁熻澶辫触:', err);
+        console.error('閼惧嘲褰囨禒璇插缂佺喕顓告径杈Е:', err);
       });
   },
 
   /**
-   * 鍔犺浇浠诲姟鍒楄〃
-   * @param {Boolean} refresh 鏄惁鍒锋柊
+   * 閸旂姾娴囨禒璇插閸掓銆?   * @param {Boolean} refresh 閺勵垰鎯侀崚閿嬫煀
    */
   loadTaskList: function(refresh = false) {
     const self = this;
     
-    // 璁剧疆加载状态    if (refresh) {
+    // 鐠佸墽鐤嗗姞杞界姸鎬?   if (refresh) {
       this.setData({
         loading: true,
         page: 1,
@@ -144,22 +137,19 @@ Page({
       });
     }
     
-    // 鏋勫缓鏌ヨ鍙傛暟
-    const params = {
+    // 閺嬪嫬缂撻弻銉嚄閸欏倹鏆?    const params = {
       type: this.data.activeTab === 'all' ? undefined : this.data.activeTab,
       page: this.data.page,
       pageSize: this.data.pageSize
     };
     
-    // 璋冪敤鏈嶅姟鑾峰彇浠诲姟鍒楄〃
-    pointsService.getTasks(params)
+    // 鐠嬪啰鏁ら張宥呭閼惧嘲褰囨禒璇插閸掓銆?    pointsService.getTasks(params)
       .then(res => {
         if (res.success) {
           const taskList = res.data.list || [];
           const hasMore = taskList.length >= this.data.pageSize;
           
-          // 澶勭悊浠诲姟鏁版嵁
-          const processedTasks = taskList.map(task => {
+          // 婢跺嫮鎮婃禒璇插閺佺増宓?          const processedTasks = taskList.map(task => {
             return {
               ...task,
               progress: this.calculateTaskProgress(task),
@@ -168,7 +158,7 @@ Page({
             };
           });
           
-          // 鏇存柊鏁版嵁
+          // 閺囧瓨鏌婇弫鐗堝祦
           if (refresh) {
             self.setData({
               taskList: processedTasks,
@@ -187,7 +177,7 @@ Page({
           }
         } else {
           wx.showToast({
-            title: res.message || '鑾峰彇浠诲姟鍒楄〃澶辫触',
+            title: res.message || '閼惧嘲褰囨禒璇插閸掓銆冩径杈Е',
             icon: 'none'
           });
           
@@ -199,9 +189,9 @@ Page({
         }
       })
       .catch(err => {
-        console.error('鑾峰彇浠诲姟鍒楄〃澶辫触:', err);
+        console.error('閼惧嘲褰囨禒璇插閸掓銆冩径杈Е:', err);
         wx.showToast({
-          title: '缃戠粶閿欒锛岃閲嶈瘯',
+          title: '缂冩垹绮堕柨娆掝嚖閿涘矁顕柌宥堢槸',
           icon: 'none'
         });
         
@@ -214,9 +204,7 @@ Page({
   },
 
   /**
-   * 璁＄畻浠诲姟杩涘害
-   * @param {Object} task 浠诲姟瀵硅薄
-   * @returns {Number} 杩涘害鐧惧垎姣?   */
+   * 鐠侊紕鐣绘禒璇插鏉╂稑瀹?   * @param {Object} task 娴犺濮熺€电钖?   * @returns {Number} 鏉╂稑瀹抽惂鎯у瀻濮?   */
   calculateTaskProgress: function(task) {
     if (!task.targetCount || task.targetCount <= 0) {
       return 0;
@@ -227,17 +215,13 @@ Page({
   },
 
   /**
-   * 鍒ゆ柇鏄惁鍙互棰嗗彇濂栧姳
-   * @param {Object} task 浠诲姟瀵硅薄
-   * @returns {Boolean} 鏄惁鍙互棰嗗彇
-   */
+   * 閸掋倖鏌囬弰顖氭儊閸欘垯浜掓０鍡楀絿婵傛牕濮?   * @param {Object} task 娴犺濮熺€电钖?   * @returns {Boolean} 閺勵垰鎯侀崣顖欎簰妫板棗褰?   */
   canReceiveReward: function(task) {
     return task.status === 'completed' && !task.rewardReceived;
   },
 
   /**
-   * 鍒ゆ柇浠诲姟鏄惁宸茶繃鏈?   * @param {Object} task 浠诲姟瀵硅薄
-   * @returns {Boolean} 鏄惁宸茶繃鏈?   */
+   * 閸掋倖鏌囨禒璇插閺勵垰鎯佸鑼剁箖閺?   * @param {Object} task 娴犺濮熺€电钖?   * @returns {Boolean} 閺勵垰鎯佸鑼剁箖閺?   */
   isTaskExpired: function(task) {
     if (!task.expireTime) {
       return false;
@@ -247,9 +231,8 @@ Page({
   },
 
   /**
-   * 鏍囩鍒囨崲
-   * @param {Object} e 浜嬩欢瀵硅薄
-   */
+   * 閺嶅洨顒烽崚鍥ㄥ床
+   * @param {Object} e 娴滃娆㈢€电钖?   */
   onTabChange: function(e) {
     const tab = e.currentTarget.dataset.tab;
     
@@ -269,9 +252,7 @@ Page({
   },
 
   /**
-   * 鎵ц浠诲姟
-   * @param {Object} e 浜嬩欢瀵硅薄
-   */
+   * 閹笛嗩攽娴犺濮?   * @param {Object} e 娴滃娆㈢€电钖?   */
   onTaskAction: function(e) {
     const taskId = e.currentTarget.dataset.id;
     const task = this.data.taskList.find(item => item.id === taskId);
@@ -280,8 +261,7 @@ Page({
       return;
     }
     
-    // 鏍规嵁浠诲姟绫诲瀷鎵ц涓嶅悓鎿嶄綔
-    switch (task.actionType) {
+    // 閺嶈宓佹禒璇插缁鐎烽幍褑顢戞稉宥呮倱閹垮秳缍?    switch (task.actionType) {
       case 'navigate':
         this.navigateToTask(task);
         break;
@@ -293,19 +273,18 @@ Page({
         break;
       default:
         wx.showToast({
-          title: '鏈煡浠诲姟绫诲瀷',
+          title: '閺堫亞鐓℃禒璇插缁鐎?,
           icon: 'none'
         });
     }
   },
 
   /**
-   * 瀵艰埅鍒颁换鍔￠〉闈?   * @param {Object} task 浠诲姟瀵硅薄
-   */
+   * 鐎佃壈鍩呴崚棰佹崲閸旓繝銆夐棃?   * @param {Object} task 娴犺濮熺€电钖?   */
   navigateToTask: function(task) {
     if (!task.actionUrl) {
       wx.showToast({
-        title: '浠诲姟閾炬帴鏃犳晥',
+        title: '娴犺濮熼柧鐐复閺冪姵鏅?,
         icon: 'none'
       });
       return;
@@ -315,7 +294,7 @@ Page({
       url: task.actionUrl,
       fail: () => {
         wx.showToast({
-          title: '椤甸潰璺宠浆澶辫触',
+          title: '妞ょ敻娼扮捄瀹犳祮婢惰精瑙?,
           icon: 'none'
         });
       }
@@ -323,41 +302,36 @@ Page({
   },
 
   /**
-   * 鏄剧ず浠诲姟寮圭獥
-   * @param {Object} task 浠诲姟瀵硅薄
-   */
+   * 閺勫墽銇氭禒璇插瀵湱鐛?   * @param {Object} task 娴犺濮熺€电钖?   */
   showTaskPopup: function(task) {
     wx.showModal({
-      title: task.name || '浠诲姟璇︽儏',
-      content: task.description || '鏆傛棤浠诲姟鎻忚堪',
+      title: task.name || '娴犺濮熺拠锔藉剰',
+      content: task.description || '閺嗗倹妫ゆ禒璇插閹诲繗鍫?,
       showCancel: false,
-      confirmText: '鎴戠煡閬撲簡',
+      confirmText: '閹存垹鐓￠柆鎾茬啊',
       success: () => {
-        // 鏍囪浠诲姟涓哄凡鏌ョ湅
+        // 閺嶅洩顔囨禒璇插娑撳搫鍑￠弻銉ф箙
         this.markTaskAsViewed(task.id);
       }
     });
   },
 
   /**
-   * 鍒嗕韩浠诲姟
-   * @param {Object} task 浠诲姟瀵硅薄
-   */
+   * 閸掑棔闊╂禒璇插
+   * @param {Object} task 娴犺濮熺€电钖?   */
   shareTask: function(task) {
-    // 瑙﹀彂鍒嗕韩
+    // 鐟欙箑褰傞崚鍡曢煩
     wx.showShareMenu({
       withShareTicket: true,
       success: () => {
-        // 鏍囪浠诲姟涓哄凡鍒嗕韩
+        // 閺嶅洩顔囨禒璇插娑撳搫鍑￠崚鍡曢煩
         this.markTaskAsShared(task.id);
       }
     });
   },
 
   /**
-   * 棰嗗彇浠诲姟濂栧姳
-   * @param {Object} e 浜嬩欢瀵硅薄
-   */
+   * 妫板棗褰囨禒璇插婵傛牕濮?   * @param {Object} e 娴滃娆㈢€电钖?   */
   onReceiveReward: function(e) {
     const taskId = e.currentTarget.dataset.id;
     const task = this.data.taskList.find(item => item.id === taskId);
@@ -369,7 +343,7 @@ Page({
     const self = this;
     
     wx.showLoading({
-      title: '棰嗗彇涓?..',
+      title: '妫板棗褰囨稉?..',
       mask: true
     });
     
@@ -378,7 +352,7 @@ Page({
         wx.hideLoading();
         
         if (res.success) {
-          // 鏇存柊浠诲姟鐘舵€?          const updatedTaskList = self.data.taskList.map(item => {
+          // 閺囧瓨鏌婃禒璇插閻樿埖鈧?          const updatedTaskList = self.data.taskList.map(item => {
             if (item.id === taskId) {
               return {
                 ...item,
@@ -393,52 +367,48 @@ Page({
             taskList: updatedTaskList
           });
           
-          // 鏄剧ず濂栧姳寮圭獥
-          self.showRewardPopup(task);
+          // 閺勫墽銇氭總鏍уС瀵湱鐛?          self.showRewardPopup(task);
           
-          // 鍒锋柊浠诲姟缁熻
-          self.loadTaskStats();
+          // 閸掗攱鏌婃禒璇插缂佺喕顓?          self.loadTaskStats();
         } else {
           wx.showToast({
-            title: res.message || '棰嗗彇澶辫触',
+            title: res.message || '妫板棗褰囨径杈Е',
             icon: 'none'
           });
         }
       })
       .catch(err => {
         wx.hideLoading();
-        console.error('棰嗗彇浠诲姟濂栧姳澶辫触:', err);
+        console.error('妫板棗褰囨禒璇插婵傛牕濮虫径杈Е:', err);
         wx.showToast({
-          title: '缃戠粶閿欒锛岃閲嶈瘯',
+          title: '缂冩垹绮堕柨娆掝嚖閿涘矁顕柌宥堢槸',
           icon: 'none'
         });
       });
   },
 
   /**
-   * 鏄剧ず濂栧姳寮圭獥
-   * @param {Object} task 浠诲姟瀵硅薄
-   */
+   * 閺勫墽銇氭總鏍уС瀵湱鐛?   * @param {Object} task 娴犺濮熺€电钖?   */
   showRewardPopup: function(task) {
     wx.showModal({
-      title: '鎭枩鑾峰緱濂栧姳',
-      content: `鑾峰緱 ${task.points} 绉垎`,
+      title: '閹厼鏋╅懢宄扮繁婵傛牕濮?,
+      content: `閼惧嘲绶?${task.points} 缁夘垰鍨巂,
       showCancel: false,
-      confirmText: '鐭ラ亾浜?,
+      confirmText: '閻儵浜炬禍?,
       success: () => {
-        // 鍙互娣诲姞鍏朵粬鎿嶄綔锛屽璺宠浆鍒扮Н鍒嗘槑缁嗛〉闈?      }
+        // 閸欘垯浜掑ǎ璇插閸忔湹绮幙宥勭稊閿涘苯顩х捄瀹犳祮閸掓壆袧閸掑棙妲戠紒鍡涖€夐棃?      }
     });
   },
 
   /**
-   * 鏍囪浠诲姟涓哄凡鏌ョ湅
-   * @param {String} taskId 浠诲姟ID
+   * 閺嶅洩顔囨禒璇插娑撳搫鍑￠弻銉ф箙
+   * @param {String} taskId 娴犺濮烮D
    */
   markTaskAsViewed: function(taskId) {
     pointsService.markTaskAsViewed(taskId)
       .then(res => {
         if (res.success) {
-          // 鏇存柊浠诲姟鐘舵€?          const updatedTaskList = this.data.taskList.map(item => {
+          // 閺囧瓨鏌婃禒璇插閻樿埖鈧?          const updatedTaskList = this.data.taskList.map(item => {
             if (item.id === taskId) {
               return {
                 ...item,
@@ -454,19 +424,19 @@ Page({
         }
       })
       .catch(err => {
-        console.error('鏍囪浠诲姟涓哄凡鏌ョ湅澶辫触:', err);
+        console.error('閺嶅洩顔囨禒璇插娑撳搫鍑￠弻銉ф箙婢惰精瑙?', err);
       });
   },
 
   /**
-   * 鏍囪浠诲姟涓哄凡鍒嗕韩
-   * @param {String} taskId 浠诲姟ID
+   * 閺嶅洩顔囨禒璇插娑撳搫鍑￠崚鍡曢煩
+   * @param {String} taskId 娴犺濮烮D
    */
   markTaskAsShared: function(taskId) {
     pointsService.markTaskAsShared(taskId)
       .then(res => {
         if (res.success) {
-          // 鏇存柊浠诲姟鐘舵€?          const updatedTaskList = this.data.taskList.map(item => {
+          // 閺囧瓨鏌婃禒璇插閻樿埖鈧?          const updatedTaskList = this.data.taskList.map(item => {
             if (item.id === taskId) {
               return {
                 ...item,
@@ -481,19 +451,16 @@ Page({
             taskList: updatedTaskList
           });
           
-          // 鍒锋柊浠诲姟缁熻
-          this.loadTaskStats();
+          // 閸掗攱鏌婃禒璇插缂佺喕顓?          this.loadTaskStats();
         }
       })
       .catch(err => {
-        console.error('鏍囪浠诲姟涓哄凡鍒嗕韩澶辫触:', err);
+        console.error('閺嶅洩顔囨禒璇插娑撳搫鍑￠崚鍡曢煩婢惰精瑙?', err);
       });
   },
 
   /**
-   * 鏌ョ湅浠诲姟璇︽儏
-   * @param {Object} e 浜嬩欢瀵硅薄
-   */
+   * 閺屻儳婀呮禒璇插鐠囷附鍎?   * @param {Object} e 娴滃娆㈢€电钖?   */
   onViewTaskDetail: function(e) {
     const taskId = e.currentTarget.dataset.id;
     const task = this.data.taskList.find(item => item.id === taskId);
@@ -503,19 +470,19 @@ Page({
     }
     
     wx.showModal({
-      title: task.name || '浠诲姟璇︽儏',
-      content: task.description || '鏆傛棤浠诲姟鎻忚堪',
+      title: task.name || '娴犺濮熺拠锔藉剰',
+      content: task.description || '閺嗗倹妫ゆ禒璇插閹诲繗鍫?,
       showCancel: false,
-      confirmText: '鎴戠煡閬撲簡'
+      confirmText: '閹存垹鐓￠柆鎾茬啊'
     });
   },
 
   /**
-   * 椤甸潰鍒嗕韩
+   * 妞ょ敻娼伴崚鍡曢煩
    */
   onShareAppMessage: function() {
     return {
-      title: '蹇潵瀹屾垚绉垎浠诲姟锛岃耽鍙栦赴鍘氬鍔憋紒',
+      title: '韫囶偅娼电€瑰本鍨氱粔顖氬瀻娴犺濮熼敍宀冭€介崣鏍﹁荡閸樻艾顨涢崝鎲嬬磼',
       path: '/pages/user/pointsTasks/pointsTasks',
       imageUrl: '/images/share-points-tasks.jpg'
     };

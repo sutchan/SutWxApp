@@ -1,7 +1,7 @@
-{
+﻿﻿{
   "name": "sut-wx-app",
   "version": "1.0.0",
-  "description": "閼诲繒澹掑顔讳繆鐏忓繒鈻兼惔?SutWxApp)",
+  "description": "鑻忕壒寰俊灏忕▼搴?SutWxApp)",
   "main": "app.js",
   "scripts": {
     "lint": "eslint --ext .js .",

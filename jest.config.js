@@ -1,22 +1,21 @@
-/**
- * 文件名: jest.config.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: Jest 测试配置文件
+﻿/**
+ * 鏂囦欢鍚? jest.config.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: Jest 娴嬭瘯閰嶇疆鏂囦欢
  */
 
 module.exports = {
-  // 测试环境
+  // 娴嬭瘯鐜
   testEnvironment: 'node',
   
-  // 测试文件匹配模式
+  // 娴嬭瘯鏂囦欢鍖归厤妯″紡
   testMatch: [
     '**/__tests__/**/*.test.js',
     '**/?(*.)+(spec|test).js'
   ],
   
-  // 覆盖率收集
-  collectCoverage: true,
+  // 瑕嗙洊鐜囨敹闆?  collectCoverage: true,
   collectCoverageFrom: [
     'SutWxApp/**/*.js',
     '!SutWxApp/**/*.test.js',
@@ -24,13 +23,11 @@ module.exports = {
     '!SutWxApp/**/node_modules/**'
   ],
   
-  // 覆盖率报告格式
-  coverageReporters: ['text', 'lcov', 'json', 'html'],
+  // 瑕嗙洊鐜囨姤鍛婃牸寮?  coverageReporters: ['text', 'lcov', 'json', 'html'],
   
-  // 覆盖率输出目录
-  coverageDirectory: 'coverage',
+  // 瑕嗙洊鐜囪緭鍑虹洰褰?  coverageDirectory: 'coverage',
   
-  // 暂时移除覆盖率阈值，随着测试用例增加再逐步提高
+  // 鏆傛椂绉婚櫎瑕嗙洊鐜囬槇鍊硷紝闅忕潃娴嬭瘯鐢ㄤ緥澧炲姞鍐嶉€愭鎻愰珮
   // coverageThreshold: {
   //   global: {
   //     branches: 5,
@@ -40,20 +37,19 @@ module.exports = {
   //   }
   // },
   
-  // 模块路径映射
+  // 妯″潡璺緞鏄犲皠
   moduleNameMapping: {
     '^@/(.*)$': '<rootDir>/SutWxApp/$1'
   },
   
-  // 设置文件
+  // 璁剧疆鏂囦欢
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   
-  // 忽略的路径
-  testPathIgnorePatterns: [
+  // 蹇界暐鐨勮矾寰?  testPathIgnorePatterns: [
     '/node_modules/'
   ],
   
-  // 转换忽略模式
+  // 杞崲蹇界暐妯″紡
   transformIgnorePatterns: [
     '/node_modules/'
   ]

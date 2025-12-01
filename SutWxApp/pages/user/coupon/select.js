@@ -1,8 +1,8 @@
-/**
- * 文件名: select.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 鐢ㄦ埛浼樻儬鍒搁€夋嫨椤甸潰
+﻿/**
+ * 鏂囦欢鍚? select.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 閻劍鍩涙导妯诲劕閸掓悂鈧瀚ㄦい鐢告桨
  */
 Page({
   data: {
@@ -15,9 +15,8 @@ Page({
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
-   * @param {Object} options - 椤甸潰鍙傛暟
-   * @param {string} options.selectedId - 宸查€変腑鐨勪紭鎯犲埜ID
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸旂姾娴?   * @param {Object} options - 妞ょ敻娼伴崣鍌涙殶
+   * @param {string} options.selectedId - 瀹告煡鈧鑵戦惃鍕喘閹姴鍩淚D
    * @returns {void}
    */
   onLoad(options) {
@@ -28,28 +27,25 @@ Page({
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍗歌浇
-   * @returns {void}
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸楁瓕娴?   * @returns {void}
    */
   onUnload() {
-    // 娓呯悊瀹氭椂鍣紝闃叉鍐呭瓨娉勬紡
-    if (this.data.timer) {
+    // 濞撳懐鎮婄€规碍妞傞崳顭掔礉闂冨弶顒涢崘鍛摠濞夊嫭绱?    if (this.data.timer) {
       clearTimeout(this.data.timer);
     }
   },
 
   /**
-   * 鍔犺浇浼樻儬鍒稿垪琛?   * @returns {void}
+   * 閸旂姾娴囨导妯诲劕閸掔鍨悰?   * @returns {void}
    */
   loadCoupons() {
     this.setData({ loading: true });
-    // 妯℃嫙鏁版嵁璇锋眰
-    const timer = setTimeout(() => {
+    // 濡剝瀚欓弫鐗堝祦鐠囬攱鐪?    const timer = setTimeout(() => {
       const mockCoupons = [
-        { id: '1', name: '婊?00鍑?0鍏?, value: 10, condition: '婊?00鍏冨彲鐢?, endDate: '2023-12-31', available: true },
-        { id: '2', name: '鏂颁汉涓撲韩鍒?, value: 5, condition: '鏃犻棬妲?, endDate: '2023-11-30', available: true },
-        { id: '3', name: '宸茶繃鏈熶紭鎯犲埜', value: 15, condition: '婊?50鍏冨彲鐢?, endDate: '2023-09-30', available: false },
-        { id: '4', name: '涓嶆弧瓒虫潯浠朵紭鎯犲埜', value: 20, condition: '婊?00鍏冨彲鐢?, endDate: '2023-12-31', available: false }
+        { id: '1', name: '濠?00閸?0閸?, value: 10, condition: '濠?00閸忓啫褰查悽?, endDate: '2023-12-31', available: true },
+        { id: '2', name: '閺傞姹夋稉鎾查煩閸?, value: 5, condition: '閺冪娀妫Σ?, endDate: '2023-11-30', available: true },
+        { id: '3', name: '瀹歌尪绻冮張鐔剁喘閹姴鍩?, value: 15, condition: '濠?50閸忓啫褰查悽?, endDate: '2023-09-30', available: false },
+        { id: '4', name: '娑撳秵寮х搾铏蒋娴犳湹绱幆鐘插煖', value: 20, condition: '濠?00閸忓啫褰查悽?, endDate: '2023-12-31', available: false }
       ];
 
       const available = mockCoupons.filter(coupon => coupon.available);
@@ -68,15 +64,13 @@ Page({
   },
 
   /**
-   * 閫夋嫨浼樻儬鍒?   * @param {Object} e - 浜嬩欢瀵硅薄
-   * @returns {void}
+   * 闁瀚ㄦ导妯诲劕閸?   * @param {Object} e - 娴滃娆㈢€电钖?   * @returns {void}
    */
   selectCoupon(e) {
     const { id } = e.currentTarget.dataset;
     const selectedCoupon = this.data.availableCoupons.find(coupon => coupon.id === id);
     if (selectedCoupon) {
-      // 杩斿洖涓婁竴椤靛苟浼犻€掗€変腑鐨勪紭鎯犲埜淇℃伅
-      const pages = getCurrentPages();
+      // 鏉╂柨娲栨稉濠佺妞ら潧鑻熸导鐘烩偓鎺椻偓澶夎厬閻ㄥ嫪绱幆鐘插煖娣団剝浼?      const pages = getCurrentPages();
       const prevPage = pages[pages.length - 2];
       if (prevPage) {
         prevPage.setData({
@@ -88,8 +82,7 @@ Page({
   },
 
   /**
-   * 涓嶄娇鐢ㄤ紭鎯犲埜
-   * @returns {void}
+   * 娑撳秳濞囬悽銊ょ喘閹姴鍩?   * @returns {void}
    */
   noCoupon() {
     const pages = getCurrentPages();

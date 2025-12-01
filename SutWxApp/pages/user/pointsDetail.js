@@ -1,33 +1,31 @@
-/**
- * 文件名: pointsDetail.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: 绉垎鏄庣粏椤甸潰
- */
+﻿/**
+ * 鏂囦欢鍚? pointsDetail.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: 缁夘垰鍨庨弰搴ｇ矎妞ょ敻娼? */
 const pointsService = require('../../services/pointsService');
 
 Page({
   data: {
-    // 褰撳墠绉垎
+    // 瑜版挸澧犵粔顖氬瀻
     currentPoints: 0,
     
-    // 绛涢€夌被鍨?    activeTab: 'all',
+    // 缁涙盯鈧琚崹?    activeTab: 'all',
     tabs: [
-      { key: 'all', label: '鍏ㄩ儴' },
-      { key: 'earn', label: '鑾峰緱' },
-      { key: 'spend', label: '娑堣垂' }
+      { key: 'all', label: '閸忋劑鍎? },
+      { key: 'earn', label: '閼惧嘲绶? },
+      { key: 'spend', label: '濞戝牐鍨? }
     ],
     
-    // 鏃堕棿绛涢€?    timeRange: 'all',
+    // 閺冨爼妫跨粵娑⑩偓?    timeRange: 'all',
     timeOptions: [
-      { key: 'all', label: '鍏ㄩ儴鏃堕棿' },
-      { key: 'today', label: '浠婂ぉ' },
-      { key: 'week', label: '鏈懆' },
-      { key: 'month', label: '鏈湀' }
+      { key: 'all', label: '閸忋劑鍎撮弮鍫曟？' },
+      { key: 'today', label: '娴犲﹤銇? },
+      { key: 'week', label: '閺堫剙鎳? },
+      { key: 'month', label: '閺堫剚婀€' }
     ],
     
-    // 鏄庣粏鍒楄〃
-    detailList: [],
+    // 閺勫海绮忛崚妤勩€?    detailList: [],
     page: 1,
     pageSize: 20,
     hasMore: true,
@@ -36,29 +34,27 @@ Page({
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸旂姾娴?   */
   onLoad: function (options) {
     this.loadCurrentPoints();
     this.loadDetailList();
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閺勫墽銇?   */
   onShow: function () {
-    // 浠庡叾浠栭〉闈㈣繑鍥炴椂锛屽埛鏂板綋鍓嶇Н鍒?    this.loadCurrentPoints();
+    // 娴犲骸鍙炬禒鏍€夐棃銏ｇ箲閸ョ偞妞傞敍灞藉煕閺傛澘缍嬮崜宥囆濋崚?    this.loadCurrentPoints();
   },
 
   /**
-   * 椤甸潰鐩稿叧浜嬩欢澶勭悊鍑芥暟--鐩戝惉鐢ㄦ埛涓嬫媺鍔ㄤ綔
+   * 妞ょ敻娼伴惄绋垮彠娴滃娆㈡径鍕倞閸戣姤鏆?-閻╂垵鎯夐悽銊﹀煕娑撳濯洪崝銊ょ稊
    */
   onPullDownRefresh: function () {
     this.refreshData();
   },
 
   /**
-   * 椤甸潰涓婃媺瑙﹀簳浜嬩欢鐨勫鐞嗗嚱鏁?   */
+   * 妞ょ敻娼版稉濠冨鐟欙箑绨虫禍瀣╂閻ㄥ嫬顦╅悶鍡楀毐閺?   */
   onReachBottom: function () {
     if (this.data.hasMore && !this.data.isLoading) {
       this.loadMoreDetailList();
@@ -66,8 +62,7 @@ Page({
   },
 
   /**
-   * 鍔犺浇褰撳墠绉垎
-   */
+   * 閸旂姾娴囪ぐ鎾冲缁夘垰鍨?   */
   loadCurrentPoints: function() {
     pointsService.getUserPoints()
       .then(res => {
@@ -76,13 +71,12 @@ Page({
         });
       })
       .catch(err => {
-        console.error('鑾峰彇褰撳墠绉垎澶辫触', err);
+        console.error('閼惧嘲褰囪ぐ鎾冲缁夘垰鍨庢径杈Е', err);
       });
   },
 
   /**
-   * 鍔犺浇绉垎鏄庣粏鍒楄〃
-   */
+   * 閸旂姾娴囩粔顖氬瀻閺勫海绮忛崚妤勩€?   */
   loadDetailList: function() {
     if (this.data.isLoading) return;
     
@@ -113,21 +107,21 @@ Page({
         wx.stopPullDownRefresh();
       })
       .catch(err => {
-        console.error('鑾峰彇绉垎鏄庣粏澶辫触', err);
+        console.error('閼惧嘲褰囩粔顖氬瀻閺勫海绮忔径杈Е', err);
         this.setData({
           isLoading: false
         });
         wx.stopPullDownRefresh();
         
         wx.showToast({
-          title: '鍔犺浇澶辫触锛岃閲嶈瘯',
+          title: '閸旂姾娴囨径杈Е閿涘矁顕柌宥堢槸',
           icon: 'none'
         });
       });
   },
 
   /**
-   * 鍔犺浇鏇村绉垎鏄庣粏
+   * 閸旂姾娴囬弴鏉戭樋缁夘垰鍨庨弰搴ｇ矎
    */
   loadMoreDetailList: function() {
     this.setData({
@@ -138,7 +132,7 @@ Page({
   },
 
   /**
-   * 鍒锋柊鏁版嵁
+   * 閸掗攱鏌婇弫鐗堝祦
    */
   refreshData: function() {
     this.setData({
@@ -151,7 +145,7 @@ Page({
   },
 
   /**
-   * 鍒囨崲绫诲瀷鏍囩
+   * 閸掑洦宕茬猾璇茬€烽弽鍥╊劮
    */
   onTabChange: function(e) {
     const activeTab = e.currentTarget.dataset.tab;
@@ -167,7 +161,7 @@ Page({
   },
 
   /**
-   * 鍒囨崲鏃堕棿绛涢€?   */
+   * 閸掑洦宕查弮鍫曟？缁涙盯鈧?   */
   onTimeFilterChange: function(e) {
     const timeRange = e.currentTarget.dataset.time;
     if (timeRange === this.data.timeRange) return;
@@ -182,8 +176,7 @@ Page({
   },
 
   /**
-   * 鏌ョ湅鏄庣粏璇︽儏
-   */
+   * 閺屻儳婀呴弰搴ｇ矎鐠囷附鍎?   */
   onViewDetail: function(e) {
     const id = e.currentTarget.dataset.id;
     wx.navigateTo({
@@ -192,7 +185,7 @@ Page({
   },
 
   /**
-   * 璺宠浆鍒扮Н鍒嗕换鍔￠〉闈?   */
+   * 鐠哄疇娴嗛崚鎵濋崚鍡曟崲閸旓繝銆夐棃?   */
   onGoToTasks: function() {
     wx.navigateTo({
       url: '/pages/user/pointsTasks'
@@ -200,7 +193,7 @@ Page({
   },
 
   /**
-   * 璺宠浆鍒扮Н鍒嗗晢鍩庨〉闈?   */
+   * 鐠哄疇娴嗛崚鎵濋崚鍡楁櫌閸╁酣銆夐棃?   */
   onGoToMall: function() {
     wx.switchTab({
       url: '/pages/user/pointsMall'

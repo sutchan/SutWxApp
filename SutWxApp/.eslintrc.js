@@ -1,10 +1,10 @@
-/**
+﻿﻿/**
  * 鏂囦欢鍚? .eslintrc.js
  * 鐗堟湰鍙? 1.0.2
  * 鏇存柊鏃ユ湡: 2025-11-29
  * 浣滆€? Sut
  * 鎻忚堪: ESLint閰嶇疆鏂囦欢
- * 涓哄井淇″皬绋嬪簭椤圭洰鎻愪緵浠ｇ爜瑙勮寖妫€鏌? */
+ * 涓鸿嫃鐗瑰皬绋嬪簭椤圭洰鎻愪緵浠ｇ爜瑙勮寖妫€鏌?*/
 module.exports = {
   root: true,
   env: {
@@ -39,7 +39,7 @@ module.exports = {
     clearInterval: 'readonly'
   },
   rules: {
-    // 鍩虹閿欒妫€鏌?    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    // 鏍稿績閿欒妫€鏌?    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-unused-vars': ['error', { args: 'none', ignoreRestSiblings: true }],
     'no-undef': 'error',

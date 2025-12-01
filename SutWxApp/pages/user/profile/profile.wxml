@@ -1,20 +1,20 @@
-/**
- * 文件名: profile.wxml
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: profile 椤甸潰缁撴瀯鏂囦欢
+﻿/**
+ * 鏂囦欢鍚? profile.wxml
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: profile 妞ょ敻娼扮紒鎾寸€弬鍥︽
  */
 <view class="container">
   <mp-cells>
-    <mp-cell value="澶村儚" link>
+    <mp-cell value="婢舵潙鍎? link>
       <image slot="footer" class="avatar" src="{{userInfo.avatarUrl || '/assets/images/default_avatar.png'}}" mode="aspectFill" bindtap="chooseAvatar"></image>
     </mp-cell>
-    <mp-cell value="鏄电О" footer="{{userInfo.nickName}}" bindtap="editNickName"></mp-cell>
-    <mp-cell value="鎬у埆" footer="{{userInfo.gender === 1 ? '鐢? : userInfo.gender === 2 ? '濂? : '鏈煡'}}" bindtap="editGender"></mp-cell>
-    <mp-cell value="鐢熸棩" footer="{{userInfo.birthday || '鏈缃?}}" bindtap="editBirthday"></mp-cell>
+    <mp-cell value="閺勭數袨" footer="{{userInfo.nickName}}" bindtap="editNickName"></mp-cell>
+    <mp-cell value="閹冨焼" footer="{{userInfo.gender === 1 ? '閻? : userInfo.gender === 2 ? '婵? : '閺堫亞鐓?}}" bindtap="editGender"></mp-cell>
+    <mp-cell value="閻㈢喐妫? footer="{{userInfo.birthday || '閺堫亣顔曠純?}}" bindtap="editBirthday"></mp-cell>
   </mp-cells>
 
   <view class="weui-btn-area">
-    <button class="weui-btn" type="warn" bindtap="logout">閫€鍑虹櫥褰?/button>
+    <button class="weui-btn" type="warn" bindtap="logout">闁偓閸戣櫣娅ヨぐ?/button>
   </view>
 </view>

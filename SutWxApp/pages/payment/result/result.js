@@ -1,15 +1,15 @@
-/**
- * 文件名: result.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: 鏀粯缁撴灉椤甸潰
+﻿/**
+ * 鏂囦欢鍚? result.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: 閺€顖欑帛缂佹挻鐏夋い鐢告桨
  */
 
 const paymentService = require('../../../services/paymentService');
 
 Page({
   /**
-   * 椤甸潰鐨勫垵濮嬫暟鎹?   */
+   * 妞ょ敻娼伴惃鍕灥婵鏆熼幑?   */
   data: {
     orderId: '',
     paymentStatus: '', // success, failed, cancelled
@@ -21,8 +21,7 @@ Page({
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸旂姾娴?   */
   onLoad(options) {
     const { orderId, status } = options;
     
@@ -36,7 +35,7 @@ Page({
       this.startCountdown();
     } else {
       wx.showToast({
-        title: '鍙傛暟閿欒',
+        title: '閸欏倹鏆熼柨娆掝嚖',
         icon: 'none'
       });
       setTimeout(() => {
@@ -48,8 +47,7 @@ Page({
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍗歌浇
-   */
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸楁瓕娴?   */
   onUnload() {
     if (this.data.countdownTimer) {
       clearInterval(this.data.countdownTimer);
@@ -57,16 +55,15 @@ Page({
   },
 
   /**
-   * 鍔犺浇鏀粯缁撴灉
-   */
+   * 閸旂姾娴囬弨顖欑帛缂佹挻鐏?   */
   async loadPaymentResult(orderId, status) {
     try {
       this.setData({ loading: true });
       
-      // 杩欓噷搴旇璋冪敤瀹為檯鐨勬敮浠樼粨鏋淎PI
+      // 鏉╂瑩鍣锋惔鏃囶嚉鐠嬪啰鏁ょ€圭偤妾惃鍕暜娴犳绮ㄩ弸娣嶱I
       // const result = await paymentService.getPaymentResult(orderId);
       
-      // 妯℃嫙鏁版嵁
+      // 濡剝瀚欓弫鐗堝祦
       setTimeout(() => {
         const orderData = {
           id: orderId,
@@ -78,18 +75,18 @@ Page({
           items: [
             {
               id: '1',
-              name: '楂樺搧璐ㄦ棤绾胯摑鐗欒€虫満',
+              name: '妤傛ê鎼х拹銊︽￥缁捐儻鎽戦悧娆掆偓铏簚',
               image: '/images/product/headphone.jpg',
               price: 299.00,
               quantity: 1,
-              specs: '榛戣壊'
+              specs: '姒涙垼澹?
             }
           ],
           address: {
             id: '1',
-            name: '寮犱笁',
+            name: '瀵姳绗?,
             phone: '13800138000',
-            address: '鍖椾含甯傛湞闃冲尯鏌愭煇琛楅亾鏌愭煇灏忓尯1鍙锋ゼ1鍗曞厓101瀹?
+            address: '閸栨ぞ鍚敮鍌涙篂闂冨啿灏弻鎰厙鐞涙浜鹃弻鎰厙鐏忓繐灏?閸欓攱銈?閸楁洖鍘?01鐎?
           },
           createTime: new Date().toISOString()
         };
@@ -108,20 +105,19 @@ Page({
       }, 800);
       
     } catch (error) {
-      console.error('鍔犺浇鏀粯缁撴灉澶辫触:', error);
+      console.error('閸旂姾娴囬弨顖欑帛缂佹挻鐏夋径杈Е:', error);
       this.setData({ loading: false });
       wx.showToast({
-        title: '鍔犺浇鏀粯缁撴灉澶辫触',
+        title: '閸旂姾娴囬弨顖欑帛缂佹挻鐏夋径杈Е',
         icon: 'none'
       });
     }
   },
 
   /**
-   * 寮€濮嬪€掕鏃?   */
+   * 瀵偓婵鈧帟顓搁弮?   */
   startCountdown() {
-    let countdown = 5; // 5绉掑悗鑷姩璺宠浆
-    
+    let countdown = 5; // 5缁夋帒鎮楅懛顏勫З鐠哄疇娴?    
     this.setData({ countdown });
     
     const countdownTimer = setInterval(() => {
@@ -134,8 +130,7 @@ Page({
           countdownTimer: null 
         });
         
-        // 鏍规嵁鏀粯鐘舵€佽烦杞埌涓嶅悓椤甸潰
-        if (this.data.paymentStatus === 'success') {
+        // 閺嶈宓侀弨顖欑帛閻樿埖鈧浇鐑︽潪顒€鍩屾稉宥呮倱妞ょ敻娼?        if (this.data.paymentStatus === 'success') {
           this.goToOrderDetail();
         } else {
           this.goToOrderList();
@@ -150,7 +145,7 @@ Page({
   },
 
   /**
-   * 鏌ョ湅订单璇︽儏
+   * 閺屻儳婀呰鍗曠拠锔藉剰
    */
   goToOrderDetail() {
     if (this.data.countdownTimer) {
@@ -164,8 +159,7 @@ Page({
   },
 
   /**
-   * 杩斿洖订单鍒楄〃
-   */
+   * 鏉╂柨娲栬鍗曢崚妤勩€?   */
   goToOrderList() {
     if (this.data.countdownTimer) {
       clearInterval(this.data.countdownTimer);
@@ -178,8 +172,7 @@ Page({
   },
 
   /**
-   * 杩斿洖棣栭〉
-   */
+   * 鏉╂柨娲栨＃鏍€?   */
   goToHome() {
     if (this.data.countdownTimer) {
       clearInterval(this.data.countdownTimer);
@@ -192,8 +185,7 @@ Page({
   },
 
   /**
-   * 缁х画璐墿
-   */
+   * 缂佈呯敾鐠愵厾澧?   */
   continueShopping() {
     if (this.data.countdownTimer) {
       clearInterval(this.data.countdownTimer);
@@ -206,7 +198,7 @@ Page({
   },
 
   /**
-   * 閲嶆柊鏀粯
+   * 闁插秵鏌婇弨顖欑帛
    */
   retryPayment() {
     if (this.data.countdownTimer) {
@@ -220,8 +212,7 @@ Page({
   },
 
   /**
-   * 鑱旂郴瀹㈡湇
-   */
+   * 閼辨梻閮寸€广垺婀?   */
   contactService() {
     if (this.data.countdownTimer) {
       clearInterval(this.data.countdownTimer);
@@ -234,26 +225,25 @@ Page({
   },
 
   /**
-   * 鍒嗕韩鏀粯缁撴灉
-   */
+   * 閸掑棔闊╅弨顖欑帛缂佹挻鐏?   */
   onShareAppMessage() {
     return {
       title: this.data.paymentStatus === 'success' ? 
-        '鎴戝垰瀹屾垚浜嗕竴绗旇鍗曪紝鍟嗗搧璐ㄩ噺寰堟锛? : 
-        '鏀粯閬囧埌闂锛岄渶瑕佸府鍔?,
+        '閹存垵鍨扮€瑰本鍨氭禍鍡曠缁楁棁顓归崡鏇礉閸熷棗鎼х拹銊╁櫤瀵板牊顥楅敍? : 
+        '閺€顖欑帛闁洤鍩岄梻顕€顣介敍宀勬付鐟曚礁搴滈崝?,
       path: `/pages/payment/result/result?orderId=${this.data.orderId}&status=${this.data.paymentStatus}`,
       imageUrl: '/images/share/payment-result.jpg'
     };
   },
 
   /**
-   * 鍒嗕韩鍒版湅鍙嬪湀
+   * 閸掑棔闊╅崚鐗堟箙閸欏婀€
    */
   onShareTimeline() {
     return {
       title: this.data.paymentStatus === 'success' ? 
-        '鎴戝垰瀹屾垚浜嗕竴绗旇鍗曪紝鍟嗗搧璐ㄩ噺寰堟锛? : 
-        '鏀粯閬囧埌闂锛岄渶瑕佸府鍔?,
+        '閹存垵鍨扮€瑰本鍨氭禍鍡曠缁楁棁顓归崡鏇礉閸熷棗鎼х拹銊╁櫤瀵板牊顥楅敍? : 
+        '閺€顖欑帛闁洤鍩岄梻顕€顣介敍宀勬付鐟曚礁搴滈崝?,
       query: `orderId=${this.data.orderId}&status=${this.data.paymentStatus}`,
       imageUrl: '/images/share/payment-result.jpg'
     };

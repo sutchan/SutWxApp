@@ -1,8 +1,8 @@
-/**
- * 文件名: edit.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 鐢ㄦ埛鍦板潃缂栬緫椤甸潰
+﻿/**
+ * 鏂囦欢鍚? edit.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 閻劍鍩涢崷鏉挎絻缂傛牞绶い鐢告桨
  */
 Page({
   data: {
@@ -17,19 +17,18 @@ Page({
       isDefault: false
     },
     rules: [
-      { name: 'name', rules: { required: true, message: '璇疯緭鍏ユ敹璐т汉濮撳悕' } },
-      { name: 'phone', rules: [{ required: true, message: '璇疯緭鍏ユ墜鏈哄彿鐮? }, { mobile: true, message: '鎵嬫満鍙风爜鏍煎紡涓嶆纭? }] },
-      { name: 'province', rules: { required: true, message: '璇烽€夋嫨鐪佷唤' } },
-      { name: 'city', rules: { required: true, message: '璇烽€夋嫨鍩庡競' } },
-      { name: 'detail', rules: { required: true, message: '璇疯緭鍏ヨ缁嗗湴鍧€' } }
+      { name: 'name', rules: { required: true, message: '鐠囩柉绶崗銉︽暪鐠愌傛眽婵挸鎮? } },
+      { name: 'phone', rules: [{ required: true, message: '鐠囩柉绶崗銉﹀閺堝搫褰块惍? }, { mobile: true, message: '閹靛婧€閸欓鐖滈弽鐓庣础娑撳秵顒滅涵? }] },
+      { name: 'province', rules: { required: true, message: '鐠囩兘鈧瀚ㄩ惇浣峰敜' } },
+      { name: 'city', rules: { required: true, message: '鐠囩兘鈧瀚ㄩ崺搴＄' } },
+      { name: 'detail', rules: { required: true, message: '鐠囩柉绶崗銉嚊缂佸棗婀撮崸鈧? } }
     ],
     timer: null
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
-   * @param {Object} options - 椤甸潰鍙傛暟
-   * @param {string} options.id - 鍦板潃ID
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸旂姾娴?   * @param {Object} options - 妞ょ敻娼伴崣鍌涙殶
+   * @param {string} options.id - 閸︽澘娼僆D
    * @returns {void}
    */
   onLoad(options) {
@@ -40,32 +39,28 @@ Page({
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍗歌浇
-   * @returns {void}
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸楁瓕娴?   * @returns {void}
    */
   onUnload() {
-    // 娓呯悊瀹氭椂鍣紝闃叉鍐呭瓨娉勬紡
-    if (this.data.timer) {
+    // 濞撳懐鎮婄€规碍妞傞崳顭掔礉闂冨弶顒涢崘鍛摠濞夊嫭绱?    if (this.data.timer) {
       clearTimeout(this.data.timer);
     }
   },
 
   /**
-   * 鍔犺浇鍦板潃璇︽儏
-   * @param {string} id - 鍦板潃ID
+   * 閸旂姾娴囬崷鏉挎絻鐠囷附鍎?   * @param {string} id - 閸︽澘娼僆D
    * @returns {void}
    */
   loadAddressDetail(id) {
-    // 妯℃嫙鏁版嵁璇锋眰
-    const timer = setTimeout(() => {
+    // 濡剝瀚欓弫鐗堝祦鐠囬攱鐪?    const timer = setTimeout(() => {
       const mockAddress = {
         id: id,
-        name: '寮犱笁',
+        name: '瀵姳绗?,
         phone: '13800138000',
-        province: '骞夸笢鐪?,
-        city: '骞垮窞甯?,
-        district: '澶╂渤鍖?,
-        detail: 'XXX琛楅亾XXX鍙?,
+        province: '楠炲じ绗㈤惇?,
+        city: '楠炲灝绐炵敮?,
+        district: '婢垛晜娓ら崠?,
+        detail: 'XXX鐞涙浜綳XX閸?,
         isDefault: true
       };
       this.setData({ 
@@ -78,9 +73,8 @@ Page({
   },
 
   /**
-   * 琛ㄥ崟杈撳叆鏀瑰彉
-   * @param {Object} e - 浜嬩欢瀵硅薄
-   * @returns {void}
+   * 鐞涖劌宕熸潏鎾冲弳閺€鐟板綁
+   * @param {Object} e - 娴滃娆㈢€电钖?   * @returns {void}
    */
   formInputChange(e) {
     const { field } = e.currentTarget.dataset;
@@ -90,18 +84,17 @@ Page({
   },
 
   /**
-   * 鎻愪氦琛ㄥ崟
+   * 閹绘劒姘︾悰銊ュ礋
    * @returns {void}
    */
   submitForm() {
     this.selectComponent('#form').validate((valid, errors) => {
       if (valid) {
         wx.showToast({
-          title: '鎻愪氦鎴愬姛',
+          title: '閹绘劒姘﹂幋鎰',
           icon: 'success'
         });
-        // 瀹為檯鎻愪氦閫昏緫
-      } else {
+        // 鐎圭偤妾幓鎰唉闁槒绶?      } else {
         const firstError = errors[0];
         wx.showToast({
           title: firstError.message,

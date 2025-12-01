@@ -1,10 +1,10 @@
-/* 鍒嗛攢瑙勫垯璁剧疆椤甸潰鏍峰紡 */
+﻿/* 閸掑棝鏀㈢憴鍕灟鐠佸墽鐤嗘い鐢告桨閺嶅嘲绱?*/
 .distribute-rules-page {
   background-color: #f5f5f5;
   min-height: 100vh;
 }
 
-/* 加载中*/
+/* 鍔犺浇涓?/
 .loading-container {
   display: flex;
   justify-content: center;
@@ -14,7 +14,7 @@
   color: #999;
 }
 
-/* 閿欒鐘舵€?*/
+/* 闁挎瑨顕ら悩鑸碘偓?*/
 .error-container {
   display: flex;
   flex-direction: column;
@@ -45,12 +45,12 @@
   background-color: #4caf50;
 }
 
-/* 瑙勫垯鍐呭 */
+/* 鐟欏嫬鍨崘鍛啇 */
 .rules-content {
   padding: 20rpx;
 }
 
-/* 瑙勫垯鍖哄潡 */
+/* 鐟欏嫬鍨崠鍝勬健 */
 .rules-section {
   background-color: #fff;
   border-radius: 12rpx;
@@ -59,7 +59,7 @@
   box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
 }
 
-/* 鍖哄潡澶撮儴 */
+/* 閸栧搫娼℃径鎾劥 */
 .section-header {
   margin-bottom: 20rpx;
   padding-bottom: 15rpx;
@@ -72,12 +72,12 @@
   color: #333;
 }
 
-/* 鍖哄潡鍐呭 */
+/* 閸栧搫娼￠崘鍛啇 */
 .section-content {
-  /* 鍐呭鏍峰紡 */
+  /* 閸愬懎顔愰弽宄扮础 */
 }
 
-/* 瑙勫垯椤?*/
+/* 鐟欏嫬鍨い?*/
 .rule-item {
   display: flex;
   justify-content: space-between;
@@ -93,7 +93,7 @@
   border-bottom: none;
 }
 
-/* 瑙勫垯鏍囩 */
+/* 鐟欏嫬鍨弽鍥╊劮 */
 .rule-label {
   flex: 1;
   margin-right: 20rpx;
@@ -113,12 +113,12 @@
   line-height: 1.4;
 }
 
-/* 瑙勫垯寮€鍏?*/
+/* 鐟欏嫬鍨鈧崗?*/
 .rule-switch {
   transform: scale(0.8);
 }
 
-/* 瑙勫垯杈撳叆缁?*/
+/* 鐟欏嫬鍨潏鎾冲弳缂?*/
 .rule-input-group {
   display: flex;
   align-items: center;
@@ -127,7 +127,7 @@
   padding: 0 15rpx;
 }
 
-/* 瑙勫垯杈撳叆妗?*/
+/* 鐟欏嫬鍨潏鎾冲弳濡?*/
 .rule-input {
   flex: 1;
   padding: 15rpx 0;
@@ -142,14 +142,14 @@
   outline: none;
 }
 
-/* 杈撳叆鍗曚綅 */
+/* 鏉堟挸鍙嗛崡鏇氱秴 */
 .input-unit {
   font-size: 28rpx;
   color: #666;
   margin-left: 10rpx;
 }
 
-/* 淇濆瓨鎸夐挳 */
+/* 娣囨繂鐡ㄩ幐澶愭尦 */
 .save-section {
   padding: 20rpx;
   background-color: #fff;
@@ -168,7 +168,7 @@
   background-color: #4caf50;
 }
 
-/* 鍝嶅簲寮忚璁?*/
+/* 閸濆秴绨插蹇氼啎鐠?*/
 @media (max-width: 375px) {
   .rule-item {
     flex-direction: column;

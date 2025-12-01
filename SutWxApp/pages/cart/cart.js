@@ -1,8 +1,8 @@
-/**
- * 文件名: cart.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 璐墿杞﹂〉闈? */
+﻿/**
+ * 鏂囦欢鍚? cart.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鐠愵厾澧挎潪锕傘€夐棃? */
 const i18n = require('../../utils/i18n');
 
 Page({
@@ -17,35 +17,30 @@ Page({
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
-   * @returns {void}
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸旂姾娴?   * @returns {void}
    */
   onLoad() {
     this.loadCartData();
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍗歌浇
-   * @returns {void}
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸楁瓕娴?   * @returns {void}
    */
   onUnload() {
-    // 娓呯悊瀹氭椂鍣紝闃叉鍐呭瓨娉勬紡
-    if (this.data.timer) {
+    // 濞撳懐鎮婄€规碍妞傞崳顭掔礉闂冨弶顒涢崘鍛摠濞夊嫭绱?    if (this.data.timer) {
       clearTimeout(this.data.timer);
     }
   },
 
   /**
-   * 椤甸潰鏄剧ず鏃惰Е鍙?   * @returns {void}
+   * 妞ょ敻娼伴弰鍓с仛閺冩儼袝閸?   * @returns {void}
    */
   onShow() {
-    // 姣忔鏄剧ず椤甸潰鏃跺埛鏂拌喘鐗╄溅鏁版嵁
-    this.loadCartData();
+    // 濮ｅ繑顐奸弰鍓с仛妞ょ敻娼伴弮璺哄煕閺傛媽鍠橀悧鈺勬簠閺佺増宓?    this.loadCartData();
   },
 
   /**
-   * 涓嬫媺鍒锋柊鍥炶皟
-   * @returns {void}
+   * 娑撳濯洪崚閿嬫煀閸ョ偠鐨?   * @returns {void}
    */
   onPullDownRefresh() {
     this.loadCartData(() => {
@@ -54,7 +49,7 @@ Page({
   },
 
   /**
-   * 鍔犺浇璐墿杞︽暟鎹?   * @param {Function} done - 瀹屾垚鍥炶皟
+   * 閸旂姾娴囩拹顓犲⒖鏉烇附鏆熼幑?   * @param {Function} done - 鐎瑰本鍨氶崶鐐剁殶
    * @returns {void}
    */
   loadCartData(done) {
@@ -63,7 +58,7 @@ Page({
       const mockCartItems = [
         { 
           id: 1, 
-          name: i18n.translate('鍟嗗搧A'), 
+          name: i18n.translate('閸熷棗鎼'), 
           image: '/assets/images/product1.jpg', 
           price: '99.00',
           quantity: 1,
@@ -71,7 +66,7 @@ Page({
         },
         { 
           id: 2, 
-          name: i18n.translate('鍟嗗搧B'), 
+          name: i18n.translate('閸熷棗鎼'), 
           image: '/assets/images/product2.jpg', 
           price: '129.00',
           quantity: 2,
@@ -93,7 +88,7 @@ Page({
   },
 
   /**
-   * 璁＄畻鎬讳环
+   * 鐠侊紕鐣婚幀璁崇幆
    * @returns {void}
    */
   calculateTotal() {
@@ -116,8 +111,7 @@ Page({
   },
 
   /**
-   * 鍒囨崲鍟嗗搧閫変腑鐘舵€?   * @param {Object} e - 浜嬩欢瀵硅薄
-   * @returns {void}
+   * 閸掑洦宕查崯鍡楁惂闁鑵戦悩鑸碘偓?   * @param {Object} e - 娴滃娆㈢€电钖?   * @returns {void}
    */
   toggleItemSelection(e) {
     const { index } = e.currentTarget.dataset;
@@ -130,7 +124,7 @@ Page({
   },
 
   /**
-   * 鍏ㄩ€?鍙栨秷鍏ㄩ€?   * @returns {void}
+   * 閸忋劑鈧?閸欐牗绉烽崗銊┾偓?   * @returns {void}
    */
   toggleSelectAll() {
     const { cartItems, selectedAll } = this.data;
@@ -149,9 +143,7 @@ Page({
   },
 
   /**
-   * 澧炲姞鍟嗗搧鏁伴噺
-   * @param {Object} e - 浜嬩欢瀵硅薄
-   * @returns {void}
+   * 婢х偛濮為崯鍡楁惂閺佷即鍣?   * @param {Object} e - 娴滃娆㈢€电钖?   * @returns {void}
    */
   increaseQuantity(e) {
     const { index } = e.currentTarget.dataset;
@@ -164,9 +156,7 @@ Page({
   },
 
   /**
-   * 鍑忓皯鍟嗗搧鏁伴噺
-   * @param {Object} e - 浜嬩欢瀵硅薄
-   * @returns {void}
+   * 閸戝繐鐨崯鍡楁惂閺佷即鍣?   * @param {Object} e - 娴滃娆㈢€电钖?   * @returns {void}
    */
   decreaseQuantity(e) {
     const { index } = e.currentTarget.dataset;
@@ -180,17 +170,16 @@ Page({
   },
 
   /**
-   * 鍒犻櫎鍟嗗搧
-   * @param {Object} e - 浜嬩欢瀵硅薄
-   * @returns {void}
+   * 閸掔娀娅庨崯鍡楁惂
+   * @param {Object} e - 娴滃娆㈢€电钖?   * @returns {void}
    */
   removeItem(e) {
     const { index } = e.currentTarget.dataset;
     const { cartItems } = this.data;
     
     wx.showModal({
-      title: i18n.translate('鎻愮ず'),
-      content: i18n.translate('纭畾瑕佸垹闄よ繖涓晢鍝佸悧锛?),
+      title: i18n.translate('閹绘劗銇?),
+      content: i18n.translate('绾喖鐣剧憰浣稿灩闂勩倛绻栨稉顏勬櫌閸濅礁鎮ч敍?),
       success: (res) => {
         if (res.confirm) {
           cartItems.splice(index, 1);
@@ -202,14 +191,14 @@ Page({
   },
 
   /**
-   * 璺宠浆鍒扮粨绠楅〉闈?   * @returns {void}
+   * 鐠哄疇娴嗛崚鎵波缁犳銆夐棃?   * @returns {void}
    */
   goToCheckout() {
     const { selectedItems } = this.data;
     
     if (selectedItems.length === 0) {
       wx.showToast({
-        title: i18n.translate('璇烽€夋嫨鍟嗗搧'),
+        title: i18n.translate('鐠囩兘鈧瀚ㄩ崯鍡楁惂'),
         icon: 'none'
       });
       return;
@@ -221,9 +210,7 @@ Page({
   },
 
   /**
-   * 璺宠浆鍒板晢鍝佽鎯呴〉
-   * @param {Object} e - 浜嬩欢瀵硅薄
-   * @returns {void}
+   * 鐠哄疇娴嗛崚鏉挎櫌閸濅浇顕涢幆鍛淬€?   * @param {Object} e - 娴滃娆㈢€电钖?   * @returns {void}
    */
   goToProductDetail(e) {
     const { id } = e.currentTarget.dataset;

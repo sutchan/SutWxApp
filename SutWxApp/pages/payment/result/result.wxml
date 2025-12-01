@@ -1,110 +1,110 @@
-/**
- * 文件名: result.wxml
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: result 椤甸潰缁撴瀯鏂囦欢
+﻿/**
+ * 鏂囦欢鍚? result.wxml
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: result 妞ょ敻娼扮紒鎾寸€弬鍥︽
  */
-<!-- 鏀粯缁撴灉椤甸潰 -->
+<!-- 閺€顖欑帛缂佹挻鐏夋い鐢告桨 -->
 <view class="payment-result-container">
-  <!-- 加载状态-->
+  <!-- 鍔犺浇鐘舵€?->
   <view wx:if="{{loading}}" class="loading-container">
     <view class="loading-spinner"></view>
-    <text class="loading-text">姝ｅ湪鑾峰彇鏀粯缁撴灉...</text>
+    <text class="loading-text">濮濓絽婀懢宄板絿閺€顖欑帛缂佹挻鐏?..</text>
   </view>
   
-  <!-- 鏀粯缁撴灉鍐呭 -->
+  <!-- 閺€顖欑帛缂佹挻鐏夐崘鍛啇 -->
   <view wx:else class="result-content">
-    <!-- 鏀粯鎴愬姛 -->
+    <!-- 閺€顖欑帛閹存劕濮?-->
     <view wx:if="{{paymentStatus === 'success'}}" class="success-result">
       <view class="result-icon success">
         <text class="iconfont icon-success"></text>
       </view>
-      <view class="result-title">鏀粯鎴愬姛</view>
-      <view class="result-desc">鎮ㄧ殑订单宸叉垚鍔熸敮浠?/view>
+      <view class="result-title">閺€顖欑帛閹存劕濮?/view>
+      <view class="result-desc">閹劎娈戣鍗曞鍙夊灇閸旂喐鏁禒?/view>
       
-      <!-- 订单淇℃伅 -->
+      <!-- 璁㈠崟娣団剝浼?-->
       <view class="order-info">
         <view class="order-item">
-          <text class="order-label">订单缂栧彿锛?/text>
+          <text class="order-label">璁㈠崟缂傛牕褰块敍?/text>
           <text class="order-value">{{orderData.orderNo}}</text>
         </view>
         <view class="order-item">
-          <text class="order-label">鏀粯閲戦锛?/text>
-          <text class="order-value price">¥{{orderData.actualAmount}}</text>
+          <text class="order-label">閺€顖欑帛闁叉垿顤傞敍?/text>
+          <text class="order-value price">楼{{orderData.actualAmount}}</text>
         </view>
         <view class="order-item">
-          <text class="order-label">鏀粯鏃堕棿锛?/text>
+          <text class="order-label">閺€顖欑帛閺冨爼妫块敍?/text>
           <text class="order-value">{{paymentInfo.paymentTime}}</text>
         </view>
       </view>
       
-      <!-- 鎿嶄綔鎸夐挳 -->
+      <!-- 閹垮秳缍旈幐澶愭尦 -->
       <view class="action-buttons">
-        <button class="btn primary" bindtap="goToOrderDetail">鏌ョ湅订单璇︽儏</button>
-        <button class="btn secondary" bindtap="continueShopping">缁х画璐墿</button>
+        <button class="btn primary" bindtap="goToOrderDetail">閺屻儳婀呰鍗曠拠锔藉剰</button>
+        <button class="btn secondary" bindtap="continueShopping">缂佈呯敾鐠愵厾澧?/button>
       </view>
       
-      <!-- 鍊掕鏃舵彁绀?-->
+      <!-- 閸婃帟顓搁弮鑸靛絹缁€?-->
       <view class="countdown-tip">
-        <text>{{countdown}}绉掑悗鑷姩璺宠浆鍒拌鍗曡鎯?/text>
+        <text>{{countdown}}缁夋帒鎮楅懛顏勫З鐠哄疇娴嗛崚鎷岊吂閸楁洝顕涢幆?/text>
       </view>
     </view>
     
-    <!-- 鏀粯澶辫触 -->
+    <!-- 閺€顖欑帛婢惰精瑙?-->
     <view wx:elif="{{paymentStatus === 'failed'}}" class="failed-result">
       <view class="result-icon failed">
         <text class="iconfont icon-failed"></text>
       </view>
-      <view class="result-title">鏀粯澶辫触</view>
-      <view class="result-desc">鏀粯杩囩▼涓嚭鐜伴敊璇紝璇烽噸璇?/view>
+      <view class="result-title">閺€顖欑帛婢惰精瑙?/view>
+      <view class="result-desc">閺€顖欑帛鏉╁洨鈻兼稉顓炲毉閻滀即鏁婄拠顖ょ礉鐠囩兘鍣哥拠?/view>
       
-      <!-- 閿欒淇℃伅 -->
+      <!-- 闁挎瑨顕ゆ穱鈩冧紖 -->
       <view class="error-info">
-        <text class="error-code">閿欒浠ｇ爜锛歅AY_FAILED</text>
-        <text class="error-desc">鏀粯璇锋眰琚嫆缁濓紝璇锋鏌ユ偍鐨勮处鎴蜂綑棰濇垨鏇存崲支付方式</text>
+        <text class="error-code">闁挎瑨顕ゆ禒锝囩垳閿涙瓍AY_FAILED</text>
+        <text class="error-desc">閺€顖欑帛鐠囬攱鐪扮悮顐ｅ珕缂佹繐绱濈拠閿嬵梾閺屻儲鍋嶉惃鍕閹磋渹缍戞０婵囧灗閺囧瓨宕叉敮浠樻柟寮?/text>
       </view>
       
-      <!-- 鎿嶄綔鎸夐挳 -->
+      <!-- 閹垮秳缍旈幐澶愭尦 -->
       <view class="action-buttons">
-        <button class="btn primary" bindtap="retryPayment">閲嶆柊鏀粯</button>
-        <button class="btn secondary" bindtap="contactService">鑱旂郴瀹㈡湇</button>
+        <button class="btn primary" bindtap="retryPayment">闁插秵鏌婇弨顖欑帛</button>
+        <button class="btn secondary" bindtap="contactService">閼辨梻閮寸€广垺婀?/button>
       </view>
       
-      <!-- 鍊掕鏃舵彁绀?-->
+      <!-- 閸婃帟顓搁弮鑸靛絹缁€?-->
       <view class="countdown-tip">
-        <text>{{countdown}}绉掑悗鑷姩璺宠浆鍒拌鍗曞垪琛?/text>
+        <text>{{countdown}}缁夋帒鎮楅懛顏勫З鐠哄疇娴嗛崚鎷岊吂閸楁洖鍨悰?/text>
       </view>
     </view>
     
-    <!-- 鏀粯鍙栨秷 -->
+    <!-- 閺€顖欑帛閸欐牗绉?-->
     <view wx:elif="{{paymentStatus === 'cancelled'}}" class="cancelled-result">
       <view class="result-icon cancelled">
         <text class="iconfont icon-cancel"></text>
       </view>
-      <view class="result-title">鏀粯宸插彇娑?/view>
-      <view class="result-desc">鎮ㄥ凡鍙栨秷鏈鏀粯</view>
+      <view class="result-title">閺€顖欑帛瀹告彃褰囧☉?/view>
+      <view class="result-desc">閹劌鍑￠崣鏍ㄧХ閺堫剚顐奸弨顖欑帛</view>
       
-      <!-- 订单淇℃伅 -->
+      <!-- 璁㈠崟娣団剝浼?-->
       <view class="order-info">
         <view class="order-item">
-          <text class="order-label">订单缂栧彿锛?/text>
+          <text class="order-label">璁㈠崟缂傛牕褰块敍?/text>
           <text class="order-value">{{orderData.orderNo}}</text>
         </view>
         <view class="order-item">
-          <text class="order-label">订单閲戦锛?/text>
-          <text class="order-value price">¥{{orderData.actualAmount}}</text>
+          <text class="order-label">璁㈠崟闁叉垿顤傞敍?/text>
+          <text class="order-value price">楼{{orderData.actualAmount}}</text>
         </view>
       </view>
       
-      <!-- 鎿嶄綔鎸夐挳 -->
+      <!-- 閹垮秳缍旈幐澶愭尦 -->
       <view class="action-buttons">
-        <button class="btn primary" bindtap="retryPayment">閲嶆柊鏀粯</button>
-        <button class="btn secondary" bindtap="goToOrderList">鏌ョ湅订单</button>
+        <button class="btn primary" bindtap="retryPayment">闁插秵鏌婇弨顖欑帛</button>
+        <button class="btn secondary" bindtap="goToOrderList">閺屻儳婀呰鍗?/button>
       </view>
       
-      <!-- 鍊掕鏃舵彁绀?-->
+      <!-- 閸婃帟顓搁弮鑸靛絹缁€?-->
       <view class="countdown-tip">
-        <text>{{countdown}}绉掑悗鑷姩璺宠浆鍒拌鍗曞垪琛?/text>
+        <text>{{countdown}}缁夋帒鎮楅懛顏勫З鐠哄疇娴嗛崚鎷岊吂閸楁洖鍨悰?/text>
       </view>
     </view>
   </view>

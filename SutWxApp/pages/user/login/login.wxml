@@ -1,21 +1,21 @@
-/**
- * 文件名: login.wxml
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: login 椤甸潰缁撴瀯鏂囦欢
+﻿/**
+ * 鏂囦欢鍚? login.wxml
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: login 妞ょ敻娼扮紒鎾寸€弬鍥︽
  */
 <view class="container">
   <mp-form>
     <mp-cells>
-      <mp-cell prop="username" title="鐢ㄦ埛鍚?>
-        <input data-field="username" bindinput="handleUsernameInput" class="weui-input" placeholder="璇疯緭鍏ョ敤鎴峰悕" />
+      <mp-cell prop="username" title="閻劍鍩涢崥?>
+        <input data-field="username" bindinput="handleUsernameInput" class="weui-input" placeholder="鐠囩柉绶崗銉ф暏閹村嘲鎮? />
       </mp-cell>
-      <mp-cell prop="password" title="瀵嗙爜">
-        <input data-field="password" bindinput="handlePasswordInput" class="weui-input" placeholder="璇疯緭鍏ュ瘑鐮? password />
+      <mp-cell prop="password" title="鐎靛棛鐖?>
+        <input data-field="password" bindinput="handlePasswordInput" class="weui-input" placeholder="鐠囩柉绶崗銉ョ槕閻? password />
       </mp-cell>
     </mp-cells>
     <view class="weui-btn-area">
-      <button class="weui-btn" type="primary" bindtap="handleLogin" loading="{{loading}}" disabled="{{loading}}">登录</button>
+      <button class="weui-btn" type="primary" bindtap="handleLogin" loading="{{loading}}" disabled="{{loading}}">鐧诲綍</button>
     </view>
   </mp-form>
 </view>

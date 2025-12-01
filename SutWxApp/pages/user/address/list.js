@@ -1,8 +1,8 @@
-/**
- * 文件名: list.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 鐢ㄦ埛鍦板潃鍒楄〃椤甸潰
+﻿/**
+ * 鏂囦欢鍚? list.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 閻劍鍩涢崷鏉挎絻閸掓銆冩い鐢告桨
  */
 Page({
   data: {
@@ -12,59 +12,53 @@ Page({
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
-   * @returns {void}
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸旂姾娴?   * @returns {void}
    */
   onLoad() {
     this.loadAddressList();
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍗歌浇
-   * @returns {void}
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸楁瓕娴?   * @returns {void}
    */
   onUnload() {
-    // 娓呯悊瀹氭椂鍣紝闃叉鍐呭瓨娉勬紡
-    if (this.data.timer) {
+    // 濞撳懐鎮婄€规碍妞傞崳顭掔礉闂冨弶顒涢崘鍛摠濞夊嫭绱?    if (this.data.timer) {
       clearTimeout(this.data.timer);
     }
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
-   * @returns {void}
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閺勫墽銇?   * @returns {void}
    */
   onShow() {
-    // 椤甸潰鏄剧ず鏃跺埛鏂板湴鍧€鍒楄〃锛岀‘淇濇暟鎹渶鏂?    this.loadAddressList();
+    // 妞ょ敻娼伴弰鍓с仛閺冭泛鍩涢弬鏉挎勾閸р偓閸掓銆冮敍宀€鈥樻穱婵囨殶閹诡喗娓堕弬?    this.loadAddressList();
   },
 
   /**
-   * 鍔犺浇鍦板潃鍒楄〃
-   * @returns {void}
+   * 閸旂姾娴囬崷鏉挎絻閸掓銆?   * @returns {void}
    */
   loadAddressList() {
     this.setData({ loading: true });
-    // 妯℃嫙鏁版嵁璇锋眰
-    const timer = setTimeout(() => {
+    // 濡剝瀚欓弫鐗堝祦鐠囬攱鐪?    const timer = setTimeout(() => {
       const mockList = [
         {
           id: '1',
-          name: '寮犱笁',
+          name: '瀵姳绗?,
           phone: '13800138000',
-          province: '骞夸笢鐪?,
-          city: '骞垮窞甯?,
-          district: '澶╂渤鍖?,
-          detail: 'XXX琛楅亾XXX鍙?,
+          province: '楠炲じ绗㈤惇?,
+          city: '楠炲灝绐炵敮?,
+          district: '婢垛晜娓ら崠?,
+          detail: 'XXX鐞涙浜綳XX閸?,
           isDefault: true
         },
         {
           id: '2',
-          name: '鏉庡洓',
+          name: '閺夊骸娲?,
           phone: '13912345678',
-          province: '骞夸笢鐪?,
-          city: '娣卞湷甯?,
-          district: '鍗楀北鍖?,
-          detail: 'YYY璺痀YY鍙?,
+          province: '楠炲じ绗㈤惇?,
+          city: '濞ｅ崬婀风敮?,
+          district: '閸楁鍖楅崠?,
+          detail: 'YYY鐠虹梹YY閸?,
           isDefault: false
         }
       ];
@@ -79,9 +73,8 @@ Page({
   },
 
   /**
-   * 缂栬緫鍦板潃
-   * @param {Object} e - 浜嬩欢瀵硅薄
-   * @returns {void}
+   * 缂傛牞绶崷鏉挎絻
+   * @param {Object} e - 娴滃娆㈢€电钖?   * @returns {void}
    */
   editAddress(e) {
     const { id } = e.currentTarget.dataset;
@@ -91,7 +84,7 @@ Page({
   },
 
   /**
-   * 娣诲姞鏂板湴鍧€
+   * 濞ｈ濮為弬鏉挎勾閸р偓
    * @returns {void}
    */
   addAddress() {

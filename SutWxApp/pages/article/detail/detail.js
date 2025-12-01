@@ -1,10 +1,9 @@
-/**
- * 文件名: detail.js
- * 版本号: 1.0.1
- * 更新日期: 2025-11-24
- * 浣滆€? Sut
- * 描述: 鏂囩珷璇︽儏椤甸潰
- */
+﻿/**
+ * 鏂囦欢鍚? detail.js
+ * 鐗堟湰鍙? 1.0.1
+ * 鏇存柊鏃ユ湡: 2025-11-24
+ * 娴ｆ粏鈧? Sut
+ * 鎻忚堪: 閺傚洨鐝风拠锔藉剰妞ょ敻娼? */
 
 const articleService = require('../../../services/articleService');
 const i18n = require('../../../utils/i18n');
@@ -18,9 +17,8 @@ Page({
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
-   * @param {Object} options - 椤甸潰鍙傛暟
-   * @param {string} options.id - 鏂囩珷ID
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸旂姾娴?   * @param {Object} options - 妞ょ敻娼伴崣鍌涙殶
+   * @param {string} options.id - 閺傚洨鐝稩D
    * @returns {void}
    */
   onLoad(options) {
@@ -36,48 +34,44 @@ Page({
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
-   * @returns {void}
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閺勫墽銇?   * @returns {void}
    */
   onShow() {
-    // 椤甸潰鏄剧ず鏃跺彲浠ュ埛鏂版暟鎹?    if (this.data.articleId && !this.data.loading) {
-      // 鍙互閫夋嫨鏄惁閲嶆柊鍔犺浇鏁版嵁
+    // 妞ょ敻娼伴弰鍓с仛閺冭泛褰叉禒銉ュ煕閺傜増鏆熼幑?    if (this.data.articleId && !this.data.loading) {
+      // 閸欘垯浜掗柅澶嬪閺勵垰鎯侀柌宥嗘煀閸旂姾娴囬弫鐗堝祦
       // this.loadArticleDetail(this.data.articleId);
     }
   },
 
   /**
-   * 鍔犺浇鏂囩珷璇︽儏
-   * @param {string} id - 鏂囩珷ID
+   * 閸旂姾娴囬弬鍥╃彿鐠囷附鍎?   * @param {string} id - 閺傚洨鐝稩D
    * @returns {Promise<void>}
    */
   async loadArticleDetail(id) {
     try {
       this.setData({ loading: true, error: null });
       
-      // 璋冪敤鏈嶅姟灞傝幏鍙栨枃绔犺鎯?      const article = await articleService.getArticleDetail(id);
+      // 鐠嬪啰鏁ら張宥呭鐏炲倽骞忛崣鏍ㄦ瀮缁旂姾顕涢幆?      const article = await articleService.getArticleDetail(id);
       
-      // 鏇存柊椤甸潰鏁版嵁
-      this.setData({ article, loading: false });
+      // 閺囧瓨鏌婃い鐢告桨閺佺増宓?      this.setData({ article, loading: false });
       
-      // 鏇存柊瀵艰埅鏍忔爣棰?      wx.setNavigationBarTitle({
+      // 閺囧瓨鏌婄€佃壈鍩呴弽蹇旂垼妫?      wx.setNavigationBarTitle({
         title: article.title || i18n.t('article_detail.default_title')
       });
       
-      // 寮傛澧炲姞闃呰娆℃暟
+      // 瀵倹顒炴晶鐐插闂冨懓顕板▎鈩冩殶
       articleService.increaseViewCount(id).catch(err => {
-        console.warn('澧炲姞闃呰娆℃暟澶辫触:', err);
+        console.warn('婢х偛濮為梼鍛邦嚢濞嗏剝鏆熸径杈Е:', err);
       });
       
     } catch (error) {
-      console.error('鍔犺浇鏂囩珷璇︽儏澶辫触:', error);
+      console.error('閸旂姾娴囬弬鍥╃彿鐠囷附鍎忔径杈Е:', error);
       this.setData({
         loading: false,
         error: error.message || i18n.t('article_detail.load_failed')
       });
       
-      // 鏄剧ず閿欒鎻愮ず
-      wx.showToast({
+      // 閺勫墽銇氶柨娆掝嚖閹绘劗銇?      wx.showToast({
         title: i18n.t('article_detail.load_failed'),
         icon: 'none',
         duration: 2000
@@ -86,14 +80,13 @@ Page({
   },
 
   /**
-   * 椤甸潰鐩稿叧浜嬩欢澶勭悊鍑芥暟--鐩戝惉鐢ㄦ埛涓嬫媺鍔ㄤ綔
+   * 妞ょ敻娼伴惄绋垮彠娴滃娆㈡径鍕倞閸戣姤鏆?-閻╂垵鎯夐悽銊﹀煕娑撳濯洪崝銊ょ稊
    * @returns {void}
    */
   onPullDownRefresh() {
     if (this.data.articleId) {
       this.loadArticleDetail(this.data.articleId).finally(() => {
-        // 鍋滄涓嬫媺鍒锋柊
-        wx.stopPullDownRefresh();
+        // 閸嬫粍顒涙稉瀣閸掗攱鏌?        wx.stopPullDownRefresh();
       });
     } else {
       wx.stopPullDownRefresh();
@@ -101,19 +94,19 @@ Page({
   },
 
   /**
-   * 鐢ㄦ埛鐐瑰嚮鍙充笂瑙掑垎浜?   * @returns {Object} 鍒嗕韩閰嶇疆
+   * 閻劍鍩涢悙鐟板毊閸欏厖绗傜憴鎺戝瀻娴?   * @returns {Object} 閸掑棔闊╅柊宥囩枂
    */
   onShareAppMessage() {
     const { article } = this.data;
     return {
       title: article?.title || i18n.t('article_detail.share_title'),
       path: `/pages/article/detail/detail?id=${this.data.articleId}`,
-      imageUrl: '' // 鍙互璁剧疆鍒嗕韩鍥剧墖
+      imageUrl: '' // 閸欘垯浜掔拋鍓х枂閸掑棔闊╅崶鍓у
     };
   },
 
   /**
-   * 閲嶈瘯鍔犺浇
+   * 闁插秷鐦崝鐘烘祰
    * @returns {void}
    */
   handleRetry() {
@@ -123,8 +116,7 @@ Page({
   },
 
   /**
-   * 澶嶅埗鏂囩珷閾炬帴
-   * @returns {void}
+   * 婢跺秴鍩楅弬鍥╃彿闁剧偓甯?   * @returns {void}
    */
   copyArticleLink() {
     const link = `https://sutwxapp.com/articles/${this.data.articleId}`;
@@ -138,7 +130,7 @@ Page({
         });
       },
       fail: (err) => {
-        console.error('澶嶅埗閾炬帴澶辫触:', err);
+        console.error('婢跺秴鍩楅柧鐐复婢惰精瑙?', err);
         wx.showToast({
           title: i18n.t('common.copy_failed'),
           icon: 'none',

@@ -1,8 +1,8 @@
-/**
- * 文件名: detail.js
- * 版本号: 1.0.1
- * 更新日期: 2025-11-27
- * 订单璇︽儏椤甸潰
+﻿/**
+ * 鏂囦欢鍚? detail.js
+ * 鐗堟湰鍙? 1.0.1
+ * 鏇存柊鏃ユ湡: 2025-11-27
+ * 璁㈠崟鐠囷附鍎忔い鐢告桨
  */
 const i18n = require('../../../utils/i18n');
 const PointsService = require('../../../services/pointsService');
@@ -20,9 +20,8 @@ Page({
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
-   * @param {Object} options - 椤甸潰鍙傛暟
-   * @param {string} options.id - 订单ID
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸旂姾娴?   * @param {Object} options - 妞ょ敻娼伴崣鍌涙殶
+   * @param {string} options.id - 璁㈠崟ID
    * @returns {void}
    */
   onLoad(options) {
@@ -33,11 +32,10 @@ Page({
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍗歌浇
-   * @returns {void}
+   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸楁瓕娴?   * @returns {void}
    */
   onUnload() {
-    // 娓呯悊鎵€鏈夊畾鏃跺櫒锛岄槻姝㈠唴瀛樻硠婕?    if (this.data.orderTimer) {
+    // 濞撳懐鎮婇幍鈧張澶婄暰閺冭泛娅掗敍宀勬Щ濮濄垹鍞寸€涙ɑ纭犲?    if (this.data.orderTimer) {
       clearTimeout(this.data.orderTimer);
     }
     if (this.data.logisticsTimer) {
@@ -46,14 +44,13 @@ Page({
   },
 
   /**
-   * 椤甸潰鏄剧ず鏃惰Е鍙?   * @returns {void}
+   * 妞ょ敻娼伴弰鍓с仛閺冩儼袝閸?   * @returns {void}
    */
   onShow() {
-    // 鍙互鍦ㄦ澶勫埛鏂伴儴鍒嗘暟鎹?  },
+    // 閸欘垯浜掗崷銊︻劃婢跺嫬鍩涢弬浼村劥閸掑棙鏆熼幑?  },
 
   /**
-   * 涓嬫媺鍒锋柊鍥炶皟
-   * @returns {void}
+   * 娑撳濯洪崚閿嬫煀閸ョ偠鐨?   * @returns {void}
    */
   onPullDownRefresh() {
     this.loadOrderDetail(this.data.orderId, () => {
@@ -62,9 +59,9 @@ Page({
   },
 
   /**
-   * 鍔犺浇订单璇︽儏
-   * @param {string} id - 订单ID
-   * @param {Function} done - 瀹屾垚鍥炶皟
+   * 閸旂姾娴囪鍗曠拠锔藉剰
+   * @param {string} id - 璁㈠崟ID
+   * @param {Function} done - 鐎瑰本鍨氶崶鐐剁殶
    * @returns {void}
    */
   loadOrderDetail(id, done) {
@@ -73,19 +70,19 @@ Page({
       const mockOrder = {
         id: id,
         status: 'shipped',
-        statusText: i18n.translate('宸插彂璐?),
+        statusText: i18n.translate('瀹告彃褰傜拹?),
         createTime: '2023-09-28 14:20:00',
         payTime: '2023-09-28 14:25:00',
         shipTime: '2023-09-29 10:15:00',
         totalAmount: '199.00',
-        paymentMethod: i18n.translate('寰俊鏀粯'),
+        paymentMethod: i18n.translate('瀵邦喕淇婇弨顖欑帛'),
         shippingAddress: {
-          name: i18n.translate('寮犱笁'),
+          name: i18n.translate('瀵姳绗?),
           phone: '13800138000',
-          address: i18n.translate('鍖椾含甯傛湞闃冲尯鏌愭煇琛楅亾鏌愭煇灏忓尯1鍙锋ゼ1鍗曞厓101瀹?)
+          address: i18n.translate('閸栨ぞ鍚敮鍌涙篂闂冨啿灏弻鎰厙鐞涙浜鹃弻鎰厙鐏忓繐灏?閸欓攱銈?閸楁洖鍘?01鐎?)
         },
         shippingInfo: {
-          company: i18n.translate('椤轰赴蹇€?),
+          company: i18n.translate('妞よ桨璧磋箛顐︹偓?),
           trackingNumber: 'SF1234567890',
           shippingFee: '10.00'
         },
@@ -97,24 +94,24 @@ Page({
         items: [
           {
             id: 1,
-            name: i18n.translate('浼樿川鍟嗗搧A'),
+            name: i18n.translate('娴兼宸濋崯鍡楁惂A'),
             image: '/images/placeholder.svg',
             price: '99.00',
             quantity: 1,
             specs: {
-              '棰滆壊': i18n.translate('绾㈣壊'),
-              '灏哄': 'M'
+              '妫版粏澹?: i18n.translate('缁俱垼澹?),
+              '鐏忓搫顕?: 'M'
             }
           },
           {
             id: 2,
-            name: i18n.translate('浼樿川鍟嗗搧B'),
+            name: i18n.translate('娴兼宸濋崯鍡楁惂B'),
             image: '/images/placeholder.svg',
             price: '100.00',
             quantity: 1,
             specs: {
-              '棰滆壊': i18n.translate('钃濊壊'),
-              '灏哄': 'L'
+              '妫版粏澹?: i18n.translate('閽冩繆澹?),
+              '鐏忓搫顕?: 'L'
             }
           }
         ]
@@ -133,8 +130,7 @@ Page({
   },
 
   /**
-   * 鍔犺浇鐗╂祦淇℃伅
-   * @param {string} id - 订单ID
+   * 閸旂姾娴囬悧鈺傜ウ娣団剝浼?   * @param {string} id - 璁㈠崟ID
    * @returns {void}
    */
   loadLogistics(id) {
@@ -143,18 +139,18 @@ Page({
       const mockLogistics = [
         {
           time: '2023-09-29 10:15:00',
-          status: i18n.translate('宸插彂璐?),
-          description: i18n.translate('鎮ㄧ殑订单宸插彂璐э紝椤轰赴蹇€掑崟鍙凤細SF1234567890')
+          status: i18n.translate('瀹告彃褰傜拹?),
+          description: i18n.translate('閹劎娈戣鍗曞鎻掑絺鐠愌嶇礉妞よ桨璧磋箛顐︹偓鎺戝礋閸欏嚖绱癝F1234567890')
         },
         {
           time: '2023-09-29 18:30:00',
-          status: i18n.translate('杩愯緭涓?),
-          description: i18n.translate('鎮ㄧ殑蹇€掑凡鍒拌揪鍖椾含杞繍涓績')
+          status: i18n.translate('鏉╂劘绶稉?),
+          description: i18n.translate('閹劎娈戣箛顐︹偓鎺戝嚒閸掓媽鎻崠妞惧惈鏉烆剝绻嶆稉顓炵妇')
         },
         {
           time: '2023-09-30 09:20:00',
-          status: i18n.translate('娲鹃€佷腑'),
-          description: i18n.translate('蹇€掑憳姝ｅ湪娲鹃€侊紝璇蜂繚鎸佺數璇濈晠閫?)
+          status: i18n.translate('濞查箖鈧椒鑵?),
+          description: i18n.translate('韫囶偊鈧帒鎲冲锝呮躬濞查箖鈧緤绱濈拠铚傜箽閹镐胶鏁哥拠婵堟櫊闁?)
         }
       ];
 
@@ -170,22 +166,21 @@ Page({
   },
 
   /**
-   * 闅愯棌鐗╂祦淇℃伅
-   * @returns {void}
+   * 闂呮劘妫岄悧鈺傜ウ娣団剝浼?   * @returns {void}
    */
   hideLogistics() {
     this.setData({ showLogistics: false });
   },
 
   /**
-   * 澶嶅埗订单鍙?   * @returns {void}
+   * 婢跺秴鍩楄鍗曢崣?   * @returns {void}
    */
   copyOrderId() {
     wx.setClipboardData({
       data: this.data.orderId,
       success: () => {
         wx.showToast({
-          title: i18n.translate('宸插鍒跺埌鍓创鏉?),
+          title: i18n.translate('瀹告彃顦查崚璺哄煂閸擃亣鍒涢弶?),
           icon: 'success'
         });
       }
@@ -193,7 +188,7 @@ Page({
   },
 
   /**
-   * 澶嶅埗蹇€掑崟鍙?   * @returns {void}
+   * 婢跺秴鍩楄箛顐︹偓鎺戝礋閸?   * @returns {void}
    */
   copyTrackingNumber() {
     const { trackingNumber } = this.data.order.shippingInfo;
@@ -201,7 +196,7 @@ Page({
       data: trackingNumber,
       success: () => {
         wx.showToast({
-          title: i18n.translate('宸插鍒跺埌鍓创鏉?),
+          title: i18n.translate('瀹告彃顦查崚璺哄煂閸擃亣鍒涢弶?),
           icon: 'success'
         });
       }
@@ -209,29 +204,26 @@ Page({
   },
 
   /**
-   * 鑱旂郴瀹㈡湇
-   * @returns {void}
+   * 閼辨梻閮寸€广垺婀?   * @returns {void}
    */
   contactService() {
     wx.showToast({
-      title: i18n.translate('璺宠浆鍒板鏈嶉〉闈?),
+      title: i18n.translate('鐠哄疇娴嗛崚鏉款吂閺堝秹銆夐棃?),
       icon: 'none'
     });
   },
 
   /**
-   * 鍙栨秷订单
-   * @returns {void}
+   * 閸欐牗绉疯鍗?   * @returns {void}
    */
   cancelOrder() {
     wx.showModal({
-      title: i18n.translate('鎻愮ず'),
-      content: i18n.translate('纭畾瑕佸彇娑堣订单鍚楋紵'),
+      title: i18n.translate('閹绘劗銇?),
+      content: i18n.translate('绾喖鐣剧憰浣稿絿濞戝牐顕氳鍗曢崥妤嬬吹'),
       success: (res) => {
         if (res.confirm) {
-          // 瀹為檯椤圭洰涓簲璇ヨ皟鐢ˋPI鍙栨秷订单
-          wx.showToast({
-            title: i18n.translate('订单宸插彇娑?),
+          // 鐎圭偤妾い鍦窗娑擃厼绨茬拠銉ㄧ殶閻⑺婸I閸欐牗绉疯鍗?          wx.showToast({
+            title: i18n.translate('璁㈠崟瀹告彃褰囧☉?),
             icon: 'success'
           });
           this.loadOrderDetail(this.data.orderId);
@@ -241,30 +233,29 @@ Page({
   },
 
   /**
-   * 绔嬪嵆浠樻
+   * 缁斿宓嗘禒妯活儥
    * @returns {void}
    */
   payOrder() {
-    // 瀹為檯椤圭洰涓簲璇ヨ烦杞埌鏀粯椤甸潰
-    wx.showToast({
-      title: i18n.translate('璺宠浆鍒版敮浠橀〉闈?),
+    // 鐎圭偤妾い鍦窗娑擃厼绨茬拠銉ㄧ儲鏉烆剙鍩岄弨顖欑帛妞ょ敻娼?    wx.showToast({
+      title: i18n.translate('鐠哄疇娴嗛崚鐗堟暜娴犳﹢銆夐棃?),
       icon: 'none'
     });
   },
 
   /**
-   * 纭鏀惰揣
+   * 绾喛顓婚弨鎯版彛
    * @returns {void}
    */
   confirmReceipt() {
     wx.showModal({
-      title: i18n.translate('鎻愮ず'),
-      content: i18n.translate('纭宸叉敹鍒板晢鍝佸悧锛?),
+      title: i18n.translate('閹绘劗銇?),
+      content: i18n.translate('绾喛顓诲鍙夋暪閸掓澘鏅㈤崫浣告偋閿?),
       success: (res) => {
         if (res.confirm) {
-          // 瀹為檯椤圭洰涓簲璇ヨ皟鐢ˋPI纭鏀惰揣
+          // 鐎圭偤妾い鍦窗娑擃厼绨茬拠銉ㄧ殶閻⑺婸I绾喛顓婚弨鎯版彛
           wx.showToast({
-            title: i18n.translate('宸茬‘璁ゆ敹璐?),
+            title: i18n.translate('瀹歌尙鈥樼拋銈嗘暪鐠?),
             icon: 'success'
           });
           this.loadOrderDetail(this.data.orderId);
@@ -274,55 +265,51 @@ Page({
   },
 
   /**
-   * 鐢宠鍞悗
+   * 閻㈠疇顕崬顔兼倵
    * @returns {void}
    */
   applyAfterSale() {
-    // 瀹為檯椤圭洰涓簲璇ヨ烦杞埌鍞悗椤甸潰
-    wx.showToast({
-      title: i18n.translate('璺宠浆鍒板敭鍚庨〉闈?),
+    // 鐎圭偤妾い鍦窗娑擃厼绨茬拠銉ㄧ儲鏉烆剙鍩岄崬顔兼倵妞ょ敻娼?    wx.showToast({
+      title: i18n.translate('鐠哄疇娴嗛崚鏉挎暛閸氬酣銆夐棃?),
       icon: 'none'
     });
   },
 
   /**
-   * 璇勪环订单
-   * @returns {void}
+   * 鐠囧嫪鐜鍗?   * @returns {void}
    */
   reviewOrder() {
-    // 瀹為檯椤圭洰涓簲璇ヨ烦杞埌璇勪环椤甸潰
-    wx.navigateTo({
+    // 鐎圭偤妾い鍦窗娑擃厼绨茬拠銉ㄧ儲鏉烆剙鍩岀拠鍕幆妞ょ敻娼?    wx.navigateTo({
       url: `/pages/order/review/review?orderId=${this.data.orderId}`
     });
   },
 
   /**
-   * 鍐嶆购买
-   * @returns {void}
+   * 閸愬秵顐艰喘涔?   * @returns {void}
    */
   buyAgain() {
-    // 瀹為檯椤圭洰涓簲璇ュ皢鍟嗗搧娣诲姞鍒拌喘鐗╄溅
+    // 鐎圭偤妾い鍦窗娑擃厼绨茬拠銉ョ殺閸熷棗鎼уǎ璇插閸掓媽鍠橀悧鈺勬簠
     wx.showToast({
-      title: i18n.translate('宸叉坊鍔犲埌璐墿杞?),
+      title: i18n.translate('瀹稿弶鍧婇崝鐘插煂鐠愵厾澧挎潪?),
       icon: 'success'
     });
   },
 
   /**
-   * 鐢宠閫€娆?   * @returns {void}
+   * 閻㈠疇顕柅鈧▎?   * @returns {void}
    */
   applyRefund() {
     const { order } = this.data;
     
     wx.showModal({
-      title: i18n.translate('鐢宠閫€娆?),
-      content: i18n.translate('纭畾瑕佺敵璇烽€€娆惧悧锛?),
+      title: i18n.translate('閻㈠疇顕柅鈧▎?),
+      content: i18n.translate('绾喖鐣剧憰浣烘暤鐠囩兘鈧偓濞嗘儳鎮ч敍?),
       success: (res) => {
         if (res.confirm) {
           this.setData({ loading: true });
           
-          // 妯℃嫙閫€娆惧鐞?          setTimeout(() => {
-            // 濡傛灉订单浣跨敤浜嗙Н鍒嗘姷鎵ｏ紝璋冪敤绉垎閫€娆惧洖閫€鎺ュ彛
+          // 濡剝瀚欓柅鈧▎鎯ь槱閻?          setTimeout(() => {
+            // 婵″倹鐏夎鍗曟担璺ㄦ暏娴滃棛袧閸掑棙濮烽幍锝忕礉鐠嬪啰鏁ょ粔顖氬瀻闁偓濞嗘儳娲栭柅鈧幒銉ュ經
             if (order.pointsDeduction && order.pointsDeduction.points > 0) {
               this.refundPoints(order.id, order.pointsDeduction.points);
             }
@@ -330,11 +317,11 @@ Page({
             this.setData({ loading: false });
             
             wx.showToast({
-              title: i18n.translate('閫€娆剧敵璇峰凡鎻愪氦'),
+              title: i18n.translate('闁偓濞嗗墽鏁电拠宄板嚒閹绘劒姘?),
               icon: 'success'
             });
             
-            // 鍒锋柊订单璇︽儏
+            // 閸掗攱鏌婅鍗曠拠锔藉剰
             this.loadOrderDetail(order.id);
           }, 1000);
         }
@@ -343,19 +330,18 @@ Page({
   },
 
   /**
-   * 绉垎閫€娆惧洖閫€
-   * @param {string} orderId - 订单ID
-   * @param {number} points - 鍥為€€绉垎鏁伴噺
+   * 缁夘垰鍨庨柅鈧▎鎯ф礀闁偓
+   * @param {string} orderId - 璁㈠崟ID
+   * @param {number} points - 閸ョ偤鈧偓缁夘垰鍨庨弫浼村櫤
    * @returns {void}
    */
   refundPoints(orderId, points) {
-    // 璋冪敤绉垎鏈嶅姟鐨勯€€娆惧洖閫€鎺ュ彛
-    PointsService.refundPoints({
+    // 鐠嬪啰鏁ょ粔顖氬瀻閺堝秴濮熼惃鍕偓鈧▎鎯ф礀闁偓閹恒儱褰?    PointsService.refundPoints({
       orderId: orderId,
       points: points
     }).then(result => {
-      // 绉垎閫€娆惧洖閫€鎴愬姛锛屾棤闇€棰濆澶勭悊
+      // 缁夘垰鍨庨柅鈧▎鎯ф礀闁偓閹存劕濮涢敍灞炬￥闂団偓妫版繂顦绘径鍕倞
     }).catch(error => {
-      // 绉垎閫€娆惧洖閫€澶辫触锛屽彲浠ヨ€冭檻璁板綍鏃ュ織鎴栧叾浠栧鐞?    });
+      // 缁夘垰鍨庨柅鈧▎鎯ф礀闁偓婢惰精瑙﹂敍灞藉讲娴犮儴鈧啳妾荤拋鏉跨秿閺冦儱绻旈幋鏍у従娴犳牕顦╅悶?    });
   }
 });

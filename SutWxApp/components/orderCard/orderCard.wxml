@@ -1,14 +1,14 @@
-/**
- * 文件名: orderCard.wxml
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: orderCard 椤甸潰缁撴瀯鏂囦欢
+﻿/**
+ * 鏂囦欢鍚? orderCard.wxml
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: orderCard 妞ょ敻娼扮紒鎾寸€弬鍥︽
  */
 <view class="order-card {{bordered ? 'bordered' : ''}}" style="width: {{width}}" bindtap="onOrderTap">
-  <!-- 璁㈠崟澶撮儴 -->
+  <!-- 鐠併垹宕熸径鎾劥 -->
   <view class="order-header">
     <view class="order-info">
-      <text class="order-no">璁㈠崟鍙凤細{{order.orderNo}}</text>
+      <text class="order-no">鐠併垹宕熼崣鍑ょ窗{{order.orderNo}}</text>
       <text class="order-time">{{order.createTime}}</text>
     </view>
     <view class="order-status" style="color: {{statusMap[order.status].color}}">
@@ -16,7 +16,7 @@
     </view>
   </view>
   
-  <!-- 鍟嗗搧鍒楄〃 -->
+  <!-- 閸熷棗鎼ч崚妤勩€?-->
   <view class="order-items">
     <view class="item" wx:for="{{order.items}}" wx:key="id">
       <view class="item-image-container">
@@ -30,65 +30,65 @@
         <view class="item-name">{{item.name}}</view>
         <view class="item-specs" wx:if="{{item.specs}}">{{item.specs}}</view>
         <view class="item-price-row">
-          <text class="item-price">楼{{item.price}}</text>
+          <text class="item-price">妤納{item.price}}</text>
           <text class="item-quantity">x{{item.quantity}}</text>
         </view>
       </view>
     </view>
   </view>
   
-  <!-- 璁㈠崟鎬昏 -->
+  <!-- 鐠併垹宕熼幀鏄忣吀 -->
   <view class="order-summary">
     <view class="summary-row" wx:if="{{order.items && order.items.length > 1}}">
-      <text class="summary-label">鍏眥{order.items.length}}浠跺晢鍝?/text>
+      <text class="summary-label">閸忕湧{order.items.length}}娴犺泛鏅㈤崫?/text>
     </view>
     <view class="summary-row">
-      <text class="summary-label">璁㈠崟鎬婚</text>
-      <text class="summary-value">楼{{order.totalAmount}}</text>
+      <text class="summary-label">鐠併垹宕熼幀濠氼杺</text>
+      <text class="summary-value">妤納{order.totalAmount}}</text>
     </view>
     <view class="summary-row" wx:if="{{order.shippingFee > 0}}">
-      <text class="summary-label">杩愯垂</text>
-      <text class="summary-value">楼{{order.shippingFee}}</text>
+      <text class="summary-label">鏉╂劘鍨?/text>
+      <text class="summary-value">妤納{order.shippingFee}}</text>
     </view>
     <view class="summary-row" wx:if="{{order.discountAmount > 0}}">
-      <text class="summary-label">浼樻儬</text>
-      <text class="summary-value discount">-楼{{order.discountAmount}}</text>
+      <text class="summary-label">娴兼ɑ鍎?/text>
+      <text class="summary-value discount">-妤納{order.discountAmount}}</text>
     </view>
     <view class="summary-row total">
-      <text class="summary-label">瀹炰粯閲戦</text>
-      <text class="summary-value total-amount">楼{{order.payAmount}}</text>
+      <text class="summary-label">鐎圭偘绮柌鎴︻杺</text>
+      <text class="summary-value total-amount">妤納{order.payAmount}}</text>
     </view>
   </view>
   
-  <!-- 鎿嶄綔鎸夐挳 -->
+  <!-- 閹垮秳缍旈幐澶愭尦 -->
   <view class="order-actions" wx:if="{{showActions}}">
-    <!-- 寰呬粯娆剧姸鎬?-->
+    <!-- 瀵板懍绮▎鍓уЦ閹?-->
     <block wx:if="{{order.status === 'pending'}}">
-      <button class="action-btn cancel" size="mini" bindtap="onCancelOrder">鍙栨秷璁㈠崟</button>
-      <button class="action-btn primary" size="mini">鍘绘敮浠?/button>
+      <button class="action-btn cancel" size="mini" bindtap="onCancelOrder">閸欐牗绉风拋銏犲礋</button>
+      <button class="action-btn primary" size="mini">閸樼粯鏁禒?/button>
     </block>
     
-    <!-- 寰呭彂璐х姸鎬?-->
+    <!-- 瀵板懎褰傜拹褏濮搁幀?-->
     <block wx:elif="{{order.status === 'paid'}}">
-      <button class="action-btn" size="mini" bindtap="onCancelOrder">鍙栨秷璁㈠崟</button>
+      <button class="action-btn" size="mini" bindtap="onCancelOrder">閸欐牗绉风拋銏犲礋</button>
     </block>
     
-    <!-- 寰呮敹璐х姸鎬?-->
+    <!-- 瀵板懏鏁圭拹褏濮搁幀?-->
     <block wx:elif="{{order.status === 'shipped'}}">
-      <button class="action-btn" size="mini" bindtap="onViewLogistics">鏌ョ湅鐗╂祦</button>
-      <button class="action-btn primary" size="mini" bindtap="onConfirmReceive">纭鏀惰揣</button>
+      <button class="action-btn" size="mini" bindtap="onViewLogistics">閺屻儳婀呴悧鈺傜ウ</button>
+      <button class="action-btn primary" size="mini" bindtap="onConfirmReceive">绾喛顓婚弨鎯版彛</button>
     </block>
     
-    <!-- 宸插畬鎴愮姸鎬?-->
+    <!-- 瀹告彃鐣幋鎰Ц閹?-->
     <block wx:elif="{{order.status === 'completed'}}">
-      <button class="action-btn" size="mini" bindtap="onReviewOrder" wx:if="{{!order.isReviewed}}">璇勪环</button>
-      <button class="action-btn" size="mini" bindtap="onViewLogistics">鏌ョ湅鐗╂祦</button>
-      <button class="action-btn" size="mini" bindtap="onDeleteOrder">鍒犻櫎璁㈠崟</button>
+      <button class="action-btn" size="mini" bindtap="onReviewOrder" wx:if="{{!order.isReviewed}}">鐠囧嫪鐜?/button>
+      <button class="action-btn" size="mini" bindtap="onViewLogistics">閺屻儳婀呴悧鈺傜ウ</button>
+      <button class="action-btn" size="mini" bindtap="onDeleteOrder">閸掔娀娅庣拋銏犲礋</button>
     </block>
     
-    <!-- 宸插彇娑堢姸鎬?-->
+    <!-- 瀹告彃褰囧☉鍫㈠Ц閹?-->
     <block wx:elif="{{order.status === 'cancelled'}}">
-      <button class="action-btn" size="mini" bindtap="onDeleteOrder">鍒犻櫎璁㈠崟</button>
+      <button class="action-btn" size="mini" bindtap="onDeleteOrder">閸掔娀娅庣拋銏犲礋</button>
     </block>
   </view>
 </view>

@@ -1,11 +1,11 @@
-/**
- * 文件名: pointsRanking.wxml
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: pointsRanking 椤甸潰缁撴瀯鏂囦欢
+﻿/**
+ * 鏂囦欢鍚? pointsRanking.wxml
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: pointsRanking 妞ょ敻娼扮紒鎾寸€弬鍥︽
  */
 <view class="container">
-  <!-- 褰撳墠鐢ㄦ埛淇℃伅 -->
+  <!-- 瑜版挸澧犻悽銊﹀煕娣団剝浼?-->
   <view class="user-info-card">
     <view class="user-info">
       <image class="user-avatar" src="{{userInfo.avatar}}" mode="aspectFill"></image>
@@ -13,25 +13,25 @@
         <text class="user-nickname">{{userInfo.nickname}}</text>
         <view class="user-points">
           <text class="points-value">{{userInfo.points}}</text>
-          <text class="points-label">绉垎</text>
+          <text class="points-label">缁夘垰鍨?/text>
         </view>
       </view>
       <view class="user-rank">
-        <text class="rank-label">鎴戠殑鎺掑悕</text>
-        <text class="rank-value">{{userInfo.rank > 0 ? userInfo.rank : '鏈笂姒?}}</text>
+        <text class="rank-label">閹存垹娈戦幒鎺戞倳</text>
+        <text class="rank-value">{{userInfo.rank > 0 ? userInfo.rank : '閺堫亙绗傚?}}</text>
       </view>
     </view>
     <view class="user-actions">
       <view class="action-item" bindtap="onGoToDetail">
-        <text class="iconfont">绉垎鏄庣粏</text>
+        <text class="iconfont">缁夘垰鍨庨弰搴ｇ矎</text>
       </view>
       <view class="action-item" bindtap="onGoToTasks">
-        <text class="iconfont">璧氱Н鍒?/text>
+        <text class="iconfont">鐠ф氨袧閸?/text>
       </view>
     </view>
   </view>
 
-  <!-- 姒滃崟绫诲瀷鍒囨崲 -->
+  <!-- 濮掓粌宕熺猾璇茬€烽崚鍥ㄥ床 -->
   <view class="tab-bar">
     <view 
       wx:for="{{tabs}}" 
@@ -43,9 +43,9 @@
     </view>
   </view>
 
-  <!-- 鎺掕姒滃垪琛?-->
+  <!-- 閹烘帟顢戝婊冨灙鐞?-->
   <view class="content">
-    <!-- 鎺掕姒滃垪琛?-->
+    <!-- 閹烘帟顢戝婊冨灙鐞?-->
     <view class="ranking-list" wx:if="{{!isEmpty}}">
       <view 
         wx:for="{{rankingList}}" 
@@ -54,7 +54,7 @@
         bindtap="onViewUser" 
         data-id="{{item.id}}">
         
-        <!-- 鎺掑悕 -->
+        <!-- 閹烘帒鎮?-->
         <view class="rank-number">
           <view class="rank-badge {{index < 3 ? 'badge-' + (index + 1) : ''}}" wx:if="{{index < 3}}">
             {{index + 1}}
@@ -62,7 +62,7 @@
           <text class="rank-text" wx:else>{{index + 1}}</text>
         </view>
         
-        <!-- 鐢ㄦ埛淇℃伅 -->
+        <!-- 閻劍鍩涙穱鈩冧紖 -->
         <view class="user-info-row">
           <image class="user-avatar-small" src="{{item.avatar}}" mode="aspectFill"></image>
           <view class="user-details-row">
@@ -73,29 +73,29 @@
           </view>
         </view>
         
-        <!-- 绉垎淇℃伅 -->
+        <!-- 缁夘垰鍨庢穱鈩冧紖 -->
         <view class="points-info">
           <text class="points-value">{{item.points}}</text>
-          <text class="points-label">绉垎</text>
+          <text class="points-label">缁夘垰鍨?/text>
         </view>
       </view>
     </view>
 
-    <!-- 绌虹姸鎬?-->
+    <!-- 缁岃櫣濮搁幀?-->
     <view class="empty-state" wx:if="{{isEmpty}}">
       <image class="empty-icon" src="/images/empty-ranking.png" mode="aspectFit"></image>
-      <text>鏆傛棤鎺掕鏁版嵁</text>
-      <view class="empty-tip">蹇幓瀹屾垚浠诲姟璧氬彇绉垎鍚?/view>
+      <text>閺嗗倹妫ら幒鎺曨攽閺佺増宓?/text>
+      <view class="empty-tip">韫囶偄骞撶€瑰本鍨氭禒璇插鐠ф艾褰囩粔顖氬瀻閸?/view>
     </view>
 
-    <!-- 加载状态-->
+    <!-- 鍔犺浇鐘舵€?->
     <view class="loading-state" wx:if="{{isLoading && rankingList.length === 0}}">
       <view class="loading-spinner"></view>
-      <text>加载中..</text>
+      <text>鍔犺浇涓?.</text>
     </view>
 
-    <!-- 娌℃湁鏇村鏁版嵁 -->
+    <!-- 濞屸剝婀侀弴鏉戭樋閺佺増宓?-->
     <view class="no-more-data" wx:if="{{!hasMore && rankingList.length > 0}}">
-      娌℃湁鏇村鏁版嵁浜?    </view>
+      濞屸剝婀侀弴鏉戭樋閺佺増宓佹禍?    </view>
   </view>
 </view>

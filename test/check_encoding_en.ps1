@@ -1,4 +1,4 @@
-# Script to check file encoding and line endings
+﻿# Script to check file encoding and line endings
 
 $fileListPath = "e:\Dropbox\GitHub\SutWxApp\file_list.txt"
 $reportPath = "e:\Dropbox\GitHub\SutWxApp\encoding_report.txt"

@@ -1,7 +1,81 @@
-/**
+﻿<!--
  * 文件名: list.wxml
  * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: list 椤甸潰缁撴瀯鏂囦欢
- */
-<!-- 榛樿椤甸潰妯℃澘 -->
+ * 更新日期: 2025-11-30
+ * 描述: 通知列表页面
+-->
+<view class="container">
+  <!-- 顶部筛选栏 -->
+  <view class="filter-bar">
+    <view class="filter-tabs">
+      <view class="filter-tab {{activeType === 'all' ? 'active' : ''}}" bindtap="onTypeChange" data-type="all">
+        <text>全部</text>
+      </view>
+      <view class="filter-tab {{activeType === 'system' ? 'active' : ''}}" bindtap="onTypeChange" data-type="system">
+        <text>系统</text>
+      </view>
+      <view class="filter-tab {{activeType === 'order' ? 'active' : ''}}" bindtap="onTypeChange" data-type="order">
+        <text>订单</text>
+      </view>
+      <view class="filter-tab {{activeType === 'promotion' ? 'active' : ''}}" bindtap="onTypeChange" data-type="promotion">
+        <text>促销</text>
+      </view>
+      <view class="filter-tab {{activeType === 'activity' ? 'active' : ''}}" bindtap="onTypeChange" data-type="activity">
+        <text>活动</text>
+      </view>
+    </view>
+    <view class="filter-actions">
+      <view class="action-item" bindtap="onMarkAllRead">
+        <text>全部已读</text>
+      </view>
+      <view class="action-item" bindtap="onSettingsTap">
+        <text>设置</text>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 通知列表 -->
+  <view class="notification-list">
+    <!-- 通知项 -->
+    <view class="notification-item" 
+      wx:for="{{notifications}}" 
+      wx:key="id"
+      bindtap="onNotificationTap"
+      data-id="{{item.id}}"
+      data-type="{{item.type}}"
+      data-url="{{item.url}}"
+      class="{{item.isRead ? 'read' : 'unread'}}"
+    >
+      <!-- 通知图标 -->
+      <view class="notification-icon {{item.type}}">
+        <text class="icon-text">{{getIconText(item.type)}}</text>
+      </view>
+      
+      <!-- 通知内容 -->
+      <view class="notification-content">
+        <view class="notification-title">{{item.title}}</view>
+        <view class="notification-desc">{{item.content}}</view>
+        <view class="notification-time">{{formatTime(item.createTime)}}</view>
+      </view>
+      
+      <!-- 未读标记 -->
+      <view class="unread-dot" wx:if="{{!item.isRead}}"></view>
+    </view>
+    
+    <!-- 空状态 -->
+    <view class="empty" wx:if="{{notifications.length === 0 && !loading}}">
+      <image class="empty-icon" src="/images/empty-notification.png" mode="aspectFit"></image>
+      <text class="empty-text">暂无通知</text>
+    </view>
+    
+    <!-- 加载更多 -->
+    <view class="load-more" wx:if="{{hasMore && !loading}}">
+      <text>上拉加载更多</text>
+    </view>
+    
+    <!-- 加载中 -->
+    <view class="loading" wx:if="{{loading && notifications.length > 0}}">
+      <text>加载中...</text>
+    </view>
+  </view>
+</view>

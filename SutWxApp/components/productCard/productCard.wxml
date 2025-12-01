@@ -1,11 +1,11 @@
-/**
- * 文件名: productCard.wxml
- * 版本号: 1.0.0
- * 更新日期: 2025-11-23
- * 描述: productCard 椤甸潰缁撴瀯鏂囦欢
+﻿/**
+ * 鏂囦欢鍚? productCard.wxml
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-23
+ * 鎻忚堪: productCard 妞ょ敻娼扮紒鎾寸€弬鍥︽
  */
 <view class="product-card {{bordered ? 'bordered' : ''}}" style="width: {{width}}" bindtap="onProductTap">
-  <!-- 鍟嗗搧鍥剧墖 -->
+  <!-- 閸熷棗鎼ч崶鍓у -->
   <view class="product-image-container" style="height: {{imageHeight}}">
     <lazy-image 
       src="{{product.image || defaultImage}}" 
@@ -13,47 +13,47 @@
       class="product-image"
       bind:error="onImageError"
     />
-    <!-- 鎶樻墸鏍囩 -->
+    <!-- 閹舵ɑ澧搁弽鍥╊劮 -->
     <view class="discount-badge" wx:if="{{product.discount && product.discount > 0}}">
-      {{product.discount}}鎶?    </view>
-    <!-- 鏀惰棌鍥炬爣 -->
+      {{product.discount}}閹?    </view>
+    <!-- 閺€鎯版閸ョ偓鐖?-->
     <view class="favorite-icon {{product.isFavorite ? 'favorited' : ''}}" wx:if="{{showActions}}" bindtap="onFavorite">
       <text class="iconfont icon-heart"></text>
     </view>
   </view>
   
-  <!-- 鍟嗗搧淇℃伅 -->
+  <!-- 閸熷棗鎼ф穱鈩冧紖 -->
   <view class="product-info">
-    <!-- 鍟嗗搧鍚嶇О -->
+    <!-- 閸熷棗鎼ч崥宥囆?-->
     <view class="product-name">{{product.name}}</view>
     
-    <!-- 鍟嗗搧鎻忚堪 -->
+    <!-- 閸熷棗鎼ч幓蹇氬牚 -->
     <view class="product-desc" wx:if="{{product.description}}">{{product.description}}</view>
     
-    <!-- 鍟嗗搧鏍囩 -->
+    <!-- 閸熷棗鎼ч弽鍥╊劮 -->
     <view class="product-tags" wx:if="{{product.tags && product.tags.length > 0}}">
       <text class="tag" wx:for="{{product.tags}}" wx:key="index">{{item}}</text>
     </view>
     
-    <!-- 浠锋牸鍖哄煙 -->
+    <!-- 娴犻攱鐗搁崠鍝勭厵 -->
     <view class="price-area">
       <view class="price-row">
-        <!-- 褰撳墠浠锋牸 -->
-        <text class="current-price">楼{{product.price}}</text>
-        <!-- 鍘熶环 -->
-        <text class="original-price" wx:if="{{product.originalPrice && product.originalPrice > product.price}}">楼{{product.originalPrice}}</text>
+        <!-- 瑜版挸澧犳禒閿嬬壐 -->
+        <text class="current-price">妤納{product.price}}</text>
+        <!-- 閸樼喍鐜?-->
+        <text class="original-price" wx:if="{{product.originalPrice && product.originalPrice > product.price}}">妤納{product.originalPrice}}</text>
       </view>
-      <!-- 閿€閲?-->
+      <!-- 闁库偓闁?-->
       <view class="sales-info" wx:if="{{product.salesCount}}">
-        宸插敭{{product.salesCount}}
+        瀹告彃鏁瓄{product.salesCount}}
       </view>
     </view>
     
-    <!-- 鎿嶄綔鎸夐挳 -->
+    <!-- 閹垮秳缍旈幐澶愭尦 -->
     <view class="action-buttons" wx:if="{{showActions}}">
       <button class="add-cart-btn" size="mini" bindtap="onAddToCart">
         <text class="iconfont icon-cart"></text>
-        鍔犲叆璐墿杞?      </button>
+        閸旂姴鍙嗙拹顓犲⒖鏉?      </button>
     </view>
   </view>
 </view>

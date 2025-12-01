@@ -1,40 +1,36 @@
-/**
- * 文件名: i18n.js
- * 版本号: 1.0.2
- * 更新日期: 2025-11-29
- * 浣滆€? Sut
- * 描述: 鍥介檯鍖栨湇鍔★紝鐢ㄤ簬绠＄悊寰俊灏忕▼搴忎腑鐨勫璇█鏂囨湰锛屼粠i18n鐩綍涓嬬殑JSON鏂囦欢鍔犺浇缈昏瘧鍐呭
+﻿/**
+ * 鏂囦欢鍚? i18n.js
+ * 鐗堟湰鍙? 1.0.2
+ * 鏇存柊鏃ユ湡: 2025-11-29
+ * 娴ｆ粏鈧? Sut
+ * 鎻忚堪: 閸ヤ粙妾崠鏍ㄦ箛閸斺槄绱濋悽銊ょ艾缁狅紕鎮婂顔讳繆鐏忓繒鈻兼惔蹇庤厬閻ㄥ嫬顦跨拠顓♀枅閺傚洦婀伴敍灞肩矤i18n閻╊喖缍嶆稉瀣畱JSON閺傚洣娆㈤崝鐘烘祰缂堟槒鐦ч崘鍛啇
  */
 class I18n {
   constructor() {
-    this.locale = 'zh_CN'; // 榛樿璇█
-    this.translations = {}; // 鐢ㄤ簬鍔犺浇缈昏瘧鍐呭
+    this.locale = 'zh_CN'; // 姒涙顓荤拠顓♀枅
+    this.translations = {}; // 閻劋绨崝鐘烘祰缂堟槒鐦ч崘鍛啇
   }
 
   /**
-   * 浠庡瓧绗︿覆妯℃澘鏂囦欢鍔犺浇缈昏瘧鍐呭
-   * @param {Object} poData - 瑙ｆ瀽鍚庣殑.po鏂囦欢鍐呭(鏋勫缓鏃舵寚瀹?
+   * 娴犲骸鐡х粭锔胯濡剝婢橀弬鍥︽閸旂姾娴囩紙鏄忕槯閸愬懎顔?   * @param {Object} poData - 鐟欙絾鐎介崥搴ｆ畱.po閺傚洣娆㈤崘鍛啇(閺嬪嫬缂撻弮鑸靛瘹鐎?
    */
   loadTranslations(poData) {
     this.translations = poData;
   }
 
   /**
-   * 璁剧疆褰撳墠璇█
-   * @param {string} locale - 璇█浠ｇ爜锛屼緥濡?'zh_CN', 'en_US'
+   * 鐠佸墽鐤嗚ぐ鎾冲鐠囶叀鈻?   * @param {string} locale - 鐠囶叀鈻堟禒锝囩垳閿涘奔绶ユ俊?'zh_CN', 'en_US'
    */
   setLocale(locale) {
     if (this.translations[locale]) {
       this.locale = locale;
     }
-    // 濡傛灉鎵句笉鍒版寚瀹氱殑璇█锛屽皢淇濇寔榛樿璇█
+    // 婵″倹鐏夐幍鍙ョ瑝閸掔増瀵氱€规氨娈戠拠顓♀枅閿涘苯鐨㈡穱婵囧瘮姒涙顓荤拠顓♀枅
   }
 
   /**
-   * 鑾峰彇缈昏瘧鏂囨湰
-   * @param {string} key - 缈昏瘧閿?   * @param {Object} params - 鏇挎崲鍙傛暟锛屼緥濡?{ price: '99.00' }
-   * @returns {string} 缈昏瘧鍚庣殑鏂囨湰
-   */
+   * 閼惧嘲褰囩紙鏄忕槯閺傚洦婀?   * @param {string} key - 缂堟槒鐦ч柨?   * @param {Object} params - 閺囨寧宕查崣鍌涙殶閿涘奔绶ユ俊?{ price: '99.00' }
+   * @returns {string} 缂堟槒鐦ч崥搴ｆ畱閺傚洦婀?   */
   translate(key, params = {}) {
     if (!this.translations[this.locale]) {
       return key;
@@ -49,11 +45,11 @@ class I18n {
 
 const i18n = new I18n();
 
-// 浠巌18n鐩綍鍔犺浇缈昏瘧鏂囦欢
+// 娴犲穼18n閻╊喖缍嶉崝鐘烘祰缂堟槒鐦ч弬鍥︽
 i18n.loadTranslations({
   'zh_CN': require('./i18n/sut-wechat-mini-zh_CN.json'),
   'en_US': require('./i18n/sut-wechat-mini-en_US.json')
 });
 
-// 瀵煎嚭瀹炰緥锛屾柟渚垮湪鍏朵粬鍦版柟浣跨敤
+// 鐎电厧鍤€圭偘绶ラ敍灞炬煙娓氬灝婀崗鏈电铂閸︾増鏌熸担璺ㄦ暏
 module.exports = i18n;

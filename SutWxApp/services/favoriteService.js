@@ -1,22 +1,20 @@
-/**
- * 文件名: favoriteService.js
- * 版本号: 1.0.1
- * 更新日期: 2025-11-28
- * 描述: 收藏与关注服务
- */
+﻿﻿/**
+ * 鏂囦欢鍚? favoriteService.js
+ * 鐗堟湰鍙? 1.0.1
+ * 鏇存柊鏃ユ湡: 2025-11-28
+ * 鎻忚堪: 鏀惰棌涓庡叧娉ㄦ湇鍔? */
 
 const request = require('../utils/request');
 
 /**
- * 获取用户收藏列表
- * @param {Object} options - 查询参数
- * @param {string} options.userId - 用户ID，不传则获取当前用户
- * @param {number} options.page - 页码，默认为1
- * @param {number} options.pageSize - 每页数量，默认为20
- * @param {string} options.type - 收藏类型：product/article/all
- * @param {string} options.sort - 排序方式：newest/oldest
- * @returns {Promise<Object>} 收藏列表和分页信息
- */
+ * 鑾峰彇鐢ㄦ埛鏀惰棌鍒楄〃
+ * @param {Object} options - 鏌ヨ鍙傛暟
+ * @param {string} options.userId - 鐢ㄦ埛ID锛屼笉浼犲垯鑾峰彇褰撳墠鐢ㄦ埛
+ * @param {number} options.page - 椤电爜锛岄粯璁や负1
+ * @param {number} options.pageSize - 姣忛〉鏁伴噺锛岄粯璁や负20
+ * @param {string} options.type - 鏀惰棌绫诲瀷锛歱roduct/article/all
+ * @param {string} options.sort - 鎺掑簭鏂瑰紡锛歯ewest/oldest
+ * @returns {Promise<Object>} 鏀惰棌鍒楄〃鍜屽垎椤典俊鎭? */
 async function getUserFavorites(options = {}) {
   const {
     userId,
@@ -39,105 +37,102 @@ async function getUserFavorites(options = {}) {
 }
 
 /**
- * 添加商品收藏
- * @param {string} productId - 商品ID
- * @returns {Promise<Object>} 操作结果
+ * 娣诲姞鍟嗗搧鏀惰棌
+ * @param {string} productId - 鍟嗗搧ID
+ * @returns {Promise<Object>} 鎿嶄綔缁撴灉
  */
 async function addProductFavorite(productId) {
   if (!productId) {
-    throw new Error('商品ID不能为空');
+    throw new Error('鍟嗗搧ID涓嶈兘涓虹┖');
   }
 
   return request.post('/user/favorites/product', { productId });
 }
 
 /**
- * 取消商品收藏
- * @param {string} productId - 商品ID
- * @returns {Promise<Object>} 操作结果
+ * 鍙栨秷鍟嗗搧鏀惰棌
+ * @param {string} productId - 鍟嗗搧ID
+ * @returns {Promise<Object>} 鎿嶄綔缁撴灉
  */
 async function removeProductFavorite(productId) {
   if (!productId) {
-    throw new Error('商品ID不能为空');
+    throw new Error('鍟嗗搧ID涓嶈兘涓虹┖');
   }
 
   return request.delete(`/user/favorites/product/${productId}`);
 }
 
 /**
- * 检查商品是否已收藏
- * @param {string} productId - 商品ID
- * @returns {Promise<Object>} 检查结果
- */
+ * 妫€鏌ュ晢鍝佹槸鍚﹀凡鏀惰棌
+ * @param {string} productId - 鍟嗗搧ID
+ * @returns {Promise<Object>} 妫€鏌ョ粨鏋? */
 async function checkProductFavorite(productId) {
   if (!productId) {
-    throw new Error('商品ID不能为空');
+    throw new Error('鍟嗗搧ID涓嶈兘涓虹┖');
   }
 
   return request.get(`/user/favorites/product/${productId}/check`);
 }
 
 /**
- * 添加文章收藏
- * @param {string} articleId - 文章ID
- * @returns {Promise<Object>} 操作结果
+ * 娣诲姞鏂囩珷鏀惰棌
+ * @param {string} articleId - 鏂囩珷ID
+ * @returns {Promise<Object>} 鎿嶄綔缁撴灉
  */
 async function addArticleFavorite(articleId) {
   if (!articleId) {
-    throw new Error('文章ID不能为空');
+    throw new Error('鏂囩珷ID涓嶈兘涓虹┖');
   }
 
   return request.post('/user/favorites/article', { articleId });
 }
 
 /**
- * 取消文章收藏
- * @param {string} articleId - 文章ID
- * @returns {Promise<Object>} 操作结果
+ * 鍙栨秷鏂囩珷鏀惰棌
+ * @param {string} articleId - 鏂囩珷ID
+ * @returns {Promise<Object>} 鎿嶄綔缁撴灉
  */
 async function removeArticleFavorite(articleId) {
   if (!articleId) {
-    throw new Error('文章ID不能为空');
+    throw new Error('鏂囩珷ID涓嶈兘涓虹┖');
   }
 
   return request.delete(`/user/favorites/article/${articleId}`);
 }
 
 /**
- * 检查文章是否已收藏
- * @param {string} articleId - 文章ID
- * @returns {Promise<Object>} 检查结果
- */
+ * 妫€鏌ユ枃绔犳槸鍚﹀凡鏀惰棌
+ * @param {string} articleId - 鏂囩珷ID
+ * @returns {Promise<Object>} 妫€鏌ョ粨鏋? */
 async function checkArticleFavorite(articleId) {
   if (!articleId) {
-    throw new Error('文章ID不能为空');
+    throw new Error('鏂囩珷ID涓嶈兘涓虹┖');
   }
 
   return request.get(`/user/favorites/article/${articleId}/check`);
 }
 
 /**
- * 批量取消收藏
- * @param {Array} favoriteIds - 收藏ID数组
- * @returns {Promise<Object>} 操作结果
+ * 鎵归噺鍙栨秷鏀惰棌
+ * @param {Array} favoriteIds - 鏀惰棌ID鏁扮粍
+ * @returns {Promise<Object>} 鎿嶄綔缁撴灉
  */
 async function batchRemoveFavorites(favoriteIds) {
   if (!favoriteIds || favoriteIds.length === 0) {
-    throw new Error('收藏ID列表不能为空');
+    throw new Error('鏀惰棌ID鍒楄〃涓嶈兘涓虹┖');
   }
 
   return request.delete('/user/favorites/batch', { favoriteIds });
 }
 
 /**
- * 获取用户关注列表
- * @param {Object} options - 查询参数
- * @param {string} options.userId - 用户ID，不传则获取当前用户
- * @param {number} options.page - 页码，默认为1
- * @param {number} options.pageSize - 每页数量，默认为20
- * @param {string} options.sort - 排序方式：newest/oldest
- * @returns {Promise<Object>} 关注列表和分页信息
- */
+ * 鑾峰彇鐢ㄦ埛鍏虫敞鍒楄〃
+ * @param {Object} options - 鏌ヨ鍙傛暟
+ * @param {string} options.userId - 鐢ㄦ埛ID锛屼笉浼犲垯鑾峰彇褰撳墠鐢ㄦ埛
+ * @param {number} options.page - 椤电爜锛岄粯璁や负1
+ * @param {number} options.pageSize - 姣忛〉鏁伴噺锛岄粯璁や负20
+ * @param {string} options.sort - 鎺掑簭鏂瑰紡锛歯ewest/oldest
+ * @returns {Promise<Object>} 鍏虫敞鍒楄〃鍜屽垎椤典俊鎭? */
 async function getUserFollowing(options = {}) {
   const {
     userId,
@@ -158,14 +153,13 @@ async function getUserFollowing(options = {}) {
 }
 
 /**
- * 获取用户粉丝列表
- * @param {Object} options - 查询参数
- * @param {string} options.userId - 用户ID，不传则获取当前用户
- * @param {number} options.page - 页码，默认为1
- * @param {number} options.pageSize - 每页数量，默认为20
- * @param {string} options.sort - 排序方式：newest/oldest
- * @returns {Promise<Object>} 粉丝列表和分页信息
- */
+ * 鑾峰彇鐢ㄦ埛绮変笣鍒楄〃
+ * @param {Object} options - 鏌ヨ鍙傛暟
+ * @param {string} options.userId - 鐢ㄦ埛ID锛屼笉浼犲垯鑾峰彇褰撳墠鐢ㄦ埛
+ * @param {number} options.page - 椤电爜锛岄粯璁や负1
+ * @param {number} options.pageSize - 姣忛〉鏁伴噺锛岄粯璁や负20
+ * @param {string} options.sort - 鎺掑簭鏂瑰紡锛歯ewest/oldest
+ * @returns {Promise<Object>} 绮変笣鍒楄〃鍜屽垎椤典俊鎭? */
 async function getUserFollowers(options = {}) {
   const {
     userId,
@@ -186,70 +180,69 @@ async function getUserFollowers(options = {}) {
 }
 
 /**
- * 关注用户
- * @param {string} targetUserId - 目标用户ID
- * @returns {Promise<Object>} 操作结果
+ * 鍏虫敞鐢ㄦ埛
+ * @param {string} targetUserId - 鐩爣鐢ㄦ埛ID
+ * @returns {Promise<Object>} 鎿嶄綔缁撴灉
  */
 async function followUser(targetUserId) {
   if (!targetUserId) {
-    throw new Error('目标用户ID不能为空');
+    throw new Error('鐩爣鐢ㄦ埛ID涓嶈兘涓虹┖');
   }
 
   return request.post('/user/following', { targetUserId });
 }
 
 /**
- * 取消关注用户
- * @param {string} targetUserId - 目标用户ID
- * @returns {Promise<Object>} 操作结果
+ * 鍙栨秷鍏虫敞鐢ㄦ埛
+ * @param {string} targetUserId - 鐩爣鐢ㄦ埛ID
+ * @returns {Promise<Object>} 鎿嶄綔缁撴灉
  */
 async function unfollowUser(targetUserId) {
   if (!targetUserId) {
-    throw new Error('目标用户ID不能为空');
+    throw new Error('鐩爣鐢ㄦ埛ID涓嶈兘涓虹┖');
   }
 
   return request.delete(`/user/following/${targetUserId}`);
 }
 
 /**
- * 检查是否已关注用户
- * @param {string} targetUserId - 目标用户ID
- * @returns {Promise<Object>} 检查结果
- */
+ * 妫€鏌ユ槸鍚﹀凡鍏虫敞鐢ㄦ埛
+ * @param {string} targetUserId - 鐩爣鐢ㄦ埛ID
+ * @returns {Promise<Object>} 妫€鏌ョ粨鏋? */
 async function checkUserFollowing(targetUserId) {
   if (!targetUserId) {
-    throw new Error('目标用户ID不能为空');
+    throw new Error('鐩爣鐢ㄦ埛ID涓嶈兘涓虹┖');
   }
 
   return request.get(`/user/following/${targetUserId}/check`);
 }
 
 /**
- * 删除粉丝
- * @param {string} followerId - 粉丝ID
- * @returns {Promise<Object>} 操作结果
+ * 鍒犻櫎绮変笣
+ * @param {string} followerId - 绮変笣ID
+ * @returns {Promise<Object>} 鎿嶄綔缁撴灉
  */
 async function removeFollower(followerId) {
   if (!followerId) {
-    throw new Error('粉丝ID不能为空');
+    throw new Error('绮変笣ID涓嶈兘涓虹┖');
   }
 
   return request.delete(`/user/followers/${followerId}`);
 }
 
 /**
- * 获取推荐关注用户
- * @param {number} limit - 推荐数量，默认为10
- * @returns {Promise<Array>} 推荐用户列表
+ * 鑾峰彇鎺ㄨ崘鍏虫敞鐢ㄦ埛
+ * @param {number} limit - 鎺ㄨ崘鏁伴噺锛岄粯璁や负10
+ * @returns {Promise<Array>} 鎺ㄨ崘鐢ㄦ埛鍒楄〃
  */
 async function getRecommendedUsers(limit = 10) {
   return request.get('/users/recommended', { limit });
 }
 
 /**
- * 获取用户关注/粉丝统计
- * @param {string} userId - 用户ID，不传则获取当前用户
- * @returns {Promise<Object>} 统计信息
+ * 鑾峰彇鐢ㄦ埛鍏虫敞/绮変笣缁熻
+ * @param {string} userId - 鐢ㄦ埛ID锛屼笉浼犲垯鑾峰彇褰撳墠鐢ㄦ埛
+ * @returns {Promise<Object>} 缁熻淇℃伅
  */
 async function getUserFollowStats(userId) {
   const url = userId ? `/users/${userId}/follow-stats` : '/user/follow-stats';
@@ -257,36 +250,31 @@ async function getUserFollowStats(userId) {
 }
 
 /**
- * 获取收藏文件夹列表
- * @param {number} page - 页码，默认为1
- * @param {number} pageSize - 每页数量，默认为20
- * @returns {Promise<Object>} 收藏文件夹列表和分页信息
+ * 鑾峰彇鏀惰棌鏂囦欢澶瑰垪琛? * @param {number} page - 椤电爜锛岄粯璁や负1
+ * @param {number} pageSize - 姣忛〉鏁伴噺锛岄粯璁や负20
+ * @returns {Promise<Object>} 鏀惰棌鏂囦欢澶瑰垪琛ㄥ拰鍒嗛〉淇℃伅
  */
 async function getFavoriteFolders(page = 1, pageSize = 20) {
   return request.get('/user/favorite-folders', { page, pageSize });
 }
 
 /**
- * 创建收藏文件夹
- * @param {Object} data - 收藏文件夹数据
- * @param {string} data.name - 收藏文件夹名称
- * @param {string} data.description - 收藏文件夹描述
- * @param {boolean} data.isPublic - 是否公开
- * @returns {Promise<Object>} 创建结果
+ * 鍒涘缓鏀惰棌鏂囦欢澶? * @param {Object} data - 鏀惰棌鏂囦欢澶规暟鎹? * @param {string} data.name - 鏀惰棌鏂囦欢澶瑰悕绉? * @param {string} data.description - 鏀惰棌鏂囦欢澶规弿杩? * @param {boolean} data.isPublic - 鏄惁鍏紑
+ * @returns {Promise<Object>} 鍒涘缓缁撴灉
  */
 async function createFavoriteFolder(data) {
   const { name, description, isPublic = false } = data;
 
   if (!name || name.trim().length === 0) {
-    throw new Error('收藏文件夹名称不能为空');
+    throw new Error('鏀惰棌鏂囦欢澶瑰悕绉颁笉鑳戒负绌?);
   }
 
   if (name.length > 20) {
-    throw new Error('收藏文件夹名称不能超过20个字符');
+    throw new Error('鏀惰棌鏂囦欢澶瑰悕绉颁笉鑳借秴杩?0涓瓧绗?);
   }
 
   if (description && description.length > 100) {
-    throw new Error('收藏文件夹描述不能超过100个字符');
+    throw new Error('鏀惰棌鏂囦欢澶规弿杩颁笉鑳借秴杩?00涓瓧绗?);
   }
 
   return request.post('/user/favorite-folders', {
@@ -297,33 +285,30 @@ async function createFavoriteFolder(data) {
 }
 
 /**
- * 更新收藏文件夹
- * @param {string} folderId - 收藏文件夹ID
- * @param {Object} data - 更新数据
- * @param {string} data.name - 收藏文件夹名称
- * @param {string} data.description - 收藏文件夹描述
- * @param {boolean} data.isPublic - 是否公开
- * @returns {Promise<Object>} 更新结果
+ * 鏇存柊鏀惰棌鏂囦欢澶? * @param {string} folderId - 鏀惰棌鏂囦欢澶笽D
+ * @param {Object} data - 鏇存柊鏁版嵁
+ * @param {string} data.name - 鏀惰棌鏂囦欢澶瑰悕绉? * @param {string} data.description - 鏀惰棌鏂囦欢澶规弿杩? * @param {boolean} data.isPublic - 鏄惁鍏紑
+ * @returns {Promise<Object>} 鏇存柊缁撴灉
  */
 async function updateFavoriteFolder(folderId, data) {
   const { name, description, isPublic } = data;
 
   if (!folderId) {
-    throw new Error('收藏文件夹ID不能为空');
+    throw new Error('鏀惰棌鏂囦欢澶笽D涓嶈兘涓虹┖');
   }
 
   if (name !== undefined) {
     if (!name || name.trim().length === 0) {
-      throw new Error('收藏文件夹名称不能为空');
+      throw new Error('鏀惰棌鏂囦欢澶瑰悕绉颁笉鑳戒负绌?);
     }
 
     if (name.length > 20) {
-      throw new Error('收藏文件夹名称不能超过20个字符');
+      throw new Error('鏀惰棌鏂囦欢澶瑰悕绉颁笉鑳借秴杩?0涓瓧绗?);
     }
   }
 
   if (description !== undefined && description && description.length > 100) {
-    throw new Error('收藏文件夹描述不能超过100个字符');
+    throw new Error('鏀惰棌鏂囦欢澶规弿杩颁笉鑳借秴杩?00涓瓧绗?);
   }
 
   const updateData = {};
@@ -336,64 +321,61 @@ async function updateFavoriteFolder(folderId, data) {
 }
 
 /**
- * 删除收藏文件夹
- * @param {string} folderId - 收藏文件夹ID
- * @returns {Promise<Object>} 删除结果
+ * 鍒犻櫎鏀惰棌鏂囦欢澶? * @param {string} folderId - 鏀惰棌鏂囦欢澶笽D
+ * @returns {Promise<Object>} 鍒犻櫎缁撴灉
  */
 async function deleteFavoriteFolder(folderId) {
   if (!folderId) {
-    throw new Error('收藏文件夹ID不能为空');
+    throw new Error('鏀惰棌鏂囦欢澶笽D涓嶈兘涓虹┖');
   }
 
   return request.delete(`/user/favorite-folders/${folderId}`);
 }
 
 /**
- * 获取收藏文件夹内容
- * @param {string} folderId - 收藏文件夹ID
- * @param {number} page - 页码，默认为1
- * @param {number} pageSize - 每页数量，默认为20
- * @returns {Promise<Object>} 收藏文件夹内容和分页信息
+ * 鑾峰彇鏀惰棌鏂囦欢澶瑰唴瀹? * @param {string} folderId - 鏀惰棌鏂囦欢澶笽D
+ * @param {number} page - 椤电爜锛岄粯璁や负1
+ * @param {number} pageSize - 姣忛〉鏁伴噺锛岄粯璁や负20
+ * @returns {Promise<Object>} 鏀惰棌鏂囦欢澶瑰唴瀹瑰拰鍒嗛〉淇℃伅
  */
 async function getFavoriteFolderContent(folderId, page = 1, pageSize = 20) {
   if (!folderId) {
-    throw new Error('收藏文件夹ID不能为空');
+    throw new Error('鏀惰棌鏂囦欢澶笽D涓嶈兘涓虹┖');
   }
 
   return request.get(`/user/favorite-folders/${folderId}/content`, { page, pageSize });
 }
 
 /**
- * 将收藏添加到收藏文件夹
- * @param {string} folderId - 收藏文件夹ID
- * @param {string} favoriteId - 收藏ID
- * @returns {Promise<Object>} 操作结果
+ * 灏嗘敹钘忔坊鍔犲埌鏀惰棌鏂囦欢澶? * @param {string} folderId - 鏀惰棌鏂囦欢澶笽D
+ * @param {string} favoriteId - 鏀惰棌ID
+ * @returns {Promise<Object>} 鎿嶄綔缁撴灉
  */
 async function addToFavoriteFolder(folderId, favoriteId) {
   if (!folderId) {
-    throw new Error('收藏文件夹ID不能为空');
+    throw new Error('鏀惰棌鏂囦欢澶笽D涓嶈兘涓虹┖');
   }
 
   if (!favoriteId) {
-    throw new Error('收藏ID不能为空');
+    throw new Error('鏀惰棌ID涓嶈兘涓虹┖');
   }
 
   return request.post(`/user/favorite-folders/${folderId}/add`, { favoriteId });
 }
 
 /**
- * 从收藏文件夹移除收藏
- * @param {string} folderId - 收藏文件夹ID
- * @param {string} favoriteId - 收藏ID
- * @returns {Promise<Object>} 操作结果
+ * 浠庢敹钘忔枃浠跺す绉婚櫎鏀惰棌
+ * @param {string} folderId - 鏀惰棌鏂囦欢澶笽D
+ * @param {string} favoriteId - 鏀惰棌ID
+ * @returns {Promise<Object>} 鎿嶄綔缁撴灉
  */
 async function removeFromFavoriteFolder(folderId, favoriteId) {
   if (!folderId) {
-    throw new Error('收藏文件夹ID不能为空');
+    throw new Error('鏀惰棌鏂囦欢澶笽D涓嶈兘涓虹┖');
   }
 
   if (!favoriteId) {
-    throw new Error('收藏ID不能为空');
+    throw new Error('鏀惰棌ID涓嶈兘涓虹┖');
   }
 
   return request.delete(`/user/favorite-folders/${folderId}/favorites/${favoriteId}`);

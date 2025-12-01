@@ -1,15 +1,13 @@
-/**
- * 文件名: po2json.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-24
- * PO鏂囦欢杞崲涓篔SON宸ュ叿
- * 鐢ㄤ簬灏?po缈昏瘧鏂囦欢杞崲涓篔SON鏍煎紡锛岀‘淇濈炕璇戝悓姝? */
+﻿/**
+ * 鏂囦欢鍚? po2json.js
+ * 鐗堟湰鍙? 1.0.0
+ * 鏇存柊鏃ユ湡: 2025-11-24
+ * PO閺傚洣娆㈡潪顒佸床娑撶瘮SON瀹搞儱鍙? * 閻劋绨亸?po缂堟槒鐦ч弬鍥︽鏉烆剚宕叉稉绡擲ON閺嶇厧绱￠敍宀€鈥樻穱婵堢倳鐠囨垵鎮撳? */
 
 /**
- * 瑙ｆ瀽PO鏂囦欢鍐呭
- * @param {string} poContent - PO鏂囦欢鍐呭
- * @returns {Object} 缈昏瘧閿€煎瀵硅薄
- */
+ * 鐟欙絾鐎絇O閺傚洣娆㈤崘鍛啇
+ * @param {string} poContent - PO閺傚洣娆㈤崘鍛啇
+ * @returns {Object} 缂堟槒鐦ч柨顔尖偓鐓庮嚠鐎电钖? */
 function parsePoFile(poContent) {
   const translations = {};
   const lines = poContent.split('\n');
@@ -20,30 +18,29 @@ function parsePoFile(poContent) {
   for (const line of lines) {
     const trimmedLine = line.trim();
     
-    // 璺宠繃娉ㄩ噴鍜岀┖琛?    if (trimmedLine.startsWith('#') || trimmedLine === '') {
+    // 鐠哄疇绻冨▔銊╁櫞閸滃瞼鈹栫悰?    if (trimmedLine.startsWith('#') || trimmedLine === '') {
       continue;
     }
 
-    // 鍖归厤msgid琛?    if (trimmedLine.startsWith('msgid ')) {
-      // 濡傛灉宸茬粡鏈塵sgid锛屼繚瀛樹箣鍓嶇殑缈昏瘧
-      if (currentMsgid !== null) {
+    // 閸栧綊鍘sgid鐞?    if (trimmedLine.startsWith('msgid ')) {
+      // 婵″倹鐏夊鑼病閺堝〉sgid閿涘奔绻氱€涙ü绠ｉ崜宥囨畱缂堟槒鐦?      if (currentMsgid !== null) {
         translations[currentMsgid] = currentMsgstr;
       }
-      // 鎻愬彇鏂扮殑msgid
+      // 閹绘劕褰囬弬鎵畱msgid
       currentMsgid = trimmedLine.substring(6).replace(/^"|"$/g, '');
       currentMsgstr = '';
       inMsgstr = false;
     }
-    // 鍖归厤msgstr琛?    else if (trimmedLine.startsWith('msgstr ')) {
+    // 閸栧綊鍘sgstr鐞?    else if (trimmedLine.startsWith('msgstr ')) {
       currentMsgstr = trimmedLine.substring(7).replace(/^"|"$/g, '');
       inMsgstr = true;
     }
-    // 澶勭悊澶氳瀛楃涓?    else if (inMsgstr && (trimmedLine.startsWith('"') && trimmedLine.endsWith('"'))) {
+    // 婢跺嫮鎮婃径姘愁攽鐎涙顑佹稉?    else if (inMsgstr && (trimmedLine.startsWith('"') && trimmedLine.endsWith('"'))) {
       currentMsgstr += trimmedLine.replace(/^"|"$/g, '');
     }
   }
 
-  // 淇濆瓨鏈€鍚庝竴涓炕璇?  if (currentMsgid !== null && currentMsgid !== '') {
+  // 娣囨繂鐡ㄩ張鈧崥搴濈娑擃亞鐐曠拠?  if (currentMsgid !== null && currentMsgid !== '') {
     translations[currentMsgid] = currentMsgstr;
   }
 
@@ -51,10 +48,9 @@ function parsePoFile(poContent) {
 }
 
 /**
- * 灏嗙炕璇戝璞¤浆鎹负JSON瀛楃涓? * @param {Object} translations - 缈昏瘧瀵硅薄
- * @returns {string} 鏍煎紡鍖栫殑JSON瀛楃涓? */
+ * 鐏忓棛鐐曠拠鎴濐嚠鐠灺ゆ祮閹诡澀璐烰SON鐎涙顑佹稉? * @param {Object} translations - 缂堟槒鐦х€电钖? * @returns {string} 閺嶇厧绱￠崠鏍畱JSON鐎涙顑佹稉? */
 function toJsonString(translations) {
-  // 鎸夌収閿悕鎺掑簭锛屼繚鎸佽緭鍑轰竴鑷存€?  const sortedTranslations = {};
+  // 閹稿鍙庨柨顔兼倳閹烘帒绨敍灞肩箽閹镐浇绶崙杞扮閼峰瓨鈧?  const sortedTranslations = {};
   Object.keys(translations).sort().forEach(key => {
     sortedTranslations[key] = translations[key];
   });
@@ -63,10 +59,9 @@ function toJsonString(translations) {
 }
 
 /**
- * 鐢熸垚鏂囦欢澶撮儴娉ㄩ噴
- * @param {string} filename - 文件名: * @param {string} language - 璇█浠ｇ爜
- * @returns {string} 鏂囦欢澶撮儴娉ㄩ噴
- */
+ * 閻㈢喐鍨氶弬鍥︽婢舵挳鍎村▔銊╁櫞
+ * @param {string} filename - 鏂囦欢鍚? * @param {string} language - 鐠囶叀鈻堟禒锝囩垳
+ * @returns {string} 閺傚洣娆㈡径鎾劥濞夈劑鍣? */
 function generateHeaderComment(filename, language) {
   const now = new Date();
   const year = now.getFullYear();
@@ -75,17 +70,17 @@ function generateHeaderComment(filename, language) {
   const dateStr = `${year}-${month}-${day}`;
 
   return `/**
- * 文件名: ${filename}
- * 版本号: 1.0.1
- * 更新日期: ${dateStr}
- * 描述: ${filename} JSON 配置文件 - 鑷姩鐢熸垚锛岃鍕挎墜鍔ㄤ慨鏀? */`;
+ * 鏂囦欢鍚? ${filename}
+ * 鐗堟湰鍙? 1.0.1
+ * 鏇存柊鏃ユ湡: ${dateStr}
+ * 鎻忚堪: ${filename} JSON 閰嶇疆鏂囦欢 - 閼奉亜濮╅悽鐔稿灇閿涘矁顕崟鎸庡閸斻劋鎱ㄩ弨? */`;
 }
 
 /**
- * 杞崲PO鏂囦欢涓篔SON
- * @param {string} poContent - PO鏂囦欢鍐呭
- * @param {string} filename - 杈撳嚭文件名: * @param {string} language - 璇█浠ｇ爜
- * @returns {string} 瀹屾暣鐨凧SON鏂囦欢鍐呭
+ * 鏉烆剚宕睵O閺傚洣娆㈡稉绡擲ON
+ * @param {string} poContent - PO閺傚洣娆㈤崘鍛啇
+ * @param {string} filename - 鏉堟挸鍤枃浠跺悕: * @param {string} language - 鐠囶叀鈻堟禒锝囩垳
+ * @returns {string} 鐎瑰本鏆ｉ惃鍑ON閺傚洣娆㈤崘鍛啇
  */
 function convertPoToJson(poContent, filename, language) {
   const header = generateHeaderComment(filename, language);
@@ -95,8 +90,7 @@ function convertPoToJson(poContent, filename, language) {
   return `${header}\n${jsonContent}`;
 }
 
-// 瀵煎嚭鍑芥暟锛屼緵鍏朵粬妯″潡浣跨敤
-module.exports = {
+// 鐎电厧鍤崙鑺ユ殶閿涘奔绶甸崗鏈电铂濡€虫健娴ｈ法鏁?module.exports = {
   parsePoFile,
   toJsonString,
   generateHeaderComment,

@@ -1,39 +1,39 @@
-<!-- 鍒嗛攢瑙勫垯璁剧疆椤甸潰 -->
+﻿<!-- 閸掑棝鏀㈢憴鍕灟鐠佸墽鐤嗘い鐢告桨 -->
 <view class="distribute-rules-page">
-  <!-- 加载中-->
+  <!-- 鍔犺浇涓?->
   <view class="loading-container" wx:if="{{loading}}">
-    <text>加载中..</text>
+    <text>鍔犺浇涓?.</text>
   </view>
 
-  <!-- 閿欒鐘舵€?-->
+  <!-- 闁挎瑨顕ら悩鑸碘偓?-->
   <view class="error-container" wx:elif="{{error}}">
     <image src="../../images/error.svg" class="error-image" />
-    <text class="error-text">鍔犺浇澶辫触</text>
-    <button class="retry-btn" bindtap="getDistributeRules">閲嶈瘯</button>
+    <text class="error-text">閸旂姾娴囨径杈Е</text>
+    <button class="retry-btn" bindtap="getDistributeRules">闁插秷鐦?/button>
   </view>
 
-  <!-- 瑙勫垯鍐呭 -->
+  <!-- 鐟欏嫬鍨崘鍛啇 -->
   <view class="rules-content" wx:else>
-    <!-- 鍩烘湰璁剧疆 -->
+    <!-- 閸╃儤婀扮拋鍓х枂 -->
     <view class="rules-section">
       <view class="section-header">
-        <text class="section-title">鍩烘湰璁剧疆</text>
+        <text class="section-title">閸╃儤婀扮拋鍓х枂</text>
       </view>
       <view class="section-content">
-        <!-- 鍚敤鍒嗛攢 -->
+        <!-- 閸氼垳鏁ら崚鍡涙敘 -->
         <view class="rule-item">
           <view class="rule-label">
-            <text class="label-text">鍚敤鍒嗛攢</text>
-            <text class="label-desc">鏄惁鍏佽鐢ㄦ埛杩涜鍒嗛攢鎺ㄥ箍</text>
+            <text class="label-text">閸氼垳鏁ら崚鍡涙敘</text>
+            <text class="label-desc">閺勵垰鎯侀崗浣筋啅閻劍鍩涙潻娑滎攽閸掑棝鏀㈤幒銊ョ畭</text>
           </view>
           <switch class="rule-switch" checked="{{distributeRules.enableDistribute}}" bindchange="onSwitchChange" data-field="enableDistribute" />
         </view>
 
-        <!-- 浣ｉ噾姣斾緥 -->
+        <!-- 娴ｏ綁鍣惧В鏂剧伐 -->
         <view class="rule-item">
           <view class="rule-label">
-            <text class="label-text">浣ｉ噾姣斾緥</text>
-            <text class="label-desc">鍒嗛攢鍟嗗搧鐨勪剑閲戞瘮渚嬶紝鍗曚綅锛?</text>
+            <text class="label-text">娴ｏ綁鍣惧В鏂剧伐</text>
+            <text class="label-desc">閸掑棝鏀㈤崯鍡楁惂閻ㄥ嫪鍓戦柌鎴炵槷娓氬绱濋崡鏇氱秴閿?</text>
           </view>
           <view class="rule-input-group">
             <input class="rule-input" type="number" value="{{distributeRules.commissionRate}}" bindinput="onInputChange" data-field="commissionRate" />
@@ -41,89 +41,89 @@
           </view>
         </view>
 
-        <!-- 鏈€浣庤鍗曢噾棰?-->
+        <!-- 閺堚偓娴ｅ氦顓归崡鏇㈠櫨妫?-->
         <view class="rule-item">
           <view class="rule-label">
-            <text class="label-text">鏈€浣庤鍗曢噾棰?/text>
-            <text class="label-desc">浜х敓浣ｉ噾鐨勬渶浣庤鍗曢噾棰濓紝鍗曚綅锛氬厓</text>
+            <text class="label-text">閺堚偓娴ｅ氦顓归崡鏇㈠櫨妫?/text>
+            <text class="label-desc">娴溠呮晸娴ｏ綁鍣鹃惃鍕付娴ｅ氦顓归崡鏇㈠櫨妫版繐绱濋崡鏇氱秴閿涙艾鍘?/text>
           </view>
           <view class="rule-input-group">
             <input class="rule-input" type="number" value="{{distributeRules.minOrderAmount}}" bindinput="onInputChange" data-field="minOrderAmount" />
-            <text class="input-unit">鍏?/text>
+            <text class="input-unit">閸?/text>
           </view>
         </view>
 
-        <!-- 鏈€楂樹剑閲戦噾棰?-->
+        <!-- 閺堚偓妤傛ü鍓戦柌鎴﹀櫨妫?-->
         <view class="rule-item">
           <view class="rule-label">
-            <text class="label-text">鏈€楂樹剑閲戦噾棰?/text>
-            <text class="label-desc">鍗曚釜订单鐨勬渶楂樹剑閲戦噾棰濓紝鍗曚綅锛氬厓</text>
+            <text class="label-text">閺堚偓妤傛ü鍓戦柌鎴﹀櫨妫?/text>
+            <text class="label-desc">閸楁洑閲滆鍗曢惃鍕付妤傛ü鍓戦柌鎴﹀櫨妫版繐绱濋崡鏇氱秴閿涙艾鍘?/text>
           </view>
           <view class="rule-input-group">
             <input class="rule-input" type="number" value="{{distributeRules.maxCommissionAmount}}" bindinput="onInputChange" data-field="maxCommissionAmount" />
-            <text class="input-unit">鍏?/text>
+            <text class="input-unit">閸?/text>
           </view>
         </view>
       </view>
     </view>
 
-    <!-- 楂樼骇璁剧疆 -->
+    <!-- 妤傛楠囩拋鍓х枂 -->
     <view class="rules-section">
       <view class="section-header">
-        <text class="section-title">楂樼骇璁剧疆</text>
+        <text class="section-title">妤傛楠囩拋鍓х枂</text>
       </view>
       <view class="section-content">
-        <!-- 鍒嗛攢鏈夋晥鏈?-->
+        <!-- 閸掑棝鏀㈤張澶嬫櫏閺?-->
         <view class="rule-item">
           <view class="rule-label">
-            <text class="label-text">鍒嗛攢鏈夋晥鏈?/text>
-            <text class="label-desc">鐢ㄦ埛鐐瑰嚮鍒嗛攢閾炬帴鍚庣殑鏈夋晥鏈燂紝鍗曚綅锛氬ぉ</text>
+            <text class="label-text">閸掑棝鏀㈤張澶嬫櫏閺?/text>
+            <text class="label-desc">閻劍鍩涢悙鐟板毊閸掑棝鏀㈤柧鐐复閸氬海娈戦張澶嬫櫏閺堢噦绱濋崡鏇氱秴閿涙艾銇?/text>
           </view>
           <view class="rule-input-group">
             <input class="rule-input" type="number" value="{{distributeRules.distributeValidity}}" bindinput="onInputChange" data-field="distributeValidity" />
-            <text class="input-unit">澶?/text>
+            <text class="input-unit">婢?/text>
           </view>
         </view>
 
-        <!-- 鑷姩缁撶畻鍛ㄦ湡 -->
+        <!-- 閼奉亜濮╃紒鎾剁暬閸涖劍婀?-->
         <view class="rule-item">
           <view class="rule-label">
-            <text class="label-text">鑷姩缁撶畻鍛ㄦ湡</text>
-            <text class="label-desc">订单瀹屾垚鍚庣殑鑷姩缁撶畻鍛ㄦ湡锛屽崟浣嶏細澶?/text>
+            <text class="label-text">閼奉亜濮╃紒鎾剁暬閸涖劍婀?/text>
+            <text class="label-desc">璁㈠崟鐎瑰本鍨氶崥搴ｆ畱閼奉亜濮╃紒鎾剁暬閸涖劍婀￠敍灞藉礋娴ｅ稄绱版径?/text>
           </view>
           <view class="rule-input-group">
             <input class="rule-input" type="number" value="{{distributeRules.autoSettlementPeriod}}" bindinput="onInputChange" data-field="autoSettlementPeriod" />
-            <text class="input-unit">澶?/text>
+            <text class="input-unit">婢?/text>
           </view>
         </view>
 
-        <!-- 鎻愮幇闂ㄦ -->
+        <!-- 閹绘劗骞囬梻銊︻潬 -->
         <view class="rule-item">
           <view class="rule-label">
-            <text class="label-text">鎻愮幇闂ㄦ</text>
-            <text class="label-desc">鍒嗛攢浣ｉ噾鐨勬渶浣庢彁鐜伴噾棰濓紝鍗曚綅锛氬厓</text>
+            <text class="label-text">閹绘劗骞囬梻銊︻潬</text>
+            <text class="label-desc">閸掑棝鏀㈡担锝夊櫨閻ㄥ嫭娓舵担搴㈠絹閻滀即鍣炬０婵撶礉閸楁洑缍呴敍姘帗</text>
           </view>
           <view class="rule-input-group">
             <input class="rule-input" type="number" value="{{distributeRules.withdrawThreshold}}" bindinput="onInputChange" data-field="withdrawThreshold" />
-            <text class="input-unit">鍏?/text>
+            <text class="input-unit">閸?/text>
           </view>
         </view>
 
-        <!-- 鍏佽鑷喘 -->
+        <!-- 閸忎浇顔忛懛顏囧枠 -->
         <view class="rule-item">
           <view class="rule-label">
-            <text class="label-text">鍏佽鑷喘</text>
-            <text class="label-desc">鏄惁鍏佽鍒嗛攢鍛樿嚜宸辫喘涔拌幏寰椾剑閲?/text>
+            <text class="label-text">閸忎浇顔忛懛顏囧枠</text>
+            <text class="label-desc">閺勵垰鎯侀崗浣筋啅閸掑棝鏀㈤崨妯垮殰瀹歌精鍠樻稊鎷屽箯瀵版ぞ鍓戦柌?/text>
           </view>
           <switch class="rule-switch" checked="{{distributeRules.allowSelfPurchase}}" bindchange="onSwitchChange" data-field="allowSelfPurchase" />
         </view>
       </view>
     </view>
 
-    <!-- 淇濆瓨鎸夐挳 -->
+    <!-- 娣囨繂鐡ㄩ幐澶愭尦 -->
     <view class="save-section">
       <button class="save-btn" bindtap="saveRules" loading="{{saving}}">
-        淇濆瓨璁剧疆
+        娣囨繂鐡ㄧ拋鍓х枂
       </button>
     </view>
   </view>
