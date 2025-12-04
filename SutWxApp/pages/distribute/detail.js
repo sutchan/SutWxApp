@@ -1,8 +1,9 @@
-﻿/**
+/**
  * 文件名 detail.js
  * 版本号 1.0.0
  * 更新日期: 2025-11-29
- * 描述: 閸掑棝鏀㈢拠锔藉剰妞ょ敻娼? */
+ * 描述: 分销详情页面
+ */
 
 const distributeService = require('../../services/distributeService');
 const store = require('../../utils/store');
@@ -27,14 +28,15 @@ Page({
         error: true
       });
       wx.showToast({
-        title: '閸掑棝鏀D娑撳秷鍏樻稉铏光敄',
+        title: '分销ID不能为空',
         icon: 'none'
       });
     }
   },
 
   /**
-   * 閼惧嘲褰囬崚鍡涙敘鐠囷附鍎?   */
+   * 获取分销详情
+   */
   getDistributeDetail() {
     this.setData({ loading: true });
 
@@ -47,30 +49,32 @@ Page({
         });
       })
       .catch(err => {
-        console.error('閼惧嘲褰囬崚鍡涙敘鐠囷附鍎忔径杈Е:', err);
+        console.error('获取分销详情失败:', err);
         this.setData({
           loading: false,
           error: true
         });
         wx.showToast({
-          title: '閼惧嘲褰囬崚鍡涙敘鐠囷附鍎忔径杈Е',
+          title: '获取分销详情失败',
           icon: 'none'
         });
       });
   },
 
   /**
-   * 鏉╂柨娲栭崚妤勩€冩い?   */
+   * 返回上一页
+   */
   goBack() {
     wx.navigateBack();
   },
 
   /**
-   * 鐎光剝鐗抽柅姘崇箖閸掑棝鏀?   */
+   * 审核通过分销
+   */
   approveDistribute() {
     wx.showModal({
-      title: '鐎光剝鐗抽崚鍡涙敘',
-      content: '绾喖鐣剧憰浣割吀閺嶆悂鈧俺绻冪拠銉ュ瀻闁库偓閸氭绱?,
+      title: '审核通过',
+      content: '确定要审核通过该分销申请吗？',
       success: (res) => {
         if (res.confirm) {
           this.handleApprove();
@@ -80,39 +84,39 @@ Page({
   },
 
   /**
-   * 婢跺嫮鎮婄€光剝鐗抽柅姘崇箖
+   * 处理审核通过
    */
   handleApprove() {
     wx.showLoading({
-      title: '鐎光剝鐗虫稉?..'
+      title: '审核中...'
     });
 
     distributeService.approveDistribute(this.data.distributeId)
       .then(() => {
         wx.hideLoading();
         wx.showToast({
-          title: '鐎光剝鐗抽柅姘崇箖閹存劕濮?
+          title: '审核通过成功'
         });
-        // 閸掗攱鏌婄拠锔藉剰
+        // 刷新详情
         this.getDistributeDetail();
       })
       .catch(err => {
         wx.hideLoading();
-        console.error('鐎光剝鐗抽柅姘崇箖婢惰精瑙?', err);
+        console.error('审核通过失败:', err);
         wx.showToast({
-          title: '鐎光剝鐗抽柅姘崇箖婢惰精瑙?,
+          title: '审核通过失败',
           icon: 'none'
         });
       });
   },
 
   /**
-   * 妞瑰啿娲栭崚鍡涙敘
+   * 拒绝分销
    */
   rejectDistribute() {
     wx.showModal({
-      title: '妞瑰啿娲栭崚鍡涙敘',
-      content: '绾喖鐣剧憰渚€鈹忛崶鐐额嚉閸掑棝鏀㈤崥妤嬬吹',
+      title: '拒绝分销',
+      content: '确定要拒绝该分销申请吗？',
       success: (res) => {
         if (res.confirm) {
           this.showRejectReasonInput();
@@ -122,12 +126,13 @@ Page({
   },
 
   /**
-   * 閺勫墽銇氭す鍐叉礀閸樼喎娲滄潏鎾冲弳濡?   */
+   * 显示拒绝原因输入框
+   */
   showRejectReasonInput() {
     wx.showModal({
-      title: '鐠囩柉绶崗銉┾攺閸ョ偛甯崶?,
+      title: '输入拒绝原因',
       editable: true,
-      placeholderText: '鐠囩柉绶崗銉┾攺閸ョ偛甯崶?,
+      placeholderText: '请输入拒绝原因',
       success: (res) => {
         if (res.confirm && res.content.trim()) {
           this.handleReject(res.content.trim());
@@ -137,40 +142,40 @@ Page({
   },
 
   /**
-   * 婢跺嫮鎮婃す鍐叉礀
-   * @param {string} reason - 妞瑰啿娲栭崢鐔锋礈
+   * 处理拒绝
+   * @param {string} reason - 拒绝原因
    */
   handleReject(reason) {
     wx.showLoading({
-      title: '妞瑰啿娲栨稉?..'
+      title: '拒绝中...'
     });
 
     distributeService.rejectDistribute(this.data.distributeId, reason)
       .then(() => {
         wx.hideLoading();
         wx.showToast({
-          title: '妞瑰啿娲栭幋鎰'
+          title: '拒绝成功'
         });
-        // 閸掗攱鏌婄拠锔藉剰
+        // 刷新详情
         this.getDistributeDetail();
       })
       .catch(err => {
         wx.hideLoading();
-        console.error('妞瑰啿娲栨径杈Е:', err);
+        console.error('拒绝失败:', err);
         wx.showToast({
-          title: '妞瑰啿娲栨径杈Е',
+          title: '拒绝失败',
           icon: 'none'
         });
       });
   },
 
   /**
-   * 閸掔娀娅庨崚鍡涙敘
+   * 删除分销
    */
   deleteDistribute() {
     wx.showModal({
-      title: '閸掔娀娅庨崚鍡涙敘',
-      content: '绾喖鐣剧憰浣稿灩闂勩倛顕氶崚鍡涙敘閸氭绱?,
+      title: '删除分销',
+      content: '确定要删除该分销吗？',
       success: (res) => {
         if (res.confirm) {
           this.showDeleteReasonInput();
@@ -180,12 +185,13 @@ Page({
   },
 
   /**
-   * 閺勫墽銇氶崚鐘绘珟閸樼喎娲滄潏鎾冲弳濡?   */
+   * 显示删除原因输入框
+   */
   showDeleteReasonInput() {
     wx.showModal({
-      title: '鐠囩柉绶崗銉ュ灩闂勩倕甯崶?,
+      title: '输入删除原因',
       editable: true,
-      placeholderText: '鐠囩柉绶崗銉ュ灩闂勩倕甯崶?,
+      placeholderText: '请输入删除原因',
       success: (res) => {
         if (res.confirm && res.content.trim()) {
           this.handleDelete(res.content.trim());
@@ -195,27 +201,28 @@ Page({
   },
 
   /**
-   * 婢跺嫮鎮婇崚鐘绘珟
-   * @param {string} reason - 閸掔娀娅庨崢鐔锋礈
+   * 处理删除
+   * @param {string} reason - 删除原因
    */
   handleDelete(reason) {
     wx.showLoading({
-      title: '閸掔娀娅庢稉?..'
+      title: '删除中...'
     });
 
     distributeService.deleteDistribute(this.data.distributeId, reason)
       .then(() => {
         wx.hideLoading();
         wx.showToast({
-          title: '閸掔娀娅庨幋鎰'
+          title: '删除成功'
         });
-        // 鏉╂柨娲栭崚妤勩€冩い?        wx.navigateBack();
+        // 返回上一页
+        wx.navigateBack();
       })
       .catch(err => {
         wx.hideLoading();
-        console.error('閸掔娀娅庢径杈Е:', err);
+        console.error('删除失败:', err);
         wx.showToast({
-          title: '閸掔娀娅庢径杈Е',
+          title: '删除失败',
           icon: 'none'
         });
       });

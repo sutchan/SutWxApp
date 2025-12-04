@@ -1,28 +1,27 @@
-﻿﻿/**
- * 文件名 articleService.js
- * 版本号 1.0.2
+/**
+ * 文件名: articleService.js
+ * 版本号: 1.0.2
  * 更新日期: 2025-11-29
- * 作者 Sut
- * 描述: 鏂囩珷服务层- 鎻愪緵鏂囩珷鐩稿叧鐨凙PI鎺ュ彛璋冪敤
- */
+ * 作者: Sut
+ * 描述: 文章服务层，提供文章相关的API接口调用 */
 
 const request = require('../utils/request');
 const cacheService = require('../utils/cacheService.js').instance;
 const CACHE_POLICY = require('../utils/cacheService.js').CACHE_POLICY;
 
 /**
- * 鑾峰彇鏂囩珷鍒楄〃
- * @param {Object} params - 鏌ヨ鍙傛暟
- * @param {number} params.page - 椤电爜锛岄粯璁や负1
- * @param {number} params.pageSize - 姣忛〉鏁伴噺锛岄粯璁や负10
- * @param {string} params.category - 鏂囩珷鍒嗙被锛堝彲閫夛級
- * @returns {Promise<Object>} 鏂囩珷鍒楄〃鏁版嵁
+ * 获取文章列表
+ * @param {Object} params - 查询参数
+ * @param {number} params.page - 页码，默认为1
+ * @param {number} params.pageSize - 每页数量，默认为10
+ * @param {string} params.category - 文章分类（可选）
+ * @returns {Promise<Object>} 文章列表数据
  */
 const getArticleList = async (params = {}) => {
   const { page = 1, pageSize = 10, category = '' } = params;
   
   try {
-    // 璋冪敤API鑾峰彇鏂囩珷鍒楄〃
+    // 调用API获取文章列表
     const response = await request.get('/articles', {
       page,
       pageSize,
@@ -30,72 +29,72 @@ const getArticleList = async (params = {}) => {
     }, {
       cache: {
         policy: CACHE_POLICY.NETWORK_FIRST,
-        maxAge: 30 * 60 * 1000 // 30鍒嗛挓
+        maxAge: 30 * 60 * 1000 // 30分钟
       }
     });
     
     return response;
   } catch (error) {
-    console.error('鑾峰彇鏂囩珷鍒楄〃澶辫触:', error);
+    console.error('获取文章列表失败:', error);
     throw error;
   }
 };
 
 /**
- * 鑾峰彇鏂囩珷璇︽儏
- * @param {string} articleId - 鏂囩珷ID
- * @returns {Promise<Object>} 鏂囩珷璇︽儏鏁版嵁
+ * 获取文章详情
+ * @param {string} articleId - 文章ID
+ * @returns {Promise<Object>} 文章详情数据
  */
 const getArticleDetail = async (articleId) => {
   if (!articleId) {
-    throw new Error('鏂囩珷ID涓嶈兘涓虹┖');
+    throw new Error('文章ID不能为空');
   }
   
   try {
-    // 璋冪敤API鑾峰彇鏂囩珷璇︽儏
+    // 调用API获取文章详情
     const response = await request.get(`/articles/${articleId}`, {}, {
       cache: {
         policy: CACHE_POLICY.STALE_WHILE_REVALIDATE,
-        maxAge: 60 * 60 * 1000 // 1灏忔椂
+        maxAge: 60 * 60 * 1000 // 1小时
       }
     });
     
     return response;
   } catch (error) {
-    console.error('鑾峰彇鏂囩珷璇︽儏澶辫触:', error);
+    console.error('获取文章详情失败:', error);
     throw error;
   }
 };
 
 /**
- * 澧炲姞鏂囩珷娴忚娆℃暟
- * @param {string} articleId - 鏂囩珷ID
+ * 增加文章浏览次数
+ * @param {string} articleId - 文章ID
  * @returns {Promise<void>}
  */
 const increaseViewCount = async (articleId) => {
   if (!articleId) {
-    throw new Error('鏂囩珷ID涓嶈兘涓虹┖');
+    throw new Error('文章ID不能为空');
   }
   
   try {
     await request.post(`/articles/${articleId}/view`);
   } catch (error) {
-    console.error('澧炲姞娴忚娆℃暟澶辫触:', error);
-    // 涓嶆姏鍑洪敊璇紝閬垮厤褰卞搷鐢ㄦ埛娴忚浣撻獙
+    console.error('增加浏览次数失败:', error);
+    // 不抛出错误，避免影响用户浏览体验
   }
 };
 
 /**
- * 鑾峰彇鏂囩珷璇勮鍒楄〃
- * @param {string} articleId - 鏂囩珷ID
- * @param {Object} params - 鏌ヨ鍙傛暟
- * @param {number} params.page - 椤电爜锛岄粯璁や负1
- * @param {number} params.pageSize - 姣忛〉鏁伴噺锛岄粯璁や负20
- * @returns {Promise<Object>} 璇勮鍒楄〃鏁版嵁
+ * 获取文章评论列表
+ * @param {string} articleId - 文章ID
+ * @param {Object} params - 查询参数
+ * @param {number} params.page - 页码，默认为1
+ * @param {number} params.pageSize - 每页数量，默认为20
+ * @returns {Promise<Object>} 评论列表数据
  */
 const getArticleComments = async (articleId, params = {}) => {
   if (!articleId) {
-    throw new Error('鏂囩珷ID涓嶈兘涓虹┖');
+    throw new Error('文章ID不能为空');
   }
   
   const { page = 1, pageSize = 20 } = params;
@@ -107,13 +106,13 @@ const getArticleComments = async (articleId, params = {}) => {
     }, {
       cache: {
         policy: CACHE_POLICY.NETWORK_FIRST,
-        maxAge: 5 * 60 * 1000 // 5鍒嗛挓
+        maxAge: 5 * 60 * 1000 // 5分钟
       }
     });
     
     return response;
   } catch (error) {
-    console.error('鑾峰彇鏂囩珷璇勮澶辫触:', error);
+    console.error('获取文章评论失败:', error);
     throw error;
   }
 };

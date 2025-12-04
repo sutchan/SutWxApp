@@ -1,20 +1,25 @@
 ﻿/**
- * 閺傚洣娆㈤崥? categoryService.js
- * 閻楀牊婀伴崣? 1.0.2
- * 閺囧瓨鏌婇弮銉︽埂: 2025-11-29
- * 娴ｆ粏鈧? Sut
- * 閹诲繗鍫? 閸掑棛琚張宥呭
+ * 文件名 categoryService.js
+ * 版本号 1.0.2
+ * 更新日期: 2025-11-29
+ * 作者: Sut
+ * 描述: 分类服务
  */
 
 const request = require('../utils/request');
 
 /**
- * 閸掑棛琚張宥呭缁? */
+ * 分类服务类
+ */
 class CategoryService {
   /**
-   * 閼惧嘲褰囬崚鍡欒閸掓銆?   * @param {Object} options - 閺屻儴顕楅崣鍌涙殶
-   * @param {number} options.parentId - 閻栬泛鍨庣猾绫孌閿涘奔璐?閹存牜鈹栭弮鎯板箯閸欐牠銆婄痪褍鍨庣猾?   * @param {boolean} options.includeChildren - 閺勵垰鎯侀崠鍛儓鐎涙劕鍨庣猾?   * @param {boolean} options.includeProductCount - 閺勵垰鎯侀崠鍛儓閸熷棗鎼ч弫浼村櫤
-   * @returns {Promise<Object>} 閸掑棛琚崚妤勩€?   */
+   * 获取分类列表
+   * @param {Object} options - 查询参数
+   * @param {number} options.parentId - 父分类ID，0表示顶级分类
+   * @param {boolean} options.includeChildren - 是否包含子分类
+   * @param {boolean} options.includeProductCount - 是否包含产品数量
+   * @returns {Promise<Object>} 分类列表
+   */
   async getCategoryList(options = {}) {
     const params = {
       parentId: options.parentId || 0,
@@ -26,14 +31,17 @@ class CategoryService {
   }
 
   /**
-   * 閼惧嘲褰囬崚鍡欒鐠囷附鍎?   * @param {string} id - 閸掑棛琚獻D
-   * @param {Object} options - 閺屻儴顕楅崣鍌涙殶
-   * @param {boolean} options.includeChildren - 閺勵垰鎯侀崠鍛儓鐎涙劕鍨庣猾?   * @param {boolean} options.includeParent - 閺勵垰鎯侀崠鍛儓閻栬泛鍨庣猾璁充繆閹?   * @param {boolean} options.includeProductCount - 閺勵垰鎯侀崠鍛儓閸熷棗鎼ч弫浼村櫤
-   * @returns {Promise<Object>} 閸掑棛琚拠锔藉剰
+   * 获取分类详情
+   * @param {string} id - 分类ID
+   * @param {Object} options - 查询参数
+   * @param {boolean} options.includeChildren - 是否包含子分类
+   * @param {boolean} options.includeParent - 是否包含父分类
+   * @param {boolean} options.includeProductCount - 是否包含产品数量
+   * @returns {Promise<Object>} 分类详情
    */
   async getCategoryDetail(id, options = {}) {
     if (!id) {
-      throw new Error('閸掑棛琚獻D娑撳秷鍏樻稉铏光敄');
+      throw new Error('分类ID不能为空');
     }
     
     const params = {
@@ -46,10 +54,13 @@ class CategoryService {
   }
 
   /**
-   * 閼惧嘲褰囬崚鍡欒閺嶆垵鑸扮紒鎾寸€?   * @param {Object} options - 閺屻儴顕楅崣鍌涙殶
-   * @param {number} options.maxLevel - 閺堚偓婢堆冪湴缁狙嶇礉姒涙顓绘稉?
-   * @param {boolean} options.includeEmpty - 閺勵垰鎯侀崠鍛儓濞屸剝婀侀崯鍡楁惂閻ㄥ嫬鍨庣猾?   * @param {boolean} options.includeProductCount - 閺勵垰鎯侀崠鍛儓閸熷棗鎼ч弫浼村櫤
-   * @returns {Promise<Object>} 閸掑棛琚弽?   */
+   * 获取分类树状结构
+   * @param {Object} options - 查询参数
+   * @param {number} options.maxLevel - 最大层级，默认3级
+   * @param {boolean} options.includeEmpty - 是否包含空分类
+   * @param {boolean} options.includeProductCount - 是否包含产品数量
+   * @returns {Promise<Object>} 分类树状结构
+   */
   async getCategoryTree(options = {}) {
     const params = {
       maxLevel: options.maxLevel || 3,

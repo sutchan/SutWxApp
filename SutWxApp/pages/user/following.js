@@ -1,66 +1,81 @@
-﻿/**
+/**
  * 文件名 following.js
  * 版本号 1.0.0
  * 更新日期: 2025-11-23
- * 描述: 閸忚櫕鏁為崚妤勩€冩い鐢告桨
+ * 描述: 关注与粉丝页面
  */
-const favoriteService = require('../../../services/favoriteService');
+const socialService = require('../../../services/socialService');
 
 Page({
   /**
-   * 妞ょ敻娼伴惃鍕灥婵鏆熼幑?   */
+   * 页面的初始数据
+   */
   data: {
-    activeTab: 0, // 瑜版挸澧犲┑鈧ú鑽ゆ畱閺嶅洨顒?0-閹存垵鍙у▔銊ф畱 1-閸忚櫕鏁為幋鎴犳畱
-    tabs: ['閹存垵鍙у▔銊ф畱', '閸忚櫕鏁為幋鎴犳畱'],
-    followingList: [], // 閹存垵鍙у▔銊ф畱閸掓銆?    followersList: [], // 閸忚櫕鏁為幋鎴犳畱閸掓銆?    loading: false, // 加载状态   noMoreData: false, // 閺勵垰鎯佸▽鈩冩箒閺囨潙顦块弫鐗堝祦
-    isEmpty: false, // 閺勵垰鎯佹稉铏光敄
-    page: 1, // 瑜版挸澧犳い鐢电垳
-    pageSize: 20, // 濮ｅ繘銆夐弫浼村櫤
-    editMode: false, // 閺勵垰鎯佹径鍕艾缂傛牞绶Ο鈥崇础
-    selectedItems: [], // 闁鑵戦惃鍕€嶉惄?    searchKeyword: '', // 閹兼粎鍌ㄩ崗鎶芥暛鐠?    searchResults: [], // 閹兼粎鍌ㄧ紒鎾寸亯
-    showSearchResults: false // 閺勵垰鎯侀弰鍓с仛閹兼粎鍌ㄧ紒鎾寸亯
+    activeTab: 0, // 当前激活的标签页
+    tabs: ['我关注的', '关注我的'],
+    followingList: [], // 关注列表数据
+    followersList: [], // 粉丝列表数据
+    recommendedUsers: [], // 推荐关注用户列表
+    recommendedLoading: false, // 推荐关注加载状态
+    recommendedLoaded: false, // 是否已加载推荐关注
+    loading: false, // 加载状态
+    noMoreData: false, // 是否没有更多数据
+    isEmpty: false, // 是否为空
+    page: 1, // 当前页码
+    pageSize: 20, // 每页数量
+    editMode: false, // 编辑模式
+    selectedItems: [], // 选中的项目ID
+    searchKeyword: '', // 搜索关键词
+    searchResults: [], // 搜索结果
+    showSearchResults: false // 是否显示搜索结果
   },
 
   /**
-   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸旂姾娴?   */
+   * 生命周期函数--监听页面加载
+   */
   onLoad: function (options) {
     this.loadFollowingList(true);
   },
 
   /**
-   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸掓繃顐煎〒鍙夌厠鐎瑰本鍨?   */
+   * 生命周期函数--监听页面初次渲染完成
+   */
   onReady: function () {
     
   },
 
   /**
-   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閺勫墽銇?   */
+   * 生命周期函数--监听页面显示
+   */
   onShow: function () {
-    // 閸掗攱鏌婇弫鐗堝祦
+    // 刷新当前标签页数据
     this.refreshCurrentTab();
   },
 
   /**
-   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨闂呮劘妫?   */
+   * 生命周期函数--监听页面隐藏
+   */
   onHide: function () {
     
   },
 
   /**
-   * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸楁瓕娴?   */
+   * 生命周期函数--监听页面卸载
+   */
   onUnload: function () {
     
   },
 
   /**
-   * 妞ょ敻娼伴惄绋垮彠娴滃娆㈡径鍕倞閸戣姤鏆?-閻╂垵鎯夐悽銊﹀煕娑撳濯洪崝銊ょ稊
+   * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
     this.refreshCurrentTab();
   },
 
   /**
-   * 妞ょ敻娼版稉濠冨鐟欙箑绨虫禍瀣╂閻ㄥ嫬顦╅悶鍡楀毐閺?   */
+   * 页面上拉触底事件的处理函数
+   */
   onReachBottom: function () {
     if (!this.data.loading && !this.data.noMoreData && !this.data.showSearchResults) {
       this.loadMoreData();
@@ -68,16 +83,17 @@ Page({
   },
 
   /**
-   * 閻劍鍩涢悙鐟板毊閸欏厖绗傜憴鎺戝瀻娴?   */
+   * 用户点击右上角分享
+   */
   onShareAppMessage: function () {
     return {
-      title: '閹存垹娈戦崗铏暈',
+      title: '关注与粉丝',
       path: '/pages/user/following/following'
     };
   },
 
   /**
-   * 閸掑洦宕查弽鍥╊劮
+   * 标签页切换事件
    */
   onTabChange: function(e) {
     const index = e.currentTarget.dataset.index;
@@ -95,7 +111,8 @@ Page({
   },
 
   /**
-   * 閸掗攱鏌婅ぐ鎾冲閺嶅洨顒锋い鍨殶閹?   */
+   * 刷新当前标签页数据
+   */
   refreshCurrentTab: function() {
     if (this.data.activeTab === 0) {
       this.loadFollowingList(true);
@@ -105,7 +122,8 @@ Page({
   },
 
   /**
-   * 閸旂姾娴囬弴鏉戭樋閺佺増宓?   */
+   * 加载更多数据
+   */
   loadMoreData: function() {
     if (this.data.activeTab === 0) {
       this.loadFollowingList(false);
@@ -115,7 +133,8 @@ Page({
   },
 
   /**
-   * 閸旂姾娴囬幋鎴濆彠濞夈劎娈戦崚妤勩€?   */
+   * 加载关注列表
+   */
   loadFollowingList: function(reset = false) {
     if (this.data.loading) return;
     
@@ -124,7 +143,7 @@ Page({
     const page = reset ? 1 : this.data.page;
     const pageSize = this.data.pageSize;
     
-    favoriteService.getUserFollowing({
+    socialService.getUserFollowing({
       page,
       pageSize
     }).then((res) => {
@@ -146,14 +165,15 @@ Page({
       this.setData({ loading: false });
       
       wx.showToast({
-        title: err.message || '閸旂姾娴囨径杈Е',
+        title: err.message || '加载失败',
         icon: 'none'
       });
     });
   },
 
   /**
-   * 閸旂姾娴囬崗铏暈閹存垹娈戦崚妤勩€?   */
+   * 加载粉丝列表
+   */
   loadFollowersList: function(reset = false) {
     if (this.data.loading) return;
     
@@ -162,7 +182,7 @@ Page({
     const page = reset ? 1 : this.data.page;
     const pageSize = this.data.pageSize;
     
-    favoriteService.getUserFollowers({
+    socialService.getUserFollowers({
       page,
       pageSize
     }).then((res) => {
@@ -184,14 +204,14 @@ Page({
       this.setData({ loading: false });
       
       wx.showToast({
-        title: err.message || '閸旂姾娴囨径杈Е',
+        title: err.message || '加载失败',
         icon: 'none'
       });
     });
   },
 
   /**
-   * 閸掑洦宕茬紓鏍帆濡€崇础
+   * 切换编辑模式
    */
   toggleEditMode: function() {
     this.setData({
@@ -201,23 +221,27 @@ Page({
   },
 
   /**
-   * 闁瀚?閸欐牗绉烽柅澶嬪妞ゅ湱娲?   */
+   * 选择/取消选择项目
+   */
   onSelectItem: function(e) {
     const { id } = e.currentTarget.dataset;
     const { selectedItems } = this.data;
     const index = selectedItems.indexOf(id);
     
     if (index > -1) {
-      // 瀹告煡鈧鑵戦敍灞藉絿濞戝牓鈧鑵?      selectedItems.splice(index, 1);
+      // 取消选择
+      selectedItems.splice(index, 1);
     } else {
-      // 閺堫亪鈧鑵戦敍灞惧潑閸旂娀鈧鑵?      selectedItems.push(id);
+      // 选择
+      selectedItems.push(id);
     }
     
     this.setData({ selectedItems });
   },
 
   /**
-   * 閸忋劑鈧?閸欐牗绉烽崗銊┾偓?   */
+   * 全选/取消全选
+   */
   toggleSelectAll: function() {
     const { editMode, selectedItems, activeTab, followingList, followersList } = this.data;
     if (!editMode) return;
@@ -226,42 +250,46 @@ Page({
     const allIds = currentList.map(item => item.id);
     
     if (selectedItems.length === allIds.length) {
-      // 瀹告彃鍙忛柅澶涚礉閸欐牗绉烽崗銊┾偓?      this.setData({ selectedItems: [] });
+      // 取消全选
+      this.setData({ selectedItems: [] });
     } else {
-      // 閺堫亜鍙忛柅澶涚礉閹笛嗩攽閸忋劑鈧?      this.setData({ selectedItems: allIds });
+      // 全选
+      this.setData({ selectedItems: allIds });
     }
   },
 
   /**
-   * 閸欐牗绉烽崗铏暈
+   * 取消关注
    */
   unfollowUsers: function() {
     const { selectedItems, activeTab } = this.data;
     if (selectedItems.length === 0) {
       wx.showToast({
-        title: '鐠囩兘鈧瀚ㄧ憰浣稿絿濞戝牆鍙у▔銊ф畱閻劍鍩?,
+        title: '请选择要取消关注的用户',
         icon: 'none'
       });
       return;
     }
     
     wx.showModal({
-      title: '閹绘劗銇?,
-      content: `绾喖鐣剧憰浣稿絿濞戝牆鍙у▔銊┾偓澶夎厬閻?{selectedItems.length}娑擃亞鏁ら幋宄版偋閿涚剫,
+      title: '确认取消关注',
+      content: `确定要取消关注选中的${selectedItems.length}位用户吗？`,
       success: (res) => {
         if (res.confirm) {
           this.setData({ loading: true });
           
-          // 閹靛綊鍣洪崣鏍ㄧХ閸忚櫕鏁?          const promises = selectedItems.map(id => favoriteService.unfollowUser(id));
+          // 批量取消关注
+          const promises = selectedItems.map(id => socialService.unfollowUser(id));
           
           Promise.all(promises)
             .then(() => {
               wx.showToast({
-                title: '閸欐牗绉烽崗铏暈閹存劕濮?,
+                title: '取消关注成功',
                 icon: 'success'
               });
               
-              // 閸掗攱鏌婇崚妤勩€?              this.setData({
+              // 刷新数据
+              this.setData({
                 editMode: false,
                 selectedItems: []
               });
@@ -275,7 +303,7 @@ Page({
             .catch((err) => {
               this.setData({ loading: false });
               wx.showToast({
-                title: err.message || '閹垮秳缍旀径杈Е',
+                title: err.message || '操作失败',
                 icon: 'none'
               });
             });
@@ -285,42 +313,44 @@ Page({
   },
 
   /**
-   * 閸忚櫕鏁為悽銊﹀煕
+   * 关注用户
    */
   followUser: function(e) {
     const { id } = e.currentTarget.dataset;
     
     this.setData({ loading: true });
     
-    favoriteService.followUser(id)
+    socialService.followUser(id)
       .then(() => {
         this.setData({ loading: false });
         wx.showToast({
-          title: '閸忚櫕鏁為幋鎰',
+          title: '关注成功',
           icon: 'success'
         });
         
-        // 閸掗攱鏌婇崗铏暈閹存垹娈戦崚妤勩€?        if (this.data.activeTab === 1) {
+        // 刷新粉丝列表
+        if (this.data.activeTab === 1) {
           this.loadFollowersList(true);
         }
       })
       .catch((err) => {
         this.setData({ loading: false });
         wx.showToast({
-          title: err.message || '閸忚櫕鏁炴径杈Е',
+          title: err.message || '关注失败',
           icon: 'none'
         });
       });
   },
 
   /**
-   * 閹兼粎鍌ㄦ潏鎾冲弳
+   * 搜索输入
    */
   onSearchInput: function(e) {
     const keyword = e.detail.value.trim();
     this.setData({ searchKeyword: keyword });
     
-    // 濞撳懐鈹栭幖婊呭偍濡楀棙妞傞弰鍓с仛閸樼喎鍨悰?    if (!keyword) {
+    // 清空关键词时隐藏搜索结果
+    if (!keyword) {
       this.setData({
         showSearchResults: false,
         searchResults: []
@@ -329,36 +359,41 @@ Page({
   },
 
   /**
-   * 閹笛嗩攽閹兼粎鍌?   */
+   * 执行搜索
+   */
   onSearch: function() {
     const keyword = this.data.searchKeyword.trim();
     if (!keyword) return;
     
     this.setData({ loading: true });
     
-    // 鐠佸墽鐤嗗鍦惃鍕壐閹兼粎鍌?    wx.showToast({
-      title: '閹兼粎鍌ㄤ腑...',
-      icon: 'loading'
-    });
-    
-    // 鐠佸墽鐤嗗鍦惃鍕壐閹兼粎鍌ㄥ鍦惃鍕壐
-    setTimeout(() => {
+    // 调用搜索API
+    socialService.searchUsers({
+      keyword,
+      page: 1,
+      pageSize: 20
+    }).then((res) => {
       this.setData({
-        searchResults: [],
+        searchResults: res.data || [],
         showSearchResults: true,
         loading: false
       });
       
-      wx.hideToast();
       wx.showToast({
-        title: '閹兼粎鍌ㄥ鍦惃鍕壐閹存劕濮?,
+        title: '搜索成功',
         icon: 'success'
       });
-    }, 500);
+    }).catch((err) => {
+      this.setData({ loading: false });
+      wx.showToast({
+        title: err.message || '搜索失败',
+        icon: 'none'
+      });
+    });
   },
 
   /**
-   * 濞撳懐鈹栭幖婊呭偍
+   * 清空搜索
    */
   clearSearch: function() {
     this.setData({
@@ -369,11 +404,49 @@ Page({
   },
 
   /**
-   * 閺屻儳婀呴悽銊﹀煕鐠囷附鍎?   */
+   * 查看用户详情
+   */
   viewUserDetail: function(e) {
     const { id } = e.currentTarget.dataset;
     wx.navigateTo({
-      url: `/pages/user/userDetail/userDetail?id=${id}`
+      url: `/pages/user/profile/profile?id=${id}`
     });
+  },
+
+  /**
+   * 加载推荐关注用户
+   */
+  loadRecommendedUsers: function() {
+    if (this.data.recommendedLoading || this.data.recommendedLoaded) return;
+    
+    this.setData({ recommendedLoading: true });
+    
+    socialService.getRecommendedUsers(10)
+      .then((res) => {
+        this.setData({
+          recommendedUsers: res.data || [],
+          recommendedLoaded: true,
+          recommendedLoading: false
+        });
+      })
+      .catch((err) => {
+        this.setData({ recommendedLoading: false });
+        
+        wx.showToast({
+          title: err.message || '加载推荐关注失败',
+          icon: 'none'
+        });
+      });
+  },
+
+  /**
+   * 刷新推荐关注用户
+   */
+  refreshRecommendedUsers: function() {
+    this.setData({
+      recommendedLoaded: false,
+      recommendedUsers: []
+    });
+    this.loadRecommendedUsers();
   }
 });

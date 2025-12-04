@@ -1,7 +1,7 @@
-﻿{
-  "navigationBarTitleText": "闁告帒妫濋弨銏㈡嫚閿旇棄鍓?,
-  "enablePullDownRefresh": false,
-  "usingComponents": {
-    "product-card": "../../components/productCard/productCard"
-  }
+{
+  "navigationBarTitleText": "详情",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark",
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black"
 }

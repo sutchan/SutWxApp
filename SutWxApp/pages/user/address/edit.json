@@ -1,16 +1,7 @@
-﻿/**
- * 鏂囦欢鍚? edit.json
- * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: edit JSON 閰嶇疆鏂囦欢
- */
 {
-  "navigationBarTitleText": "缂傛牞绶敹璐у湴鍧€",
-  "usingComponents": {
-    "mp-form": "weui-miniprogram/form/form",
-    "mp-cells": "weui-miniprogram/cells/cells",
-    "mp-cell": "weui-miniprogram/cell/cell",
-    "mp-checkbox-group": "weui-miniprogram/checkbox-group/checkbox-group",
-    "mp-checkbox": "weui-miniprogram/checkbox/checkbox"
-  }
+  "navigationBarTitleText": "地址",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark",
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black"
 }

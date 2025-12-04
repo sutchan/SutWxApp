@@ -1,4 +1,4 @@
-﻿﻿/**
+﻿/**
  * 文件名: app.json
  * 版本号: 1.0.2
  * 更新日期: 2025-11-29
@@ -64,19 +64,19 @@
     "list": [
       {
         "pagePath": "pages/index/index",
-        "text": "棣栭〉",
+        "text": "首页",
         "iconPath": "images/tabbar/home.png",
         "selectedIconPath": "images/tabbar/home-active.png"
       },
       {
         "pagePath": "pages/category/category",
-        "text": "鍒嗙被",
+        "text": "分类",
         "iconPath": "images/tabbar/category.png",
         "selectedIconPath": "images/tabbar/category-active.png"
       },
       {
         "pagePath": "pages/user/user",
-        "text": "鎴戠殑",
+        "text": "我的",
         "iconPath": "images/tabbar/user.png",
         "selectedIconPath": "images/tabbar/user-active.png"
       }

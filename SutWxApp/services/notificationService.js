@@ -1,7 +1,7 @@
 /**
  * 文件名: notificationService.js
- * 版本号: 1.0.2
- * 更新日期: 2025-11-29
+ * 版本号: 1.0.3
+ * 更新日期: 2025-12-03
  * 描述: 通知服务，包含用户通知重试机制 */
 
 const request = require('../utils/request');
@@ -23,7 +23,7 @@ const notificationService = {
   /**
    * 获取通知列表
    * @param {Object} options - 查询参数
-   * @param {string} options.type - 通知类型：all/system/order/promotion/activity
+   * @param {string} options.type - 通知类型：all/system/order/promotion/activity/article/product/social
    * @param {string} options.status - 通知状态：all/read/unread
    * @param {number} options.page - 页码，默认为1
    * @param {number} options.pageSize - 每页数量，默认为20
@@ -223,20 +223,55 @@ const notificationService = {
         return;
       }
       
+      // 检查队列是否已被清空
+      if (retryQueue.length === 0) {
+        isProcessingRetryQueue = false;
+        return;
+      }
+      
       const now = Date.now();
       const nextItem = retryQueue[0];
       
+      // 如果队列已被清空，停止处理
+      if (!nextItem) {
+        isProcessingRetryQueue = false;
+        return;
+      }
+      
       // 如果还没到重试时间，设置定时器
       if (nextItem.timestamp > now) {
-        setTimeout(() => {
+        const timeoutId = setTimeout(() => {
+          // 再次检查队列是否已被清空
+          if (retryQueue.length === 0) {
+            isProcessingRetryQueue = false;
+            return;
+          }
+          
           this.sendSubscribeMessage(nextItem.message, nextItem.retries)
-            .finally(processNext);
+            .finally(() => {
+              // 检查队列是否已被清空
+              if (retryQueue.length === 0) {
+                isProcessingRetryQueue = false;
+                return;
+              }
+              processNext();
+            });
           retryQueue.shift();
         }, nextItem.timestamp - now);
+        
+        // 保存timeoutId以便后续清理
+        this._currentTimeout = timeoutId;
       } else {
         // 到了重试时间，立即发送
         this.sendSubscribeMessage(nextItem.message, nextItem.retries)
-          .finally(processNext);
+          .finally(() => {
+            // 检查队列是否已被清空
+            if (retryQueue.length === 0) {
+              isProcessingRetryQueue = false;
+              return;
+            }
+            processNext();
+          });
         retryQueue.shift();
       }
     };
@@ -261,6 +296,12 @@ const notificationService = {
   clearRetryQueue() {
     retryQueue = [];
     isProcessingRetryQueue = false;
+    
+    // 清除当前定时器
+    if (this._currentTimeout) {
+      clearTimeout(this._currentTimeout);
+      this._currentTimeout = null;
+    }
   }
 };
 

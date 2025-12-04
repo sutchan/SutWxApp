@@ -1,15 +1,7 @@
-﻿//
-// 鏂囦欢鍚? detail.json
-// 鐗堟湰鍙? 1.0.1
-// 鏇存柊鏃ユ湡: 2025-11-24
-// 娴ｆ粏鈧? Sut
-// 鎻忚堪: 閺傚洨鐝风拠锔藉剰妞ょ敻娼伴柊宥囩枂
-//
 {
-  "navigationBarTitleText": "閺傚洨鐝风拠锔藉剰",
+  "navigationBarTitleText": "详情",
   "enablePullDownRefresh": true,
   "backgroundTextStyle": "dark",
   "navigationBarBackgroundColor": "#ffffff",
-  "navigationBarTextStyle": "black",
-  "onReachBottomDistance": 50
+  "navigationBarTextStyle": "black"
 }

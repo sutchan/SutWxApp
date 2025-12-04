@@ -1,11 +1,7 @@
-﻿/**
- * 鏂囦欢鍚? detail.json
- * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: detail JSON 閰嶇疆鏂囦欢
- */
 {
-  "navigationBarTitleText": "閸熷棗鎼х拠锔藉剰",
+  "navigationBarTitleText": "详情",
   "enablePullDownRefresh": true,
-  "backgroundTextStyle": "dark"
+  "backgroundTextStyle": "dark",
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black"
 }

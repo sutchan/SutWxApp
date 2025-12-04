@@ -1,14 +1,7 @@
-﻿/**
- * 鏂囦欢鍚? points.json
- * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: points JSON 閰嶇疆鏂囦欢
- */
 {
-  "navigationBarTitleText": "閹存垹娈戠粔顖氬瀻",
-  "navigationBarBackgroundColor": "#07c160",
-  "navigationBarTextStyle": "white",
-  "backgroundColor": "#f5f5f5",
+  "navigationBarTitleText": "积分",
   "enablePullDownRefresh": true,
-  "onReachBottomDistance": 50
+  "backgroundTextStyle": "dark",
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black"
 }

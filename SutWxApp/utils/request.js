@@ -1,7 +1,7 @@
 /**
  * 文件名: request.js
- * 版本号: 1.1.1
- * 更新日期: 2025-11-27
+ * 版本号: 1.1.2
+ * 更新日期: 2025-12-01
  * 作者: Sut
  * 描述: 网络请求工具类，处理API请求、缓存策略、签名验证等
  */
@@ -11,6 +11,7 @@ const i18n = require('./i18n.js');
 const store = require('./store.js');
 const cacheService = require('./cacheService.js').instance;
 const CACHE_POLICY = require('./cacheService.js').CACHE_POLICY;
+const performanceService = require('./performanceService.js');
 
 // API配置信息
 const API_CONFIG = {
@@ -56,6 +57,7 @@ class Request {
    * @param {Object} options.cache - 缓存配置
    * @param {string} options.cache.policy - 缓存策略: 'NETWORK_FIRST', 'CACHE_FIRST', 'STALE_WHILE_REVALIDATE', 'ONLY_NETWORK', 'ONLY_CACHE'
    * @param {number} options.cache.maxAge - 缓存最大有效期，单位毫秒
+   * @param {boolean} options.handleError - 是否自动处理错误，默认true
    * @returns {Promise} 请求结果Promise
    */
   static async request(options) {
@@ -66,7 +68,8 @@ class Request {
       header = {},
       needAuth = true,
       needSign = true,
-      cache = {}
+      cache = {},
+      handleError = true
     } = options;
     
     // 构建请求选项
@@ -101,73 +104,85 @@ class Request {
     const cacheEnabled = method === 'GET' && cacheService && cache.policy;
     const cacheKey = this._generateCacheKey(requestOptions);
     
-    // 根据缓存策略处理请求
-    if (cacheEnabled) {
-      switch (cache.policy) {
-        case CACHE_POLICY.CACHE_FIRST:
-          // 优先使用缓存
-          const cachedData = await cacheService.get(cacheKey, cache.maxAge);
-          if (cachedData) {
-            return cachedData;
-          }
-          // 缓存不存在时从网络获取并缓存
-          const result = await this._executeWithRetry(requestOptions, API_CONFIG.RETRY_COUNT);
-          await cacheService.set(cacheKey, result, cache.maxAge);
-          return result;
-          
-        case CACHE_POLICY.ONLY_CACHE:
-          // 仅使用缓存
-          const onlyCachedData = await cacheService.get(cacheKey, cache.maxAge);
-          if (onlyCachedData) {
-            return onlyCachedData;
-          }
-          throw new Error(i18n.translate('offline_data_unavailable') || '离线数据不可用');
-          
-        case CACHE_POLICY.NETWORK_FIRST:
-          try {
-            // 优先从网络获取
+    try {
+      // 根据缓存策略处理请求
+      if (cacheEnabled) {
+        switch (cache.policy) {
+          case CACHE_POLICY.CACHE_FIRST:
+            // 优先使用缓存
+            const cachedData = await cacheService.get(cacheKey, cache.maxAge);
+            if (cachedData) {
+              return cachedData;
+            }
+            // 缓存不存在时从网络获取并缓存
             const result = await this._executeWithRetry(requestOptions, API_CONFIG.RETRY_COUNT);
             await cacheService.set(cacheKey, result, cache.maxAge);
             return result;
-          } catch (error) {
-            // 网络请求失败时使用缓存
-            const fallbackData = await cacheService.get(cacheKey);
-            if (fallbackData) {
-              return fallbackData;
+            
+          case CACHE_POLICY.ONLY_CACHE:
+            // 仅使用缓存
+            const onlyCachedData = await cacheService.get(cacheKey, cache.maxAge);
+            if (onlyCachedData) {
+              return onlyCachedData;
             }
-            throw error;
-          }
-          
-        case CACHE_POLICY.STALE_WHILE_REVALIDATE:
-          // 返回过期数据并异步更新
-          const staleData = await cacheService.get(cacheKey);
-          
-          // 异步更新缓存
-          this._executeWithRetry(requestOptions, API_CONFIG.RETRY_COUNT)
-            .then(result => {
-              cacheService.set(cacheKey, result, cache.maxAge);
-            })
-            .catch(error => {
-              console.warn('异步更新缓存失败:', error);
-            });
-          
-          // 如果有过期数据则返回，否则从网络获取
-          if (staleData) {
-            return staleData;
-          }
-          
-          // 没有过期数据时从网络获取
-          return this._executeWithRetry(requestOptions, API_CONFIG.RETRY_COUNT);
-          
-        case CACHE_POLICY.ONLY_NETWORK:
-        default:
-          // 仅从网络获取
-          return this._executeWithRetry(requestOptions, API_CONFIG.RETRY_COUNT);
+            throw new Error(i18n.translate('offline_data_unavailable') || '离线数据不可用');
+            
+          case CACHE_POLICY.NETWORK_FIRST:
+            try {
+              // 优先从网络获取
+              const result = await this._executeWithRetry(requestOptions, API_CONFIG.RETRY_COUNT);
+              await cacheService.set(cacheKey, result, cache.maxAge);
+              return result;
+            } catch (error) {
+              // 网络请求失败时使用缓存
+              const fallbackData = await cacheService.get(cacheKey);
+              if (fallbackData) {
+                return fallbackData;
+              }
+              throw error;
+            }
+            
+          case CACHE_POLICY.STALE_WHILE_REVALIDATE:
+            // 返回过期数据并异步更新
+            const staleData = await cacheService.get(cacheKey);
+            
+            // 异步更新缓存
+            this._executeWithRetry(requestOptions, API_CONFIG.RETRY_COUNT)
+              .then(result => {
+                cacheService.set(cacheKey, result, cache.maxAge);
+              })
+              .catch(error => {
+                console.warn('异步更新缓存失败:', error);
+              });
+            
+            // 如果有过期数据则返回，否则从网络获取
+            if (staleData) {
+              return staleData;
+            }
+            
+            // 没有过期数据时从网络获取
+            return this._executeWithRetry(requestOptions, API_CONFIG.RETRY_COUNT);
+            
+          case CACHE_POLICY.ONLY_NETWORK:
+          default:
+            // 仅从网络获取
+            return this._executeWithRetry(requestOptions, API_CONFIG.RETRY_COUNT);
+        }
       }
+      
+      // 不使用缓存时直接从网络获取
+      return this._executeWithRetry(requestOptions, API_CONFIG.RETRY_COUNT);
+    } catch (error) {
+      // 处理错误
+      if (handleError && store) {
+        store.commit('SET_ERROR', {
+          message: error.message,
+          url: requestOptions.url,
+          method: requestOptions.method
+        });
+      }
+      throw error;
     }
-    
-    // 不使用缓存时直接从网络获取
-    return this._executeWithRetry(requestOptions, API_CONFIG.RETRY_COUNT);
   }
   
   /**
@@ -296,9 +311,30 @@ class Request {
    */
   static _executeWithRetry(options, retryCount) {
     return new Promise((resolve, reject) => {
+      // 记录请求开始时间
+      const startTime = Date.now();
+      
+      // 请求开始，设置加载状态为true
+      if (store) {
+        store.commit('SET_LOADING', true);
+      }
+      
       wx.request({
         ...options,
         success: (res) => {
+          // 记录请求结束时间
+          const endTime = Date.now();
+          
+          // 记录网络请求性能
+          performanceService.recordNetwork({
+            url: options.url,
+            method: options.method || 'GET',
+            startTime,
+            endTime,
+            statusCode: res.statusCode,
+            responseSize: res.data ? JSON.stringify(res.data).length : 0
+          });
+          
           // 处理响应
           if (res.statusCode === 401) {
             // 未授权，清除用户信息和令牌
@@ -315,6 +351,19 @@ class Request {
           }
         },
         fail: (err) => {
+          // 记录请求结束时间
+          const endTime = Date.now();
+          
+          // 记录网络请求性能（失败情况）
+          performanceService.recordNetwork({
+            url: options.url,
+            method: options.method || 'GET',
+            startTime,
+            endTime,
+            statusCode: 0,
+            error: err.errMsg
+          });
+          
           // 请求失败，处理重试
           if (retryCount > 0) {
             // 指数退避重试

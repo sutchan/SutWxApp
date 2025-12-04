@@ -53,7 +53,7 @@
           </view>
         </view>
 
-        <!-- 閺堚偓妤傛ü鍓戦柌鎴﹀櫨妫?-->
+        <!-- 注释 -->
         <view class="rule-item">
           <view class="rule-label">
             <text class="label-text">閺堚偓妤傛ü鍓戦柌鎴﹀櫨妫?/text>

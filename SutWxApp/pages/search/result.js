@@ -9,7 +9,7 @@ Page({
   data: {
     keyword: '', // 閹兼粎鍌ㄩ崗鎶芥暛鐠?    searchHistory: [], // 閹兼粎鍌ㄩ崢鍡楀蕉
     hotSearches: [], // 閻戭參妫幖婊呭偍
-    activeTab: 'all', // 瑜版挸澧犲┑鈧ú鑽ゆ畱閺嶅洨顒烽敍姝沴l(閸忋劑鍎?閵嗕垢roduct(閸熷棗鎼?閵嗕工rticle(閺傚洨鐝?閵嗕菇ser(閻劍鍩?
+    activeTab: 'all', // 注释
     tabs: [
       { key: 'all', value: '閸忋劑鍎? },
       { key: 'product', value: '閸熷棗鎼? },
@@ -26,7 +26,7 @@ Page({
   /**
    * 閻㈢喎鎳￠崨銊︽埂閸戣姤鏆?-閻╂垵鎯夋い鐢告桨閸旂姾娴?   */
   onLoad: function (options) {
-    // 閼惧嘲褰囨导鐘插弳閻ㄥ嫬鍙ч柨顔跨槤
+    // 閼惧嘲褰囨导状态插弳閻ㄥ嫬鍙ч柨顔跨槤
     if (options.keyword) {
       this.setData({
         keyword: options.keyword,

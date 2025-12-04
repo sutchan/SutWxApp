@@ -1,62 +1,59 @@
-﻿﻿/**
- * 文件名 productService.js
- * 版本号 1.0.2
- * 更新日期: 2025-11-29
- * 作者 Sut
- * 描述: 鍟嗗搧鏈嶅姟 - 鎻愪緵鍟嗗搧鐩稿叧鐨凙PI鎺ュ彛璋冪敤
+﻿/**
+ * 文件名: productService.js
+ * 版本号: 1.0.1
+ * 更新日期: 2025-12-01
+ * 描述: 产品服务，处理产品相关业务逻辑
  */
 
 const request = require('../utils/request');
 
-/**
- * 鍟嗗搧鏈嶅姟绫? */
-class ProductService {
+const productService = {
   /**
-   * 鑾峰彇鍟嗗搧鍒楄〃
-   * @param {Object} options - 鏌ヨ鍙傛暟
-   * @param {string} options.categoryId - 鍒嗙被ID
-   * @param {string} options.keyword - 鎼滅储鍏抽敭璇?   * @param {number} options.minPrice - 鏈€浣庝环鏍?   * @param {number} options.maxPrice - 鏈€楂樹环鏍?   * @param {string} options.sort - 鎺掑簭鏂瑰紡锛歱rice_asc(浠锋牸鍗囧簭)銆乸rice_desc(浠锋牸闄嶅簭)銆乻ales(閿€閲?銆乶ewest(鏈€鏂?
-   * @param {number} options.page - 椤电爜锛岄粯璁や负1
-   * @param {number} options.pageSize - 姣忛〉鏁伴噺锛岄粯璁や负20
-   * @returns {Promise<Object>} 鍟嗗搧鍒楄〃鍜屽垎椤典俊鎭?   */
-  async getProductList(options = {}) {
-    const params = {
-      categoryId: options.categoryId || '',
-      keyword: options.keyword || '',
-      minPrice: options.minPrice || '',
-      maxPrice: options.maxPrice || '',
-      sort: options.sort || 'newest',
-      page: options.page || 1,
-      pageSize: options.pageSize || 20
-    };
-
-    return request.get('/products', params);
-  }
-
-  /**
-   * 鑾峰彇鍟嗗搧璇︽儏
-   * @param {string} id - 鍟嗗搧ID
-   * @returns {Promise<Object>} 鍟嗗搧璇︾粏淇℃伅
+   * 获取产品列表
+   * @param {Object} options - 查询参数
+   * @param {number} options.page - 页码，默认为1
+   * @param {number} options.pageSize - 每页数量，默认为20
+   * @param {number} options.categoryId - 分类ID
+   * @param {string} options.keyword - 搜索关键词
+   * @returns {Promise<Object>} 产品列表和分页信息
    */
-  async getProductDetail(id) {
+  async getProducts(options = {}) {
+    const params = {
+      page: options.page || 1,
+      pageSize: options.pageSize || 20,
+      categoryId: options.categoryId,
+      keyword: options.keyword
+    };
+    
+    return request.get('/products', params);
+  },
+
+  /**
+   * 根据ID获取产品信息
+   * @param {string} id - 产品ID
+   * @returns {Promise<Object>} 产品信息
+   * @throws {Error} 当产品不存在时抛出错误
+   */
+  async getProductById(id) {
     if (!id) {
-      throw new Error('鍟嗗搧ID涓嶈兘涓虹┖');
+      throw new Error('产品ID不能为空');
     }
     
     return request.get(`/products/${id}`);
-  }
+  },
 
   /**
-   * 鎼滅储鍟嗗搧
-   * @param {string} keyword - 鎼滅储鍏抽敭璇?   * @param {Object} options - 鏌ヨ鍙傛暟
-   * @param {number} options.page - 椤电爜锛岄粯璁や负1
-   * @param {number} options.pageSize - 姣忛〉鏁伴噺锛岄粯璁や负20
-   * @param {string} options.sort - 鎺掑簭鏂瑰紡
-   * @returns {Promise<Object>} 鎼滅储缁撴灉
+   * 搜索产品
+   * @param {string} keyword - 搜索关键词
+   * @param {Object} options - 查询参数
+   * @param {number} options.page - 页码，默认为1
+   * @param {number} options.pageSize - 每页数量，默认为20
+   * @param {string} options.sort - 排序方式
+   * @returns {Promise<Object>} 搜索结果
    */
   async searchProducts(keyword, options = {}) {
     if (!keyword) {
-      throw new Error('鎼滅储鍏抽敭璇嶄笉鑳戒负绌?);
+      throw new Error('搜索关键词不能为空');
     }
     
     const params = {
@@ -67,162 +64,67 @@ class ProductService {
     };
 
     return request.get('/products/search', params);
-  }
+  },
 
   /**
-   * 鑾峰彇鍟嗗搧鍒嗙被
-   * @returns {Promise<Object>} 鍟嗗搧鍒嗙被鍒楄〃
+   * 获取产品分类
+   * @returns {Promise<Object>} 产品分类列表
    */
-  async getProductCategories() {
-    return request.get('/products/categories');
-  }
+  async getCategories() {
+    return request.get('/categories');
+  },
 
   /**
-   * 鑾峰彇鍟嗗搧璇勮鍒楄〃
-   * @param {string} productId - 鍟嗗搧ID
-   * @param {Object} options - 鏌ヨ鍙傛暟
-   * @param {number} options.page - 椤电爜锛岄粯璁や负1
-   * @param {number} options.pageSize - 姣忛〉鏁伴噺锛岄粯璁や负10
-   * @param {number} options.rating - 璇勫垎绛涢€夛細1-5鏄?   * @param {boolean} options.hasImage - 鏄惁鏈夊浘鐗?   * @returns {Promise<Object>} 璇勮鍒楄〃鍜屽垎椤典俊鎭?   */
-  async getProductReviews(productId, options = {}) {
-    if (!productId) {
-      throw new Error('鍟嗗搧ID涓嶈兘涓虹┖');
+   * 获取推荐产品
+   * @param {number} limit - 推荐数量，默认为10
+   * @returns {Promise<Object>} 推荐产品列表
+   */
+  async getRecommendProducts(limit = 10) {
+    return request.get('/products/recommend', { limit });
+  },
+
+  /**
+   * 获取热门产品
+   * @param {number} limit - 热门产品数量，默认为10
+   * @returns {Promise<Object>} 热门产品列表
+   */
+  async getHotProducts(limit = 10) {
+    return request.get('/products/hot', { limit });
+  },
+
+  /**
+   * 获取产品详情
+   * @param {string} id - 产品ID
+   * @returns {Promise<Object>} 产品详情
+   */
+  async getProductDetail(id) {
+    if (!id) {
+      throw new Error('产品ID不能为空');
+    }
+    
+    return request.get(`/products/${id}/detail`);
+  },
+
+  /**
+   * 获取产品评价
+   * @param {string} id - 产品ID
+   * @param {Object} options - 查询参数
+   * @param {number} options.page - 页码，默认为1
+   * @param {number} options.pageSize - 每页数量，默认为20
+   * @returns {Promise<Object>} 产品评价列表
+   */
+  async getProductReviews(id, options = {}) {
+    if (!id) {
+      throw new Error('产品ID不能为空');
     }
     
     const params = {
       page: options.page || 1,
-      pageSize: options.pageSize || 10,
-      rating: options.rating || '',
-      hasImage: options.hasImage ? 1 : ''
+      pageSize: options.pageSize || 20
     };
-
-    return request.get(`/products/${productId}/reviews`, params);
-  }
-
-  /**
-   * 鑾峰彇鍟嗗搧鎺ㄨ崘鍒楄〃
-   * @param {string} productId - 鍟嗗搧ID锛岀敤浜庤幏鍙栫浉鍏虫帹鑽?   * @param {number} limit - 杩斿洖鏁伴噺闄愬埗锛岄粯璁や负10
-   * @returns {Promise<Object>} 鎺ㄨ崘鍟嗗搧鍒楄〃
-   */
-  async getProductRecommendations(productId, limit = 10) {
-    const params = {
-      limit
-    };
-
-    return request.get(`/products/${productId}/recommendations`, params);
-  }
-
-  /**
-   * 鑾峰彇鐑棬鍟嗗搧鍒楄〃
-   * @param {number} limit - 杩斿洖鏁伴噺闄愬埗锛岄粯璁や负10
-   * @returns {Promise<Object>} 鐑棬鍟嗗搧鍒楄〃
-   */
-  async getHotProducts(limit = 10) {
-    const params = {
-      limit
-    };
-
-    return request.get('/products/hot', params);
-  }
-
-  /**
-   * 鑾峰彇鏂板搧鍒楄〃
-   * @param {number} limit - 杩斿洖鏁伴噺闄愬埗锛岄粯璁や负10
-   * @returns {Promise<Object>} 鏂板搧鍒楄〃
-   */
-  async getNewProducts(limit = 10) {
-    const params = {
-      limit
-    };
-
-    return request.get('/products/new', params);
-  }
-
-  /**
-   * 鑾峰彇鍟嗗搧鎼滅储鍘嗗彶
-   * @returns {Promise<Object>} 鎼滅储鍘嗗彶鍒楄〃
-   */
-  async getSearchHistory() {
-    return request.get('/products/search-history');
-  }
-
-  /**
-   * 娓呯┖鍟嗗搧鎼滅储鍘嗗彶
-   * @returns {Promise<Object>} 鎿嶄綔缁撴灉
-   */
-  async clearSearchHistory() {
-    return request.delete('/products/search-history');
-  }
-
-  /**
-   * 娣诲姞鍟嗗搧鍒版悳绱㈠巻鍙?   * @param {string} keyword - 鎼滅储鍏抽敭璇?   * @returns {Promise<Object>} 鎿嶄綔缁撴灉
-   */
-  async addSearchHistory(keyword) {
-    if (!keyword) {
-      throw new Error('鎼滅储鍏抽敭璇嶄笉鑳戒负绌?);
-    }
     
-    return request.post('/products/search-history', { keyword });
+    return request.get(`/products/${id}/reviews`, params);
   }
-
-  /**
-   * 鑾峰彇鍟嗗搧鏀惰棌鐘舵€?   * @param {string} productId - 鍟嗗搧ID
-   * @returns {Promise<Object>} 鏀惰棌鐘舵€?   */
-  async getFavoriteStatus(productId) {
-    if (!productId) {
-      throw new Error('鍟嗗搧ID涓嶈兘涓虹┖');
-    }
-    
-    return request.get(`/products/${productId}/favorite-status`);
-  }
-
-  /**
-   * 娣诲姞鍟嗗搧鍒版敹钘忓す
-   * @param {string} productId - 鍟嗗搧ID
-   * @returns {Promise<Object>} 鎿嶄綔缁撴灉
-   */
-  async addToFavorites(productId) {
-    if (!productId) {
-      throw new Error('鍟嗗搧ID涓嶈兘涓虹┖');
-    }
-    
-    return request.post('/favorites', { productId });
-  }
-
-  /**
-   * 浠庢敹钘忓す绉婚櫎鍟嗗搧
-   * @param {string} productId - 鍟嗗搧ID
-   * @returns {Promise<Object>} 鎿嶄綔缁撴灉
-   */
-  async removeFromFavorites(productId) {
-    if (!productId) {
-      throw new Error('鍟嗗搧ID涓嶈兘涓虹┖');
-    }
-    
-    return request.delete(`/favorites/${productId}`);
-  }
-
-  /**
-   * 鑾峰彇鍟嗗搧搴撳瓨
-   * @param {string} productId - 鍟嗗搧ID
-   * @param {Object} options - 鏌ヨ鍙傛暟
-   * @param {string} options.skuId - SKU ID锛屽鏋滄湁
-   * @returns {Promise<Object>} 搴撳瓨淇℃伅
-   */
-  async getProductStock(productId, options = {}) {
-    if (!productId) {
-      throw new Error('鍟嗗搧ID涓嶈兘涓虹┖');
-    }
-    
-    const params = {
-      skuId: options.skuId || ''
-    };
-
-    return request.get(`/products/${productId}/stock`, params);
-  }
-}
-
-// 鍒涘缓鍗曚緥瀹炰緥
-const productService = new ProductService();
+};
 
 module.exports = productService;

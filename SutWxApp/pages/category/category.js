@@ -56,7 +56,7 @@ Page({
   },
 
   /**
-   * 鐟欙箑绨抽崝鐘烘祰閺囨潙顦?   * @returns {void}
+   * 鐟欙箑绨抽崝状态烘祰閺囨潙顦?   * @returns {void}
    */
   onReachBottom() {
     // 妫板嫮鏆€閿涙艾鍨庢い闈涘鏉?  },

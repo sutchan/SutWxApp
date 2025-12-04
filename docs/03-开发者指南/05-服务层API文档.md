@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿# 服务层API文档
+﻿# 服务层API文档
 
 <!--
 
@@ -86,122 +86,181 @@
 
 ## 4. 核心服务API
 
-### 4.1 用户服务
+### 4.1 认证服务
 
 #### 4.1.1 接口定义
 
 ```javascript
 /**
- * 用户服务接口
+ * 认证服务接口
  */
-class UserService {
+const authService = {
   /**
-   * 根据ID获取用户信息
-   * @param {number} id - 用户ID
-   * @returns {Promise<User>} 用户信息
-   * @throws {Error} 当用户不存在时抛出错误
-   */
-  async getUserById(id) {}
-
-  /**
-   * 根据用户名获取用户信息
+   * 用户登录
    * @param {string} username - 用户名
-   * @returns {Promise<User>} 用户信息
-   * @throws {Error} 当用户不存在时抛出错误
+   * @param {string} password - 密码
+   * @returns {Promise<Object>} 包含用户信息的Promise
    */
-  async getUserByUsername(username) {}
+  async login(username, password) {},
 
   /**
-   * 创建用户
-   * @param {Object} userData - 用户数据
-   * @returns {Promise<User>} 创建的用户信息
-   * @throws {Error} 当用户名已存在时抛出错误
+   * 用户登出
+   * @returns {Promise<void>} Promise
    */
-  async createUser(userData) {}
+  async logout() {},
 
   /**
-   * 更新用户信息
-   * @param {number} id - 用户ID
-   * @param {Object} userData - 用户数据
-   * @returns {Promise<User>} 更新后的用户信息
-   * @throws {Error} 当用户不存在时抛出错误
+   * 获取当前认证token
+   * @returns {string | null} token
    */
-  async updateUser(id, userData) {}
+  getToken() {},
 
   /**
-   * 删除用户
-   * @param {number} id - 用户ID
-   * @returns {Promise<boolean>} 删除结果
-   * @throws {Error} 当用户不存在时抛出错误
+   * 检查用户是否已登录
+   * @returns {boolean} 是否已登录
    */
-  async deleteUser(id) {}
-}
+  isLoggedIn() {},
+
+  /**
+   * 获取当前用户信息
+   * @returns {Promise<Object>} 用户信息
+   */
+  async getCurrentUser() {},
+
+  /**
+   * 刷新token
+   * @returns {Promise<Object>} 新的token和用户信息
+   */
+  async refreshToken() {},
+
+  /**
+   * 获取用户收藏列表
+   * @param {Object} options - 查询参数
+   * @param {number} options.page - 页码，默认为1
+   * @param {number} options.pageSize - 每页数量，默认为20
+   * @returns {Promise<Object>} 收藏列表和分页信息
+   */
+  async getUserFavorites(options) {},
+
+  /**
+   * 获取用户地址列表
+   * @returns {Promise<Object>} 地址列表
+   */
+  async getUserAddresses() {},
+
+  /**
+   * 添加用户地址
+   * @param {Object} address - 地址信息
+   * @returns {Promise<Object>} 添加结果
+   */
+  async addUserAddress(address) {},
+
+  /**
+   * 更新用户地址
+   * @param {string} id - 地址ID
+   * @param {Object} address - 地址信息
+   * @returns {Promise<Object>} 更新结果
+   */
+  async updateUserAddress(id, address) {},
+
+  /**
+   * 删除用户地址
+   * @param {string} id - 地址ID
+   * @returns {Promise<Object>} 删除结果
+   */
+  async deleteUserAddress(id) {}
+};
 ```
 
 #### 4.1.2 实现示例
 
 ```javascript
 /**
- * 用户服务实现
+ * 认证服务实现
  */
-class UserServiceImpl extends UserService {
-  constructor(userRepository) {
-    super();
-    this.userRepository = userRepository;
-  }
+const request = require('../utils/request');
+const store = require('../utils/store.js');
+const TOKEN_KEY = 'authToken';
 
-  async getUserById(id) {
-    const user = await this.userRepository.findById(id);
-    if (!user) {
-      throw new Error(`用户不存在，ID: ${id}`);
+// 微信API包装，便于测试时模拟
+const wxApi = {
+  setStorageSync: (key, value) => {
+    if (typeof wx !== 'undefined') {
+      return wx.setStorageSync(key, value);
     }
-    return user;
-  }
-
-  async getUserByUsername(username) {
-    const user = await this.userRepository.findByUsername(username);
-    if (!user) {
-      throw new Error(`用户不存在，用户名：${username}`);
+    return null;
+  },
+  getStorageSync: (key) => {
+    if (typeof wx !== 'undefined') {
+      return wx.getStorageSync(key);
     }
-    return user;
-  }
-
-  async createUser(userData) {
-    // 检查用户名是否已存在
-    const existingUser = await this.userRepository.findByUsername(userData.username);
-    if (existingUser) {
-      throw new Error(`用户名已存在：${userData.username}`);
+    return null;
+  },
+  removeStorageSync: (key) => {
+    if (typeof wx !== 'undefined') {
+      return wx.removeStorageSync(key);
     }
-
-    // 创建用户
-    const user = await this.userRepository.create(userData);
-    return user;
-  }
-
-  async updateUser(id, userData) {
-    // 检查用户是否存在
-    const existingUser = await this.userRepository.findById(id);
-    if (!existingUser) {
-      throw new Error(`用户不存在，ID: ${id}`);
+    return null;
+  },
+  showToast: (options) => {
+    if (typeof wx !== 'undefined') {
+      return wx.showToast(options);
     }
-
-    // 更新用户
-    const user = await this.userRepository.update(id, userData);
-    return user;
+    return null;
   }
+};
 
-  async deleteUser(id) {
-    // 检查用户是否存在
-    const existingUser = await this.userRepository.findById(id);
-    if (!existingUser) {
-      throw new Error(`用户不存在，ID: ${id}`);
+const authService = {
+  async login(username, password) {
+    try {
+      const response = await request.post('/auth/login', { username, password }, {
+        needAuth: false
+      });
+      
+      if (response && response.token) {
+        // 保存token到本地存储
+        wxApi.setStorageSync(TOKEN_KEY, response.token);
+        // 保存到store中
+        store.commit('SET_TOKEN', response.token);
+        store.commit('SET_USER_INFO', response.user);
+      }
+      
+      return response;
+    } catch (error) {
+      console.error('登录失败:', error);
+      throw error;
     }
+  },
 
-    // 删除用户
-    const result = await this.userRepository.delete(id);
-    return result;
+  async logout() {
+    try {
+      await request.post('/auth/logout');
+      
+      // 清除本地token和store中的用户信息
+      wxApi.removeStorageSync(TOKEN_KEY);
+      store.commit('SET_TOKEN', null);
+      store.commit('SET_USER_INFO', null);
+    } catch (error) {
+      console.error('登出失败:', error);
+      // 即使API调用失败，也要清除本地token
+      wxApi.removeStorageSync(TOKEN_KEY);
+      store.commit('SET_TOKEN', null);
+      store.commit('SET_USER_INFO', null);
+    }
+  },
+
+  getToken() {
+    return wxApi.getStorageSync(TOKEN_KEY) || null;
+  },
+
+  isLoggedIn() {
+    return !!this.getToken();
   }
-}
+  
+  // 其他方法实现...
+};
+
+module.exports = authService;
 ```
 
 ### 4.2 产品服务
@@ -212,50 +271,74 @@ class UserServiceImpl extends UserService {
 /**
  * 产品服务接口
  */
-class ProductService {
+const productService = {
   /**
    * 获取产品列表
-   * @param {Object} options - 查询选项
-   * @param {number} options.page - 页码
-   * @param {number} options.pageSize - 每页数量
+   * @param {Object} options - 查询参数
+   * @param {number} options.page - 页码，默认为1
+   * @param {number} options.pageSize - 每页数量，默认为20
    * @param {number} options.categoryId - 分类ID
    * @param {string} options.keyword - 搜索关键词
    * @returns {Promise<Object>} 产品列表和分页信息
    */
-  async getProducts(options) {}
+  async getProducts(options) {},
 
   /**
    * 根据ID获取产品信息
-   * @param {number} id - 产品ID
-   * @returns {Promise<Product>} 产品信息
+   * @param {string} id - 产品ID
+   * @returns {Promise<Object>} 产品信息
    * @throws {Error} 当产品不存在时抛出错误
    */
-  async getProductById(id) {}
+  async getProductById(id) {},
 
   /**
-   * 创建产品
-   * @param {Object} productData - 产品数据
-   * @returns {Promise<Product>} 创建的产品信息
+   * 搜索产品
+   * @param {string} keyword - 搜索关键词
+   * @param {Object} options - 查询参数
+   * @param {number} options.page - 页码，默认为1
+   * @param {number} options.pageSize - 每页数量，默认为20
+   * @param {string} options.sort - 排序方式
+   * @returns {Promise<Object>} 搜索结果
    */
-  async createProduct(productData) {}
+  async searchProducts(keyword, options) {},
 
   /**
-   * 更新产品信息
-   * @param {number} id - 产品ID
-   * @param {Object} productData - 产品数据
-   * @returns {Promise<Product>} 更新后的产品信息
-   * @throws {Error} 当产品不存在时抛出错误
+   * 获取产品分类
+   * @returns {Promise<Object>} 产品分类列表
    */
-  async updateProduct(id, productData) {}
+  async getCategories() {},
 
   /**
-   * 删除产品
-   * @param {number} id - 产品ID
-   * @returns {Promise<boolean>} 删除结果
-   * @throws {Error} 当产品不存在时抛出错误
+   * 获取推荐产品
+   * @param {number} limit - 推荐数量，默认为10
+   * @returns {Promise<Object>} 推荐产品列表
    */
-  async deleteProduct(id) {}
-}
+  async getRecommendProducts(limit) {},
+
+  /**
+   * 获取热门产品
+   * @param {number} limit - 热门产品数量，默认为10
+   * @returns {Promise<Object>} 热门产品列表
+   */
+  async getHotProducts(limit) {},
+
+  /**
+   * 获取产品详情
+   * @param {string} id - 产品ID
+   * @returns {Promise<Object>} 产品详情
+   */
+  async getProductDetail(id) {},
+
+  /**
+   * 获取产品评价
+   * @param {string} id - 产品ID
+   * @param {Object} options - 查询参数
+   * @param {number} options.page - 页码，默认为1
+   * @param {number} options.pageSize - 每页数量，默认为20
+   * @returns {Promise<Object>} 产品评价列表
+   */
+  async getProductReviews(id, options) {}
+};
 ```
 
 ### 4.3 订单服务
@@ -313,7 +396,7 @@ class OrderService {
 /**
  * 社交服务接口
  */
-class SocialService {
+const socialService = {
   /**
    * 分享产品
    * @param {Object} options - 分享参数
@@ -321,40 +404,51 @@ class SocialService {
    * @param {string} options.title - 分享标题
    * @param {string} options.description - 分享描述
    * @param {string} options.imageUrl - 分享图片URL
-   * @param {string} options.shareChannel - 分享渠道：wechat/friend/circle/qq/weibo
+   * @param {string} options.shareChannel - 分享渠道: wechat/friend/circle/qq/weibo
    * @returns {Promise<Object>} 分享结果
    */
-  async shareProduct(options) {}
+  async shareProduct(options) {},
 
   /**
    * 获取分享记录
    * @param {Object} options - 查询参数
-   * @param {number} options.page - 页码，默认为1
-   * @param {number} options.pageSize - 每页数量，默认为20
-   * @param {string} options.sort - 排序方式：newest/oldest
+   * @param {number} options.page - 页码，默认1
+   * @param {number} options.pageSize - 每页数量，默认20
+   * @param {string} options.sort - 排序方式: newest/oldest
    * @returns {Promise<Object>} 分享记录列表和分页信息
    */
-  async getShareRecords(options) {}
+  async getShareRecords(options) {},
 
   /**
    * 获取分享统计
-   * @param {string} productId - 产品ID，不传则获取用户全部记录
+   * @param {string} productId - 产品ID，不传则获取用户全部分享统计
    * @returns {Promise<Object>} 分享统计信息
    */
-  async getShareStats(productId) {}
+  async getShareStats(productId) {},
 
   /**
    * 获取产品评论列表
    * @param {Object} options - 查询参数
    * @param {string} options.productId - 产品ID
-   * @param {number} options.page - 页码，默认为1
-   * @param {number} options.pageSize - 每页数量，默认为20
-   * @param {string} options.sort - 排序方式：newest/oldest/highest/lowest
+   * @param {number} options.page - 页码，默认1
+   * @param {number} options.pageSize - 每页数量，默认20
+   * @param {string} options.sort - 排序方式: newest/oldest/highest/lowest
    * @param {number} options.minRating - 最低评分，1-5
-   * @param {boolean} options.withImages - 是否只启用可见图的评论
+   * @param {boolean} options.withImages - 是否只显示带图评论
    * @returns {Promise<Object>} 评论列表和分页信息
    */
-  async getProductComments(options) {}
+  async getProductComments(options) {},
+
+  /**
+   * 获取文章评论列表
+   * @param {Object} options - 查询参数
+   * @param {string} options.articleId - 文章ID
+   * @param {number} options.page - 页码，默认1
+   * @param {number} options.pageSize - 每页数量，默认20
+   * @param {string} options.sort - 排序方式: newest/oldest
+   * @returns {Promise<Object>} 评论列表和分页信息
+   */
+  async getArticleComments(options) {},
 
   /**
    * 添加产品评论
@@ -363,99 +457,300 @@ class SocialService {
    * @param {string} data.content - 评论内容
    * @param {number} data.rating - 评分，1-5
    * @param {Array} data.images - 评论图片URL数组
-   * @param {boolean} data.anonymous - 是否匿名评论
+   * @param {boolean} data.anonymous - 是否匿名
    * @returns {Promise<Object>} 评论结果
    */
-  async addProductComment(data) {}
+  async addProductComment(data) {},
 
   /**
    * 添加文章评论
    * @param {Object} data - 评论数据
    * @param {string} data.articleId - 文章ID
    * @param {string} data.content - 评论内容
-   * @param {boolean} data.anonymous - 是否匿名评论
+   * @param {boolean} data.anonymous - 是否匿名
    * @returns {Promise<Object>} 评论结果
    */
-  async addArticleComment(data) {}
+  async addArticleComment(data) {},
 
   /**
    * 回复评论
    * @param {Object} data - 回复数据
    * @param {string} data.commentId - 评论ID
    * @param {string} data.content - 回复内容
-   * @param {boolean} data.anonymous - 是否匿名回复
+   * @param {boolean} data.anonymous - 是否匿名
    * @returns {Promise<Object>} 回复结果
    */
-  async replyComment(data) {}
+  async replyComment(data) {},
 
   /**
    * 删除评论
    * @param {string} commentId - 评论ID
    * @returns {Promise<Object>} 删除结果
    */
-  async deleteComment(commentId) {}
+  async deleteComment(commentId) {},
 
   /**
    * 点赞评论
    * @param {string} commentId - 评论ID
    * @returns {Promise<Object>} 点赞结果
    */
-  async likeComment(commentId) {}
+  async likeComment(commentId) {},
 
   /**
    * 取消点赞评论
    * @param {string} commentId - 评论ID
    * @returns {Promise<Object>} 取消点赞结果
    */
-  async unlikeComment(commentId) {}
+  async unlikeComment(commentId) {},
 
   /**
    * 点赞产品
    * @param {string} productId - 产品ID
    * @returns {Promise<Object>} 点赞结果
    */
-  async likeProduct(productId) {}
+  async likeProduct(productId) {},
 
   /**
    * 取消点赞产品
    * @param {string} productId - 产品ID
    * @returns {Promise<Object>} 取消点赞结果
    */
-  async unlikeProduct(productId) {}
+  async unlikeProduct(productId) {},
 
   /**
    * 点赞文章
    * @param {string} articleId - 文章ID
    * @returns {Promise<Object>} 点赞结果
    */
-  async likeArticle(articleId) {}
+  async likeArticle(articleId) {},
 
   /**
    * 取消点赞文章
    * @param {string} articleId - 文章ID
    * @returns {Promise<Object>} 取消点赞结果
    */
-  async unlikeArticle(articleId) {}
+  async unlikeArticle(articleId) {},
 
   /**
    * 检查是否已点赞
    * @param {Object} options - 检查参数
    * @param {string} options.targetId - 目标ID
-   * @param {string} options.targetType - 目标类型：product/article/comment
+   * @param {string} options.targetType - 目标类型: product/article/comment
    * @returns {Promise<Object>} 检查结果
    */
-  async checkLikeStatus(options) {}
+  async checkLikeStatus(options) {},
 
   /**
    * 获取点赞记录
    * @param {Object} options - 查询参数
-   * @param {string} options.targetType - 目标类型：product/article/comment/all
-   * @param {number} options.page - 页码，默认为1
-   * @param {number} options.pageSize - 每页数量，默认为20
+   * @param {string} options.targetType - 目标类型: product/article/comment/all
+   * @param {number} options.page - 页码，默认1
+   * @param {number} options.pageSize - 每页数量，默认20
    * @returns {Promise<Object>} 点赞记录列表和分页信息
    */
-  async getLikeRecords(options) {}
-}
+  async getLikeRecords(options) {},
+
+  /**
+   * 获取产品点赞统计
+   * @param {string} productId - 产品ID
+   * @returns {Promise<Object>} 点赞统计信息
+   */
+  async getProductLikeStats(productId) {},
+
+  /**
+   * 获取文章点赞统计
+   * @param {string} articleId - 文章ID
+   * @returns {Promise<Object>} 点赞统计信息
+   */
+  async getArticleLikeStats(articleId) {},
+
+  /**
+   * 获取评论点赞统计
+   * @param {string} commentId - 评论ID
+   * @returns {Promise<Object>} 点赞统计信息
+   */
+  async getCommentLikeStats(commentId) {},
+
+  /**
+   * 举报评论
+   * @param {Object} data - 举报数据
+   * @param {string} data.commentId - 评论ID
+   * @param {string} data.reason - 举报原因: spam/abuse/pornography/violence/other
+   * @param {string} data.description - 举报描述
+   * @returns {Promise<Object>} 举报结果
+   */
+  async reportComment(data) {},
+
+  /**
+   * 获取评论回复列表
+   * @param {string} commentId - 评论ID
+   * @param {number} page - 页码，默认1
+   * @param {number} pageSize - 每页数量，默认20
+   * @returns {Promise<Object>} 回复列表和分页信息
+   */
+  async getCommentReplies(commentId, page, pageSize) {},
+
+  /**
+   * 获取热门评论
+   * @param {Object} options - 查询参数
+   * @param {string} options.targetId - 目标ID
+   * @param {string} options.targetType - 目标类型: product/article
+   * @param {number} options.limit - 数量限制，默认10
+   * @returns {Promise<Array>} 热门评论列表
+   */
+  async getHotComments(options) {},
+
+  /**
+   * 获取用户评论列表
+   * @param {Object} options - 查询参数
+   * @param {string} options.userId - 用户ID，不传则获取当前用户
+   * @param {number} options.page - 页码，默认1
+   * @param {number} options.pageSize - 每页数量，默认20
+   * @param {string} options.sort - 排序方式: newest/oldest
+   * @returns {Promise<Object>} 评论列表和分页信息
+   */
+  async getUserComments(options) {},
+
+  /**
+   * 获取用户点赞列表
+   * @param {Object} options - 查询参数
+   * @param {string} options.userId - 用户ID，不传则获取当前用户
+   * @param {number} options.page - 页码，默认1
+   * @param {number} options.pageSize - 每页数量，默认20
+   * @param {string} options.sort - 排序方式: newest/oldest
+   * @returns {Promise<Object>} 点赞列表和分页信息
+   */
+  async getUserLikes(options) {},
+
+  /**
+   * 获取用户关注列表
+   * @param {Object} options - 查询参数
+   * @param {string} options.userId - 用户ID，不传递则获取当前用户
+   * @param {number} options.page - 页码，默认1
+   * @param {number} options.pageSize - 每页数量，默认20
+   * @param {string} options.sort - 排序方式: newest/oldest
+   * @returns {Promise<Object>} 关注列表和分页信息
+   */
+  async getUserFollowing(options) {},
+
+  /**
+   * 获取用户粉丝列表
+   * @param {Object} options - 查询参数
+   * @param {string} options.userId - 用户ID，不传递则获取当前用户
+   * @param {number} options.page - 页码，默认1
+   * @param {number} options.pageSize - 每页数量，默认20
+   * @param {string} options.sort - 排序方式: newest/oldest
+   * @returns {Promise<Object>} 粉丝列表和分页信息
+   */
+  async getUserFollowers(options) {},
+
+  /**
+   * 关注用户
+   * @param {string} userId - 要关注的用户ID
+   * @returns {Promise<Object>} 关注结果
+   */
+  async followUser(userId) {},
+
+  /**
+   * 取消关注
+   * @param {string} userId - 要取消关注的用户ID
+   * @returns {Promise<Object>} 取消关注结果
+   */
+  async unfollowUser(userId) {},
+
+  /**
+   * 删除粉丝
+   * @param {string} followerId - 粉丝ID
+   * @returns {Promise<Object>} 操作结果
+   */
+  async removeFollower(followerId) {},
+
+  /**
+   * 搜索用户
+   * @param {Object} options - 搜索参数
+   * @param {string} options.keyword - 搜索关键词
+   * @param {number} options.page - 页码，默认1
+   * @param {number} options.pageSize - 每页数量，默认20
+   * @returns {Promise<Object>} 搜索结果和分页信息
+   */
+  async searchUsers(options) {},
+
+  /**
+   * 检查是否已关注
+   * @param {string} userId - 要检查的用户ID
+   * @returns {Promise<Object>} 检查结果
+   */
+  async checkFollowStatus(userId) {},
+
+  /**
+   * 获取推荐关注用户
+   * @param {number} limit - 推荐数量，默认为10
+   * @returns {Promise<Array>} 推荐用户列表
+   */
+  async getRecommendedUsers(limit) {},
+
+  /**
+   * 获取用户关注/粉丝统计
+   * @param {string} userId - 用户ID，不传递则获取当前用户
+   * @returns {Promise<Object>} 统计信息
+   */
+  async getUserFollowStats(userId) {},
+
+  /**
+   * 分享文章
+   * @param {Object} options - 分享参数
+   * @param {string} options.articleId - 文章ID
+   * @param {string} options.title - 分享标题
+   * @param {string} options.description - 分享描述
+   * @param {string} options.imageUrl - 分享图片URL
+   * @param {string} options.shareChannel - 分享渠道: wechat/friend/circle/qq/weibo/link/copy
+   * @param {Object} options.extra - 额外参数
+   * @returns {Promise<Object>} 分享结果
+   */
+  async shareArticle(options) {},
+
+  /**
+   * 分享活动
+   * @param {Object} options - 分享参数
+   * @param {string} options.activityId - 活动ID
+   * @param {string} options.title - 分享标题
+   * @param {string} options.description - 分享描述
+   * @param {string} options.imageUrl - 分享图片URL
+   * @param {string} options.shareChannel - 分享渠道: wechat/friend/circle/qq/weibo/link/copy
+   * @param {Object} options.extra - 额外参数
+   * @returns {Promise<Object>} 分享结果
+   */
+  async shareActivity(options) {},
+
+  /**
+   * 获取分享渠道列表
+   * @returns {Promise<Array>} 分享渠道列表
+   */
+  async getShareChannels() {},
+
+  /**
+   * 获取分享奖励记录
+   * @param {Object} options - 查询参数
+   * @param {number} options.page - 页码，默认1
+   * @param {number} options.pageSize - 每页数量，默认20
+   * @param {string} options.sort - 排序方式: newest/oldest
+   * @returns {Promise<Object>} 奖励记录列表和分页信息
+   */
+  async getShareRewards(options) {},
+
+  /**
+   * 获取分享奖励规则
+   * @returns {Promise<Object>} 奖励规则
+   */
+  async getShareRewardRules() {},
+
+  /**
+   * 检查分享奖励状态
+   * @param {string} shareId - 分享记录ID
+   * @returns {Promise<Object>} 奖励状态
+   */
+  async checkShareRewardStatus(shareId) {}
+};
 ```
 
 ### 4.5 通知服务
@@ -466,7 +761,7 @@ class SocialService {
 /**
  * 通知服务接口
  */
-class NotificationService {
+const notificationService = {
   /**
    * 获取通知列表
    * @param {Object} options - 查询参数
@@ -476,7 +771,7 @@ class NotificationService {
    * @param {number} options.pageSize - 每页数量，默认为20
    * @returns {Promise<Object>} 通知列表和分页信息
    */
-  async getNotificationList(options) {}
+  async getNotificationList(options) {},
 
   /**
    * 获取通知详情
@@ -484,33 +779,33 @@ class NotificationService {
    * @returns {Promise<Object>} 通知详情
    * @throws {Error} 当请求的通知不存在时抛出错误
    */
-  async getNotificationDetail(id) {}
+  async getNotificationDetail(id) {},
 
   /**
    * 标记通知为已读
    * @param {string} id - 通知ID，如果不提供则标记所有未读通知为已读
    * @returns {Promise<Object>} 操作结果
    */
-  async markAsRead(id) {}
+  async markAsRead(id) {},
 
   /**
    * 删除通知
    * @param {string} id - 通知ID，如果不提供则删除所有已读通知
    * @returns {Promise<Object>} 操作结果
    */
-  async deleteNotification(id) {}
+  async deleteNotification(id) {},
 
   /**
    * 获取未读通知数量
    * @returns {Promise<Object>} 未读通知数量
    */
-  async getUnreadCount() {}
+  async getUnreadCount() {},
 
   /**
    * 获取通知设置
    * @returns {Promise<Object>} 通知设置
    */
-  async getNotificationSettings() {}
+  async getNotificationSettings() {},
 
   /**
    * 更新通知设置
@@ -521,38 +816,7 @@ class NotificationService {
    * @param {boolean} settings.activityNotification - 是否接收活动通知
    * @returns {Promise<Object>} 更新结果
    */
-  async updateNotificationSettings(settings) {}
-
-  /**
-   * 订阅推送通知
-   * @param {Object} subscription - 订阅信息
-   * @param {string} subscription.platform - 平台：ios/android/web
-   * @param {string} subscription.token - 设备令牌
-   * @param {string} subscription.userId - 用户ID
-   * @returns {Promise<Object>} 订阅结果
-   * @throws {Error} 当请求的平台或设备令牌为空时抛出错误
-   */
-  async subscribePushNotification(subscription) {}
-
-  /**
-   * 取消订阅推送通知
-   * @param {string} token - 设备令牌
-   * @returns {Promise<Object>} 取消订阅结果
-   * @throws {Error} 当请求的设备令牌为空时抛出错误
-   */
-  async unsubscribePushNotification(token) {}
-
-  /**
-   * 发送自定义通知（管理员功能）
-   * @param {Object} notification - 通知内容
-   * @param {string} notification.title - 通知标题
-   * @param {string} notification.content - 通知内容
-   * @param {string} notification.type - 通知类型
-   * @param {Array} notification.targetUsers - 目标用户ID列表，为空则发送给所有用户
-   * @returns {Promise<Object>} 发送结果
-   * @throws {Error} 当请求的通知标题、内容和类型为空时抛出错误
-   */
-  async sendNotification(notification) {}
+  async updateNotificationSettings(settings) {},
 
   /**
    * 发送订阅消息
@@ -564,31 +828,31 @@ class NotificationService {
    * @returns {Promise<Object>} 发送结果
    * @throws {Error} 当请求的模板ID、消息数据和用户openId为空时抛出错误
    */
-  async sendSubscribeMessage(message, retries) {}
+  async sendSubscribeMessage(message, retries) {},
 
   /**
    * 将消息加入重试队列
    * @param {Object} message - 消息内容
    * @param {number} retries - 当前重试次数
    */
-  addToRetryQueue(message, retries) {}
+  addToRetryQueue(message, retries) {},
 
   /**
    * 处理重试队列
    */
-  processRetryQueue() {}
+  processRetryQueue() {},
 
   /**
    * 获取重试队列状态
    * @returns {Object} 重试队列状态
    */
-  getRetryQueueStatus() {}
+  getRetryQueueStatus() {},
 
   /**
    * 清空重试队列
    */
   clearRetryQueue() {}
-}
+};
 ```
 
 ## 5. 服务层API使用示例

@@ -2,12 +2,14 @@
  * 文件名 stateModules.js
  * 版本号 1.1.0
  * 更新日期: 2025-11-24
- * 娴ｆ粏鈧? Sut
- * 描述: 妫板嫬鐣炬稊澶屽Ц閹焦膩閸ф娉﹂崥鍫礉娑撶儤鐗宠箛鍐ㄥ閼宠姤褰佹笟娑欑垼閸戝棗瀵查惃鍕Ц閹胶顓搁悶鍡樐侀崸? */
+ * 作者: Sut
+ * 描述: 应用状态模块定义，包含用户、UI、购物车和产品等模块的状态管理
+ */
 
-// 鐎电厧鍙哤ebSocket閺堝秴濮?const webSocketService = require('./webSocketService.js').instance;
+// 导入WebSocket服务
+const webSocketService = require('./webSocketService.js').instance;
 
-// 閻劍鍩涘Ο鈥虫健
+// 用户模块
 exports.userModule = {
   state: {
     isLoggedIn: false,
@@ -74,7 +76,8 @@ exports.userModule = {
   actions: {
     async login({ commit }, { username, password }) {
       try {
-        // 濡剝瀚橝PI鐠嬪啰鏁?        const response = await new Promise(resolve => {
+        // 模拟API请求
+        const response = await new Promise(resolve => {
           setTimeout(() => {
             resolve({
               success: true,
@@ -83,7 +86,7 @@ exports.userModule = {
                 userInfo: {
                   id: '1',
                   username,
-                  nickname: '閻劍鍩? + username,
+                  nickname: '用户 ' + username,
                   avatar: '/assets/images/default-avatar.png'
                 },
                 permissions: ['read', 'write']
@@ -97,15 +100,15 @@ exports.userModule = {
           commit('SET_TOKEN', response.data.token);
           commit('SET_PERMISSIONS', response.data.permissions);
           
-          // 閻ц缍嶉幋鎰閸氬氦绻涢幒顧漞bSocket
+          // 登录成功后连接WebSocket
           try {
-            console.log('閻劍鍩涢惂璇茬秿閹存劕濮涢敍宀冪箾閹侯櫇ebSocket...');
+            console.log('登录成功，正在连接WebSocket...');
             await webSocketService.connect({
               userId: response.data.userInfo.id,
               token: response.data.token
             });
           } catch (wsError) {
-            console.error('WebSocket鏉╃偞甯存径杈Е閿涘奔绲炬稉宥呭閸濆秶娅ヨぐ鏇熺ウ缁?', wsError);
+            console.error('WebSocket连接失败，将在后台重试:', wsError);
           }
           
           return response.data;
@@ -119,19 +122,22 @@ exports.userModule = {
     
     async logout({ commit }) {
       try {
-        // 閻ц鍤崜宥嗘焽瀵偓WebSocket鏉╃偞甯?        console.log('閻劍鍩涢惂璇插毉閿涘本鏌囧鈧琖ebSocket鏉╃偞甯?..');
-        await webSocketService.disconnect(1000, '閻劍鍩涢惂璇插毉');
+        // 登出时断开WebSocket连接
+        console.log('登出中，正在断开WebSocket连接...');
+        await webSocketService.disconnect(1000, '用户登出');
       } catch (wsError) {
-        console.error('WebSocket閺傤厼绱戞潻鐐村复婢惰精瑙﹂敍灞肩稻缂佈呯敾閻ц鍤ù浣衡柤:', wsError);
+        console.error('WebSocket断开失败:', wsError);
       }
       
-      // 濞撳懘娅庨惂璇茬秿閻樿埖鈧?      commit('LOGOUT');
-      // 閸欘垯浜掗崷銊ㄧ箹闁插矁鐨熼悽銊ф閸戠瘓PI
+      // 清除用户状态
+      commit('LOGOUT');
+      // 可以在这里调用登出API
     },
     
     async updateProfile({ commit, state }, profileData) {
       try {
-        // 濡剝瀚橝PI鐠嬪啰鏁?        const response = await new Promise(resolve => {
+        // 模拟API请求
+        const response = await new Promise(resolve => {
           setTimeout(() => {
             resolve({
               success: true,
@@ -157,17 +163,17 @@ exports.userModule = {
       return state.permissions.includes('admin');
     },
     displayName(state) {
-      return state.profile.nickname || state.userInfo?.nickname || '閺堫亞娅ヨぐ鏇犳暏閹?;
+      return state.profile.nickname || state.userInfo?.nickname || '未登录用户';
     },
     hasPermission: (state) => (permission) => {
       return state.permissions.includes(permission);
     }
   },
   
-  persist: true // 閹镐椒绠欓崠鏍嚉濡€虫健
+  persist: true // 持久化用户模块
 };
 
-// UI濡€虫健
+// UI模块
 exports.uiModule = {
   state: {
     loading: false,
@@ -184,8 +190,8 @@ exports.uiModule = {
       show: false,
       title: '',
       content: '',
-      confirmText: '绾喖鐣?,
-      cancelText: '閸欐牗绉?
+      confirmText: '确认',
+      cancelText: '取消'
     }
   },
   
@@ -248,8 +254,8 @@ exports.uiModule = {
           show: true,
           title: '',
           content: '',
-          confirmText: '绾喖鐣?,
-          cancelText: '閸欐牗绉?,
+          confirmText: '确认',
+          cancelText: '取消',
           ...modalOptions
         }
       };
@@ -269,7 +275,7 @@ exports.uiModule = {
   actions: {
     showToast({ commit, dispatch }, toastOptions) {
       commit('SHOW_TOAST', toastOptions);
-      // 閼奉亜濮╅梾鎰
+      // 自动隐藏
       setTimeout(() => {
         commit('HIDE_TOAST');
       }, toastOptions.duration || 3000);
@@ -293,7 +299,7 @@ exports.uiModule = {
     
     setTheme({ commit }, theme) {
       commit('SET_THEME', theme);
-      // 閸欘垯浜掗崷銊ㄧ箹闁插苯绨查悽銊ゅ瘜妫版ê鍩屾い鐢告桨
+      // 更新导航栏颜色
       wx.setNavigationBarColor({
         frontColor: theme === 'dark' ? '#ffffff' : '#000000',
         backgroundColor: theme === 'dark' ? '#1a1a1a' : '#ffffff'
@@ -313,10 +319,11 @@ exports.uiModule = {
     }
   },
   
-  persist: true // 閹镐椒绠欓崠鏍嚉濡€虫健
+  persist: true // 持久化UI模块
 };
 
-// 鐠愵厾澧挎潪锔侥侀崸?exports.cartModule = {
+// 购物车模块
+exports.cartModule = {
   state: {
     items: [],
     total: 0,
@@ -336,10 +343,12 @@ exports.uiModule = {
       let newItems;
       
       if (existingItemIndex >= 0) {
-        // 閸熷棗鎼у鎻掔摠閸︻煉绱濇晶鐐插閺佷即鍣?        newItems = [...state.items];
+        // 商品已存在，增加数量
+        newItems = [...state.items];
         newItems[existingItemIndex].quantity += product.quantity || 1;
       } else {
-        // 濞ｈ濮為弬鏉挎櫌閸?        newItems = [...state.items, {
+        // 新商品，添加到购物车
+        newItems = [...state.items, {
           ...product,
           quantity: product.quantity || 1
         }];
@@ -403,9 +412,9 @@ exports.uiModule = {
     addToCart({ commit, dispatch }, product) {
       commit('ADD_TO_CART', product);
       commit('UPDATE_TOTALS');
-      // 閺勫墽銇氬ǎ璇插閹存劕濮涢幓鎰仛
+      // 显示添加成功提示
       dispatch('ui/SHOW_TOAST', {
-        message: '瀹稿弶鍧婇崝鐘插煂鐠愵厾澧挎潪?,
+        message: '已添加到购物车',
         type: 'success'
       }, { root: true });
     },
@@ -428,17 +437,20 @@ exports.uiModule = {
       try {
         commit('ui/SET_LOADING', true, { root: true });
         
-        // 濡剝瀚橝PI鐠嬪啰鏁?        const response = await new Promise(resolve => {
+        // 模拟API请求
+        const response = await new Promise(resolve => {
           setTimeout(() => {
             resolve({ success: true, orderId: 'ORD' + Date.now() });
           }, 1000);
         });
         
         if (response.success) {
-          // 濞撳懐鈹栫拹顓犲⒖鏉?          commit('CLEAR_CART');
+          // 清空购物车
+          commit('CLEAR_CART');
           
-          // 閺勫墽銇氶幋鎰閹绘劗銇?          dispatch('ui/SHOW_TOAST', {
-            message: '鐠併垹宕熼崚娑樼紦閹存劕濮?,
+          // 显示成功提示
+          dispatch('ui/SHOW_TOAST', {
+            message: '下单成功',
             type: 'success'
           }, { root: true });
           
@@ -449,7 +461,7 @@ exports.uiModule = {
         console.error('Checkout error:', error);
         
         dispatch('ui/SHOW_TOAST', {
-          message: '鐠併垹宕熼崚娑樼紦婢惰精瑙?,
+          message: '下单失败',
           type: 'error'
         }, { root: true });
         
@@ -468,10 +480,10 @@ exports.uiModule = {
     getItemById: state => id => state.items.find(item => item.id === id)
   },
   
-  persist: true // 閹镐椒绠欓崠鏍嚉濡€虫健
+  persist: true // 持久化购物车模块
 };
 
-// 閸熷棗鎼уΟ鈥虫健
+// 产品模块
 exports.productModule = {
   state: {
     products: [],
@@ -520,7 +532,7 @@ exports.productModule = {
         },
         pagination: {
           ...state.pagination,
-          page: 1 // 闁插秶鐤嗘い鐢电垳
+          page: 1 // 筛选条件变化时重置页码
         }
       };
     },
@@ -556,14 +568,15 @@ exports.productModule = {
       try {
         commit('ui/SET_LOADING', true, { root: true });
         
-        // 濡剝瀚橝PI鐠嬪啰鏁?        const response = await new Promise(resolve => {
+        // 模拟API请求
+        const response = await new Promise(resolve => {
           setTimeout(() => {
             const mockProducts = Array.from({ length: state.pagination.pageSize }, (_, i) => ({
               id: String((state.pagination.page - 1) * state.pagination.pageSize + i + 1),
-              name: `閸熷棗鎼?${(state.pagination.page - 1) * state.pagination.pageSize + i + 1}`,
+              name: `产品 ${(state.pagination.page - 1) * state.pagination.pageSize + i + 1}`,
               price: Math.floor(Math.random() * 1000) + 100,
               image: '/assets/images/product-placeholder.png',
-              description: '鏉╂瑦妲告稉鈧稉顏嗐仛娓氬鏅㈤崫浣瑰伎鏉?
+              description: '这是产品的详细描述，包含产品的功能、特点等信息。'
             }));
             
             resolve({
@@ -593,19 +606,20 @@ exports.productModule = {
       try {
         commit('ui/SET_LOADING', true, { root: true });
         
-        // 濡剝瀚橝PI鐠嬪啰鏁?        const response = await new Promise(resolve => {
+        // 模拟API请求
+        const response = await new Promise(resolve => {
           setTimeout(() => {
             resolve({
               success: true,
               data: {
                 id: productId,
-                name: `閸熷棗鎼?${productId}`,
+                name: `产品 ${productId}`,
                 price: Math.floor(Math.random() * 1000) + 100,
                 image: '/assets/images/product-placeholder.png',
-                description: '鏉╂瑦妲告稉鈧稉顏囶嚊缂佸棛娈戦崯鍡楁惂閹诲繗鍫穱鈩冧紖',
+                description: '这是产品的详细描述，包含产品的功能、特点等信息。',
                 specifications: [
-                  { name: '閸濅胶澧?, value: '閸濅胶澧滱' },
-                  { name: '鐟欏嫭鐗?, value: '閺嶅洤鍣崹? }
+                  { name: '品牌', value: '品牌A' },
+                  { name: '型号', value: '型号X' }
                 ]
               }
             });
@@ -628,15 +642,16 @@ exports.productModule = {
     
     async fetchCategories({ commit }) {
       try {
-        // 濡剝瀚橝PI鐠嬪啰鏁?        const response = await new Promise(resolve => {
+        // 模拟API请求
+        const response = await new Promise(resolve => {
           setTimeout(() => {
             resolve({
               success: true,
               data: [
-                { id: '1', name: '閻㈤潧鐡欐禍褍鎼? },
-                { id: '2', name: '鐎硅泛鐪抽悽銊ユ惂' },
-                { id: '3', name: '閺堝秷顥婇棄瀣檮' },
-                { id: '4', name: '妞嬬喎鎼ф顔芥灐' }
+                { id: '1', name: '电子产品' },
+                { id: '2', name: '家居用品' },
+                { id: '3', name: '服装鞋帽' },
+                { id: '4', name: '食品饮料' }
               ]
             });
           }, 300);
@@ -662,17 +677,18 @@ exports.productModule = {
   getters: {
     filteredProducts: (state) => {
       return state.products.filter(product => {
-        // 閸掑棛琚潻鍥ㄦ姢
+        // 分类筛选
         if (state.filters.category && product.categoryId !== state.filters.category) {
           return false;
         }
         
-        // 娴犻攱鐗搁懠鍐ㄦ纯鏉╁洦鎶?        if (product.price < state.filters.priceRange[0] || 
+        // 价格范围筛选
+        if (product.price < state.filters.priceRange[0] || 
             product.price > state.filters.priceRange[1]) {
           return false;
         }
         
-        // 閹兼粎鍌ㄦ潻鍥ㄦ姢
+        // 搜索筛选
         if (state.filters.search && 
             !product.name.toLowerCase().includes(state.filters.search.toLowerCase())) {
           return false;
@@ -689,5 +705,5 @@ exports.productModule = {
     hasMore: state => state.pagination.page < Math.ceil(state.pagination.total / state.pagination.pageSize)
   },
   
-  persist: false // 娑撳秵瀵旀稊鍛閸熷棗鎼ч弫鐗堝祦
+  persist: false // 不持久化产品模块
 };

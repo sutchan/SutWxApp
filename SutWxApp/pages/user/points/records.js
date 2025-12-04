@@ -7,7 +7,7 @@ Page({
   /**
    * 妞ょ敻娼伴惃鍕灥婵鏆熼幑?   */
   data: {
-    activeTab: 'all', // 瑜版挸澧犲┑鈧ú鑽ゆ畱閺嶅洨顒烽敍姝沴l(閸忋劑鍎?閵嗕躬arn(閼惧嘲褰?閵嗕菇se(娴ｈ法鏁?
+    activeTab: 'all', // 注释
     tabs: [
       { key: 'all', value: '閸忋劑鍎? },
       { key: 'earn', value: '閼惧嘲褰? },
@@ -134,12 +134,12 @@ Page({
     const allRecords = [
       { id: 1, type: 'earn', amount: 10, title: '濮ｅ繑妫╃粵鎯у煂', desc: '鏉╃偟鐢荤粵鎯у煂3婢?, time: '2023-06-15 08:30:00' },
       { id: 2, type: 'earn', amount: 50, title: '鐎瑰本鍨氭禒璇插', desc: '鐎瑰苯鏉芥稉顏冩眽鐠у嫭鏋?, time: '2023-06-14 15:20:00' },
-      { id: 3, type: 'use', amount: -100, title: '缁夘垰鍨庨崗鎴炲床', desc: '閸忔垶宕?0閸忓啩绱幆鐘插煖', time: '2023-06-13 10:15:00' },
+      { id: 3, type: 'use', amount: -100, title: '缁夘垰鍨庨崗鎴炲床', desc: '閸忔垶宕?0閸忓啩绱幆状态插煖', time: '2023-06-13 10:15:00' },
       { id: 4, type: 'earn', amount: 20, title: '鐠囧嫪鐜崯鍡楁惂', desc: '鐠囧嫪鐜鑼跺枠娑旀澘鏅㈤崫?, time: '2023-06-12 14:45:00' },
-      { id: 5, type: 'use', amount: -200, title: '缁夘垰鍨庨崗鎴炲床', desc: '閸忔垶宕?0閸忓啩绱幆鐘插煖', time: '2023-06-10 09:30:00' },
+      { id: 5, type: 'use', amount: -200, title: '缁夘垰鍨庨崗鎴炲床', desc: '閸忔垶宕?0閸忓啩绱幆状态插煖', time: '2023-06-10 09:30:00' },
       { id: 6, type: 'earn', amount: 30, title: '閸掑棔闊╅崯鍡楁惂', desc: '閸掑棔闊╅崯鍡楁惂缂佹瑥銈介崣?, time: '2023-06-08 16:20:00' },
       { id: 7, type: 'earn', amount: 100, title: '閺傛壆鏁ら幋宄邦殯閸?, desc: '娉ㄥ唽闁胶袧閸?, time: '2023-06-01 12:00:00' },
-      { id: 8, type: 'use', amount: -50, title: '缁夘垰鍨庨崗鎴炲床', desc: '閸忔垶宕?閸忓啩绱幆鐘插煖', time: '2023-05-28 11:10:00' }
+      { id: 8, type: 'use', amount: -50, title: '缁夘垰鍨庨崗鎴炲床', desc: '閸忔垶宕?閸忓啩绱幆状态插煖', time: '2023-05-28 11:10:00' }
     ];
     
     // 閺嶈宓佽ぐ鎾冲閺嶅洨顒锋潻鍥ㄦ姢閺佺増宓?    let filteredRecords = allRecords;

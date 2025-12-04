@@ -1,14 +1,7 @@
-﻿/**
- * 鏂囦欢鍚? tasks.json
- * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: tasks JSON 閰嶇疆鏂囦欢
- */
 {
-  "navigationBarTitleText": "缁夘垰鍨庢禒璇插",
-  "navigationBarBackgroundColor": "#07c160",
-  "navigationBarTextStyle": "white",
-  "backgroundColor": "#f5f5f5",
+  "navigationBarTitleText": "任务",
   "enablePullDownRefresh": true,
-  "onReachBottomDistance": 50
+  "backgroundTextStyle": "dark",
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black"
 }

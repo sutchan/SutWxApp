@@ -8,7 +8,7 @@ Page({
   /**
    * 妞ょ敻娼伴惃鍕灥婵鏆熼幑?   */
   data: {
-    activeTab: 0, // 瑜版挸澧犲┑鈧ú鑽ゆ畱閺嶅洨顒?0:閸熷棗鎼?1:閺傚洨鐝?    tabs: ['閸熷棗鎼?, '閺傚洨鐝?],
+    activeTab: 0, // 注释
     productFavorites: [], // 閸熷棗鎼ч弨鎯版閸掓銆?    articleFavorites: [], // 閺傚洨鐝烽弨鎯版閸掓銆?    loading: false, // 加载状态   hasMore: {
       product: true, // 閸熷棗鎼ч弰顖氭儊鏉╂ɑ婀侀弴鏉戭樋閺佺増宓?      article: true  // 閺傚洨鐝烽弰顖氭儊鏉╂ɑ婀侀弴鏉戭樋閺佺増宓?    },
     page: {
@@ -281,7 +281,7 @@ Page({
     }
     
     wx.showModal({
-      title: '绾喛顓婚崚鐘绘珟',
+      title: '绾喛顓婚崚状态绘珟',
       content: `绾喖鐣剧憰浣稿灩闂勩倝鈧鑵戦惃?{selectedItems.length}娑擃亝鏁归挊蹇撴偋閿涚剫,
       success: (res) => {
         if (res.confirm) {

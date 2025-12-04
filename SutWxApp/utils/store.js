@@ -1,39 +1,49 @@
-﻿/**
+﻿﻿﻿/**
  * 文件名 store.js
  * 版本号 1.0.2
  * 更新日期: 2025-11-29
- * 娴ｆ粏鈧? Sut
- * 閸忋劌鐪悩鑸碘偓浣侯吀閻炲棗娅掗敍灞界唨娴滃氦顫囩€电喕鈧懏膩瀵繐鐤勯悳鎵畱缁犫偓閺勬挾濮搁幀浣侯吀閻炲棙鏌熷鍫礉閹绘劒绶甸悩鑸碘偓浣侯吀閻炲棗鎷扮紒鍕闂傛挳鈧矮淇婇崝鐔诲厴
+ * 作者: Sut
+ * 描述: 状态管理类，用于管理应用的全局状态
  */
 
 /**
- * 閸忋劌鐪悩鑸碘偓浣侯吀閻炲棗娅? * 娴ｈ法鏁ょ憴鍌氱檪閼板懏膩瀵繐鐤勯悳鎵Ц閹胶娈戦梿鍡曡厬缁狅紕鎮婇崪宀€绮嶆禒鍫曟？闁矮淇? */
+ * 状态管理类
+ * 用于管理应用的全局状态，支持状态订阅、状态变更等功能
+ */
 class Store {
   constructor() {
     this.state = {
-      // 閻劍鍩涢惄绋垮彠閻樿埖鈧?      user: {
+      // 用户状态
+      user: {
         isLoggedIn: false,
         userInfo: null,
         token: null
       },
-      // 鐠愵厾澧挎潪锔惧Ц閹?      cart: {
+      // 购物车状态
+      cart: {
         items: [],
         total: 0
       },
-      // 閸忋劌鐪琔I閻樿埖鈧?      ui: {
+      // UI状态
+      ui: {
         loading: false,
         error: null
       },
-      // 缁夘垰鍨庨悩鑸碘偓?      points: {
+      // 积分状态
+      points: {
         balance: 0,
         tasks: []
       }
     };
-    this.listeners = new Map(); // 鐎涙ê鍋嶉悩鑸碘偓浣烘磧閸氼剙娅?    this.mutations = new Map(); // 鐎涙ê鍋嶉悩鑸碘偓浣稿綁閺囧瓨鏌熷▔?  }
+    this.listeners = new Map(); // 状态监听器
+    this.mutations = new Map(); // 状态变更函数
+  }
 
   /**
-   * 閼惧嘲褰囬悩鑸碘偓?   * @param {string} path - 閻樿埖鈧浇鐭惧鍕剁礉婵?'user.userInfo'
-   * @returns {*} 閻樿埖鈧礁鈧?   */
+   * 获取状态
+   * @param {string} path - 状态路径，如'user.userInfo'
+   * @returns {*} 状态值
+   */
   getState(path = '') {
     if (!path) return this.state;
     
@@ -43,7 +53,9 @@ class Store {
   }
 
   /**
-   * 濞夈劌鍞介悩鑸碘偓浣稿綁閺囧瓨鏌熷▔?   * @param {string} name - 閸欐ɑ娲块弬瑙勭《閸?   * @param {Function} mutation - 閸欐ɑ娲块弬瑙勭《
+   * 注册状态变更函数
+   * @param {string} name - 变更函数名称
+   * @param {Function} mutation - 变更函数
    */
   registerMutation(name, mutation) {
     if (typeof mutation !== 'function') {
@@ -53,7 +65,9 @@ class Store {
   }
 
   /**
-   * 閹绘劒姘﹂悩鑸碘偓浣稿綁閺?   * @param {string} name - 閸欐ɑ娲块弬瑙勭《閸?   * @param {*} payload - 閸欐ɑ娲块崣鍌涙殶
+   * 提交状态变更
+   * @param {string} name - 变更函数名称
+   * @param {*} payload - 变更数据
    */
   commit(name, payload) {
     if (!this.mutations.has(name)) {
@@ -63,12 +77,14 @@ class Store {
     
     const mutation = this.mutations.get(name);
     try {
-      // 閹笛嗩攽閻樿埖鈧礁褰夐弴?      const newState = mutation(this.state, payload);
+      // 执行变更函数
+      const newState = mutation(this.state, payload);
       if (newState !== undefined) {
         const oldState = this.state;
         this.state = { ...this.state, ...newState };
         
-        // 閸欘亝婀佽ぐ鎾跺Ц閹胶婀″锝嗘暭閸欐ɑ妞傞幍宥夆偓姘辩叀閻╂垵鎯夐崳?        if (JSON.stringify(oldState) !== JSON.stringify(this.state)) {
+        // 通知监听器
+        if (JSON.stringify(oldState) !== JSON.stringify(this.state)) {
           this.notify();
         }
       }
@@ -78,7 +94,10 @@ class Store {
   }
 
   /**
-   * 濞夈劌鍞介悩鑸碘偓浣烘磧閸氼剙娅?   * @param {string} id - 閻╂垵鎯夐崳銊ユ暜娑撯偓閺嶅洩鐦?   * @param {Function} callback - 閻樿埖鈧礁褰夐崠鏍ф礀鐠嬪啫鍤遍弫?   */
+   * 订阅状态变化
+   * @param {string} id - 订阅者ID
+   * @param {Function} callback - 回调函数
+   */
   subscribe(id, callback) {
     if (typeof callback !== 'function') {
       throw new Error('Callback must be a function');
@@ -87,13 +106,16 @@ class Store {
   }
 
   /**
-   * 閸欐牗绉烽悩鑸碘偓浣烘磧閸?   * @param {string} id - 閻╂垵鎯夐崳銊ユ暜娑撯偓閺嶅洩鐦?   */
+   * 取消订阅
+   * @param {string} id - 订阅者ID
+   */
   unsubscribe(id) {
     this.listeners.delete(id);
   }
 
   /**
-   * 闁氨鐓￠幍鈧張澶屾磧閸氼剙娅掗悩鑸碘偓浣稿嚒閺囧瓨鏌?   */
+   * 通知所有监听器
+   */
   notify() {
     this.listeners.forEach(callback => {
       try {
@@ -105,7 +127,8 @@ class Store {
   }
 
   /**
-   * 閹镐椒绠欓崠鏍Ц閹礁鍩岄張顒€婀寸€涙ê鍋?   * @param {string} key - 閺堫剙婀寸€涙ê鍋嶉柨顔兼倳
+   * 持久化状态
+   * @param {string} key - 存储键名
    */
   persist(key = 'sutwxapp_state') {
     try {
@@ -116,7 +139,8 @@ class Store {
   }
 
   /**
-   * 娴犲孩婀伴崷鏉跨摠閸屻劍浠径宥囧Ц閹?   * @param {string} key - 閺堫剙婀寸€涙ê鍋嶉柨顔兼倳
+   * 从本地存储恢复状态
+   * @param {string} key - 存储键名
    */
   restore(key = 'sutwxapp_state') {
     try {
@@ -131,9 +155,11 @@ class Store {
   }
 }
 
-// 閸掓稑缂撻獮璺侯嚤閸戠皧tore鐎圭偘绶?const store = new Store();
+// 导出单例实例
+const store = new Store();
 
-// 濞夈劌鍞界敮鍝ユ暏閻ㄥ嫮濮搁幀浣稿綁閺囧瓨鏌熷▔?store.registerMutation('SET_USER_INFO', (state, userInfo) => ({
+// 注册默认的mutations
+store.registerMutation('SET_USER_INFO', (state, userInfo) => ({
   user: {
     ...state.user,
     userInfo,

@@ -1,1 +1,7 @@
-﻿{\n  "navigationBarTitleText": "閫氱煡璁剧疆",\n  "usingComponents": {}\n}
+{
+  "navigationBarTitleText": "通知",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark",
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black"
+}

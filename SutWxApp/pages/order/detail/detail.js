@@ -290,7 +290,7 @@ Page({
   buyAgain() {
     // 鐎圭偤妾い鍦窗娑擃厼绨茬拠銉ョ殺閸熷棗鎼уǎ璇插閸掓媽鍠橀悧鈺勬簠
     wx.showToast({
-      title: i18n.translate('瀹稿弶鍧婇崝鐘插煂鐠愵厾澧挎潪?),
+      title: i18n.translate('瀹稿弶鍧婇崝状态插煂鐠愵厾澧挎潪?),
       icon: 'success'
     });
   },

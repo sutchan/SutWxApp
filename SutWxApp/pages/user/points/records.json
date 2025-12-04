@@ -1,11 +1,7 @@
-﻿/**
- * 鏂囦欢鍚? records.json
- * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: records JSON 閰嶇疆鏂囦欢
- */
 {
-  "navigationBarTitleText": "缁夘垰鍨庣拋鏉跨秿",
+  "navigationBarTitleText": "积分",
   "enablePullDownRefresh": true,
-  "onReachBottomDistance": 50
+  "backgroundTextStyle": "dark",
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black"
 }

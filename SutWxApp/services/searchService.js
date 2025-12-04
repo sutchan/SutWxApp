@@ -1,24 +1,27 @@
-﻿﻿/**
+﻿/**
  * 文件名 searchService.js
  * 版本号 1.0.1
  * 更新日期: 2025-11-28
- * 描述: 鎼滅储鏈嶅姟
+ * 描述: 搜索服务
  */
 
 const request = require('../utils/request');
 
 /**
- * 鎼滅储鏈嶅姟
+ * 搜索服务
  */
 const searchService = {
   /**
-   * 閫氱敤鎼滅储鎺ュ彛
-   * @param {Object} options - 鎼滅储鍙傛暟
-   * @param {string} options.keyword - 鎼滅储鍏抽敭璇?   * @param {string} options.type - 鎼滅储绫诲瀷锛歛ll/product/article/user/order
-   * @param {Object} options.filters - 绛涢€夋潯浠?   * @param {string} options.sort - 鎺掑簭鏂瑰紡
-   * @param {number} options.page - 椤电爜锛岄粯璁や负1
-   * @param {number} options.pageSize - 姣忛〉鏁伴噺锛岄粯璁や负20
-   * @returns {Promise<Object>} 鎼滅储缁撴灉鍜屽垎椤典俊鎭?   */
+   * 通用搜索接口
+   * @param {Object} options - 搜索参数
+   * @param {string} options.keyword - 搜索关键词
+   * @param {string} options.type - 搜索类型：all/product/article/user/order
+   * @param {Object} options.filters - 筛选条件
+   * @param {string} options.sort - 排序方式
+   * @param {number} options.page - 页码，默认为1
+   * @param {number} options.pageSize - 每页数量，默认为20
+   * @returns {Promise<Object>} 搜索结果和分页信息
+   */
   async search(options = {}) {
     const {
       keyword = '',
@@ -40,14 +43,18 @@ const searchService = {
   },
 
   /**
-   * 鎼滅储鍟嗗搧
-   * @param {Object} options - 鎼滅储鍙傛暟
-   * @param {string} options.keyword - 鎼滅储鍏抽敭璇?   * @param {string} options.categoryId - 鍒嗙被ID
-   * @param {string} options.brandId - 鍝佺墝ID
-   * @param {string} options.minPrice - 鏈€浣庝环鏍?   * @param {string} options.maxPrice - 鏈€楂樹环鏍?   * @param {string} options.sort - 鎺掑簭鏂瑰紡锛歱rice_asc/price_desc/sales_desc/newest/default
-   * @param {number} options.page - 椤电爜锛岄粯璁や负1
-   * @param {number} options.pageSize - 姣忛〉鏁伴噺锛岄粯璁や负20
-   * @returns {Promise<Object>} 鎼滅储缁撴灉鍜屽垎椤典俊鎭?   */
+   * 搜索商品
+   * @param {Object} options - 搜索参数
+   * @param {string} options.keyword - 搜索关键词
+   * @param {string} options.categoryId - 分类ID
+   * @param {string} options.brandId - 品牌ID
+   * @param {string} options.minPrice - 最低价格
+   * @param {string} options.maxPrice - 最高价格
+   * @param {string} options.sort - 排序方式：price_asc/price_desc/sales_desc/newest/default
+   * @param {number} options.page - 页码，默认为1
+   * @param {number} options.pageSize - 每页数量，默认为20
+   * @returns {Promise<Object>} 搜索结果和分页信息
+   */
   async searchProducts(options = {}) {
     const {
       keyword = '',
@@ -73,14 +80,16 @@ const searchService = {
   },
 
   /**
-   * 鎼滅储鏂囩珷
-   * @param {Object} options - 鎼滅储鍙傛暟
-   * @param {string} options.keyword - 鎼滅储鍏抽敭璇?   * @param {string} options.categoryId - 鍒嗙被ID
-   * @param {string} options.tag - 鏍囩
-   * @param {string} options.sort - 鎺掑簭鏂瑰紡锛歱ublish_desc/views_desc/likes_desc/default
-   * @param {number} options.page - 椤电爜锛岄粯璁や负1
-   * @param {number} options.pageSize - 姣忛〉鏁伴噺锛岄粯璁や负20
-   * @returns {Promise<Object>} 鎼滅储缁撴灉鍜屽垎椤典俊鎭?   */
+   * 搜索文章
+   * @param {Object} options - 搜索参数
+   * @param {string} options.keyword - 搜索关键词
+   * @param {string} options.categoryId - 分类ID
+   * @param {string} options.tag - 标签
+   * @param {string} options.sort - 排序方式：publish_desc/views_desc/likes_desc/default
+   * @param {number} options.page - 页码，默认为1
+   * @param {number} options.pageSize - 每页数量，默认为20
+   * @returns {Promise<Object>} 搜索结果和分页信息
+   */
   async searchArticles(options = {}) {
     const {
       keyword = '',
@@ -102,12 +111,14 @@ const searchService = {
   },
 
   /**
-   * 鎼滅储鐢ㄦ埛
-   * @param {Object} options - 鎼滅储鍙傛暟
-   * @param {string} options.keyword - 鎼滅储鍏抽敭璇?   * @param {string} options.sort - 鎺掑簭鏂瑰紡锛歠ans_desc/follows_desc/articles_desc/default
-   * @param {number} options.page - 椤电爜锛岄粯璁や负1
-   * @param {number} options.pageSize - 姣忛〉鏁伴噺锛岄粯璁や负20
-   * @returns {Promise<Object>} 鎼滅储缁撴灉鍜屽垎椤典俊鎭?   */
+   * 搜索用户
+   * @param {Object} options - 搜索参数
+   * @param {string} options.keyword - 搜索关键词
+   * @param {string} options.sort - 排序方式：fans_desc/follows_desc/articles_desc/default
+   * @param {number} options.page - 页码，默认为1
+   * @param {number} options.pageSize - 每页数量，默认为20
+   * @returns {Promise<Object>} 搜索结果和分页信息
+   */
   async searchUsers(options = {}) {
     const {
       keyword = '',
@@ -125,13 +136,17 @@ const searchService = {
   },
 
   /**
-   * 鎼滅储璁㈠崟
-   * @param {Object} options - 鎼滅储鍙傛暟
-   * @param {string} options.keyword - 鎼滅储鍏抽敭璇?   * @param {string} options.status - 璁㈠崟鐘舵€?   * @param {string} options.startDate - 寮€濮嬫棩鏈?   * @param {string} options.endDate - 缁撴潫鏃ユ湡
-   * @param {string} options.sort - 鎺掑簭鏂瑰紡锛歝reate_desc/amount_asc/amount_desc/default
-   * @param {number} options.page - 椤电爜锛岄粯璁や负1
-   * @param {number} options.pageSize - 姣忛〉鏁伴噺锛岄粯璁や负20
-   * @returns {Promise<Object>} 鎼滅储缁撴灉鍜屽垎椤典俊鎭?   */
+   * 搜索订单
+   * @param {Object} options - 搜索参数
+   * @param {string} options.keyword - 搜索关键词
+   * @param {string} options.status - 订单状态
+   * @param {string} options.startDate - 开始日期
+   * @param {string} options.endDate - 结束日期
+   * @param {string} options.sort - 排序方式：create_desc/amount_asc/amount_desc/default
+   * @param {number} options.page - 页码，默认为1
+   * @param {number} options.pageSize - 每页数量，默认为20
+   * @returns {Promise<Object>} 搜索结果和分页信息
+   */
   async searchOrders(options = {}) {
     const {
       keyword = '',
@@ -155,11 +170,11 @@ const searchService = {
   },
 
   /**
-   * 鑾峰彇鎼滅储鍘嗗彶
-   * @param {Object} options - 鏌ヨ鍙傛暟
-   * @param {string} options.type - 鎼滅储绫诲瀷锛歛ll/product/article/user/order
-   * @param {number} options.limit - 杩斿洖鏁伴噺闄愬埗锛岄粯璁や负10
-   * @returns {Promise<Array>} 鎼滅储鍘嗗彶鍒楄〃
+   * 获取搜索历史
+   * @param {Object} options - 查询参数
+   * @param {string} options.type - 搜索类型：all/product/article/user/order
+   * @param {number} options.limit - 返回数量限制，默认为10
+   * @returns {Promise<Array>} 搜索历史列表
    */
   async getSearchHistory(options = {}) {
     const { type = 'all', limit = 10 } = options;
@@ -171,10 +186,11 @@ const searchService = {
   },
 
   /**
-   * 娣诲姞鎼滅储鍘嗗彶
-   * @param {Object} options - 鎼滅储鍙傛暟
-   * @param {string} options.keyword - 鎼滅储鍏抽敭璇?   * @param {string} options.type - 鎼滅储绫诲瀷锛歛ll/product/article/user/order
-   * @returns {Promise<Object>} 鎿嶄綔缁撴灉
+   * 添加搜索历史
+   * @param {Object} options - 搜索参数
+   * @param {string} options.keyword - 搜索关键词
+   * @param {string} options.type - 搜索类型：all/product/article/user/order
+   * @returns {Promise<Object>} 操作结果
    */
   async addSearchHistory(options = {}) {
     const { keyword, type = 'all' } = options;
@@ -186,10 +202,11 @@ const searchService = {
   },
 
   /**
-   * 鍒犻櫎鎼滅储鍘嗗彶
-   * @param {Object} options - 鍒犻櫎鍙傛暟
-   * @param {string} options.keyword - 鎼滅储鍏抽敭璇?   * @param {string} options.type - 鎼滅储绫诲瀷锛歛ll/product/article/user/order
-   * @returns {Promise<Object>} 鎿嶄綔缁撴灉
+   * 删除搜索历史
+   * @param {Object} options - 删除参数
+   * @param {string} options.keyword - 搜索关键词
+   * @param {string} options.type - 搜索类型：all/product/article/user/order
+   * @returns {Promise<Object>} 操作结果
    */
   async removeSearchHistory(options = {}) {
     const { keyword, type = 'all' } = options;
@@ -201,9 +218,10 @@ const searchService = {
   },
 
   /**
-   * 娓呯┖鎼滅储鍘嗗彶
-   * @param {Object} options - 娓呯┖鍙傛暟
-   * @param {string} options.type - 鎼滅储绫诲瀷锛歛ll/product/article/user/order锛屼笉浼犲垯娓呯┖鎵€鏈?   * @returns {Promise<Object>} 鎿嶄綔缁撴灉
+   * 清空搜索历史
+   * @param {Object} options - 清空参数
+   * @param {string} options.type - 搜索类型：all/product/article/user/order，不传递则清空所有
+   * @returns {Promise<Object>} 操作结果
    */
   async clearSearchHistory(options = {}) {
     const { type } = options;
@@ -212,10 +230,12 @@ const searchService = {
   },
 
   /**
-   * 鑾峰彇鐑棬鎼滅储鍏抽敭璇?   * @param {Object} options - 鏌ヨ鍙傛暟
-   * @param {string} options.type - 鎼滅储绫诲瀷锛歛ll/product/article/user/order
-   * @param {number} options.limit - 杩斿洖鏁伴噺闄愬埗锛岄粯璁や负10
-   * @returns {Promise<Array>} 鐑棬鎼滅储鍏抽敭璇嶅垪琛?   */
+   * 获取热门搜索关键词
+   * @param {Object} options - 查询参数
+   * @param {string} options.type - 搜索类型：all/product/article/user/order
+   * @param {number} options.limit - 返回数量限制，默认为10
+   * @returns {Promise<Array>} 热门搜索关键词列表
+   */
   async getHotKeywords(options = {}) {
     const { type = 'all', limit = 10 } = options;
 
@@ -226,11 +246,12 @@ const searchService = {
   },
 
   /**
-   * 鑾峰彇鎼滅储寤鸿
-   * @param {Object} options - 鏌ヨ鍙傛暟
-   * @param {string} options.keyword - 鎼滅储鍏抽敭璇?   * @param {string} options.type - 鎼滅储绫诲瀷锛歛ll/product/article/user/order
-   * @param {number} options.limit - 杩斿洖鏁伴噺闄愬埗锛岄粯璁や负5
-   * @returns {Promise<Array>} 鎼滅储寤鸿鍒楄〃
+   * 获取搜索建议
+   * @param {Object} options - 查询参数
+   * @param {string} options.keyword - 搜索关键词
+   * @param {string} options.type - 搜索类型：all/product/article/user/order
+   * @param {number} options.limit - 返回数量限制，默认为5
+   * @returns {Promise<Array>} 搜索建议列表
    */
   async getSearchSuggestions(options = {}) {
     const {
@@ -247,9 +268,11 @@ const searchService = {
   },
 
   /**
-   * 鑾峰彇鎼滅储绛涢€夋潯浠?   * @param {Object} options - 鏌ヨ鍙傛暟
-   * @param {string} options.type - 鎼滅储绫诲瀷锛歱roduct/article
-   * @returns {Promise<Object>} 绛涢€夋潯浠舵暟鎹?   */
+   * 获取搜索筛选条件
+   * @param {Object} options - 查询参数
+   * @param {string} options.type - 搜索类型：product/article
+   * @returns {Promise<Object>} 筛选条件数据
+   */
   async getSearchFilters(options = {}) {
     const { type = 'product' } = options;
 
@@ -259,8 +282,11 @@ const searchService = {
   },
 
   /**
-   * 淇濆瓨鎼滅储绛涢€夋潯浠?   * @param {Object} options - 绛涢€夋潯浠跺弬鏁?   * @param {string} options.type - 鎼滅储绫诲瀷锛歱roduct/article
-   * @param {Object} options.filters - 绛涢€夋潯浠?   * @returns {Promise<Object>} 鎿嶄綔缁撴灉
+   * 保存搜索筛选条件
+   * @param {Object} options - 筛选条件参数
+   * @param {string} options.type - 搜索类型：product/article
+   * @param {Object} options.filters - 筛选条件
+   * @returns {Promise<Object>} 操作结果
    */
   async saveSearchFilters(options = {}) {
     const { type = 'product', filters = {} } = options;
@@ -272,9 +298,11 @@ const searchService = {
   },
 
   /**
-   * 鑾峰彇淇濆瓨鐨勬悳绱㈢瓫閫夋潯浠?   * @param {Object} options - 鏌ヨ鍙傛暟
-   * @param {string} options.type - 鎼滅储绫诲瀷锛歱roduct/article
-   * @returns {Promise<Object>} 淇濆瓨鐨勭瓫閫夋潯浠?   */
+   * 获取保存的搜索筛选条件
+   * @param {Object} options - 查询参数
+   * @param {string} options.type - 搜索类型：product/article
+   * @returns {Promise<Object>} 保存的筛选条件
+   */
   async getSavedSearchFilters(options = {}) {
     const { type = 'product' } = options;
 

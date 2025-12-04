@@ -2,42 +2,55 @@
  * 文件名 stateManager.js
  * 版本号 1.0.0
  * 更新日期: 2025-11-24
- * 娴ｆ粏鈧? Sut
- * 描述: 缂佸棛鐭戞惔锔惧Ц閹胶顓搁悶鍡欓兇缂佺噦绱濋弨顖涘瘮濡€虫健閸栨牜濮搁幀浣碘偓浣哥磽濮濄儲鎼锋担婧库偓浣虹矎缁帒瀹崇拋銏ゆ閸滃瞼濮搁幀浣瑰瘮娑斿懎瀵查柊宥囩枂
+ * 作者: Sut
+ * 描述: 状态管理类，用于管理应用的全局状态，支持模块化状态管理、持久化存储等功能
  */
 
-// 鐎电厧鍙嗘０鍕暰娑斿娈戦悩鑸碘偓浣鼓侀崸?const stateModules = require('./stateModules.js');
+// 导入状态模块
+const stateModules = require('./stateModules.js');
 
 /**
- * 缂佸棛鐭戞惔锔惧Ц閹胶顓搁悶鍡楁珤
- * 閺€顖涘瘮濡€虫健閸栨牜濮搁幀浣碘偓浣哥磽濮濄儲鎼锋担婧库偓浣虹翱绾喛顓归梼鍛嫲妤傛楠囬幐浣风畽閸栨牠鍘ょ純? */
+ * 状态管理类
+ * 用于管理应用的全局状态，支持模块化状态管理、持久化存储等功能
+ */
 class StateManager {
   constructor(modules = {}) {
-    // 閸氬牆鑻熸０鍕暰娑斿膩閸ф鎷版导鐘插弳閻ㄥ嫭膩閸?    this.modules = { ...stateModules, ...modules };
+    // 合并默认状态模块和自定义模块
+    this.modules = { ...stateModules, ...modules };
     
     this.state = {};
     this.mutations = new Map();
     this.actions = new Map();
     this.getters = new Map();
-    this.listeners = new Map(); // 閸忋劌鐪惄鎴濇儔閸?    this.pathListeners = new Map(); // 鐠侯垰绶炵痪褏娲冮崥顒€娅?    this.nextListenerId = 0;
+    this.listeners = new Map(); // 全局状态监听器
+    this.pathListeners = new Map(); // 路径状态监听器
+    this.nextListenerId = 0;
     this.isPersisting = false;
     
-    // 閸掓繂顫愰崠鏍ㄥ閺堝膩閸?    Object.keys(this.modules).forEach(moduleName => {
+    // 初始化状态模块
+    Object.keys(this.modules).forEach(moduleName => {
       this.registerModule(moduleName, this.modules[moduleName]);
     });
   }
 
   /**
-   * 濞夈劌鍞介悩鑸碘偓浣鼓侀崸?   * @param {string} moduleName - 濡€虫健閸氬秶袨
-   * @param {Object} moduleConfig - 濡€虫健闁板秶鐤?   * @param {Object} moduleConfig.state - 閸掓繂顫愰悩鑸碘偓?   * @param {Object} moduleConfig.mutations - 閸欐ɑ娲块弬瑙勭《
-   * @param {Object} moduleConfig.actions - 瀵倹顒為幙宥勭稊閺傝纭?   * @param {Object} moduleConfig.getters - 鐠侊紕鐣荤仦鐐粹偓?   * @param {Object} moduleConfig.persist - 閹镐椒绠欓崠鏍帳缂?   */
+   * 注册状态模块
+   * @param {string} moduleName - 模块名称
+   * @param {Object} moduleConfig - 模块配置
+   * @param {Object} moduleConfig.state - 初始状态
+   * @param {Object} moduleConfig.mutations - 状态变更函数
+   * @param {Object} moduleConfig.actions - 异步操作函数
+   * @param {Object} moduleConfig.getters - 计算属性函数
+   * @param {Object} moduleConfig.persist - 是否持久化
+   */
   registerModule(moduleName, moduleConfig) {
     const { state = {}, mutations = {}, actions = {}, getters = {}, persist = false } = moduleConfig;
     
-    // 閸掓繂顫愰崠鏍侀崸妤冨Ц閹?    this.state[moduleName] = { ...state };
+    // 初始化模块状态
+    this.state[moduleName] = { ...state };
     this.modules[moduleName] = { state, persist };
     
-    // 濞夈劌鍞藉Ο鈥虫健閻ㄥ埓utations
+    // 注册mutations
     Object.entries(mutations).forEach(([key, mutation]) => {
       this.registerMutation(`${moduleName}/${key}`, (rootState, payload) => {
         const newState = mutation(this.state[moduleName], payload, rootState);
@@ -49,12 +62,12 @@ class StateManager {
       });
     });
     
-    // 濞夈劌鍞藉Ο鈥虫健閻ㄥ垷ctions
+    // 注册actions
     Object.entries(actions).forEach(([key, action]) => {
       this.registerAction(`${moduleName}/${key}`, action);
     });
     
-    // 濞夈劌鍞藉Ο鈥虫健閻ㄥ埀etters
+    // 注册getters
     Object.entries(getters).forEach(([key, getter]) => {
       this.registerGetter(`${moduleName}/${key}`, (state) => {
         return getter(state[moduleName], state, this.gettersMap);
@@ -65,40 +78,48 @@ class StateManager {
   }
 
   /**
-   * 濞夈劌鍞介崗銊ョ湰閻樿埖鈧焦膩閸?   * @param {Object} moduleConfig - 閸忋劌鐪Ο鈥虫健闁板秶鐤?   */
+   * 注册全局模块
+   * @param {Object} moduleConfig - 全局模块配置
+   */
   registerGlobalModule(moduleConfig) {
     this.registerModule('global', moduleConfig);
   }
 
   /**
-   * 閼惧嘲褰囩€瑰本鏆ｉ悩鑸碘偓?   * @returns {Object} 鐎瑰本鏆ｉ悩鑸碘偓浣圭埐
+   * 获取当前状态
+   * @returns {Object} 当前状态对象
    */
   getState() {
     return { ...this.state };
   }
 
   /**
-   * 閺嶈宓佺捄顖氱窞閼惧嘲褰囬悩鑸碘偓?   * @param {string} path - 閻樿埖鈧浇鐭惧鍕剁礉婵?'user.userInfo' 閹?'user'
-   * @returns {*} 閻樿埖鈧礁鈧?   */
+   * 根据路径获取状态
+   * @param {string} path - 状态路径，如'user.userInfo' 或 'user'
+   * @returns {*} 状态值
+   */
   get(path) {
     if (!path) return this.getState();
     
     const [moduleName, ...restPath] = path.split('.');
     
-    // 濡偓閺屻儲妲搁崥锔芥Ц鐎瑰本鏆ｉ惃鍕侀崸?    if (restPath.length === 0 && this.state[moduleName] !== undefined) {
+    // 如果只请求模块名，返回整个模块状态
+    if (restPath.length === 0 && this.state[moduleName] !== undefined) {
       return { ...this.state[moduleName] };
     }
     
-    // 閼惧嘲褰囬崗铚傜秼鐠侯垰绶為惃鍕偓?    let currentState = this.state;
+    // 根据路径获取嵌套状态
+    let currentState = this.state;
     return path.split('.').reduce((state, key) => {
       return state && state[key] !== undefined ? state[key] : undefined;
     }, currentState);
   }
 
   /**
-   * 濞夈劌鍞絤utation
-   * @param {string} name - mutation閸氬秶袨
-   * @param {Function} mutation - mutation閸戣姤鏆?   */
+   * 注册mutation
+   * @param {string} name - mutation名称
+   * @param {Function} mutation - mutation函数
+   */
   registerMutation(name, mutation) {
     if (typeof mutation !== 'function') {
       throw new Error(`Mutation for ${name} must be a function`);
@@ -107,9 +128,10 @@ class StateManager {
   }
 
   /**
-   * 濞夈劌鍞絘ction
-   * @param {string} name - action閸氬秶袨
-   * @param {Function} action - action閸戣姤鏆?   */
+   * 注册action
+   * @param {string} name - action名称
+   * @param {Function} action - action函数
+   */
   registerAction(name, action) {
     if (typeof action !== 'function') {
       throw new Error(`Action for ${name} must be a function`);
@@ -118,9 +140,10 @@ class StateManager {
   }
 
   /**
-   * 濞夈劌鍞絞etter
-   * @param {string} name - getter閸氬秶袨
-   * @param {Function} getter - getter閸戣姤鏆?   */
+   * 注册getter
+   * @param {string} name - getter名称
+   * @param {Function} getter - getter函数
+   */
   registerGetter(name, getter) {
     if (typeof getter !== 'function') {
       throw new Error(`Getter for ${name} must be a function`);
@@ -129,7 +152,8 @@ class StateManager {
   }
 
   /**
-   * 鐠侊紕鐣籫etters閺勭姴鐨?   * @private
+   * 获取getters映射
+   * @private
    */
   get gettersMap() {
     const map = {};
@@ -140,8 +164,9 @@ class StateManager {
   }
 
   /**
-   * 閼惧嘲褰噂etter閸?   * @param {string} name - getter閸氬秶袨
-   * @returns {*} getter鐠侊紕鐣荤紒鎾寸亯
+   * 获取getter值
+   * @param {string} name - getter名称
+   * @returns {*} getter计算结果
    */
   getGetter(name) {
     if (!this.getters.has(name)) {
@@ -153,12 +178,14 @@ class StateManager {
   }
 
   /**
-   * 閹绘劒姘utation
-   * @param {string} name - mutation閸氬秶袨閿涘本鏁幐?'module/mutationName' 閺嶇厧绱?   * @param {*} payload - 鏉炲€熷祹
+   * 提交mutation
+   * @param {string} name - mutation名称，格式为'module/mutationName' 或 'mutationName'
+   * @param {*} payload - 变更数据
    */
   commit(name, payload) {
     if (!this.mutations.has(name)) {
-      // 鐏忔繆鐦憴锝嗙€介崣顖濆厴閻ㄥ嫭膩閸ф鐭惧鍕壐瀵?      if (name.includes('/')) {
+      // 尝试解析模块名和mutation名
+      if (name.includes('/')) {
         const [moduleName, mutationName] = name.split('/');
         const fullName = `${moduleName}/${mutationName}`;
         
@@ -176,13 +203,15 @@ class StateManager {
     
     const mutation = this.mutations.get(name);
     try {
-      // 閹笛嗩攽mutation
+      // 执行mutation
       const changes = mutation(this.state, payload);
       if (changes) {
-        // 鎼存梻鏁ら崣妯绘纯
+        // 更新状态
         this.state = { ...this.state, ...changes };
-        // 闁氨鐓￠惄鎴濇儔閸?        this.notify();
-        // 鐟欙箑褰傞幐浣风畽閸?        this._handlePersist();
+        // 通知监听器
+        this.notify();
+        // 处理持久化
+        this._handlePersist();
       }
     } catch (error) {
       console.error(`Error in mutation ${name}:`, error);
@@ -190,12 +219,15 @@ class StateManager {
   }
 
   /**
-   * 閸掑棗褰俛ction
-   * @param {string} name - action閸氬秶袨閿涘本鏁幐?'module/actionName' 閺嶇厧绱?   * @param {*} payload - 鏉炲€熷祹
-   * @returns {Promise} action閹笛嗩攽缂佹挻鐏?   */
+   * 分发action
+   * @param {string} name - action名称，格式为'module/actionName' 或 'actionName'
+   * @param {*} payload - 操作数据
+   * @returns {Promise} action执行结果
+   */
   async dispatch(name, payload) {
     if (!this.actions.has(name)) {
-      // 鐏忔繆鐦憴锝嗙€介崣顖濆厴閻ㄥ嫭膩閸ф鐭惧鍕壐瀵?      if (name.includes('/')) {
+      // 尝试解析模块名和action名
+      if (name.includes('/')) {
         const [moduleName, actionName] = name.split('/');
         const fullName = `${moduleName}/${actionName}`;
         
@@ -228,21 +260,26 @@ class StateManager {
   }
 
   /**
-   * 鐠併垽妲勯悩鑸碘偓浣稿綁閸?   * @param {Function} callback - 閸ョ偠鐨熼崙鑺ユ殶
-   * @returns {Function} 閸欐牗绉风拋銏ゆ閸戣姤鏆?   */
+   * 订阅状态变化
+   * @param {Function} callback - 回调函数
+   * @returns {Function} 取消订阅函数
+   */
   subscribe(callback) {
     const id = this.nextListenerId++;
     this.listeners.set(id, callback);
     
-    // 鏉╂柨娲栭崣鏍ㄧХ鐠併垽妲勯崙鑺ユ殶
+    // 返回取消订阅函数
     return () => {
       this.listeners.delete(id);
     };
   }
 
   /**
-   * 鐠併垽妲勯悧鐟扮暰鐠侯垰绶為惃鍕Ц閹礁褰夐崠?   * @param {string} path - 閻樿埖鈧浇鐭惧?   * @param {Function} callback - 閸ョ偠鐨熼崙鑺ユ殶
-   * @returns {Function} 閸欐牗绉风拋銏ゆ閸戣姤鏆?   */
+   * 订阅特定路径的状态变化
+   * @param {string} path - 状态路径
+   * @param {Function} callback - 回调函数
+   * @returns {Function} 取消订阅函数
+   */
   subscribePath(path, callback) {
     const id = this.nextListenerId++;
     
@@ -252,7 +289,7 @@ class StateManager {
     
     this.pathListeners.get(path).set(id, callback);
     
-    // 鏉╂柨娲栭崣鏍ㄧХ鐠併垽妲勯崙鑺ユ殶
+    // 返回取消订阅函数
     return () => {
       const pathMap = this.pathListeners.get(path);
       if (pathMap) {
@@ -265,12 +302,14 @@ class StateManager {
   }
 
   /**
-   * 闁氨鐓￠幍鈧張澶屾磧閸氼剙娅?   * @private
+   * 通知所有监听器
+   * @private
    */
   notify() {
     const newState = this.getState();
     
-    // 闁氨鐓￠崗銊ョ湰閻╂垵鎯夐崳?    this.listeners.forEach(callback => {
+    // 通知全局监听器
+    this.listeners.forEach(callback => {
       try {
         callback(newState);
       } catch (error) {
@@ -278,7 +317,8 @@ class StateManager {
       }
     });
     
-    // 闁氨鐓＄捄顖氱窞缁狙呮磧閸氼剙娅?    this.pathListeners.forEach((callbacks, path) => {
+    // 通知路径监听器
+    this.pathListeners.forEach((callbacks, path) => {
       callbacks.forEach(callback => {
         try {
           const value = this.get(path);
@@ -291,16 +331,19 @@ class StateManager {
   }
 
   /**
-   * 婢跺嫮鎮婇悩鑸碘偓浣瑰瘮娑斿懎瀵?   * @private
+   * 处理状态持久化
+   * @private
    */
   _handlePersist() {
     if (this.isPersisting) return;
     
     this.isPersisting = true;
     
-    // 娴ｈ法鏁ゅ顔绘崲閸旓繝浼╅崗宥夘暥缁讳礁鍟撻崗?    Promise.resolve().then(() => {
+    // 使用Promise.resolve()确保异步执行
+    Promise.resolve().then(() => {
       try {
-        // 閸欘亝瀵旀稊鍛闁板秶鐤嗘禍鍞抏rsist閻ㄥ嫭膩閸?        const stateToPersist = {};
+        // 收集需要持久化的状态
+        const stateToPersist = {};
         Object.entries(this.modules).forEach(([moduleName, module]) => {
           if (module.persist) {
             stateToPersist[moduleName] = this.state[moduleName];
@@ -319,12 +362,15 @@ class StateManager {
   }
 
   /**
-   * 娴犲孩婀伴崷鏉跨摠閸屻劍浠径宥囧Ц閹?   * @returns {Promise<boolean>} 閺勵垰鎯侀幋鎰閹垹顦?   */
+   * 从本地存储恢复状态
+   * @returns {Promise<boolean>} 恢复是否成功
+   */
   async restoreState() {
     try {
       const savedState = wx.getStorageSync('sutwxapp_state');
       if (savedState) {
-        // 閸欘亝浠径宥呭嚒濞夈劌鍞藉Ο鈥虫健閻ㄥ嫮濮搁幀?        Object.keys(savedState).forEach(moduleName => {
+        // 合并保存的状态到当前状态
+        Object.keys(savedState).forEach(moduleName => {
           if (this.state[moduleName] !== undefined) {
             this.state[moduleName] = { ...this.state[moduleName], ...savedState[moduleName] };
           }
@@ -339,24 +385,28 @@ class StateManager {
   }
   
   /**
-   * 閼惧嘲褰囬幍鈧張澶婂嚒濞夈劌鍞藉Ο鈥虫健閸氬秶袨
-   * @returns {Array} 濡€虫健閸氬秶袨閺佹壆绮?   */
+   * 获取已注册的模块名称列表
+   * @returns {Array} 模块名称列表
+   */
   getRegisteredModules() {
     return Object.keys(this.modules);
   }
 
   /**
-   * 濞撳懘娅庨幐浣风畽閸栨牜濮搁幀?   * @param {string} moduleName - 閸欘垶鈧绱濋幐鍥х暰鐟曚焦绔婚梽銈囨畱濡€虫健
-   * @returns {Promise<boolean>} 閺勵垰鎯侀幋鎰濞撳懘娅?   */
+   * 清除持久化状态
+   * @param {string} moduleName - 可选，指定要清除的模块
+   * @returns {Promise<boolean>} 清除是否成功
+   */
   async clearPersistedState(moduleName) {
     try {
       if (moduleName) {
-        // 濞撳懘娅庨悧鐟扮暰濡€虫健
+        // 清除指定模块
         const savedState = wx.getStorageSync('sutwxapp_state') || {};
         delete savedState[moduleName];
         wx.setStorageSync('sutwxapp_state', savedState);
       } else {
-        // 濞撳懘娅庨幍鈧張澶屽Ц閹?        wx.removeStorageSync('sutwxapp_state');
+        // 清除所有状态
+        wx.removeStorageSync('sutwxapp_state');
       }
       return true;
     } catch (error) {
@@ -366,7 +416,8 @@ class StateManager {
   }
 
   /**
-   * 闁插秶鐤嗛幍鈧張澶屽Ц閹?   */
+   * 重置状态
+   */
   resetState() {
     Object.keys(this.modules).forEach(moduleName => {
       this.state[moduleName] = { ...this.modules[moduleName].state };
@@ -375,29 +426,32 @@ class StateManager {
   }
 }
 
-// 閸掓稑缂撻獮璺侯嚤閸戣櫣濮搁幀浣侯吀閻炲棗娅掔€圭偘绶?const stateManager = new StateManager();
+// 导出单例实例
+const stateManager = new StateManager();
 
-// 鐎电厧鍤銉ュ徔閸戣姤鏆?module.exports = {
+// 导出状态管理工具
+module.exports = {
   stateManager,
-  // 鏉堝懎濮崙鑺ユ殶閿涙艾鍨卞铏圭矋娴犲墎娈戦悩鑸碘偓浣规Ё鐏?  mapState: function(mapOptions) {
+  // 映射状态到组件数据的工具函数
+  mapState: function(mapOptions) {
     const computed = {};
     
     if (typeof mapOptions === 'function') {
-      // 閸戣姤鏆熻ぐ銏犵础閿涘本甯撮弨绉檛ate閸欏倹鏆?      return function() {
+      // 函数形式，返回一个函数
+      return function() {
         return mapOptions(stateManager.getState());
       };
     }
     
-    // 鐎电钖勮ぐ銏犵础
+    // 对象形式
     Object.keys(mapOptions).forEach(key => {
-      const path = mapOptions[key];
-      if (typeof path === 'function') {
+      if (typeof mapOptions[key] === 'function') {
         computed[key] = function() {
-          return path(stateManager.getState());
+          return mapOptions[key](stateManager.getState());
         };
       } else {
         computed[key] = function() {
-          return stateManager.get(path);
+          return stateManager.get(mapOptions[key]);
         };
       }
     });
@@ -405,7 +459,8 @@ class StateManager {
     return computed;
   },
   
-  // 鏉堝懎濮崙鑺ユ殶閿涙艾鍨卞铏圭矋娴犲墎娈慻etters閺勭姴鐨?  mapGetters: function(mapOptions) {
+  // 映射getters到组件计算属性
+  mapGetters: function(mapOptions) {
     const computed = {};
     
     if (Array.isArray(mapOptions)) {
@@ -426,7 +481,8 @@ class StateManager {
     return computed;
   },
   
-  // 鏉堝懎濮崙鑺ユ殶閿涙艾鍨卞铏圭矋娴犲墎娈憁utations閺勭姴鐨?  mapMutations: function(mapOptions) {
+  // 映射mutations到组件方法
+  mapMutations: function(mapOptions) {
     const methods = {};
     
     if (Array.isArray(mapOptions)) {
@@ -447,7 +503,8 @@ class StateManager {
     return methods;
   },
   
-  // 鏉堝懎濮崙鑺ユ殶閿涙艾鍨卞铏圭矋娴犲墎娈慳ctions閺勭姴鐨?  mapActions: function(mapOptions) {
+  // 映射actions到组件方法
+  mapActions: function(mapOptions) {
     const methods = {};
     
     if (Array.isArray(mapOptions)) {

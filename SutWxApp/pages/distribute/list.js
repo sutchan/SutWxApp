@@ -1,7 +1,324 @@
-﻿/**\n * 文件名 list.js\n * 版本号 1.0.0\n * 更新日期: 2025-11-29\n * 描述: 閸掑棝鏀㈤崚妤勩€冩い鐢告桨\n */\n\nconst distributeService = require('../../services/distributeService');\nconst store = require('../../utils/store');\n\nPage({\n  data: {\n    distributeList: [],\n    status: 'all', // all/pending/approved/rejected/deleted\n    type: 'all', // all/product/article\n    page: 1,\n    pageSize: 20,\n    total: 0,\n    loading: false,\n    hasMore: true\n  },\n\n  onLoad(options) {\n    // 閸掓繂顫愰崠鏍ㄦ殶閹?
-    this.setData({\n      status: options.status || 'all',\n      type: options.type || 'all'\n    });\n    this.getDistributeList();\n  },\n\n  onShow() {\n    // 妞ょ敻娼伴弰鍓с仛閺冭泛鍩涢弬鐗堟殶閹?
-    this.setData({\n      page: 1,\n      distributeList: [],\n      hasMore: true\n    });\n    this.getDistributeList();\n  },\n\n  onReachBottom() {\n    // 鐟欙箑绨抽崝鐘烘祰閺囨潙顦縗n    if (!this.data.loading && this.data.hasMore) {\n      this.setData({\n        page: this.data.page + 1\n      });\n      this.getDistributeList();\n    }\n  },\n\n  onPullDownRefresh() {\n    // 娑撳濯洪崚閿嬫煀\n    this.setData({\n      page: 1,\n      distributeList: [],\n      hasMore: true\n    });\n    this.getDistributeList(() => {\n      wx.stopPullDownRefresh();\n    });\n  },\n\n  /**\n   * 閼惧嘲褰囬崚鍡涙敘閸掓銆僜n   * @param {Function} callback - 閸ョ偠鐨熼崙鑺ユ殶\n   */\n  getDistributeList(callback) {\n    if (this.data.loading) return;\n\n    this.setData({ loading: true });\n\n    distributeService.getDistributeList({\n      status: this.data.status,\n      type: this.data.type,\n      page: this.data.page,\n      pageSize: this.data.pageSize\n    })\n      .then(res => {\n        const newList = this.data.page === 1 ? res.list : [...this.data.distributeList, ...res.list];\n        this.setData({\n          distributeList: newList,\n          total: res.total,\n          hasMore: newList.length < res.total,\n          loading: false\n        });\n        if (callback) callback();\n      })\n      .catch(err => {\n        console.error('閼惧嘲褰囬崚鍡涙敘閸掓銆冩径杈Е:', err);\n        this.setData({ loading: false });\n        wx.showToast({\n          title: '閼惧嘲褰囬崚鍡涙敘閸掓銆冩径杈Е',\n          icon: 'none'\n        });\n        if (callback) callback();\n      });\n  },\n\n  /**\n   * 閸掑洦宕查悩鑸碘偓浣虹摣闁?
-   * @param {Object} e - 娴滃娆㈢€电钖刓n   */\n  onStatusChange(e) {\n    this.setData({\n      status: e.detail.value,\n      page: 1,\n      distributeList: [],\n      hasMore: true\n    });\n    this.getDistributeList();\n  },\n\n  /**\n   * 閸掑洦宕茬猾璇茬€风粵娑⑩偓?
-   * @param {Object} e - 娴滃娆㈢€电钖刓n   */\n  onTypeChange(e) {\n    this.setData({\n      type: e.detail.value,\n      page: 1,\n      distributeList: [],\n      hasMore: true\n    });\n    this.getDistributeList();\n  },\n\n  /**\n   * 鐠哄疇娴嗛崚鏉垮瀻闁库偓鐠囷附鍎廫n   * @param {Object} e - 娴滃娆㈢€电钖刓n   */\n  goToDetail(e) {\n    const id = e.currentTarget.dataset.id;\n    wx.navigateTo({\n      url: `/pages/distribute/detail?id=${id}`\n    });\n  },\n\n  /**\n   * 鐎光剝鐗抽崚鍡涙敘\n   * @param {Object} e - 娴滃娆㈢€电钖刓n   */\n  approveDistribute(e) {\n    const id = e.currentTarget.dataset.id;\n    wx.showModal({\n      title: '鐎光剝鐗抽崚鍡涙敘',\n      content: '绾喖鐣剧憰浣割吀閺嶆悂鈧俺绻冪拠銉ュ瀻闁库偓閸氭绱?,\n      success: (res) => {\n        if (res.confirm) {\n          this.handleApprove(id);\n        }\n      }\n    });\n  },\n\n  /**\n   * 婢跺嫮鎮婄€光剝鐗抽柅姘崇箖\n   * @param {string} id - 閸掑棝鏀D\n   */\n  handleApprove(id) {\n    wx.showLoading({\n      title: '鐎光剝鐗虫稉?..'\n    });\n\n    distributeService.approveDistribute(id)\n      .then(() => {\n        wx.hideLoading();\n        wx.showToast({\n          title: '鐎光剝鐗抽柅姘崇箖閹存劕濮?\n        });\n        // 閸掗攱鏌婇崚妤勩€僜n        this.setData({\n          page: 1,\n          distributeList: [],\n          hasMore: true\n        });\n        this.getDistributeList();\n      })\n      .catch(err => {\n        wx.hideLoading();\n        console.error('鐎光剝鐗抽柅姘崇箖婢惰精瑙?', err);\n        wx.showToast({\n          title: '鐎光剝鐗抽柅姘崇箖婢惰精瑙?,\n          icon: 'none'\n        });\n      });\n  },\n\n  /**\n   * 妞瑰啿娲栭崚鍡涙敘\n   * @param {Object} e - 娴滃娆㈢€电钖刓n   */\n  rejectDistribute(e) {\n    const id = e.currentTarget.dataset.id;\n    wx.showModal({\n      title: '妞瑰啿娲栭崚鍡涙敘',\n      content: '绾喖鐣剧憰渚€鈹忛崶鐐额嚉閸掑棝鏀㈤崥妤嬬吹',\n      success: (res) => {\n        if (res.confirm) {\n          this.showRejectReasonInput(id);\n        }\n      }\n    });\n  },\n\n  /**\n   * 閺勫墽銇氭す鍐叉礀閸樼喎娲滄潏鎾冲弳濡?
-   * @param {string} id - 閸掑棝鏀D\n   */\n  showRejectReasonInput(id) {\n    wx.showModal({\n      title: '鐠囩柉绶崗銉┾攺閸ョ偛甯崶?,\n      editable: true,\n      placeholderText: '鐠囩柉绶崗銉┾攺閸ョ偛甯崶?,\n      success: (res) => {\n        if (res.confirm && res.content.trim()) {\n          this.handleReject(id, res.content.trim());\n        }\n      }\n    });\n  },\n\n  /**\n   * 婢跺嫮鎮婃す鍐叉礀\n   * @param {string} id - 閸掑棝鏀D\n   * @param {string} reason - 妞瑰啿娲栭崢鐔锋礈\n   */\n  handleReject(id, reason) {\n    wx.showLoading({\n      title: '妞瑰啿娲栨稉?..'\n    });\n\n    distributeService.rejectDistribute(id, reason)\n      .then(() => {\n        wx.hideLoading();\n        wx.showToast({\n          title: '妞瑰啿娲栭幋鎰'\n        });\n        // 閸掗攱鏌婇崚妤勩€僜n        this.setData({\n          page: 1,\n          distributeList: [],\n          hasMore: true\n        });\n        this.getDistributeList();\n      })\n      .catch(err => {\n        wx.hideLoading();\n        console.error('妞瑰啿娲栨径杈Е:', err);\n        wx.showToast({\n          title: '妞瑰啿娲栨径杈Е',\n          icon: 'none'\n        });\n      });\n  },\n\n  /**\n   * 閸掔娀娅庨崚鍡涙敘\n   * @param {Object} e - 娴滃娆㈢€电钖刓n   */\n  deleteDistribute(e) {\n    const id = e.currentTarget.dataset.id;\n    wx.showModal({\n      title: '閸掔娀娅庨崚鍡涙敘',\n      content: '绾喖鐣剧憰浣稿灩闂勩倛顕氶崚鍡涙敘閸氭绱?,\n      success: (res) => {\n        if (res.confirm) {\n          this.showDeleteReasonInput(id);\n        }\n      }\n    });\n  },\n\n  /**\n   * 閺勫墽銇氶崚鐘绘珟閸樼喎娲滄潏鎾冲弳濡?
-   * @param {string} id - 閸掑棝鏀D\n   */\n  showDeleteReasonInput(id) {\n    wx.showModal({\n      title: '鐠囩柉绶崗銉ュ灩闂勩倕甯崶?,\n      editable: true,\n      placeholderText: '鐠囩柉绶崗銉ュ灩闂勩倕甯崶?,\n      success: (res) => {\n        if (res.confirm && res.content.trim()) {\n          this.handleDelete(id, res.content.trim());\n        }\n      }\n    });\n  },\n\n  /**\n   * 婢跺嫮鎮婇崚鐘绘珟\n   * @param {string} id - 閸掑棝鏀D\n   * @param {string} reason - 閸掔娀娅庨崢鐔锋礈\n   */\n  handleDelete(id, reason) {\n    wx.showLoading({\n      title: '閸掔娀娅庢稉?..'\n    });\n\n    distributeService.deleteDistribute(id, reason)\n      .then(() => {\n        wx.hideLoading();\n        wx.showToast({\n          title: '閸掔娀娅庨幋鎰'\n        });\n        // 閸掗攱鏌婇崚妤勩€僜n        this.setData({\n          page: 1,\n          distributeList: [],\n          hasMore: true\n        });\n        this.getDistributeList();\n      })\n      .catch(err => {\n        wx.hideLoading();\n        console.error('閸掔娀娅庢径杈Е:', err);\n        wx.showToast({\n          title: '閸掔娀娅庢径杈Е',\n          icon: 'none'\n        });\n      });\n  }\n});
+/**
+ * 文件名 list.js
+ * 版本号 1.0.0
+ * 更新日期: 2025-11-29
+ * 描述: 分销列表页面
+ */
+
+const distributeService = require('../../services/distributeService');
+const store = require('../../utils/store');
+
+Page({
+  data: {
+    distributeList: [],
+    status: 'all', // all/pending/approved/rejected/deleted
+    type: 'all', // all/product/article
+    page: 1,
+    pageSize: 20,
+    total: 0,
+    loading: false,
+    hasMore: true
+  },
+
+  onLoad(options) {
+    // 初始化页面数据
+    this.setData({
+      status: options.status || 'all',
+      type: options.type || 'all'
+    });
+    this.getDistributeList();
+  },
+
+  onShow() {
+    // 刷新数据
+    this.setData({
+      page: 1,
+      distributeList: [],
+      hasMore: true
+    });
+    this.getDistributeList();
+  },
+
+  onReachBottom() {
+    // 触底加载更多
+    if (!this.data.loading && this.data.hasMore) {
+      this.setData({
+        page: this.data.page + 1
+      });
+      this.getDistributeList();
+    }
+  },
+
+  onPullDownRefresh() {
+    // 下拉刷新
+    this.setData({
+      page: 1,
+      distributeList: [],
+      hasMore: true
+    });
+    this.getDistributeList(() => {
+      wx.stopPullDownRefresh();
+    });
+  },
+
+  /**
+   * 获取分销列表
+   * @param {Function} callback - 回调函数
+   */
+  getDistributeList(callback) {
+    if (this.data.loading) return;
+
+    this.setData({ loading: true });
+
+    distributeService.getDistributeList({
+      status: this.data.status,
+      type: this.data.type,
+      page: this.data.page,
+      pageSize: this.data.pageSize
+    })
+      .then(res => {
+        const newList = this.data.page === 1 ? res.list : [...this.data.distributeList, ...res.list];
+        this.setData({
+          distributeList: newList,
+          total: res.total,
+          hasMore: newList.length < res.total,
+          loading: false
+        });
+        if (callback) callback();
+      })
+      .catch(err => {
+        console.error('获取分销列表失败:', err);
+        this.setData({ loading: false });
+        wx.showToast({
+          title: '获取分销列表失败',
+          icon: 'none'
+        });
+        if (callback) callback();
+      });
+  },
+
+  /**
+   * 状态变化事件
+   * @param {Object} e - 事件对象
+   */
+  onStatusChange(e) {
+    this.setData({
+      status: e.detail.value,
+      page: 1,
+      distributeList: [],
+      hasMore: true
+    });
+    this.getDistributeList();
+  },
+
+  /**
+   * 类型变化事件
+   * @param {Object} e - 事件对象
+   */
+  onTypeChange(e) {
+    this.setData({
+      type: e.detail.value,
+      page: 1,
+      distributeList: [],
+      hasMore: true
+    });
+    this.getDistributeList();
+  },
+
+  /**
+   * 跳转到详情页
+   * @param {Object} e - 事件对象
+   */
+  goToDetail(e) {
+    const id = e.currentTarget.dataset.id;
+    wx.navigateTo({
+      url: `/pages/distribute/detail?id=${id}`
+    });
+  },
+
+  /**
+   * 审核通过分销
+   * @param {Object} e - 事件对象
+   */
+  approveDistribute(e) {
+    const id = e.currentTarget.dataset.id;
+    wx.showModal({
+      title: '审核通过',
+      content: '确定要审核通过该分销申请吗？',
+      success: (res) => {
+        if (res.confirm) {
+          this.handleApprove(id);
+        }
+      }
+    });
+  },
+
+  /**
+   * 处理审核通过
+   * @param {string} id - 分销ID
+   */
+  handleApprove(id) {
+    wx.showLoading({
+      title: '审核中...'
+    });
+
+    distributeService.approveDistribute(id)
+      .then(() => {
+        wx.hideLoading();
+        wx.showToast({
+          title: '审核通过成功'
+        });
+        // 刷新列表
+        this.setData({
+          page: 1,
+          distributeList: [],
+          hasMore: true
+        });
+        this.getDistributeList();
+      })
+      .catch(err => {
+        wx.hideLoading();
+        console.error('审核通过失败:', err);
+        wx.showToast({
+          title: '审核通过失败',
+          icon: 'none'
+        });
+      });
+  },
+
+  /**
+   * 拒绝分销
+   * @param {Object} e - 事件对象
+   */
+  rejectDistribute(e) {
+    const id = e.currentTarget.dataset.id;
+    wx.showModal({
+      title: '拒绝分销',
+      content: '确定要拒绝该分销申请吗？',
+      success: (res) => {
+        if (res.confirm) {
+          this.showRejectReasonInput(id);
+        }
+      }
+    });
+  },
+
+  /**
+   * 显示拒绝原因输入框
+   * @param {string} id - 分销ID
+   */
+  showRejectReasonInput(id) {
+    wx.showModal({
+      title: '输入拒绝原因',
+      editable: true,
+      placeholderText: '请输入拒绝原因',
+      success: (res) => {
+        if (res.confirm && res.content.trim()) {
+          this.handleReject(id, res.content.trim());
+        }
+      }
+    });
+  },
+
+  /**
+   * 处理拒绝
+   * @param {string} id - 分销ID
+   * @param {string} reason - 拒绝原因
+   */
+  handleReject(id, reason) {
+    wx.showLoading({
+      title: '拒绝中...'
+    });
+
+    distributeService.rejectDistribute(id, reason)
+      .then(() => {
+        wx.hideLoading();
+        wx.showToast({
+          title: '拒绝成功'
+        });
+        // 刷新列表
+        this.setData({
+          page: 1,
+          distributeList: [],
+          hasMore: true
+        });
+        this.getDistributeList();
+      })
+      .catch(err => {
+        wx.hideLoading();
+        console.error('拒绝失败:', err);
+        wx.showToast({
+          title: '拒绝失败',
+          icon: 'none'
+        });
+      });
+  },
+
+  /**
+   * 删除分销
+   * @param {Object} e - 事件对象
+   */
+  deleteDistribute(e) {
+    const id = e.currentTarget.dataset.id;
+    wx.showModal({
+      title: '删除分销',
+      content: '确定要删除该分销吗？',
+      success: (res) => {
+        if (res.confirm) {
+          this.showDeleteReasonInput(id);
+        }
+      }
+    });
+  },
+
+  /**
+   * 显示删除原因输入框
+   * @param {string} id - 分销ID
+   */
+  showDeleteReasonInput(id) {
+    wx.showModal({
+      title: '输入删除原因',
+      editable: true,
+      placeholderText: '请输入删除原因',
+      success: (res) => {
+        if (res.confirm && res.content.trim()) {
+          this.handleDelete(id, res.content.trim());
+        }
+      }
+    });
+  },
+
+  /**
+   * 处理删除
+   * @param {string} id - 分销ID
+   * @param {string} reason - 删除原因
+   */
+  handleDelete(id, reason) {
+    wx.showLoading({
+      title: '删除中...'
+    });
+
+    distributeService.deleteDistribute(id, reason)
+      .then(() => {
+        wx.hideLoading();
+        wx.showToast({
+          title: '删除成功'
+        });
+        // 刷新列表
+        this.setData({
+          page: 1,
+          distributeList: [],
+          hasMore: true
+        });
+        this.getDistributeList();
+      })
+      .catch(err => {
+        wx.hideLoading();
+        console.error('删除失败:', err);
+        wx.showToast({
+          title: '删除失败',
+          icon: 'none'
+        });
+      });
+  }
+});

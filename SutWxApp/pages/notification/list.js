@@ -1,4 +1,4 @@
-﻿/**
+/**
  * 文件名: list.js
  * 版本号: 1.0.0
  * 更新日期: 2025-12-01
@@ -233,7 +233,11 @@ Page({
       promotion: '促',
       activity: '活',
       article: '文',
-      product: '产'
+      product: '产',
+      social: '社',
+      distribute: '分',
+      points: '积',
+      message: '消'
     };
     return iconMap[type] || '通';
   },
@@ -266,7 +270,7 @@ Page({
    * 标记全部已读
    */
   onMarkAllRead: function() {
-    notificationService.markAllAsRead()
+    notificationService.markAsRead()
       .then(() => {
         // 更新本地数据
         const notifications = this.data.notifications.map(item => {

@@ -1,6 +1,0 @@
-﻿File: E:\Dropbox\GitHub\SutWxApp\SutWxApp\utils\i18n\sut-wechat-mini-zh_CN.json
-  Encoding: 简体中文(GB2312)
-  BOM: No
-  Line Endings: Unix LF
-  Status: Not Compliant
-

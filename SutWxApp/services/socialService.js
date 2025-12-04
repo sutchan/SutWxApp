@@ -1,13 +1,917 @@
-﻿/**\n * 文件名 socialService.js\n * 版本号 1.0.0\n * 更新日期: 2025-11-30\n * 描述: 绀句氦鍔熻兘鏈嶅姟锛屽寘鎷晢鍝佸垎浜€佽瘎璁恒€佺偣璧炵瓑\n */\n\nconst request = require('../utils/request');\n\n/**\n * 鍒嗕韩鍟嗗搧\n * @param {Object} options - 鍒嗕韩鍙傛暟\n * @param {string} options.productId - 鍟嗗搧ID\n * @param {string} options.title - 鍒嗕韩鏍囬\n * @param {string} options.description - 鍒嗕韩描述\n * @param {string} options.imageUrl - 鍒嗕韩鍥剧墖URL\n * @param {string} options.shareChannel - 鍒嗕韩娓犻亾: wechat/friend/circle/qq/weibo\n * @returns {Promise<Object>} 鍒嗕韩缁撴灉\n */\nasync function shareProduct(options = {}) {\n  const {\n    productId,\n    title,\n    description,\n    imageUrl,\n    shareChannel = 'wechat'\n  } = options;\n\n  if (!productId) {\n    throw new Error('鍟嗗搧ID涓嶈兘涓虹┖');\n  }\n\n  return request.post('/social/share/product', {\n    productId,\n    title,\n    description,\n    imageUrl,\n    shareChannel\n  });\n}\n\n/**\n * 鑾峰彇鍒嗕韩璁板綍\n * @param {Object} options - 鏌ヨ鍙傛暟\n * @param {number} options.page - 椤电爜锛岄粯璁?\n * @param {number} options.pageSize - 姣忛〉鏁伴噺锛岄粯璁?0\n * @param {string} options.sort - 鎺掑簭鏂瑰紡: newest/oldest\n * @returns {Promise<Object>} 鍒嗕韩璁板綍鍒楄〃鍜屽垎椤典俊鎭?
- */\nasync function getShareRecords(options = {}) {\n  const {\n    page = 1,\n    pageSize = 20,\n    sort = 'newest'\n  } = options;\n\n  return request.get('/social/share/records', {\n    page,\n    pageSize,\n    sort\n  });\n}\n\n/**\n * 鑾峰彇鍒嗕韩缁熻\n * @param {string} productId - 鍟嗗搧ID锛屼笉浼犲垯鑾峰彇鐢ㄦ埛鎬诲垎浜粺璁?
- * @returns {Promise<Object>} 鍒嗕韩缁熻淇℃伅\n */\nasync function getShareStats(productId) {\n  const url = productId ? `/social/share/stats/product/${productId}` : '/social/share/stats';\n  return request.get(url);\n}\n\n/**\n * 鑾峰彇鍟嗗搧璇勮鍒楄〃\n * @param {Object} options - 鏌ヨ鍙傛暟\n * @param {string} options.productId - 鍟嗗搧ID\n * @param {number} options.page - 椤电爜锛岄粯璁?\n * @param {number} options.pageSize - 姣忛〉鏁伴噺锛岄粯璁?0\n * @param {string} options.sort - 鎺掑簭鏂瑰紡: newest/oldest/highest/lowest\n * @param {number} options.minRating - 鏈€浣庤瘎鍒?
- * @param {boolean} options.withImages - 鏄惁鍙樉绀哄甫鍥捐瘎璁?
- * @returns {Promise<Object>} 璇勮鍒楄〃鍜屽垎椤典俊鎭?
- */\nasync function getProductComments(options = {}) {\n  const {\n    productId,\n    page = 1,\n    pageSize = 20,\n    sort = 'newest',\n    minRating,\n    withImages\n  } = options;\n\n  if (!productId) {\n    throw new Error('鍟嗗搧ID涓嶈兘涓虹┖');\n  }\n\n  const params = {\n    page,\n    pageSize,\n    sort\n  };\n\n  if (minRating) params.minRating = minRating;\n  if (withImages) params.withImages = withImages;\n\n  return request.get(`/products/${productId}/comments`, params);\n}\n\n/**\n * 鑾峰彇鏂囩珷璇勮鍒楄〃\n * @param {Object} options - 鏌ヨ鍙傛暟\n * @param {string} options.articleId - 鏂囩珷ID\n * @param {number} options.page - 椤电爜锛岄粯璁?\n * @param {number} options.pageSize - 姣忛〉鏁伴噺锛岄粯璁?0\n * @param {string} options.sort - 鎺掑簭鏂瑰紡: newest/oldest\n * @returns {Promise<Object>} 璇勮鍒楄〃鍜屽垎椤典俊鎭?
- */\nasync function getArticleComments(options = {}) {\n  const {\n    articleId,\n    page = 1,\n    pageSize = 20,\n    sort = 'newest'\n  } = options;\n\n  if (!articleId) {\n    throw new Error('鏂囩珷ID涓嶈兘涓虹┖');\n  }\n\n  return request.get(`/articles/${articleId}/comments`, {\n    page,\n    pageSize,\n    sort\n  });\n}\n\n/**\n * 娣诲姞鍟嗗搧璇勮\n * @param {Object} data - 璇勮鏁版嵁\n * @param {string} data.productId - 鍟嗗搧ID\n * @param {string} data.content - 璇勮鍐呭\n * @param {number} data.rating - 璇勫垎锛?-5\n * @param {Array} data.images - 璇勮鍥剧墖URL鏁扮粍\n * @param {boolean} data.anonymous - 鏄惁鍖垮悕\n * @returns {Promise<Object>} 璇勮缁撴灉\n */\nasync function addProductComment(data) {\n  const {\n    productId,\n    content,\n    rating,\n    images = [],\n    anonymous = false\n  } = data;\n\n  if (!productId) {\n    throw new Error('鍟嗗搧ID涓嶈兘涓虹┖');\n  }\n\n  if (!content || content.trim().length === 0) {\n    throw new Error('璇勮鍐呭涓嶈兘涓虹┖');\n  }\n\n  if (rating < 1 || rating > 5) {\n    throw new Error('璇勫垎蹇呴』鍦?-5涔嬮棿');\n  }\n\n  return request.post('/social/comments/product', {\n    productId,\n    content: content.trim(),\n    rating,\n    images,\n    anonymous\n  });\n}\n\n/**\n * 娣诲姞鏂囩珷璇勮\n * @param {Object} data - 璇勮鏁版嵁\n * @param {string} data.articleId - 鏂囩珷ID\n * @param {string} data.content - 璇勮鍐呭\n * @param {boolean} data.anonymous - 鏄惁鍖垮悕\n * @returns {Promise<Object>} 璇勮缁撴灉\n */\nasync function addArticleComment(data) {\n  const {\n    articleId,\n    content,\n    anonymous = false\n  } = data;\n\n  if (!articleId) {\n    throw new Error('鏂囩珷ID涓嶈兘涓虹┖');\n  }\n\n  if (!content || content.trim().length === 0) {\n    throw new Error('璇勮鍐呭涓嶈兘涓虹┖');\n  }\n\n  return request.post('/social/comments/article', {\n    articleId,\n    content: content.trim(),\n    anonymous\n  });\n}\n\n/**\n * 鍥炲璇勮\n * @param {Object} data - 鍥炲鏁版嵁\n * @param {string} data.commentId - 璇勮ID\n * @param {string} data.content - 鍥炲鍐呭\n * @param {boolean} data.anonymous - 鏄惁鍖垮悕\n * @returns {Promise<Object>} 鍥炲缁撴灉\n */\nasync function replyComment(data) {\n  const {\n    commentId,\n    content,\n    anonymous = false\n  } = data;\n\n  if (!commentId) {\n    throw new Error('璇勮ID涓嶈兘涓虹┖');\n  }\n\n  if (!content || content.trim().length === 0) {\n    throw new Error('鍥炲鍐呭涓嶈兘涓虹┖');\n  }\n\n  return request.post(`/social/comments/${commentId}/reply`, {\n    content: content.trim(),\n    anonymous\n  });\n}\n\n/**\n * 鍒犻櫎璇勮\n * @param {string} commentId - 璇勮ID\n * @returns {Promise<Object>} 鍒犻櫎缁撴灉\n */\nasync function deleteComment(commentId) {\n  if (!commentId) {\n    throw new Error('璇勮ID涓嶈兘涓虹┖');\n  }\n\n  return request.delete(`/social/comments/${commentId}`);\n}\n\n/**\n * 鐐硅禐璇勮\n * @param {string} commentId - 璇勮ID\n * @returns {Promise<Object>} 鐐硅禐缁撴灉\n */\nasync function likeComment(commentId) {\n  if (!commentId) {\n    throw new Error('璇勮ID涓嶈兘涓虹┖');\n  }\n\n  return request.post(`/social/comments/${commentId}/like`);\n}\n\n/**\n * 鍙栨秷鐐硅禐璇勮\n * @param {string} commentId - 璇勮ID\n * @returns {Promise<Object>} 鍙栨秷鐐硅禐缁撴灉\n */\nasync function unlikeComment(commentId) {\n  if (!commentId) {\n    throw new Error('璇勮ID涓嶈兘涓虹┖');\n  }\n\n  return request.delete(`/social/comments/${commentId}/like`);\n}\n\n/**\n * 鐐硅禐鍟嗗搧\n * @param {string} productId - 鍟嗗搧ID\n * @returns {Promise<Object>} 鐐硅禐缁撴灉\n */\nasync function likeProduct(productId) {\n  if (!productId) {\n    throw new Error('鍟嗗搧ID涓嶈兘涓虹┖');\n  }\n\n  return request.post(`/social/like/product/${productId}`);\n}\n\n/**\n * 鍙栨秷鐐硅禐鍟嗗搧\n * @param {string} productId - 鍟嗗搧ID\n * @returns {Promise<Object>} 鍙栨秷鐐硅禐缁撴灉\n */\nasync function unlikeProduct(productId) {\n  if (!productId) {\n    throw new Error('鍟嗗搧ID涓嶈兘涓虹┖');\n  }\n\n  return request.delete(`/social/like/product/${productId}`);\n}\n\n/**\n * 鐐硅禐鏂囩珷\n * @param {string} articleId - 鏂囩珷ID\n * @returns {Promise<Object>} 鐐硅禐缁撴灉\n */\nasync function likeArticle(articleId) {\n  if (!articleId) {\n    throw new Error('鏂囩珷ID涓嶈兘涓虹┖');\n  }\n\n  return request.post(`/social/like/article/${articleId}`);\n}\n\n/**\n * 鍙栨秷鐐硅禐鏂囩珷\n * @param {string} articleId - 鏂囩珷ID\n * @returns {Promise<Object>} 鍙栨秷鐐硅禐缁撴灉\n */\nasync function unlikeArticle(articleId) {\n  if (!articleId) {\n    throw new Error('鏂囩珷ID涓嶈兘涓虹┖');\n  }\n\n  return request.delete(`/social/like/article/${articleId}`);\n}\n\n/**\n * 妫€鏌ユ槸鍚﹀凡鐐硅禐\n * @param {Object} options - 妫€鏌ュ弬鏁?
- * @param {string} options.targetId - 鐩爣ID\n * @param {string} options.targetType - 鐩爣绫诲瀷: product/article/comment\n * @returns {Promise<Object>} 妫€鏌ョ粨鏋?
- */\nasync function checkLikeStatus(options = {}) {\n  const {\n    targetId,\n    targetType\n  } = options;\n\n  if (!targetId || !targetType) {\n    throw new Error('鐩爣ID鍜岀被鍨嬩笉鑳戒负绌?);\n  }\n\n  return request.get('/social/like/check', {\n    targetId,\n    targetType\n  });\n}\n\n/**\n * 鑾峰彇鐐硅禐璁板綍\n * @param {Object} options - 鏌ヨ鍙傛暟\n * @param {string} options.targetType - 鐩爣绫诲瀷: product/article/comment/all\n * @param {number} options.page - 椤电爜锛岄粯璁?\n * @param {number} options.pageSize - 姣忛〉鏁伴噺锛岄粯璁?0\n * @returns {Promise<Object>} 鐐硅禐璁板綍鍒楄〃鍜屽垎椤典俊鎭?
- */\nasync function getLikeRecords(options = {}) {\n  const {\n    targetType = 'all',\n    page = 1,\n    pageSize = 20\n  } = options;\n\n  return request.get('/social/like/records', {\n    targetType,\n    page,\n    pageSize\n  });\n}\n\n/**\n * 鑾峰彇鍟嗗搧鐐硅禐缁熻\n * @param {string} productId - 鍟嗗搧ID\n * @returns {Promise<Object>} 鐐硅禐缁熻淇℃伅\n */\nasync function getProductLikeStats(productId) {\n  if (!productId) {\n    throw new Error('鍟嗗搧ID涓嶈兘涓虹┖');\n  }\n\n  return request.get(`/social/like/stats/product/${productId}`);\n}\n\n/**\n * 鑾峰彇鏂囩珷鐐硅禐缁熻\n * @param {string} articleId - 鏂囩珷ID\n * @returns {Promise<Object>} 鐐硅禐缁熻淇℃伅\n */\nasync function getArticleLikeStats(articleId) {\n  if (!articleId) {\n    throw new Error('鏂囩珷ID涓嶈兘涓虹┖');\n  }\n\n  return request.get(`/social/like/stats/article/${articleId}`);\n}\n\n/**\n * 鑾峰彇璇勮鐐硅禐缁熻\n * @param {string} commentId - 璇勮ID\n * @returns {Promise<Object>} 鐐硅禐缁熻淇℃伅\n */\nasync function getCommentLikeStats(commentId) {\n  if (!commentId) {\n    throw new Error('璇勮ID涓嶈兘涓虹┖');\n  }\n\n  return request.get(`/social/like/stats/comment/${commentId}`);\n}\n\n/**\n * 涓炬姤璇勮\n * @param {Object} data - 涓炬姤鏁版嵁\n * @param {string} data.commentId - 璇勮ID\n * @param {string} data.reason - 涓炬姤鍘熷洜: spam/abuse/pornography/violence/other\n * @param {string} data.description - 涓炬姤描述\n * @returns {Promise<Object>} 涓炬姤缁撴灉\n */\nasync function reportComment(data) {\n  const {\n    commentId,\n    reason,\n    description\n  } = data;\n\n  if (!commentId || !reason) {\n    throw new Error('璇勮ID鍜屼妇鎶ュ師鍥犱笉鑳戒负绌?);\n  }\n\n  return request.post('/social/comments/report', {\n    commentId,\n    reason,\n    description\n  });\n}\n\n/**\n * 鑾峰彇璇勮鍥炲鍒楄〃\n * @param {string} commentId - 璇勮ID\n * @param {number} page - 椤电爜锛岄粯璁?\n * @param {number} pageSize - 姣忛〉鏁伴噺锛岄粯璁?0\n * @returns {Promise<Object>} 鍥炲鍒楄〃鍜屽垎椤典俊鎭?
- */\nasync function getCommentReplies(commentId, page = 1, pageSize = 20) {\n  if (!commentId) {\n    throw new Error('璇勮ID涓嶈兘涓虹┖');\n  }\n\n  return request.get(`/social/comments/${commentId}/replies`, {\n    page,\n    pageSize\n  });\n}\n\n/**\n * 鑾峰彇鐑棬璇勮\n * @param {Object} options - 鏌ヨ鍙傛暟\n * @param {string} options.targetId - 鐩爣ID\n * @param {string} options.targetType - 鐩爣绫诲瀷: product/article\n * @param {number} options.limit - 鏁伴噺闄愬埗锛岄粯璁?0\n * @returns {Promise<Array>} 鐑棬璇勮鍒楄〃\n */\nasync function getHotComments(options = {}) {\n  const {\n    targetId,\n    targetType,\n    limit = 10\n  } = options;\n\n  if (!targetId || !targetType) {\n    throw new Error('鐩爣ID鍜岀被鍨嬩笉鑳戒负绌?);\n  }\n\n  return request.get('/social/comments/hot', {\n    targetId,\n    targetType,\n    limit\n  });\n}\n\n/**\n * 鑾峰彇鐢ㄦ埛璇勮鍒楄〃\n * @param {Object} options - 鏌ヨ鍙傛暟\n * @param {string} options.userId - 鐢ㄦ埛ID锛屼笉浼犲垯鑾峰彇褰撳墠鐢ㄦ埛\n * @param {number} options.page - 椤电爜锛岄粯璁?\n * @param {number} options.pageSize - 姣忛〉鏁伴噺锛岄粯璁?0\n * @param {string} options.sort - 鎺掑簭鏂瑰紡: newest/oldest\n * @returns {Promise<Object>} 璇勮鍒楄〃鍜屽垎椤典俊鎭?
- */\nasync function getUserComments(options = {}) {\n  const {\n    userId,\n    page = 1,\n    pageSize = 20,\n    sort = 'newest'\n  } = options;\n\n  const params = {\n    page,\n    pageSize,\n    sort\n  };\n\n  const url = userId ? `/users/${userId}/comments` : '/user/comments';\n\n  return request.get(url, params);\n}\n\n/**\n * 鑾峰彇鐢ㄦ埛鐐硅禐鍒楄〃\n * @param {Object} options - 鏌ヨ鍙傛暟\n * @param {string} options.userId - 鐢ㄦ埛ID锛屼笉浼犲垯鑾峰彇褰撳墠鐢ㄦ埛\n * @param {number} options.page - 椤电爜锛岄粯璁?\n * @param {number} options.pageSize - 姣忛〉鏁伴噺锛岄粯璁?0\n * @param {string} options.sort - 鎺掑簭鏂瑰紡: newest/oldest\n * @returns {Promise<Object>} 鐐硅禐鍒楄〃鍜屽垎椤典俊鎭?
- */\nasync function getUserLikes(options = {}) {\n  const {\n    userId,\n    page = 1,\n    pageSize = 20,\n    sort = 'newest'\n  } = options;\n\n  const params = {\n    page,\n    pageSize,\n    sort\n  };\n\n  const url = userId ? `/users/${userId}/likes` : '/user/likes';\n\n  return request.get(url, params);\n}\n\nmodule.exports = {\n  shareProduct,\n  getShareRecords,\n  getShareStats,\n  getProductComments,\n  getArticleComments,\n  addProductComment,\n  addArticleComment,\n  replyComment,\n  deleteComment,\n  likeComment,\n  unlikeComment,\n  likeProduct,\n  unlikeProduct,\n  likeArticle,\n  unlikeArticle,\n  checkLikeStatus,\n  getLikeRecords,\n  getProductLikeStats,\n  getArticleLikeStats,\n  getCommentLikeStats,\n  reportComment,\n  getCommentReplies,\n  getHotComments,\n  getUserComments,\n  getUserLikes\n};\n
+/**
+ * 文件名: socialService.js
+ * 版本号: 1.0.2
+ * 更新日期: 2025-12-02
+ * 描述: 社交功能服务，包含产品分享、评论、点赞、用户关注等
+ */
+
+const request = require('../utils/request');
+
+/**
+ * 分享产品
+ * @param {Object} options - 分享参数
+ * @param {string} options.productId - 产品ID
+ * @param {string} options.title - 分享标题
+ * @param {string} options.description - 分享描述
+ * @param {string} options.imageUrl - 分享图片URL
+ * @param {string} options.shareChannel - 分享渠道: wechat/friend/circle/qq/weibo/link/copy
+ * @param {Object} options.extra - 额外参数
+ * @returns {Promise<Object>} 分享结果
+ */
+async function shareProduct(options = {}) {
+  const {
+    productId,
+    title,
+    description,
+    imageUrl,
+    shareChannel = 'wechat',
+    extra = {}
+  } = options;
+
+  if (!productId) {
+    throw new Error('产品ID不能为空');
+  }
+
+  return request.post('/social/share/product', {
+    productId,
+    title,
+    description,
+    imageUrl,
+    shareChannel,
+    extra
+  });
+}
+
+/**
+ * 分享文章
+ * @param {Object} options - 分享参数
+ * @param {string} options.articleId - 文章ID
+ * @param {string} options.title - 分享标题
+ * @param {string} options.description - 分享描述
+ * @param {string} options.imageUrl - 分享图片URL
+ * @param {string} options.shareChannel - 分享渠道: wechat/friend/circle/qq/weibo/link/copy
+ * @param {Object} options.extra - 额外参数
+ * @returns {Promise<Object>} 分享结果
+ */
+async function shareArticle(options = {}) {
+  const {
+    articleId,
+    title,
+    description,
+    imageUrl,
+    shareChannel = 'wechat',
+    extra = {}
+  } = options;
+
+  if (!articleId) {
+    throw new Error('文章ID不能为空');
+  }
+
+  return request.post('/social/share/article', {
+    articleId,
+    title,
+    description,
+    imageUrl,
+    shareChannel,
+    extra
+  });
+}
+
+/**
+ * 分享活动
+ * @param {Object} options - 分享参数
+ * @param {string} options.activityId - 活动ID
+ * @param {string} options.title - 分享标题
+ * @param {string} options.description - 分享描述
+ * @param {string} options.imageUrl - 分享图片URL
+ * @param {string} options.shareChannel - 分享渠道: wechat/friend/circle/qq/weibo/link/copy
+ * @param {Object} options.extra - 额外参数
+ * @returns {Promise<Object>} 分享结果
+ */
+async function shareActivity(options = {}) {
+  const {
+    activityId,
+    title,
+    description,
+    imageUrl,
+    shareChannel = 'wechat',
+    extra = {}
+  } = options;
+
+  if (!activityId) {
+    throw new Error('活动ID不能为空');
+  }
+
+  return request.post('/social/share/activity', {
+    activityId,
+    title,
+    description,
+    imageUrl,
+    shareChannel,
+    extra
+  });
+}
+
+/**
+ * 获取分享记录
+ * @param {Object} options - 查询参数
+ * @param {number} options.page - 页码，默认1
+ * @param {number} options.pageSize - 每页数量，默认20
+ * @param {string} options.sort - 排序方式: newest/oldest
+ * @param {string} options.targetType - 分享目标类型: product/article/activity/all
+ * @param {string} options.shareChannel - 分享渠道，可选值：wechat/friend/circle/qq/weibo/link/copy
+ * @returns {Promise<Object>} 分享记录列表和分页信息
+ */
+async function getShareRecords(options = {}) {
+  const {
+    page = 1,
+    pageSize = 20,
+    sort = 'newest',
+    targetType = 'all',
+    shareChannel
+  } = options;
+
+  const params = {
+    page,
+    pageSize,
+    sort,
+    targetType
+  };
+
+  if (shareChannel) params.shareChannel = shareChannel;
+
+  return request.get('/social/share/records', params);
+}
+
+/**
+ * 获取分享统计
+ * @param {Object} options - 统计参数
+ * @param {string} options.targetId - 目标ID，可选
+ * @param {string} options.targetType - 目标类型: product/article/activity
+ * @param {string} options.timeRange - 时间范围: today/week/month/year/all
+ * @param {string} options.shareChannel - 分享渠道，可选
+ * @returns {Promise<Object>} 分享统计信息
+ */
+async function getShareStats(options = {}) {
+  const {
+    targetId,
+    targetType,
+    timeRange = 'all',
+    shareChannel
+  } = options;
+
+  let url;
+  if (targetId && targetType) {
+    url = `/social/share/stats/${targetType}/${targetId}`;
+  } else {
+    url = '/social/share/stats';
+  }
+
+  const params = {
+    timeRange
+  };
+
+  if (shareChannel) params.shareChannel = shareChannel;
+  if (!targetId && targetType) params.targetType = targetType;
+
+  return request.get(url, params);
+}
+
+/**
+ * 获取分享渠道列表
+ * @returns {Promise<Array>} 分享渠道列表
+ */
+async function getShareChannels() {
+  return request.get('/social/share/channels');
+}
+
+/**
+ * 获取分享奖励记录
+ * @param {Object} options - 查询参数
+ * @param {number} options.page - 页码，默认1
+ * @param {number} options.pageSize - 每页数量，默认20
+ * @param {string} options.sort - 排序方式: newest/oldest
+ * @returns {Promise<Object>} 奖励记录列表和分页信息
+ */
+async function getShareRewards(options = {}) {
+  const {
+    page = 1,
+    pageSize = 20,
+    sort = 'newest'
+  } = options;
+
+  return request.get('/social/share/rewards', {
+    page,
+    pageSize,
+    sort
+  });
+}
+
+/**
+ * 获取分享奖励规则
+ * @returns {Promise<Object>} 奖励规则
+ */
+async function getShareRewardRules() {
+  return request.get('/social/share/reward-rules');
+}
+
+/**
+ * 检查分享奖励状态
+ * @param {string} shareId - 分享记录ID
+ * @returns {Promise<Object>} 奖励状态
+ */
+async function checkShareRewardStatus(shareId) {
+  if (!shareId) {
+    throw new Error('分享记录ID不能为空');
+  }
+
+  return request.get(`/social/share/rewards/check/${shareId}`);
+}
+
+/**
+ * 获取产品评论列表
+ * @param {Object} options - 查询参数
+ * @param {string} options.productId - 产品ID
+ * @param {number} options.page - 页码，默认1
+ * @param {number} options.pageSize - 每页数量，默认20
+ * @param {string} options.sort - 排序方式: newest/oldest/highest/lowest
+ * @param {number} options.minRating - 最低评分，1-5
+ * @param {boolean} options.withImages - 是否只显示带图评论
+ * @returns {Promise<Object>} 评论列表和分页信息
+ */
+async function getProductComments(options = {}) {
+  const {
+    productId,
+    page = 1,
+    pageSize = 20,
+    sort = 'newest',
+    minRating,
+    withImages
+  } = options;
+
+  if (!productId) {
+    throw new Error('产品ID不能为空');
+  }
+
+  const params = {
+    page,
+    pageSize,
+    sort
+  };
+
+  if (minRating) params.minRating = minRating;
+  if (withImages) params.withImages = withImages;
+
+  return request.get(`/products/${productId}/comments`, params);
+}
+
+/**
+ * 获取文章评论列表
+ * @param {Object} options - 查询参数
+ * @param {string} options.articleId - 文章ID
+ * @param {number} options.page - 页码，默认1
+ * @param {number} options.pageSize - 每页数量，默认20
+ * @param {string} options.sort - 排序方式: newest/oldest
+ * @param {boolean} options.withImages - 是否只显示带图评论
+ * @param {boolean} options.withReplies - 是否只显示有回复的评论
+ * @param {string} options.authorId - 按作者ID筛选
+ * @returns {Promise<Object>} 评论列表和分页信息
+ */
+async function getArticleComments(options = {}) {
+  const {
+    articleId,
+    page = 1,
+    pageSize = 20,
+    sort = 'newest',
+    withImages,
+    withReplies,
+    authorId
+  } = options;
+
+  if (!articleId) {
+    throw new Error('文章ID不能为空');
+  }
+
+  const params = {
+    page,
+    pageSize,
+    sort
+  };
+
+  if (withImages !== undefined) params.withImages = withImages;
+  if (withReplies !== undefined) params.withReplies = withReplies;
+  if (authorId) params.authorId = authorId;
+
+  return request.get(`/articles/${articleId}/comments`, params);
+}
+
+/**
+ * 添加产品评论
+ * @param {Object} data - 评论数据
+ * @param {string} data.productId - 产品ID
+ * @param {string} data.content - 评论内容
+ * @param {number} data.rating - 评分，1-5
+ * @param {Array} data.images - 评论图片URL数组
+ * @param {boolean} data.anonymous - 是否匿名
+ * @returns {Promise<Object>} 评论结果
+ */
+async function addProductComment(data) {
+  const {
+    productId,
+    content,
+    rating,
+    images = [],
+    anonymous = false
+  } = data;
+
+  if (!productId) {
+    throw new Error('产品ID不能为空');
+  }
+
+  if (!content || content.trim().length === 0) {
+    throw new Error('评论内容不能为空');
+  }
+
+  if (rating < 1 || rating > 5) {
+    throw new Error('评分必须在1-5之间');
+  }
+
+  return request.post('/social/comments/product', {
+    productId,
+    content: content.trim(),
+    rating,
+    images,
+    anonymous
+  });
+}
+
+/**
+ * 添加文章评论
+ * @param {Object} data - 评论数据
+ * @param {string} data.articleId - 文章ID
+ * @param {string} data.content - 评论内容
+ * @param {boolean} data.anonymous - 是否匿名
+ * @returns {Promise<Object>} 评论结果
+ */
+async function addArticleComment(data) {
+  const {
+    articleId,
+    content,
+    anonymous = false
+  } = data;
+
+  if (!articleId) {
+    throw new Error('文章ID不能为空');
+  }
+
+  if (!content || content.trim().length === 0) {
+    throw new Error('评论内容不能为空');
+  }
+
+  return request.post('/social/comments/article', {
+    articleId,
+    content: content.trim(),
+    anonymous
+  });
+}
+
+/**
+ * 回复评论
+ * @param {Object} data - 回复数据
+ * @param {string} data.commentId - 评论ID
+ * @param {string} data.content - 回复内容
+ * @param {boolean} data.anonymous - 是否匿名
+ * @returns {Promise<Object>} 回复结果
+ */
+async function replyComment(data) {
+  const {
+    commentId,
+    content,
+    anonymous = false
+  } = data;
+
+  if (!commentId) {
+    throw new Error('评论ID不能为空');
+  }
+
+  if (!content || content.trim().length === 0) {
+    throw new Error('回复内容不能为空');
+  }
+
+  return request.post('/social/comments/reply', {
+    commentId,
+    content: content.trim(),
+    anonymous
+  });
+}
+
+/**
+ * 删除评论
+ * @param {string} commentId - 评论ID
+ * @returns {Promise<Object>} 删除结果
+ */
+async function deleteComment(commentId) {
+  if (!commentId) {
+    throw new Error('评论ID不能为空');
+  }
+
+  return request.delete(`/social/comments/${commentId}`);
+}
+
+/**
+ * 点赞评论
+ * @param {string} commentId - 评论ID
+ * @returns {Promise<Object>} 点赞结果
+ */
+async function likeComment(commentId) {
+  if (!commentId) {
+    throw new Error('评论ID不能为空');
+  }
+
+  return request.post('/social/like/comment', {
+    commentId
+  });
+}
+
+/**
+ * 取消点赞评论
+ * @param {string} commentId - 评论ID
+ * @returns {Promise<Object>} 取消点赞结果
+ */
+async function unlikeComment(commentId) {
+  if (!commentId) {
+    throw new Error('评论ID不能为空');
+  }
+
+  return request.post('/social/unlike/comment', {
+    commentId
+  });
+}
+
+/**
+ * 点赞产品
+ * @param {string} productId - 产品ID
+ * @returns {Promise<Object>} 点赞结果
+ */
+async function likeProduct(productId) {
+  if (!productId) {
+    throw new Error('产品ID不能为空');
+  }
+
+  return request.post('/social/like/product', {
+    productId
+  });
+}
+
+/**
+ * 取消点赞产品
+ * @param {string} productId - 产品ID
+ * @returns {Promise<Object>} 取消点赞结果
+ */
+async function unlikeProduct(productId) {
+  if (!productId) {
+    throw new Error('产品ID不能为空');
+  }
+
+  return request.post('/social/unlike/product', {
+    productId
+  });
+}
+
+/**
+ * 点赞文章
+ * @param {string} articleId - 文章ID
+ * @returns {Promise<Object>} 点赞结果
+ */
+async function likeArticle(articleId) {
+  if (!articleId) {
+    throw new Error('文章ID不能为空');
+  }
+
+  return request.post('/social/like/article', {
+    articleId
+  });
+}
+
+/**
+ * 取消点赞文章
+ * @param {string} articleId - 文章ID
+ * @returns {Promise<Object>} 取消点赞结果
+ */
+async function unlikeArticle(articleId) {
+  if (!articleId) {
+    throw new Error('文章ID不能为空');
+  }
+
+  return request.post('/social/unlike/article', {
+    articleId
+  });
+}
+
+/**
+ * 检查是否已点赞
+ * @param {Object} options - 检查参数
+ * @param {string} options.targetId - 目标ID
+ * @param {string} options.targetType - 目标类型: product/article/comment
+ * @returns {Promise<Object>} 检查结果
+ */
+async function checkLikeStatus(options = {}) {
+  const {
+    targetId,
+    targetType
+  } = options;
+
+  if (!targetId || !targetType) {
+    throw new Error('目标ID和类型不能为空');
+  }
+
+  return request.get('/social/like/check', {
+    targetId,
+    targetType
+  });
+}
+
+/**
+ * 获取点赞记录
+ * @param {Object} options - 查询参数
+ * @param {string} options.targetType - 目标类型: product/article/comment/all
+ * @param {number} options.page - 页码，默认1
+ * @param {number} options.pageSize - 每页数量，默认20
+ * @returns {Promise<Object>} 点赞记录列表和分页信息
+ */
+async function getLikeRecords(options = {}) {
+  const {
+    targetType = 'all',
+    page = 1,
+    pageSize = 20
+  } = options;
+
+  return request.get('/social/like/records', {
+    targetType,
+    page,
+    pageSize
+  });
+}
+
+/**
+ * 获取产品点赞统计
+ * @param {string} productId - 产品ID
+ * @returns {Promise<Object>} 点赞统计信息
+ */
+async function getProductLikeStats(productId) {
+  if (!productId) {
+    throw new Error('产品ID不能为空');
+  }
+
+  return request.get(`/social/like/stats/product/${productId}`);
+}
+
+/**
+ * 获取文章点赞统计
+ * @param {string} articleId - 文章ID
+ * @returns {Promise<Object>} 点赞统计信息
+ */
+async function getArticleLikeStats(articleId) {
+  if (!articleId) {
+    throw new Error('文章ID不能为空');
+  }
+
+  return request.get(`/social/like/stats/article/${articleId}`);
+}
+
+/**
+ * 获取评论点赞统计
+ * @param {string} commentId - 评论ID
+ * @returns {Promise<Object>} 点赞统计信息
+ */
+async function getCommentLikeStats(commentId) {
+  if (!commentId) {
+    throw new Error('评论ID不能为空');
+  }
+
+  return request.get(`/social/like/stats/comment/${commentId}`);
+}
+
+/**
+ * 举报评论
+ * @param {Object} data - 举报数据
+ * @param {string} data.commentId - 评论ID
+ * @param {string} data.reason - 举报原因: spam/abuse/pornography/violence/other
+ * @param {string} data.description - 举报描述
+ * @returns {Promise<Object>} 举报结果
+ */
+async function reportComment(data) {
+  const {
+    commentId,
+    reason,
+    description
+  } = data;
+
+  if (!commentId || !reason) {
+    throw new Error('评论ID和举报原因不能为空');
+  }
+
+  return request.post('/social/comments/report', {
+    commentId,
+    reason,
+    description
+  });
+}
+
+/**
+ * 获取评论回复列表
+ * @param {string} commentId - 评论ID
+ * @param {number} page - 页码，默认1
+ * @param {number} pageSize - 每页数量，默认20
+ * @returns {Promise<Object>} 回复列表和分页信息
+ */
+async function getCommentReplies(commentId, page = 1, pageSize = 20) {
+  if (!commentId) {
+    throw new Error('评论ID不能为空');
+  }
+
+  return request.get(`/social/comments/${commentId}/replies`, {
+    page,
+    pageSize
+  });
+}
+
+/**
+ * 获取热门评论
+ * @param {Object} options - 查询参数
+ * @param {string} options.targetId - 目标ID
+ * @param {string} options.targetType - 目标类型: product/article
+ * @param {number} options.limit - 数量限制，默认10
+ * @returns {Promise<Array>} 热门评论列表
+ */
+async function getHotComments(options = {}) {
+  const {
+    targetId,
+    targetType,
+    limit = 10
+  } = options;
+
+  if (!targetId || !targetType) {
+    throw new Error('目标ID和类型不能为空');
+  }
+
+  return request.get('/social/comments/hot', {
+    targetId,
+    targetType,
+    limit
+  });
+}
+
+/**
+ * 获取用户评论列表
+ * @param {Object} options - 查询参数
+ * @param {string} options.userId - 用户ID，不传则获取当前用户
+ * @param {number} options.page - 页码，默认1
+ * @param {number} options.pageSize - 每页数量，默认20
+ * @param {string} options.sort - 排序方式: newest/oldest
+ * @returns {Promise<Object>} 评论列表和分页信息
+ */
+async function getUserComments(options = {}) {
+  const {
+    userId,
+    page = 1,
+    pageSize = 20,
+    sort = 'newest'
+  } = options;
+
+  const params = {
+    page,
+    pageSize,
+    sort
+  };
+
+  const url = userId ? `/users/${userId}/comments` : '/user/comments';
+
+  return request.get(url, params);
+}
+
+/**
+ * 获取用户点赞列表
+ * @param {Object} options - 查询参数
+ * @param {string} options.userId - 用户ID，不传则获取当前用户
+ * @param {number} options.page - 页码，默认1
+ * @param {number} options.pageSize - 每页数量，默认20
+ * @param {string} options.sort - 排序方式: newest/oldest
+ * @returns {Promise<Object>} 点赞列表和分页信息
+ */
+async function getUserLikes(options = {}) {
+  const {
+    userId,
+    page = 1,
+    pageSize = 20,
+    sort = 'newest'
+  } = options;
+
+  const params = {
+    page,
+    pageSize,
+    sort
+  };
+
+  const url = userId ? `/users/${userId}/likes` : '/user/likes';
+
+  return request.get(url, params);
+}
+
+/**
+ * 获取关注列表
+ * @param {Object} options - 查询参数
+ * @param {string} options.userId - 用户ID，不传递则获取当前用户
+ * @param {number} options.page - 页码，默认1
+ * @param {number} options.pageSize - 每页数量，默认20
+ * @param {string} options.sort - 排序方式，可选值：newest/oldest
+ * @returns {Promise<Object>} 关注列表和分页信息
+ */
+async function getUserFollowing(options = {}) {
+  const {
+    userId,
+    page = 1,
+    pageSize = 20,
+    sort = 'newest'
+  } = options;
+
+  const params = {
+    page,
+    pageSize,
+    sort
+  };
+
+  const url = userId ? `/users/${userId}/following` : '/social/following';
+
+  return request.get(url, params);
+}
+
+/**
+ * 获取粉丝列表
+ * @param {Object} options - 查询参数
+ * @param {string} options.userId - 用户ID，不传递则获取当前用户
+ * @param {number} options.page - 页码，默认1
+ * @param {number} options.pageSize - 每页数量，默认20
+ * @param {string} options.sort - 排序方式，可选值：newest/oldest
+ * @returns {Promise<Object>} 粉丝列表和分页信息
+ */
+async function getUserFollowers(options = {}) {
+  const {
+    userId,
+    page = 1,
+    pageSize = 20,
+    sort = 'newest'
+  } = options;
+
+  const params = {
+    page,
+    pageSize,
+    sort
+  };
+
+  const url = userId ? `/users/${userId}/followers` : '/social/followers';
+
+  return request.get(url, params);
+}
+
+/**
+ * 关注用户
+ * @param {string} userId - 要关注的用户ID
+ * @returns {Promise<Object>} 关注结果
+ */
+async function followUser(userId) {
+  if (!userId) {
+    throw new Error('用户ID不能为空');
+  }
+
+  return request.post('/social/follow', {
+    userId
+  });
+}
+
+/**
+ * 取消关注
+ * @param {string} userId - 要取消关注的用户ID
+ * @returns {Promise<Object>} 取消关注结果
+ */
+async function unfollowUser(userId) {
+  if (!userId) {
+    throw new Error('用户ID不能为空');
+  }
+
+  return request.delete(`/social/follow/${userId}`);
+}
+
+/**
+ * 删除粉丝
+ * @param {string} followerId - 粉丝ID
+ * @returns {Promise<Object>} 操作结果
+ */
+async function removeFollower(followerId) {
+  if (!followerId) {
+    throw new Error('粉丝ID不能为空');
+  }
+
+  return request.delete(`/user/followers/${followerId}`);
+}
+
+/**
+ * 搜索用户
+ * @param {Object} options - 搜索参数
+ * @param {string} options.keyword - 搜索关键词
+ * @param {number} options.page - 页码，默认1
+ * @param {number} options.pageSize - 每页数量，默认20
+ * @returns {Promise<Object>} 搜索结果和分页信息
+ */
+async function searchUsers(options = {}) {
+  const {
+    keyword,
+    page = 1,
+    pageSize = 20
+  } = options;
+
+  if (!keyword) {
+    throw new Error('搜索关键词不能为空');
+  }
+
+  return request.get('/social/users/search', {
+    keyword,
+    page,
+    pageSize
+  });
+}
+
+/**
+ * 检查是否已关注
+ * @param {string} userId - 要检查的用户ID
+ * @returns {Promise<Object>} 检查结果
+ */
+async function checkFollowStatus(userId) {
+  if (!userId) {
+    throw new Error('用户ID不能为空');
+  }
+
+  return request.get(`/social/follow/check/${userId}`);
+}
+
+/**
+ * 获取推荐关注用户
+ * @param {number} limit - 推荐数量，默认为10
+ * @returns {Promise<Array>} 推荐用户列表
+ */
+async function getRecommendedUsers(limit = 10) {
+  return request.get('/users/recommended', { limit });
+}
+
+/**
+ * 获取用户关注/粉丝统计
+ * @param {string} userId - 用户ID，不传递则获取当前用户
+ * @returns {Promise<Object>} 统计信息
+ */
+async function getUserFollowStats(userId) {
+  const url = userId ? `/users/${userId}/follow-stats` : '/user/follow-stats';
+  return request.get(url);
+}
+
+module.exports = {
+  shareProduct,
+  shareArticle,
+  shareActivity,
+  getShareRecords,
+  getShareStats,
+  getShareChannels,
+  getShareRewards,
+  getShareRewardRules,
+  checkShareRewardStatus,
+  getProductComments,
+  getArticleComments,
+  addProductComment,
+  addArticleComment,
+  replyComment,
+  deleteComment,
+  likeComment,
+  unlikeComment,
+  likeProduct,
+  unlikeProduct,
+  likeArticle,
+  unlikeArticle,
+  checkLikeStatus,
+  getLikeRecords,
+  getProductLikeStats,
+  getArticleLikeStats,
+  getCommentLikeStats,
+  reportComment,
+  getCommentReplies,
+  getHotComments,
+  getUserComments,
+  getUserLikes,
+  getUserFollowing,
+  getUserFollowers,
+  followUser,
+  unfollowUser,
+  removeFollower,
+  searchUsers,
+  checkFollowStatus,
+  getRecommendedUsers,
+  getUserFollowStats
+};

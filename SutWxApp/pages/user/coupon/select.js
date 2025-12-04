@@ -45,7 +45,7 @@ Page({
         { id: '1', name: '濠?00閸?0閸?, value: 10, condition: '濠?00閸忓啫褰查悽?, endDate: '2023-12-31', available: true },
         { id: '2', name: '閺傞姹夋稉鎾查煩閸?, value: 5, condition: '閺冪娀妫Σ?, endDate: '2023-11-30', available: true },
         { id: '3', name: '瀹歌尪绻冮張鐔剁喘閹姴鍩?, value: 15, condition: '濠?50閸忓啫褰查悽?, endDate: '2023-09-30', available: false },
-        { id: '4', name: '娑撳秵寮х搾铏蒋娴犳湹绱幆鐘插煖', value: 20, condition: '濠?00閸忓啫褰查悽?, endDate: '2023-12-31', available: false }
+        { id: '4', name: '娑撳秵寮х搾铏蒋娴犳湹绱幆状态插煖', value: 20, condition: '濠?00閸忓啫褰查悽?, endDate: '2023-12-31', available: false }
       ];
 
       const available = mockCoupons.filter(coupon => coupon.available);
@@ -70,7 +70,7 @@ Page({
     const { id } = e.currentTarget.dataset;
     const selectedCoupon = this.data.availableCoupons.find(coupon => coupon.id === id);
     if (selectedCoupon) {
-      // 鏉╂柨娲栨稉濠佺妞ら潧鑻熸导鐘烩偓鎺椻偓澶夎厬閻ㄥ嫪绱幆鐘插煖娣団剝浼?      const pages = getCurrentPages();
+      // 鏉╂柨娲栨稉濠佺妞ら潧鑻熸导状态烩偓鎺椻偓澶夎厬閻ㄥ嫪绱幆状态插煖娣団剝浼?      const pages = getCurrentPages();
       const prevPage = pages[pages.length - 2];
       if (prevPage) {
         prevPage.setData({

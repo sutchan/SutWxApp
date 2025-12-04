@@ -38,7 +38,7 @@ Page({
   },
 
   /**
-   * 妞ょ敻娼伴崝鐘烘祰
+   * 妞ょ敻娼伴崝状态烘祰
    */
   onLoad: function(options) {
     // 娴犲骸寮弫棰佽厬閼惧嘲褰囬崚婵嗩潗閺嶅洨顒?    if (options && options.tab) {
@@ -80,7 +80,7 @@ Page({
   },
 
   /**
-   * 娑撳﹥濯洪崝鐘烘祰閺囨潙顦?   */
+   * 娑撳﹥濯洪崝状态烘祰閺囨潙顦?   */
   onReachBottom: function() {
     if (!this.data.loadingMore && this.data.hasMore) {
       this.loadTaskList(false);

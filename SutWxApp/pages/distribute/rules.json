@@ -1,5 +1,7 @@
-﻿{
-  "navigationBarTitleText": "閸掑棝鏀㈢憴鍕灟鐠佸墽鐤?,
-  "enablePullDownRefresh": false,
-  "usingComponents": {}
+{
+  "navigationBarTitleText": "分销",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark",
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black"
 }

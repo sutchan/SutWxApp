@@ -1,11 +1,5 @@
-﻿/**
- * 鏂囦欢鍚? cart.json
- * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: cart JSON 閰嶇疆鏂囦欢
- */
 {
-  "navigationBarTitleText": "鐠愵厾澧挎潪?,
+  "navigationBarTitleText": "购物车",
   "enablePullDownRefresh": true,
   "backgroundTextStyle": "dark"
 }

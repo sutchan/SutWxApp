@@ -67,7 +67,7 @@ Page({
   },
 
   /**
-   * 鐟欙箑绨抽崝鐘烘祰閺囨潙顦?   * @returns {void}
+   * 鐟欙箑绨抽崝状态烘祰閺囨潙顦?   * @returns {void}
    */
   onReachBottom() {
     if (this.data.pagination.hasMore) {

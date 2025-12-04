@@ -1,23 +1,25 @@
-﻿/**
- * 文件名 detail.js
- * 版本号 1.0.0
- * 更新日期: 2025-11-30
- * 描述: 閫氱煡璇︽儏椤甸潰
+/**
+ * 文件名: detail.js
+ * 版本号: 1.0.1
+ * 更新日期: 2025-12-03
+ * 描述: 通知详情页面
  */
 const notificationService = require('../../services/notificationService');
 
 Page({
   /**
-   * 椤甸潰鐨勫垵濮嬫暟鎹?
+   * 页面的初始数据
    */
   data: {
     notification: null,
     loading: true,
-    notificationId: null
+    notificationId: null,
+    error: false,
+    errorMessage: ''
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
+   * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
     if (options.id) {
@@ -29,7 +31,7 @@ Page({
   },
 
   /**
-   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
+   * 生命周期函数--监听页面显示
    */
   onShow: function () {
     if (this.data.notificationId) {
@@ -38,14 +40,16 @@ Page({
   },
 
   /**
-   * 鍔犺浇閫氱煡璇︽儏
-   * @param {string} id - 閫氱煡ID
+   * 加载通知详情
+   * @param {string} id - 通知ID
    */
   loadNotificationDetail: function (id) {
     if (!id) return;
     
     this.setData({
-      loading: true
+      loading: true,
+      error: false,
+      errorMessage: ''
     });
     
     notificationService.getNotificationDetail(id)
@@ -55,33 +59,30 @@ Page({
           loading: false
         });
         
-        // 鏍囪涓哄凡璇?
+        // 标记为已读
         if (!res.isRead) {
           notificationService.markAsRead(id)
             .catch(err => {
-              console.error('鏍囪閫氱煡涓哄凡璇诲け璐?', err);
+              console.error('标记通知已读失败', err);
             });
         }
       })
       .catch(err => {
         this.setData({
-          loading: false
+          loading: false,
+          error: true,
+          errorMessage: err.message || '加载通知详情失败'
         });
         
         wx.showToast({
-          title: err.message || '鍔犺浇閫氱煡璇︽儏澶辫触',
+          title: err.message || '加载通知详情失败',
           icon: 'none'
         });
-        
-        // 寤惰繜杩斿洖涓婁竴椤?
-        setTimeout(() => {
-          wx.navigateBack();
-        }, 1500);
       });
   },
 
   /**
-   * 鐐瑰嚮鎿嶄綔鎸夐挳
+   * 点击操作按钮
    */
   onActionTap: function () {
     const { notification } = this.data;
@@ -91,8 +92,8 @@ Page({
   },
 
   /**
-   * 鐐瑰嚮鐩稿叧閾炬帴
-   * @param {Object} e - 浜嬩欢瀵硅薄
+   * 点击相关链接
+   * @param {Object} e - 事件对象
    */
   onLinkTap: function (e) {
     const { url } = e.currentTarget.dataset;
@@ -102,40 +103,74 @@ Page({
   },
 
   /**
-   * 璺宠浆鍒版寚瀹歎RL
-   * @param {string} url - 鐩爣URL
+   * 跳转至指定URL
+   * @param {string} url - 目标URL
    */
   navigateToUrl: function (url) {
     if (!url) return;
     
-    // 鍒ゆ柇URL绫诲瀷锛岃繘琛岀浉搴旂殑璺宠浆
+    // 判断URL类型，进行相应的跳转
     if (url.startsWith('/')) {
-      // 鍐呴儴椤甸潰璺宠浆
+      // 内部页面跳转
       wx.navigateTo({
         url: url
       });
     } else if (url.startsWith('http://') || url.startsWith('https://')) {
-      // 澶栭儴閾炬帴璺宠浆
+      // 外部链接跳转
       wx.navigateTo({
         url: `/pages/webview/webview?url=${encodeURIComponent(url)}`
       });
     } else {
-      // 鍏朵粬绫诲瀷閾炬帴
-      console.error('涓嶆敮鎸佺殑URL绫诲瀷:', url);
+      // 其他类型链接
+      console.error('不支持的URL类型:', url);
       wx.showToast({
-        title: '涓嶆敮鎸佺殑閾炬帴绫诲瀷',
+        title: '不支持的链接类型',
         icon: 'none'
       });
     }
   },
 
   /**
-   * 鍒嗕韩鍔熻兘
+   * 返回上一页
+   */
+  onBackTap: function () {
+    wx.navigateBack();
+  },
+
+  /**
+   * 重试加载
+   */
+  onRetryTap: function () {
+    if (this.data.notificationId) {
+      this.loadNotificationDetail(this.data.notificationId);
+    }
+  },
+
+  /**
+   * 格式化时间
+   * @param {number} timestamp - 时间戳
+   * @returns {string} 格式化后的时间
+   */
+  formatTime: function(timestamp) {
+    if (!timestamp) return '';
+    
+    const date = new Date(timestamp);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    
+    return `${year}-${month}-${day} ${hours}:${minutes}`;
+  },
+
+  /**
+   * 分享功能
    */
   onShareAppMessage: function () {
     const { notification } = this.data;
     return {
-      title: notification ? notification.title : '閫氱煡璇︽儏',
+      title: notification ? notification.title : '通知详情',
       path: `/pages/notification/detail/detail?id=${this.data.notificationId}`
     };
   }

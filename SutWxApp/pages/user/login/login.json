@@ -1,9 +1,7 @@
-﻿/**
- * 鏂囦欢鍚? login.json
- * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: login JSON 閰嶇疆鏂囦欢
- */
 {
-  "navigationBarTitleText": "閻劍鍩涚櫥褰?
+  "navigationBarTitleText": "登录",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark",
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black"
 }

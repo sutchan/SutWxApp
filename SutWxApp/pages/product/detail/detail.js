@@ -293,7 +293,7 @@ Page({
    */
   addToCart() {
     // 鐎圭偤妾い鍦窗娑擃厼绨茬拠銉ㄧ殶閻⑺婸I濞ｈ濮為崚鎷屽枠閻椻晞婧?    wx.showToast({
-      title: i18n.translate('瀹稿弶鍧婇崝鐘插煂鐠愵厾澧挎潪?),
+      title: i18n.translate('瀹稿弶鍧婇崝状态插煂鐠愵厾澧挎潪?),
       icon: 'success'
     });
     this.hideSpecModal();

@@ -1,7 +1,7 @@
-﻿/**
+/**
  * 文件名: settings.js
- * 版本号: 1.0.0
- * 更新日期: 2025-11-30
+ * 版本号: 1.0.1
+ * 更新日期: 2025-12-03
  * 描述: 通知设置页面
  */
 const notificationService = require('../../services/notificationService');
@@ -13,7 +13,14 @@ Page({
   data: {
     settings: null,
     loading: true,
-    unreadCount: 0
+    unreadCount: 0,
+    notificationTypes: [
+      { key: 'systemNotification', name: '系统通知', description: '接收系统重要通知和公告' },
+      { key: 'orderNotification', name: '订单通知', description: '接收订单状态变更通知' },
+      { key: 'promotionNotification', name: '促销通知', description: '接收商品促销和优惠信息' },
+      { key: 'activityNotification', name: '活动通知', description: '接收平台活动和事件通知' },
+      { key: 'socialNotification', name: '社交通知', description: '接收关注、点赞、评论等社交互动通知' }
+    ]
   },
 
   /**
@@ -42,8 +49,22 @@ Page({
     
     notificationService.getNotificationSettings()
       .then(res => {
+        // 设置默认值
+        const defaultSettings = {
+          systemNotification: true,
+          orderNotification: true,
+          promotionNotification: true,
+          activityNotification: true,
+          socialNotification: true,
+          notificationSound: true,
+          notificationVibration: true,
+          pushNotification: true
+        };
+        
+        const settings = { ...defaultSettings, ...res };
+        
         this.setData({
-          settings: res,
+          settings,
           loading: false
         });
       })
@@ -86,6 +107,14 @@ Page({
     });
     
     notificationService.updateNotificationSettings(settings)
+      .then(() => {
+        // 更新成功，显示提示
+        wx.showToast({
+          title: '设置已保存',
+          icon: 'success',
+          duration: 1000
+        });
+      })
       .catch(err => {
         wx.showToast({
           title: err.message || '更新通知设置失败',
@@ -98,39 +127,47 @@ Page({
   },
 
   /**
-   * 系统通知开关变化
+   * 通知类型开关变化
    * @param {Object} e - 事件对象
    */
-  onSystemNotificationChange: function (e) {
+  onNotificationTypeChange: function (e) {
+    const { key } = e.currentTarget.dataset;
     const { value } = e.detail;
-    this.updateSettings({ systemNotification: value });
+    this.updateSettings({ [key]: value });
   },
 
   /**
-   * 订单通知开关变化
+   * 通知提醒方式变化
    * @param {Object} e - 事件对象
    */
-  onOrderNotificationChange: function (e) {
+  onNotificationReminderChange: function (e) {
+    const { key } = e.currentTarget.dataset;
     const { value } = e.detail;
-    this.updateSettings({ orderNotification: value });
+    this.updateSettings({ [key]: value });
   },
 
   /**
-   * 促销通知开关变化
+   * 推送通知开关变化
    * @param {Object} e - 事件对象
    */
-  onPromotionNotificationChange: function (e) {
+  onPushNotificationChange: function (e) {
     const { value } = e.detail;
-    this.updateSettings({ promotionNotification: value });
+    this.updateSettings({ pushNotification: value });
   },
 
   /**
-   * 活动通知开关变化
+   * 全选/取消全选所有通知
    * @param {Object} e - 事件对象
    */
-  onActivityNotificationChange: function (e) {
+  onSelectAllChange: function (e) {
     const { value } = e.detail;
-    this.updateSettings({ activityNotification: value });
+    const newSettings = {};
+    
+    this.data.notificationTypes.forEach(type => {
+      newSettings[type.key] = value;
+    });
+    
+    this.updateSettings(newSettings);
   },
 
   /**
@@ -172,6 +209,15 @@ Page({
             });
         }
       }
+    });
+  },
+
+  /**
+   * 跳转到通知列表
+   */
+  onNotificationListTap: function () {
+    wx.navigateTo({
+      url: '/pages/notification/list/list'
     });
   }
 });

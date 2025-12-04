@@ -1,9 +1,7 @@
-﻿/**
- * 鏂囦欢鍚? settings.json
- * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-24
- * 娴ｆ粏鈧? Sut
- * 鎻忚堪: 閻劍鍩涚拋鍓х枂妞ょ敻娼伴厤缃枃浠? */
 {
-  "navigationBarTitleText": "鐠佸墽鐤?
+  "navigationBarTitleText": "设置",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark",
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black"
 }

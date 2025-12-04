@@ -2,24 +2,27 @@
  * 文件名 webSocketService.js
  * 版本号 1.0.2
  * 更新日期: 2025-11-29
- * 娴ｆ粏鈧? Sut
- * WebSocket閺堝秴濮熼敍宀€鏁ゆ禍搴＄杽閺冭埖绉烽幁顖涘腹闁緤绱濈€圭偟骞囨潻鐐村复缁狅紕鎮婇妴浣圭Х閹垰顦╅悶鍡楁嫲韫囧啳鐑﹀Λ鈧ù? */
+ * 作者: Sut
+ * WebSocket服务类，用于处理WebSocket连接、消息发送和接收
+ */
 
 const store = require('./store.js');
 const i18n = require('./i18n.js');
 
-// WebSocket闁板秶鐤嗙敮鎼佸櫤
+// WebSocket配置
 const WS_CONFIG = {
-  // WebSocket閺堝秴濮熼崳銊ユ勾閸р偓
+  // WebSocket服务器地址
   WS_URL: 'wss://api.example.com/ws',
   WS_TEST_URL: 'wss://test-api.example.com/ws',
   USE_TEST: false,
   
-  // 鏉╃偞甯撮柊宥囩枂
-  RECONNECT_DELAY: 3000, // 闁插秷绻涘鎯扮箿(ms)
-  MAX_RECONNECT_ATTEMPTS: 5, // 閺堚偓婢堆囧櫢鏉╃偞顐奸弫?  HEARTBEAT_INTERVAL: 30000, // 韫囧啳鐑﹂梻鎾(ms)
+  // 连接配置
+  RECONNECT_DELAY: 3000, // 重连延迟（毫秒）
+  MAX_RECONNECT_ATTEMPTS: 5, // 最大重连次数
+  HEARTBEAT_INTERVAL: 30000, // 心跳间隔（毫秒）
   
-  // 濞戝牊浼呯猾璇茬€?  MSG_TYPE: {
+  // 消息类型
+  MSG_TYPE: {
     HEARTBEAT: 'heartbeat',
     HEARTBEAT_RESPONSE: 'heartbeat_response',
     USER_MESSAGE: 'user_message',
@@ -28,133 +31,115 @@ const WS_CONFIG = {
     AUTHENTICATE: 'authenticate',
     AUTHENTICATE_SUCCESS: 'authenticate_success',
     AUTHENTICATE_FAILURE: 'authenticate_failure'
-  },
-  
-  // 鏉╃偞甯撮悩鑸碘偓?  CONNECTION_STATUS: {
-    CONNECTING: 'connecting',
-    OPEN: 'open',
-    CLOSING: 'closing',
-    CLOSED: 'closed'
   }
 };
 
 /**
- * WebSocket閺堝秴濮熺猾? */
+ * WebSocket服务类
+ */
 class WebSocketService {
   constructor() {
     this.socket = null;
     this.connected = false;
     this.reconnectAttempts = 0;
     this.reconnectTimer = null;
-    this.heartbeatTimer = null;
     this.listeners = new Map();
     this.offlineMessages = [];
     this.connectionStatus = WS_CONFIG.CONNECTION_STATUS.CLOSED;
   }
-  
+
   /**
-   * 閼惧嘲褰嘩ebSocket URL
-   * @private
-   * @returns {string} WebSocket URL
-   */
-  _getWebSocketUrl() {
-    const baseUrl = WS_CONFIG.USE_TEST ? WS_CONFIG.WS_TEST_URL : WS_CONFIG.WS_URL;
-    const token = store.getState('user.token') || '';
-    return `${baseUrl}?token=${token}`;
-  }
-  
-  /**
-   * 瀵よ櫣鐝沇ebSocket鏉╃偞甯?   * @returns {Promise} 鏉╃偞甯寸紒鎾寸亯
+   * 连接WebSocket服务器
+   * @returns {Promise} 连接结果
    */
   connect() {
     return new Promise((resolve, reject) => {
       try {
-        // 瀹歌尙绮℃潻鐐村复閹存牗顒滈崷銊ㄧ箾閹恒儰鑵?        if (this.connectionStatus === WS_CONFIG.CONNECTION_STATUS.OPEN || 
+        // 如果已经连接或正在连接，直接返回
+        if (this.connectionStatus === WS_CONFIG.CONNECTION_STATUS.OPEN || 
             this.connectionStatus === WS_CONFIG.CONNECTION_STATUS.CONNECTING) {
           resolve(this.connected);
           return;
         }
-        
+
+        // 获取WebSocket URL
+        const baseUrl = WS_CONFIG.USE_TEST ? WS_CONFIG.WS_TEST_URL : WS_CONFIG.WS_URL;
+        const token = store.getState('user.token') || '';
+        const url = `${baseUrl}?token=${token}`;
+
+        // 更新连接状态
         this.connectionStatus = WS_CONFIG.CONNECTION_STATUS.CONNECTING;
+
+        // 创建WebSocket连接
         this.socket = wx.connectSocket({
-          url: this._getWebSocketUrl(),
+          url,
           header: {
             'content-type': 'application/json'
           },
           protocols: ['protocol1']
         });
-        
-        // 閻╂垵鎯夋潻鐐村复閹存劕濮?        this.socket.onOpen(() => {
-          console.log('WebSocket鏉╃偞甯村鍙夊ⅵ瀵偓');
+
+        // 监听连接打开
+        this.socket.onOpen(() => {
+          console.log('WebSocket连接已打开');
           this.connected = true;
           this.connectionStatus = WS_CONFIG.CONNECTION_STATUS.OPEN;
           this.reconnectAttempts = 0;
           
-          // 瀵偓婵绺剧捄铏梾濞?          this._startHeartbeat();
+          // 发送离线消息
+          this._sendOfflineMessages();
           
-          // 閸欐垿鈧胶顬囩痪鎸庣Х閹?          this._sendOfflineMessages();
-          
-          // 闁氨鐓￠惄鎴濇儔閸ｃ劏绻涢幒銉﹀灇閸?          this._notifyListeners('connected', true);
+          // 启动心跳
+          this._startHeartbeat();
           
           resolve(true);
         });
-        
-        // 閻╂垵鎯夐幒銉︽暪濞戝牊浼?        this.socket.onMessage((res) => {
-          try {
-            const data = JSON.parse(res.data);
-            this._handleMessage(data);
-          } catch (error) {
-            console.error('鐟欙絾鐎絎ebSocket濞戝牊浼呮径杈Е:', error);
-          }
-        });
-        
-        // 閻╂垵鎯夋潻鐐村复閸忔娊妫?        this.socket.onClose(() => {
-          console.log('WebSocket鏉╃偞甯村鎻掑彠闂?);
+
+        // 监听连接关闭
+        this.socket.onClose(() => {
+          console.log('WebSocket连接已关闭');
           this.connected = false;
           this.connectionStatus = WS_CONFIG.CONNECTION_STATUS.CLOSED;
-          
-          // 閸嬫粍顒涜箛鍐儲濡偓濞?          this._stopHeartbeat();
-          
-          // 闁氨鐓￠惄鎴濇儔閸ｃ劏绻涢幒銉ュ彠闂?          this._notifyListeners('disconnected', true);
-          
-          // 鐏忔繆鐦柌宥堢箾
-          this._reconnect();
+          this._stopHeartbeat();
+          this._handleReconnect();
         });
-        
-        // 閻╂垵鎯夋潻鐐村复闁挎瑨顕?        this.socket.onError((error) => {
-          console.error('WebSocket鏉╃偞甯撮柨娆掝嚖:', error);
+
+        // 监听错误
+        this.socket.onError((error) => {
+          console.error('WebSocket连接错误:', error);
           this.connected = false;
           this.connectionStatus = WS_CONFIG.CONNECTION_STATUS.CLOSED;
-          
-          // 閸嬫粍顒涜箛鍐儲濡偓濞?          this._stopHeartbeat();
-          
-          // 闁氨鐓￠惄鎴濇儔閸ｃ劏绻涢幒銉╂晩鐠?          this._notifyListeners('error', error);
-          
           reject(error);
-          
-          // 鐏忔繆鐦柌宥堢箾
-          this._reconnect();
         });
-        
+
+        // 监听消息
+        this.socket.onMessage((res) => {
+          this._handleMessage(res.data);
+        });
+
       } catch (error) {
-        console.error('閸掓稑缂揥ebSocket鏉╃偞甯存径杈Е:', error);
+        console.error('WebSocket连接失败:', error);
         reject(error);
       }
     });
   }
-  
+
   /**
-   * 閺傤厼绱慦ebSocket鏉╃偞甯?   * @param {number} code - 閸忔娊妫撮惍?   * @param {string} reason - 閸忔娊妫撮崢鐔锋礈
+   * 断开WebSocket连接
+   * @param {number} code - 关闭代码
+   * @param {string} reason - 关闭原因
    */
-  disconnect(code = 1000, reason = '濮濓絽鐖堕崗鎶芥４') {
-    // 濞撳懘娅庨柌宥堢箾鐎规碍妞傞崳?    if (this.reconnectTimer) {
+  disconnect(code = 1000, reason = '正常关闭') {
+    // 取消重连
+    if (this.reconnectTimer) {
       clearTimeout(this.reconnectTimer);
       this.reconnectTimer = null;
     }
-    
-    // 閸嬫粍顒涜箛鍐儲濡偓濞?    this._stopHeartbeat();
-    
-    // 閸忔娊妫存潻鐐村复
+
+    // 停止心跳
+    this._stopHeartbeat();
+
+    // 关闭连接
     if (this.socket && this.connectionStatus !== WS_CONFIG.CONNECTION_STATUS.CLOSED) {
       this.socket.close({
         code,
@@ -164,115 +149,126 @@ class WebSocketService {
       this.connectionStatus = WS_CONFIG.CONNECTION_STATUS.CLOSED;
     }
   }
-  
+
   /**
-   * 閸欐垿鈧焦绉烽幁?   * @param {Object} message - 濞戝牊浼呯€电钖?   * @param {string} message.type - 濞戝牊浼呯猾璇茬€?   * @param {Object} message.data - 濞戝牊浼呴弫鐗堝祦
-   * @returns {boolean} 閺勵垰鎯侀崣鎴︹偓浣瑰灇閸?   */
+   * 发送消息
+   * @param {Object} message - 消息内容
+   * @returns {boolean} 发送结果
+   */
   send(message) {
-    // 濞ｈ濮炲☉鍫熶紖ID閸滃本妞傞梻瀛樺煈
-    const messageWithMeta = {
-      id: this._generateMessageId(),
-      timestamp: Date.now(),
-      ...message
-    };
-    
-    // 婵″倹鐏夊鑼剁箾閹恒儻绱濋惄瀛樺复閸欐垿鈧?    if (this.connected && this.socket) {
-      try {
-        this.socket.send({
-          data: JSON.stringify(messageWithMeta)
-        });
-        return true;
-      } catch (error) {
-        console.error('閸欐垿鈧箘ebSocket濞戝牊浼呮径杈Е:', error);
-        // 娣囨繂鐡ㄩ崚鎵瀲缁炬寧绉烽幁顖炴Е閸?        this._saveOfflineMessage(messageWithMeta);
-        return false;
-      }
-    } else {
-      // 閺堫亣绻涢幒銉礉娣囨繂鐡ㄩ崚鎵瀲缁炬寧绉烽幁顖炴Е閸?      this._saveOfflineMessage(messageWithMeta);
-      // 鐏忔繆鐦潻鐐村复
+    if (!this.connected) {
+      // 离线消息处理
+      this.offlineMessages.push(message);
+      // 尝试重新连接
       this.connect();
       return false;
     }
+
+    try {
+      this.socket.send({
+        data: JSON.stringify(message)
+      });
+      return true;
+    } catch (error) {
+      console.error('WebSocket发送消息失败:', error);
+      return false;
+    }
   }
-  
+
   /**
-   * 鐠併垽妲勫☉鍫熶紖
-   * @param {string} eventType - 娴滃娆㈢猾璇茬€?   * @param {Function} callback - 閸ョ偠鐨熼崙鑺ユ殶
+   * 监听消息
+   * @param {string} eventType - 事件类型
+   * @param {Function} callback - 回调函数
+   * @returns {Function} 取消监听函数
    */
   on(eventType, callback) {
     if (!this.listeners.has(eventType)) {
       this.listeners.set(eventType, new Set());
     }
     this.listeners.get(eventType).add(callback);
+
+    // 返回取消监听函数
+    return () => {
+      this.off(eventType, callback);
+    };
   }
-  
+
   /**
-   * 閸欐牗绉风拋銏ゆ
-   * @param {string} eventType - 娴滃娆㈢猾璇茬€?   * @param {Function} callback - 閸ョ偠鐨熼崙鑺ユ殶閿涘牆褰查柅澶涚礉婵″倹鐏夋稉宥嗗絹娓氭稑鍨崣鏍ㄧХ鐠囥儰绨ㄦ禒鍓佽閸ㄥ娈戦幍鈧張澶庮吂闂冨拑绱?   */
+   * 取消监听
+   * @param {string} eventType - 事件类型
+   * @param {Function} callback - 回调函数
+   */
   off(eventType, callback) {
     if (this.listeners.has(eventType)) {
-      if (callback) {
-        this.listeners.get(eventType).delete(callback);
-      } else {
+      const callbacks = this.listeners.get(eventType);
+      callbacks.delete(callback);
+      if (callbacks.size === 0) {
         this.listeners.delete(eventType);
       }
     }
   }
-  
+
   /**
-   * 閻㈢喐鍨氬☉鍫熶紖ID
+   * 处理接收到的消息
    * @private
-   * @returns {string} 濞戝牊浼匢D
+   * @param {string} message - 消息内容
    */
-  _generateMessageId() {
-    return Date.now().toString(36) + Math.random().toString(36).substr(2);
-  }
-  
-  /**
-   * 婢跺嫮鎮婇幒銉︽暪閸掓壆娈戝☉鍫熶紖
-   * @private
-   * @param {Object} message - 濞戝牊浼呯€电钖?   */
   _handleMessage(message) {
-    const { type, data } = message;
-    
-    switch (type) {
-      case WS_CONFIG.MSG_TYPE.HEARTBEAT_RESPONSE:
-        // 閺€璺哄煂韫囧啳鐑﹂崫宥呯安閿涘本娲块弬鐗堟付閸氬孩妞跨捄鍐╂闂?        break;
-        
-      case WS_CONFIG.MSG_TYPE.USER_MESSAGE:
-      case WS_CONFIG.MSG_TYPE.SYSTEM_NOTIFICATION:
-        // 闁氨鐓＄€电懓绨查惃鍕Х閹垳娲冮崥顒€娅?        this._notifyListeners(type, data);
-        // 闁氨鏁ゅ☉鍫熶紖閻╂垵鎯夐崳?        this._notifyListeners('message', { type, data });
-        break;
-        
-      case WS_CONFIG.MSG_TYPE.ERROR:
-        console.error('WebSocket闁挎瑨顕ゅ☉鍫熶紖:', data);
-        this._notifyListeners('error', data);
-        break;
-        
-      default:
-        // 闁氨鐓￠張顏嗙叀濞戝牊浼呯猾璇茬€烽惃鍕磧閸氼剙娅?        this._notifyListeners('unknown', message);
+    try {
+      const parsedMessage = JSON.parse(message);
+      const { type, data } = parsedMessage;
+
+      // 心跳响应
+      if (type === WS_CONFIG.MSG_TYPE.HEARTBEAT_RESPONSE) {
+        // 心跳响应，无需处理
+        return;
+      }
+
+      // 通知所有监听器
+      if (this.listeners.has(type)) {
+        this.listeners.get(type).forEach(callback => {
+          try {
+            callback(data, parsedMessage);
+          } catch (error) {
+            console.error(`WebSocket消息处理错误 (${type}):`, error);
+          }
+        });
+      }
+
+      // 通知通用消息监听器
+      if (this.listeners.has('message')) {
+        this.listeners.get('message').forEach(callback => {
+          try {
+            callback({ type, data });
+          } catch (error) {
+            console.error('WebSocket通用消息处理错误:', error);
+          }
+        });
+      }
+    } catch (error) {
+      console.error('WebSocket消息解析错误:', error, message);
     }
   }
-  
+
   /**
-   * 瀵偓婵绺剧捄铏梾濞?   * @private
+   * 启动心跳
+   * @private
    */
   _startHeartbeat() {
-    this._stopHeartbeat(); // 閸忓牆浠犲顫閸撳秶娈戣箛鍐儲
-    
+    this._stopHeartbeat();
     this.heartbeatTimer = setInterval(() => {
-      if (this.connected && this.socket) {
+      if (this.connected) {
         this.send({
           type: WS_CONFIG.MSG_TYPE.HEARTBEAT,
-          data: { timestamp: Date.now() }
+          timestamp: Date.now()
         });
       }
     }, WS_CONFIG.HEARTBEAT_INTERVAL);
   }
-  
+
   /**
-   * 閸嬫粍顒涜箛鍐儲濡偓濞?   * @private
+   * 停止心跳
+   * @private
    */
   _stopHeartbeat() {
     if (this.heartbeatTimer) {
@@ -280,88 +276,54 @@ class WebSocketService {
       this.heartbeatTimer = null;
     }
   }
-  
+
   /**
-   * 鐏忔繆鐦柌宥堢箾
+   * 处理重连
    * @private
    */
-  _reconnect() {
-    // 濞撳懘娅庢稊瀣閻ㄥ嫰鍣告潻鐐茬暰閺冭泛娅?    if (this.reconnectTimer) {
-      clearTimeout(this.reconnectTimer);
-      this.reconnectTimer = null;
+  _handleReconnect() {
+    if (this.reconnectAttempts >= WS_CONFIG.MAX_RECONNECT_ATTEMPTS) {
+      console.error('WebSocket重连失败，已达到最大重连次数');
+      this.connectionStatus = WS_CONFIG.CONNECTION_STATUS.CLOSED;
+      return;
     }
-    
-    // 濡偓閺屻儵鍣告潻鐐搭偧閺佺増妲搁崥锕佺Т鏉╁洭妾洪崚?    if (this.reconnectAttempts < WS_CONFIG.MAX_RECONNECT_ATTEMPTS) {
+
+    // 计算重连延迟（指数退避）
+    const baseDelay = WS_CONFIG.RECONNECT_DELAY;
+    const randomDelay = Math.random() * 1000; // 0-1秒随机延迟
+    const delay = baseDelay * Math.pow(1.5, this.reconnectAttempts) + randomDelay;
+
+    console.log(`WebSocket将在 ${Math.round(delay / 1000)} 秒后尝试重连...`);
+
+    this.reconnectTimer = setTimeout(() => {
       this.reconnectAttempts++;
-      // 娴兼ê瀵查柌宥堢箾缁涙牜鏆愰敍姘辩波閸氬牊瀵氶弫浼粹偓鈧柆鍨嫲闂呭繑婧€瀵ゆ儼绻滈敍宀勪缉閸忓秴顦挎稉顏勵吂閹撮顏崥灞炬闁插秷绻?      const baseDelay = WS_CONFIG.RECONNECT_DELAY * Math.pow(1.5, this.reconnectAttempts - 1);
-      const randomDelay = Math.random() * 1000; // 0-1缁夋帞娈戦梾蹇旀簚瀵ゆ儼绻?      const delay = baseDelay + randomDelay;
-      
-      console.log(`WebSocket鐏忓棗婀?{Math.round(delay)}ms閸氬氦绻樼悰宀€顑?{this.reconnectAttempts}濞嗭繝鍣告潻鐎?;
-      
-      this.reconnectTimer = setTimeout(() => {
-        this.connect().catch(error => {
-          console.error(`WebSocket闁插秷绻涙径杈Е (${this.reconnectAttempts}/${WS_CONFIG.MAX_RECONNECT_ATTEMPTS}):`, error);
-        });
-      }, delay);
-    } else {
-      console.error('WebSocket闁插秷绻涘▎鈩冩殶瀹歌尪鎻張鈧径褔妾洪崚璁圭礉閸嬫粍顒涢柌宥堢箾');
-      this._notifyListeners('maxReconnectAttemptsReached', {
-        maxAttempts: WS_CONFIG.MAX_RECONNECT_ATTEMPTS
-      });
-    }
+      console.log(`WebSocket尝试重连 (${this.reconnectAttempts}/${WS_CONFIG.MAX_RECONNECT_ATTEMPTS})`);
+      this.connect();
+    }, delay);
   }
-  
+
   /**
-   * 闁氨鐓￠惄鎴濇儔閸?   * @private
-   * @param {string} eventType - 娴滃娆㈢猾璇茬€?   * @param {...any} args - 娴肩娀鈧帞绮伴惄鎴濇儔閸ｃ劎娈戦崣鍌涙殶
-   */
-  _notifyListeners(eventType, ...args) {
-    if (this.listeners.has(eventType)) {
-      const callbacks = this.listeners.get(eventType);
-      callbacks.forEach(callback => {
-        try {
-          callback(...args);
-        } catch (error) {
-          console.error(`WebSocket閻╂垵鎯夐崳銊﹀⒔鐞涘矂鏁婄拠?(${eventType}):`, error);
-        }
-      });
-    }
-  }
-  
-  /**
-   * 娣囨繂鐡ㄧ粋鑽ゅ殠濞戝牊浼?   * @private
-   * @param {Object} message - 濞戝牊浼呯€电钖?   */
-  _saveOfflineMessage(message) {
-    this.offlineMessages.push(message);
-    // 闂勬劕鍩楃粋鑽ゅ殠濞戝牊浼呴弫浼村櫤閿涘矂妲诲銏犲敶鐎涙ɑ瀛╅崙?    if (this.offlineMessages.length > 100) {
-      this.offlineMessages.shift();
-    }
-  }
-  
-  /**
-   * 閸欐垿鈧胶顬囩痪鎸庣Х閹?   * @private
+   * 发送离线消息
+   * @private
    */
   _sendOfflineMessages() {
     if (this.offlineMessages.length > 0 && this.connected) {
-      console.log(`瀵偓婵褰傞柅?{this.offlineMessages.length}閺夛紕顬囩痪鎸庣Х閹棎);
+      console.log(`发送 ${this.offlineMessages.length} 条离线消息`);
       
-      // 婢跺秴鍩楀☉鍫熶紖闂冪喎鍨敍宀勪缉閸忓秴婀崣鎴︹偓浣界箖缁嬪鑵戞穱顔芥暭
-      const messagesToSend = [...this.offlineMessages];
-      this.offlineMessages = [];
-      
-      // 閹靛綊鍣洪崣鎴︹偓浣圭Х閹?      messagesToSend.forEach(message => {
-        this.send({
-          ...message,
-          isOfflineMessage: true
-        });
+      // 逐个发送离线消息
+      this.offlineMessages.forEach(message => {
+        this.send(message);
       });
       
-      console.log('缁傝崵鍤庡☉鍫熶紖閸欐垿鈧礁鐣幋?);
+      // 清空离线消息
+      this.offlineMessages = [];
     }
   }
-  
+
   /**
-   * 閼惧嘲褰囨潻鐐村复閻樿埖鈧?   * @returns {Object} 鏉╃偞甯撮悩鑸碘偓浣蜂繆閹?   */
+   * 获取连接状态
+   * @returns {Object} 连接状态信息
+   */
   getConnectionStatus() {
     return {
       connected: this.connected,
@@ -370,21 +332,13 @@ class WebSocketService {
       offlineMessagesCount: this.offlineMessages.length
     };
   }
-  
-  /**
-   * 濞撳懐鎮婄挧鍕爱
-   */
-  cleanup() {
-    this.disconnect();
-    this.listeners.clear();
-    this.offlineMessages = [];
-  }
 }
 
-// 閸掓稑缂撻崡鏇氱伐鐎圭偘绶?const webSocketService = new WebSocketService();
+// 导出单例实例
+const instance = new WebSocketService();
 
-// 鐎电厧鍤?module.exports = {
-  instance: webSocketService,
-  WS_CONFIG,
-  WebSocketService
+module.exports = {
+  instance,
+  WebSocketService,
+  WS_CONFIG
 };

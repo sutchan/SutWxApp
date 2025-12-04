@@ -1,16 +1,16 @@
-﻿/**
- * 文件名 following.wxml
- * 版本号 1.0.0
- * 更新日期: 2025-11-23
- * 描述: following 妞ょ敻娼扮紒鎾寸€弬鍥︽
- */
-<!-- 閸忚櫕鏁為崚妤勩€冩い鐢告桨 -->
+<!--
+  文件名 following.wxml
+  版本号 1.0.0
+  更新日期: 2025-11-23
+  描述: 关注与粉丝页面
+-->
+<!-- 主容器 -->
 <view class="container">
-  <!-- 閹兼粎鍌ㄥ?-->
+  <!-- 搜索栏 -->
   <view class="search-bar">
     <view class="search-input-wrapper">
       <input class="search-input" 
-             placeholder="閹兼粎鍌ㄩ悽銊﹀煕" 
+             placeholder="搜索用户" 
              value="{{searchKeyword}}" 
              bindinput="onSearchInput" 
              bindconfirm="onSearch" />
@@ -19,7 +19,7 @@
     </view>
   </view>
 
-  <!-- 閺嶅洨顒烽崚鍥ㄥ床 -->
+  <!-- 标签栏 -->
   <view class="tab-bar">
     <view wx:for="{{tabs}}" 
           wx:key="index" 
@@ -30,24 +30,24 @@
     </view>
   </view>
 
-  <!-- 缂傛牞绶Ο鈥崇础閹垮秳缍旈弽?-->
+  <!-- 编辑栏 -->
   <view class="edit-bar" wx:if="{{editMode}}">
     <view class="select-all" bindtap="toggleSelectAll">
       <view class="checkbox {{selectedItems.length === (activeTab === 0 ? followingList.length : followersList.length) ? 'checked' : ''}}"></view>
-      <text>閸忋劑鈧?/text>
+      <text>全选</text>
     </view>
     <view class="edit-actions">
-      <text class="cancel-btn" bindtap="toggleEditMode">閸欐牗绉?/text>
-      <text class="action-btn" bindtap="unfollowUsers">閸欐牗绉烽崗铏暈({{selectedItems.length}})</text>
+      <text class="cancel-btn" bindtap="toggleEditMode">取消</text>
+      <text class="action-btn" bindtap="unfollowUsers">取消关注({{selectedItems.length}})</text>
     </view>
   </view>
 
-  <!-- 閸愬懎顔愰崠鍝勭厵 -->
+  <!-- 内容区域 -->
   <view class="content">
-    <!-- 閹兼粎鍌ㄧ紒鎾寸亯 -->
+    <!-- 搜索结果 -->
     <view wx:if="{{showSearchResults}}" class="search-results">
       <view class="list-header">
-        <text>閹兼粎鍌ㄧ紒鎾寸亯</text>
+        <text>搜索结果</text>
       </view>
       <view class="user-list">
         <view wx:for="{{searchResults}}" 
@@ -60,24 +60,24 @@
           </view>
           <view class="user-info">
             <view class="user-name">{{item.name}}</view>
-            <view class="user-desc">{{item.description || '鏉╂瑤閲滄禍鍝勭发閹虫帪绱濇禒鈧稊鍫ュ厴濞岋紕鏆€娑?}}</view>
+            <view class="user-desc">{{item.description || '这个人很神秘，什么都没有留下'}}</view>
           </view>
           <view class="follow-btn" 
                 data-id="{{item.id}}" 
-                catchtap="followUser">閸忚櫕鏁?/view>
+                catchtap="followUser">关注</view>
         </view>
       </view>
       <view wx:if="{{searchResults.length === 0}}" class="empty-state">
         <image src="/images/empty.svg" class="empty-icon"></image>
-        <text>濞屸剝婀侀幍鎯у煂閻╃鍙ч悽銊﹀煕</text>
+        <text>没有找到匹配的用户</text>
       </view>
     </view>
 
-    <!-- 閹存垵鍙у▔銊ф畱閸掓銆?-->
+    <!-- 我关注的 -->
     <view wx:if="{{!showSearchResults && activeTab === 0}}" class="following-list">
       <view class="list-header">
-        <text>閹存垵鍙у▔銊ф畱</text>
-        <text class="edit-btn" bindtap="toggleEditMode">{{editMode ? '鐎瑰本鍨? : '缁狅紕鎮?}}</text>
+        <text>我关注的</text>
+        <text class="edit-btn" bindtap="toggleEditMode">{{editMode ? '完成' : '编辑'}}</text>
       </view>
       <view class="user-list">
         <view wx:for="{{followingList}}" 
@@ -91,24 +91,24 @@
           </view>
           <view class="user-info">
             <view class="user-name">{{item.name}}</view>
-            <view class="user-desc">{{item.description || '鏉╂瑤閲滄禍鍝勭发閹虫帪绱濇禒鈧稊鍫ュ厴濞岋紕鏆€娑?}}</view>
+            <view class="user-desc">{{item.description || '这个人很神秘，什么都没有留下'}}</view>
           </view>
-          <view wx:if="{{!editMode}}" class="follow-status">瀹告彃鍙у▔?/view>
+          <view wx:if="{{!editMode}}" class="follow-status">已关注</view>
         </view>
       </view>
       
-      <!-- 缁岃櫣濮搁幀?-->
+      <!-- 空状态 -->
       <view wx:if="{{isEmpty && followingList.length === 0}}" class="empty-state">
         <image src="/images/empty.svg" class="empty-icon"></image>
-        <text>鏉╂ɑ鐥呴張澶婂彠濞夈劋鎹㈡担鏇氭眽</text>
-        <text class="empty-tip">閸樿褰傞悳浼淬€夐棃銏″閹电偓鍔呴崗纾嬪彯閻ㄥ嫪姹夐崥?/text>
+        <text>你还没有关注任何人</text>
+        <text class="empty-tip">去发现更多有趣的用户吧</text>
       </view>
     </view>
 
-    <!-- 閸忚櫕鏁為幋鎴犳畱閸掓銆?-->
+    <!-- 关注我的 -->
     <view wx:if="{{!showSearchResults && activeTab === 1}}" class="followers-list">
       <view class="list-header">
-        <text>閸忚櫕鏁為幋鎴犳畱</text>
+        <text>关注我的</text>
       </view>
       <view class="user-list">
         <view wx:for="{{followersList}}" 
@@ -121,31 +121,65 @@
           </view>
           <view class="user-info">
             <view class="user-name">{{item.name}}</view>
-            <view class="user-desc">{{item.description || '鏉╂瑤閲滄禍鍝勭发閹虫帪绱濇禒鈧稊鍫ュ厴濞岋紕鏆€娑?}}</view>
+            <view class="user-desc">{{item.description || '这个人很神秘，什么都没有留下'}}</view>
           </view>
           <view class="follow-btn" 
                 data-id="{{item.id}}" 
-                catchtap="followUser">閸忚櫕鏁?/view>
+                catchtap="followUser">关注</view>
         </view>
       </view>
       
-      <!-- 缁岃櫣濮搁幀?-->
+      <!-- 空状态 -->
       <view wx:if="{{isEmpty && followersList.length === 0}}" class="empty-state">
         <image src="/images/empty.svg" class="empty-icon"></image>
-        <text>鏉╂ɑ鐥呴張澶夋眽閸忚櫕鏁炴担?/text>
-        <text class="empty-tip">婢舵艾褰傛稉鈧禍娑楃喘鐠愩劌鍞寸€圭櫢绱濋崥绋跨穿閺囨潙顦块崗铏暈閸?/text>
+        <text>还没有人关注你</text>
+        <text class="empty-tip">分享更多精彩内容，吸引粉丝关注</text>
       </view>
     </view>
 
-    <!-- 加载状态->
-    <view wx:if="{{loading}}" class="loading-state">
-      <view class="loading-spinner"></view>
-      <text>鍔犺浇涓?.</text>
+    <!-- 推荐关注 -->
+    <view wx:if="{{!showSearchResults && !loading && !isEmpty && followingList.length === 0}}">
+      <view class="recommended-header">
+        <text>推荐关注</text>
+        <text class="refresh-btn" bindtap="refreshRecommendedUsers">换一批</text>
+      </view>
+      <view class="user-list">
+        <view wx:for="{{recommendedUsers}}" 
+              wx:key="id" 
+              class="user-item" 
+              data-id="{{item.id}}" 
+              bindtap="viewUserDetail">
+          <view class="user-avatar">
+            <image src="{{item.avatar || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+          </view>
+          <view class="user-info">
+            <view class="user-name">{{item.name}}</view>
+            <view class="user-desc">{{item.description || '这个人很神秘，什么都没有留下'}}</view>
+          </view>
+          <view class="follow-btn" 
+                data-id="{{item.id}}" 
+                catchtap="followUser">关注</view>
+        </view>
+      </view>
+      <view wx:if="{{recommendedLoading}}" class="loading-state">
+        <view class="loading-spinner"></view>
+        <text>加载中...</text>
+      </view>
+      <view wx:if="{{!recommendedLoading && recommendedUsers.length === 0}}" class="empty-state">
+        <image src="/images/empty.svg" class="empty-icon"></image>
+        <text>暂时没有推荐用户</text>
+      </view>
     </view>
 
-    <!-- 濞屸剝婀侀弴鏉戭樋閺佺増宓?-->
+    <!-- 加载状态-->
+    <view wx:if="{{loading}}" class="loading-state">
+      <view class="loading-spinner"></view>
+      <text>加载中...</text>
+    </view>
+
+    <!-- 没有更多数据 -->
     <view wx:if="{{noMoreData && !isEmpty && !loading && !showSearchResults}}" class="no-more-data">
-      <text>濞屸剝婀侀弴鏉戭樋閺佺増宓佹禍?/text>
+      <text>没有更多数据了</text>
     </view>
   </view>
 </view>

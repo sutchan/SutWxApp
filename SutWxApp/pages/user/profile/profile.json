@@ -1,9 +1,7 @@
-﻿/**
- * 鏂囦欢鍚? profile.json
- * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: profile JSON 閰嶇疆鏂囦欢
- */
 {
-  "navigationBarTitleText": "娑擃亙姹夌挧鍕灐"
+  "navigationBarTitleText": "个人资料",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark",
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black"
 }

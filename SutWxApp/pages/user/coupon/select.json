@@ -1,7 +1,7 @@
-﻿/**
- * 鏂囦欢鍚? select.json
- * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: select JSON 閰嶇疆鏂囦欢
- */
-{}
+{
+  "navigationBarTitleText": "优惠券",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark",
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black"
+}

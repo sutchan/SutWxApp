@@ -1,7 +1,7 @@
-﻿﻿﻿﻿/**
+﻿﻿﻿﻿﻿﻿﻿/**
  * 文件名: app.js
- * 版本号: 1.0.2
- * 更新日期: 2025-11-27
+ * 版本号: 1.0.4
+ * 更新日期: 2025-12-03
  * 作者: Sut
  * 描述: 小程序入口文件，负责初始化应用、配置全局状态、管理组件和服务等 */
 
@@ -11,6 +11,7 @@ const componentManager = require('./components');
 const cacheService = require('./utils/cacheService.js').instance;
 const cacheConfig = require('./utils/cacheConfig.js').getConfig();
 const webSocketService = require('./utils/webSocketService.js').instance;
+const performanceService = require('./utils/performanceService.js');
 
 /**
  * 小程序应用实例
@@ -45,6 +46,9 @@ App({
     
     // 初始化错误处理器
     this.initErrorHandler();
+    
+    // 初始化性能监控
+    this.initPerformanceMonitoring();
   },
 
   /**
@@ -96,6 +100,29 @@ App({
         // 显示提示失败时的容错处理
       }
     });
+  },
+  
+  /**
+   * 初始化性能监控
+   * @returns {void}
+   */
+  initPerformanceMonitoring() {
+    try {
+      // 初始化性能监控服务
+      performanceService.init({
+        enabled: true,
+        autoReport: true,
+        reportInterval: 60 * 1000, // 60秒上报一次
+        recordNetworkDetails: true,
+        recordComponentRender: true
+      });
+      console.log('性能监控服务初始化成功');
+      
+      // 将性能监控服务添加到全局数据中，方便其他地方调用
+      this.globalData.performanceService = performanceService;
+    } catch (error) {
+      console.error('性能监控服务初始化失败:', error);
+    }
   },
 
   /**

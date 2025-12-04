@@ -1,10 +1,7 @@
-﻿/**
- * 鏂囦欢鍚? confirm.json
- * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-27
- * 鎻忚堪: 璁㈠崟绾喛顓绘い鐢告桨閰嶇疆鏂囦欢
- */
 {
-  "navigationBarTitleText": "绾喛顓昏鍗?,
-  "enablePullDownRefresh": false
+  "navigationBarTitleText": "确认",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark",
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black"
 }

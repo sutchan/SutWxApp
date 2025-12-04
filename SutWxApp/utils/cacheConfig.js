@@ -1,35 +1,74 @@
 ﻿/**
- * 文件名 cacheConfig.js
- * 版本号 1.0.18
- * 更新日期: 2025-11-24
- * 娴ｆ粏鈧? Sut
- * 缂傛挸鐡ㄩ柊宥囩枂缁狅紕鎮婇敍灞惧絹娓氭稓绱︾€涙鐡ラ悾銉╁帳缂冾喖鎷扮粻锛勬倞閸旂喕鍏? */
+ * 文件名: cacheConfig.js
+ * 版本号: 1.0.19
+ * 更新日期: 2025-12-01
+ * 作者: Sut
+ * 描述: 缓存配置管理，定义不同API的缓存策略
+ */
 
 /**
- * 姒涙顓荤紓鎾崇摠闁板秶鐤? */
+ * 默认缓存配置
+ */
 const DEFAULT_CONFIG = {
-  // 閺勵垰鎯侀崥顖滄暏缂傛挸鐡?  enabled: true,
-  // 缂傛挸鐡ㄦ径褍鐨梽鎰煑閿涘牆鐡ч懞鍌︾礆
+  // 是否启用缓存
+  enabled: true,
+  // 最大缓存大小
   maxSize: 1024 * 1024 * 100, // 100MB
-  // 姒涙顓绘潻鍥ㄦ埂閺冨爼妫块敍鍫燁嚑缁夋帪绱?  defaultExpiry: 60 * 60 * 1000, // 1鐏忓繑妞?  // 閺勵垰鎯侀懛顏勫З濞撳懐鎮婃潻鍥ㄦ埂缂傛挸鐡?  autoClean: true,
-  // 閼奉亜濮╁〒鍛倞闂傛挳娈ч敍鍫燁嚑缁夋帪绱?  cleanInterval: 24 * 60 * 60 * 1000, // 24鐏忓繑妞?  // 閺勵垰鎯佺紓鎾崇摠閸ュ墽澧?  cacheImages: true,
-  // 閸ュ墽澧栫紓鎾崇摠閺堚偓婢堆勬殶闁?  maxImageCacheCount: 100,
-  // 鐠囬攱鐪扮紓鎾崇摠闁板秶鐤?  requestCache: {
-    // 姒涙顓荤紓鎾崇摠缁涙牜鏆?    defaultPolicy: 'cache_first',
-    // 閻楃懓鐣綰RL閻ㄥ嫮绱︾€涙鐡ラ悾?    policies: {
-      // 缁€杞扮伐闁板秶鐤嗛敍?/api/user/profile': 'network_first'
+  // 默认缓存过期时间
+  defaultExpiry: 60 * 60 * 1000, // 1小时
+  // 是否自动清理过期缓存
+  autoClean: true,
+  // 自动清理间隔时间
+  cleanInterval: 24 * 60 * 60 * 1000, // 24小时
+  // 是否缓存图片
+  cacheImages: true,
+  // 最大图片缓存数量
+  maxImageCacheCount: 100,
+  // 请求缓存配置
+  requestCache: {
+    // 默认缓存策略
+    defaultPolicy: 'cache_first',
+    // 特定URL的缓存策略
+    policies: {
+      // 用户信息相关API，优先从网络获取
+      '/api/user/profile': 'network_first',
+      '/api/user/addresses': 'network_first',
+      '/api/user/favorites': 'network_first',
+      // 产品列表，优先使用缓存
+      '/api/products': 'cache_first',
+      '/api/products/categories': 'cache_first',
+      '/api/products/recommend': 'cache_first',
+      '/api/products/hot': 'cache_first',
+      // 产品详情，优先使用缓存
+      '/api/products/': 'cache_first',
+      // 分类相关API，优先使用缓存
+      '/api/categories': 'cache_first',
+      // 社交相关API，优先从网络获取
+      '/api/social/': 'network_first',
+      // 通知相关API，优先从网络获取
+      '/api/notifications': 'network_first',
+      // 积分相关API，优先从网络获取
+      '/api/points': 'network_first',
+      // 购物车相关API，优先从网络获取
+      '/api/cart': 'network_first',
+      // 订单相关API，优先从网络获取
+      '/api/orders': 'network_first'
     },
-    // 娑撳秶绱︾€涙娈慤RL濡€崇础
+    // 不缓存的URL模式
     noCachePatterns: [
       '/api/auth/',
       '/api/payment/',
-      '/api/upload/'
+      '/api/upload/',
+      '/api/login/',
+      '/api/logout/',
+      '/api/refresh-token/'
     ]
   }
 };
 
 /**
- * 缂傛挸鐡ㄩ柊宥囩枂缁狅紕鎮婄猾? */
+ * 缓存配置管理类
+ */
 class CacheConfigManager {
   constructor() {
     this.configKey = 'sut_cache_config';
@@ -41,11 +80,11 @@ class CacheConfigManager {
    * 閸掓繂顫愰崠鏍帳缂?   * @returns {Promise<void>}
    */
   async init() {
-    // 鐏忔繆鐦禒搴＄摠閸屻劋鑵戦崝鐘烘祰闁板秶鐤?    try {
+    // 鐏忔繆鐦禒搴＄摠閸屻劋鑵戦崝状态烘祰闁板秶鐤?    try {
       const storedConfig = await wx.getStorage({ key: this.configKey });
       this.config = { ...DEFAULT_CONFIG, ...storedConfig.data };
     } catch (error) {
-      // 婵″倹鐏夐崝鐘烘祰婢惰精瑙﹂敍灞煎▏閻劑绮拋銈夊帳缂?      this.config = { ...DEFAULT_CONFIG };
+      // 婵″倹鐏夐崝状态烘祰婢惰精瑙﹂敍灞煎▏閻劑绮拋銈夊帳缂?      this.config = { ...DEFAULT_CONFIG };
     }
 
     // 閸氼垰濮╅懛顏勫З濞撳懐鎮?    if (this.config.autoClean) {
@@ -54,8 +93,9 @@ class CacheConfigManager {
   }
 
   /**
-   * 閼惧嘲褰囬柊宥囩枂
-   * @returns {Object} 缂傛挸鐡ㄩ柊宥囩枂鐎电钖?   */
+   * 获取配置
+   * @returns {Object} 缓存配置对象
+   */
   getConfig() {
     if (!this.config) {
       return { ...DEFAULT_CONFIG };
@@ -64,8 +104,9 @@ class CacheConfigManager {
   }
 
   /**
-   * 閺囧瓨鏌婇柊宥囩枂
-   * @param {Object} newConfig - 閺備即鍘ょ純?   * @returns {Promise<void>}
+   * 更新配置
+   * @param {Object} newConfig - 新配置
+   * @returns {Promise<void>}
    */
   async updateConfig(newConfig) {
     this.config = { ...this.config, ...newConfig };
@@ -146,26 +187,33 @@ class CacheConfigManager {
   }
 
   /**
-   * 閸氼垰濮╅懛顏勫З濞撳懐鎮?   */
+   * 启动自动清理
+   */
   startAutoCleanup() {
-    this.stopAutoCleanup(); // 閸忓牆浠犲顫閸撳秶娈戠€规碍妞傞崳?    
+    this.stopAutoCleanup(); // 先停止之前的定时器
+    
     this.cleanupTimer = setInterval(async () => {
       try {
-        // 閸斻劍鈧礁顕遍崗銉や簰闁灝鍘ゅ顏嗗箚娓氭繆绂?        const cacheService = require('./cacheService').default;
+        // 动态导入缓存服务，避免循环依赖
+        const cacheService = require('./cacheService').instance;
         
-        // 鏉╂瑩鍣烽崣顖欎簰濞ｈ濮為弴鏉戭樋閻ㄥ嫭绔婚悶鍡涒偓鏄忕帆
+        // 输出清理日志
         console.log('Running scheduled cache cleanup');
         
-        // 濞撳懐鎮婃稉瀛樻缂傛挸鐡?        await cacheService.clearByType('temp');
+        // 清理临时缓存
+        await cacheService.clearByType('temp');
         
-        // 閸欘垯浜掑ǎ璇插閸忔湹绮猾璇茬€烽惃鍕处鐎涙ɑ绔婚悶?      } catch (error) {
+        // 清理过期缓存
+        await cacheService._cleanExpiredCache();
+      } catch (error) {
         console.error('Auto cleanup error:', error);
       }
     }, this.config.cleanInterval);
   }
 
   /**
-   * 閸嬫粍顒涢懛顏勫З濞撳懐鎮?   */
+   * 停止自动清理
+   */
   stopAutoCleanup() {
     if (this.cleanupTimer) {
       clearInterval(this.cleanupTimer);
@@ -188,7 +236,9 @@ class CacheConfigManager {
   }
 
   /**
-   * 閼惧嘲褰囩紓鎾崇摠娴ｈ法鏁ら悩鑸碘偓?   * @returns {Promise<Object>} 缂傛挸鐡ㄩ悩鑸碘偓浣蜂繆閹?   */
+   * 获取缓存状态
+   * @returns {Promise<Object>} 缓存状态信息
+   */
   async getCacheStatus() {
     try {
       const info = await wx.getStorageInfo();

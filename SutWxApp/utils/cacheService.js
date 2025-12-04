@@ -1,9 +1,56 @@
-/**
+﻿/**
  * 文件名: cacheService.js
  * 版本号: 1.0.19
  * 更新日期: 2025-11-29
  * 作者: Sut
  * 描述: 缓存服务，提供数据缓存、图片缓存、缓存策略管理等功能 */
+
+// 微信API包装，便于测试时模拟
+const wxApi = {
+  // 性能监控服务，延迟导入避免循环依赖
+  get performanceService() {
+    if (!this._performanceService) {
+      this._performanceService = require('./performanceService.js');
+    }
+    return this._performanceService;
+  },
+  getStorageInfo: (options) => {
+    if (typeof wx !== 'undefined') {
+      return wx.getStorageInfo(options);
+    }
+    return Promise.resolve({ keys: [], currentSize: 0, limitSize: 0 });
+  },
+  getStorage: (options) => {
+    if (typeof wx !== 'undefined') {
+      return wx.getStorage(options);
+    }
+    return Promise.reject({ errMsg: 'wx is not available' });
+  },
+  setStorage: (options) => {
+    if (typeof wx !== 'undefined') {
+      return wx.setStorage(options);
+    }
+    return Promise.resolve();
+  },
+  removeStorage: (options) => {
+    if (typeof wx !== 'undefined') {
+      return wx.removeStorage(options);
+    }
+    return Promise.resolve();
+  },
+  downloadFile: (options) => {
+    if (typeof wx !== 'undefined') {
+      return wx.downloadFile(options);
+    }
+    return Promise.reject({ errMsg: 'wx is not available' });
+  },
+  getFileInfo: (options) => {
+    if (typeof wx !== 'undefined') {
+      return wx.getFileInfo(options);
+    }
+    return Promise.reject({ errMsg: 'wx is not available' });
+  }
+};
 
 /**
  * 缓存策略常量
@@ -112,8 +159,8 @@ class CacheService {
 
       // 保存数据和元数据
       await Promise.all([
-        wx.setStorage({ key: cacheKey, data }),
-        wx.setStorage({ key: metaKey, data: metadata })
+        wxApi.setStorage({ key: cacheKey, data }),
+        wxApi.setStorage({ key: metaKey, data: metadata })
       ]);
 
       // 添加到缓存索引
@@ -139,8 +186,8 @@ class CacheService {
 
       // 获取元数据和数据
       const [metadata, data] = await Promise.all([
-        wx.getStorage({ key: metaKey }),
-        wx.getStorage({ key: cacheKey })
+        wxApi.getStorage({ key: metaKey }),
+        wxApi.getStorage({ key: cacheKey })
       ]);
 
       // 检查是否过期
@@ -148,17 +195,25 @@ class CacheService {
         if (Date.now() > metadata.data.expiry) {
           // 缓存过期，移除缓存
           await this.remove(key, { type });
+          // 记录缓存未命中
+          wxApi.performanceService.recordCacheHit(false);
           return null;
         }
       }
 
+      // 记录缓存命中
+      wxApi.performanceService.recordCacheHit(true);
       return data.data;
     } catch (error) {
       // 缓存不存在
       if (error.errMsg && error.errMsg.includes('getStorage:fail')) {
+        // 记录缓存未命中
+        wxApi.performanceService.recordCacheHit(false);
         return null;
       }
       console.error('Cache get error:', error);
+      // 记录缓存未命中
+      wxApi.performanceService.recordCacheHit(false);
       return null;
     }
   }
@@ -178,8 +233,8 @@ class CacheService {
 
       // 移除缓存数据和元数据
       await Promise.all([
-        wx.removeStorage({ key: cacheKey }),
-        wx.removeStorage({ key: metaKey })
+        wxApi.removeStorage({ key: cacheKey }),
+        wxApi.removeStorage({ key: metaKey })
       ]);
 
       // 从缓存索引中移除
@@ -197,15 +252,15 @@ class CacheService {
    */
   async clear() {
     try {
-      const keys = await wx.getStorageInfo();
+      const keys = await wxApi.getStorageInfo();
       const cacheKeys = keys.keys.filter(key => key.startsWith(this.cachePrefix));
       
       if (cacheKeys.length > 0) {
-        await wx.removeStorage({ key: cacheKeys });
+        await wxApi.removeStorage({ key: cacheKeys });
       }
       
       // 清空缓存索引
-      await wx.removeStorage({ key: `${this.cachePrefix}index` });
+      await wxApi.removeStorage({ key: `${this.cachePrefix}index` });
       return true;
     } catch (error) {
       console.error('Cache clear error:', error);
@@ -230,12 +285,12 @@ class CacheService {
         });
 
         if (keysToRemove.length > 0) {
-          await Promise.all(keysToRemove.map(key => wx.removeStorage({ key })));
+          await Promise.all(keysToRemove.map(key => wxApi.removeStorage({ key })));
         }
 
         // 更新索引
         delete index[type];
-        await wx.setStorage({ key: `${this.cachePrefix}index`, data: index });
+        await wxApi.setStorage({ key: `${this.cachePrefix}index`, data: index });
       }
 
       return true;
@@ -287,7 +342,7 @@ class CacheService {
    */
   async getCacheSize() {
     try {
-      const info = await wx.getStorageInfo();
+      const info = await wxApi.getStorageInfo();
       return info.currentSize;
     } catch (error) {
       console.error('Get cache size error:', error);
@@ -396,7 +451,7 @@ class CacheService {
       if (cachedPath) {
         // 检查文件是否存在
         try {
-          await wx.getFileInfo({ filePath: cachedPath });
+          await wxApi.getFileInfo({ filePath: cachedPath });
           return cachedPath;
         } catch (e) {
           // 文件不存在，移除失效缓存
@@ -405,7 +460,7 @@ class CacheService {
       }
 
       // 下载图片
-      const downloadResult = await wx.downloadFile({
+      const downloadResult = await wxApi.downloadFile({
         url,
         success: res => {
           if (res.statusCode === 200) {
@@ -465,7 +520,7 @@ class CacheService {
    */
   async _getCacheIndex() {
     try {
-      const result = await wx.getStorage({ key: `${this.cachePrefix}index` });
+      const result = await wxApi.getStorage({ key: `${this.cachePrefix}index` });
       return result.data || {};
     } catch (error) {
       return {};
@@ -570,7 +625,7 @@ class CacheService {
           for (const key of index[type].all) {
             const metaKey = this._getMetaKey(key, type);
             try {
-              const meta = await wx.getStorage({ key: metaKey });
+              const meta = await wxApi.getStorage({ key: metaKey });
               if (meta.data) {
                 cacheItems.push({
                   key,

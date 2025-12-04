@@ -1,10 +1,4 @@
-﻿/**
- * 鏂囦欢鍚? index.json
- * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: index JSON 閰嶇疆鏂囦欢
- */
 {
-  "navigationBarTitleText": "妫ｆ牠銆?,
+  "navigationBarTitleText": "首页",
   "enablePullDownRefresh": true
 }

@@ -1,11 +1,7 @@
-﻿/**
- * 鏂囦欢鍚? following.json
- * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: following JSON 閰嶇疆鏂囦欢
- */
 {
-  "navigationBarTitleText": "閹存垹娈戦崗铏暈",
+  "navigationBarTitleText": "我的",
   "enablePullDownRefresh": true,
-  "onReachBottomDistance": 50
+  "backgroundTextStyle": "dark",
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black"
 }

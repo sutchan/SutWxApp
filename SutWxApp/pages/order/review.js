@@ -22,7 +22,7 @@ Page({
    */
    
   onLoad: function (_options) {
-    console.log('妞ょ敻娼伴崝鐘烘祰閸欏倹鏆?', _options);
+    console.log('妞ょ敻娼伴崝状态烘祰閸欏倹鏆?', _options);
     // 鐠佸墽鐤嗘い鐢告桨閺嶅洭顣?    wx.setNavigationBarTitle({
       title: i18n.translate('review.title')
     });

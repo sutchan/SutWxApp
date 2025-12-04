@@ -1,11 +1,7 @@
-﻿/**
- * 鏂囦欢鍚? result.json
- * 鐗堟湰鍙? 1.0.0
- * 鏇存柊鏃ユ湡: 2025-11-23
- * 鎻忚堪: result JSON 閰嶇疆鏂囦欢
- */
 {
-  "navigationBarTitleText": "閹兼粎鍌?,
+  "navigationBarTitleText": "结果",
   "enablePullDownRefresh": true,
-  "onReachBottomDistance": 50
+  "backgroundTextStyle": "dark",
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black"
 }
