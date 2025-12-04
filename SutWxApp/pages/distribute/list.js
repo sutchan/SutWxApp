@@ -77,13 +77,22 @@ Page({
       pageSize: this.data.pageSize
     })
       .then(res => {
-        const newList = this.data.page === 1 ? res.list : [...this.data.distributeList, ...res.list];
-        this.setData({
-          distributeList: newList,
-          total: res.total,
-          hasMore: newList.length < res.total,
-          loading: false
-        });
+        if (res.success) {
+          const newList = this.data.page === 1 ? res.data.list : [...this.data.distributeList, ...res.data.list];
+          this.setData({
+            distributeList: newList,
+            total: res.data.total,
+            hasMore: newList.length < res.data.total,
+            loading: false
+          });
+        } else {
+          console.error('获取分销列表失败:', res.message);
+          this.setData({ loading: false });
+          wx.showToast({
+            title: res.message || '获取分销列表失败',
+            icon: 'none'
+          });
+        }
         if (callback) callback();
       })
       .catch(err => {
@@ -163,18 +172,25 @@ Page({
     });
 
     distributeService.approveDistribute(id)
-      .then(() => {
+      .then(res => {
         wx.hideLoading();
-        wx.showToast({
-          title: '审核通过成功'
-        });
-        // 刷新列表
-        this.setData({
-          page: 1,
-          distributeList: [],
-          hasMore: true
-        });
-        this.getDistributeList();
+        if (res.success) {
+          wx.showToast({
+            title: '审核通过成功'
+          });
+          // 刷新列表
+          this.setData({
+            page: 1,
+            distributeList: [],
+            hasMore: true
+          });
+          this.getDistributeList();
+        } else {
+          wx.showToast({
+            title: res.message || '审核通过失败',
+            icon: 'none'
+          });
+        }
       })
       .catch(err => {
         wx.hideLoading();
@@ -231,18 +247,25 @@ Page({
     });
 
     distributeService.rejectDistribute(id, reason)
-      .then(() => {
+      .then(res => {
         wx.hideLoading();
-        wx.showToast({
-          title: '拒绝成功'
-        });
-        // 刷新列表
-        this.setData({
-          page: 1,
-          distributeList: [],
-          hasMore: true
-        });
-        this.getDistributeList();
+        if (res.success) {
+          wx.showToast({
+            title: '拒绝成功'
+          });
+          // 刷新列表
+          this.setData({
+            page: 1,
+            distributeList: [],
+            hasMore: true
+          });
+          this.getDistributeList();
+        } else {
+          wx.showToast({
+            title: res.message || '拒绝失败',
+            icon: 'none'
+          });
+        }
       })
       .catch(err => {
         wx.hideLoading();
@@ -299,18 +322,25 @@ Page({
     });
 
     distributeService.deleteDistribute(id, reason)
-      .then(() => {
+      .then(res => {
         wx.hideLoading();
-        wx.showToast({
-          title: '删除成功'
-        });
-        // 刷新列表
-        this.setData({
-          page: 1,
-          distributeList: [],
-          hasMore: true
-        });
-        this.getDistributeList();
+        if (res.success) {
+          wx.showToast({
+            title: '删除成功'
+          });
+          // 刷新列表
+          this.setData({
+            page: 1,
+            distributeList: [],
+            hasMore: true
+          });
+          this.getDistributeList();
+        } else {
+          wx.showToast({
+            title: res.message || '删除失败',
+            icon: 'none'
+          });
+        }
       })
       .catch(err => {
         wx.hideLoading();

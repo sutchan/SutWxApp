@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿/**
+﻿/**
  * 文件名: distributeService.js
  * 版本号: 1.0.1
  * 更新日期: 2025-12-03
@@ -51,6 +51,10 @@ const distributeService = {
   deleteDistribute(id, reason) {
     if (!id) {
       return Promise.reject(new Error('分销ID不能为空'));
+    }
+    
+    if (!reason) {
+      return Promise.reject(new Error('删除原因不能为空'));
     }
     
     return request.delete(`/distributes/${id}`, { reason });
