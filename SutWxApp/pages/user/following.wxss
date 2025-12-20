@@ -1,10 +1,10 @@
 ﻿/**
- * 文件名 following.wxss
- * 版本号 1.0.0
- * 更新日期: 2025-11-23
- * 描述: following 椤甸潰鏍峰紡鏂囦欢
+ * 鏂囦欢鍚?following.wxss
+ * 鐗堟湰鍙?1.0.0
+ * 鏇存柊鏃ユ湡: 2025-12-04
+ * 鎻忚堪: 鍏虫敞椤甸潰鏍峰紡鏂囦欢
  */
-/* 閸忚櫕鏁為崚妤勩€冩い鐢告桨閺嶅嘲绱?*/
+/* 鍏虫敞椤甸潰瀹瑰櫒 */
 .container {
   display: flex;
   flex-direction: column;
@@ -12,7 +12,7 @@
   background-color: #f5f5f5;
 }
 
-/* 閹兼粎鍌ㄥ鍡樼壉瀵?*/
+/* 鎼滅储鏍?*/
 .search-bar {
   padding: 16rpx 24rpx;
   background-color: #fff;
@@ -62,7 +62,7 @@
   pointer-events: none;
 }
 
-/* 閺嶅洨顒烽崚鍥ㄥ床閺嶅嘲绱?*/
+/* 鏍囩鏍?*/
 .tab-bar {
   display: flex;
   background-color: #fff;
@@ -98,7 +98,7 @@
   border-radius: 2rpx;
 }
 
-/* 缂傛牞绶Ο鈥崇础閹垮秳缍旈弽?*/
+/* 缂栬緫鏍?*/
 .edit-bar {
   display: flex;
   justify-content: space-between;
@@ -155,13 +155,13 @@
   color: #07c160;
 }
 
-/* 閸愬懎顔愰崠鍝勭厵 */
+/* 鍐呭鍖哄煙 */
 .content {
   flex: 1;
   padding: 0 24rpx;
 }
 
-/* 閸掓銆冩径鎾劥 */
+/* 鍒楄〃澶撮儴 */
 .list-header {
   display: flex;
   justify-content: space-between;
@@ -176,7 +176,7 @@
   color: #07c160;
 }
 
-/* 閻劍鍩涢崚妤勩€?*/
+/* 鐢ㄦ埛鍒楄〃 */
 .user-list {
   background-color: #fff;
   border-radius: 16rpx;
@@ -252,7 +252,7 @@
   border-radius: 24rpx;
 }
 
-/* 婢跺秹鈧顢嬮崷銊х椽鏉堟垶膩瀵繋绗呴惃鍕秴缂?*/
+/* 缂栬緫妯″紡涓嬬殑澶嶉€夋浣嶇疆 */
 .user-item.edit-mode .checkbox {
   position: absolute;
   left: 24rpx;
@@ -260,7 +260,7 @@
   transform: translateY(-50%);
 }
 
-/* 缁岃櫣濮搁幀?*/
+/* 绌虹姸鎬?*/
 .empty-state {
   display: flex;
   flex-direction: column;
@@ -289,7 +289,7 @@
   color: #ccc;
 }
 
-/* 加载状态/
+/* 鍔犺浇鐘舵€?*/
 .loading-state {
   display: flex;
   flex-direction: column;
@@ -318,7 +318,7 @@
   color: #999;
 }
 
-/* 濞屸剝婀侀弴鏉戭樋閺佺増宓?*/
+/* 鏃犳洿澶氭暟鎹彁绀?*/
 .no-more-data {
   text-align: center;
   padding: 40rpx 0;
@@ -326,7 +326,7 @@
   color: #999;
 }
 
-/* 閹兼粎鍌ㄧ紒鎾寸亯閻楄鐣╅弽宄扮础 */
+/* 鎼滅储缁撴灉鏍峰紡 */
 .search-results {
   margin-top: 24rpx;
 }

@@ -1,17 +1,16 @@
 ﻿/**
- * 文件名 mall.wxss
- * 版本号 1.0.0
- * 更新日期: 2025-11-23
- * 描述: mall 椤甸潰鏍峰紡鏂囦欢
- */
-/* 缁夘垰鍨庨崯鍡楃厔妞ょ敻娼伴弽宄扮础 */
+ * 鏂囦欢鍚?mall.wxss
+ * 鐗堟湰鍙?1.0.0
+ * 鏇存柊鏃ユ湡: 2025-12-04
+ * 鎻忚堪: mall 妞ょ敻娼伴弽宄扮础閺傚洣娆? */
+/* 绉垎鍟嗗煄瀹瑰櫒 */
 .mall-container {
   min-height: 100vh;
   background-color: #f5f5f5;
   padding-bottom: 20px;
 }
 
-/* 閻劍鍩涚粔顖氬瀻娣団剝浼?*/
+/* 绉垎澶撮儴淇℃伅 */
 .points-header {
   display: flex;
   align-items: center;
@@ -58,7 +57,7 @@
   opacity: 0.8;
 }
 
-/* 閹兼粎鍌ㄩ弽?*/
+/* 鎼滅储鏍?*/
 .search-bar {
   padding: 15px;
   background-color: #fff;
@@ -89,7 +88,7 @@
   margin-left: 8px;
 }
 
-/* 閸熷棗鎼ч崚鍡欒 */
+/* 鍒嗙被鍒楄〃 */
 .categories {
   display: flex;
   align-items: center;
@@ -150,12 +149,12 @@
   color: #666;
 }
 
-/* 閸熷棗鎼ч崚妤勩€?*/
+/* 鍟嗗搧瀹瑰櫒 */
 .products-container {
   padding: 10px 15px;
 }
 
-/* 加载状态/
+/* 鍔犺浇鐘舵€?*/
 .loading-container {
   display: flex;
   flex-direction: column;
@@ -190,7 +189,7 @@
   100% { transform: rotate(360deg); }
 }
 
-/* 閸熷棗鎼ч崚妤勩€?*/
+/* 鍟嗗搧鍒楄〃 */
 .products-list {
   display: flex;
   flex-direction: column;
@@ -204,7 +203,7 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-/* 閸熷棗鎼ч崶鍓у */
+/* 鍟嗗搧鍥剧墖 */
 .product-image {
   position: relative;
   height: 180px;
@@ -243,7 +242,7 @@
   border-radius: 4px;
 }
 
-/* 浜у搧淇℃伅 */
+/* 鍟嗗搧淇℃伅 */
 .product-info {
   padding: 15px;
 }
@@ -275,7 +274,7 @@
   overflow: hidden;
 }
 
-/* 閸熷棗鎼ч弽鍥╊劮 */
+/* 鍟嗗搧鏍囩 */
 .product-tags {
   display: flex;
   flex-wrap: wrap;
@@ -291,7 +290,7 @@
   border-radius: 4px;
 }
 
-/* 閸忔垶宕查柌蹇撴嫲鎼存挸鐡?*/
+/* 鍟嗗搧缁熻淇℃伅 */
 .product-stats {
   display: flex;
   justify-content: space-between;
@@ -299,7 +298,7 @@
   color: #999;
 }
 
-/* 閸熷棗鎼ф惔鏇㈠劥 */
+/* 鍟嗗搧搴曢儴 */
 .product-footer {
   display: flex;
   align-items: center;
@@ -338,7 +337,7 @@
   color: #999;
 }
 
-/* 閸旂姾娴囬弴鏉戭樋 */
+/* 鍔犺浇鏇村 */
 .loading-more {
   display: flex;
   align-items: center;
@@ -350,7 +349,7 @@
   margin-left: 8px;
 }
 
-/* 濞屸剝婀侀弴鏉戭樋閺佺増宓?*/
+/* 鏃犳洿澶氭暟鎹彁绀?*/
 .no-more {
   text-align: center;
   padding: 20px 0;
@@ -358,7 +357,7 @@
   font-size: 14px;
 }
 
-/* 缁岃櫣濮搁幀?*/
+/* 绌虹姸鎬?*/
 .empty-state {
   display: flex;
   flex-direction: column;
@@ -405,7 +404,7 @@
   color: #999;
 }
 
-/* 閺堚偓鏉╂垵鍘幑銏ｎ唶瑜?*/
+/* 鏈€杩戝厬鎹㈣褰?*/
 .recent-exchanges {
   margin: 20px 15px 0;
   background-color: #fff;
@@ -482,7 +481,7 @@
   font-weight: 500;
 }
 
-/* 閹烘帒绨鍦崶 */
+/* 鎺掑簭寮圭獥 */
 .sort-popup {
   position: fixed;
   top: 0;

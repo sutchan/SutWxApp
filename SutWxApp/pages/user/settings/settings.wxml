@@ -1,16 +1,1 @@
-﻿<!--
-文件名 settings.wxml
-版本号 1.0.0
-更新日期: 2025-11-24
-娴ｆ粏鈧? Sut
-描述: 閻劍鍩涚拋鍓х枂妞ょ敻娼扮紒鎾寸€弬鍥︽
--->
-<view class="container">
-  <mp-cells>
-    <mp-cell value="娑擃亙姹夌挧鍕灐" link url="/pages/user/profile/profile"></mp-cell>
-    <mp-cell value="閸︽澘娼冪粻锛勬倞" link url="/pages/user/address/list"></mp-cell>
-    <mp-cell value="閸忓厖绨幋鎴滄粦" link url="/pages/user/about/about"></mp-cell>
-    <mp-cell value="閻劍鍩涢崡蹇氼唴" link url="/pages/user/agreement/agreement"></mp-cell>
-    <mp-cell value="闂呮劗顫嗛弨璺ㄧ摜" link url="/pages/user/privacySettings/privacySettings"></mp-cell>
-  </mp-cells>
-</view>
+﻿<!--\n文件名 settings.wxml\n版本号 1.0.0\n更新日期: 2025-11-24\n娴ｆ粏鈧? Sut\n描述: 閻劍鍩涚拋鍓х枂妞ょ敻娼扮紒鎾寸€弬鍥︽\n-->\n<view class="container">\n  <mp-cells>\n    <mp-cell value="娑擃亙姹夌挧鍕灐" link url="/pages/user/profile/profile"></mp-cell>\n    <mp-cell value="閸︽澘娼冪粻锛勬倞" link url="/pages/user/address/list"></mp-cell>\n    <mp-cell value="閸忓厖绨幋鎴滄粦" link url="/pages/user/about/about"></mp-cell>\n    <mp-cell value="閻劍鍩涢崡蹇氼唴" link url="/pages/user/agreement/agreement"></mp-cell>\n    <mp-cell value="闂呮劗顫嗛弨璺ㄧ摜" link url="/pages/user/privacySettings/privacySettings"></mp-cell>\n  </mp-cells>\n</view>\n

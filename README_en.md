@@ -1,7 +1,7 @@
 ﻿﻿/**
  * 文件名 README_en.md
  * 版本号 1.0.0
- * 更新日期: 2025-11-23
+ * 更新日期: 2025-12-01
  * 描述: README_en 鏂囨。鏂囦欢
  */
 # SUT WeChat Mini Program Project

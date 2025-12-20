@@ -1,7 +1,7 @@
-/**
+﻿/**
  * 文件名: detail.js
  * 版本号: 1.0.1
- * 更新日期: 2025-12-03
+ * 更新日期: 2025-12-04
  * 描述: 通知详情页面
  */
 const notificationService = require('../../services/notificationService');

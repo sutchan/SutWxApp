@@ -58,7 +58,7 @@ SutWxApp/
 /**
  * 文件名: project_rules.md
  * 版本号: 1.0.0
- * 更新日期: 2025-11-23
+ * 更新日期: 2025-12-01
  * 获取用户积分任务列表
  * @param {Object} options - 查询参数
  * @param {string} options.type - 任务类型: all/once/daily/weekly/monthly

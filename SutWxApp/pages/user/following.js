@@ -1,7 +1,7 @@
-/**
+﻿/**
  * 文件名 following.js
  * 版本号 1.0.0
- * 更新日期: 2025-11-23
+ * 更新日期: 2025-12-04
  * 描述: 关注与粉丝页面
  */
 const socialService = require('../../../services/socialService');

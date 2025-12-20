@@ -1,16 +1,15 @@
 ﻿/**
- * 文件名 tasks.wxss
- * 版本号 1.0.0
- * 更新日期: 2025-11-23
- * 描述: tasks 椤甸潰鏍峰紡鏂囦欢
- */
-/* 缁夘垰鍨庢禒璇插妞ょ敻娼伴弽宄扮础 */
+ * 鏂囦欢鍚?tasks.wxss
+ * 鐗堟湰鍙?1.0.0
+ * 鏇存柊鏃ユ湡: 2025-12-04
+ * 鎻忚堪: tasks 妞ょ敻娼伴弽宄扮础閺傚洣娆? */
+/* 浠诲姟椤甸潰瀹瑰櫒 */
 .tasks-container {
   min-height: 100vh;
   background-color: #f5f5f5;
 }
 
-/* 閻劍鍩涚粔顖氬瀻娣団剝浼?*/
+/* 绉垎澶撮儴淇℃伅 */
 .points-header {
   display: flex;
   align-items: center;
@@ -53,7 +52,7 @@
   opacity: 0.8;
 }
 
-/* 娴犺濮熺猾璇茬€风粵娑⑩偓?*/
+/* 浠诲姟绫诲瀷 */
 .task-types {
   background-color: #fff;
   padding: 10px 0;
@@ -103,7 +102,7 @@
   text-align: center;
 }
 
-/* 娴犺濮熼悩鑸碘偓浣虹摣闁?*/
+/* 浠诲姟鐘舵€?*/
 .task-statuses {
   background-color: #fff;
   padding: 10px 0;
@@ -137,12 +136,12 @@
   white-space: nowrap;
 }
 
-/* 娴犺濮熼崚妤勩€?*/
+/* 浠诲姟鍒楄〃 */
 .tasks-list {
   padding: 10px 15px;
 }
 
-/* 加载状态/
+/* 鍔犺浇鐘舵€?*/
 .loading-container {
   display: flex;
   flex-direction: column;
@@ -177,7 +176,7 @@
   100% { transform: rotate(360deg); }
 }
 
-/* 娴犺濮熸い?*/
+/* 浠诲姟椤?*/
 .task-items {
   margin: -10px -15px;
 }
@@ -190,7 +189,7 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-/* 娴犺濮熸径鎾劥 */
+/* 浠诲姟澶撮儴 */
 .task-header {
   display: flex;
   align-items: center;
@@ -269,7 +268,7 @@
   color: #999;
 }
 
-/* 娴犺濮熸潻娑樺 */
+/* 浠诲姟杩涘害 */
 .task-progress {
   margin-bottom: 10px;
 }
@@ -295,7 +294,7 @@
   text-align: right;
 }
 
-/* 娴犺濮熸惔鏇㈠劥 */
+/* 浠诲姟搴曢儴 */
 .task-footer {
   display: flex;
   justify-content: space-between;
@@ -350,7 +349,7 @@
   color: #999;
 }
 
-/* 閸旂姾娴囬弴鏉戭樋 */
+/* 鍔犺浇鏇村 */
 .loading-more {
   display: flex;
   align-items: center;
@@ -362,7 +361,7 @@
   margin-left: 8px;
 }
 
-/* 濞屸剝婀侀弴鏉戭樋閺佺増宓?*/
+/* 鏃犳洿澶氭暟鎹彁绀?*/
 .no-more {
   text-align: center;
   padding: 20px 0;
@@ -370,7 +369,7 @@
   font-size: 14px;
 }
 
-/* 缁岃櫣濮搁幀?*/
+/* 绌虹姸鎬?*/
 .empty-state {
   display: flex;
   flex-direction: column;

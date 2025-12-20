@@ -1,6 +1,6 @@
-﻿/* index.wxss - 版本号 1.0.1 - 2025-11-24 */
+/* index.wxss - 版本号 1.0.1 - 2025-11-24 */
 
-/* 鐎圭懓娅掗弽宄扮础 */
+/* 页面容器 */
 .container {
   width: 100%;
   padding: 0;
@@ -9,7 +9,7 @@
   -webkit-font-smoothing: antialiased;
 }
 
-/* 閸旂姾娴囬幓鎰仛 */
+/* 鍔犺浇鎻愮ず */
 .loading-tip {
   padding: 40rpx 0;
   text-align: center;
@@ -17,7 +17,7 @@
   font-size: 28rpx;
 }
 
-/* 鏉烆喗鎸遍崶鐐壉瀵?*/
+/* 杞挱鍥惧鍣?*/
 .swiper-container {
   width: 100%;
   height: 300rpx;
@@ -32,7 +32,7 @@
   will-change: transform;
 }
 
-/* 閸掑棛琚崗銉ュ經閺嶅嘲绱?*/
+/* 鍒嗙被缃戞牸 */
 .category-grid {
   display: flex;
   flex-wrap: wrap;
@@ -62,7 +62,7 @@
   color: #333;
 }
 
-/* 閹恒劏宕橀崯鍡楁惂閺嶅嘲绱?*/
+/* 鎺ㄨ崘鍟嗗搧 */
 .recommend-products {
   background-color: #fff;
   padding-bottom: 20rpx;
@@ -127,4 +127,4 @@
   font-size: 32rpx;
   color: #ff4444;
   font-weight: bold;
-}
+}\n

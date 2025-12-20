@@ -1,9 +1,9 @@
-/**
- * 文件名: detail.js
- * 版本号: 1.0.2
- * 更新日期: 2025-12-03
- * 作者: Sut
- * 描述: 文章详情页面 */
+﻿/**
+ * 鏂囦欢鍚? detail.js
+ * 鐗堟湰鍙? 1.0.2
+ * 鏇存柊鏃ユ湡: 2025-12-03
+ * 浣滆€? Sut
+ * 鎻忚堪: 鏂囩珷璇︽儏椤甸潰 */
 
 const articleService = require('../../../services/articleService');
 const socialService = require('../../../services/socialService');
@@ -15,7 +15,7 @@ Page({
     article: null,
     loading: true,
     error: null,
-    // 评论相关数据
+    // 璇勮鐩稿叧鏁版嵁
     comments: [],
     commentLoading: false,
     hasMoreComments: true,
@@ -24,7 +24,7 @@ Page({
     commentInput: '',
     replyTo: null,
     showReplyInput: false,
-    // 评论筛选和排序
+    // 璇勮绛涢€夊拰鎺掑簭
     sortType: 'newest',
     filterOptions: {
       withImages: false,
@@ -36,9 +36,9 @@ Page({
   },
 
   /**
-   * 生命周期函数--监听页面加载
-   * @param {Object} options - 页面参数
-   * @param {string} options.id - 文章ID
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
+   * @param {Object} options - 椤甸潰鍙傛暟
+   * @param {string} options.id - 鏂囩珷ID
    * @returns {void}
    */
   onLoad(options) {
@@ -55,54 +55,49 @@ Page({
   },
 
   /**
-   * 生命周期函数--监听页面显示
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
    * @returns {void}
    */
   onShow() {
-    // 页面显示时刷新数据
-    if (this.data.articleId && !this.data.loading) {
-      // 可以选择性刷新文章数据
-      // this.loadArticleDetail(this.data.articleId);
+    // 椤甸潰鏄剧ず鏃跺埛鏂版暟鎹?    if (this.data.articleId && !this.data.loading) {
+      // 鍙互閫夋嫨鎬у埛鏂版枃绔犳暟鎹?      // this.loadArticleDetail(this.data.articleId);
       this.loadComments(this.data.articleId, true);
     }
   },
 
   /**
-   * 加载文章详情
-   * @param {string} id - 文章ID
+   * 鍔犺浇鏂囩珷璇︽儏
+   * @param {string} id - 鏂囩珷ID
    * @returns {Promise<void>}
    */
   async loadArticleDetail(id) {
     try {
       this.setData({ loading: true, error: null });
       
-      // 获取文章详情
+      // 鑾峰彇鏂囩珷璇︽儏
       const article = await articleService.getArticleDetail(id);
       
-      // 更新数据
+      // 鏇存柊鏁版嵁
       this.setData({ article, loading: false });
       
-      // 设置导航栏标题
-      wx.setNavigationBarTitle({
+      // 璁剧疆瀵艰埅鏍忔爣棰?      wx.setNavigationBarTitle({
         title: article.title || i18n.t('article_detail.default_title')
       });
       
-      // 增加浏览量
-      articleService.increaseViewCount(id).catch(err => {
-        console.warn('增加浏览量失败:', err);
+      // 澧炲姞娴忚閲?      articleService.increaseViewCount(id).catch(err => {
+        console.warn('澧炲姞娴忚閲忓け璐?', err);
       });
       
-      // 检查点赞状态
-      this.checkLikeStatus(id);
+      // 妫€鏌ョ偣璧炵姸鎬?      this.checkLikeStatus(id);
       
     } catch (error) {
-      console.error('加载文章详情失败:', error);
+      console.error('鍔犺浇鏂囩珷璇︽儏澶辫触:', error);
       this.setData({
         loading: false,
         error: error.message || i18n.t('article_detail.load_failed')
       });
       
-      // 显示错误提示
+      // 鏄剧ず閿欒鎻愮ず
       wx.showToast({
         title: i18n.t('article_detail.load_failed'),
         icon: 'none',
@@ -112,10 +107,9 @@ Page({
   },
 
   /**
-   * 加载评论列表
-   * @param {string} articleId - 文章ID
-   * @param {boolean} isRefresh - 是否为刷新
-   * @returns {Promise<void>}
+   * 鍔犺浇璇勮鍒楄〃
+   * @param {string} articleId - 鏂囩珷ID
+   * @param {boolean} isRefresh - 鏄惁涓哄埛鏂?   * @returns {Promise<void>}
    */
   async loadComments(articleId, isRefresh = false) {
     if (!articleId || this.data.commentLoading) return;
@@ -147,13 +141,13 @@ Page({
         commentPage: hasMoreComments ? page + 1 : page
       });
     } catch (error) {
-      console.error('加载评论失败:', error);
+      console.error('鍔犺浇璇勮澶辫触:', error);
       this.setData({
         commentLoading: false
       });
       
       wx.showToast({
-        title: '加载评论失败',
+        title: '鍔犺浇璇勮澶辫触',
         icon: 'none',
         duration: 2000
       });
@@ -161,7 +155,7 @@ Page({
   },
 
   /**
-   * 下拉刷新
+   * 涓嬫媺鍒锋柊
    * @returns {void}
    */
   onPullDownRefresh() {
@@ -175,7 +169,7 @@ Page({
   },
 
   /**
-   * 上拉加载更多评论
+   * 涓婃媺鍔犺浇鏇村璇勮
    * @returns {void}
    */
   onReachBottom() {
@@ -185,8 +179,8 @@ Page({
   },
 
   /**
-   * 分享文章
-   * @returns {Object} 分享配置
+   * 鍒嗕韩鏂囩珷
+   * @returns {Object} 鍒嗕韩閰嶇疆
    */
   onShareAppMessage() {
     const { article } = this.data;
@@ -198,7 +192,7 @@ Page({
   },
 
   /**
-   * 重试加载
+   * 閲嶈瘯鍔犺浇
    * @returns {void}
    */
   handleRetry() {
@@ -208,7 +202,7 @@ Page({
   },
 
   /**
-   * 复制文章链接
+   * 澶嶅埗鏂囩珷閾炬帴
    * @returns {void}
    */
   copyArticleLink() {
@@ -223,7 +217,7 @@ Page({
         });
       },
       fail: (err) => {
-        console.error('复制链接失败:', err);
+        console.error('澶嶅埗閾炬帴澶辫触:', err);
         wx.showToast({
           title: i18n.t('common.copy_failed'),
           icon: 'none',
@@ -234,7 +228,7 @@ Page({
   },
 
   /**
-   * 点赞文章
+   * 鐐硅禐鏂囩珷
    * @returns {void}
    */
   async likeArticle() {
@@ -255,9 +249,9 @@ Page({
         });
       }
     } catch (error) {
-      console.error('点赞失败:', error);
+      console.error('鐐硅禐澶辫触:', error);
       wx.showToast({
-        title: '操作失败',
+        title: '鎿嶄綔澶辫触',
         icon: 'none',
         duration: 2000
       });
@@ -265,8 +259,7 @@ Page({
   },
 
   /**
-   * 检查点赞状态
-   * @param {string} articleId - 文章ID
+   * 妫€鏌ョ偣璧炵姸鎬?   * @param {string} articleId - 鏂囩珷ID
    * @returns {void}
    */
   async checkLikeStatus(articleId) {
@@ -281,13 +274,12 @@ Page({
         likeCount: result.likeCount || 0
       });
     } catch (error) {
-      console.error('检查点赞状态失败:', error);
+      console.error('妫€鏌ョ偣璧炵姸鎬佸け璐?', error);
     }
   },
 
   /**
-   * 评论输入框变化
-   * @param {Object} e - 事件对象
+   * 璇勮杈撳叆妗嗗彉鍖?   * @param {Object} e - 浜嬩欢瀵硅薄
    * @returns {void}
    */
   onCommentInputChange(e) {
@@ -297,7 +289,7 @@ Page({
   },
 
   /**
-   * 提交评论
+   * 鎻愪氦璇勮
    * @returns {void}
    */
   async submitComment() {
@@ -307,40 +299,38 @@ Page({
     
     try {
       if (replyTo) {
-        // 回复评论
+        // 鍥炲璇勮
         await socialService.replyComment({
           commentId: replyTo,
           content: commentInput.trim(),
           anonymous: false
         });
       } else {
-        // 添加新评论
-        await socialService.addArticleComment({
+        // 娣诲姞鏂拌瘎璁?        await socialService.addArticleComment({
           articleId,
           content: commentInput.trim(),
           anonymous: false
         });
       }
       
-      // 清空输入框
-      this.setData({
+      // 娓呯┖杈撳叆妗?      this.setData({
         commentInput: '',
         replyTo: null,
         showReplyInput: false
       });
       
-      // 重新加载评论
+      // 閲嶆柊鍔犺浇璇勮
       this.loadComments(articleId, true);
       
       wx.showToast({
-        title: '评论成功',
+        title: '璇勮鎴愬姛',
         icon: 'success',
         duration: 2000
       });
     } catch (error) {
-      console.error('提交评论失败:', error);
+      console.error('鎻愪氦璇勮澶辫触:', error);
       wx.showToast({
-        title: '评论失败',
+        title: '璇勮澶辫触',
         icon: 'none',
         duration: 2000
       });
@@ -348,8 +338,8 @@ Page({
   },
 
   /**
-   * 回复评论
-   * @param {Object} e - 事件对象
+   * 鍥炲璇勮
+   * @param {Object} e - 浜嬩欢瀵硅薄
    * @returns {void}
    */
   onReplyComment(e) {
@@ -361,7 +351,7 @@ Page({
   },
 
   /**
-   * 取消回复
+   * 鍙栨秷鍥炲
    * @returns {void}
    */
   cancelReply() {
@@ -372,8 +362,8 @@ Page({
   },
 
   /**
-   * 点赞评论
-   * @param {Object} e - 事件对象
+   * 鐐硅禐璇勮
+   * @param {Object} e - 浜嬩欢瀵硅薄
    * @returns {void}
    */
   async likeComment(e) {
@@ -382,7 +372,7 @@ Page({
     try {
       await socialService.likeComment(commentId);
       
-      // 更新本地评论数据
+      // 鏇存柊鏈湴璇勮鏁版嵁
       const comments = this.data.comments.map(comment => {
         if (comment.id === commentId) {
           return {
@@ -396,9 +386,9 @@ Page({
       
       this.setData({ comments });
     } catch (error) {
-      console.error('点赞评论失败:', error);
+      console.error('鐐硅禐璇勮澶辫触:', error);
       wx.showToast({
-        title: '操作失败',
+        title: '鎿嶄綔澶辫触',
         icon: 'none',
         duration: 2000
       });
@@ -406,8 +396,8 @@ Page({
   },
 
   /**
-   * 排序类型变化
-   * @param {Object} e - 事件对象
+   * 鎺掑簭绫诲瀷鍙樺寲
+   * @param {Object} e - 浜嬩欢瀵硅薄
    * @returns {void}
    */
   onSortTypeChange(e) {
@@ -425,15 +415,15 @@ Page({
   },
 
   /**
-   * 举报评论
-   * @param {Object} e - 事件对象
+   * 涓炬姤璇勮
+   * @param {Object} e - 浜嬩欢瀵硅薄
    * @returns {void}
    */
   reportComment(e) {
     const { commentId } = e.currentTarget.dataset;
     
     wx.showActionSheet({
-      itemList: ['垃圾广告', '人身攻击', '色情内容', '暴力内容', '其他'],
+      itemList: ['鍨冨溇骞垮憡', '浜鸿韩鏀诲嚮', '鑹叉儏鍐呭', '鏆村姏鍐呭', '鍏朵粬'],
       success: async (res) => {
         const reasons = ['spam', 'abuse', 'pornography', 'violence', 'other'];
         const reason = reasons[res.tapIndex];
@@ -446,14 +436,14 @@ Page({
           });
           
           wx.showToast({
-            title: '举报成功',
+            title: '涓炬姤鎴愬姛',
             icon: 'success',
             duration: 2000
           });
         } catch (error) {
-          console.error('举报评论失败:', error);
+          console.error('涓炬姤璇勮澶辫触:', error);
           wx.showToast({
-            title: '举报失败',
+            title: '涓炬姤澶辫触',
             icon: 'none',
             duration: 2000
           });
@@ -463,8 +453,7 @@ Page({
   },
 
   /**
-   * 显示/隐藏筛选面板
-   * @returns {void}
+   * 鏄剧ず/闅愯棌绛涢€夐潰鏉?   * @returns {void}
    */
   toggleFilterPanel() {
     this.setData({
@@ -473,8 +462,7 @@ Page({
   },
 
   /**
-   * 筛选条件变化
-   * @param {Object} e - 事件对象
+   * 绛涢€夋潯浠跺彉鍖?   * @param {Object} e - 浜嬩欢瀵硅薄
    * @returns {void}
    */
   onFilterChange(e) {
@@ -485,8 +473,7 @@ Page({
   },
 
   /**
-   * 应用筛选
-   * @returns {void}
+   * 搴旂敤绛涢€?   * @returns {void}
    */
   applyFilter() {
     this.setData({
@@ -502,8 +489,7 @@ Page({
   },
 
   /**
-   * 重置筛选
-   * @returns {void}
+   * 閲嶇疆绛涢€?   * @returns {void}
    */
   resetFilter() {
     this.setData({

@@ -1,10 +1,10 @@
 ﻿/**
- * 文件名 favorites.wxss
- * 版本号 1.0.0
- * 更新日期: 2025-11-23
- * 描述: favorites 椤甸潰鏍峰紡鏂囦欢
+ * 鏂囦欢鍚?favorites.wxss
+ * 鐗堟湰鍙?1.0.0
+ * 鏇存柊鏃ユ湡: 2025-12-04
+ * 鎻忚堪: 鏀惰棌椤甸潰鏍峰紡鏂囦欢
  */
-/* 鐎圭懓娅?*/
+/* 鏀惰棌椤甸潰瀹瑰櫒 */
 .container {
   display: flex;
   flex-direction: column;
@@ -12,7 +12,7 @@
   background-color: #f5f5f5;
 }
 
-/* 閺嶅洨顒烽崚鍥ㄥ床 */
+/* 鏍囩鏍?*/
 .tabs {
   display: flex;
   background-color: #fff;
@@ -47,13 +47,13 @@
   border-radius: 3rpx;
 }
 
-/* 閸愬懎顔愰崠鍝勭厵 */
+/* 鍐呭鍖哄煙 */
 .content {
   flex: 1;
   padding-bottom: 20rpx;
 }
 
-/* 閸掓銆冩径鎾劥 */
+/* 鍒楄〃澶撮儴 */
 .list-header {
   display: flex;
   justify-content: space-between;
@@ -73,7 +73,7 @@
   color: #333;
 }
 
-/* 缂傛牞绶Ο鈥崇础閹垮秳缍旈弽?*/
+/* 缂栬緫鏍?*/
 .edit-bar {
   display: flex;
   justify-content: space-between;
@@ -115,7 +115,7 @@
   background-color: #fa5151;
 }
 
-/* 閸熷棗鎼ч崚妤勩€?*/
+/* 鍟嗗搧鍒楄〃 */
 .product-list {
   background-color: #fff;
 }
@@ -195,7 +195,7 @@
   color: #999;
 }
 
-/* 閺傚洨鐝烽崚妤勩€?*/
+/* 鏂囩珷鍒楄〃 */
 .article-list {
   background-color: #fff;
 }
@@ -266,7 +266,7 @@
   margin-right: 20rpx;
 }
 
-/* 缁岃櫣濮搁幀?*/
+/* 绌虹姸鎬?*/
 .empty-state {
   display: flex;
   flex-direction: column;
@@ -300,7 +300,7 @@
   text-align: center;
 }
 
-/* 加载状态/
+/* 鍔犺浇鐘舵€?*/
 .loading {
   display: flex;
   flex-direction: column;
@@ -326,7 +326,7 @@
   100% { transform: rotate(360deg); }
 }
 
-/* 濞屸剝婀侀弴鏉戭樋閺佺増宓?*/
+/* 鏃犳洿澶氭暟鎹彁绀?*/
 .no-more {
   text-align: center;
   padding: 30rpx 0;

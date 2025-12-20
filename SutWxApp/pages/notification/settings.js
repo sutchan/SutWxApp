@@ -1,30 +1,29 @@
-/**
- * 文件名: settings.js
- * 版本号: 1.0.1
- * 更新日期: 2025-12-03
- * 描述: 通知设置页面
+﻿/**
+ * 鏂囦欢鍚? settings.js
+ * 鐗堟湰鍙? 1.0.1
+ * 鏇存柊鏃ユ湡: 2025-12-03
+ * 鎻忚堪: 閫氱煡璁剧疆椤甸潰
  */
 const notificationService = require('../../services/notificationService');
 
 Page({
   /**
-   * 页面的初始数据
-   */
+   * 椤甸潰鐨勫垵濮嬫暟鎹?   */
   data: {
     settings: null,
     loading: true,
     unreadCount: 0,
     notificationTypes: [
-      { key: 'systemNotification', name: '系统通知', description: '接收系统重要通知和公告' },
-      { key: 'orderNotification', name: '订单通知', description: '接收订单状态变更通知' },
-      { key: 'promotionNotification', name: '促销通知', description: '接收商品促销和优惠信息' },
-      { key: 'activityNotification', name: '活动通知', description: '接收平台活动和事件通知' },
-      { key: 'socialNotification', name: '社交通知', description: '接收关注、点赞、评论等社交互动通知' }
+      { key: 'systemNotification', name: '绯荤粺閫氱煡', description: '鎺ユ敹绯荤粺閲嶈閫氱煡鍜屽叕鍛? },
+      { key: 'orderNotification', name: '璁㈠崟閫氱煡', description: '鎺ユ敹璁㈠崟鐘舵€佸彉鏇撮€氱煡' },
+      { key: 'promotionNotification', name: '淇冮攢閫氱煡', description: '鎺ユ敹鍟嗗搧淇冮攢鍜屼紭鎯犱俊鎭? },
+      { key: 'activityNotification', name: '娲诲姩閫氱煡', description: '鎺ユ敹骞冲彴娲诲姩鍜屼簨浠堕€氱煡' },
+      { key: 'socialNotification', name: '绀句氦閫氱煡', description: '鎺ユ敹鍏虫敞銆佺偣璧炪€佽瘎璁虹瓑绀句氦浜掑姩閫氱煡' }
     ]
   },
 
   /**
-   * 生命周期函数--监听页面加载
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鍔犺浇
    */
   onLoad: function () {
     this.loadNotificationSettings();
@@ -32,7 +31,7 @@ Page({
   },
 
   /**
-   * 生命周期函数--监听页面显示
+   * 鐢熷懡鍛ㄦ湡鍑芥暟--鐩戝惉椤甸潰鏄剧ず
    */
   onShow: function () {
     this.loadNotificationSettings();
@@ -40,7 +39,7 @@ Page({
   },
 
   /**
-   * 加载通知设置
+   * 鍔犺浇閫氱煡璁剧疆
    */
   loadNotificationSettings: function () {
     this.setData({
@@ -49,8 +48,7 @@ Page({
     
     notificationService.getNotificationSettings()
       .then(res => {
-        // 设置默认值
-        const defaultSettings = {
+        // 璁剧疆榛樿鍊?        const defaultSettings = {
           systemNotification: true,
           orderNotification: true,
           promotionNotification: true,
@@ -74,14 +72,14 @@ Page({
         });
         
         wx.showToast({
-          title: err.message || '加载通知设置失败',
+          title: err.message || '鍔犺浇閫氱煡璁剧疆澶辫触',
           icon: 'none'
         });
       });
   },
 
   /**
-   * 加载未读通知数量
+   * 鍔犺浇鏈閫氱煡鏁伴噺
    */
   loadUnreadCount: function () {
     notificationService.getUnreadCount()
@@ -91,13 +89,13 @@ Page({
         });
       })
       .catch(err => {
-        console.error('加载未读通知数量失败:', err);
+        console.error('鍔犺浇鏈閫氱煡鏁伴噺澶辫触:', err);
       });
   },
 
   /**
-   * 更新通知设置
-   * @param {Object} newSettings - 新的设置
+   * 鏇存柊閫氱煡璁剧疆
+   * @param {Object} newSettings - 鏂扮殑璁剧疆
    */
   updateSettings: function (newSettings) {
     const settings = { ...this.data.settings, ...newSettings };
@@ -108,27 +106,24 @@ Page({
     
     notificationService.updateNotificationSettings(settings)
       .then(() => {
-        // 更新成功，显示提示
-        wx.showToast({
-          title: '设置已保存',
+        // 鏇存柊鎴愬姛锛屾樉绀烘彁绀?        wx.showToast({
+          title: '璁剧疆宸蹭繚瀛?,
           icon: 'success',
           duration: 1000
         });
       })
       .catch(err => {
         wx.showToast({
-          title: err.message || '更新通知设置失败',
+          title: err.message || '鏇存柊閫氱煡璁剧疆澶辫触',
           icon: 'none'
         });
         
-        // 恢复原设置
-        this.loadNotificationSettings();
+        // 鎭㈠鍘熻缃?        this.loadNotificationSettings();
       });
   },
 
   /**
-   * 通知类型开关变化
-   * @param {Object} e - 事件对象
+   * 閫氱煡绫诲瀷寮€鍏冲彉鍖?   * @param {Object} e - 浜嬩欢瀵硅薄
    */
   onNotificationTypeChange: function (e) {
     const { key } = e.currentTarget.dataset;
@@ -137,8 +132,8 @@ Page({
   },
 
   /**
-   * 通知提醒方式变化
-   * @param {Object} e - 事件对象
+   * 閫氱煡鎻愰啋鏂瑰紡鍙樺寲
+   * @param {Object} e - 浜嬩欢瀵硅薄
    */
   onNotificationReminderChange: function (e) {
     const { key } = e.currentTarget.dataset;
@@ -147,8 +142,7 @@ Page({
   },
 
   /**
-   * 推送通知开关变化
-   * @param {Object} e - 事件对象
+   * 鎺ㄩ€侀€氱煡寮€鍏冲彉鍖?   * @param {Object} e - 浜嬩欢瀵硅薄
    */
   onPushNotificationChange: function (e) {
     const { value } = e.detail;
@@ -156,8 +150,8 @@ Page({
   },
 
   /**
-   * 全选/取消全选所有通知
-   * @param {Object} e - 事件对象
+   * 鍏ㄩ€?鍙栨秷鍏ㄩ€夋墍鏈夐€氱煡
+   * @param {Object} e - 浜嬩欢瀵硅薄
    */
   onSelectAllChange: function (e) {
     const { value } = e.detail;
@@ -171,12 +165,12 @@ Page({
   },
 
   /**
-   * 清空所有通知
+   * 娓呯┖鎵€鏈夐€氱煡
    */
   onClearNotifications: function () {
     wx.showModal({
-      title: '确认清空',
-      content: '确定要清空所有已读通知吗？',
+      title: '纭娓呯┖',
+      content: '纭畾瑕佹竻绌烘墍鏈夊凡璇婚€氱煡鍚楋紵',
       success: (res) => {
         if (res.confirm) {
           this.setData({
@@ -190,11 +184,11 @@ Page({
               });
               
               wx.showToast({
-                title: '清空成功',
+                title: '娓呯┖鎴愬姛',
                 icon: 'success'
               });
               
-              // 更新未读数量
+              // 鏇存柊鏈鏁伴噺
               this.loadUnreadCount();
             })
             .catch(err => {
@@ -203,7 +197,7 @@ Page({
               });
               
               wx.showToast({
-                title: err.message || '清空通知失败',
+                title: err.message || '娓呯┖閫氱煡澶辫触',
                 icon: 'none'
               });
             });
@@ -213,11 +207,11 @@ Page({
   },
 
   /**
-   * 跳转到通知列表
+   * 璺宠浆鍒伴€氱煡鍒楄〃
    */
   onNotificationListTap: function () {
     wx.navigateTo({
       url: '/pages/notification/list/list'
     });
   }
-});
+});\n

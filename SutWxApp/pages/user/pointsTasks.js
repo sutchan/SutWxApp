@@ -1,7 +1,7 @@
 ﻿/**
  * 文件名 pointsTasks.js
  * 版本号 1.0.0
- * 更新日期: 2025-11-23
+ * 更新日期: 2025-12-04
  * 描述: 缁夘垰鍨庢禒璇插妞ょ敻娼? */
 const app = getApp();
 const pointsService = require('../../services/pointsService');

@@ -1,12 +1,11 @@
-/**
+﻿﻿/**
  * 文件名 list.js
  * 版本号 1.0.0
- * 更新日期: 2025-11-29
+ * 更新日期: 2025-12-04
  * 描述: 分销列表页面
  */
 
 const distributeService = require('../../services/distributeService');
-const store = require('../../utils/store');
 
 Page({
   data: {

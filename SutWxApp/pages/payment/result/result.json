@@ -1,7 +1,1 @@
-{
-  "navigationBarTitleText": "结果",
-  "enablePullDownRefresh": true,
-  "backgroundTextStyle": "dark",
-  "navigationBarBackgroundColor": "#ffffff",
-  "navigationBarTextStyle": "black"
-}
+﻿{\n  "navigationBarTitleText": "缁撴灉",\n  "enablePullDownRefresh": true,\n  "backgroundTextStyle": "dark",\n  "navigationBarBackgroundColor": "#ffffff",\n  "navigationBarTextStyle": "black"\n}

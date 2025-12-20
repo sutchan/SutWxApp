@@ -1,7 +1,7 @@
 ﻿/**
  * 文件名 webSocketService.js
  * 版本号 1.0.2
- * 更新日期: 2025-11-29
+ * 更新日期: 2025-12-04
  * 作者: Sut
  * WebSocket服务类，用于处理WebSocket连接、消息发送和接收
  */
