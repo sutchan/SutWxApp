@@ -1,4 +1,4 @@
-# 架构规范
+ 架构规范
 
 ## 目的
 本规范定义了苏铁微信小程序（SutWxApp）项目的技术架构，包括前端技术栈、后端服务、开发流程、安全设计、性能优化和监控策略。
@@ -7,30 +7,33 @@
 
 ### 前端技术栈
 - **微信小程序框架**：原生微信小程序开发框架
-- **开发语言**：JavaScript
+- **开发语言**：TypeScript
 - **UI组件库**：WeUI + 自定义组件
-- **开发工具**：微信开发者工具、VS Code
+- **开发工具**：微信开发者工具、VS Code、Bun
 - **状态管理**：微信小程序自带状态管理
 - **路由管理**：微信小程序原生路由
-- **网络请求**：wx.request API
+- **网络请求**：wx.request API + TypeScript类型定义
 - **本地存储**：wx.setStorageSync / wx.getStorageSync
 
 ### 后端技术栈
-- **开发语言**：Node.js 18.x
-- **Web框架**：Express.js 4.x
+- **运行时**：Bun 1.x
+- **开发语言**：TypeScript
+- **Web框架**：Hono / Bun原生HTTP服务器
 - **数据库**：
   - MySQL 8.x（关系型数据存储）
   - Redis 7.x（缓存、会话管理）
   - MongoDB 6.x（非关系型数据存储）
 - **认证授权**：JWT + RBAC
 - **API设计**：RESTful API
-- **日志管理**：Winston + ELK Stack
+- **日志管理**：Bun内置日志 + ELK Stack
 - **缓存策略**：Redis
 
 ### 基础设施
+- **运行时**：Bun
+- **包管理器**：Bun (bun install)
 - **容器化**：Docker
-- **容器编排**：Kubernetes
-- **CI/CD**：GitHub Actions
+- **容器编排**：Kubernetes / Docker Compose
+- **CI/CD**：GitHub Actions (使用Bun)
 - **监控告警**：Prometheus + Grafana
 - **文件存储**：阿里云OSS / 腾讯云COS
 - **CDN加速**：阿里云CDN / 腾讯云CDN
