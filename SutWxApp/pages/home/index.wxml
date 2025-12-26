@@ -1,0 +1,75 @@
+<!-- 
+  文件名: index.wxml
+  版本号: 1.0.0
+  更新日期: 2025-12-26
+  描述: 首页结构模板
+-->
+
+<view class="container">
+  <view class="header">
+    <view class="search-bar" bindtap="handleSearchBarTap">
+      <image class="search-icon" src="/images/search.png" mode="aspectFit"></image>
+      <text class="search-placeholder">搜索商品</text>
+    </view>
+  </view>
+
+  <view class="banner-section">
+    <swiper class="banner-swiper" indicator-dots="true" indicator-color="rgba(0,0,0,0.3)" indicator-active-color="#ffffff" autoplay="true" interval="3000" circular="true">
+      <block wx:for="{{bannerList}}" wx:key="id">
+        <swiper-item>
+          <image class="banner-image" src="{{item.imageUrl}}" mode="aspectFill" bindtap="handleBannerTap" data-link="{{item.link}}"></image>
+        </swiper-item>
+      </block>
+    </swiper>
+  </view>
+
+  <view class="category-section">
+    <scroll-view class="category-scroll" scroll-x="true" enhanced="true" show-scrollbar="false">
+      <view class="category-list">
+        <view class="category-item {{currentCategory === 0 ? 'active' : ''}}" bindtap="handleCategoryTap" data-id="0">
+          <image class="category-icon" src="/images/category-all.png" mode="aspectFit"></image>
+          <text class="category-name">全部</text>
+        </view>
+        <block wx:for="{{categoryList}}" wx:key="id" wx:for-item="category">
+          <view class="category-item {{currentCategory === category.id ? 'active' : ''}}" bindtap="handleCategoryTap" data-id="{{category.id}}">
+            <image class="category-icon" src="{{category.icon}}" mode="aspectFit"></image>
+            <text class="category-name">{{category.name}}</text>
+          </view>
+        </block>
+      </view>
+    </scroll-view>
+  </view>
+
+  <view class="product-section">
+    <view class="section-header">
+      <text class="section-title">推荐商品</text>
+    </view>
+    <view class="product-grid">
+      <block wx:for="{{productList}}" wx:key="id">
+        <view class="product-card" bindtap="handleProductTap" data-id="{{item.id}}">
+          <image class="product-image" src="{{item.imageUrl}}" mode="aspectFill" lazy-load="true"></image>
+          <view class="product-info">
+            <text class="product-name">{{item.name}}</text>
+            <view class="product-bottom">
+              <text class="product-price">¥{{item.price}}</text>
+              <view class="product-actions">
+                <image class="action-icon" src="/images/favorite.png" catchtap="handleFavorite" data-id="{{item.id}}"></image>
+                <image class="action-icon" src="/images/share.png" catchtap="handleShare" data-id="{{item.id}}"></image>
+              </view>
+            </view>
+          </view>
+        </view>
+      </block>
+    </view>
+    <view class="loading-tip" wx:if="{{isLoading}}">
+      <text>加载中...</text>
+    </view>
+    <view class="loading-tip" wx:if="{{!hasMore && productList.length > 0}}">
+      <text>没有更多了</text>
+    </view>
+    <view class="empty-tip" wx:if="{{productList.length === 0 && !isLoading}}">
+      <image class="empty-image" src="/images/empty.png" mode="aspectFit"></image>
+      <text class="empty-text">暂无商品</text>
+    </view>
+  </view>
+</view>

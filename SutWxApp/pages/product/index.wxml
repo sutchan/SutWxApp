@@ -1,0 +1,271 @@
+<!-- 
+  文件名: index.wxml
+  版本号: 1.0.0
+  更新日期: 2025-12-26
+  描述: 产品详情页结构模板
+-->
+
+<view class="container">
+  <view class="product-image-section">
+    <swiper class="product-image-swiper" indicator-dots="true" indicator-color="rgba(0,0,0,0.3)" indicator-active-color="#ffffff" circular="true" bindchange="handleImageChange">
+      <block wx:for="{{productInfo.images}}" wx:key="index">
+        <swiper-item>
+          <image class="product-image" src="{{item}}" mode="aspectFill"></image>
+        </swiper-item>
+      </block>
+    </swiper>
+    <view class="image-indicator">
+      <text>{{currentImageIndex + 1}}/{{productInfo.images.length}}</text>
+    </view>
+    <view class="product-actions-overlay">
+      <view class="action-btn" catchtap="handleShare">
+        <image src="/images/share-white.png" mode="aspectFit"></image>
+      </view>
+      <view class="action-btn" catchtap="handleCollect">
+        <image src="/images/collect{{isFavorite ? '-active' : ''}}.png" mode="aspectFit"></image>
+      </view>
+    </view>
+  </view>
+
+  <view class="product-info-section">
+    <view class="price-row">
+      <view class="price-info">
+        <text class="price-label">促销价</text>
+        <text class="price-symbol">¥</text>
+        <text class="price-value">{{productInfo.price}}</text>
+        <text class="price-origin" wx:if="{{productInfo.originalPrice}}">¥{{productInfo.originalPrice}}</text>
+        <view class="discount-badge" wx:if="{{productInfo.discount}}">
+          <text>{{productInfo.discount}}折</text>
+        </view>
+      </view>
+      <view class="sales-info">
+        <text>已售{{productInfo.sales || 0}}件</text>
+      </view>
+    </view>
+
+    <view class="product-name">
+      <text>{{productInfo.name}}</text>
+    </view>
+
+    <view class="product-desc">
+      <text>{{productInfo.description}}</text>
+    </view>
+
+    <view class="product-tags" wx:if="{{productInfo.tags && productInfo.tags.length > 0}}">
+      <block wx:for="{{productInfo.tags}}" wx:key="index">
+        <view class="tag-item">
+          <text>{{item}}</text>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <view class="spec-section" bindtap="handleShowSpecPopup">
+    <view class="spec-label">选择</view>
+    <view class="spec-content">
+      <text class="spec-text">{{selectedSpecIndex >= 0 && productInfo.specs[selectedSpecIndex] ? productInfo.specs[selectedSpecIndex].name : '请选择规格'}}</text>
+    </view>
+    <image class="arrow-icon" src="/images/arrow-right.png" mode="aspectFit"></image>
+  </view>
+
+  <view class="service-section">
+    <view class="service-item">
+      <image src="/images/checked.png" mode="aspectFit"></image>
+      <text>正品保证</text>
+    </view>
+    <view class="service-item">
+      <image src="/images/checked.png" mode="aspectFit"></image>
+      <text>极速发货</text>
+    </view>
+    <view class="service-item">
+      <image src="/images/checked.png" mode="aspectFit"></image>
+      <text>7天无理由退货</text>
+    </view>
+  </view>
+
+  <view class="reviews-section" wx:if="{{reviews.length > 0}}">
+    <view class="section-header">
+      <text class="section-title">商品评价</text>
+      <view class="view-all" bindtap="handleShowReviewPopup">
+        <text>查看全部</text>
+        <image src="/images/arrow-right.png" mode="aspectFit"></image>
+      </view>
+    </view>
+    <view class="review-list">
+      <block wx:for="{{reviews}}" wx:key="id" wx:for-item="review">
+        <view class="review-item">
+          <view class="review-header">
+            <image class="review-avatar" src="{{review.avatar || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+            <text class="review-username">{{review.nickname || '匿名用户'}}</text>
+            <view class="review-rating">
+              <block wx:for="{{[1,2,3,4,5]}}" wx:for-item="star" wx:key="*this">
+                <image class="star-icon" src="/images/star{{index < review.rating ? '-active' : ''}}.png" mode="aspectFit"></image>
+              </block>
+            </view>
+          </view>
+          <view class="review-content">
+            <text>{{review.content}}</text>
+          </view>
+          <view class="review-spec">
+            <text>{{review.specName}}</text>
+          </view>
+          <view class="review-time">
+            <text>{{review.createTime}}</text>
+          </view>
+        </view>
+      </block>
+    </view>
+    <view class="load-more" wx:if="{{hasMoreReviews}}" bindtap="handleLoadMoreReviews">
+      <text>加载更多评价</text>
+    </view>
+  </view>
+
+  <view class="product-detail-section">
+    <view class="section-header">
+      <text class="section-title">商品详情</text>
+    </view>
+    <view class="detail-content">
+      <rich-text nodes="{{productInfo.detailHtml || ''}}"></rich-text>
+    </view>
+    <view class="params-section" wx:if="{{productInfo.params && productInfo.params.length > 0}}">
+      <view class="params-title">产品参数</view>
+      <view class="params-list">
+        <block wx:for="{{productInfo.params}}" wx:key="name">
+          <view class="params-item">
+            <text class="params-name">{{item.name}}</text>
+            <text class="params-value">{{item.value}}</text>
+          </view>
+        </block>
+      </view>
+    </view>
+  </view>
+
+  <view class="related-section" wx:if="{{relatedProducts.length > 0}}">
+    <view class="section-header">
+      <text class="section-title">为你推荐</text>
+    </view>
+    <view class="related-list">
+      <block wx:for="{{relatedProducts}}" wx:key="id">
+        <view class="related-item" bindtap="handleRelatedProductTap" data-id="{{item.id}}">
+          <image class="related-image" src="{{item.imageUrl}}" mode="aspectFill"></image>
+          <view class="related-info">
+            <text class="related-name">{{item.name}}</text>
+            <text class="related-price">¥{{item.price}}</text>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <view class="bottom-action-bar">
+    <view class="action-icons">
+      <view class="icon-item" bindtap="handleContactService">
+        <image src="/images/customer-service.png" mode="aspectFit"></image>
+        <text>客服</text>
+      </view>
+      <view class="icon-item" bindtap="handleToggleFavorite">
+        <image src="/images/favorite{{isFavorite ? '-active' : ''}}.png" mode="aspectFit"></image>
+        <text>{{isFavorite ? '已收藏' : '收藏'}}</text>
+      </view>
+      <view class="icon-item" bindtap="handleShowSpecPopup">
+        <image src="/images/cart.png" mode="aspectFit"></image>
+        <text>购物车</text>
+        <view class="cart-badge" wx:if="{{cartCount > 0}}">
+          <text>{{cartCount > 99 ? '99+' : cartCount}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="action-buttons">
+      <view class="btn-add-cart" bindtap="handleAddToCart">加入购物车</view>
+      <view class="btn-buy-now" bindtap="handleBuyNow">立即购买</view>
+    </view>
+  </view>
+
+  <view class="spec-popup-mask" wx:if="{{showSpecPopup}}" bindtap="handleHideSpecPopup"></view>
+  <view class="spec-popup {{showSpecPopup ? 'show' : ''}}">
+    <view class="spec-popup-header">
+      <image class="spec-popup-image" src="{{productInfo.images[0]}}" mode="aspectFill"></image>
+      <view class="spec-popup-info">
+        <view class="spec-popup-price">
+          <text class="price-symbol">¥</text>
+          <text class="price-value">{{getCurrentSpecPrice()}}</text>
+        </view>
+        <view class="spec-popup-stock">
+          <text>库存: {{productInfo.specs[selectedSpecIndex].stock || 99}}</text>
+        </view>
+        <view class="spec-popup-selected">
+          <text>已选: {{productInfo.specs[selectedSpecIndex].name}}</text>
+        </view>
+      </view>
+      <view class="spec-popup-close" bindtap="handleHideSpecPopup">
+        <image src="/images/close.png" mode="aspectFit"></image>
+      </view>
+    </view>
+    <scroll-view class="spec-popup-body" scroll-y="true">
+      <view class="spec-section">
+        <view class="spec-title">规格</view>
+        <view class="spec-list">
+          <block wx:for="{{productInfo.specs}}" wx:key="id" wx:for-index="specIndex">
+            <view class="spec-item {{selectedSpecIndex === specIndex ? 'active' : ''}}" bindtap="handleSpecTap" data-index="{{specIndex}}">
+              <text>{{item.name}}</text>
+            </view>
+          </block>
+        </view>
+      </view>
+      <view class="quantity-section">
+        <view class="quantity-title">数量</view>
+        <view class="quantity-selector">
+          <view class="quantity-btn {{selectedQuantity <= 1 ? 'disabled' : ''}}" bindtap="handleQuantityChange" data-type="minus">
+            <text>-</text>
+          </view>
+          <input class="quantity-input" type="number" value="{{selectedQuantity}}" bindinput="handleQuantityInput"></input>
+          <view class="quantity-btn {{selectedQuantity >= (productInfo.specs[selectedSpecIndex].stock || 99) ? 'disabled' : ''}}" bindtap="handleQuantityChange" data-type="plus">
+            <text>+</text>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+    <view class="spec-popup-footer">
+      <view class="btn-confirm" bindtap="handleConfirmAddToCart" wx:if="{{!isAddingToCart}}">确定</view>
+      <view class="btn-confirm loading" wx:if="{{isAddingToCart}}">
+        <text>加入中...</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="review-popup-mask" wx:if="{{showReviewPopup}}" bindtap="handleHideReviewPopup"></view>
+  <view class="review-popup {{showReviewPopup ? 'show' : ''}}">
+    <view class="review-popup-header">
+      <text class="review-popup-title">商品评价</text>
+      <view class="review-popup-close" bindtap="handleHideReviewPopup">
+        <image src="/images/close.png" mode="aspectFit"></image>
+      </view>
+    </view>
+    <scroll-view class="review-popup-body" scroll-y="true">
+      <view class="review-list-full">
+        <block wx:for="{{reviews}}" wx:key="id">
+          <view class="review-item">
+            <view class="review-header">
+              <image class="review-avatar" src="{{review.avatar || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+              <text class="review-username">{{review.nickname || '匿名用户'}}</text>
+              <view class="review-rating">
+                <block wx:for="{{[1,2,3,4,5]}}" wx:for-item="star" wx:key="*this">
+                  <image class="star-icon" src="/images/star{{index < review.rating ? '-active' : ''}}.png" mode="aspectFit"></image>
+                </block>
+              </view>
+            </view>
+            <view class="review-content">
+              <text>{{review.content}}</text>
+            </view>
+            <view class="review-spec">
+              <text>{{review.specName}}</text>
+            </view>
+            <view class="review-time">
+              <text>{{review.createTime}}</text>
+            </view>
+          </view>
+        </block>
+      </view>
+    </scroll-view>
+  </view>
+</view>

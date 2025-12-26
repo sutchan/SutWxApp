@@ -1,5 +1,5 @@
 /// 文件名: product.dart
-/// 版本号: 1.0.0
+/// 版本号: 1.0.1
 /// 更新日期: 2025-12-26
 /// 作者: Sut
 /// 描述: 商品模型类，定义商品数据结构
@@ -28,6 +28,15 @@ class Product {
   /// 是否收藏
   final bool isFavorite;
   
+  /// 是否点赞
+  final bool isLiked;
+  
+  /// 折扣百分比
+  final int? discount;
+  
+  /// 原价
+  final double? originalPrice;
+  
   /// 商品销量
   final int sales;
   
@@ -44,6 +53,9 @@ class Product {
     this.category = '',
     this.stock = 0,
     this.isFavorite = false,
+    this.isLiked = false,
+    this.discount,
+    this.originalPrice,
     this.sales = 0,
     this.rating = 0.0,
   });
@@ -59,6 +71,9 @@ class Product {
       category: json['category'] ?? '',
       stock: json['stock'] ?? 0,
       isFavorite: json['isFavorite'] ?? false,
+      isLiked: json['isLiked'] ?? false,
+      discount: json['discount'],
+      originalPrice: json['originalPrice']?.toDouble(),
       sales: json['sales'] ?? 0,
       rating: json['rating']?.toDouble() ?? 0.0,
     );
@@ -75,6 +90,9 @@ class Product {
       'category': category,
       'stock': stock,
       'isFavorite': isFavorite,
+      'isLiked': isLiked,
+      'discount': discount,
+      'originalPrice': originalPrice,
       'sales': sales,
       'rating': rating,
     };

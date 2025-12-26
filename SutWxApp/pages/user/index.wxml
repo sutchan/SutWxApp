@@ -1,0 +1,67 @@
+<!-- 
+  文件名: index.wxml
+  版本号: 1.0.0
+  更新日期: 2025-12-26
+  描述: 用户中心页面结构模板
+-->
+
+<view class="container">
+  <view class="header-section" bindtap="handleAvatarTap">
+    <view class="user-info" wx:if="{{isLoggedIn}}">
+      <image class="avatar" src="{{userInfo.avatar || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+      <view class="info-content">
+        <text class="nickname">{{userInfo.nickname || userInfo.username || '用户'}}</text>
+        <text class="user-id">ID: {{userInfo.id || ''}}</text>
+      </view>
+      <image class="arrow-right" src="/images/arrow-right.png" mode="aspectFit"></image>
+    </view>
+    <view class="login-prompt" wx:else bindtap="handleLogin">
+      <image class="avatar placeholder" src="/images/default-avatar.png" mode="aspectFill"></image>
+      <text class="login-text">点击登录</text>
+    </view>
+  </view>
+
+  <view class="stats-section" wx:if="{{isLoggedIn}}">
+    <view class="stats-item" bindtap="handlePointsTap">
+      <text class="stats-value">{{points}}</text>
+      <text class="stats-label">积分</text>
+    </view>
+    <view class="stats-divider"></view>
+    <view class="stats-item" bindtap="handleFollowingTap">
+      <text class="stats-value">{{followStats.following}}</text>
+      <text class="stats-label">关注</text>
+    </view>
+    <view class="stats-divider"></view>
+    <view class="stats-item" bindtap="handleFollowersTap">
+      <text class="stats-value">{{followStats.followers}}</text>
+      <text class="stats-label">粉丝</text>
+    </view>
+  </view>
+
+  <view class="menu-section">
+    <block wx:for="{{menuList}}" wx:key="groupName" wx:for-item="menuGroup">
+      <view class="menu-group">
+        <view class="menu-group-header">
+          <text class="menu-group-name">{{menuGroup.groupName}}</text>
+        </view>
+        <view class="menu-group-content">
+          <block wx:for="{{menuGroup.items}}" wx:key="id" wx:for-item="menuItem">
+            <view class="menu-item" bindtap="handleMenuTap" data-id="{{menuItem.id}}" data-url="{{menuItem.url}}">
+              <image class="menu-icon" src="{{menuItem.icon}}" mode="aspectFit"></image>
+              <text class="menu-name">{{menuItem.name}}</text>
+              <image class="menu-arrow" src="/images/arrow-right.png" mode="aspectFit"></image>
+            </view>
+          </block>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <view class="logout-section" wx:if="{{isLoggedIn}}">
+    <view class="logout-btn" bindtap="handleLogout">退出登录</view>
+  </view>
+
+  <view class="version-info">
+    <text class="version-text">苏铁 v1.0.18</text>
+  </view>
+</view>
