@@ -1,210 +1,185 @@
 # API规范
 
 ## 目的
-本规范定义了苏铁微信小程序（SutWxApp）项目的API设计和使用，包括API架构、设计原则、认证机制、核心接口、错误处理和版本管理。
+本规范定义了苏铁微信小程序（SutWxApp）项目的API设计和使用，包括API结构、设计原则、认证机制、核心接口、错误处理和版本管理。
 
-## 要求
+## 设计原则
 
-### 要求：RESTful API设计
-系统应对所有端点实现RESTful API设计原则。
+### 1. RESTful设计
+- 遵循RESTful API设计原则
+- 使用HTTP方法表示操作类型
+- 资源路径使用名词复数形式
+- 状态码表示操作结果
 
-#### 场景：RESTful端点结构
-- **当**开发人员设计API端点时
-- **则**他们应使用小写字母加连字符作为路径段（例如：`/api/v1/user-info`）
+### 2. 简洁易用
+- 接口命名简洁明了
+- 减少不必要的参数
+- 提供清晰的错误信息
+- 支持常见的请求格式
 
-#### 场景：HTTP方法使用
-- **当**实现CRUD操作时
-- **则**开发人员应使用适当的HTTP方法：GET（读取）、POST（创建）、PUT（更新）、DELETE（删除）、PATCH（部分更新）
+### 3. 高可靠性
+- 提供适当的超时机制
+- 实现幂等性设计
+- 支持重试机制
+- 提供合理的缓存策略
 
-### 要求：API架构
-系统应具有分层API架构，客户端、API层、服务层和数据层之间有明确的分离。
+### 4. 安全性
+- 防止常见的安全漏洞
+- 实现适当的认证和授权
+- 加密敏感数据
+- 限制请求频率
 
-#### 场景：API调用流程
-- **当**客户端发送请求时
-- **则**请求应流经API层 → 服务层 → 数据访问层 → 数据存储，并返回
+### 5. 可扩展性
+- 支持版本管理
+- 模块化设计
+- 支持参数扩展
+- 考虑未来需求
 
-#### 场景：API技术栈
-- **当**实现API层时
-- **则**开发人员应使用JavaScript和Express.js框架
-- **并**使用MySQL/MongoDB进行数据存储
-- **并**实现JWT进行认证
-- **并**使用Swagger/OpenAPI进行文档编制
+### 6. 一致性
+- 统一的命名规范
+- 一致的响应格式
+- 统一的错误处理
+- 一致的认证方式
 
-### 要求：请求格式
-系统应支持一致的请求格式，包括URL参数、查询参数和JSON请求体。
+### 7. 文档化
+- 提供完整的API文档
+- 包含示例请求和响应
+- 描述参数和返回值
+- 更新及时
 
-#### 场景：URL参数
-- **当**标识特定资源时
-- **则**开发人员应使用URL参数（例如：`/api/v1/users/{id}`）
+## API结构
 
-#### 场景：查询参数
-- **当**过滤、排序或分页结果时
-- **则**开发人员应使用查询参数（例如：`/api/v1/users?page=1&pageSize=10`）
+### URL结构
+```
+https://api.example.com/v{version}/{resource}/{id}?{query_parameters}
+```
 
-#### 场景：JSON请求体
-- **当**创建或更新资源时
-- **则**系统应接受JSON格式的请求体
+- **version**: API版本号，如v1, v2
+- **resource**: 资源名称，使用复数形式，如users, products
+- **id**: 资源ID，用于标识特定资源
+- **query_parameters**: 查询参数，用于过滤、排序等
 
-### 要求：响应格式
-系统应为所有API端点返回一致的JSON响应格式。
+### HTTP方法
 
-#### 场景：成功响应
-- **当**API请求成功时
-- **则**系统应返回包含`code`、`message`、`data`、`timestamp`和`requestId`字段的响应
+| HTTP方法 | 描述 | 幂等性 |
+|----------|------|--------|
+| GET | 获取资源 | 是 |
+| POST | 创建资源 | 否 |
+| PUT | 更新资源 | 是 |
+| PATCH | 部分更新资源 | 是 |
+| DELETE | 删除资源 | 是 |
 
-#### 场景：错误响应
-- **当**API请求失败时
-- **则**系统应返回包含`code`、`message`、`data`、`timestamp`、`requestId`和可选`errors`字段的响应
+### 状态码
 
-### 要求：认证和授权
-系统应实现JWT认证和基于角色的访问控制（RBAC）。
-
-#### 场景：JWT认证
-- **当**访问受保护资源时
-- **则**客户端应在Authorization头中提供有效的JWT令牌
-
-#### 场景：基于角色的授权
-- **当**验证访问权限时
-- **则**系统应检查用户角色（普通用户、管理员）是否符合所需权限
-
-### 要求：核心API端点
-系统应为用户、产品、订单和通知实现核心API端点。
-
-#### 场景：用户管理
-- **当**用户注册、登录或管理其账户时
-- **则**系统应提供用户注册、登录、个人资料管理等端点
-
-#### 场景：产品管理
-- **当**用户浏览或搜索产品时
-- **则**系统应提供产品列表、详情查看等端点
-
-#### 场景：订单管理
-- **当**用户创建或跟踪订单时
-- **则**系统应提供订单创建、列表和状态跟踪等端点
-
-#### 场景：通知管理
-- **当**用户管理通知时
-- **则**系统应提供通知列表和状态更新等端点
-
-### 要求：错误处理
-系统应实现一致的错误处理，包括适当的状态码和错误消息。
-
-#### 场景：参数验证
-- **当**客户端发送无效参数时
-- **则**系统应返回400 Bad Request，并附带详细的错误消息
-
-#### 场景：认证失败
-- **当**客户端提供无效或缺失的认证信息时
-- **则**系统应返回401 Unauthorized
-
-#### 场景：授权失败
-- **当**客户端尝试访问未授权资源时
-- **则**系统应返回403 Forbidden
-
-#### 场景：资源未找到
-- **当**客户端请求不存在的资源时
-- **则**系统应返回404 Not Found
-
-#### 场景：服务器错误
-- **当**服务器发生意外错误时
-- **则**系统应返回500 Internal Server Error
-
-### 要求：API测试
-系统应支持使用手动和自动化方法进行API测试。
-
-#### 场景：手动测试
-- **当**开发人员手动测试API时
-- **则**他们应使用Postman或Swagger UI等工具
-
-#### 场景：自动化测试
-- **当**实现自动化测试时
-- **则**开发人员应使用Jest和Supertest框架
-
-### 要求：API版本管理
-系统应使用URL路径和语义化版本控制实现API版本管理。
-
-#### 场景：版本化端点
-- **当**访问API时
-- **则**客户端应使用版本化端点（例如：`/api/v1/users`）
-
-#### 场景：版本升级策略
-- **当**升级API时
-- **则**开发人员应遵循语义化版本控制：MAJOR（破坏性更改）、MINOR（新功能）、PATCH（错误修复）
-
-## API设计原则
-
-1. **RESTful设计**：遵循RESTful API设计规范
-2. **简洁性**：易于理解和使用
-3. **高可用性**：容错且可靠
-4. **安全性**：防止常见漏洞
-5. **可扩展性**：易于扩展以满足未来需求
-6. **一致性**：所有端点具有一致的命名和响应格式
-7. **文档化**：为开发人员提供全面的API文档
-
-## API设计规范
-
-### 要求：命名约定
-系统应对API路径、HTTP方法、参数和响应字段遵循一致的命名约定。
-
-#### 场景：API路径命名
-- **当**设计API路径时
-- **则**应使用小写字母加连字符作为路径段（例如：`/api/v1/user-info`）
-
-#### 场景：HTTP方法使用
-- **当**实现CRUD操作时
-- **则**应使用HTTP方法使用表中定义的适当HTTP方法
-
-#### 场景：参数命名
-- **当**定义参数时
-- **则**应使用camelCase命名参数
-
-#### 场景：响应字段命名
-- **当**定义响应字段时
-- **则**应使用camelCase命名响应字段
-
-### HTTP方法使用表
-
-| HTTP方法 | 用途 | 示例 |
-|----------|------|------|
-| GET | 获取资源 | GET /api/v1/users |
-| POST | 创建资源 | POST /api/v1/users |
-| PUT | 更新资源 | PUT /api/v1/users/{id} |
-| DELETE | 删除资源 | DELETE /api/v1/users/{id} |
-| PATCH | 部分更新资源 | PATCH /api/v1/users/{id} |
-
-### 状态码使用表
-
-| 状态码 | 含义 | 示例 |
+| 状态码 | 描述 | 说明 |
 |--------|------|------|
-| 200 | OK - 请求成功 | GET /api/v1/users |
-| 201 | Created - 资源已创建 | POST /api/v1/users |
-| 204 | No Content - 请求成功，无响应体 | DELETE /api/v1/users/{id} |
-| 400 | Bad Request - 参数无效 | POST /api/v1/users（缺少必填字段） |
-| 401 | Unauthorized - 缺失或无效的认证 | GET /api/v1/users（无令牌） |
-| 403 | Forbidden - 权限不足 | GET /api/v1/admin（普通用户） |
-| 404 | Not Found - 资源未找到 | GET /api/v1/users/999 |
-| 500 | Internal Server Error - 服务器错误 | 任何服务器异常的API |
+| 200 | OK | 请求成功 |
+| 201 | Created | 资源创建成功 |
+| 204 | No Content | 请求成功，无内容返回 |
+| 400 | Bad Request | 请求参数错误 |
+| 401 | Unauthorized | 未认证 |
+| 403 | Forbidden | 无权限 |
+| 404 | Not Found | 资源不存在 |
+| 500 | Internal Server Error | 服务器内部错误 |
+| 502 | Bad Gateway | 网关错误 |
+| 503 | Service Unavailable | 服务不可用 |
+| 504 | Gateway Timeout | 网关超时 |
 
-## 认证
+## 认证与授权
 
 ### JWT认证
-客户端必须在Authorization头中包含有效的JWT令牌：
-```
-Authorization: Bearer {token}
+- 所有需要认证的API请求必须在Authorization头中携带JWT令牌
+- 令牌格式：`Authorization: Bearer {token}`
+- 令牌有效期：24小时
+- 刷新机制：支持令牌刷新
+
+### RBAC授权
+- 基于角色的访问控制
+- 支持角色：普通用户、管理员
+- 细粒度权限控制
+- 动态权限分配
+
+## 请求格式
+
+### URL参数
+- 用于标识资源或过滤、排序
+- 示例：`/api/v1/users?page=1&pageSize=10&sortBy=createdAt&sortOrder=desc`
+
+### 查询参数
+- 用于过滤、排序、分页等
+- 支持多种比较运算符：=, >, <, >=, <=, in, like
+- 支持逻辑运算符：and, or
+
+### JSON请求体
+- 用于创建或更新资源
+- 示例：
+```json
+{
+  "username": "test",
+  "password": "password",
+  "email": "test@example.com",
+  "phone": "13800138000"
+}
 ```
 
-### 基于角色的访问控制
-- **普通用户**：访问公共资源和自己的私人资源
-- **管理员**：访问所有资源
+## 响应格式
 
-## 核心API端点
+### 成功响应
+```json
+{
+  "code": 200,
+  "message": "success",
+  "data": {},
+  "timestamp": 1609459200000,
+  "requestId": "uuid"
+}
+```
+
+### 列表响应
+```json
+{
+  "code": 200,
+  "message": "success",
+  "data": {
+    "list": [],
+    "total": 100,
+    "page": 1,
+    "pageSize": 10
+  },
+  "timestamp": 1609459200000,
+  "requestId": "uuid"
+}
+```
+
+### 错误响应
+```json
+{
+  "code": 400,
+  "message": "参数错误",
+  "data": null,
+  "timestamp": 1609459200000,
+  "requestId": "uuid",
+  "errors": [
+    {
+      "field": "username",
+      "message": "用户名不能为空"
+    },
+    {
+      "field": "email",
+      "message": "邮箱格式不正确"
+    }
+  ]
+}
+```
+
+## 核心API接口
 
 ### 用户API
 
 #### 注册用户
-- **URL**：`POST /api/v1/users/register`
-- **描述**：注册新用户账户
-- **请求体**：
+- **URL**: `POST /api/v1/users/register`
+- **描述**: 注册新用户账号
+- **请求体**: 
   ```json
   {
     "username": "test",
@@ -213,7 +188,7 @@ Authorization: Bearer {token}
     "phone": "13800138000"
   }
   ```
-- **响应**：
+- **响应**: 
   ```json
   {
     "code": 201,
@@ -231,16 +206,16 @@ Authorization: Bearer {token}
   ```
 
 #### 用户登录
-- **URL**：`POST /api/v1/users/login`
-- **描述**：认证用户并返回JWT令牌
-- **请求体**：
+- **URL**: `POST /api/v1/users/login`
+- **描述**: 认证用户并返回JWT令牌
+- **请求体**: 
   ```json
   {
     "username": "test",
     "password": "password"
   }
   ```
-- **响应**：
+- **响应**: 
   ```json
   {
     "code": 200,
@@ -261,10 +236,10 @@ Authorization: Bearer {token}
   ```
 
 #### 获取用户信息
-- **URL**：`GET /api/v1/users/{id}`
-- **描述**：通过ID获取用户信息
-- **认证**：必需
-- **响应**：
+- **URL**: `GET /api/v1/users/{id}`
+- **描述**: 通过ID获取用户信息
+- **认证**: 需要
+- **响应**: 
   ```json
   {
     "code": 200,
@@ -281,61 +256,17 @@ Authorization: Bearer {token}
   }
   ```
 
-#### 更新用户信息
-- **URL**：`PUT /api/v1/users/{id}`
-- **描述**：更新用户信息
-- **认证**：必需
-- **请求体**：
-  ```json
-  {
-    "email": "new-test@example.com",
-    "phone": "13900139000"
-  }
-  ```
-- **响应**：
-  ```json
-  {
-    "code": 200,
-    "message": "success",
-    "data": {
-      "id": 1,
-      "username": "test",
-      "email": "new-test@example.com",
-      "phone": "13900139000",
-      "createdAt": "2025-12-01T00:00:00.000Z",
-      "updatedAt": "2025-12-02T00:00:00.000Z"
-    },
-    "timestamp": 1609459200000,
-    "requestId": "uuid"
-  }
-  ```
-
-#### 删除用户
-- **URL**：`DELETE /api/v1/users/{id}`
-- **描述**：删除用户账户
-- **认证**：必需
-- **响应**：
-  ```json
-  {
-    "code": 204,
-    "message": "success",
-    "data": null,
-    "timestamp": 1609459200000,
-    "requestId": "uuid"
-  }
-  ```
-
 ### 产品API
 
 #### 获取产品列表
-- **URL**：`GET /api/v1/products`
-- **描述**：获取产品列表，支持分页和过滤
-- **查询参数**：
-  - `page`：页码，默认为1
-  - `pageSize`：每页数量，默认为10
-  - `categoryId`：用于过滤的分类ID
-  - `keyword`：搜索关键词
-- **响应**：
+- **URL**: `GET /api/v1/products`
+- **描述**: 获取产品列表，支持分页和搜索
+- **查询参数**: 
+  - `page`: 页码，默认1
+  - `pageSize`: 每页数量，默认20
+  - `categoryId`: 用于过滤的分类ID
+  - `keyword`: 搜索关键词
+- **响应**: 
   ```json
   {
     "code": 200,
@@ -367,9 +298,9 @@ Authorization: Bearer {token}
   ```
 
 #### 获取产品详情
-- **URL**：`GET /api/v1/products/{id}`
-- **描述**：获取产品详细信息
-- **响应**：
+- **URL**: `GET /api/v1/products/{id}`
+- **描述**: 获取产品详细信息
+- **响应**: 
   ```json
   {
     "code": 200,
@@ -391,10 +322,10 @@ Authorization: Bearer {token}
 ### 订单API
 
 #### 创建订单
-- **URL**：`POST /api/v1/orders`
-- **描述**：创建新订单
-- **认证**：必需
-- **请求体**：
+- **URL**: `POST /api/v1/orders`
+- **描述**: 创建新订单
+- **认证**: 需要
+- **请求体**: 
   ```json
   {
     "products": [
@@ -411,7 +342,7 @@ Authorization: Bearer {token}
     "paymentMethod": "alipay"
   }
   ```
-- **响应**：
+- **响应**: 
   ```json
   {
     "code": 201,
@@ -444,128 +375,27 @@ Authorization: Bearer {token}
   }
   ```
 
-#### 获取订单列表
-- **URL**：`GET /api/v1/orders`
-- **描述**：获取认证用户的订单列表
-- **认证**：必需
-- **查询参数**：
-  - `page`：页码，默认为1
-  - `pageSize`：每页数量，默认为10
-  - `status`：用于过滤的订单状态
-- **响应**：
-  ```json
-  {
-    "code": 200,
-    "message": "success",
-    "data": {
-      "list": [
-        {
-          "id": 1,
-          "orderNo": "ORD20251201000001",
-          "totalAmount": 400,
-          "status": "pending",
-          "createdAt": "2025-12-01T00:00:00.000Z"
-        },
-        {
-          "id": 2,
-          "orderNo": "ORD20251201000002",
-          "totalAmount": 200,
-          "status": "completed",
-          "createdAt": "2025-12-01T00:00:00.000Z"
-        }
-      ],
-      "total": 2,
-      "page": 1,
-      "pageSize": 10
-    },
-    "timestamp": 1609459200000,
-    "requestId": "uuid"
-  }
-  ```
+## 错误处理
 
-### 通知API
+### 错误类型
 
-#### 获取通知列表
-- **URL**：`GET /api/v1/notifications`
-- **描述**：获取认证用户的通知列表
-- **认证**：必需
-- **查询参数**：
-  - `type`：通知类型（all/system/order/promotion/activity）
-  - `status`：通知状态（all/read/unread）
-  - `page`：页码，默认为1
-  - `pageSize`：每页数量，默认为20
-- **响应**：
-  ```json
-  {
-    "code": 200,
-    "message": "success",
-    "data": {
-      "list": [
-        {
-          "id": 1,
-          "title": "系统通知",
-          "content": "系统维护通知",
-          "type": "system",
-          "status": "unread",
-          "createdAt": "2025-12-01T00:00:00.000Z"
-        },
-        {
-          "id": 2,
-          "title": "订单通知",
-          "content": "您的订单已发货",
-          "type": "order",
-          "status": "read",
-          "createdAt": "2025-12-01T00:00:00.000Z"
-        }
-      ],
-      "total": 2,
-      "page": 1,
-      "pageSize": 20
-    },
-    "timestamp": 1609459200000,
-    "requestId": "uuid"
-  }
-  ```
+| 错误码 | 描述 | HTTP状态码 |
+|--------|------|------------|
+| 40001 | 参数错误 | 400 |
+| 40101 | 未认证 | 401 |
+| 40102 | 认证过期 | 401 |
+| 40103 | 认证无效 | 401 |
+| 40301 | 无权限 | 403 |
+| 40401 | 资源不存在 | 404 |
+| 50001 | 服务器错误 | 500 |
+| 50002 | 数据库错误 | 500 |
+| 50003 | 第三方服务错误 | 500 |
 
-#### 标记通知为已读
-- **URL**：`PUT /api/v1/notifications/{id}/read`
-- **描述**：将通知标记为已读
-- **认证**：必需
-- **响应**：
-  ```json
-  {
-    "code": 200,
-    "message": "success",
-    "data": {
-      "id": 1,
-      "title": "系统通知",
-      "content": "系统维护通知",
-      "type": "system",
-      "status": "read",
-      "createdAt": "2025-12-01T00:00:00.000Z"
-    },
-    "timestamp": 1609459200000,
-    "requestId": "uuid"
-  }
-  ```
+### 错误响应格式
 
-## 响应格式
-
-### 成功响应
 ```json
 {
-  "code": 200,
-  "message": "success",
-  "data": {},
-  "timestamp": 1609459200000,
-  "requestId": "uuid"
-}
-```
-
-### 错误响应
-```json
-{
-  "code": 400,
+  "code": 40001,
   "message": "参数错误",
   "data": null,
   "timestamp": 1609459200000,
@@ -574,26 +404,43 @@ Authorization: Bearer {token}
     {
       "field": "username",
       "message": "用户名不能为空"
-    },
-    {
-      "field": "email",
-      "message": "邮箱格式不正确"
     }
   ]
 }
 ```
 
+## 版本管理
+
+### 版本格式
+- **语义化版本号**: MAJOR.MINOR.PATCH（例如：v1.0.0）
+
+### 版本控制
+- **URL路径版本控制**: `/api/v{version}/resources`
+
+### 升级策略
+- **MAJOR**: 破坏性变更，与以前版本不兼容
+- **MINOR**: 新功能，向后兼容
+- **PATCH**: 错误修复，向后兼容
+
+### 版本支持
+- 同时支持2个主要版本
+- 旧版本在新版本发布后6个月内支持
+- 提供版本迁移指南
+
 ## API测试
 
 ### 手动测试工具
-- **Postman**：用于交互式API测试
-- **Swagger UI**：用于API文档和测试
+- **Postman**: 用于交互式API测试
+- **Swagger UI**: 用于API文档和测试
+- **curl**: 命令行HTTP客户端
 
 ### 自动化测试
-- **Jest**：用于单元测试和集成测试
-- **Supertest**：用于HTTP API测试
+- **Jest**: 用于单元测试和集成测试
+- **Supertest**: 用于HTTP API测试
+- **Newman**: 用于Postman集合自动化测试
 
-### 自动化测试示例
+### 测试示例
+
 ```javascript
 const request = require('supertest');
 const app = require('../app');
@@ -627,15 +474,16 @@ describe('User API', () => {
 });
 ```
 
-## API调用示例
+## API使用示例
 
 ### 使用Axios
+
 ```javascript
 const axios = require('axios');
 
 // 设置基础URL
 const api = axios.create({
-  baseURL: 'http://localhost:3000/api/v1',
+  baseURL: 'https://api.example.com/api/v1',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json'
@@ -664,12 +512,24 @@ async function login(username, password) {
     throw error;
   }
 }
+
+// 获取用户信息
+async function getUserInfo(userId) {
+  try {
+    const response = await api.get(`/users/${userId}`);
+    return response.data;
+  } catch (error) {
+    console.error('获取用户信息失败:', error.response.data);
+    throw error;
+  }
+}
 ```
 
 ### 使用Fetch
+
 ```javascript
 // 设置基础URL
-const baseURL = 'http://localhost:3000/api/v1';
+const baseURL = 'https://api.example.com/api/v1';
 
 // 登录
 async function login(username, password) {
@@ -695,29 +555,135 @@ async function login(username, password) {
     throw error;
   }
 }
+
+// 获取用户信息
+async function getUserInfo(userId, token) {
+  try {
+    const response = await fetch(`${baseURL}/users/${userId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    const data = await response.json();
+    if (response.ok) {
+      return data;
+    } else {
+      throw new Error(data.message);
+    }
+  } catch (error) {
+    console.error('获取用户信息失败:', error);
+    throw error;
+  }
+}
 ```
 
-## 版本管理
+## 性能优化
 
-### 版本格式
-- **语义化版本控制**：MAJOR.MINOR.PATCH（例如：v1.0.0）
+### 请求优化
+- 减少请求次数
+- 使用批量请求
+- 合理使用缓存
+- 压缩请求数据
 
-### 版本控制
-- **URL路径版本控制**：`/api/v{version}/resources`
+### 响应优化
+- 只返回必要数据
+- 压缩响应数据
+- 使用适当的数据格式
+- 优化数据库查询
 
-### 升级策略
-- **MAJOR**：破坏性更改，与以前版本不兼容
-- **MINOR**：新功能，向后兼容
-- **PATCH**：错误修复，向后兼容
+### 并发控制
+- 限制请求频率
+- 使用队列处理高并发
+- 实现熔断机制
+- 使用负载均衡
 
-## 错误处理
+## 安全措施
 
-### 错误类型
-- **参数错误**：无效的请求参数
-- **认证错误**：缺失或无效的认证
-- **授权错误**：权限不足
-- **资源未找到**：请求的资源不存在
-- **服务器内部错误**：意外的服务器错误
+### 认证与授权
+- 使用JWT进行认证
+- 基于角色的访问控制
+- 定期更换密钥
+- 限制令牌有效期
 
-### 错误响应格式
-所有API错误都遵循标准的错误响应格式，详细的错误信息在`errors`数组中。
+### 数据安全
+- 加密敏感数据
+- 使用HTTPS
+- 防止SQL注入
+- 防止XSS攻击
+- 防止CSRF攻击
+
+### 访问控制
+- IP白名单
+- 限制请求频率
+- 防止DDoS攻击
+- 监控异常访问
+
+## 监控与日志
+
+### 监控指标
+- 请求量
+- 响应时间
+- 错误率
+- 成功率
+- 并发数
+
+### 日志记录
+- 请求日志
+- 响应日志
+- 错误日志
+- 性能日志
+
+### 日志格式
+
+```json
+{
+  "timestamp": "2025-12-01T00:00:00.000Z",
+  "requestId": "uuid",
+  "method": "GET",
+  "url": "/api/v1/users/1",
+  "statusCode": 200,
+  "responseTime": 100,
+  "ip": "127.0.0.1",
+  "userAgent": "Mozilla/5.0",
+  "userId": 1
+}
+```
+
+## 变更管理
+
+### 变更流程
+1. 提出API变更需求
+2. 设计API变更方案
+3. 编写API文档
+4. 实现API变更
+5. 测试API变更
+6. 发布API变更
+7. 更新API文档
+8. 通知相关方
+
+### 变更类型
+- **新增API**: 添加新的API端点
+- **修改API**: 修改现有API的行为
+- **废弃API**: 标记API为废弃
+- **删除API**: 移除不再使用的API
+
+## 最佳实践
+
+1. **使用RESTful设计原则**
+2. **保持API简洁易用**
+3. **提供完整的文档**
+4. **实现适当的认证和授权**
+5. **处理错误和异常**
+6. **支持版本管理**
+7. **优化性能**
+8. **确保安全性**
+9. **测试API**
+10. **监控和日志**
+
+## 版本历史
+
+| 版本 | 更新日期 | 更新内容 | 作者 |
+|------|----------|----------|------|
+| 1.0.0 | 2025-12-26 | 初始版本 | Sut |
