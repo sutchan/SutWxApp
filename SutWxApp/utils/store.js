@@ -52,44 +52,44 @@ function getState() {
  */
 function commit(mutation, payload) {
   switch (mutation) {
-    case 'SET_TOKEN':
-      state.token = payload;
-      if (payload) {
-        wx.setStorageSync('token', payload);
-      } else {
-        wx.removeStorageSync('token');
-      }
-      break;
-    
-    case 'SET_USER_INFO':
-      state.userInfo = payload;
-      if (payload) {
-        wx.setStorageSync('userInfo', payload);
-      } else {
-        wx.removeStorageSync('userInfo');
-      }
-      break;
-    
-    case 'SET_POINTS':
-      state.points = payload;
-      wx.setStorageSync('points', payload);
-      break;
-    
-    case 'SET_UNREAD_COUNT':
-      state.unreadCount = payload;
-      wx.setStorageSync('unreadCount', payload);
-      break;
-    
-    case 'RESET_STATE':
-      state = { ...initialState };
+  case 'SET_TOKEN':
+    state.token = payload;
+    if (payload) {
+      wx.setStorageSync('token', payload);
+    } else {
       wx.removeStorageSync('token');
-      wx.removeStorageSync('userInfo');
-      wx.removeStorageSync('points');
-      wx.removeStorageSync('unreadCount');
-      break;
+    }
+    break;
     
-    default:
-      console.warn(`未知的mutation: ${mutation}`);
+  case 'SET_USER_INFO':
+    state.userInfo = payload;
+    if (payload) {
+      wx.setStorageSync('userInfo', payload);
+    } else {
+      wx.removeStorageSync('userInfo');
+    }
+    break;
+    
+  case 'SET_POINTS':
+    state.points = payload;
+    wx.setStorageSync('points', payload);
+    break;
+    
+  case 'SET_UNREAD_COUNT':
+    state.unreadCount = payload;
+    wx.setStorageSync('unreadCount', payload);
+    break;
+    
+  case 'RESET_STATE':
+    state = { ...initialState };
+    wx.removeStorageSync('token');
+    wx.removeStorageSync('userInfo');
+    wx.removeStorageSync('points');
+    wx.removeStorageSync('unreadCount');
+    break;
+    
+  default:
+    console.warn(`未知的mutation: ${mutation}`);
   }
 }
 
