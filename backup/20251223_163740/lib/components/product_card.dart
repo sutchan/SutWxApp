@@ -1,10 +1,8 @@
-/**
- * 文件名: product_card.dart
- * 版本号: 1.0.0
- * 更新日期: 2025-12-23
- * 作者: Sut
- * 描述: 商品卡片组件，用于展示商品信息
- */
+// 文件名: product_card.dart
+// 版本号: 1.0.0
+// 更新日期: 2025-12-26
+// 作者: Sut
+// 描述: 商品卡片组件，用于展示商品信息
 
 import 'package:flutter/material.dart';
 import '../models/product.dart';
@@ -38,7 +36,7 @@ class ProductCard extends StatelessWidget {
   
   /// 构造函数
   const ProductCard({
-    Key? key,
+    super.key,
     required this.product,
     this.bordered = true,
     this.showActions = true,
@@ -47,24 +45,24 @@ class ProductCard extends StatelessWidget {
     this.onTap,
     this.onAddToCart,
     this.onFavorite,
-  }) : super(key: key);
+  });
   
   @override
   Widget build(BuildContext context) {
     return Container(
       width: width,
       decoration: BoxDecoration(
-        border: bordered ? Border.all(color: Colors.grey.shade200, width: 1) : null,
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: bordered ? [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 3,
-            offset: const Offset(0, 1),
-          ),
-        ] : null,
-      ),
+          border: bordered ? Border.all(color: Colors.grey.shade200, width: 1) : null,
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: bordered ? [
+            BoxShadow(
+              color: Colors.grey.shade100,
+              spreadRadius: 1,
+              blurRadius: 3,
+              offset: const Offset(0, 1),
+            ),
+          ] : null,
+        ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -73,7 +71,7 @@ class ProductCard extends StatelessWidget {
             onTap: () => onTap?.call(product),
             child: Stack(
               children: [
-                Container(
+                SizedBox(
                   height: imageHeight,
                   width: double.infinity,
                   child: LazyImage(

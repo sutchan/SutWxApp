@@ -1,8 +1,8 @@
-/// 文件名: lazy_image.dart
-/// 版本号: 1.0.0
-/// 更新日期: 2025-12-23
-/// 作者: Sut
-/// 描述: 图片懒加载组件，用于优化图片加载性能
+// 文件名: lazy_image.dart
+// 版本号: 1.0.0
+// 更新日期: 2025-12-26
+// 作者: Sut
+// 描述: 图片懒加载组件，用于优化图片加载性能
 
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -35,7 +35,7 @@ class LazyImage extends StatelessWidget {
   
   /// 构造函数
   const LazyImage({
-    Key? key,
+    super.key,
     required this.src,
     this.placeholder = 'assets/images/placeholder.svg',
     this.errorImage = 'assets/images/error.svg',
@@ -44,7 +44,7 @@ class LazyImage extends StatelessWidget {
     this.threshold = 100,
     this.width,
     this.height,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

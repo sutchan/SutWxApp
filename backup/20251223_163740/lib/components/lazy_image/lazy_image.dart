@@ -1,12 +1,9 @@
-/**
- * 文件名: lazy_image.dart
- * 版本号: 1.0.0
- * 更新日期: 2025-12-23
- * 作者: Sut
- * 描述: 图片懒加载组件，用于优化图片加载性能
- */
+// 文件名: lazy_image.dart
+// 版本号: 1.0.0
+// 更新日期: 2025-12-26
+// 作者: Sut
+// 描述: 图片懒加载组件，用于优化图片加载性能
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class LazyImage extends StatelessWidget {
@@ -38,7 +35,7 @@ class LazyImage extends StatelessWidget {
   final VoidCallback? onError;
 
   const LazyImage({
-    Key? key,
+    super.key,
     required this.src,
     this.placeholder = 'assets/images/placeholder.svg',
     this.errorImage = 'assets/images/error.svg',
@@ -48,7 +45,7 @@ class LazyImage extends StatelessWidget {
     this.height,
     this.onLoad,
     this.onError,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -56,3 +53,39 @@ class LazyImage extends StatelessWidget {
     if (src.isEmpty) {
       return Image.asset(
         placeholder,
+        width: width,
+        height: height,
+        fit: fit,
+      );
+    }
+    
+    // 正常加载图片
+    return Image.network(
+      src,
+      width: width,
+      height: height,
+      fit: fit,
+      loadingBuilder: (context, child, loadingProgress) {
+        if (loadingProgress == null) {
+          onLoad?.call();
+          return child;
+        }
+        return Image.asset(
+          placeholder,
+          width: width,
+          height: height,
+          fit: fit,
+        );
+      },
+      errorBuilder: (context, error, stackTrace) {
+        onError?.call();
+        return Image.asset(
+          errorImage,
+          width: width,
+          height: height,
+          fit: fit,
+        );
+      },
+    );
+  }
+}

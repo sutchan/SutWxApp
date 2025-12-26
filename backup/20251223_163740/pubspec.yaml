@@ -41,11 +41,11 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   # WebSocket support
-  web_socket_channel: ^2.5.0
+  web_socket_channel: ^3.0.3
   # JSON serialization
   json_annotation: ^4.9.0
   # Image caching
-  cached_network_image: ^3.5.1
+  cached_network_image: ^3.4.0
 
 dev_dependencies:
   flutter_test:

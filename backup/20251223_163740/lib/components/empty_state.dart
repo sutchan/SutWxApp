@@ -1,10 +1,8 @@
-/**
- * 文件名: empty_state.dart
- * 版本号: 1.0.0
- * 更新日期: 2025-12-23
- * 作者: Sut
- * 描述: 空状态组件，用于在各种场景下显示空状态提示
- */
+// 文件名: empty_state.dart
+// 版本号: 1.0.0
+// 更新日期: 2025-12-26
+// 作者: Sut
+// 描述: 空状态组件，用于在各种场景下显示空状态提示
 
 import 'package:flutter/material.dart';
 
@@ -49,7 +47,7 @@ class EmptyState extends StatelessWidget {
 
   /// 构造函数
   const EmptyState({
-    Key? key,
+    super.key,
     this.type = EmptyStateType.defaultType,
     this.image,
     this.title,
@@ -59,7 +57,7 @@ class EmptyState extends StatelessWidget {
     this.imageWidth = 100.0,
     this.imageHeight = 100.0,
     this.onButtonTap,
-  }) : super(key: key);
+  });
 
   /// 默认空状态图片映射
   static const Map<EmptyStateType, String> _defaultImages = {
