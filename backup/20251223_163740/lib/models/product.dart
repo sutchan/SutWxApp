@@ -16,6 +16,9 @@ class Product {
   /// 商品图片
   final String image;
   
+  /// 商品图片列表
+  final List<String> images;
+  
   /// 商品描述
   final String description;
   
@@ -49,6 +52,7 @@ class Product {
     required this.name,
     required this.price,
     required this.image,
+    this.images = const [],
     this.description = '',
     this.category = '',
     this.stock = 0,
@@ -67,6 +71,7 @@ class Product {
       name: json['name'] ?? '',
       price: json['price']?.toDouble() ?? 0.0,
       image: json['image'] ?? '',
+      images: json['images'] != null && json['images'] is List ? List<String>.from(json['images']) : [],
       description: json['description'] ?? '',
       category: json['category'] ?? '',
       stock: json['stock'] ?? 0,
@@ -86,6 +91,7 @@ class Product {
       'name': name,
       'price': price,
       'image': image,
+      'images': images,
       'description': description,
       'category': category,
       'stock': stock,

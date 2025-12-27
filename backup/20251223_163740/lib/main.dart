@@ -1,4 +1,13 @@
+// 文件名: main.dart
+// 版本号: 1.0.1
+// 更新日期: 2025-12-26
+// 描述: Flutter应用入口，配置路由和主题
+
 import 'package:flutter/material.dart';
+import 'pages/home/home_page.dart';
+import 'pages/product/product_list_page.dart';
+import 'pages/product/product_detail_page.dart';
+import 'pages/user/user_center_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -7,116 +16,218 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: '苏铁商城',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        primarySwatch: Colors.red,
+        scaffoldBackgroundColor: Colors.grey.shade100,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          iconTheme: IconThemeData(color: Colors.black87),
+          titleTextStyle: TextStyle(
+            color: Colors.black87,
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        tabBarTheme: const TabBarThemeData(
+          labelColor: Colors.red,
+          unselectedLabelColor: Colors.grey,
+        ),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const MainPage(),
+        '/home': (context) => const HomePage(),
+        '/product/list': (context) => const ProductListPage(),
+        '/product/detail': (context) {
+          final args = ModalRoute.of(context)?.settings.arguments;
+          final productId = args is String ? args : '1';
+          return ProductDetailPage(productId: productId);
+        },
+        '/user': (context) => const UserCenterPage(),
+        '/cart': (context) => const CartPlaceholderPage(),
+        '/auth/login': (context) => const LoginPlaceholderPage(),
+        '/order/list': (context) => const OrderListPlaceholderPage(),
+        '/order/confirm': (context) => const OrderConfirmPlaceholderPage(),
+      },
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+class MainPage extends StatefulWidget {
+  const MainPage({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MainPage> createState() => _MainPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _MainPageState extends State<MainPage> {
+  int _currentIndex = 0;
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+  final List<Widget> _pages = [
+    const HomePage(),
+    const ProductListPage(categoryId: 0),
+    const CartPlaceholderPage(),
+    const UserCenterPage(),
+  ];
+
+  final List<BottomNavigationBarItem> _navItems = [
+    const BottomNavigationBarItem(
+      icon: Icon(Icons.home_outlined),
+      activeIcon: Icon(Icons.home),
+      label: '首页',
+    ),
+    const BottomNavigationBarItem(
+      icon: Icon(Icons.category_outlined),
+      activeIcon: Icon(Icons.category),
+      label: '分类',
+    ),
+    const BottomNavigationBarItem(
+      icon: Icon(Icons.shopping_cart_outlined),
+      activeIcon: Icon(Icons.shopping_cart),
+      label: '购物车',
+    ),
+    const BottomNavigationBarItem(
+      icon: Icon(Icons.person_outline),
+      activeIcon: Icon(Icons.person),
+      label: '我的',
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+    return Scaffold(
+      body: _pages[_currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: Colors.red,
+        unselectedItemColor: Colors.grey.shade600,
+        selectedFontSize: 12,
+        unselectedFontSize: 12,
+        iconSize: 24,
+        items: _navItems,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+      ),
+    );
+  }
+}
+
+class CartPlaceholderPage extends StatelessWidget {
+  const CartPlaceholderPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: const Text('购物车'),
       ),
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('You have pushed the button this many times:'),
+          children: [
+            Icon(
+              Icons.shopping_cart_outlined,
+              size: 80,
+              color: Colors.grey.shade300,
+            ),
+            const SizedBox(height: 16),
             Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+              '购物车是空的',
+              style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: () {
+                // 导航到首页
+                Navigator.pushNamed(context, '/home');
+              },
+              child: const Text('去逛逛'),
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+}
+
+class LoginPlaceholderPage extends StatelessWidget {
+  const LoginPlaceholderPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('登录'),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text('模拟登录成功'),
+        ),
+      ),
+    );
+  }
+}
+
+class OrderListPlaceholderPage extends StatelessWidget {
+  const OrderListPlaceholderPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('我的订单'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.receipt_long_outlined,
+              size: 80,
+              color: Colors.grey.shade300,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              '暂无订单',
+              style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class OrderConfirmPlaceholderPage extends StatelessWidget {
+  const OrderConfirmPlaceholderPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('确认订单'),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.pop(context);
+            Navigator.pop(context);
+          },
+          child: const Text('模拟下单'),
+        ),
+      ),
     );
   }
 }
