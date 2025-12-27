@@ -77,7 +77,7 @@
 
 ### 3. API层
 - **作用**：管理用户、产品、订单和通知的核心API
-- **技术**：Node.js、Express.js、RESTful API
+- **技术**：Bun 1.x、Hono、Bun原生HTTP服务器、TypeScript、RESTful API
 - **主要功能**：
   - 接口路由
   - 请求处理
@@ -87,7 +87,7 @@
 
 ### 4. 服务层
 - **作用**：实现各个领域的业务逻辑
-- **技术**：Node.js、Express.js
+- **技术**：Bun 1.x、Hono、TypeScript
 - **主要功能**：
   - 用户管理
   - 产品管理
