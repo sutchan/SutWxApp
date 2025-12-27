@@ -1,0 +1,65 @@
+<view class="container">
+  <view class="header">
+    <view class="title">帮助中心</view>
+    <view class="subtitle">常见问题解答</view>
+  </view>
+
+  <view class="search-box">
+    <view class="search-input-wrap">
+      <text class="search-icon">🔍</text>
+      <input class="search-input" placeholder="搜索问题" value="{{searchKeyword}}" bindinput="onSearchInput" bindconfirm="onSearch"/>
+    </view>
+    <view class="search-btn" bindtap="onSearch">搜索</view>
+  </view>
+
+  <view class="help-categories">
+    <view class="category-item" wx:for="{{categories}}" wx:key="id" bindtap="onSelectCategory" data-id="{{item.id}}">
+      <view class="category-icon">{{item.icon}}</view>
+      <view class="category-name">{{item.name}}</view>
+      <view class="category-count">{{item.count}}个问题</view>
+    </view>
+  </view>
+
+  <view class="faq-section">
+    <view class="section-title">常见问题</view>
+    <view class="faq-list">
+      <view class="faq-item" wx:for="{{faqList}}" wx:key="id" bindtap="onToggleQuestion" data-id="{{item.id}}">
+        <view class="faq-question">
+          <text class="question-text">{{item.question}}</text>
+          <text class="toggle-icon">{{item.expanded ? '−' : '+'}}</text>
+        </view>
+        <view class="faq-answer" wx:if="{{item.expanded}}">
+          <text>{{item.answer}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="contact-section">
+    <view class="section-title">联系我们</view>
+    <view class="contact-cards">
+      <view class="contact-item" bindtap="onCallService">
+        <text class="contact-icon">📞</text>
+        <text class="contact-text">客服热线</text>
+        <text class="contact-value">400-888-8888</text>
+      </view>
+      <view class="contact-item" bindtap="onContactService">
+        <text class="contact-icon">💬</text>
+        <text class="contact-text">在线客服</text>
+        <text class="contact-value">点击咨询</text>
+      </view>
+      <view class="contact-item" bindtap="onSendEmail">
+        <text class="contact-icon">📧</text>
+        <text class="contact-text">商务合作</text>
+        <text class="contact-value">business@sut.com</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="feedback-section">
+    <view class="feedback-btn" bindtap="onFeedback">
+      <text>意见反馈</text>
+      <text class="feedback-hint">帮助我们做得更好</text>
+    </view>
+  </view>
+</view>

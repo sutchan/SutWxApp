@@ -1,0 +1,80 @@
+<view class="container">
+  <view class="header">
+    <view class="title">地址管理</view>
+  </view>
+
+  <view class="address-list" wx:if="{{addressList.length > 0}}">
+    <view class="address-item" wx:for="{{addressList}}" wx:key="id" bindtap="onSelectAddress" data-id="{{item.id}}">
+      <view class="address-info">
+        <view class="user-info">
+          <text class="name">{{item.name}}</text>
+          <text class="phone">{{item.phone}}</text>
+          <text class="tag default" wx:if="{{item.isDefault}}">默认</text>
+        </view>
+        <view class="address-detail">{{item.province}}{{item.city}}{{item.district}}{{item.detail}}</view>
+      </view>
+      <view class="address-actions">
+        <view class="action-btn edit" catchtap="onEditAddress" data-id="{{item.id}}">
+          <text class="icon">✏️</text>
+          <text>编辑</text>
+        </view>
+        <view class="action-btn delete" catchtap="onDeleteAddress" data-id="{{item.id}}">
+          <text class="icon">🗑️</text>
+          <text>删除</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="empty-state" wx:else>
+    <image class="empty-icon" src="/images/empty.svg" mode="aspectFit"></image>
+    <view class="empty-text">暂无收货地址</view>
+    <view class="empty-hint">添加收货地址，方便收货</view>
+  </view>
+
+  <view class="add-address-btn" bindtap="onAddAddress">
+    <text class="icon">+</text>
+    <text>添加新地址</text>
+  </view>
+
+  <view class="modal" wx:if="{{showModal}}">
+    <view class="modal-mask" bindtap="onCloseModal"></view>
+    <view class="modal-content">
+      <view class="modal-header">
+        <text class="modal-title">{{isEdit ? '编辑地址' : '新增地址'}}</text>
+        <view class="modal-close" bindtap="onCloseModal">×</view>
+      </view>
+      <view class="modal-body">
+        <view class="form-item">
+          <view class="form-label">收货人</view>
+          <input class="form-input" placeholder="请输入收货人姓名" value="{{formData.name}}" bindinput="onInputChange" data-field="name"/>
+        </view>
+        <view class="form-item">
+          <view class="form-label">手机号码</view>
+          <input class="form-input" type="number" placeholder="请输入手机号码" value="{{formData.phone}}" bindinput="onInputChange" data-field="phone"/>
+        </view>
+        <view class="form-item">
+          <view class="form-label">所在地区</view>
+          <picker mode="region" bindchange="onRegionChange" value="{{region}}">
+            <view class="form-input picker-input">
+              <text wx:if="{{region.length > 0}}">{{region[0]}}-{{region[1]}}-{{region[2]}}</text>
+              <text wx:else class="placeholder">请选择省/市/区</text>
+            </view>
+          </picker>
+        </view>
+        <view class="form-item">
+          <view class="form-label">详细地址</view>
+          <textarea class="form-textarea" placeholder="请输入详细地址" value="{{formData.detail}}" bindinput="onInputChange" data-field="detail"></textarea>
+        </view>
+        <view class="form-item switch-item">
+          <view class="form-label">设为默认地址</view>
+          <switch color="#ff4d4f" checked="{{formData.isDefault}}" bindchange="onSwitchChange"/>
+        </view>
+      </view>
+      <view class="modal-footer">
+        <button class="btn-cancel" bindtap="onCloseModal">取消</button>
+        <button class="btn-confirm" bindtap="onSaveAddress">保存</button>
+      </view>
+    </view>
+  </view>
+</view>

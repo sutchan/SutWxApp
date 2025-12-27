@@ -1,0 +1,128 @@
+<view class="container">
+  <view class="header">
+    <view class="title">设置</view>
+  </view>
+
+  <view class="settings-group">
+    <view class="group-title">账户安全</view>
+    <view class="settings-list">
+      <view class="settings-item" bindtap="onNavigateTo" data-page="password">
+        <view class="item-left">
+          <text class="item-icon">🔐</text>
+          <text class="item-text">修改密码</text>
+        </view>
+        <view class="item-right">
+          <text class="arrow">›</text>
+        </view>
+      </view>
+      <view class="settings-item" bindtap="onNavigateTo" data-page="phone">
+        <view class="item-left">
+          <text class="item-icon">📱</text>
+          <text class="item-text">更换手机号</text>
+        </view>
+        <view class="item-right">
+          <text class="arrow">›</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="settings-group">
+    <view class="group-title">通知设置</view>
+    <view class="settings-list">
+      <view class="settings-item switch-item">
+        <view class="item-left">
+          <text class="item-icon">🔔</text>
+          <text class="item-text">消息推送</text>
+        </view>
+        <view class="item-right">
+          <switch color="#ff4d4f" checked="{{messagePush}}" bindchange="onSwitchChange" data-field="messagePush"/>
+        </view>
+      </view>
+      <view class="settings-item switch-item">
+        <view class="item-left">
+          <text class="item-icon">📧</text>
+          <text class="item-text">邮件通知</text>
+        </view>
+        <view class="item-right">
+          <switch color="#ff4d4f" checked="{{emailNotify}}" bindchange="onSwitchChange" data-field="emailNotify"/>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="settings-group">
+    <view class="group-title">隐私设置</view>
+    <view class="settings-list">
+      <view class="settings-item switch-item">
+        <view class="item-left">
+          <text class="item-icon">👁️</text>
+          <text class="item-text">隐私浏览模式</text>
+        </view>
+        <view class="item-right">
+          <switch color="#ff4d4f" checked="{{privacyMode}}" bindchange="onSwitchChange" data-field="privacyMode"/>
+        </view>
+      </view>
+      <view class="settings-item switch-item">
+        <view class="item-left">
+          <text class="item-icon">📍</text>
+          <text class="item-text">位置授权</text>
+        </view>
+        <view class="item-right">
+          <switch color="#ff4d4f" checked="{{locationAuth}}" bindchange="onSwitchChange" data-field="locationAuth"/>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="settings-group">
+    <view class="group-title">关于</view>
+    <view class="settings-list">
+      <view class="settings-item" bindtap="onNavigateTo" data-page="about">
+        <view class="item-left">
+          <text class="item-icon">ℹ️</text>
+          <text class="item-text">关于我们</text>
+        </view>
+        <view class="item-right">
+          <text class="arrow">›</text>
+        </view>
+      </view>
+      <view class="settings-item" bindtap="onNavigateTo" data-page="help">
+        <view class="item-left">
+          <text class="item-icon">❓</text>
+          <text class="item-text">帮助中心</text>
+        </view>
+        <view class="item-right">
+          <text class="arrow">›</text>
+        </view>
+      </view>
+      <view class="settings-item" bindtap="onNavigateTo" data-page="feedback">
+        <view class="item-left">
+          <text class="item-icon">💬</text>
+          <text class="item-text">意见反馈</text>
+        </view>
+        <view class="item-right">
+          <text class="arrow">›</text>
+        </view>
+      </view>
+      <view class="settings-item" bindtap="onCheckVersion">
+        <view class="item-left">
+          <text class="item-icon">🔄</text>
+          <text class="item-text">检查更新</text>
+        </view>
+        <view class="item-right version">
+          <text class="version-text">v1.0.0</text>
+          <text class="arrow">›</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="logout-btn" bindtap="onLogout">
+    <text>退出登录</text>
+  </view>
+
+  <view class="version-info">
+    <text>苏铁商城 v1.0.0</text>
+  </view>
+</view>
