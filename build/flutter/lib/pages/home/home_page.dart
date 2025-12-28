@@ -21,7 +21,6 @@ class _HomePageState extends State<HomePage> {
   bool _isLoading = false;
   bool _hasMore = true;
   int _pageNum = 1;
-  int _pageSize = 10;
 
   final List<Map<String, dynamic>> _categoryList = [
     {'id': 0, 'name': '全部', 'icon': Icons.grid_view},

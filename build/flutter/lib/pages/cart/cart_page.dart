@@ -56,7 +56,6 @@ class CartItem {
 class _CartPageState extends State<CartPage> {
   final List<CartItem> _cartItems = [];
   final List<Product> _productList = [];
-  bool _isLoading = false;
   bool _isEditMode = false;
 
   @override
@@ -158,7 +157,8 @@ class _CartPageState extends State<CartPage> {
     return _cartItems.where((item) => item.selected).length;
   }
 
-  void _onSelectAll(bool value) {
+  void _onSelectAll(bool? value) {
+    if (value == null) return;
     setState(() {
       for (var item in _cartItems) {
         item.selected = value;
@@ -185,15 +185,6 @@ class _CartPageState extends State<CartPage> {
       if (item.quantity > 1) {
         item.quantity--;
       }
-    });
-  }
-
-  void _onDelete(CartItem item) {
-    _showConfirmDialog('确认删除', '确定要从购物车删除该商品吗？', () {
-      setState(() {
-        _cartItems.removeWhere((i) => i.id == item.id);
-      });
-      _showToast('已删除');
     });
   }
 
@@ -470,7 +461,7 @@ class _CartPageState extends State<CartPage> {
                 Checkbox(
                   value: _allSelected,
                   onChanged: _onSelectAll,
-                  activeThumbColor: Colors.red,
+                  activeColor: Colors.red,
                 ),
                 const Text('全选'),
               ],

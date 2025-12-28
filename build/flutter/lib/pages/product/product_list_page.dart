@@ -23,7 +23,6 @@ class _ProductListPageState extends State<ProductListPage> {
   bool _isLoading = false;
   bool _hasMore = true;
   int _pageNum = 1;
-  int _pageSize = 10;
 
   @override
   void initState() {

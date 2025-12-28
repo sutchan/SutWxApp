@@ -6,7 +6,6 @@
  */
 
 import 'package:flutter/material.dart';
-import '../../models/address.dart';
 import '../../models/product.dart';
 
 class OrderConfirmPage extends StatefulWidget {
@@ -17,22 +16,24 @@ class OrderConfirmPage extends StatefulWidget {
 }
 
 class AddressInfo {
-  String name;
-  String phone;
-  String province;
-  String city;
-  String district;
-  String detail;
-  bool isDefault;
+  final String id;
+  final String name;
+  final String phone;
+  final String province;
+  final String city;
+  final String district;
+  final String detail;
+  final bool isDefault;
 
-  AddressInfo({
-    this.name = '',
-    this.phone = '',
-    this.province = '',
-    this.city = '',
-    this.district = '',
-    this.detail = '',
-    this.isDefault = false,
+  const AddressInfo({
+    required this.id,
+    required this.name,
+    required this.phone,
+    required this.province,
+    required this.city,
+    required this.district,
+    required this.detail,
+    required this.isDefault,
   });
 
   String get fullAddress => '$province$city$district$detail';
@@ -41,7 +42,8 @@ class AddressInfo {
 }
 
 class _OrderConfirmPageState extends State<OrderConfirmPage> {
-  AddressInfo _selectedAddress = AddressInfo(
+  AddressInfo _selectedAddress = const AddressInfo(
+    id: '1',
     name: '张三',
     phone: '13800138000',
     province: '北京市',
@@ -67,7 +69,7 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
     Product(
       id: '1',
       name: '苏铁精品盆栽',
-      price: 199.00,
+      price: 199.0,
       image: '',
       description: '',
       category: '盆栽',
@@ -75,14 +77,14 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
       isFavorite: false,
       isLiked: false,
       discount: 0,
-      originalPrice: 299.00,
+      originalPrice: 299.0,
       sales: 500,
       rating: 4.8,
     ),
     Product(
       id: '2',
       name: '多肉植物组合',
-      price: 59.00,
+      price: 59.0,
       image: '',
       description: '',
       category: '盆栽',
@@ -90,13 +92,11 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
       isFavorite: false,
       isLiked: false,
       discount: 10,
-      originalPrice: 69.00,
+      originalPrice: 69.0,
       sales: 1200,
       rating: 4.9,
     ),
   ];
-
-  int _productCount = 3;
 
   double get _totalAmount {
     return _products.fold(0, (sum, p) => sum + p.price * 1);

@@ -21,9 +21,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   int _currentImageIndex = 0;
   bool _isLoading = true;
   bool _isFavorite = false;
-  bool _isLiked = false;
   int _quantity = 1;
-  bool _showSpecPopup = false;
   final PageController _pageController = PageController();
 
   @override
@@ -80,18 +78,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(_isFavorite ? '已收藏' : '取消收藏')),
     );
-  }
-
-  void _onShowSpecPopup() {
-    setState(() {
-      _showSpecPopup = true;
-    });
-  }
-
-  void _onHideSpecPopup() {
-    setState(() {
-      _showSpecPopup = false;
-    });
   }
 
   void _onQuantityChange(int delta) {
@@ -349,7 +335,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             child: ElevatedButton(
               onPressed: _onBuyNow,
               style: ElevatedButton.styleFrom(
-                backgroundColor: MaterialStateProperty.all(Colors.red),
+                backgroundColor: Colors.red,
               ),
               child: const Text('立即购买'),
             ),
@@ -403,9 +389,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           children: [
             Row(
               children: [
-                const CircleAvatar(
+                CircleAvatar(
                   radius: 16,
-                  backgroundImage: const NetworkImage('https://i.pravatar.cc/150?img=$index'),
+                  backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=$index'),
                 ),
                 const SizedBox(width: 8),
                 Text('用户${index + 1}'),
