@@ -5,6 +5,7 @@
 
 import 'package:flutter/material.dart';
 import '../../models/product.dart';
+import '../../components/lazy_image.dart';
 
 class ProductListPage extends StatefulWidget {
   final int? categoryId;
@@ -106,11 +107,20 @@ class _ProductListPageState extends State<ProductListPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.network(
-            product.image,
+          LazyImage(
+            url: product.image,
             height: 150,
             width: double.infinity,
             fit: BoxFit.cover,
+            placeholder: 'images/placeholder.svg',
+            errorImage: 'images/error.svg',
+            fadeInDuration: const Duration(milliseconds: 300),
+            onLoadSuccess: () {
+              debugPrint('Product list image loaded: ${product.name}');
+            },
+            onLoadError: () {
+              debugPrint('Product list image failed: ${product.name}');
+            },
           ),
           Padding(
             padding: const EdgeInsets.all(8),

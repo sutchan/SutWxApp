@@ -1,9 +1,17 @@
 /**
  * 文件名: request.ts
- * 版本号: 1.0.0
- * 更新日期: 2025-12-26
+ * 版本号: 1.0.1
+ * 更新日期: 2025-12-28
  * 描述: 网络请求工具，封装wx.request，支持拦截器、重试机制等
  */
+
+// 安全获取wx对象
+function getWx() {
+  if (typeof wx !== 'undefined') {
+    return wx;
+  }
+  return null;
+}
 
 interface RequestConfig {
   baseURL: string;
@@ -49,12 +57,15 @@ function request(options: RequestOptions): Promise<unknown> {
   };
 
   if (config.needAuth !== false) {
-    const token = wx.getStorageSync<string>('token');
-    if (token) {
-      config.header = {
-        ...config.header,
-        'Authorization': `Bearer ${token}`
-      };
+    const wx = getWx();
+    if (wx) {
+      const token = wx.getStorageSync<string>('token');
+      if (token) {
+        config.header = {
+          ...config.header,
+          'Authorization': `Bearer ${token}`
+        };
+      }
     }
   }
 
@@ -68,8 +79,14 @@ function request(options: RequestOptions): Promise<unknown> {
 
   return new Promise((resolve, reject) => {
     let retryCount = 0;
+    const wx = getWx();
 
     function sendRequest(): void {
+      if (!wx || !wx.request) {
+        reject(new Error('wx.request未定义'));
+        return;
+      }
+
       wx.request({
         ...processedConfig,
         success: (res: WechatMiniprogram.RequestSuccess<unknown>) => {
