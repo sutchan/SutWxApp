@@ -226,7 +226,7 @@ class _HelpCenterPageState extends State<HelpCenterPage> {
                 borderRadius: BorderRadius.circular(24),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withValues(alpha: 0.1),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),
@@ -496,7 +496,7 @@ class _HelpCenterPageState extends State<HelpCenterPage> {
             const SizedBox(height: 8),
             Text(
               '帮助我们做得更好',
-              style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8)),
+              style: TextStyle(fontSize: 12, color: Colors.white.withValues(alpha: 0.8)),
             ),
           ],
         ),

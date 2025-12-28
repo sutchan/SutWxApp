@@ -391,7 +391,8 @@ class _SettingsPageState extends State<SettingsPage> {
           Switch(
             value: value,
             onChanged: onChanged,
-            activeColor: Colors.red,
+            activeTrackColor: Colors.red.withValues(alpha: 0.5),
+            activeThumbColor: Colors.red,
           ),
         ],
       ),

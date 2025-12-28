@@ -542,7 +542,8 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
           Switch(
             value: _usePoints,
             onChanged: _onUsePointsChange,
-            activeColor: Colors.red,
+            activeTrackColor: Colors.red.withValues(alpha: 0.5),
+            activeThumbColor: Colors.red,
           ),
         ],
       ),
@@ -641,7 +642,7 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 8,
             offset: const Offset(0, -2),
           ),

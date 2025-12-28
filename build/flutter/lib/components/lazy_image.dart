@@ -3,7 +3,6 @@
 /// 更新日期: 2025-12-28
 /// 描述: Flutter图片懒加载组件，支持网络图片加载、占位符、错误图片、缓存功能
 
-import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class LazyImage extends StatefulWidget {

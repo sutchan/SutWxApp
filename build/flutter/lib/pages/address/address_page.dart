@@ -228,37 +228,6 @@ class _AddressPageState extends State<AddressPage> {
     }
   }
 
-  void _setDefaultAddress(AddressInfo address) {
-    setState(() {
-      _addressList = _addressList.map((a) {
-        if (a.id == address.id) {
-          return AddressInfo(
-            id: a.id,
-            name: a.name,
-            phone: a.phone,
-            province: a.province,
-            city: a.city,
-            district: a.district,
-            detail: a.detail,
-            isDefault: true,
-          );
-        }
-        return AddressInfo(
-          id: a.id,
-          name: a.name,
-          phone: a.phone,
-          province: a.province,
-          city: a.city,
-          district: a.district,
-          detail: a.detail,
-          isDefault: false,
-        );
-      }).toList();
-    });
-
-    _showToast('已设为默认地址');
-  }
-
   void _onSelectAddress(AddressInfo address) {
     if (widget.selectMode && widget.onAddressSelected != null) {
       widget.onAddressSelected!(address);
@@ -595,7 +564,8 @@ class _AddressPageState extends State<AddressPage> {
         Switch(
           value: _isDefault,
           onChanged: (value) => setState(() => _isDefault = value),
-          activeColor: Colors.red,
+          activeTrackColor: Colors.red.withValues(alpha: 0.5),
+          activeThumbColor: Colors.red,
         ),
       ],
     );
