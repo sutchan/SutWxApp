@@ -55,9 +55,9 @@ class _UserCenterPageState extends State<UserCenterPage> {
                 ),
                 Text(
                   '13800138000',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 14,
-                    color: Colors.grey.shade600,
+                    color: Color.fromARGB(153, 117, 117, 117),
                   ),
                 ),
               ],

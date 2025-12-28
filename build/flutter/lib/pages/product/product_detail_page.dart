@@ -399,7 +399,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               children: [
                 const CircleAvatar(
                   radius: 16,
-                  backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=$index'),
+                  backgroundImage: const NetworkImage('https://i.pravatar.cc/150?img=$index'),
                 ),
                 const SizedBox(width: 8),
                 Text('用户${index + 1}'),

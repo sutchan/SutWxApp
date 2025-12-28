@@ -6,7 +6,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:sut_wxapp/models/product.dart';
+import '../../models/product.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
@@ -71,7 +71,7 @@ class _CartPageState extends State<CartPage> {
       Product(
         id: '1',
         name: '苏铁精品盆栽',
-        price: 199.00,
+        price: 199.0,
         image: 'https://via.placeholder.com/100',
         description: '优质苏铁盆栽，适合家居装饰',
         category: '盆栽',
@@ -79,29 +79,29 @@ class _CartPageState extends State<CartPage> {
         isFavorite: false,
         isLiked: false,
         discount: 0,
-        originalPrice: 299.00,
+        originalPrice: 299.0,
         sales: 500,
         rating: 4.8,
       ),
       Product(
         id: '2',
         name: '多肉植物组合',
-        price: 59.00,
+        price: 59.0,
         image: 'https://via.placeholder.com/100',
         description: '精选多肉植物，精致可爱',
         category: '盆栽',
         stock: 200,
         isFavorite: false,
         isLiked: false,
-        discount: 10,
-        originalPrice: 69.00,
-        sales: 1200,
-        rating: 4.9,
+        discount: 0,
+        originalPrice: 49.0,
+        sales: 800,
+        rating: 4.7,
       ),
       Product(
         id: '3',
         name: '绿萝吊兰',
-        price: 39.00,
+        price: 39.0,
         image: 'https://via.placeholder.com/100',
         description: '空气净化利器，易养护',
         category: '盆栽',
@@ -109,7 +109,7 @@ class _CartPageState extends State<CartPage> {
         isFavorite: false,
         isLiked: false,
         discount: 0,
-        originalPrice: 49.00,
+        originalPrice: 49.0,
         sales: 800,
         rating: 4.7,
       ),
@@ -470,7 +470,7 @@ class _CartPageState extends State<CartPage> {
                 Checkbox(
                   value: _allSelected,
                   onChanged: _onSelectAll,
-                  activeColor: Colors.red,
+                  activeThumbColor: Colors.red,
                 ),
                 const Text('全选'),
               ],

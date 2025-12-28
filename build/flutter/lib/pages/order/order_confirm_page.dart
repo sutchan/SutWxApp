@@ -6,8 +6,8 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:sut_wxapp/models/address.dart';
-import 'package:sut_wxapp/models/product.dart';
+import '../../models/address.dart';
+import '../../models/product.dart';
 
 class OrderConfirmPage extends StatefulWidget {
   const OrderConfirmPage({super.key});
@@ -293,7 +293,6 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
         decoration: BoxDecoration(
           border: Border.all(color: Colors.grey.shade300),
           borderRadius: BorderRadius.circular(8),
-          borderStyle: BorderStyle.solid,
         ),
         child: const Row(
           mainAxisAlignment: MainAxisAlignment.center,
