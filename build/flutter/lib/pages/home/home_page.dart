@@ -5,6 +5,7 @@
 
 import 'package:flutter/material.dart';
 import '../../models/product.dart';
+import '../../components/lazy_image.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -170,11 +171,20 @@ class _HomePageState extends State<HomePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.network(
-            product.image,
+          LazyImage(
+            url: product.image,
             height: 150,
             width: double.infinity,
             fit: BoxFit.cover,
+            placeholder: 'images/placeholder.svg',
+            errorImage: 'images/error.svg',
+            fadeInDuration: const Duration(milliseconds: 300),
+            onLoadSuccess: () {
+              debugPrint('Product image loaded: ${product.name}');
+            },
+            onLoadError: () {
+              debugPrint('Product image failed: ${product.name}');
+            },
           ),
           Padding(
             padding: const EdgeInsets.all(8),

@@ -5,6 +5,7 @@
 
 import 'package:flutter/material.dart';
 import '../../models/product.dart';
+import '../../components/lazy_image.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final String productId;
@@ -167,15 +168,20 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             onPageChanged: _onImageChanged,
             itemCount: _product!.images.length,
             itemBuilder: (context, index) {
-              return Image.network(
-                _product!.images[index],
+              return LazyImage(
+                url: _product!.images[index],
+                width: double.infinity,
+                height: 400,
                 fit: BoxFit.cover,
-                loadingBuilder: (context, child, progress) {
-                  if (progress == null) return child;
-                  return const Center(child: CircularProgressIndicator());
+                placeholder: 'images/placeholder.svg',
+                errorImage: 'images/error.svg',
+                fadeInDuration: const Duration(milliseconds: 300),
+                onLoadSuccess: () {
+                  debugPrint('Image ${index + 1} loaded successfully');
                 },
-                errorBuilder: (context, error, stack) =>
-                    const Icon(Icons.broken_image, size: 80),
+                onLoadError: () {
+                  debugPrint('Image ${index + 1} failed to load');
+                },
               );
             },
           ),
