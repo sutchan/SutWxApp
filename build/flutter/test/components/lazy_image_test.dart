@@ -106,7 +106,9 @@ void main() {
       await tester.pump();
 
       final container = find.byWidgetPredicate(
-        (widget) => widget is Container && widget.width == 200 && widget.height == 150,
+        (widget) => widget is Container && 
+                    widget.constraints?.maxWidth == 200 && 
+                    widget.constraints?.maxHeight == 150,
       );
 
       expect(container, findsOneWidget);

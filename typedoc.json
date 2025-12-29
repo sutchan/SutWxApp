@@ -1,0 +1,16 @@
+{
+  "entryPoints": [
+    "SutWxApp/utils/request.ts",
+    "SutWxApp/utils/security.ts",
+    "SutWxApp/utils/cache.ts",
+    "SutWxApp/services/authService.ts"
+  ],
+  "out": "docs/api",
+  "exclude": ["**/node_modules/**", "**/tests/**"],
+  "name": "苏铁微信小程序API文档",
+  "theme": "default",
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "includeVersion": true,
+  "cleanOutputDir": true
+}

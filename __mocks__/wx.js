@@ -1,6 +1,6 @@
 // 模拟微信小程序wx对象
 module.exports = {
-  login: jest.fn().mockResolvedValue({ code: 'test-code' }),
+  login: jest.fn().mockResolvedValue({ code: "test-code" }),
   request: jest.fn().mockResolvedValue({ statusCode: 200, data: {} }),
   getStorageSync: jest.fn().mockReturnValue(null),
   setStorageSync: jest.fn(),
@@ -9,5 +9,5 @@ module.exports = {
   showToast: jest.fn(),
   showLoading: jest.fn(),
   hideLoading: jest.fn(),
-  showModal: jest.fn().mockResolvedValue({ confirm: true })
+  showModal: jest.fn().mockResolvedValue({ confirm: true }),
 };

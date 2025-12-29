@@ -110,14 +110,14 @@ void main() {
         'image': 'https://example.com/multi.jpg',
         'description': '可爱多肉植物',
         'category': '多肉',
-        stock: 200,
+        'stock': 200,
         'isFavorite': false,
         'isLiked': true,
-        discount: 20,
-        originalPrice: 37.00,
-        sales: 1000,
-        rating: 4.8,
-        images: ['https://example.com/m1.jpg'],
+        'discount': 20,
+        'originalPrice': 37.00,
+        'sales': 1000,
+        'rating': 4.8,
+        'images': ['https://example.com/m1.jpg'],
       };
 
       final product = Product.fromJson(json);

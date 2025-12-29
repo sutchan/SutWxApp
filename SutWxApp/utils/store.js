@@ -1,10 +1,11 @@
 /**
  * 文件名: store.js
  * 版本号: 1.0.2
- * 更新日期: 2025-12-28 10:30
+ * 更新日期: 2025-12-29 14:30
  * 描述: 应用状态管理工具，用于存储和管理全局状态
  */
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 
 // 初始状态
@@ -12,7 +13,7 @@ const initialState = {
   token: null,
   userInfo: null,
   points: 0,
-  unreadCount: 0
+  unreadCount: 0,
 };
 
 // 状态存储
@@ -20,7 +21,7 @@ let state = { ...initialState };
 
 // 安全获取wx对象
 function getWx() {
-  if (typeof wx !== 'undefined') {
+  if (typeof wx !== "undefined") {
     return wx;
   }
   return null;
@@ -33,10 +34,10 @@ function init() {
     return;
   }
 
-  const storedToken = wx.getStorageSync('token');
-  const storedUserInfo = wx.getStorageSync('userInfo');
-  const storedPoints = wx.getStorageSync('points');
-  const storedUnreadCount = wx.getStorageSync('unreadCount');
+  const storedToken = wx.getStorageSync("token");
+  const storedUserInfo = wx.getStorageSync("userInfo");
+  const storedPoints = wx.getStorageSync("points");
+  const storedUnreadCount = wx.getStorageSync("unreadCount");
 
   if (storedToken) {
     state.token = storedToken;
@@ -44,10 +45,10 @@ function init() {
   if (storedUserInfo) {
     state.userInfo = storedUserInfo;
   }
-  if (storedPoints !== '') {
+  if (storedPoints !== "") {
     state.points = storedPoints;
   }
-  if (storedUnreadCount !== '') {
+  if (storedUnreadCount !== "") {
     state.unreadCount = storedUnreadCount;
   }
 }
@@ -68,49 +69,49 @@ function getState() {
 function commit(mutation, payload) {
   const wx = getWx();
   if (!wx) {
-    console.warn('wx对象未定义，跳过状态变更');
+    console.warn("wx对象未定义，跳过状态变更");
     return;
   }
 
   switch (mutation) {
-  case 'SET_TOKEN':
-    state.token = payload;
-    if (payload) {
-      wx.setStorageSync('token', payload);
-    } else {
-      wx.removeStorageSync('token');
-    }
-    break;
-    
-  case 'SET_USER_INFO':
-    state.userInfo = payload;
-    if (payload) {
-      wx.setStorageSync('userInfo', payload);
-    } else {
-      wx.removeStorageSync('userInfo');
-    }
-    break;
-    
-  case 'SET_POINTS':
-    state.points = payload;
-    wx.setStorageSync('points', payload);
-    break;
-    
-  case 'SET_UNREAD_COUNT':
-    state.unreadCount = payload;
-    wx.setStorageSync('unreadCount', payload);
-    break;
-    
-  case 'RESET_STATE':
-    state = { ...initialState };
-    wx.removeStorageSync('token');
-    wx.removeStorageSync('userInfo');
-    wx.removeStorageSync('points');
-    wx.removeStorageSync('unreadCount');
-    break;
-    
-  default:
-    console.warn(`未知的mutation: ${mutation}`);
+    case "SET_TOKEN":
+      state.token = payload;
+      if (payload) {
+        wx.setStorageSync("token", payload);
+      } else {
+        wx.removeStorageSync("token");
+      }
+      break;
+
+    case "SET_USER_INFO":
+      state.userInfo = payload;
+      if (payload) {
+        wx.setStorageSync("userInfo", payload);
+      } else {
+        wx.removeStorageSync("userInfo");
+      }
+      break;
+
+    case "SET_POINTS":
+      state.points = payload;
+      wx.setStorageSync("points", payload);
+      break;
+
+    case "SET_UNREAD_COUNT":
+      state.unreadCount = payload;
+      wx.setStorageSync("unreadCount", payload);
+      break;
+
+    case "RESET_STATE":
+      state = { ...initialState };
+      wx.removeStorageSync("token");
+      wx.removeStorageSync("userInfo");
+      wx.removeStorageSync("points");
+      wx.removeStorageSync("unreadCount");
+      break;
+
+    default:
+      console.warn(`未知的mutation: ${mutation}`);
   }
 }
 
@@ -119,5 +120,5 @@ init();
 
 module.exports = {
   getState,
-  commit
+  commit,
 };

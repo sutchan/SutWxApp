@@ -1,0 +1,109 @@
+# 文件名: ci-cd.yml
+# 版本号: 1.0.0
+# 更新日期: 2025-12-29 20:00
+# 描述: GitHub Actions CI/CD工作流，用于自动化构建和测试微信小程序项目
+
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, dev ]
+  pull_request:
+    branches: [ main, dev ]
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm install
+        
+      - name: Run lint
+        run: npm run lint
+        
+      - name: Run type check
+        run: npx tsc --noEmit
+        
+      - name: Run unit tests
+        run: npm run test
+        
+      - name: Build project
+        run: npm run build
+        
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: wechat-miniprogram-build
+          path: |
+            dist
+            build
+            
+  flutter-build:
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.16.x'
+          
+      - name: Install Flutter dependencies
+        run: flutter pub get
+        
+      - name: Run Flutter test
+        run: flutter test
+        
+      - name: Build Flutter for Android
+        run: flutter build apk --release
+        
+      - name: Build Flutter for iOS
+        run: |
+          flutter build ios --release --no-codesign
+        
+      - name: Upload Flutter artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: flutter-build-artifacts
+          path: |
+            build/app/outputs/flutter-apk
+            build/ios/iphoneos
+            
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [ build-and-test, flutter-build ]
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: wechat-miniprogram-build
+          path: ./build
+          
+      - name: Deploy to production
+        run: |
+          echo "Deploying to production..."
+          # 添加部署脚本，例如上传到微信小程序平台或其他部署目标
+          
+      - name: Notify team
+        run: |
+          echo "Deployment completed successfully!"
+          # 添加通知脚本，例如发送邮件或Slack通知

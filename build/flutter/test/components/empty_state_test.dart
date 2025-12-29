@@ -288,7 +288,8 @@ void main() {
       );
 
       final containerFinder = find.byWidgetPredicate(
-        (widget) => widget is Container && widget.width == double.infinity,
+        (widget) => widget is Container && 
+                    widget.constraints?.maxWidth == double.infinity,
       );
 
       expect(containerFinder, findsOneWidget);
