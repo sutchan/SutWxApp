@@ -1,12 +1,12 @@
 /**
  * 文件名: index.js
- * 版本号: 1.0.0
- * 更新日期: 2025-12-27
+ * 版本号: 1.0.1
+ * 更新日期: 2025-12-28 10:30
  * 描述: 地址管理页面，处理收货地址的增删改查
  */
 
 const app = getApp();
-const authService = require('../../../services/authService.js');
+const authService = require('../../../services/authService');
 
 Page({
   data: {

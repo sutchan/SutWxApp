@@ -1,7 +1,7 @@
 /**
  * 文件名: request.ts
- * 版本号: 1.0.1
- * 更新日期: 2025-12-28
+ * 版本号: 1.0.2
+ * 更新日期: 2025-12-28 10:30
  * 描述: 网络请求工具，封装wx.request，支持拦截器、重试机制等
  */
 
@@ -80,6 +80,8 @@ function request(options: RequestOptions): Promise<unknown> {
   return new Promise((resolve, reject) => {
     let retryCount = 0;
     const wx = getWx();
+    const maxRetry = processedConfig.retry ?? DEFAULT_CONFIG.retry;
+    const retryDelay = processedConfig.retryDelay ?? DEFAULT_CONFIG.retryDelay;
 
     function sendRequest(): void {
       if (!wx || !wx.request) {
@@ -101,9 +103,12 @@ function request(options: RequestOptions): Promise<unknown> {
           if (processedResponse.statusCode && processedResponse.statusCode >= 200 && processedResponse.statusCode < 300) {
             resolve(processedResponse.data);
           } else if (processedResponse.statusCode === 401) {
-            wx.removeStorageSync('token');
-            wx.removeStorageSync('userInfo');
-            wx.navigateTo({ url: '/pages/login/login' });
+            const wxObj = getWx();
+            if (wxObj) {
+              wxObj.removeStorageSync('token');
+              wxObj.removeStorageSync('userInfo');
+              wxObj.navigateTo({ url: '/pages/login/login' });
+            }
             reject(new Error('未授权，请重新登录'));
           } else {
             const errorMessage = (processedResponse.data as { message?: string })?.message || `请求失败：${processedResponse.statusCode}`;
@@ -111,9 +116,9 @@ function request(options: RequestOptions): Promise<unknown> {
           }
         },
         fail: (err: WechatMiniprogram.RequestFail) => {
-          if (retryCount < processedConfig.retry!) {
+          if (retryCount < maxRetry) {
             retryCount++;
-            setTimeout(sendRequest, processedConfig.retryDelay);
+            setTimeout(sendRequest, retryDelay);
           } else {
             reject(err);
           }

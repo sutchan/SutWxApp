@@ -1,12 +1,12 @@
 /**
  * 文件名: index.js
- * 版本号: 1.0.0
- * 更新日期: 2025-12-27
+ * 版本号: 1.0.1
+ * 更新日期: 2025-12-28 10:30
  * 描述: 设置页面，处理用户账户安全、通知、隐私等设置
  */
 
 const app = getApp();
-const authService = require('../../../services/authService.js');
+const authService = require('../../../services/authService');
 
 Page({
   data: {

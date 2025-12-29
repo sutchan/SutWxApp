@@ -289,6 +289,7 @@ Page({
   },
 
   handleShowShareMenu: function() {
+    const that = this;
     wx.showActionSheet({
       itemList: ['分享给好友', '生成海报', '复制链接'],
       success: function(res) {

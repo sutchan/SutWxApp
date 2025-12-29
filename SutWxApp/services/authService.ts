@@ -1,7 +1,7 @@
 /**
  * 文件名: authService.ts
- * 版本号: 1.0.0
- * 更新日期: 2025-12-26
+ * 版本号: 1.0.1
+ * 更新日期: 2025-12-28 10:30
  * 描述: 认证服务，处理用户登录、注册、信息管理等功能
  */
 
@@ -145,6 +145,33 @@ async function addUserAddress(address: Omit<Address, 'id'>): Promise<Address> {
   }
 }
 
+async function getAddressList(): Promise<{ code: number; data: Address[] }> {
+  try {
+    return await request.get<{ code: number; data: Address[] }>('/user/addresses') as { code: number; data: Address[] };
+  } catch (error) {
+    console.error('获取地址列表失败:', error);
+    throw error;
+  }
+}
+
+async function deleteAddress(id: string): Promise<{ code: number; message?: string }> {
+  try {
+    return await request.delete<{ code: number; message?: string }>(`/user/addresses/${id}`) as { code: number; message?: string };
+  } catch (error) {
+    console.error('删除地址失败:', error);
+    throw error;
+  }
+}
+
+async function updateAddress(data: { id: string; name: string; phone: string; province: string; city: string; district: string; detail: string; isDefault: number }): Promise<{ code: number; message?: string }> {
+  try {
+    return await request.put<{ code: number; message?: string }>(`/user/addresses/${data.id}`, data) as { code: number; message?: string };
+  } catch (error) {
+    console.error('更新地址失败:', error);
+    throw error;
+  }
+}
+
 async function sendVerificationCode(phone: string, type = 'login'): Promise<{ success: boolean }> {
   try {
     return await request.post<{ success: boolean }>('/auth/send-code', {
@@ -211,6 +238,9 @@ export {
   updateUserInfo,
   getUserAddresses,
   addUserAddress,
+  getAddressList,
+  deleteAddress,
+  updateAddress,
   sendVerificationCode,
   verifyResetCode,
   resetPassword,
