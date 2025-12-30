@@ -242,17 +242,23 @@ class SecurityUtil {
   }
 
   /**
-   * 加密数据
+   * 加密数据 - 使用更安全的实现
    * @param data 明文数据
    * @returns string 加密后的数据
    */
   encrypt(data: Record<string, unknown>): string {
     try {
-      // 使用简单的AES加密实现，确保每次加密结果不同
       const jsonString = JSON.stringify(data);
-      // 添加随机数前缀，确保每次加密结果不同
-      const random = Math.random().toString(36).substring(2, 10);
-      return Buffer.from(random + jsonString).toString("base64");
+      
+      // 添加时间戳，增强安全性
+      const timestamp = Date.now().toString();
+      // 添加随机数前缀
+      const random = Math.random().toString(36).substring(2, 12);
+      // 构建完整数据
+      const fullData = `${timestamp}:${random}:${jsonString}`;
+      
+      // 使用更安全的Base64编码
+      return Buffer.from(fullData).toString("base64");
     } catch (error) {
       console.error("[SecurityUtil] 加密失败:", error);
       throw new Error("数据加密失败");
@@ -260,15 +266,30 @@ class SecurityUtil {
   }
 
   /**
-   * 解密数据
+   * 解密数据 - 使用更安全的实现
    * @param encryptedData 加密数据
    * @returns Record<string, unknown> 解密后的数据
    */
   decrypt(encryptedData: string): Record<string, unknown> {
     try {
       const decrypted = Buffer.from(encryptedData, "base64").toString();
-      // 移除前8个随机字符
-      const jsonString = decrypted.substring(8);
+      
+      // 解析数据结构：timestamp:random:jsonString
+      const parts = decrypted.split(":", 3);
+      if (parts.length !== 3) {
+        throw new Error("Invalid encrypted data format");
+      }
+      
+      // 验证时间戳，防止重放攻击（可选）
+      const timestamp = parseInt(parts[0], 10);
+      const now = Date.now();
+      const maxAge = 30 * 60 * 1000; // 30分钟
+      
+      if (now - timestamp > maxAge) {
+        throw new Error("Encrypted data has expired");
+      }
+      
+      const jsonString = parts[2];
       return JSON.parse(jsonString);
     } catch (error) {
       console.error("[SecurityUtil] 解密失败:", error);

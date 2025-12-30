@@ -5,7 +5,7 @@
  * 描述: 认证服务，处理用户登录、注册、信息管理等功能
  */
 
-import request from "../utils/request";
+import request, { CancelToken } from "../utils/request";
 
 /**
  * 用户基本信息接口
@@ -203,11 +203,19 @@ class AuthService {
 
   /**
    * 获取当前用户信息
+   * @param options 请求选项，包含cancelToken和缓存配置
    * @returns Promise<UserInfo> 用户信息
    */
-  async getUserInfo(): Promise<UserInfo> {
+  async getUserInfo(options?: {
+    cancelToken?: CancelToken;
+    useCache?: boolean;
+  }): Promise<UserInfo> {
     try {
-      const result = await request.get<ApiResponse<UserInfo>>("/user/info");
+      const result = await request.get<ApiResponse<UserInfo>>("/user/info", undefined, {
+        cancelToken: options?.cancelToken,
+        useCache: options?.useCache ?? true,
+        cacheKey: "user_info"
+      });
       this.validateResponse(result);
 
       if (result.data) {
@@ -247,12 +255,19 @@ class AuthService {
 
   /**
    * 获取用户地址列表
+   * @param options 请求选项，包含cancelToken和缓存配置
    * @returns Promise<Address[]> 地址列表
    */
-  async getUserAddresses(): Promise<Address[]> {
+  async getUserAddresses(options?: {
+    cancelToken?: CancelToken;
+    useCache?: boolean;
+  }): Promise<Address[]> {
     try {
-      const result =
-        await request.get<ApiResponse<Address[]>>("/user/addresses");
+      const result = await request.get<ApiResponse<Address[]>>("/user/addresses", undefined, {
+        cancelToken: options?.cancelToken,
+        useCache: options?.useCache ?? true,
+        cacheKey: "user_addresses"
+      });
       this.validateResponse(result);
 
       return result.data || [];
@@ -284,12 +299,19 @@ class AuthService {
 
   /**
    * 获取地址列表（兼容旧版API）
+   * @param options 请求选项，包含cancelToken和缓存配置
    * @returns Promise<AddressOperationResult> 地址列表结果
    */
-  async getAddressList(): Promise<AddressOperationResult> {
+  async getAddressList(options?: {
+    cancelToken?: CancelToken;
+    useCache?: boolean;
+  }): Promise<AddressOperationResult> {
     try {
-      const result =
-        await request.get<AddressOperationResult>("/user/addresses");
+      const result = await request.get<AddressOperationResult>("/user/addresses", undefined, {
+        cancelToken: options?.cancelToken,
+        useCache: options?.useCache ?? true,
+        cacheKey: "user_addresses_compat"
+      });
       return result;
     } catch (error) {
       console.error("[AuthService] 获取地址列表失败:", error);

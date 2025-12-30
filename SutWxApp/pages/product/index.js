@@ -1,7 +1,7 @@
 /**
  * 文件名: index.js
- * 版本号: 1.0.0
- * 更新日期: 2025-12-26
+ * 版本号: 1.1.0
+ * 更新日期: 2025-12-30 14:30
  * 描述: 产品详情页逻辑控制层
  */
 
@@ -29,6 +29,19 @@ Page({
     showReviewPopup: false,
     isLoggedIn: false,
     userInfo: null,
+    // 图片懒加载相关
+    visibleImages: [],
+    imageLoaded: {},
+    // 优化性能
+    isPageVisible: true,
+  },
+
+  // 请求取消令牌
+  requestTokens: {
+    productDetail: null,
+    relatedProducts: null,
+    reviews: null,
+    favoriteCheck: null,
   },
 
   onLoad: function (options) {
@@ -44,8 +57,20 @@ Page({
   },
 
   onShow: function () {
+    this.setData({ isPageVisible: true });
     this.checkLoginStatus();
     this.updateFavoriteStatus();
+  },
+
+  onHide: function () {
+    this.setData({ isPageVisible: false });
+    // 取消所有未完成的请求
+    this.cancelAllRequests();
+  },
+
+  onUnload: function () {
+    // 取消所有未完成的请求
+    this.cancelAllRequests();
   },
 
   onShareAppMessage: function () {
@@ -57,11 +82,39 @@ Page({
     };
   },
 
+  onImageLoad: function (e) {
+    const { index } = e.currentTarget.dataset;
+    this.setData({
+      [`imageLoaded[${index}]`]: true
+    });
+  },
+
+  onImageError: function (e) {
+    const { index } = e.currentTarget.dataset;
+    this.setData({
+      [`imageLoaded[${index}]`]: false
+    });
+  },
+
   checkLoginStatus: function () {
     const token = wx.getStorageSync("token");
     const userInfo = wx.getStorageSync("userInfo");
     const isLoggedIn = !!token;
     this.setData({ isLoggedIn, userInfo });
+  },
+
+  // 取消所有请求
+  cancelAllRequests: function () {
+    for (const key in this.requestTokens) {
+      if (this.requestTokens[key]) {
+        try {
+          this.requestTokens[key].cancel();
+        } catch (e) {
+          console.warn(`取消请求失败: ${key}`);
+        }
+        this.requestTokens[key] = null;
+      }
+    }
   },
 
   loadProductDetail: function () {
@@ -70,37 +123,74 @@ Page({
     this.setData({ isLoading: true });
     const that = this;
 
+    // 取消之前的请求
+    if (this.requestTokens.productDetail) {
+      this.requestTokens.productDetail.cancel();
+    }
+
+    // 创建新的请求令牌
+    this.requestTokens.productDetail = new app.globalData.request.CancelToken();
+
     wx.request({
       url: "/api/product/detail",
       method: "GET",
       data: { id: this.data.productId },
+      header: {
+        "X-CSRF-Token": wx.getStorageSync("csrfToken") || ""
+      },
+      cancelToken: this.requestTokens.productDetail,
       success: function (res) {
+        if (!that.data.isPageVisible) return;
+        
         if (res.data && res.data.success) {
           const productInfo = res.data.data;
-          const defaultSpecIndex =
+          const defaultSpecIndex = 
             productInfo.specs && productInfo.specs.length > 0 ? 0 : 0;
+
+          // 初始化可见图片数组
+          const visibleImages = productInfo.images.map((_, index) => index < 2);
 
           that.setData({
             productInfo,
             selectedSpecIndex: defaultSpecIndex,
             isFavorite: productInfo.isFavorite || false,
+            visibleImages,
+            imageLoaded: productInfo.images.reduce((acc, _, index) => {
+              acc[index] = index < 2; // 前两张图片初始化为已加载
+              return acc;
+            }, {})
           });
 
           wx.setNavigationBarTitle({ title: productInfo.name });
         }
       },
-      fail: function () {
-        console.error("获取产品详情失败");
+      fail: function (err) {
+        if (!that.data.isPageVisible) return;
+        if (err.errMsg && err.errMsg.includes("cancelled")) {
+          console.log("产品详情请求已取消");
+          return;
+        }
+        console.error("获取产品详情失败:", err);
         wx.showToast({ title: "加载失败", icon: "error" });
       },
       complete: function () {
+        if (!that.data.isPageVisible) return;
         that.setData({ isLoading: false });
+        that.requestTokens.productDetail = null;
       },
     });
   },
 
   loadRelatedProducts: function () {
     const that = this;
+
+    // 取消之前的请求
+    if (this.requestTokens.relatedProducts) {
+      this.requestTokens.relatedProducts.cancel();
+    }
+
+    // 创建新的请求令牌
+    this.requestTokens.relatedProducts = new app.globalData.request.CancelToken();
 
     wx.request({
       url: "/api/product/related",
@@ -112,16 +202,42 @@ Page({
           : 0,
         limit: 6,
       },
+      header: {
+        "X-CSRF-Token": wx.getStorageSync("csrfToken") || ""
+      },
+      cancelToken: this.requestTokens.relatedProducts,
       success: function (res) {
+        if (!that.data.isPageVisible) return;
+        
         if (res.data && res.data.success) {
           that.setData({ relatedProducts: res.data.data || [] });
         }
+      },
+      fail: function (err) {
+        if (!that.data.isPageVisible) return;
+        if (err.errMsg && err.errMsg.includes("cancelled")) {
+          console.log("相关商品请求已取消");
+          return;
+        }
+        console.error("获取相关商品失败:", err);
+      },
+      complete: function () {
+        if (!that.data.isPageVisible) return;
+        that.requestTokens.relatedProducts = null;
       },
     });
   },
 
   loadReviews: function () {
     const that = this;
+
+    // 取消之前的请求
+    if (this.requestTokens.reviews) {
+      this.requestTokens.reviews.cancel();
+    }
+
+    // 创建新的请求令牌
+    this.requestTokens.reviews = new app.globalData.request.CancelToken();
 
     wx.request({
       url: "/api/product/reviews",
@@ -131,10 +247,16 @@ Page({
         pageNum: this.data.reviewsPageNum,
         pageSize: this.data.reviewsPageSize,
       },
+      header: {
+        "X-CSRF-Token": wx.getStorageSync("csrfToken") || ""
+      },
+      cancelToken: this.requestTokens.reviews,
       success: function (res) {
+        if (!that.data.isPageVisible) return;
+        
         if (res.data && res.data.success) {
           const { list, hasMore } = res.data.data;
-          const newReviews =
+          const newReviews = 
             that.data.reviewsPageNum === 1
               ? list
               : [...that.data.reviews, ...list];
@@ -144,6 +266,18 @@ Page({
           });
         }
       },
+      fail: function (err) {
+        if (!that.data.isPageVisible) return;
+        if (err.errMsg && err.errMsg.includes("cancelled")) {
+          console.log("商品评价请求已取消");
+          return;
+        }
+        console.error("获取商品评价失败:", err);
+      },
+      complete: function () {
+        if (!that.data.isPageVisible) return;
+        that.requestTokens.reviews = null;
+      },
     });
   },
 
@@ -151,14 +285,41 @@ Page({
     if (!this.data.isLoggedIn) return;
 
     const that = this;
+
+    // 取消之前的请求
+    if (this.requestTokens.favoriteCheck) {
+      this.requestTokens.favoriteCheck.cancel();
+    }
+
+    // 创建新的请求令牌
+    this.requestTokens.favoriteCheck = new app.globalData.request.CancelToken();
+
     wx.request({
       url: "/api/favorite/check",
       method: "GET",
       data: { productId: this.data.productId },
+      header: {
+        "X-CSRF-Token": wx.getStorageSync("csrfToken") || ""
+      },
+      cancelToken: this.requestTokens.favoriteCheck,
       success: function (res) {
+        if (!that.data.isPageVisible) return;
+        
         if (res.data && res.data.success) {
           that.setData({ isFavorite: res.data.data.isFavorite });
         }
+      },
+      fail: function (err) {
+        if (!that.data.isPageVisible) return;
+        if (err.errMsg && err.errMsg.includes("cancelled")) {
+          console.log("收藏状态检查请求已取消");
+          return;
+        }
+        console.error("检查收藏状态失败:", err);
+      },
+      complete: function () {
+        if (!that.data.isPageVisible) return;
+        that.requestTokens.favoriteCheck = null;
       },
     });
   },

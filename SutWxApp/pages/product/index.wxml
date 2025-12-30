@@ -10,7 +10,15 @@
     <swiper class="product-image-swiper" indicator-dots="true" indicator-color="rgba(0,0,0,0.3)" indicator-active-color="#ffffff" circular="true" bindchange="handleImageChange">
       <block wx:for="{{productInfo.images}}" wx:key="index">
         <swiper-item>
-          <image class="product-image" src="{{item}}" mode="aspectFill"></image>
+          <image 
+            class="product-image" 
+            src="{{item}}" 
+            mode="aspectFill"
+            lazy-load="true"
+            bindload="onImageLoad"
+            binderror="onImageError"
+            data-index="{{index}}"
+          ></image>
         </swiper-item>
       </block>
     </swiper>
@@ -147,7 +155,12 @@
     <view class="related-list">
       <block wx:for="{{relatedProducts}}" wx:key="id">
         <view class="related-item" bindtap="handleRelatedProductTap" data-id="{{item.id}}">
-          <image class="related-image" src="{{item.imageUrl}}" mode="aspectFill"></image>
+          <image 
+            class="related-image" 
+            src="{{item.imageUrl}}" 
+            mode="aspectFill"
+            lazy-load="true"
+          ></image>
           <view class="related-info">
             <text class="related-name">{{item.name}}</text>
             <text class="related-price">¥{{item.price}}</text>
@@ -184,7 +197,12 @@
   <view class="spec-popup-mask" wx:if="{{showSpecPopup}}" bindtap="handleHideSpecPopup"></view>
   <view class="spec-popup {{showSpecPopup ? 'show' : ''}}">
     <view class="spec-popup-header">
-      <image class="spec-popup-image" src="{{productInfo.images[0]}}" mode="aspectFill"></image>
+      <image 
+        class="spec-popup-image" 
+        src="{{productInfo.images[0]}}" 
+        mode="aspectFill"
+        lazy-load="true"
+      ></image>
       <view class="spec-popup-info">
         <view class="spec-popup-price">
           <text class="price-symbol">¥</text>
