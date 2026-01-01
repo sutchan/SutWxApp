@@ -7,17 +7,31 @@
 
 declare namespace wx {
   /**
-   * 微信小程序应用实例
-   */
-  interface AppInstance {
-    onLaunch(options: LaunchOptions): void;
-    onShow(options: ShowOptions): void;
-    onHide(): void;
-    onError(msg: string): void;
-    onPageNotFound(res: PageNotFoundOptions): void;
-    onUnhandledRejection(res: UnhandledRejectionOptions): void;
-    globalData: GlobalData;
-  }
+ * 微信小程序应用配置选项
+ */
+interface AppOptions {
+  onLaunch?(options: LaunchOptions): void;
+  onShow?(options: ShowOptions): void;
+  onHide?(): void;
+  onError?(msg: string): void;
+  onPageNotFound?(res: PageNotFoundOptions): void;
+  onUnhandledRejection?(res: UnhandledRejectionOptions): void;
+  globalData?: GlobalData;
+  [key: string]: unknown;
+}
+
+/**
+ * 微信小程序应用实例
+ */
+interface AppInstance {
+  onLaunch(options: LaunchOptions): void;
+  onShow(options: ShowOptions): void;
+  onHide(): void;
+  onError(msg: string): void;
+  onPageNotFound(res: PageNotFoundOptions): void;
+  onUnhandledRejection(res: UnhandledRejectionOptions): void;
+  globalData: GlobalData;
+}
 
   /**
    * 全局数据接口
@@ -1639,6 +1653,7 @@ declare namespace wx {
    * 微信小程序全局API
    */
   const app: AppInstance;
+  function App(options: AppOptions): void;
   function getApp(): AppInstance;
   function getCurrentPages(): PageInstance[];
   function getAppProxy(): unknown;

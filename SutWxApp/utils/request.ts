@@ -5,7 +5,11 @@
  * 描述: 网络请求工具，封装wx.request，支持拦截器、重试机制、请求缓存、请求取消等
  */
 
-// 安全获取wx对象
+/**
+ * 安全获取wx对象
+ * 用于在不同环境下兼容微信小程序的wx对象
+ * @returns {any|null} 微信小程序wx对象，如果不存在则返回null
+ */
 function getWx() {
   if (typeof wx !== "undefined") {
     return wx;
@@ -13,7 +17,12 @@ function getWx() {
   return null;
 }
 
-// 检查wx对象是否存在
+/**
+ * 检查wx对象是否存在，并抛出错误如果不存在
+ * 用于确保在微信小程序环境下运行
+ * @returns {any} 微信小程序wx对象
+ * @throws {Error} 如果wx对象未定义则抛出错误
+ */
 function checkWx() {
   const wx = getWx();
   if (!wx) {
@@ -135,99 +144,104 @@ let csrfToken: string = "";
 let cacheCleanupTimer: number | null = null;
 
 /**
-   * LRU缓存实现 - 设置缓存
-   */
-  function cacheSet(key: string, data: unknown): void {
-    if (!DEFAULT_CONFIG.enableCache) return;
+ * LRU缓存实现 - 设置缓存
+ * @param {string} key 缓存键名
+ * @param {unknown} data 缓存数据
+ */
+function cacheSet(key: string, data: unknown): void {
+  if (!DEFAULT_CONFIG.enableCache) return;
 
+  const now = Date.now();
+  const cacheItem: CacheItem = {
+    data,
+    timestamp: now,
+    cacheKey: key,
+  };
+
+  // 如果缓存已存在，移除旧条目
+  if (requestCache.has(key)) {
+    requestCache.delete(key);
+    const orderIndex = requestCacheOrder.indexOf(key);
+    if (orderIndex >= 0) {
+      requestCacheOrder.splice(orderIndex, 1);
+    }
+  }
+
+  // 添加新缓存，移到访问顺序列表最前面
+  requestCache.set(key, cacheItem);
+  requestCacheOrder.unshift(key);
+
+  // 检查缓存大小，超过最大值则移除最旧的缓存
+  if (requestCache.size > DEFAULT_CONFIG.maxCacheSize) {
+    const oldestKey = requestCacheOrder.pop();
+    if (oldestKey) {
+      requestCache.delete(oldestKey);
+    }
+  }
+
+  // 启动定期清理过期缓存
+  startCacheCleanup();
+}
+
+/**
+ * LRU缓存实现 - 获取缓存
+ * @param {string} key 缓存键名
+ * @returns {unknown|null} 缓存数据，如果缓存不存在或过期则返回null
+ */
+function cacheGet(key: string): unknown | null {
+  if (!DEFAULT_CONFIG.enableCache) return null;
+
+  if (requestCache.has(key)) {
+    const cacheItem = requestCache.get(key)!;
     const now = Date.now();
-    const cacheItem: CacheItem = {
-      data,
-      timestamp: now,
-      cacheKey: key,
-    };
-
-    // 如果缓存已存在，移除旧条目
-    if (requestCache.has(key)) {
+    
+    // 检查缓存是否过期
+    if (now - cacheItem.timestamp < DEFAULT_CONFIG.cacheTimeout) {
+      // 将访问的缓存移到最前面，更新访问顺序
+      const orderIndex = requestCacheOrder.indexOf(key);
+      if (orderIndex >= 0) {
+        requestCacheOrder.splice(orderIndex, 1);
+        requestCacheOrder.unshift(key);
+      }
+      return cacheItem.data;
+    } else {
+      // 移除过期缓存
       requestCache.delete(key);
       const orderIndex = requestCacheOrder.indexOf(key);
       if (orderIndex >= 0) {
         requestCacheOrder.splice(orderIndex, 1);
       }
     }
+  }
+  return null;
+}
 
-    // 添加新缓存
-    requestCache.set(key, cacheItem);
-    requestCacheOrder.unshift(key);
+/**
+ * 清理过期缓存
+ * 遍历所有缓存项，移除过期的缓存条目
+ */
+function cleanupExpiredCache(): void {
+  if (!DEFAULT_CONFIG.enableCache) return;
 
-    // 检查缓存大小，超过最大值则移除最旧的缓存
-    if (requestCache.size > DEFAULT_CONFIG.maxCacheSize) {
-      const oldestKey = requestCacheOrder.pop();
-      if (oldestKey) {
-        requestCache.delete(oldestKey);
-      }
+  const now = Date.now();
+  let removedCount = 0;
+
+  // 遍历所有缓存项，移除过期的
+  for (const [key, cacheItem] of requestCache.entries()) {
+    if (now - cacheItem.timestamp >= DEFAULT_CONFIG.cacheTimeout) {
+      requestCache.delete(key);
+      removedCount++;
     }
-
-    // 启动定期清理过期缓存
-    startCacheCleanup();
   }
 
-  /**
-   * LRU缓存实现 - 获取缓存
-   */
-  function cacheGet(key: string): unknown | null {
-    if (!DEFAULT_CONFIG.enableCache) return null;
-
-    if (requestCache.has(key)) {
-      const cacheItem = requestCache.get(key)!;
-      const now = Date.now();
-      
-      // 检查缓存是否过期
-      if (now - cacheItem.timestamp < DEFAULT_CONFIG.cacheTimeout) {
-        // 将访问的缓存移到最前面
-        const orderIndex = requestCacheOrder.indexOf(key);
-        if (orderIndex >= 0) {
-          requestCacheOrder.splice(orderIndex, 1);
-          requestCacheOrder.unshift(key);
-        }
-        return cacheItem.data;
-      } else {
-        // 移除过期缓存
-        requestCache.delete(key);
-        const orderIndex = requestCacheOrder.indexOf(key);
-        if (orderIndex >= 0) {
-          requestCacheOrder.splice(orderIndex, 1);
-        }
-      }
-    }
-    return null;
+  // 如果有缓存被移除，重新构建缓存顺序
+  if (removedCount > 0) {
+    requestCacheOrder.length = 0;
+    // 按照访问顺序重新构建
+    // 注意：这里无法完全恢复原始访问顺序，但保持了基本的LRU特性
+    requestCacheOrder.push(...requestCache.keys());
   }
-
-  /**
-   * 清理过期缓存
-   */
-  function cleanupExpiredCache(): void {
-    if (!DEFAULT_CONFIG.enableCache) return;
-
-    const now = Date.now();
-    let removedCount = 0;
-
-    // 遍历所有缓存项，移除过期的
-    for (const [key, cacheItem] of requestCache.entries()) {
-      if (now - cacheItem.timestamp >= DEFAULT_CONFIG.cacheTimeout) {
-        requestCache.delete(key);
-        removedCount++;
-      }
-    }
-
-    // 如果有缓存被移除，重新构建缓存顺序
-    if (removedCount > 0) {
-      requestCacheOrder.length = 0;
-      // 按照访问顺序重新构建
-      // 注意：这里无法完全恢复原始访问顺序，但保持了基本的LRU特性
-      requestCacheOrder.push(...requestCache.keys());
-    }
-  }
+}
 
 /**
  * 启动定期清理过期缓存
@@ -423,6 +437,9 @@ function validateRequestData(data: Record<string, unknown>): void {
 
 /**
  * 网络请求主函数
+ * @template T - 响应数据类型
+ * @param {RequestOptions} options - 请求配置选项
+ * @returns {Promise<T>} - 请求结果的Promise对象
  */
 function request<T = unknown>(options: RequestOptions): Promise<T> {
   // 初始化CSRF令牌
@@ -445,30 +462,30 @@ function request<T = unknown>(options: RequestOptions): Promise<T> {
     useCache: options.useCache ?? true,
   };
 
-  // 验证请求数据
+  // 验证请求数据，防止SQL注入
   if (config.data && typeof config.data === 'object') {
     validateRequestData(config.data);
   }
 
   // 检查是否需要授权
-    if (config.needAuth !== false) {
-      try {
-        const wx = checkWx();
-        const token = wx.getStorageSync("token");
-        if (typeof token === "string" && token.length > 0) {
-          config.header = {
-            ...config.header,
-            Authorization: `Bearer ${token}`,
-          };
-        } else {
-          // 没有token，抛出未授权错误
-          throw new Error("未授权，请重新登录");
-        }
-      } catch (error) {
-        // wx对象不存在或没有token，抛出未授权错误
+  if (config.needAuth !== false) {
+    try {
+      const wx = checkWx();
+      const token = wx.getStorageSync("token");
+      if (typeof token === "string" && token.length > 0) {
+        config.header = {
+          ...config.header,
+          Authorization: `Bearer ${token}`,
+        };
+      } else {
+        // 没有token，抛出未授权错误
         throw new Error("未授权，请重新登录");
       }
+    } catch (error) {
+      // wx对象不存在或没有token，抛出未授权错误
+      throw new Error("未授权，请重新登录");
     }
+  }
 
   // 应用请求拦截器
   let processedConfig: RequestOptions = { ...config };
@@ -479,7 +496,7 @@ function request<T = unknown>(options: RequestOptions): Promise<T> {
     }
   }
 
-  // 生成缓存键
+  // 生成缓存键，用于缓存GET请求结果
   const cacheKey = 
     config.cacheKey ||
     `${config.method}:${config.url}:${JSON.stringify(config.data || {})}`;
@@ -509,148 +526,148 @@ function request<T = unknown>(options: RequestOptions): Promise<T> {
     let requestTask: any = null;
 
     /**
-   * 发送请求
-   */
-  function sendRequest(): void {
-    // 检查是否已取消
-    if (config.cancelToken?.isCancel()) {
-      reject(new Error("Request cancelled"));
-      return;
-    }
+     * 发送请求的内部函数
+     */
+    function sendRequest(): void {
+      // 检查是否已取消
+      if (config.cancelToken?.isCancel()) {
+        reject(new Error("Request cancelled"));
+        return;
+      }
 
-    const wxInstance = checkWx();
-    if (!wxInstance.request) {
-      reject(new Error("wx.request未定义"));
-      return;
-    }
+      const wxInstance = checkWx();
+      if (!wxInstance.request) {
+        reject(new Error("wx.request未定义"));
+        return;
+      }
 
-    // 构建请求参数
-    const requestParams = {
-      ...processedConfig,
-      success: (res: any) => {
-        activeRequests--;
-        processQueue();
+      // 构建请求参数
+      const requestParams = {
+        ...processedConfig,
+        success: (res: any) => {
+          activeRequests--;
+          processQueue();
 
-        // 应用响应拦截器
-        let processedResponse: any = res;
-        for (const interceptor of responseInterceptors) {
-          const result = interceptor(processedResponse);
-          if (result) {
-            processedResponse = result;
+          // 应用响应拦截器
+          let processedResponse: any = res;
+          for (const interceptor of responseInterceptors) {
+            const result = interceptor(processedResponse);
+            if (result) {
+              processedResponse = result;
+            }
           }
-        }
 
-        // 处理XSS防护
-        if (DEFAULT_CONFIG.enableXssProtection) {
-          if (typeof processedResponse.data === 'string') {
-            processedResponse.data = sanitizeHtml(processedResponse.data);
-          } else if (typeof processedResponse.data === 'object' && processedResponse.data !== null) {
-            // 递归清理对象中的HTML内容
-            const cleanObject = (obj: any) => {
-              for (const key in obj) {
-                if (obj.hasOwnProperty(key)) {
-                  if (typeof obj[key] === 'string') {
-                    obj[key] = sanitizeHtml(obj[key]);
-                  } else if (typeof obj[key] === 'object' && obj[key] !== null && !Array.isArray(obj[key])) {
-                    cleanObject(obj[key]);
-                  } else if (Array.isArray(obj[key])) {
-                    obj[key].forEach((item: any) => {
-                      if (typeof item === 'object' && item !== null) {
-                        cleanObject(item);
-                      }
-                    });
+          // 处理XSS防护
+          if (DEFAULT_CONFIG.enableXssProtection) {
+            if (typeof processedResponse.data === 'string') {
+              processedResponse.data = sanitizeHtml(processedResponse.data);
+            } else if (typeof processedResponse.data === 'object' && processedResponse.data !== null) {
+              // 递归清理对象中的HTML内容
+              const cleanObject = (obj: any) => {
+                for (const key in obj) {
+                  if (obj.hasOwnProperty(key)) {
+                    if (typeof obj[key] === 'string') {
+                      obj[key] = sanitizeHtml(obj[key]);
+                    } else if (typeof obj[key] === 'object' && obj[key] !== null && !Array.isArray(obj[key])) {
+                      cleanObject(obj[key]);
+                    } else if (Array.isArray(obj[key])) {
+                      obj[key].forEach((item: any) => {
+                        if (typeof item === 'object' && item !== null) {
+                          cleanObject(item);
+                        }
+                      });
+                    }
                   }
                 }
-              }
-            };
-            // 使用深拷贝避免修改原始数据
-            const cleanData = JSON.parse(JSON.stringify(processedResponse.data));
-            cleanObject(cleanData);
-            processedResponse.data = cleanData;
-          }
-        }
-
-        if (
-          processedResponse.statusCode &&
-          processedResponse.statusCode >= 200 &&
-          processedResponse.statusCode < 300
-        ) {
-          // 缓存GET请求结果
-          if (config.useCache && config.method === "GET") {
-            cacheSet(cacheKey, processedResponse.data);
-          }
-          resolve(processedResponse.data);
-        } else {
-          // 统一处理错误状态码
-          let errorMessage = `请求失败：${processedResponse.statusCode || "未知状态"}`;
-          if (processedResponse.statusCode === 401) {
-            errorMessage = "未授权，请重新登录";
-            // 清除本地存储的token和用户信息，并跳转到登录页
-            if (wxInstance.removeStorageSync && wxInstance.navigateTo) {
-              try {
-                wxInstance.removeStorageSync("token");
-                wxInstance.removeStorageSync("userInfo");
-                // 延迟跳转，确保错误信息被正确处理
-                setTimeout(() => {
-                  wxInstance.navigateTo({ url: "/pages/auth/login" });
-                }, 500);
-              } catch (error) {
-                console.warn("清除存储和跳转失败:", error);
-              }
+              };
+              // 使用深拷贝避免修改原始数据
+              const cleanData = JSON.parse(JSON.stringify(processedResponse.data));
+              cleanObject(cleanData);
+              processedResponse.data = cleanData;
             }
-          } else if (processedResponse.statusCode === 403) {
-            errorMessage = "权限不足，无法访问该资源";
-          } else if (processedResponse.statusCode === 404) {
-            errorMessage = "请求的资源不存在";
-          } else if (processedResponse.statusCode === 500) {
-            errorMessage = "服务器内部错误";
-          } else if (processedResponse.data && processedResponse.data.message) {
-            errorMessage = processedResponse.data.message;
           }
-          reject(new Error(errorMessage));
-        }
-      },
-      fail: (err: any) => {
-        activeRequests--;
-        processQueue();
-        
-        // 检查是否已取消
-        if (config.cancelToken?.isCancel()) {
-          reject(new Error("Request cancelled"));
-          return;
-        }
-        
-        // 增强的请求重试机制
-        if (retryCount < maxRetry) {
-          retryCount++;
-          // 计算重试延迟：指数退避算法
-          const delay = retryDelay * Math.pow(2, retryCount - 1);
-          // 添加随机抖动，避免请求风暴
-          const jitter = Math.random() * delay * 0.5;
-          const retryDelayWithJitter = delay + jitter;
-          
-          console.log(`请求失败，${retryCount}/${maxRetry}，${Math.round(retryDelayWithJitter)}ms后重试`, err);
-          setTimeout(sendRequest, retryDelayWithJitter);
-        } else {
-          // 提供更详细的错误信息
-          let errorMessage = "网络请求失败";
-          if (err.errMsg) {
-            errorMessage = err.errMsg;
-          } else if (err.message) {
-            errorMessage = err.message;
-          }
-          reject(new Error(errorMessage));
-        }
-      },
-      complete: () => {
-        // 确保请求任务被清理
-        requestTask = null;
-      }
-    };
 
-    // 发送请求
-    requestTask = wxInstance.request(requestParams);
-  }
+          if (
+            processedResponse.statusCode &&
+            processedResponse.statusCode >= 200 &&
+            processedResponse.statusCode < 300
+          ) {
+            // 缓存GET请求结果
+            if (config.useCache && config.method === "GET") {
+              cacheSet(cacheKey, processedResponse.data);
+            }
+            resolve(processedResponse.data);
+          } else {
+            // 统一处理错误状态码
+            let errorMessage = `请求失败：${processedResponse.statusCode || "未知状态"}`;
+            if (processedResponse.statusCode === 401) {
+              errorMessage = "未授权，请重新登录";
+              // 清除本地存储的token和用户信息，并跳转到登录页
+              if (wxInstance.removeStorageSync && wxInstance.navigateTo) {
+                try {
+                  wxInstance.removeStorageSync("token");
+                  wxInstance.removeStorageSync("userInfo");
+                  // 延迟跳转，确保错误信息被正确处理
+                  setTimeout(() => {
+                    wxInstance.navigateTo({ url: "/pages/auth/login" });
+                  }, 500);
+                } catch (error) {
+                  console.warn("清除存储和跳转失败:", error);
+                }
+              }
+            } else if (processedResponse.statusCode === 403) {
+              errorMessage = "权限不足，无法访问该资源";
+            } else if (processedResponse.statusCode === 404) {
+              errorMessage = "请求的资源不存在";
+            } else if (processedResponse.statusCode === 500) {
+              errorMessage = "服务器内部错误";
+            } else if (processedResponse.data && processedResponse.data.message) {
+              errorMessage = processedResponse.data.message;
+            }
+            reject(new Error(errorMessage));
+          }
+        },
+        fail: (err: any) => {
+          activeRequests--;
+          processQueue();
+          
+          // 检查是否已取消
+          if (config.cancelToken?.isCancel()) {
+            reject(new Error("Request cancelled"));
+            return;
+          }
+          
+          // 增强的请求重试机制
+          if (retryCount < maxRetry) {
+            retryCount++;
+            // 计算重试延迟：指数退避算法
+            const delay = retryDelay * Math.pow(2, retryCount - 1);
+            // 添加随机抖动，避免请求风暴
+            const jitter = Math.random() * delay * 0.5;
+            const retryDelayWithJitter = delay + jitter;
+            
+            console.log(`请求失败，${retryCount}/${maxRetry}，${Math.round(retryDelayWithJitter)}ms后重试`, err);
+            setTimeout(sendRequest, retryDelayWithJitter);
+          } else {
+            // 提供更详细的错误信息
+            let errorMessage = "网络请求失败";
+            if (err.errMsg) {
+              errorMessage = err.errMsg;
+            } else if (err.message) {
+              errorMessage = err.message;
+            }
+            reject(new Error(errorMessage));
+          }
+        },
+        complete: () => {
+          // 确保请求任务被清理
+          requestTask = null;
+        }
+      };
+
+      // 发送请求
+      requestTask = wxInstance.request(requestParams);
+    }
 
     /**
      * 取消请求处理

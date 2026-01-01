@@ -250,15 +250,14 @@ class SecurityUtil {
     try {
       const jsonString = JSON.stringify(data);
       
-      // 添加时间戳，增强安全性
-      const timestamp = Date.now().toString();
-      // 添加随机数前缀
-      const random = Math.random().toString(36).substring(2, 12);
-      // 构建完整数据
-      const fullData = `${timestamp}:${random}:${jsonString}`;
-      
-      // 使用更安全的Base64编码
-      return Buffer.from(fullData).toString("base64");
+      // 简化实现，直接返回Base64编码的JSON字符串
+      // 移除时间戳和随机数前缀，避免分割问题
+      if (typeof Buffer !== "undefined") {
+        return Buffer.from(jsonString).toString("base64");
+      } else {
+        // 浏览器环境下使用btoa
+        return btoa(unescape(encodeURIComponent(jsonString)));
+      }
     } catch (error) {
       console.error("[SecurityUtil] 加密失败:", error);
       throw new Error("数据加密失败");
@@ -272,25 +271,16 @@ class SecurityUtil {
    */
   decrypt(encryptedData: string): Record<string, unknown> {
     try {
-      const decrypted = Buffer.from(encryptedData, "base64").toString();
-      
-      // 解析数据结构：timestamp:random:jsonString
-      const parts = decrypted.split(":", 3);
-      if (parts.length !== 3) {
-        throw new Error("Invalid encrypted data format");
+      let decrypted: string;
+      if (typeof Buffer !== "undefined") {
+        decrypted = Buffer.from(encryptedData, "base64").toString();
+      } else {
+        // 浏览器环境下使用atob
+        decrypted = decodeURIComponent(escape(atob(encryptedData)));
       }
       
-      // 验证时间戳，防止重放攻击（可选）
-      const timestamp = parseInt(parts[0], 10);
-      const now = Date.now();
-      const maxAge = 30 * 60 * 1000; // 30分钟
-      
-      if (now - timestamp > maxAge) {
-        throw new Error("Encrypted data has expired");
-      }
-      
-      const jsonString = parts[2];
-      return JSON.parse(jsonString);
+      // 直接解析JSON字符串，避免分割问题
+      return JSON.parse(decrypted);
     } catch (error) {
       console.error("[SecurityUtil] 解密失败:", error);
       throw new Error("数据解密失败");

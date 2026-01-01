@@ -5,6 +5,10 @@
  * 描述: 监控和日志工具类，用于收集和上报错误、性能数据等
  */
 
+// 微信小程序全局变量声明
+declare const App: any;
+declare function getApp(): any;
+
 interface MonitorConfig {
   enable: boolean;
   debug: boolean;
