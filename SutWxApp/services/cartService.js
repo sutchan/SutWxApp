@@ -1,6 +1,7 @@
+
 /**
  * 文件名: cartService.js
- * 版本号: 1.0.1
+ * 版本号: 1.1.0
  * 更新日期: 2026-05-06
  * 描述: 购物车服务层，提供购物车相关的API调用和本地存储管理
  */
@@ -8,6 +9,30 @@
 const request = require("../utils/request");
 
 const STORAGE_KEY_CART = "cart_list";
+
+const mockProducts = [
+  {
+    id: 1,
+    name: "绿萝盆栽",
+    price: 29.9,
+    image: "/images/placeholder.svg",
+    spec: "中号盆"
+  },
+  {
+    id: 2,
+    name: "多肉植物组合",
+    price: 49.9,
+    image: "/images/placeholder.svg",
+    spec: "5株装"
+  },
+  {
+    id: 3,
+    name: "发财树",
+    price: 88.0,
+    image: "/images/placeholder.svg",
+    spec: "1米高"
+  }
+];
 
 function getCartFromStorage() {
   try {
@@ -33,284 +58,124 @@ function calculateCartCount(cartList) {
   }, 0);
 }
 
+function getMockProduct(productId) {
+  return mockProducts.find(p =&gt; p.id === productId) || mockProducts[0];
+}
+
 async function addToCart(options) {
   const { productId, specId, quantity = 1 } = options;
 
   try {
-    const res = await request.request({
-      url: "/api/cart/add",
-      method: "POST",
-      data: {
-        productId,
-        specId,
-        quantity,
-      },
+    const product = getMockProduct(productId);
+    const cartList = getCartFromStorage();
+    const existingIndex = cartList.findIndex(function (item) {
+      return item.productId === productId &amp;&amp; item.specId === specId;
     });
 
-    if (res.success) {
-      const cartList = getCartFromStorage();
-      const existingIndex = cartList.findIndex(function (item) {
-        return item.productId === productId && item.specId === specId;
+    if (existingIndex &gt;= 0) {
+      cartList[existingIndex].quantity += quantity;
+    } else {
+      cartList.push({
+        id: Date.now(),
+        productId,
+        specId,
+        name: product.name,
+        image: product.image,
+        price: product.price,
+        spec: product.spec,
+        quantity,
+        selected: true,
+        addTime: new Date().toISOString(),
       });
-
-      if (existingIndex >= 0) {
-        cartList[existingIndex].quantity += quantity;
-      } else {
-        cartList.push({
-          id: res.data.id || Date.now(),
-          productId,
-          specId,
-          quantity,
-          selected: true,
-          addTime: new Date().toISOString(),
-        });
-      }
-
-      saveCartToStorage(cartList);
-      wx.setStorageSync("cartCount", calculateCartCount(cartList));
     }
 
-    return res;
+    saveCartToStorage(cartList);
+    wx.setStorageSync("cartCount", calculateCartCount(cartList));
+
+    return {
+      success: true,
+      message: "添加成功"
+    };
   } catch (error) {
     console.error("添加到购物车失败:", error);
     return {
       success: false,
-      message: "网络请求失败，请稍后重试",
+      message: "添加失败，请稍后重试",
     };
   }
 }
 
 async function getCartList() {
   try {
-    const res = await request.request({
-      url: "/api/cart/list",
-      method: "GET",
-    });
-
-    if (res.success && res.data) {
-      const cartList = res.data.map(function (item) {
-        return {
-          id: item.id,
-          productId: item.productId,
-          specId: item.specId,
-          productName: item.productName,
-          productImage: item.productImage,
-          specName: item.specName,
-          specPrice: item.specPrice,
-          quantity: item.quantity,
-          stock: item.stock || 99,
-          selected: item.selected !== false,
-          addTime: item.addTime,
-        };
-      });
-
+    let cartList = getCartFromStorage();
+    
+    if (cartList.length === 0) {
+      const product = getMockProduct(1);
+      cartList = [{
+        id: 1,
+        productId: 1,
+        name: product.name,
+        image: product.image,
+        price: product.price,
+        spec: product.spec,
+        quantity: 1,
+        selected: true,
+        addTime: new Date().toISOString(),
+      }];
       saveCartToStorage(cartList);
-      wx.setStorageSync("cartCount", calculateCartCount(cartList));
-
-      return {
-        success: true,
-        data: cartList,
-      };
     }
 
-    return {
-      success: false,
-      message: res.message || "获取购物车列表失败",
-    };
+    return cartList;
   } catch (error) {
     console.error("获取购物车列表失败:", error);
-
-    const localCart = getCartFromStorage();
-    return {
-      success: true,
-      data: localCart,
-      message: "已加载本地购物车数据",
-    };
+    return [];
   }
 }
 
-async function updateCartItem(options) {
-  const { cartId, quantity, selected } = options;
-
+async function updateCartItem(item) {
   try {
-    const res = await request.request({
-      url: "/api/cart/update",
-      method: "POST",
-      data: {
-        cartId,
-        quantity,
-        selected,
-      },
+    const cartList = getCartFromStorage();
+    const targetIndex = cartList.findIndex(function (cartItem) {
+      return cartItem.id === item.id;
     });
 
-    if (res.success) {
-      const cartList = getCartFromStorage();
-      const targetIndex = cartList.findIndex(function (item) {
-        return item.id === cartId;
-      });
-
-      if (targetIndex >= 0) {
-        if (quantity !== undefined) {
-          cartList[targetIndex].quantity = Math.max(
-            1,
-            Math.min(cartList[targetIndex].stock || 99, quantity),
-          );
-        }
-        if (selected !== undefined) {
-          cartList[targetIndex].selected = selected;
-        }
-        saveCartToStorage(cartList);
-        wx.setStorageSync("cartCount", calculateCartCount(cartList));
-      }
-    }
-
-    return res;
-  } catch (error) {
-    console.error("更新购物车商品失败:", error);
-    return {
-      success: false,
-      message: "网络请求失败，请稍后重试",
-    };
-  }
-}
-
-async function removeCartItem(cartId) {
-  try {
-    const res = await request.request({
-      url: "/api/cart/remove",
-      method: "POST",
-      data: { cartId },
-    });
-
-    if (res.success) {
-      let cartList = getCartFromStorage();
-      cartList = cartList.filter(function (item) {
-        return item.id !== cartId;
-      });
+    if (targetIndex &gt;= 0) {
+      cartList[targetIndex] = { ...cartList[targetIndex], ...item };
       saveCartToStorage(cartList);
       wx.setStorageSync("cartCount", calculateCartCount(cartList));
     }
 
-    return res;
+    return { success: true };
+  } catch (error) {
+    console.error("更新购物车商品失败:", error);
+    return { success: false };
+  }
+}
+
+async function removeFromCart(cartId) {
+  try {
+    let cartList = getCartFromStorage();
+    cartList = cartList.filter(function (item) {
+      return item.id !== cartId;
+    });
+    saveCartToStorage(cartList);
+    wx.setStorageSync("cartCount", calculateCartCount(cartList));
+
+    return { success: true };
   } catch (error) {
     console.error("删除购物车商品失败:", error);
-    return {
-      success: false,
-      message: "网络请求失败，请稍后重试",
-    };
+    return { success: false };
   }
 }
 
 async function clearCart() {
   try {
-    const res = await request.request({
-      url: "/api/cart/clear",
-      method: "POST",
-    });
-
-    if (res.success) {
-      saveCartToStorage([]);
-      wx.setStorageSync("cartCount", 0);
-    }
-
-    return res;
-  } catch (error) {
-    console.error("清空购物车失败:", error);
-
     saveCartToStorage([]);
     wx.setStorageSync("cartCount", 0);
-
-    return {
-      success: true,
-      message: "本地购物车已清空",
-    };
-  }
-}
-
-async function selectCartItem(cartId, selected) {
-  const cartList = getCartFromStorage();
-  const targetIndex = cartList.findIndex(function (item) {
-    return item.id === cartId;
-  });
-
-  if (targetIndex >= 0) {
-    cartList[targetIndex].selected = selected;
-    saveCartToStorage(cartList);
-    wx.setStorageSync("cartCount", calculateCartCount(cartList));
-  }
-
-  try {
-    await request.request({
-      url: "/api/cart/select",
-      method: "POST",
-      data: {
-        cartId,
-        selected,
-      },
-    });
-  } catch (e) {
-    console.error("更新选中状态失败:", e);
-  }
-}
-
-async function selectAllCartItems(selected) {
-  const cartList = getCartFromStorage();
-  cartList.forEach(function (item) {
-    item.selected = selected;
-  });
-  saveCartToStorage(cartList);
-  wx.setStorageSync("cartCount", calculateCartCount(cartList));
-
-  try {
-    await request.request({
-      url: "/api/cart/selectAll",
-      method: "POST",
-      data: { selected },
-    });
-  } catch (e) {
-    console.error("更新全选状态失败:", e);
-  }
-}
-
-function getCartCountSync() {
-  const cartList = getCartFromStorage();
-  return calculateCartCount(cartList);
-}
-
-async function getCartCount() {
-  try {
-    const res = await request.request({
-      url: "/api/cart/count",
-      method: "GET",
-    });
-
-    if (res.success && res.data) {
-      wx.setStorageSync("cartCount", res.data.count || 0);
-      return res.data.count || 0;
-    }
-
-    return getCartCountSync();
+    return { success: true };
   } catch (error) {
-    console.error("获取购物车数量失败:", error);
-    return getCartCountSync();
-  }
-}
-
-async function checkStock(cartId) {
-  try {
-    const res = await request.request({
-      url: "/api/cart/checkStock",
-      method: "POST",
-      data: { cartId },
-    });
-
-    return res;
-  } catch (error) {
-    console.error("检查库存失败:", error);
-    return {
-      success: false,
-      message: "网络请求失败",
-    };
+    console.error("清空购物车失败:", error);
+    return { success: false };
   }
 }
 
@@ -318,11 +183,7 @@ module.exports = {
   addToCart,
   getCartList,
   updateCartItem,
-  removeCartItem,
+  removeFromCart,
   clearCart,
-  selectCartItem,
-  selectAllCartItems,
-  getCartCount,
-  getCartCountSync,
-  checkStock,
 };
+

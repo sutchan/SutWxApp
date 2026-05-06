@@ -1,0 +1,225 @@
+
+/**
+ * 文件名: detail.wxss
+ * 版本号: 1.0.0
+ * 更新日期: 2026-05-06
+ * 描述: 订单详情页面样式
+ */
+
+.detail-container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding-bottom: 120rpx;
+}
+
+/* 订单状态 */
+.status-section {
+  background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+  padding: 60rpx 40rpx;
+  color: white;
+}
+
+.status-text {
+  display: block;
+  font-size: 40rpx;
+  font-weight: bold;
+  margin-bottom: 16rpx;
+}
+
+.status-desc {
+  display: block;
+  font-size: 26rpx;
+  opacity: 0.9;
+}
+
+/* 收货地址 */
+.address-section {
+  background-color: white;
+  padding: 30rpx;
+  margin-top: 20rpx;
+}
+
+.address-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.name-phone {
+  font-size: 30rpx;
+  color: #333;
+  font-weight: 500;
+  margin-bottom: 12rpx;
+}
+
+.address-detail {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.6;
+}
+
+/* 商品列表 */
+.products-section {
+  background-color: white;
+  margin-top: 20rpx;
+  padding: 24rpx;
+}
+
+.product-item {
+  display: flex;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+
+.product-item:last-child {
+  border-bottom: none;
+}
+
+.product-image {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 12rpx;
+  margin-right: 20rpx;
+}
+
+.product-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.product-name {
+  font-size: 28rpx;
+  color: #333;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.product-spec {
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 8rpx;
+}
+
+.product-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.product-price {
+  font-size: 30rpx;
+  color: #ff6b6b;
+  font-weight: bold;
+}
+
+.product-quantity {
+  font-size: 26rpx;
+  color: #999;
+}
+
+/* 订单信息 */
+.info-section {
+  background-color: white;
+  margin-top: 20rpx;
+  padding: 24rpx;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+
+.info-item:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.info-value {
+  font-size: 26rpx;
+  color: #333;
+}
+
+/* 价格信息 */
+.price-section {
+  background-color: white;
+  margin-top: 20rpx;
+  padding: 24rpx;
+}
+
+.price-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 12rpx 0;
+}
+
+.price-label {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.price-value {
+  font-size: 26rpx;
+  color: #333;
+}
+
+.price-value.discount {
+  color: #ff6b6b;
+}
+
+.price-item.total {
+  border-top: 1rpx solid #f5f5f5;
+  margin-top: 12rpx;
+  padding-top: 24rpx;
+}
+
+.total-value {
+  font-size: 36rpx;
+  color: #ff6b6b;
+  font-weight: bold;
+}
+
+/* 底部操作栏 */
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16rpx;
+  background-color: white;
+  padding: 20rpx 24rpx;
+  padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+  box-shadow: 0 -2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+.action-btn {
+  height: 70rpx;
+  line-height: 70rpx;
+  padding: 0 32rpx;
+  font-size: 26rpx;
+  border-radius: 35rpx;
+  border: none;
+}
+
+.action-btn.secondary {
+  background-color: #f5f5f5;
+  color: #666;
+}
+
+.action-btn.primary {
+  background-color: #ff6b6b;
+  color: white;
+}
+

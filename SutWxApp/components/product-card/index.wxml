@@ -1,0 +1,16 @@
+
+&lt;view class="product-card {{layout}}" bindtap="onProductTap"&gt;
+  &lt;image class="product-image" src="{{product.image}}" mode="aspectFill"&gt;&lt;/image&gt;
+  &lt;view class="product-info"&gt;
+    &lt;text class="product-name"&gt;{{product.name}}&lt;/text&gt;
+    &lt;text class="product-desc" wx:if="{{product.desc}}"&gt;{{product.desc}}&lt;/text&gt;
+    &lt;view class="product-bottom"&gt;
+      &lt;view class="price-box"&gt;
+        &lt;text class="product-price"&gt;¥{{product.price.toFixed(2)}}&lt;/text&gt;
+        &lt;text class="product-origin-price" wx:if="{{product.originPrice}}"&gt;¥{{product.originPrice.toFixed(2)}}&lt;/text&gt;
+      &lt;/view&gt;
+      &lt;button class="add-cart-btn" catchtap="onAddCartTap"&gt;+&lt;/button&gt;
+    &lt;/view&gt;
+  &lt;/view&gt;
+&lt;/view&gt;
+

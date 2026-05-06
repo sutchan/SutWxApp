@@ -1,0 +1,124 @@
+
+&lt;!--
+文件名: detail.wxml
+版本号: 1.0.0
+更新日期: 2026-05-06
+描述: 订单详情页面模板
+--&gt;
+&lt;view class="detail-container" wx:if="{{!loading}}"&gt;
+  &lt;!-- 订单状态 --&gt;
+  &lt;view class="status-section"&gt;
+    &lt;text class="status-text"&gt;{{orderDetail.statusText}}&lt;/text&gt;
+    &lt;text class="status-desc" wx:if="{{orderDetail.statusDesc}}"&gt;{{orderDetail.statusDesc}}&lt;/text&gt;
+  &lt;/view&gt;
+
+  &lt;!-- 收货地址 --&gt;
+  &lt;view class="address-section"&gt;
+    &lt;view class="address-info"&gt;
+      &lt;text class="name-phone"&gt;{{orderDetail.address.name}} {{orderDetail.address.phone}}&lt;/text&gt;
+      &lt;text class="address-detail"&gt;{{orderDetail.address.detail}}&lt;/text&gt;
+    &lt;/view&gt;
+  &lt;/view&gt;
+
+  &lt;!-- 商品列表 --&gt;
+  &lt;view class="products-section"&gt;
+    &lt;view
+      wx:for="{{orderDetail.products}}"
+      wx:key="id"
+      class="product-item"
+    &gt;
+      &lt;image class="product-image" src="{{item.image}}" mode="aspectFill"&gt;&lt;/image&gt;
+      &lt;view class="product-info"&gt;
+        &lt;text class="product-name"&gt;{{item.name}}&lt;/text&gt;
+        &lt;text class="product-spec" wx:if="{{item.spec}}"&gt;{{item.spec}}&lt;/text&gt;
+        &lt;view class="product-bottom"&gt;
+          &lt;text class="product-price"&gt;¥{{item.price.toFixed(2)}}&lt;/text&gt;
+          &lt;text class="product-quantity"&gt;x{{item.quantity}}&lt;/text&gt;
+        &lt;/view&gt;
+      &lt;/view&gt;
+    &lt;/view&gt;
+  &lt;/view&gt;
+
+  &lt;!-- 订单信息 --&gt;
+  &lt;view class="info-section"&gt;
+    &lt;view class="info-item"&gt;
+      &lt;text class="info-label"&gt;订单编号&lt;/text&gt;
+      &lt;text class="info-value"&gt;{{orderDetail.orderNo}}&lt;/text&gt;
+    &lt;/view&gt;
+    &lt;view class="info-item"&gt;
+      &lt;text class="info-label"&gt;下单时间&lt;/text&gt;
+      &lt;text class="info-value"&gt;{{orderDetail.createTime}}&lt;/text&gt;
+    &lt;/view&gt;
+    &lt;view class="info-item" wx:if="{{orderDetail.payTime}}"&gt;
+      &lt;text class="info-label"&gt;支付时间&lt;/text&gt;
+      &lt;text class="info-value"&gt;{{orderDetail.payTime}}&lt;/text&gt;
+    &lt;/view&gt;
+    &lt;view class="info-item" wx:if="{{orderDetail.deliveryTime}}"&gt;
+      &lt;text class="info-label"&gt;发货时间&lt;/text&gt;
+      &lt;text class="info-value"&gt;{{orderDetail.deliveryTime}}&lt;/text&gt;
+    &lt;/view&gt;
+    &lt;view class="info-item" wx:if="{{orderDetail.completeTime}}"&gt;
+      &lt;text class="info-label"&gt;完成时间&lt;/text&gt;
+      &lt;text class="info-value"&gt;{{orderDetail.completeTime}}&lt;/text&gt;
+    &lt;/view&gt;
+  &lt;/view&gt;
+
+  &lt;!-- 价格信息 --&gt;
+  &lt;view class="price-section"&gt;
+    &lt;view class="price-item"&gt;
+      &lt;text class="price-label"&gt;商品金额&lt;/text&gt;
+      &lt;text class="price-value"&gt;¥{{orderDetail.productPrice.toFixed(2)}}&lt;/text&gt;
+    &lt;/view&gt;
+    &lt;view class="price-item"&gt;
+      &lt;text class="price-label"&gt;运费&lt;/text&gt;
+      &lt;text class="price-value"&gt;¥{{orderDetail.shippingFee.toFixed(2)}}&lt;/text&gt;
+    &lt;/view&gt;
+    &lt;view class="price-item" wx:if="{{orderDetail.couponDiscount &gt; 0}}"&gt;
+      &lt;text class="price-label"&gt;优惠券&lt;/text&gt;
+      &lt;text class="price-value discount"&gt;-¥{{orderDetail.couponDiscount.toFixed(2)}}&lt;/text&gt;
+    &lt;/view&gt;
+    &lt;view class="price-item total"&gt;
+      &lt;text class="price-label"&gt;实付金额&lt;/text&gt;
+      &lt;text class="price-value total-value"&gt;¥{{orderDetail.totalPrice.toFixed(2)}}&lt;/text&gt;
+    &lt;/view&gt;
+  &lt;/view&gt;
+
+  &lt;!-- 底部操作栏 --&gt;
+  &lt;view class="bottom-bar"&gt;
+    &lt;button
+      wx:if="{{orderDetail.status === 1}}"
+      class="action-btn secondary"
+      bindtap="onCancelOrder"
+    &gt;
+      取消订单
+    &lt;/button&gt;
+    &lt;button
+      wx:if="{{orderDetail.status === 3}}"
+      class="action-btn secondary"
+      bindtap="onViewLogistics"
+    &gt;
+      查看物流
+    &lt;/button&gt;
+    &lt;button
+      class="action-btn secondary"
+      bindtap="onContactService"
+    &gt;
+      联系客服
+    &lt;/button&gt;
+    &lt;button
+      wx:if="{{orderDetail.status === 1}}"
+      class="action-btn primary"
+      bindtap="onPayOrder"
+    &gt;
+      立即支付
+    &lt;/button&gt;
+    &lt;button
+      wx:if="{{orderDetail.status === 3}}"
+      class="action-btn primary"
+      bindtap="onConfirmReceive"
+    &gt;
+      确认收货
+    &lt;/button&gt;
+  &lt;/view&gt;
+&lt;/view&gt;
+
