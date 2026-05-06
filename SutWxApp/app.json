@@ -7,7 +7,12 @@
   "main": "app.js",
   "pages": [
     "pages/home/index",
+    "pages/category/index",
     "pages/product/index",
+    "pages/cart/index",
+    "pages/order/index",
+    "pages/order/detail",
+    "pages/order/confirm",
     "pages/user/index"
   ],
   "subpackages": [
@@ -31,7 +36,7 @@
   },
   "tabBar": {
     "color": "#999999",
-    "selectedColor": "#e63946",
+    "selectedColor": "#ff6b6b",
     "backgroundColor": "#ffffff",
     "borderStyle": "black",
     "list": [
@@ -42,8 +47,14 @@
         "selectedIconPath": "images/tabbar/home-active.png"
       },
       {
-        "pagePath": "pages/product/index",
+        "pagePath": "pages/category/index",
         "text": "分类",
+        "iconPath": "images/tabbar/category.png",
+        "selectedIconPath": "images/tabbar/category-active.png"
+      },
+      {
+        "pagePath": "pages/cart/index",
+        "text": "购物车",
         "iconPath": "images/tabbar/category.png",
         "selectedIconPath": "images/tabbar/category-active.png"
       },

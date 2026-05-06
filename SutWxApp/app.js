@@ -5,8 +5,9 @@
  * 描述: 微信小程序应用入口文件，处理应用生命周期事件和全局数据
  */
 
-// 引入监控工具
+// 引入监控工具和请求取消令牌
 const monitorUtil = require("./utils/monitor").default;
+const { CancelToken } = require("./utils/request");
 
 App({
   onLaunch(options) {
@@ -49,6 +50,9 @@ App({
     baseUrl: "https://api.example.com",
     version: "1.0.0",
     debug: true,
+    request: {
+      CancelToken,
+    },
   },
 
   initApp() {

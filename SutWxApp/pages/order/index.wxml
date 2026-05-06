@@ -1,0 +1,106 @@
+
+&lt;!--
+文件名: index.wxml
+版本号: 1.0.0
+更新日期: 2026-05-06
+描述: 订单列表页面模板
+--&gt;
+&lt;view class="order-container"&gt;
+  &lt;!-- 标签页 --&gt;
+  &lt;view class="tabs"&gt;
+    &lt;view
+      wx:for="{{tabs}}"
+      wx:key="*this"
+      class="tab-item {{activeTab === index ? 'active' : ''}}"
+      data-index="{{index}}"
+      bindtap="onTabChange"
+    &gt;
+      &lt;text&gt;{{item}}&lt;/text&gt;
+      &lt;view wx:if="{{activeTab === index}}" class="tab-line"&gt;&lt;/view&gt;
+    &lt;/view&gt;
+  &lt;/view&gt;
+
+  &lt;!-- 空状态 --&gt;
+  &lt;view wx:if="{{empty &amp;&amp; !loading}}" class="empty-container"&gt;
+    &lt;image class="empty-icon" src="/images/placeholder.svg" mode="aspectFit"&gt;&lt;/image&gt;
+    &lt;text class="empty-text"&gt;暂无订单&lt;/text&gt;
+  &lt;/view&gt;
+
+  &lt;!-- 订单列表 --&gt;
+  &lt;view wx:else class="order-list"&gt;
+    &lt;view
+      wx:for="{{orderList}}"
+      wx:key="id"
+      class="order-item"
+      bindtap="onViewDetail"
+      data-id="{{item.id}}"
+    &gt;
+      &lt;!-- 订单头部 --&gt;
+      &lt;view class="order-header"&gt;
+        &lt;text class="order-sn"&gt;订单号：{{item.orderNo}}&lt;/text&gt;
+        &lt;text class="order-status"&gt;{{item.statusText}}&lt;/text&gt;
+      &lt;/view&gt;
+
+      &lt;!-- 商品列表 --&gt;
+      &lt;view class="order-products"&gt;
+        &lt;view
+          wx:for="{{item.products}}"
+          wx:for-item="product"
+          wx:key="id"
+          class="product-item"
+        &gt;
+          &lt;image class="product-image" src="{{product.image}}" mode="aspectFill"&gt;&lt;/image&gt;
+          &lt;view class="product-info"&gt;
+            &lt;text class="product-name"&gt;{{product.name}}&lt;/text&gt;
+            &lt;text class="product-spec" wx:if="{{product.spec}}"&gt;{{product.spec}}&lt;/text&gt;
+            &lt;view class="product-bottom"&gt;
+              &lt;text class="product-price"&gt;¥{{product.price.toFixed(2)}}&lt;/text&gt;
+              &lt;text class="product-quantity"&gt;x{{product.quantity}}&lt;/text&gt;
+            &lt;/view&gt;
+          &lt;/view&gt;
+        &lt;/view&gt;
+      &lt;/view&gt;
+
+      &lt;!-- 订单底部 --&gt;
+      &lt;view class="order-footer"&gt;
+        &lt;text class="order-total"&gt;共{{item.totalQuantity}}件商品 合计：&lt;text class="price"&gt;¥{{item.totalPrice.toFixed(2)}}&lt;/text&gt;&lt;/text&gt;
+        
+        &lt;view class="order-actions"&gt;
+          &lt;button
+            wx:if="{{item.status === 1}}"
+            class="action-btn cancel-btn"
+            catchtap="onCancelOrder"
+            data-id="{{item.id}}"
+          &gt;
+            取消订单
+          &lt;/button&gt;
+          &lt;button
+            wx:if="{{item.status === 1}}"
+            class="action-btn pay-btn"
+            catchtap="onPayOrder"
+            data-id="{{item.id}}"
+          &gt;
+            立即支付
+          &lt;/button&gt;
+          &lt;button
+            wx:if="{{item.status === 3}}"
+            class="action-btn confirm-btn"
+            catchtap="onConfirmReceive"
+            data-id="{{item.id}}"
+          &gt;
+            确认收货
+          &lt;/button&gt;
+          &lt;button
+            wx:if="{{item.status === 4}}"
+            class="action-btn comment-btn"
+            catchtap="onCommentOrder"
+            data-id="{{item.id}}"
+          &gt;
+            评价
+          &lt;/button&gt;
+        &lt;/view&gt;
+      &lt;/view&gt;
+    &lt;/view&gt;
+  &lt;/view&gt;
+&lt;/view&gt;
+

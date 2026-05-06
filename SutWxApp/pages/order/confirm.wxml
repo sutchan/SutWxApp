@@ -1,0 +1,86 @@
+
+&lt;!--
+文件名: confirm.wxml
+版本号: 1.0.0
+更新日期: 2026-05-06
+描述: 订单确认页面模板
+--&gt;
+&lt;view class="confirm-container"&gt;
+  &lt;!-- 收货地址 --&gt;
+  &lt;view class="address-section" bindtap="onSelectAddress"&gt;
+    &lt;view wx:if="{{address}}" class="address-info"&gt;
+      &lt;view class="name-phone"&gt;
+        &lt;text&gt;{{address.name}}&lt;/text&gt;
+        &lt;text&gt;{{address.phone}}&lt;/text&gt;
+      &lt;/view&gt;
+      &lt;text class="address-detail"&gt;{{address.detail}}&lt;/text&gt;
+    &lt;/view&gt;
+    &lt;view wx:else class="address-empty"&gt;
+      &lt;text&gt;请选择收货地址&lt;/text&gt;
+      &lt;text class="arrow"&gt;&gt;&lt;/text&gt;
+    &lt;/view&gt;
+  &lt;/view&gt;
+
+  &lt;!-- 商品列表 --&gt;
+  &lt;view class="products-section"&gt;
+    &lt;view
+      wx:for="{{items}}"
+      wx:key="id"
+      class="product-item"
+    &gt;
+      &lt;image class="product-image" src="{{item.image}}" mode="aspectFill"&gt;&lt;/image&gt;
+      &lt;view class="product-info"&gt;
+        &lt;text class="product-name"&gt;{{item.name}}&lt;/text&gt;
+        &lt;text class="product-spec" wx:if="{{item.spec}}"&gt;{{item.spec}}&lt;/text&gt;
+        &lt;view class="product-bottom"&gt;
+          &lt;text class="product-price"&gt;¥{{item.price.toFixed(2)}}&lt;/text&gt;
+          &lt;text class="product-quantity"&gt;x{{item.quantity}}&lt;/text&gt;
+        &lt;/view&gt;
+      &lt;/view&gt;
+    &lt;/view&gt;
+  &lt;/view&gt;
+
+  &lt;!-- 备注 --&gt;
+  &lt;view class="remark-section"&gt;
+    &lt;text class="remark-label"&gt;订单备注&lt;/text&gt;
+    &lt;input
+      class="remark-input"
+      placeholder="选填，请先和商家协商一致"
+      value="{{remark}}"
+      bindinput="onRemarkInput"
+      maxlength="100"
+    /&gt;
+  &lt;/view&gt;
+
+  &lt;!-- 价格明细 --&gt;
+  &lt;view class="price-section"&gt;
+    &lt;view class="price-item"&gt;
+      &lt;text class="price-label"&gt;商品金额&lt;/text&gt;
+      &lt;text class="price-value"&gt;¥{{totalPrice.toFixed(2)}}&lt;/text&gt;
+    &lt;/view&gt;
+    &lt;view class="price-item"&gt;
+      &lt;text class="price-label"&gt;运费&lt;/text&gt;
+      &lt;text class="price-value"&gt;{{shippingFee === 0 ? '免运费' : '¥' + shippingFee.toFixed(2)}}&lt;/text&gt;
+    &lt;/view&gt;
+    &lt;view class="price-item" wx:if="{{couponDiscount &gt; 0}}"&gt;
+      &lt;text class="price-label"&gt;优惠券&lt;/text&gt;
+      &lt;text class="price-value discount"&gt;-¥{{couponDiscount.toFixed(2)}}&lt;/text&gt;
+    &lt;/view&gt;
+  &lt;/view&gt;
+
+  &lt;!-- 底部栏 --&gt;
+  &lt;view class="bottom-bar"&gt;
+    &lt;view class="total-box"&gt;
+      &lt;text class="total-label"&gt;合计：&lt;/text&gt;
+      &lt;text class="total-price"&gt;¥{{finalPrice.toFixed(2)}}&lt;/text&gt;
+    &lt;/view&gt;
+    &lt;button
+      class="submit-btn"
+      bindtap="onSubmitOrder"
+      disabled="{{submitting}}"
+    &gt;
+      {{submitting ? '提交中...' : '提交订单'}}
+    &lt;/button&gt;
+  &lt;/view&gt;
+&lt;/view&gt;
+
