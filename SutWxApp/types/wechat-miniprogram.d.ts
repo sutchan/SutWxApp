@@ -1,37 +1,37 @@
 /**
  * 文件名: wechat-miniprogram.d.ts
- * 版本号: 1.0.0
- * 更新日期: 2025-12-29 14:45
+ * 版本号: 1.0.1
+ * 更新日期: 2026-05-06
  * 描述: 微信小程序TypeScript类型定义文件，提供完整的微信小程序API类型支持
  */
 
 declare namespace wx {
   /**
- * 微信小程序应用配置选项
- */
-interface AppOptions {
-  onLaunch?(options: LaunchOptions): void;
-  onShow?(options: ShowOptions): void;
-  onHide?(): void;
-  onError?(msg: string): void;
-  onPageNotFound?(res: PageNotFoundOptions): void;
-  onUnhandledRejection?(res: UnhandledRejectionOptions): void;
-  globalData?: GlobalData;
-  [key: string]: unknown;
-}
+   * 微信小程序应用配置选项
+   */
+  interface AppOptions {
+    onLaunch?(options: LaunchOptions): void;
+    onShow?(options: ShowOptions): void;
+    onHide?(): void;
+    onError?(msg: string): void;
+    onPageNotFound?(res: PageNotFoundOptions): void;
+    onUnhandledRejection?(res: UnhandledRejectionOptions): void;
+    globalData?: GlobalData;
+    [key: string]: unknown;
+  }
 
-/**
- * 微信小程序应用实例
- */
-interface AppInstance {
-  onLaunch(options: LaunchOptions): void;
-  onShow(options: ShowOptions): void;
-  onHide(): void;
-  onError(msg: string): void;
-  onPageNotFound(res: PageNotFoundOptions): void;
-  onUnhandledRejection(res: UnhandledRejectionOptions): void;
-  globalData: GlobalData;
-}
+  /**
+   * 微信小程序应用实例
+   */
+  interface AppInstance {
+    onLaunch(options: LaunchOptions): void;
+    onShow(options: ShowOptions): void;
+    onHide(): void;
+    onError(msg: string): void;
+    onPageNotFound(res: PageNotFoundOptions): void;
+    onUnhandledRejection(res: UnhandledRejectionOptions): void;
+    globalData: GlobalData;
+  }
 
   /**
    * 全局数据接口
@@ -44,6 +44,18 @@ interface AppInstance {
     baseUrl: string;
     version: string;
     debug: boolean;
+    request?: {
+      CancelToken: new () => CancelToken;
+    };
+  }
+
+  /**
+   * 请求取消令牌
+   */
+  interface CancelToken {
+    cancel(): void;
+    isCancel(): boolean;
+    register(callback: () => void): void;
   }
 
   /**

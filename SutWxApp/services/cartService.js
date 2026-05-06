@@ -1,12 +1,11 @@
 /**
  * 文件名: cartService.js
- * 版本号: 1.0.0
- * 更新日期: 2025-12-26
+ * 版本号: 1.0.1
+ * 更新日期: 2026-05-06
  * 描述: 购物车服务层，提供购物车相关的API调用和本地存储管理
  */
 
 const request = require("../utils/request");
-const store = require("../utils/store");
 
 const STORAGE_KEY_CART = "cart_list";
 

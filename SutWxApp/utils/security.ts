@@ -470,11 +470,12 @@ class SecurityUtil {
     let i = 0;
 
     for (; length >= 4; length -= 4) {
-      words[i++] =
+      words[i] =
         (str.charCodeAt(i * 4) & 0xff) |
         ((str.charCodeAt(i * 4 + 1) & 0xff) << 8) |
         ((str.charCodeAt(i * 4 + 2) & 0xff) << 16) |
         ((str.charCodeAt(i * 4 + 3) & 0xff) << 24);
+      i++;
     }
 
     let remaining = 0;
