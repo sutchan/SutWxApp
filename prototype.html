@@ -1,0 +1,48 @@
+<!-- prototype.html v0.0.1 -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>SutWxApp 高保真原型 – v0.0.1</title>
+  <meta name="description" content="SutWxApp 项目高保真交互原型，展示首页、分类、商品详情、购物车、订单、用户中心等关键页面。">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --card-bg: rgba(255,255,255,0.08);
+      --accent: hsl(210, 80%, 60%);
+      --text: #e0e0e0;
+      --shadow: rgba(0,0,0,0.4);
+    }
+    body {margin:0; font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); display:flex; flex-direction:column; align-items:center; min-height:100vh;}
+    header {padding:2rem; text-align:center;}
+    h1 {font-size:2.2rem; margin:0;}
+    .grid {display:grid; gap:1.5rem; padding:2rem; grid-template-columns:repeat(auto-fit, minmax(260px,1fr));}
+    .card {background:var(--card-bg); border-radius:12px; padding:1.5rem; backdrop-filter:blur(12px); box-shadow:0 4px 12px var(--shadow); transition:transform .25s ease, box-shadow .25s ease;}
+    .card:hover {transform:translateY(-4px) scale(1.02); box-shadow:0 8px 24px var(--shadow);}
+    .card h2 {margin:0 0 .5rem; font-size:1.4rem; color:var(--accent);}
+    .card p {margin:0; line-height:1.4;}
+    .footer {margin-top:auto; padding:1rem; font-size:.9rem;}
+    .btn {display:inline-block; margin-top:1rem; padding:.6rem 1.2rem; background:var(--accent); color:#fff; border:none; border-radius:6px; cursor:pointer; text-decoration:none; font-weight:600; transition:background .2s;}
+    .btn:hover {background:hsl(210,80%,55%);}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>SutWxApp 高保真原型</h1>
+    <p>展示核心业务页面的交互布局，供设计评审与前端实现参考。</p>
+    <a class="btn" href="README.md">返回项目文档</a>
+  </header>
+  <section class="grid">
+    <div class="card" id="home"><h2>首页</h2><p>轮播图、搜索框、分类导航、热门商品卡片。</p></div>
+    <div class="card" id="category"><h2>分类页</h2><p>左侧分类列表、右侧商品网格。</p></div>
+    <div class="card" id="product"><h2>商品详情</h2><p>商品图片轮播、规格选择、加入购物车按钮。</p></div>
+    <div class="card" id="cart"><h2>购物车</h2><p>商品列表、数量调节、结算按钮。</p></div>
+    <div class="card" id="order"><h2>订单页</h2><p>订单概览、支付状态、订单历史。</p></div>
+    <div class="card" id="user"><h2>用户中心</h2><p>个人信息、地址管理、积分商城入口。</p></div>
+  </section>
+  <!-- TODO: 设计审查要点（由设计师填写） -->
+  <footer class="footer">© 2026 SutWxApp – All rights reserved.</footer>
+</body>
+</html>

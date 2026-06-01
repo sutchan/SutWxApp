@@ -8,7 +8,7 @@
     "lint": "eslint SutWxApp/",
     "typecheck": "tsc --noEmit",
     "build": "echo '构建完成'",
-    "clean": "rm -rf node_modules package-lock.json"
+    "clean": "rmdir /s /q node_modules && del /f /q package-lock.json"
   },
   "keywords": [
     "wechat",
