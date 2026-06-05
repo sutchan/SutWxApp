@@ -46,19 +46,29 @@ SutWxApp/
 │   └── help/               # 帮助中心
 ├── services/               # 服务层
 │   ├── authService.ts      # 认证服务
-│   ├── productService.ts   # 产品服务
 │   ├── cartService.js      # 购物车服务
+│   ├── categoryService.ts   # 分类服务
+│   ├── logisticsService.ts  # 物流服务
+│   ├── notificationService.ts # 通知服务
 │   ├── orderService.js     # 订单服务
-│   ├── categoryService.js  # 分类服务
-│   └── ...                 # 其他服务
+│   ├── orderService.ts     # 订单服务
+│   ├── pointsService.ts     # 积分服务
+│   ├── productService.js    # 产品服务
+│   ├── productService.ts    # 产品服务
+│   ├── socialService.ts    # 社交服务
+│   └── userService.ts      # 用户服务
 ├── utils/                  # 工具类
 │   ├── request.ts          # 请求封装
-│   ├── cache.ts            # 缓存工具
-│   ├── security.ts         # 安全工具
-│   └── monitor.ts          # 监控工具
-├── types/                  # 类型定义
+│   ├── cache.ts           # 缓存工具
+│   ├── security.ts        # 安全工具
+│   ├── monitor.ts         # 监控工具
+│   └── store.js           # 状态管理
+├── types/                 # 类型定义
 │   └── wechat-miniprogram.d.ts
-└── locales/                # 多语言文件
+└── locales/               # 多语言文件
+    ├── sut-wechat-mini.pot     # 翻译模板
+    ├── sut-wechat-mini-zh_CN.po # 中文翻译
+    └── sut-wechat-mini-en_US.po # 英文翻译
 ```
 
 ## 核心功能模块
