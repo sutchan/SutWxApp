@@ -54,21 +54,37 @@ SutWxApp/
 ├── app.js              # 小程序入口文件
 ├── app.json            # 全局配置
 ├── app.wxss            # 全局样式
-├── assets/             # 第三方资源
-│   └── images/         # 图片资源
 ├── components/         # 自定义组件
-├── images/             # 图片文件
+│   ├── empty-state/    # 空状态组件
+│   └── product-card/    # 商品卡片组件
+├── images/             # 图片资源
+│   └── tabbar/         # 底部导航图标
+├── locales/            # 多语言文件
+│   ├── sut-wechat-mini.pot    # 翻译模板
+│   ├── sut-wechat-mini-zh_CN.po # 中文翻译
+│   └── sut-wechat-mini-en_US.po # 英文翻译
 ├── pages/              # 页面文件
 │   ├── home/           # 首页
 │   ├── category/       # 分类页
-│   ├── product/        # 商品页
+│   ├── product/        # 商品详情页
 │   ├── cart/           # 购物车
-│   ├── order/          # 订单页
+│   ├── order/          # 订单模块
+│   │   ├── index/      # 订单列表
+│   │   ├── detail/     # 订单详情
+│   │   └── confirm/    # 订单确认
 │   ├── user/           # 用户中心
-│   └── ...             # 其他功能模块
-├── services/           # 服务层
-├── tests/              # 测试文件
+│   ├── address/        # 地址管理
+│   ├── settings/        # 设置页
+│   └── help/           # 帮助中心
+├── services/           # 服务层（API调用封装）
+├── types/              # TypeScript类型定义
+│   └── wechat-miniprogram.d.ts
 ├── utils/              # 工具类
+│   ├── request.ts      # 网络请求封装
+│   ├── cache.ts        # 缓存工具
+│   ├── security.ts     # 安全工具
+│   ├── monitor.ts      # 监控工具
+│   └── store.js        # 状态管理
 ├── docs/               # 项目文档
 └── openspec/           # 规范文档
 ```
