@@ -1,333 +1,581 @@
-<!-- prototype.html v1.0.0 -->
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-  <title>SutWxApp 高保真原型 - v1.0.0</title>
-  <meta name="description" content="SutWxApp 项目高保真交互原型，展示首页、分类、商品详情、购物车、订单、用户中心等关键页面。">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
+&lt;!DOCTYPE html&gt;
+&lt;html lang="zh-CN"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+  &lt;title&gt;SutWxApp 高保真原型 - v2.0.0&lt;/title&gt;
+  &lt;meta name="description" content="SutWxApp 项目高保真交互原型，基于 UI 设计规范，展示完整用户流程"&gt;
+  &lt;style&gt;
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
     :root {
-      /* 品牌色彩系统 - 对应 openspec/specs/design/spec.md */
       --primary-color: #2E7D32;
       --primary-hover: #1B5E20;
       --primary-active: #388E3C;
       --primary-light: #E8F5E9;
       --success-color: #4CAF50;
+      --success-light: #E8F5E9;
       --warning-color: #FF9800;
+      --warning-light: #FFF3E0;
       --error-color: #F44336;
+      --error-light: #FFEBEE;
       --info-color: #2196F3;
+      --info-light: #E3F2FD;
       --text-primary: #212121;
       --text-secondary: #757575;
       --text-disabled: #BDBDBD;
+      --text-inverse: #FFFFFF;
       --border-color: #E0E0E0;
+      --border-light: #EEEEEE;
       --bg-page: #F5F5F5;
       --bg-card: #FFFFFF;
-      /* 间距系统 */
+      --shadow-color: rgba(0, 0, 0, 0.1);
       --space-xs: 4px;
       --space-sm: 8px;
       --space-md: 16px;
       --space-lg: 24px;
       --space-xl: 32px;
+      --font-size-xs: 10px;
+      --font-size-sm: 12px;
+      --font-size-base: 14px;
+      --font-size-lg: 16px;
+      --font-size-xl: 18px;
+      --font-weight-normal: 400;
+      --font-weight-medium: 500;
+      --font-weight-semibold: 600;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
-        'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      background: var(--bg-page);
+        'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial,
+        sans-serif;
+      background: linear-gradient(135deg, #f8f9fa 0%, #e8f5e9 100%);
       color: var(--text-primary);
       line-height: 1.5;
+      min-height: 100vh;
     }
-    header {
-      background: linear-gradient(135deg, var(--primary-color), var(--primary-active));
-      color: #fff;
-      padding: var(--space-lg) var(--space-md);
-      text-align: center;
-    }
-    header h1 { font-size: 24px; margin-bottom: var(--space-sm); }
-    header p { font-size: 14px; opacity: 0.9; }
-    .back-link {
-      display: inline-block;
-      margin-top: var(--space-md);
-      padding: var(--space-sm) var(--space-md);
-      background: rgba(255,255,255,0.2);
-      color: #fff;
-      text-decoration: none;
-      border-radius: 20px;
-      font-size: 14px;
-    }
-    .grid {
-      display: grid;
-      gap: var(--space-md);
-      padding: var(--space-md);
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+
+    .container {
       max-width: 1400px;
       margin: 0 auto;
+      padding: var(--space-xl);
     }
+
+    header {
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-active));
+      color: var(--text-inverse);
+      padding: var(--space-xl) var(--space-lg);
+      text-align: center;
+      margin-bottom: var(--space-xl);
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(46, 125, 50, 0.3);
+    }
+
+    header h1 {
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-semibold);
+      margin-bottom: var(--space-sm);
+    }
+
+    header p {
+      font-size: var(--font-size-base);
+      opacity: 0.9;
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: var(--space-md);
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: var(--space-xl);
+    }
+
+    .nav-tab {
+      padding: var(--space-sm) var(--space-md);
+      background: var(--bg-card);
+      border: 2px solid var(--border-color);
+      border-radius: 24px;
+      cursor: pointer;
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+      transition: all 0.3s ease;
+    }
+
+    .nav-tab:hover {
+      border-color: var(--primary-color);
+      color: var(--primary-color);
+    }
+
+    .nav-tab.active {
+      background: var(--primary-color);
+      color: var(--text-inverse);
+      border-color: var(--primary-color);
+    }
+
+    .grid {
+      display: grid;
+      gap: var(--space-xl);
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    }
+
     .page-section {
       background: var(--bg-card);
-      border-radius: 12px;
+      border-radius: 16px;
       overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      box-shadow: 0 4px 20px var(--shadow-color);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
+
+    .page-section:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    }
+
     .page-header {
       background: var(--primary-color);
-      color: #fff;
+      color: var(--text-inverse);
       padding: var(--space-md);
-      font-weight: 600;
+      font-weight: var(--font-weight-semibold);
+      font-size: var(--font-size-lg);
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
     }
+
+    .page-header::before {
+      content: '';
+      display: block;
+      width: 4px;
+      height: 20px;
+      background: var(--primary-light);
+      border-radius: 2px;
+    }
+
+    .phone-wrapper {
+      padding: var(--space-xl);
+      background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
     .phone-frame {
       width: 100%;
       max-width: 375px;
-      min-height: 667px;
-      margin: 0 auto;
+      height: 667px;
       background: var(--bg-card);
       border-radius: 40px;
       overflow: hidden;
       position: relative;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      border: 12px solid #1a1a1a;
     }
+
+    .phone-notch {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 150px;
+      height: 30px;
+      background: #1a1a1a;
+      border-radius: 0 0 20px 20px;
+      z-index: 100;
+    }
+
     .status-bar {
-      height: 24px;
+      height: 44px;
       background: var(--bg-card);
       display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 10px;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 0 var(--space-md) var(--space-xs);
+      font-size: var(--font-size-sm);
       color: var(--text-primary);
+      position: relative;
+      z-index: 10;
     }
+
     .nav-bar {
       height: 44px;
       background: var(--bg-card);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 17px;
-      font-weight: 600;
-      border-bottom: 1px solid var(--border-color);
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-semibold);
+      border-bottom: 1px solid var(--border-light);
+      position: relative;
+      z-index: 10;
     }
+
+    .nav-bar-back {
+      position: absolute;
+      left: var(--space-md);
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+    }
+
     .page-content {
-      height: calc(667px - 24px - 44px - 50px);
+      height: calc(667px - 44px - 44px - 50px);
       overflow-y: auto;
       background: var(--bg-page);
+      position: relative;
     }
+
     .page-content.no-tabbar {
-      height: calc(667px - 24px - 44px);
+      height: calc(667px - 44px - 44px);
     }
+
+    .page-content.no-navbar {
+      height: calc(667px - 44px - 50px);
+    }
+
+    .page-content.no-navbar-no-tabbar {
+      height: calc(667px - 44px);
+    }
+
     .tab-bar {
       height: 50px;
       background: var(--bg-card);
-      border-top: 1px solid var(--border-color);
+      border-top: 1px solid var(--border-light);
       display: flex;
       position: absolute;
       bottom: 0;
       left: 0;
       right: 0;
+      z-index: 20;
     }
+
     .tab-item {
       flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      font-size: 10px;
+      font-size: var(--font-size-xs);
       color: var(--text-secondary);
+      cursor: pointer;
+      transition: color 0.2s ease;
     }
-    .tab-item.active { color: var(--primary-color); }
+
+    .tab-item:hover, .tab-item.active {
+      color: var(--primary-color);
+    }
+
     .tab-icon {
       width: 24px;
       height: 24px;
-      background: var(--text-disabled);
-      border-radius: 4px;
       margin-bottom: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .tab-item.active .tab-icon { background: var(--primary-color); }
 
-    /* 首页样式 */
-    .home-content { padding: var(--space-sm); }
+    /* Home Page Styles */
+    .home-content { padding: var(--space-md); }
+
     .search-bar {
       background: var(--bg-card);
-      padding: var(--space-sm);
-      border-radius: 20px;
+      padding: var(--space-sm) var(--space-md);
+      border-radius: 24px;
       display: flex;
       align-items: center;
       gap: var(--space-sm);
-      margin-bottom: var(--space-md);
+      margin-bottom: var(--space-lg);
+      box-shadow: 0 2px 8px var(--shadow-color);
     }
+
     .search-icon {
       width: 20px;
       height: 20px;
       background: var(--text-disabled);
       border-radius: 50%;
+      flex-shrink: 0;
     }
-    .search-text { font-size: 14px; color: var(--text-secondary); }
+
+    .search-text { font-size: var(--font-size-sm); color: var(--text-secondary); }
+
     .banner {
-      height: 120px;
+      height: 140px;
       background: linear-gradient(135deg, var(--primary-light), #C8E6C9);
-      border-radius: 8px;
-      margin-bottom: var(--space-md);
+      border-radius: 12px;
+      margin-bottom: var(--space-lg);
       display: flex;
       align-items: center;
       justify-content: center;
       color: var(--primary-color);
-      font-size: 14px;
+      font-size: var(--font-size-base);
+      font-weight: var(--font-weight-medium);
+      overflow: hidden;
+      position: relative;
     }
+
+    .banner-dots {
+      position: absolute;
+      bottom: var(--space-sm);
+      display: flex;
+      gap: var(--space-xs);
+    }
+
+    .banner-dot {
+      width: 6px;
+      height: 6px;
+      background: rgba(255,255,255,0.5);
+      border-radius: 50%;
+    }
+
+    .banner-dot.active {
+      background: var(--primary-color);
+      width: 18px;
+      border-radius: 3px;
+    }
+
     .category-nav {
       display: flex;
-      gap: var(--space-sm);
-      margin-bottom: var(--space-md);
+      gap: var(--space-md);
+      margin-bottom: var(--space-lg);
       overflow-x: auto;
+      padding-bottom: var(--space-sm);
     }
+
     .category-item {
-      min-width: 60px;
+      min-width: 64px;
       text-align: center;
+      flex-shrink: 0;
+      cursor: pointer;
     }
+
     .category-icon {
-      width: 40px;
-      height: 40px;
-      background: var(--bg-card);
-      border-radius: 8px;
+      width: 48px;
+      height: 48px;
+      background: var(--primary-light);
+      border-radius: 12px;
       margin: 0 auto var(--space-xs);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .category-name { font-size: 12px; color: var(--text-primary); }
+
+    .category-name { font-size: var(--font-size-sm); color: var(--text-primary); }
+
     .section-title {
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: var(--space-sm);
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-semibold);
+      margin-bottom: var(--space-md);
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-    .more-link { font-size: 12px; color: var(--text-secondary); }
+
+    .more-link {
+      font-size: var(--font-size-sm);
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+
     .product-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: var(--space-sm);
+      gap: var(--space-md);
     }
+
     .product-card {
       background: var(--bg-card);
-      border-radius: 8px;
+      border-radius: 12px;
       overflow: hidden;
+      box-shadow: 0 2px 8px var(--shadow-color);
+      cursor: pointer;
+      transition: transform 0.2s ease;
     }
+
+    .product-card:active {
+      transform: scale(0.98);
+    }
+
     .product-image {
-      height: 100px;
-      background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
+      height: 120px;
+      background: linear-gradient(135deg, var(--primary-light), #C8E6C9);
       display: flex;
       align-items: center;
       justify-content: center;
       color: var(--primary-color);
-      font-size: 12px;
+      font-size: var(--font-size-sm);
     }
-    .product-info { padding: var(--space-sm); }
+
+    .product-info {
+      padding: var(--space-sm);
+    }
+
     .product-name {
-      font-size: 14px;
+      font-size: var(--font-size-sm);
       color: var(--text-primary);
       margin-bottom: var(--space-xs);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-    .product-price { font-size: 16px; color: var(--error-color); font-weight: 600; }
-    .product-price::before { content: '¥'; font-size: 12px; }
 
-    /* 分类页样式 */
-    .category-content {
+    .product-price {
+      font-size: var(--font-size-lg);
+      color: var(--error-color);
+      font-weight: var(--font-weight-semibold);
+    }
+
+    .product-price::before {
+      content: '¥';
+      font-size: var(--font-size-sm);
+    }
+
+    /* Category Page Styles */
+    .category-page-content {
       display: flex;
       height: 100%;
     }
+
     .category-left {
-      width: 80px;
+      width: 90px;
       background: var(--bg-page);
       border-right: 1px solid var(--border-color);
+      overflow-y: auto;
     }
+
     .category-tab {
       padding: var(--space-md) var(--space-sm);
-      font-size: 13px;
+      font-size: var(--font-size-sm);
       text-align: center;
       color: var(--text-secondary);
       border-left: 3px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s ease;
     }
+
     .category-tab.active {
       background: var(--bg-card);
       color: var(--primary-color);
       border-left-color: var(--primary-color);
+      font-weight: var(--font-weight-medium);
     }
+
     .category-right {
       flex: 1;
       padding: var(--space-md);
       background: var(--bg-card);
+      overflow-y: auto;
     }
+
     .sub-category-title {
-      font-size: 14px;
-      font-weight: 600;
+      font-size: var(--font-size-base);
+      font-weight: var(--font-weight-semibold);
       margin-bottom: var(--space-md);
+      color: var(--text-primary);
     }
+
     .sub-category-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: var(--space-md);
+      gap: var(--space-lg);
     }
-    .sub-category-item { text-align: center; }
-    .sub-category-icon {
-      width: 50px;
-      height: 50px;
-      background: var(--primary-light);
-      border-radius: 8px;
-      margin: 0 auto var(--space-sm);
-    }
-    .sub-category-name { font-size: 12px; color: var(--text-primary); }
 
-    /* 商品详情页样式 */
-    .detail-content {}
+    .sub-category-item {
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .sub-category-icon {
+      width: 56px;
+      height: 56px;
+      background: var(--primary-light);
+      border-radius: 12px;
+      margin: 0 auto var(--space-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sub-category-name {
+      font-size: var(--font-size-sm);
+      color: var(--text-primary);
+    }
+
+    /* Product Detail Styles */
+    .detail-content {
+      position: relative;
+    }
+
     .detail-swiper {
       height: 300px;
-      background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
+      background: linear-gradient(135deg, var(--primary-light), #C8E6C9);
       display: flex;
       align-items: center;
       justify-content: center;
       color: var(--primary-color);
+      font-size: var(--font-size-base);
     }
+
     .detail-info {
       background: var(--bg-card);
-      padding: var(--space-md);
+      padding: var(--space-lg);
     }
+
     .detail-price {
-      font-size: 24px;
+      font-size: 28px;
       color: var(--error-color);
-      font-weight: 700;
+      font-weight: var(--font-weight-bold);
       margin-bottom: var(--space-sm);
     }
-    .detail-price::before { content: '¥'; font-size: 14px; }
+
+    .detail-price::before {
+      content: '¥';
+      font-size: var(--font-size-base);
+    }
+
     .detail-title {
-      font-size: 16px;
+      font-size: var(--font-size-lg);
       line-height: 1.4;
       margin-bottom: var(--space-sm);
+      font-weight: var(--font-weight-medium);
     }
+
     .detail-desc {
-      font-size: 13px;
+      font-size: var(--font-size-sm);
       color: var(--text-secondary);
     }
+
     .detail-spec {
       background: var(--bg-card);
       margin-top: var(--space-sm);
-      padding: var(--space-md);
+      padding: var(--space-md) var(--space-lg);
     }
+
     .spec-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: var(--space-sm) 0;
-      border-bottom: 1px solid var(--border-color);
+      padding: var(--space-md) 0;
+      border-bottom: 1px solid var(--border-light);
     }
-    .spec-row:last-child { border-bottom: none; }
-    .spec-label { font-size: 14px; color: var(--text-secondary); }
+
+    .spec-row:last-child {
+      border-bottom: none;
+    }
+
+    .spec-label {
+      font-size: var(--font-size-base);
+      color: var(--text-secondary);
+    }
+
     .spec-value {
-      font-size: 14px;
+      font-size: var(--font-size-base);
       color: var(--text-primary);
       display: flex;
       align-items: center;
+      gap: var(--space-sm);
     }
+
     .detail-action {
       position: absolute;
       bottom: 0;
@@ -335,97 +583,169 @@
       right: 0;
       height: 60px;
       background: var(--bg-card);
-      border-top: 1px solid var(--border-color);
+      border-top: 1px solid var(--border-light);
       display: flex;
       align-items: center;
-      padding: 0 var(--space-md);
+      padding: 0 var(--space-lg);
+      gap: var(--space-md);
+      z-index: 30;
+    }
+
+    .detail-action-btns {
+      display: flex;
       gap: var(--space-sm);
     }
+
     .btn {
       padding: var(--space-sm) var(--space-md);
       border-radius: 20px;
-      font-size: 14px;
+      font-size: var(--font-size-sm);
       border: none;
       cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: var(--font-weight-medium);
+      transition: all 0.2s ease;
     }
+
     .btn-outline {
       background: transparent;
       border: 1px solid var(--primary-color);
       color: var(--primary-color);
     }
-    .btn-primary {
-      background: var(--primary-color);
-      color: #fff;
-      flex: 1;
+
+    .btn-outline:hover {
+      background: var(--primary-light);
     }
 
-    /* 购物车样式 */
-    .cart-content { padding: var(--space-sm); }
+    .btn-primary {
+      background: var(--primary-color);
+      color: var(--text-inverse);
+      flex: 1;
+      height: 40px;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    /* Cart Page Styles */
+    .cart-content {
+      padding: var(--space-md);
+      padding-bottom: 80px;
+    }
+
     .cart-item {
       background: var(--bg-card);
-      border-radius: 8px;
+      border-radius: 12px;
       padding: var(--space-md);
-      margin-bottom: var(--space-sm);
+      margin-bottom: var(--space-md);
       display: flex;
       gap: var(--space-md);
+      align-items: flex-start;
+      box-shadow: 0 2px 8px var(--shadow-color);
     }
+
     .cart-check {
-      width: 20px;
-      height: 20px;
+      width: 24px;
+      height: 24px;
       border: 2px solid var(--border-color);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      align-self: center;
+      margin-top: 4px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
     }
+
     .cart-check.selected {
       background: var(--primary-color);
       border-color: var(--primary-color);
+      color: var(--text-inverse);
     }
+
     .cart-image {
-      width: 80px;
-      height: 80px;
-      background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
+      width: 88px;
+      height: 88px;
+      background: linear-gradient(135deg, var(--primary-light), #C8E6C9);
       border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
       color: var(--primary-color);
-      font-size: 10px;
+      font-size: var(--font-size-xs);
+      flex-shrink: 0;
     }
-    .cart-info { flex: 1; }
+
+    .cart-info {
+      flex: 1;
+      min-width: 0;
+    }
+
     .cart-name {
-      font-size: 14px;
+      font-size: var(--font-size-base);
       margin-bottom: var(--space-xs);
+      font-weight: var(--font-weight-medium);
     }
+
     .cart-spec {
-      font-size: 12px;
+      font-size: var(--font-size-sm);
       color: var(--text-secondary);
       margin-bottom: var(--space-sm);
     }
+
     .cart-bottom {
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-    .cart-price { font-size: 16px; color: var(--error-color); font-weight: 600; }
+
+    .cart-price {
+      font-size: var(--font-size-lg);
+      color: var(--error-color);
+      font-weight: var(--font-weight-semibold);
+    }
+
+    .cart-price::before {
+      content: '¥';
+      font-size: var(--font-size-sm);
+    }
+
     .quantity-control {
       display: flex;
       align-items: center;
       gap: var(--space-sm);
     }
+
     .qty-btn {
-      width: 24px;
-      height: 24px;
+      width: 28px;
+      height: 28px;
       background: var(--bg-page);
       border-radius: 4px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 14px;
+      font-size: var(--font-size-base);
+      cursor: pointer;
+      border: 1px solid var(--border-color);
+      transition: all 0.2s ease;
     }
-    .qty-num { font-size: 14px; min-width: 20px; text-align: center; }
+
+    .qty-btn:hover {
+      background: var(--primary-light);
+      border-color: var(--primary-color);
+    }
+
+    .qty-num {
+      font-size: var(--font-size-base);
+      min-width: 28px;
+      text-align: center;
+      font-weight: var(--font-weight-medium);
+    }
+
     .cart-footer {
       position: absolute;
       bottom: 0;
@@ -433,99 +753,159 @@
       right: 0;
       height: 60px;
       background: var(--bg-card);
-      border-top: 1px solid var(--border-color);
+      border-top: 1px solid var(--border-light);
       display: flex;
       align-items: center;
       padding: 0 var(--space-md);
       gap: var(--space-md);
-    }
-    .cart-total {
-      flex: 1;
-      font-size: 14px;
-    }
-    .cart-total-price {
-      color: var(--error-color);
-      font-weight: 600;
-      font-size: 18px;
-    }
-    .btn-settle {
-      padding: var(--space-sm) var(--space-lg);
-      background: var(--primary-color);
-      color: #fff;
-      border-radius: 20px;
-      border: none;
-      font-size: 14px;
+      z-index: 30;
+      box-shadow: 0 -2px 10px var(--shadow-color);
     }
 
-    /* 订单确认页样式 */
-    .order-confirm-content {}
+    .cart-total {
+      flex: 1;
+      font-size: var(--font-size-base);
+    }
+
+    .cart-total-price {
+      color: var(--error-color);
+      font-weight: var(--font-weight-bold);
+      font-size: var(--font-size-xl);
+    }
+
+    .btn-settle {
+      padding: var(--space-md) var(--space-xl);
+      background: var(--primary-color);
+      color: var(--text-inverse);
+      border-radius: 24px;
+      border: none;
+      font-size: var(--font-size-base);
+      font-weight: var(--font-weight-semibold);
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .btn-settle:hover {
+      background: var(--primary-hover);
+    }
+
+    /* Order Confirm Styles */
+    .order-confirm-content {
+      padding-bottom: 80px;
+    }
+
     .addr-section {
       background: var(--bg-card);
-      padding: var(--space-md);
+      padding: var(--space-lg);
       display: flex;
       align-items: center;
       gap: var(--space-md);
+      margin-bottom: var(--space-sm);
     }
+
     .addr-icon {
-      width: 40px;
-      height: 40px;
+      width: 44px;
+      height: 44px;
       background: var(--primary-light);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       color: var(--primary-color);
+      flex-shrink: 0;
     }
-    .addr-info { flex: 1; }
-    .addr-name { font-size: 16px; font-weight: 600; margin-bottom: var(--space-xs); }
-    .addr-detail { font-size: 13px; color: var(--text-secondary); }
+
+    .addr-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .addr-name {
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-semibold);
+      margin-bottom: var(--space-xs);
+    }
+
+    .addr-detail {
+      font-size: var(--font-size-sm);
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
     .order-goods {
       background: var(--bg-card);
-      margin-top: var(--space-sm);
-      padding: var(--space-md);
+      margin-bottom: var(--space-sm);
+      padding: var(--space-md) var(--space-lg);
     }
+
     .goods-item {
       display: flex;
       gap: var(--space-md);
-      padding: var(--space-sm) 0;
+      padding: var(--space-md) 0;
+      border-bottom: 1px solid var(--border-light);
     }
+
+    .goods-item:last-child {
+      border-bottom: none;
+    }
+
     .goods-image {
-      width: 60px;
-      height: 60px;
-      background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
-      border-radius: 4px;
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, var(--primary-light), #C8E6C9);
+      border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
       color: var(--primary-color);
-      font-size: 10px;
+      font-size: var(--font-size-xs);
+      flex-shrink: 0;
     }
-    .goods-info { flex: 1; }
-    .goods-name { font-size: 14px; margin-bottom: var(--space-xs); }
+
+    .goods-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .goods-name {
+      font-size: var(--font-size-base);
+      margin-bottom: var(--space-xs);
+      font-weight: var(--font-weight-medium);
+    }
+
     .goods-price {
-      font-size: 14px;
+      font-size: var(--font-size-sm);
       color: var(--text-secondary);
       display: flex;
       justify-content: space-between;
     }
+
     .order-summary {
       background: var(--bg-card);
-      margin-top: var(--space-sm);
-      padding: var(--space-md);
+      padding: var(--space-md) var(--space-lg);
     }
+
     .summary-row {
       display: flex;
       justify-content: space-between;
       padding: var(--space-sm) 0;
-      font-size: 14px;
+      font-size: var(--font-size-sm);
     }
+
     .summary-row.total {
-      border-top: 1px solid var(--border-color);
+      border-top: 1px solid var(--border-light);
       margin-top: var(--space-sm);
       padding-top: var(--space-md);
-      font-weight: 600;
+      font-weight: var(--font-weight-semibold);
+      font-size: var(--font-size-base);
     }
-    .summary-row.total .summary-value { color: var(--error-color); font-size: 18px; }
+
+    .summary-row.total .summary-value {
+      color: var(--error-color);
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-bold);
+    }
+
     .order-confirm-footer {
       position: absolute;
       bottom: 0;
@@ -533,855 +913,1346 @@
       right: 0;
       height: 70px;
       background: var(--bg-card);
-      border-top: 1px solid var(--border-color);
+      border-top: 1px solid var(--border-light);
       display: flex;
       align-items: center;
       padding: 0 var(--space-md);
       gap: var(--space-md);
+      z-index: 30;
     }
+
     .confirm-total {
-      font-size: 14px;
+      flex: 1;
+      font-size: var(--font-size-base);
     }
+
     .confirm-price {
       color: var(--error-color);
-      font-weight: 700;
-      font-size: 20px;
+      font-weight: var(--font-weight-bold);
+      font-size: var(--font-size-xl);
     }
+
     .btn-submit {
       padding: var(--space-md) var(--space-xl);
       background: var(--primary-color);
-      color: #fff;
+      color: var(--text-inverse);
       border-radius: 24px;
       border: none;
-      font-size: 16px;
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-semibold);
+      cursor: pointer;
+      transition: background 0.2s ease;
     }
 
-    /* 用户中心样式 */
-    .user-content {}
+    /* User Center Styles */
+    .user-content {
+      padding-bottom: var(--space-md);
+    }
+
     .user-header {
       background: linear-gradient(135deg, var(--primary-color), var(--primary-active));
-      color: #fff;
-      padding: var(--space-xl) var(--space-md);
+      color: var(--text-inverse);
+      padding: var(--space-xl) var(--space-lg);
     }
+
     .user-info {
       display: flex;
       align-items: center;
       gap: var(--space-md);
     }
+
     .user-avatar {
-      width: 60px;
-      height: 60px;
+      width: 64px;
+      height: 64px;
       background: rgba(255,255,255,0.3);
       border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
     }
-    .user-name { font-size: 18px; font-weight: 600; margin-bottom: var(--space-xs); }
+
+    .user-name {
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-semibold);
+      margin-bottom: var(--space-xs);
+    }
+
     .user-level {
-      font-size: 12px;
+      font-size: var(--font-size-sm);
       background: rgba(255,255,255,0.2);
-      padding: 2px 8px;
+      padding: 2px 10px;
       border-radius: 10px;
       display: inline-block;
     }
+
     .user-stats {
       display: flex;
       justify-content: space-around;
-      margin-top: var(--space-lg);
+      margin-top: var(--space-xl);
       text-align: center;
     }
-    .stat-item {}
-    .stat-num { font-size: 20px; font-weight: 600; }
-    .stat-label { font-size: 12px; opacity: 0.9; }
+
+    .stat-item {
+      cursor: pointer;
+    }
+
+    .stat-num {
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-bold);
+    }
+
+    .stat-label {
+      font-size: var(--font-size-sm);
+      opacity: 0.9;
+      margin-top: var(--space-xs);
+    }
+
     .user-order-section {
       background: var(--bg-card);
       margin: var(--space-md);
       border-radius: 12px;
       padding: var(--space-md);
+      box-shadow: 0 2px 8px var(--shadow-color);
     }
-    .order-title {
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: var(--space-md);
-      display: flex;
-      justify-content: space-between;
-    }
+
     .order-tabs {
       display: flex;
       justify-content: space-around;
     }
-    .order-tab { text-align: center; }
-    .order-tab-icon {
-      width: 32px;
-      height: 32px;
-      background: var(--bg-page);
-      border-radius: 8px;
-      margin: 0 auto var(--space-xs);
+
+    .order-tab {
+      text-align: center;
+      cursor: pointer;
     }
-    .order-tab-text { font-size: 12px; color: var(--text-secondary); }
+
+    .order-tab-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--bg-page);
+      border-radius: 10px;
+      margin: 0 auto var(--space-xs);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .order-tab-text {
+      font-size: var(--font-size-sm);
+      color: var(--text-secondary);
+    }
+
     .user-menu {
       background: var(--bg-card);
-      margin: 0 var(--space-md) var(--space-md);
+      margin: 0 var(--space-md);
       border-radius: 12px;
       overflow: hidden;
+      box-shadow: 0 2px 8px var(--shadow-color);
     }
+
     .menu-item {
       display: flex;
       align-items: center;
-      padding: var(--space-md);
-      border-bottom: 1px solid var(--border-color);
+      padding: var(--space-md) var(--space-lg);
+      border-bottom: 1px solid var(--border-light);
+      cursor: pointer;
+      transition: background 0.2s ease;
     }
-    .menu-item:last-child { border-bottom: none; }
+
+    .menu-item:last-child {
+      border-bottom: none;
+    }
+
+    .menu-item:hover {
+      background: var(--bg-page);
+    }
+
     .menu-icon {
       width: 24px;
       height: 24px;
       background: var(--primary-light);
       border-radius: 6px;
       margin-right: var(--space-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
     }
-    .menu-text { flex: 1; font-size: 15px; }
+
+    .menu-text {
+      flex: 1;
+      font-size: var(--font-size-base);
+    }
+
     .menu-arrow {
       width: 16px;
       height: 16px;
       background: var(--text-disabled);
       border-radius: 2px;
+      flex-shrink: 0;
     }
 
-    /* 地址管理样式 */
-    .address-list { padding: var(--space-sm); }
+    /* Address Management Styles */
+    .address-list {
+      padding: var(--space-md);
+    }
+
     .address-card {
       background: var(--bg-card);
-      border-radius: 8px;
+      border-radius: 12px;
       padding: var(--space-md);
-      margin-bottom: var(--space-sm);
+      margin-bottom: var(--space-md);
+      box-shadow: 0 2px 8px var(--shadow-color);
     }
+
     .addr-card-header {
       display: flex;
       justify-content: space-between;
       margin-bottom: var(--space-sm);
+      align-items: center;
     }
-    .addr-card-name { font-size: 16px; font-weight: 600; }
-    .addr-card-phone { font-size: 14px; color: var(--text-secondary); }
+
+    .addr-card-name {
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-semibold);
+    }
+
+    .addr-card-phone {
+      font-size: var(--font-size-base);
+      color: var(--text-secondary);
+    }
+
     .addr-card-detail {
-      font-size: 14px;
+      font-size: var(--font-size-base);
       color: var(--text-secondary);
       margin-bottom: var(--space-md);
+      line-height: 1.5;
     }
+
     .addr-card-action {
       display: flex;
       gap: var(--space-md);
       padding-top: var(--space-sm);
-      border-top: 1px solid var(--border-color);
+      border-top: 1px solid var(--border-light);
     }
+
     .addr-action-btn {
-      font-size: 13px;
+      font-size: var(--font-size-sm);
       color: var(--text-secondary);
       display: flex;
       align-items: center;
       gap: var(--space-xs);
+      cursor: pointer;
+      padding: var(--space-xs) 0;
     }
+
+    .addr-action-btn.default {
+      color: var(--primary-color);
+      font-weight: var(--font-weight-medium);
+    }
+
     .addr-action-icon {
       width: 16px;
       height: 16px;
       background: var(--text-disabled);
       border-radius: 2px;
+      flex-shrink: 0;
     }
+
+    .addr-action-btn.default .addr-action-icon {
+      background: var(--primary-color);
+    }
+
     .add-address-btn {
       background: var(--bg-card);
       border: 2px dashed var(--border-color);
-      border-radius: 8px;
+      border-radius: 12px;
       padding: var(--space-lg);
       text-align: center;
       color: var(--text-secondary);
-      font-size: 14px;
+      font-size: var(--font-size-base);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      transition: all 0.2s ease;
     }
 
-    /* 订单列表样式 */
-    .order-list-content { padding: var(--space-sm); }
+    .add-address-btn:hover {
+      border-color: var(--primary-color);
+      color: var(--primary-color);
+    }
+
+    /* Order List Styles */
+    .order-list-content {
+      padding: var(--space-md);
+    }
+
     .order-card {
       background: var(--bg-card);
-      border-radius: 8px;
-      margin-bottom: var(--space-sm);
+      border-radius: 12px;
+      margin-bottom: var(--space-md);
       overflow: hidden;
+      box-shadow: 0 2px 8px var(--shadow-color);
     }
+
     .order-card-header {
       display: flex;
       justify-content: space-between;
       padding: var(--space-md);
-      border-bottom: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border-light);
+      align-items: center;
     }
-    .order-num { font-size: 13px; color: var(--text-secondary); }
+
+    .order-num {
+      font-size: var(--font-size-sm);
+      color: var(--text-secondary);
+    }
+
     .order-status {
-      font-size: 13px;
+      font-size: var(--font-size-sm);
       color: var(--primary-color);
+      font-weight: var(--font-weight-medium);
     }
+
+    .order-status.pending {
+      color: var(--warning-color);
+    }
+
+    .order-status.shipping {
+      color: var(--info-color);
+    }
+
+    .order-status.completed {
+      color: var(--success-color);
+    }
+
     .order-card-goods {
       padding: var(--space-md);
       display: flex;
       gap: var(--space-md);
     }
+
     .order-goods-img {
-      width: 60px;
-      height: 60px;
-      background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
-      border-radius: 4px;
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, var(--primary-light), #C8E6C9);
+      border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
       color: var(--primary-color);
-      font-size: 10px;
+      font-size: var(--font-size-xs);
+      flex-shrink: 0;
     }
-    .order-goods-info { flex: 1; }
-    .order-goods-name { font-size: 14px; margin-bottom: var(--space-xs); }
-    .order-goods-spec { font-size: 12px; color: var(--text-secondary); }
+
+    .order-goods-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .order-goods-name {
+      font-size: var(--font-size-base);
+      margin-bottom: var(--space-xs);
+      font-weight: var(--font-weight-medium);
+    }
+
+    .order-goods-spec {
+      font-size: var(--font-size-sm);
+      color: var(--text-secondary);
+    }
+
     .order-card-footer {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: var(--space-md);
-      border-top: 1px solid var(--border-color);
+      border-top: 1px solid var(--border-light);
+      gap: var(--space-md);
     }
-    .order-total { font-size: 14px; }
-    .order-total-price { color: var(--error-color); font-weight: 600; }
+
+    .order-total {
+      flex: 1;
+      font-size: var(--font-size-sm);
+    }
+
+    .order-total-price {
+      color: var(--error-color);
+      font-weight: var(--font-weight-bold);
+      font-size: var(--font-size-lg);
+    }
+
     .order-action-btn {
       padding: var(--space-sm) var(--space-md);
       border-radius: 16px;
-      font-size: 13px;
+      font-size: var(--font-size-sm);
       border: 1px solid var(--border-color);
       background: transparent;
+      cursor: pointer;
+      transition: all 0.2s ease;
     }
 
-    /* 设置页样式 */
-    .settings-content {}
+    .order-action-btn.primary {
+      background: var(--primary-color);
+      color: var(--text-inverse);
+      border-color: var(--primary-color);
+    }
+
+    /* Settings Page Styles */
+    .settings-content {
+      padding-bottom: var(--space-md);
+    }
+
     .settings-group {
       background: var(--bg-card);
       margin-bottom: var(--space-md);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px var(--shadow-color);
     }
+
     .settings-item {
       display: flex;
       align-items: center;
-      padding: var(--space-md);
-      border-bottom: 1px solid var(--border-color);
+      padding: var(--space-md) var(--space-lg);
+      border-bottom: 1px solid var(--border-light);
+      cursor: pointer;
+      transition: background 0.2s ease;
     }
-    .settings-item:last-child { border-bottom: none; }
+
+    .settings-item:last-child {
+      border-bottom: none;
+    }
+
+    .settings-item:hover {
+      background: var(--bg-page);
+    }
+
     .settings-icon {
       width: 24px;
       height: 24px;
       background: var(--primary-light);
       border-radius: 6px;
       margin-right: var(--space-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
     }
-    .settings-label { flex: 1; font-size: 15px; }
+
+    .settings-label {
+      flex: 1;
+      font-size: var(--font-size-base);
+    }
+
     .settings-value {
-      font-size: 14px;
+      font-size: var(--font-size-sm);
       color: var(--text-secondary);
       margin-right: var(--space-sm);
     }
+
     .settings-arrow {
       width: 16px;
       height: 16px;
       background: var(--text-disabled);
       border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    .logout-section {
+      padding: var(--space-md);
+    }
+
+    .btn-logout {
+      width: 100%;
+      padding: var(--space-md);
+      background: var(--error-color);
+      color: var(--text-inverse);
+      border: none;
+      border-radius: 12px;
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-semibold);
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .btn-logout:hover {
+      background: #d32f2f;
     }
 
     footer {
       text-align: center;
       padding: var(--space-xl);
       color: var(--text-secondary);
-      font-size: 14px;
+      font-size: var(--font-size-sm);
+      margin-top: var(--space-xl);
     }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>SutWxApp 高保真原型</h1>
-    <p>展示核心业务页面的交互布局，供设计评审与前端实现参考。</p>
-    <a class="back-link" href="openspec/README.md">返回规范文档</a>
-  </header>
 
-  <section class="grid">
-    <!-- 1. 首页 -->
-    <div class="page-section">
-      <div class="page-header">1. 首页 (Home)</div>
-      <div class="phone-frame">
-        <div class="status-bar">9:41</div>
-        <div class="nav-bar">苏铁商城</div>
-        <div class="page-content">
-          <div class="home-content">
-            <div class="search-bar">
-              <div class="search-icon"></div>
-              <span class="search-text">搜索商品</span>
-            </div>
-            <div class="banner">轮播图区域<br>750×240rpx</div>
-            <div class="category-nav">
-              <div class="category-item">
-                <div class="category-icon"></div>
-                <div class="category-name">精选</div>
-              </div>
-              <div class="category-item">
-                <div class="category-icon"></div>
-                <div class="category-name">植物</div>
-              </div>
-              <div class="category-item">
-                <div class="category-icon"></div>
-                <div class="category-name">园艺</div>
-              </div>
-              <div class="category-item">
-                <div class="category-icon"></div>
-                <div class="category-name">工具</div>
-              </div>
-              <div class="category-item">
-                <div class="category-icon"></div>
-                <div class="category-name">花盆</div>
-              </div>
-            </div>
-            <div class="section-title">
-              热门商品
-              <span class="more-link">查看更多 &gt;</span>
-            </div>
-            <div class="product-grid">
-              <div class="product-card">
-                <div class="product-image">商品图片</div>
-                <div class="product-info">
-                  <div class="product-name">多肉植物组合盆栽</div>
-                  <div class="product-price">128.00</div>
-                </div>
-              </div>
-              <div class="product-card">
-                <div class="product-image">商品图片</div>
-                <div class="product-info">
-                  <div class="product-name">铁海棠盆栽</div>
-                  <div class="product-price">88.00</div>
-                </div>
-              </div>
-              <div class="product-card">
-                <div class="product-image">商品图片</div>
-                <div class="product-info">
-                  <div class="product-name">园艺工具套装</div>
-                  <div class="product-price">199.00</div>
-                </div>
-              </div>
-              <div class="product-card">
-                <div class="product-image">商品图片</div>
-                <div class="product-info">
-                  <div class="product-name">陶瓷花盆套装</div>
-                  <div class="product-price">68.00</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="tab-bar">
-          <div class="tab-item active">
-            <div class="tab-icon"></div>
-            <span>首页</span>
-          </div>
-          <div class="tab-item">
-            <div class="tab-icon"></div>
-            <span>分类</span>
-          </div>
-          <div class="tab-item">
-            <div class="tab-icon"></div>
-            <span>购物车</span>
-          </div>
-          <div class="tab-item">
-            <div class="tab-icon"></div>
-            <span>我的</span>
-          </div>
-        </div>
-      </div>
-    </div>
+    .page-section.hide {
+      display: none;
+    }
 
-    <!-- 2. 分类页 -->
-    <div class="page-section">
-      <div class="page-header">2. 分类页 (Category)</div>
-      <div class="phone-frame">
-        <div class="status-bar">9:41</div>
-        <div class="nav-bar">分类</div>
-        <div class="page-content no-tabbar">
-          <div class="category-content">
-            <div class="category-left">
-              <div class="category-tab active">全部</div>
-              <div class="category-tab">绿植</div>
-              <div class="category-tab">花卉</div>
-              <div class="category-tab">多肉</div>
-              <div class="category-tab">园艺工具</div>
-              <div class="category-tab">花盆花器</div>
-              <div class="category-tab">肥料药剂</div>
-            </div>
-            <div class="category-right">
-              <div class="sub-category-title">热门分类</div>
-              <div class="sub-category-grid">
-                <div class="sub-category-item">
-                  <div class="sub-category-icon"></div>
-                  <div class="sub-category-name">大型绿植</div>
-                </div>
-                <div class="sub-category-item">
-                  <div class="sub-category-icon"></div>
-                  <div class="sub-category-name">小型绿植</div>
-                </div>
-                <div class="sub-category-item">
-                  <div class="sub-category-icon"></div>
-                  <div class="sub-category-name">开花植物</div>
-                </div>
-                <div class="sub-category-item">
-                  <div class="sub-category-icon"></div>
-                  <div class="sub-category-name">观叶植物</div>
-                </div>
-                <div class="sub-category-item">
-                  <div class="sub-category-icon"></div>
-                  <div class="sub-category-name">水培植物</div>
-                </div>
-                <div class="sub-category-item">
-                  <div class="sub-category-icon"></div>
-                  <div class="sub-category-name">进口植物</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="tab-bar">
-          <div class="tab-item">
-            <div class="tab-icon"></div>
-            <span>首页</span>
-          </div>
-          <div class="tab-item active">
-            <div class="tab-icon"></div>
-            <span>分类</span>
-          </div>
-          <div class="tab-item">
-            <div class="tab-icon"></div>
-            <span>购物车</span>
-          </div>
-          <div class="tab-item">
-            <div class="tab-icon"></div>
-            <span>我的</span>
-          </div>
-        </div>
-      </div>
-    </div>
+    .ux-suggestions {
+      background: var(--bg-card);
+      border-radius: 16px;
+      padding: var(--space-xl);
+      margin-top: var(--space-xl);
+      box-shadow: 0 4px 20px var(--shadow-color);
+    }
 
-    <!-- 3. 商品详情页 -->
-    <div class="page-section">
-      <div class="page-header">3. 商品详情 (Product Detail)</div>
-      <div class="phone-frame">
-        <div class="status-bar">9:41</div>
-        <div class="nav-bar">商品详情</div>
-        <div class="page-content no-tabbar">
-          <div class="detail-content">
-            <div class="detail-swiper">商品图片轮播<br>750×600rpx</div>
-            <div class="detail-info">
-              <div class="detail-price">128.00</div>
-              <div class="detail-title">多肉植物组合盆栽 肉肉植物室内防辐射绿植花卉桌面装饰</div>
-              <div class="detail-desc">精选优质多肉品种，易于养护，适合室内摆放</div>
-            </div>
-            <div class="detail-spec">
-              <div class="spec-row">
-                <span class="spec-label">选择规格</span>
-                <span class="spec-value">请选择颜色/数量 &gt;</span>
-              </div>
-              <div class="spec-row">
-                <span class="spec-label">配送至</span>
-                <span class="spec-value">北京市朝阳区</span>
-              </div>
-              <div class="spec-row">
-                <span class="spec-label">运费</span>
-                <span class="spec-value">满99免运费</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="detail-action">
-          <button class="btn btn-outline">客服</button>
-          <button class="btn btn-outline">收藏</button>
-          <button class="btn btn-primary">加入购物车</button>
-        </div>
-      </div>
-    </div>
+    .ux-suggestions h2 {
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-semibold);
+      margin-bottom: var(--space-lg);
+      color: var(--primary-color);
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
 
-    <!-- 4. 购物车 -->
-    <div class="page-section">
-      <div class="page-header">4. 购物车 (Cart)</div>
-      <div class="phone-frame">
-        <div class="status-bar">9:41</div>
-        <div class="nav-bar">购物车</div>
-        <div class="page-content no-tabbar">
-          <div class="cart-content">
-            <div class="cart-item">
-              <div class="cart-check selected"></div>
-              <div class="cart-image">商品图</div>
-              <div class="cart-info">
-                <div class="cart-name">多肉植物组合盆栽</div>
-                <div class="cart-spec">颜色：绿色；数量：1</div>
-                <div class="cart-bottom">
-                  <div class="cart-price">128.00</div>
-                  <div class="quantity-control">
-                    <div class="qty-btn">-</div>
-                    <div class="qty-num">1</div>
-                    <div class="qty-btn">+</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="cart-item">
-              <div class="cart-check"></div>
-              <div class="cart-image">商品图</div>
-              <div class="cart-info">
-                <div class="cart-name">园艺工具套装</div>
-                <div class="cart-spec">规格：标准版</div>
-                <div class="cart-bottom">
-                  <div class="cart-price">199.00</div>
-                  <div class="quantity-control">
-                    <div class="qty-btn">-</div>
-                    <div class="qty-num">1</div>
-                    <div class="qty-btn">+</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="cart-footer">
-          <div class="cart-check selected"></div>
-          <div class="cart-total">
-            合计：<span class="cart-total-price">¥128.00</span>
-          </div>
-          <button class="btn-settle">去结算(1)</button>
-        </div>
-      </div>
-    </div>
+    .suggestion-item {
+      padding: var(--space-md);
+      background: var(--bg-page);
+      border-radius: 12px;
+      margin-bottom: var(--space-md);
+      border-left: 4px solid var(--primary-color);
+    }
 
-    <!-- 5. 订单确认页 -->
-    <div class="page-section">
-      <div class="page-header">5. 订单确认 (Order Confirm)</div>
-      <div class="phone-frame">
-        <div class="status-bar">9:41</div>
-        <div class="nav-bar">确认订单</div>
-        <div class="page-content no-tabbar">
-          <div class="order-confirm-content">
-            <div class="addr-section">
-              <div class="addr-icon">📍</div>
-              <div class="addr-info">
-                <div class="addr-name">张三 138****8888</div>
-                <div class="addr-detail">北京市朝阳区建国路88号SOHO现代城A座1201</div>
-              </div>
-              <span style="color: var(--text-secondary);">&gt;</span>
-            </div>
-            <div class="order-goods">
-              <div class="goods-item">
-                <div class="goods-image">商品图</div>
-                <div class="goods-info">
-                  <div class="goods-name">多肉植物组合盆栽</div>
-                  <div class="goods-price">
-                    <span>¥128.00</span>
-                    <span>x1</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="order-summary">
-              <div class="summary-row">
-                <span>商品金额</span>
-                <span>¥128.00</span>
-              </div>
-              <div class="summary-row">
-                <span>运费</span>
-                <span>¥0.00</span>
-              </div>
-              <div class="summary-row">
-                <span>优惠券</span>
-                <span style="color: var(--primary-color);">-¥10.00</span>
-              </div>
-              <div class="summary-row total">
-                <span>合计</span>
-                <span class="summary-value">¥118.00</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="order-confirm-footer">
-          <div class="confirm-total">
-            实付款：<span class="confirm-price">¥118.00</span>
-          </div>
-          <button class="btn-submit">提交订单</button>
-        </div>
-      </div>
-    </div>
+    .suggestion-item:last-child {
+      margin-bottom: 0;
+    }
 
-    <!-- 6. 用户中心 -->
-    <div class="page-section">
-      <div class="page-header">6. 用户中心 (User Center)</div>
-      <div class="phone-frame">
-        <div class="status-bar">9:41</div>
-        <div class="nav-bar">我的</div>
-        <div class="page-content no-tabbar">
-          <div class="user-content">
-            <div class="user-header">
-              <div class="user-info">
-                <div class="user-avatar"></div>
-                <div>
-                  <div class="user-name">苏铁用户</div>
-                  <div class="user-level">VIP会员</div>
-                </div>
-              </div>
-              <div class="user-stats">
-                <div class="stat-item">
-                  <div class="stat-num">128</div>
-                  <div class="stat-label">积分</div>
-                </div>
-                <div class="stat-item">
-                  <div class="stat-num">5</div>
-                  <div class="stat-label">优惠券</div>
-                </div>
-                <div class="stat-item">
-                  <div class="stat-num">12</div>
-                  <div class="stat-label">收藏</div>
-                </div>
-              </div>
-            </div>
-            <div class="user-order-section">
-              <div class="order-title">
-                我的订单
-                <span style="color: var(--text-secondary); font-size: 13px;">查看全部 &gt;</span>
-              </div>
-              <div class="order-tabs">
-                <div class="order-tab">
-                  <div class="order-tab-icon"></div>
-                  <div class="order-tab-text">待付款</div>
-                </div>
-                <div class="order-tab">
-                  <div class="order-tab-icon"></div>
-                  <div class="order-tab-text">待发货</div>
-                </div>
-                <div class="order-tab">
-                  <div class="order-tab-icon"></div>
-                  <div class="order-tab-text">待收货</div>
-                </div>
-                <div class="order-tab">
-                  <div class="order-tab-icon"></div>
-                  <div class="order-tab-text">待评价</div>
-                </div>
-              </div>
-            </div>
-            <div class="user-menu">
-              <div class="menu-item">
-                <div class="menu-icon"></div>
-                <span class="menu-text">收货地址管理</span>
-                <div class="menu-arrow"></div>
-              </div>
-              <div class="menu-item">
-                <div class="menu-icon"></div>
-                <span class="menu-text">优惠券</span>
-                <div class="menu-arrow"></div>
-              </div>
-              <div class="menu-item">
-                <div class="menu-icon"></div>
-                <span class="menu-text">积分中心</span>
-                <div class="menu-arrow"></div>
-              </div>
-              <div class="menu-item">
-                <div class="menu-icon"></div>
-                <span class="menu-text">帮助与客服</span>
-                <div class="menu-arrow"></div>
-              </div>
-              <div class="menu-item">
-                <div class="menu-icon"></div>
-                <span class="menu-text">设置</span>
-                <div class="menu-arrow"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    .suggestion-title {
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-semibold);
+      margin-bottom: var(--space-sm);
+      color: var(--text-primary);
+    }
 
-    <!-- 7. 地址管理 -->
-    <div class="page-section">
-      <div class="page-header">7. 地址管理 (Address Management)</div>
-      <div class="phone-frame">
-        <div class="status-bar">9:41</div>
-        <div class="nav-bar">收货地址</div>
-        <div class="page-content no-tabbar">
-          <div class="address-list">
-            <div class="address-card">
-              <div class="addr-card-header">
-                <span class="addr-card-name">张三</span>
-                <span class="addr-card-phone">138****8888</span>
-              </div>
-              <div class="addr-card-detail">北京市朝阳区建国路88号SOHO现代城A座1201</div>
-              <div class="addr-card-action">
-                <div class="addr-action-btn">
-                  <div class="addr-action-icon"></div>
-                  <span>编辑</span>
-                </div>
-                <div class="addr-action-btn">
-                  <div class="addr-action-icon"></div>
-                  <span>删除</span>
-                </div>
-                <div style="flex:1"></div>
-                <div class="addr-action-btn" style="color: var(--primary-color);">
-                  <div class="addr-action-icon" style="background: var(--primary-color);"></div>
-                  <span>默认</span>
-                </div>
-              </div>
-            </div>
-            <div class="address-card">
-              <div class="addr-card-header">
-                <span class="addr-card-name">李四</span>
-                <span class="addr-card-phone">139****6666</span>
-              </div>
-              <div class="addr-card-detail">上海市浦东新区世纪大道100号上海环球金融中心</div>
-              <div class="addr-card-action">
-                <div class="addr-action-btn">
-                  <div class="addr-action-icon"></div>
-                  <span>编辑</span>
-                </div>
-                <div class="addr-action-btn">
-                  <div class="addr-action-icon"></div>
-                  <span>删除</span>
-                </div>
-              </div>
-            </div>
-            <div class="add-address-btn">+ 添加新地址</div>
-          </div>
-        </div>
-      </div>
-    </div>
+    .suggestion-content {
+      font-size: var(--font-size-sm);
+      color: var(--text-secondary);
+      line-height: 1.8;
+    }
 
-    <!-- 8. 订单列表 -->
-    <div class="page-section">
-      <div class="page-header">8. 订单列表 (Order List)</div>
-      <div class="phone-frame">
-        <div class="status-bar">9:41</div>
-        <div class="nav-bar">我的订单</div>
-        <div class="page-content no-tabbar">
-          <div class="order-list-content">
-            <div class="order-card">
-              <div class="order-card-header">
-                <span class="order-num">订单号：202601050001</span>
-                <span class="order-status">待付款</span>
-              </div>
-              <div class="order-card-goods">
-                <div class="order-goods-img">商品图</div>
-                <div class="order-goods-info">
-                  <div class="order-goods-name">多肉植物组合盆栽</div>
-                  <div class="order-goods-spec">颜色：绿色；数量：1</div>
-                </div>
-              </div>
-              <div class="order-card-footer">
-                <div class="order-total">
-                  合计：<span class="order-total-price">¥128.00</span>
-                </div>
-                <button class="order-action-btn">取消订单</button>
-                <button class="order-action-btn" style="background: var(--primary-color); color: #fff; border-color: var(--primary-color);">去支付</button>
-              </div>
-            </div>
-            <div class="order-card">
-              <div class="order-card-header">
-                <span class="order-num">订单号：202601040002</span>
-                <span class="order-status" style="color: var(--info-color);">待发货</span>
-              </div>
-              <div class="order-card-goods">
-                <div class="order-goods-img">商品图</div>
-                <div class="order-goods-info">
-                  <div class="order-goods-name">园艺工具套装</div>
-                  <div class="order-goods-spec">规格：标准版；数量：1</div>
-                </div>
-              </div>
-              <div class="order-card-footer">
-                <div class="order-total">
-                  合计：<span class="order-total-price">¥199.00</span>
-                </div>
-                <button class="order-action-btn">查看详情</button>
-                <button class="order-action-btn">催发货</button>
-              </div>
-            </div>
-            <div class="order-card">
-              <div class="order-card-header">
-                <span class="order-num">订单号：202601030003</span>
-                <span class="order-status" style="color: var(--success-color);">已完成</span>
-              </div>
-              <div class="order-card-goods">
-                <div class="order-goods-img">商品图</div>
-                <div class="order-goods-info">
-                  <div class="order-goods-name">陶瓷花盆套装</div>
-                  <div class="order-goods-spec">颜色：米白；数量：2</div>
-                </div>
-              </div>
-              <div class="order-card-footer">
-                <div class="order-total">
-                  合计：<span class="order-total-price">¥136.00</span>
-                </div>
-                <button class="order-action-btn">查看详情</button>
-                <button class="order-action-btn">再次购买</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    .suggestion-tag {
+      display: inline-block;
+      padding: 2px 8px;
+      background: var(--primary-light);
+      color: var(--primary-color);
+      border-radius: 4px;
+      font-size: var(--font-size-xs);
+      margin-right: var(--space-sm);
+      margin-top: var(--space-sm);
+    }
 
-    <!-- 9. 设置页 -->
-    <div class="page-section">
-      <div class="page-header">9. 设置页 (Settings)</div>
-      <div class="phone-frame">
-        <div class="status-bar">9:41</div>
-        <div class="nav-bar">设置</div>
-        <div class="page-content no-tabbar">
-          <div class="settings-content">
-            <div class="settings-group">
-              <div class="settings-item">
-                <div class="settings-icon"></div>
-                <span class="settings-label">账号与安全</span>
-                <span class="settings-value">已绑定</span>
-                <div class="settings-arrow"></div>
-              </div>
-              <div class="settings-item">
-                <div class="settings-icon"></div>
-                <span class="settings-label">微信绑定</span>
-                <span class="settings-value">已绑定</span>
-                <div class="settings-arrow"></div>
-              </div>
-            </div>
-            <div class="settings-group">
-              <div class="settings-item">
-                <div class="settings-icon"></div>
-                <span class="settings-label">新消息通知</span>
-                <div class="settings-arrow"></div>
-              </div>
-              <div class="settings-item">
-                <div class="settings-icon"></div>
-                <span class="settings-label">隐私设置</span>
-                <div class="settings-arrow"></div>
-              </div>
-              <div class="settings-item">
-                <div class="settings-icon"></div>
-                <span class="settings-label">通用设置</span>
-                <div class="settings-arrow"></div>
-              </div>
-            </div>
-            <div class="settings-group">
-              <div class="settings-item">
-                <div class="settings-icon"></div>
-                <span class="settings-label">关于我们</span>
-                <div class="settings-arrow"></div>
-              </div>
-              <div class="settings-item">
-                <div class="settings-icon"></div>
-                <span class="settings-label">帮助与反馈</span>
-                <div class="settings-arrow"></div>
-              </div>
-            </div>
-            <div style="padding: var(--space-md); text-align: center;">
-              <button style="padding: var(--space-md) var(--space-xl); background: var(--error-color); color: #fff; border: none; border-radius: 8px; font-size: 16px;">退出登录</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+    @media (max-width: 768px) {
+      .container {
+        padding: var(--space-md);
+      }
 
-  <footer>
-    <p>SutWxApp 高保真原型 v1.0.0 | 基于 openspec 设计规范</p>
-    <p style="margin-top: var(--space-sm); color: var(--text-disabled);">设计评审与前端实现参考</p>
-  </footer>
-</body>
-</html>
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      header {
+        padding: var(--space-lg) var(--space-md);
+      }
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div class="container"&gt;
+    &lt;header&gt;
+      &lt;h1&gt;🌸 SutWxApp 高保真原型&lt;/h1&gt;
+      &lt;p&gt;基于 UI 设计规范 v2.0，展示完整电商流程&lt;/p&gt;
+    &lt;/header&gt;
+
+    &lt;div class="nav-tabs"&gt;
+      &lt;div class="nav-tab active" data-filter="all"&gt;全部页面&lt;/div&gt;
+      &lt;div class="nav-tab" data-filter="main"&gt;核心流程&lt;/div&gt;
+      &lt;div class="nav-tab" data-filter="user"&gt;用户中心&lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class="grid"&gt;
+      &lt;!-- 1. 首页 --&gt;
+      &lt;div class="page-section" data-category="main"&gt;
+        &lt;div class="page-header"&gt;首页 (Home)&lt;/div&gt;
+        &lt;div class="phone-wrapper"&gt;
+          &lt;div class="phone-frame"&gt;
+            &lt;div class="phone-notch"&gt;&lt;/div&gt;
+            &lt;div class="status-bar"&gt;
+              &lt;span&gt;9:41&lt;/span&gt;
+              &lt;span&gt;📶 🔋&lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div class="nav-bar"&gt;苏铁商城&lt;/div&gt;
+            &lt;div class="page-content"&gt;
+              &lt;div class="home-content"&gt;
+                &lt;div class="search-bar"&gt;
+                  &lt;div class="search-icon"&gt;&lt;/div&gt;
+                  &lt;span class="search-text"&gt;搜索商品、品牌、店铺&lt;/span&gt;
+                &lt;/div&gt;
+
+                &lt;div class="banner"&gt;
+                  春季新品 · 限时特惠
+                  &lt;div class="banner-dots"&gt;
+                    &lt;div class="banner-dot active"&gt;&lt;/div&gt;
+                    &lt;div class="banner-dot"&gt;&lt;/div&gt;
+                    &lt;div class="banner-dot"&gt;&lt;/div&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+
+                &lt;div class="category-nav"&gt;
+                  &lt;div class="category-item"&gt;
+                    &lt;div class="category-icon"&gt;🌿&lt;/div&gt;
+                    &lt;div class="category-name"&gt;精选&lt;/div&gt;
+                  &lt;/div&gt;
+                  &lt;div class="category-item"&gt;
+                    &lt;div class="category-icon"&gt;🪴&lt;/div&gt;
+                    &lt;div class="category-name"&gt;绿植&lt;/div&gt;
+                  &lt;/div&gt;
+                  &lt;div class="category-item"&gt;
+                    &lt;div class="category-icon"&gt;🌺&lt;/div&gt;
+                    &lt;div class="category-name"&gt;花卉&lt;/div&gt;
+                  &lt;/div&gt;
+                  &lt;div class="category-item"&gt;
+                    &lt;div class="category-icon"&gt;🪓&lt;/div&gt;
+                    &lt;div class="category-name"&gt;工具&lt;/div&gt;
+                  &lt;/div&gt;
+                  &lt;div class="category-item"&gt;
+                    &lt;div class="category-icon"&gt;🏺&lt;/div&gt;
+                    &lt;div class="category-name"&gt;花盆&lt;/div&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+
+                &lt;div class="section-title"&gt;
+                  &lt;span&gt;热门推荐&lt;/span&gt;
+                  &lt;span class="more-link"&gt;查看更多 ›&lt;/span&gt;
+                &lt;/div&gt;
+
+                &lt;div class="product-grid"&gt;
+                  &lt;div class="product-card"&gt;
+                    &lt;div class="product-image"&gt;多肉组合&lt;/div&gt;
+                    &lt;div class="product-info"&gt;
+                      &lt;div class="product-name"&gt;多肉植物组合盆栽 防辐射&lt;/div&gt;
+                      &lt;div class="product-price"&gt;128.00&lt;/div&gt;
+                    &lt;/div&gt;
+                  &lt;/div&gt;
+                  &lt;div class="product-card"&gt;
+                    &lt;div class="product-image"&gt;铁海棠&lt;/div&gt;
+                    &lt;div class="product-info"&gt;
+                      &lt;div class="product-name"&gt;铁海棠盆栽 四季开花&lt;/div&gt;
+                      &lt;div class="product-price"&gt;88.00&lt;/div&gt;
+                    &lt;/div&gt;
+                  &lt;/div&gt;
+                  &lt;div class="product-card"&gt;
+                    &lt;div class="product-image"&gt;园艺工具&lt;/div&gt;
+                    &lt;div class="product-info"&gt;
+                      &lt;div class="product-name"&gt;园艺工具套装 12件套&lt;/div&gt;
+                      &lt;div class="product-price"&gt;199.00&lt;/div&gt;
+                    &lt;/div&gt;
+                  &lt;/div&gt;
+                  &lt;div class="product-card"&gt;
+                    &lt;div class="product-image"&gt;陶瓷花盆&lt;/div&gt;
+                    &lt;div class="product-info"&gt;
+                      &lt;div class="product-name"&gt;简约陶瓷花盆 透气&lt;/div&gt;
+                      &lt;div class="product-price"&gt;68.00&lt;/div&gt;
+                    &lt;/div&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class="tab-bar"&gt;
+              &lt;div class="tab-item active"&gt;
+                &lt;div class="tab-icon"&gt;🏠&lt;/div&gt;
+                &lt;span&gt;首页&lt;/span&gt;
+              &lt;/div&gt;
+              &lt;div class="tab-item"&gt;
+                &lt;div class="tab-icon"&gt;📂&lt;/div&gt;
+                &lt;span&gt;分类&lt;/span&gt;
+              &lt;/div&gt;
+              &lt;div class="tab-item"&gt;
+                &lt;div class="tab-icon"&gt;🛒&lt;/div&gt;
+                &lt;span&gt;购物车&lt;/span&gt;
+              &lt;/div&gt;
+              &lt;div class="tab-item"&gt;
+                &lt;div class="tab-icon"&gt;👤&lt;/div&gt;
+                &lt;span&gt;我的&lt;/span&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;!-- 2. 分类页 --&gt;
+      &lt;div class="page-section" data-category="main"&gt;
+        &lt;div class="page-header"&gt;分类 (Category)&lt;/div&gt;
+        &lt;div class="phone-wrapper"&gt;
+          &lt;div class="phone-frame"&gt;
+            &lt;div class="phone-notch"&gt;&lt;/div&gt;
+            &lt;div class="status-bar"&gt;
+              &lt;span&gt;9:41&lt;/span&gt;
+              &lt;span&gt;📶 🔋&lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div class="nav-bar"&gt;商品分类&lt;/div&gt;
+            &lt;div class="page-content"&gt;
+              &lt;div class="category-page-content"&gt;
+                &lt;div class="category-left"&gt;
+                  &lt;div class="category-tab active"&gt;全部&lt;/div&gt;
+                  &lt;div class="category-tab"&gt;绿植&lt;/div&gt;
+                  &lt;div class="category-tab"&gt;花卉&lt;/div&gt;
+                  &lt;div class="category-tab"&gt;多肉&lt;/div&gt;
+                  &lt;div class="category-tab"&gt;园艺工具&lt;/div&gt;
+                  &lt;div class="category-tab"&gt;花盆花器&lt;/div&gt;
+                  &lt;div class="category-tab"&gt;肥料药剂&lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="category-right"&gt;
+                  &lt;div class="sub-category-title"&gt;热门分类&lt;/div&gt;
+                  &lt;div class="sub-category-grid"&gt;
+                    &lt;div class="sub-category-item"&gt;
+                      &lt;div class="sub-category-icon"&gt;🌿&lt;/div&gt;
+                      &lt;div class="sub-category-name"&gt;大型绿植&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;div class="sub-category-item"&gt;
+                      &lt;div class="sub-category-icon"&gt;🪴&lt;/div&gt;
+                      &lt;div class="sub-category-name"&gt;小型绿植&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;div class="sub-category-item"&gt;
+                      &lt;div class="sub-category-icon"&gt;🌺&lt;/div&gt;
+                      &lt;div class="sub-category-name"&gt;开花植物&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;div class="sub-category-item"&gt;
+                      &lt;div class="sub-category-icon"&gt;🍀&lt;/div&gt;
+                      &lt;div class="sub-category-name"&gt;观叶植物&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;div class="sub-category-item"&gt;
+                      &lt;div class="sub-category-icon"&gt;💧&lt;/div&gt;
+                      &lt;div class="sub-category-name"&gt;水培植物&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;div class="sub-category-item"&gt;
+                      &lt;div class="sub-category-icon"&gt;✨&lt;/div&gt;
+                      &lt;div class="sub-category-name"&gt;进口植物&lt;/div&gt;
+                    &lt;/div&gt;
+                  &lt;/div&gt;
+
+                  &lt;div class="sub-category-title" style="margin-top: 32px;"&gt;新品上架&lt;/div&gt;
+                  &lt;div class="product-grid"&gt;
+                    &lt;div class="product-card"&gt;
+                      &lt;div class="product-image"&gt;新品1&lt;/div&gt;
+                      &lt;div class="product-info"&gt;
+                        &lt;div class="product-name"&gt;新品绿萝盆栽&lt;/div&gt;
+                        &lt;div class="product-price"&gt;39.90&lt;/div&gt;
+                      &lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;div class="product-card"&gt;
+                      &lt;div class="product-image"&gt;新品2&lt;/div&gt;
+                      &lt;div class="product-info"&gt;
+                        &lt;div class="product-name"&gt;发财树盆栽&lt;/div&gt;
+                        &lt;div class="product-price"&gt;59.90&lt;/div&gt;
+                      &lt;/div&gt;
+                    &lt;/div&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class="tab-bar"&gt;
+              &lt;div class="tab-item"&gt;
+                &lt;div class="tab-icon"&gt;🏠&lt;/div&gt;
+                &lt;span&gt;首页&lt;/span&gt;
+              &lt;/div&gt;
+              &lt;div class="tab-item active"&gt;
+                &lt;div class="tab-icon"&gt;📂&lt;/div&gt;
+                &lt;span&gt;分类&lt;/span&gt;
+              &lt;/div&gt;
+              &lt;div class="tab-item"&gt;
+                &lt;div class="tab-icon"&gt;🛒&lt;/div&gt;
+                &lt;span&gt;购物车&lt;/span&gt;
+              &lt;/div&gt;
+              &lt;div class="tab-item"&gt;
+                &lt;div class="tab-icon"&gt;👤&lt;/div&gt;
+                &lt;span&gt;我的&lt;/span&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;!-- 3. 商品详情 --&gt;
+      &lt;div class="page-section" data-category="main"&gt;
+        &lt;div class="page-header"&gt;商品详情 (Product Detail)&lt;/div&gt;
+        &lt;div class="phone-wrapper"&gt;
+          &lt;div class="phone-frame"&gt;
+            &lt;div class="phone-notch"&gt;&lt;/div&gt;
+            &lt;div class="status-bar"&gt;
+              &lt;span&gt;9:41&lt;/span&gt;
+              &lt;span&gt;📶 🔋&lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div class="nav-bar"&gt;
+              &lt;div class="nav-bar-back"&gt;←&lt;/div&gt;
+              商品详情
+            &lt;/div&gt;
+            &lt;div class="page-content no-tabbar"&gt;
+              &lt;div class="detail-content"&gt;
+                &lt;div class="detail-swiper"&gt;商品图片轮播 750×750&lt;/div&gt;
+                &lt;div class="detail-info"&gt;
+                  &lt;div class="detail-price"&gt;128.00&lt;/div&gt;
+                  &lt;div class="detail-title"&gt;多肉植物组合盆栽 肉肉植物室内防辐射绿植花卉桌面装饰&lt;/div&gt;
+                  &lt;div class="detail-desc"&gt;精选优质多肉品种，易于养护，适合室内摆放，净化空气，美化环境&lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="detail-spec"&gt;
+                  &lt;div class="spec-row"&gt;
+                    &lt;span class="spec-label"&gt;选择规格&lt;/span&gt;
+                    &lt;span class="spec-value"&gt;请选择颜色/数量 ›&lt;/span&gt;
+                  &lt;/div&gt;
+                  &lt;div class="spec-row"&gt;
+                    &lt;span class="spec-label"&gt;配送至&lt;/span&gt;
+                    &lt;span class="spec-value"&gt;北京市朝阳区&lt;/span&gt;
+                  &lt;/div&gt;
+                  &lt;div class="spec-row"&gt;
+                    &lt;span class="spec-label"&gt;运费&lt;/span&gt;
+                    &lt;span class="spec-value"&gt;满99免运费&lt;/span&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="detail-spec" style="margin-top: 12px;"&gt;
+                  &lt;div class="spec-row"&gt;
+                    &lt;span class="spec-label"&gt;商品评价 (256)&lt;/span&gt;
+                    &lt;span class="spec-value"&gt;查看全部 ›&lt;/span&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div style="padding: 16px; background: white; margin-top: 12px;"&gt;
+                  &lt;div style="font-size: 16px; font-weight: 600; margin-bottom: 12px;"&gt;商品详情&lt;/div&gt;
+                  &lt;div style="background: linear-gradient(135deg, #E8F5E9, #C8E6C9); height: 200px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #2E7D32;"&gt;商品详情图&lt;/div&gt;
+                &lt;/div&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class="detail-action"&gt;
+              &lt;div class="detail-action-btns"&gt;
+                &lt;button class="btn btn-outline"&gt;💬&lt;/button&gt;
+                &lt;button class="btn btn-outline"&gt;⭐&lt;/button&gt;
+              &lt;/div&gt;
+              &lt;button class="btn btn-primary"&gt;加入购物车&lt;/button&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;!-- 4. 购物车 --&gt;
+      &lt;div class="page-section" data-category="main"&gt;
+        &lt;div class="page-header"&gt;购物车 (Cart)&lt;/div&gt;
+        &lt;div class="phone-wrapper"&gt;
+          &lt;div class="phone-frame"&gt;
+            &lt;div class="phone-notch"&gt;&lt;/div&gt;
+            &lt;div class="status-bar"&gt;
+              &lt;span&gt;9:41&lt;/span&gt;
+              &lt;span&gt;📶 🔋&lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div class="nav-bar"&gt;购物车 (2)&lt;/div&gt;
+            &lt;div class="page-content no-tabbar"&gt;
+              &lt;div class="cart-content"&gt;
+                &lt;div class="cart-item"&gt;
+                  &lt;div class="cart-check selected"&gt;✓&lt;/div&gt;
+                  &lt;div class="cart-image"&gt;多肉&lt;/div&gt;
+                  &lt;div class="cart-info"&gt;
+                    &lt;div class="cart-name"&gt;多肉植物组合盆栽&lt;/div&gt;
+                    &lt;div class="cart-spec"&gt;颜色：绿色；规格：中号&lt;/div&gt;
+                    &lt;div class="cart-bottom"&gt;
+                      &lt;div class="cart-price"&gt;128.00&lt;/div&gt;
+                      &lt;div class="quantity-control"&gt;
+                        &lt;div class="qty-btn"&gt;-&lt;/div&gt;
+                        &lt;div class="qty-num"&gt;1&lt;/div&gt;
+                        &lt;div class="qty-btn"&gt;+&lt;/div&gt;
+                      &lt;/div&gt;
+                    &lt;/div&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="cart-item"&gt;
+                  &lt;div class="cart-check"&gt;&lt;/div&gt;
+                  &lt;div class="cart-image"&gt;工具&lt;/div&gt;
+                  &lt;div class="cart-info"&gt;
+                    &lt;div class="cart-name"&gt;园艺工具套装&lt;/div&gt;
+                    &lt;div class="cart-spec"&gt;规格：标准版&lt;/div&gt;
+                    &lt;div class="cart-bottom"&gt;
+                      &lt;div class="cart-price"&gt;199.00&lt;/div&gt;
+                      &lt;div class="quantity-control"&gt;
+                        &lt;div class="qty-btn"&gt;-&lt;/div&gt;
+                        &lt;div class="qty-num"&gt;1&lt;/div&gt;
+                        &lt;div class="qty-btn"&gt;+&lt;/div&gt;
+                      &lt;/div&gt;
+                    &lt;/div&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class="cart-footer"&gt;
+              &lt;div class="cart-check selected"&gt;✓&lt;/div&gt;
+              &lt;div class="cart-total"&gt;
+                合计：&lt;span class="cart-total-price"&gt;¥128.00&lt;/span&gt;
+              &lt;/div&gt;
+              &lt;button class="btn-settle"&gt;去结算(1)&lt;/button&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;!-- 5. 订单确认 --&gt;
+      &lt;div class="page-section" data-category="main"&gt;
+        &lt;div class="page-header"&gt;订单确认 (Order Confirm)&lt;/div&gt;
+        &lt;div class="phone-wrapper"&gt;
+          &lt;div class="phone-frame"&gt;
+            &lt;div class="phone-notch"&gt;&lt;/div&gt;
+            &lt;div class="status-bar"&gt;
+              &lt;span&gt;9:41&lt;/span&gt;
+              &lt;span&gt;📶 🔋&lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div class="nav-bar"&gt;
+              &lt;div class="nav-bar-back"&gt;←&lt;/div&gt;
+              确认订单
+            &lt;/div&gt;
+            &lt;div class="page-content no-tabbar"&gt;
+              &lt;div class="order-confirm-content"&gt;
+                &lt;div class="addr-section"&gt;
+                  &lt;div class="addr-icon"&gt;📍&lt;/div&gt;
+                  &lt;div class="addr-info"&gt;
+                    &lt;div class="addr-name"&gt;张三 138****8888&lt;/div&gt;
+                    &lt;div class="addr-detail"&gt;北京市朝阳区建国路88号SOHO现代城A座1201&lt;/div&gt;
+                  &lt;/div&gt;
+                  &lt;span style="color: var(--text-secondary);"&gt;›&lt;/span&gt;
+                &lt;/div&gt;
+                &lt;div class="order-goods"&gt;
+                  &lt;div class="goods-item"&gt;
+                    &lt;div class="goods-image"&gt;多肉&lt;/div&gt;
+                    &lt;div class="goods-info"&gt;
+                      &lt;div class="goods-name"&gt;多肉植物组合盆栽&lt;/div&gt;
+                      &lt;div class="goods-price"&gt;
+                        &lt;span&gt;¥128.00&lt;/span&gt;
+                        &lt;span&gt;x1&lt;/span&gt;
+                      &lt;/div&gt;
+                    &lt;/div&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="order-summary"&gt;
+                  &lt;div class="summary-row"&gt;
+                    &lt;span&gt;商品金额&lt;/span&gt;
+                    &lt;span&gt;¥128.00&lt;/span&gt;
+                  &lt;/div&gt;
+                  &lt;div class="summary-row"&gt;
+                    &lt;span&gt;运费&lt;/span&gt;
+                    &lt;span&gt;¥0.00&lt;/span&gt;
+                  &lt;/div&gt;
+                  &lt;div class="summary-row"&gt;
+                    &lt;span&gt;优惠券&lt;/span&gt;
+                    &lt;span style="color: var(--primary-color);"&gt;-¥10.00&lt;/span&gt;
+                  &lt;/div&gt;
+                  &lt;div class="summary-row total"&gt;
+                    &lt;span&gt;合计&lt;/span&gt;
+                    &lt;span class="summary-value"&gt;¥118.00&lt;/span&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class="order-confirm-footer"&gt;
+              &lt;div class="confirm-total"&gt;
+                实付款：&lt;span class="confirm-price"&gt;¥118.00&lt;/span&gt;
+              &lt;/div&gt;
+              &lt;button class="btn-submit"&gt;提交订单&lt;/button&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;!-- 6. 用户中心 --&gt;
+      &lt;div class="page-section" data-category="user"&gt;
+        &lt;div class="page-header"&gt;用户中心 (User Center)&lt;/div&gt;
+        &lt;div class="phone-wrapper"&gt;
+          &lt;div class="phone-frame"&gt;
+            &lt;div class="phone-notch"&gt;&lt;/div&gt;
+            &lt;div class="status-bar"&gt;
+              &lt;span&gt;9:41&lt;/span&gt;
+              &lt;span&gt;📶 🔋&lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div class="nav-bar"&gt;我的&lt;/div&gt;
+            &lt;div class="page-content no-tabbar"&gt;
+              &lt;div class="user-content"&gt;
+                &lt;div class="user-header"&gt;
+                  &lt;div class="user-info"&gt;
+                    &lt;div class="user-avatar"&gt;😊&lt;/div&gt;
+                    &lt;div&gt;
+                      &lt;div class="user-name"&gt;苏铁用户&lt;/div&gt;
+                      &lt;div class="user-level"&gt;VIP会员&lt;/div&gt;
+                    &lt;/div&gt;
+                  &lt;/div&gt;
+                  &lt;div class="user-stats"&gt;
+                    &lt;div class="stat-item"&gt;
+                      &lt;div class="stat-num"&gt;128&lt;/div&gt;
+                      &lt;div class="stat-label"&gt;积分&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;div class="stat-item"&gt;
+                      &lt;div class="stat-num"&gt;5&lt;/div&gt;
+                      &lt;div class="stat-label"&gt;优惠券&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;div class="stat-item"&gt;
+                      &lt;div class="stat-num"&gt;12&lt;/div&gt;
+                      &lt;div class="stat-label"&gt;收藏&lt;/div&gt;
+                    &lt;/div&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="user-order-section"&gt;
+                  &lt;div class="section-title"&gt;
+                    &lt;span&gt;我的订单&lt;/span&gt;
+                    &lt;span class="more-link"&gt;查看全部 ›&lt;/span&gt;
+                  &lt;/div&gt;
+                  &lt;div class="order-tabs"&gt;
+                    &lt;div class="order-tab"&gt;
+                      &lt;div class="order-tab-icon"&gt;💳&lt;/div&gt;
+                      &lt;div class="order-tab-text"&gt;待付款&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;div class="order-tab"&gt;
+                      &lt;div class="order-tab-icon"&gt;📦&lt;/div&gt;
+                      &lt;div class="order-tab-text"&gt;待发货&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;div class="order-tab"&gt;
+                      &lt;div class="order-tab-icon"&gt;🚚&lt;/div&gt;
+                      &lt;div class="order-tab-text"&gt;待收货&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;div class="order-tab"&gt;
+                      &lt;div class="order-tab-icon"&gt;⭐&lt;/div&gt;
+                      &lt;div class="order-tab-text"&gt;待评价&lt;/div&gt;
+                    &lt;/div&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="user-menu"&gt;
+                  &lt;div class="menu-item"&gt;
+                    &lt;div class="menu-icon"&gt;📍&lt;/div&gt;
+                    &lt;span class="menu-text"&gt;收货地址管理&lt;/span&gt;
+                    &lt;div class="menu-arrow"&gt;›&lt;/div&gt;
+                  &lt;/div&gt;
+                  &lt;div class="menu-item"&gt;
+                    &lt;div class="menu-icon"&gt;🎫&lt;/div&gt;
+                    &lt;span class="menu-text"&gt;优惠券&lt;/span&gt;
+                    &lt;div class="menu-arrow"&gt;›&lt;/div&gt;
+                  &lt;/div&gt;
+                  &lt;div class="menu-item"&gt;
+                    &lt;div class="menu-icon"&gt;💰&lt;/div&gt;
+                    &lt;span class="menu-text"&gt;积分中心&lt;/span&gt;
+                    &lt;div class="menu-arrow"&gt;›&lt;/div&gt;
+                  &lt;/div&gt;
+                  &lt;div class="menu-item"&gt;
+                    &lt;div class="menu-icon"&gt;💬&lt;/div&gt;
+                    &lt;span class="menu-text"&gt;帮助与客服&lt;/span&gt;
+                    &lt;div class="menu-arrow"&gt;›&lt;/div&gt;
+                  &lt;/div&gt;
+                  &lt;div class="menu-item"&gt;
+                    &lt;div class="menu-icon"&gt;⚙️&lt;/div&gt;
+                    &lt;span class="menu-text"&gt;设置&lt;/span&gt;
+                    &lt;div class="menu-arrow"&gt;›&lt;/div&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;!-- 7. 地址管理 --&gt;
+      &lt;div class="page-section" data-category="user"&gt;
+        &lt;div class="page-header"&gt;地址管理 (Address)&lt;/div&gt;
+        &lt;div class="phone-wrapper"&gt;
+          &lt;div class="phone-frame"&gt;
+            &lt;div class="phone-notch"&gt;&lt;/div&gt;
+            &lt;div class="status-bar"&gt;
+              &lt;span&gt;9:41&lt;/span&gt;
+              &lt;span&gt;📶 🔋&lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div class="nav-bar"&gt;
+              &lt;div class="nav-bar-back"&gt;←&lt;/div&gt;
+              收货地址
+            &lt;/div&gt;
+            &lt;div class="page-content no-tabbar"&gt;
+              &lt;div class="address-list"&gt;
+                &lt;div class="address-card"&gt;
+                  &lt;div class="addr-card-header"&gt;
+                    &lt;span class="addr-card-name"&gt;张三&lt;/span&gt;
+                    &lt;span class="addr-card-phone"&gt;138****8888&lt;/span&gt;
+                  &lt;/div&gt;
+                  &lt;div class="addr-card-detail"&gt;北京市朝阳区建国路88号SOHO现代城A座1201&lt;/div&gt;
+                  &lt;div class="addr-card-action"&gt;
+                    &lt;div class="addr-action-btn"&gt;
+                      &lt;span&gt;编辑&lt;/span&gt;
+                    &lt;/div&gt;
+                    &lt;div class="addr-action-btn"&gt;
+                      &lt;span&gt;删除&lt;/span&gt;
+                    &lt;/div&gt;
+                    &lt;div style="flex:1"&gt;&lt;/div&gt;
+                    &lt;div class="addr-action-btn default"&gt;
+                      &lt;span&gt;默认&lt;/span&gt;
+                    &lt;/div&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="address-card"&gt;
+                  &lt;div class="addr-card-header"&gt;
+                    &lt;span class="addr-card-name"&gt;李四&lt;/span&gt;
+                    &lt;span class="addr-card-phone"&gt;139****6666&lt;/span&gt;
+                  &lt;/div&gt;
+                  &lt;div class="addr-card-detail"&gt;上海市浦东新区世纪大道100号上海环球金融中心&lt;/div&gt;
+                  &lt;div class="addr-card-action"&gt;
+                    &lt;div class="addr-action-btn"&gt;
+                      &lt;span&gt;编辑&lt;/span&gt;
+                    &lt;/div&gt;
+                    &lt;div class="addr-action-btn"&gt;
+                      &lt;span&gt;删除&lt;/span&gt;
+                    &lt;/div&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="add-address-btn"&gt;+ 添加新地址&lt;/div&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;!-- 8. 订单列表 --&gt;
+      &lt;div class="page-section" data-category="user"&gt;
+        &lt;div class="page-header"&gt;订单列表 (Order List)&lt;/div&gt;
+        &lt;div class="phone-wrapper"&gt;
+          &lt;div class="phone-frame"&gt;
+            &lt;div class="phone-notch"&gt;&lt;/div&gt;
+            &lt;div class="status-bar"&gt;
+              &lt;span&gt;9:41&lt;/span&gt;
+              &lt;span&gt;📶 🔋&lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div class="nav-bar"&gt;
+              &lt;div class="nav-bar-back"&gt;←&lt;/div&gt;
+              我的订单
+            &lt;/div&gt;
+            &lt;div class="page-content no-tabbar"&gt;
+              &lt;div class="order-list-content"&gt;
+                &lt;div class="order-card"&gt;
+                  &lt;div class="order-card-header"&gt;
+                    &lt;span class="order-num"&gt;订单号：202601050001&lt;/span&gt;
+                    &lt;span class="order-status pending"&gt;待付款&lt;/span&gt;
+                  &lt;/div&gt;
+                  &lt;div class="order-card-goods"&gt;
+                    &lt;div class="order-goods-img"&gt;多肉&lt;/div&gt;
+                    &lt;div class="order-goods-info"&gt;
+                      &lt;div class="order-goods-name"&gt;多肉植物组合盆栽&lt;/div&gt;
+                      &lt;div class="order-goods-spec"&gt;颜色：绿色；规格：中号&lt;/div&gt;
+                    &lt;/div&gt;
+                  &lt;/div&gt;
+                  &lt;div class="order-card-footer"&gt;
+                    &lt;div class="order-total"&gt;
+                      合计：&lt;span class="order-total-price"&gt;¥128.00&lt;/span&gt;
+                    &lt;/div&gt;
+                    &lt;button class="order-action-btn"&gt;取消订单&lt;/button&gt;
+                    &lt;button class="order-action-btn primary"&gt;去支付&lt;/button&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="order-card"&gt;
+                  &lt;div class="order-card-header"&gt;
+                    &lt;span class="order-num"&gt;订单号：202601040002&lt;/span&gt;
+                    &lt;span class="order-status shipping"&gt;待发货&lt;/span&gt;
+                  &lt;/div&gt;
+                  &lt;div class="order-card-goods"&gt;
+                    &lt;div class="order-goods-img"&gt;工具&lt;/div&gt;
+                    &lt;div class="order-goods-info"&gt;
+                      &lt;div class="order-goods-name"&gt;园艺工具套装&lt;/div&gt;
+                      &lt;div class="order-goods-spec"&gt;规格：标准版；数量：1&lt;/div&gt;
+                    &lt;/div&gt;
+                  &lt;/div&gt;
+                  &lt;div class="order-card-footer"&gt;
+                    &lt;div class="order-total"&gt;
+                      合计：&lt;span class="order-total-price"&gt;¥199.00&lt;/span&gt;
+                    &lt;/div&gt;
+                    &lt;button class="order-action-btn"&gt;查看详情&lt;/button&gt;
+                    &lt;button class="order-action-btn"&gt;催发货&lt;/button&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="order-card"&gt;
+                  &lt;div class="order-card-header"&gt;
+                    &lt;span class="order-num"&gt;订单号：202601030003&lt;/span&gt;
+                    &lt;span class="order-status completed"&gt;已完成&lt;/span&gt;
+                  &lt;/div&gt;
+                  &lt;div class="order-card-goods"&gt;
+                    &lt;div class="order-goods-img"&gt;花盆&lt;/div&gt;
+                    &lt;div class="order-goods-info"&gt;
+                      &lt;div class="order-goods-name"&gt;陶瓷花盆套装&lt;/div&gt;
+                      &lt;div class="order-goods-spec"&gt;颜色：米白；数量：2&lt;/div&gt;
+                    &lt;/div&gt;
+                  &lt;/div&gt;
+                  &lt;div class="order-card-footer"&gt;
+                    &lt;div class="order-total"&gt;
+                      合计：&lt;span class="order-total-price"&gt;¥136.00&lt;/span&gt;
+                    &lt;/div&gt;
+                    &lt;button class="order-action-btn"&gt;查看详情&lt;/button&gt;
+                    &lt;button class="order-action-btn"&gt;再次购买&lt;/button&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;!-- 9. 设置页 --&gt;
+      &lt;div class="page-section" data-category="user"&gt;
+        &lt;div class="page-header"&gt;设置页 (Settings)&lt;/div&gt;
+        &lt;div class="phone-wrapper"&gt;
+          &lt;div class="phone-frame"&gt;
+            &lt;div class="phone-notch"&gt;&lt;/div&gt;
+            &lt;div class="status-bar"&gt;
+              &lt;span&gt;9:41&lt;/span&gt;
+              &lt;span&gt;📶 🔋&lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div class="nav-bar"&gt;
+              &lt;div class="nav-bar-back"&gt;←&lt;/div&gt;
+              设置
+            &lt;/div&gt;
+            &lt;div class="page-content no-tabbar"&gt;
+              &lt;div class="settings-content"&gt;
+                &lt;div class="settings-group"&gt;
+                  &lt;div class="settings-item"&gt;
+                    &lt;div class="settings-icon"&gt;👤&lt;/div&gt;
+                    &lt;span class="settings-label"&gt;账号与安全&lt;/span&gt;
+                    &lt;span class="settings-value"&gt;已绑定&lt;/span&gt;
+                    &lt;div class="settings-arrow"&gt;›&lt;/div&gt;
+                  &lt;/div&gt;
+                  &lt;div class="settings-item"&gt;
+                    &lt;div class="settings-icon"&gt;🔗&lt;/div&gt;
+                    &lt;span class="settings-label"&gt;微信绑定&lt;/span&gt;
+                    &lt;span class="settings-value"&gt;已绑定&lt;/span&gt;
+                    &lt;div class="settings-arrow"&gt;›&lt;/div&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="settings-group"&gt;
+                  &lt;div class="settings-item"&gt;
+                    &lt;div class="settings-icon"&gt;🔔&lt;/div&gt;
+                    &lt;span class="settings-label"&gt;新消息通知&lt;/span&gt;
+                    &lt;div class="settings-arrow"&gt;›&lt;/div&gt;
+                  &lt;/div&gt;
+                  &lt;div class="settings-item"&gt;
+                    &lt;div class="settings-icon"&gt;🔒&lt;/div&gt;
+                    &lt;span class="settings-label"&gt;隐私设置&lt;/span&gt;
+                    &lt;div class="settings-arrow"&gt;›&lt;/div&gt;
+                  &lt;/div&gt;
+                  &lt;div class="settings-item"&gt;
+                    &lt;div class="settings-icon"&gt;⚙️&lt;/div&gt;
+                    &lt;span class="settings-label"&gt;通用设置&lt;/span&gt;
+                    &lt;div class="settings-arrow"&gt;›&lt;/div&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="settings-group"&gt;
+                  &lt;div class="settings-item"&gt;
+                    &lt;div class="settings-icon"&gt;ℹ️&lt;/div&gt;
+                    &lt;span class="settings-label"&gt;关于我们&lt;/span&gt;
+                    &lt;div class="settings-arrow"&gt;›&lt;/div&gt;
+                  &lt;/div&gt;
+                  &lt;div class="settings-item"&gt;
+                    &lt;div class="settings-icon"&gt;❓&lt;/div&gt;
+                    &lt;span class="settings-label"&gt;帮助与反馈&lt;/span&gt;
+                    &lt;div class="settings-arrow"&gt;›&lt;/div&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="logout-section"&gt;
+                  &lt;button class="btn-logout"&gt;退出登录&lt;/button&gt;
+                &lt;/div&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- UI/UX 优化建议 --&gt;
+    &lt;div class="ux-suggestions"&gt;
+      &lt;h2&gt;💡 UI/UX 优化建议&lt;/h2&gt;
+      
+      &lt;div class="suggestion-item"&gt;
+        &lt;div class="suggestion-title"&gt;响应式布局适配&lt;/div&gt;
+        &lt;div class="suggestion-content"&gt;
+          当前原型主要针对移动端设计，建议增加响应式布局，在桌面端浏览时可以并排展示多个页面，提高设计评审效率。同时支持点击放大查看单个页面细节。
+          &lt;div&gt;
+            &lt;span class="suggestion-tag"&gt;布局优化&lt;/span&gt;
+            &lt;span class="suggestion-tag"&gt;桌面端&lt;/span&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div class="suggestion-item"&gt;
+        &lt;div class="suggestion-title"&gt;页面交互动效&lt;/div&gt;
+        &lt;div class="suggestion-content"&gt;
+          建议增加简单的页面切换动画和微交互效果，如按钮悬停、卡片点击反馈等，让原型更接近真实应用体验。可以添加页面导航功能，模拟真实的用户流程。
+          &lt;div&gt;
+            &lt;span class="suggestion-tag"&gt;动效设计&lt;/span&gt;
+            &lt;span class="suggestion-tag"&gt;交互体验&lt;/span&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div class="suggestion-item"&gt;
+        &lt;div class="suggestion-title"&gt;多状态展示&lt;/div&gt;
+        &lt;div class="suggestion-content"&gt;
+          建议增加更多页面状态的展示，如空状态、加载状态、错误状态等。这些状态对用户体验至关重要，需要在设计阶段就考虑完善。
+          &lt;div&gt;
+            &lt;span class="suggestion-tag"&gt;状态设计&lt;/span&gt;
+            &lt;span class="suggestion-tag"&gt;用户体验&lt;/span&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div class="suggestion-item"&gt;
+        &lt;div class="suggestion-title"&gt;无障碍支持&lt;/div&gt;
+        &lt;div class="suggestion-content"&gt;
+          确保所有页面都符合无障碍设计标准，包括足够的对比度、合理的字体大小、语义化的HTML结构等。这对提升应用的包容性很重要。
+          &lt;div&gt;
+            &lt;span class="suggestion-tag"&gt;无障碍&lt;/span&gt;
+            &lt;span class="suggestion-tag"&gt;可访问性&lt;/span&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div class="suggestion-item"&gt;
+        &lt;div class="suggestion-title"&gt;设计规范对齐&lt;/div&gt;
+        &lt;div class="suggestion-content"&gt;
+          确保所有设计都严格遵循设计规范中的色彩、字体、间距等标准。建议在原型中展示规范的使用示例，便于团队统一理解和执行。
+          &lt;div&gt;
+            &lt;span class="suggestion-tag"&gt;设计系统&lt;/span&gt;
+            &lt;span class="suggestion-tag"&gt;一致性&lt;/span&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;footer&gt;
+      &lt;p&gt;🌸 SutWxApp 高保真原型 v2.0 | 基于 UI 设计规范&lt;/p&gt;
+      &lt;p style="margin-top: var(--space-sm); color: var(--text-disabled);"&gt;设计评审与前端实现参考&lt;/p&gt;
+    &lt;/footer&gt;
+  &lt;/div&gt;
+
+  &lt;script&gt;
+    // 简单的导航切换功能
+    document.querySelectorAll('.nav-tab').forEach(tab =&gt; {
+      tab.addEventListener('click', function() {
+        // 移除所有active状态
+        document.querySelectorAll('.nav-tab').forEach(t =&gt; t.classList.remove('active'));
+        // 添加当前active状态
+        this.classList.add('active');
+        
+        const filter = this.dataset.filter;
+        const sections = document.querySelectorAll('.page-section');
+        
+        sections.forEach(section =&gt; {
+          if (filter === 'all') {
+            section.classList.remove('hide');
+          } else {
+            if (section.dataset.category === filter) {
+              section.classList.remove('hide');
+            } else {
+              section.classList.add('hide');
+            }
+          }
+        });
+      });
+    });
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;

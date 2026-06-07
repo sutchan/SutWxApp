@@ -55,8 +55,8 @@
       {
         "pagePath": "pages/cart/index",
         "text": "购物车",
-        "iconPath": "images/tabbar/user.png",
-        "selectedIconPath": "images/tabbar/user-active.png"
+        "iconPath": "images/tabbar/cart.png",
+        "selectedIconPath": "images/tabbar/cart-active.png"
       },
       {
         "pagePath": "pages/user/index",
