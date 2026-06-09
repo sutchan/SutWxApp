@@ -5,6 +5,7 @@
 ## 版本记录
 | 版本 | 日期 | 变更内容 | 作者 |
 |------|------|----------|------|
+| 2.1.0 | 2026-06-09 | 修复代码审查发现的所有问题，包括 WXML 模板语法修复、数据字段名一致性修复、事件处理器完善、CSS 变量系统完善 | Sut |
 | 2.0.0 | 2026-06-08 | 采用Apple极简设计风格，更新全局样式和页面样式 | Sut |
 | 1.0.0 | 2025-12-26 | 初始版本 | Sut |
 
@@ -259,11 +260,110 @@ SutWxApp/
 - **组件**：PascalCase（大驼峰命名法）
 - **CSS变量**：kebab-case（短横线分隔），如 `--primary-color`
 
+### WXML 模板规范
+
+#### 1. 模板只做数据展示，不做复杂计算
+- **禁止在 WXML 中调用 JavaScript 方法**：如 `{{item.price.toFixed(2)}}` 是错误的
+- **禁止在 WXML 中使用 `+` 进行字符串拼接**：必须在 JS 中预计算
+- 价格、日期、数字等格式化必须在 JS 层完成后以 `xxxText` 字段传入模板
+
+**错误示例：**
+```xml
+<view>¥{{item.price.toFixed(2)}}</view>
+<view>{{firstName + ' ' + lastName}}</view>
+```
+
+**正确示例：**
+```xml
+<view>¥{{item.priceText}}</view>
+<view>{{fullNameText}}</view>
+```
+
+**JS 层实现：**
+```javascript
+const item = {
+  price: 99.9,
+  priceText: '99.90'  // 预计算
+};
+```
+
+#### 2. 数组/对象访问前必须确保存在性
+- 所有数组在 JS 层初始化为 `[]`
+- 所有对象在 JS 层初始化为 `{}`
+- 数据在 `setData` 之前完成结构初始化，避免 WXML 中访问不存在的字段
+
+#### 3. 事件处理器完整性
+- 所有 `bindtap` 事件处理器必须在 JS 中有对应实现
+- 事件处理函数与 `bindtap` 中的名称完全一致
+- 禁止在 WXML 中声明但在 JS 中未实现的事件处理器
+
 ### 样式规范
-- 使用 CSS 变量定义设计系统（颜色、间距、字体、圆角、阴影）
-- 遵循 Apple 设计风格，使用柔和的阴影和圆润的边角
-- 保持样式一致性，使用统一的间距和字体大小
-- 使用 `cubic-bezier(0.4, 0, 0.2, 1)` 缓动函数实现自然的动画效果
+
+#### 1. CSS 变量系统规范
+- 所有样式必须使用 CSS 变量，禁止硬编码颜色值
+- CSS 变量统一在 `app.wxss` 或全局样式文件中定义
+- 颜色变量命名规则：`--{用途}-{层级}`，如 `--text-primary`、`--background-secondary`
+
+| 变量类型 | 变量名规范 | 示例 |
+|----------|------------|------|
+| 颜色 | `--{用途}-{层级}` | `--text-primary`、`--primary-color` |
+| 间距 | `--spacing-{尺寸}` | `--spacing-sm`、`--spacing-lg` |
+| 字体 | `--font-{属性}` | `--font-size-md`、`--font-weight-medium` |
+| 圆角 | `--radius-{尺寸}` | `--radius-sm`、`--radius-lg` |
+| 阴影 | `--shadow-{尺寸}` | `--shadow-sm`、`--shadow-lg` |
+| 过渡 | `--transition-{速度}` | `--transition-fast`、`--transition-normal` |
+
+#### 2. Apple 极简设计风格详细规范
+- **颜色**：主背景使用纯净白色 `#FFFFFF`，次背景使用浅灰色 `#F5F5F7`
+- **字体**：使用 `-apple-system` 字体族，字重范围 300-700
+- **间距**：使用 4/8/12/16/20/24px 的增量体系
+- **圆角**：卡片使用 12-16px 圆角，按钮使用 8-12px 圆角
+- **阴影**：使用多层柔和阴影，颜色透明度控制在 5%-10%
+- **过渡**：默认使用 0.3s `cubic-bezier(0.4, 0, 0.2, 1)` 缓动
+
+#### 3. 样式编写规则
+- 样式类命名使用 BEM 风格或 kebab-case
+- 禁止使用 `!important`，除非必要场景
+- 保持样式类与结构类分离，样式类仅处理视觉表现
+
+### 数据字段命名规范
+
+#### 1. 字段名一致性
+- 字段名在 JS 层定义与 WXML 中使用必须完全一致
+- 同一语义的字段在所有页面和组件中使用相同的命名
+
+#### 2. 统一字段命名规则
+
+| 字段名 | 类型 | 用途说明 |
+|--------|------|----------|
+| `image` | string | 商品图片（用于商品卡片、商品详情） |
+| `imageUrl` | string | 图片 URL（通用图片字段） |
+| `avatarUrl` | string | 用户头像 URL |
+| `price` | number | 数字价格（用于计算，单位：元） |
+| `priceText` | string | 格式化价格字符串（用于展示，如 "99.90"） |
+| `title` | string | 标题（商品标题、文章标题等） |
+| `name` | string | 名称（用户名、分类名等） |
+| `description` | string | 描述信息 |
+| `time` | string | 时间字符串（已格式化） |
+| `count` | number | 数量（整数） |
+| `total` | number | 总数 |
+
+#### 3. 数据初始化规范
+- 所有数组必须初始化为 `[]`
+- 所有对象必须初始化为 `{}`
+- 字符串字段默认为 `''`
+- 数字字段默认为 `0`
+- 布尔字段默认为 `false`
+
+**示例：**
+```javascript
+data: {
+  productList: [],
+  productInfo: {},
+  priceText: '',
+  itemCount: 0
+}
+```
 
 ### 组件规范
 - 组件应遵循单一职责原则
@@ -288,8 +388,8 @@ SutWxApp/
 ```javascript
 /**
  * 文件名: example.js
- * 版本号: 1.0.0
- * 更新日期: 2025-12-26
+ * 版本号: 2.1.0
+ * 更新日期: 2026-06-09
  * 功能描述: 示例函数
  * @param {Object} options - 查询参数
  * @param {string} options.type - 类型

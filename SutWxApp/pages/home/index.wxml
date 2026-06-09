@@ -1,7 +1,7 @@
 <!-- 
   文件名: index.wxml
-  版本号: 2.0.0
-  更新日期: 2025-12-26
+  版本号: 2.1.0
+  更新日期: 2026-06-09
   描述: 首页结构模板
 -->
 
@@ -51,7 +51,7 @@
           <view class="product-info">
             <text class="product-name">{{item.name}}</text>
             <view class="product-bottom">
-              <text class="product-price">¥{{item.price}}</text>
+              <text class="product-price">{{item.price}}</text>
               <view class="product-actions">
                 <image class="action-icon" src="/images/favorite.png" catchtap="handleFavorite" data-id="{{item.id}}"></image>
                 <image class="action-icon" src="/images/share.png" catchtap="handleShare" data-id="{{item.id}}"></image>

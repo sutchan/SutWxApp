@@ -1,7 +1,7 @@
 /**
  * 文件名: app.wxss
- * 版本号: 2.0.0
- * 更新日期: 2026-06-08
+ * 版本号: 2.1.0
+ * 更新日期: 2026-06-09
  * 描述: 微信小程序全局样式文件，采用Apple极简设计风格
  */
 
@@ -17,6 +17,13 @@ page {
   --background-primary: #FFFFFF;
   --background-secondary: #F5F5F7;
   --background-tertiary: #FAFAFA;
+
+  --error-color: #FF3B30;
+  --error-light: #FFEBEA;
+  --success-color: #34C759;
+  --success-light: #E8F8ED;
+  --warning-color: #FF9500;
+  --warning-light: #FFF5E5;
 
   --font-size-xs: 10px;
   --font-size-sm: 12px;
@@ -96,9 +103,9 @@ page {
 .text-tertiary { color: var(--text-tertiary); }
 .text-white { color: #ffffff; }
 .text-primary-color { color: var(--primary-color); }
-.text-error { color: #F44336; }
-.text-success { color: #4CAF50; }
-.text-warning { color: #FF9800; }
+.text-error { color: var(--error-color); }
+.text-success { color: var(--success-color); }
+.text-warning { color: var(--warning-color); }
 
 .text-xs { font-size: var(--font-size-xs); }
 .text-sm { font-size: var(--font-size-sm); }
@@ -230,15 +237,15 @@ page {
 .border-radius-circle { border-radius: 50%; }
 
 .bg-primary { background-color: var(--primary-color); }
-.bg-secondary { background-color: #2a9d8f; }
-.bg-accent { background-color: #f4a261; }
+.bg-secondary { background-color: var(--background-secondary); }
+.bg-accent { background-color: var(--primary-light); }
 .bg-background { background-color: var(--background-secondary); }
 .bg-surface { background-color: var(--background-primary); }
 .bg-white { background-color: #ffffff; }
 .bg-transparent { background-color: transparent; }
-.bg-error { background-color: #F44336; }
-.bg-success { background-color: #4CAF50; }
-.bg-warning { background-color: #FF9800; }
+.bg-error { background-color: var(--error-color); }
+.bg-success { background-color: var(--success-color); }
+.bg-warning { background-color: var(--warning-color); }
 .bg-tertiary { background-color: var(--background-tertiary); }
 
 .shadow-sm { box-shadow: var(--shadow-sm); }
@@ -293,12 +300,12 @@ page {
 
 .btn-primary {
   background-color: var(--primary-color);
-  color: #ffffff;
+  color: var(--text-inverse);
 }
 
 .btn-secondary {
-  background-color: #2a9d8f;
-  color: #ffffff;
+  background-color: var(--background-tertiary);
+  color: var(--text-primary);
 }
 
 .btn-outline {
@@ -364,19 +371,19 @@ page {
   padding: 2rpx var(--spacing-sm);
   border-radius: var(--border-radius-circle);
   font-size: var(--font-size-xs);
-  color: #ffffff;
+  color: var(--text-inverse);
 }
 
 .badge-primary { background-color: var(--primary-color); }
-.badge-success { background-color: #4CAF50; }
-.badge-warning { background-color: #FF9800; }
-.badge-error { background-color: #F44336; }
+.badge-success { background-color: var(--success-color); }
+.badge-warning { background-color: var(--warning-color); }
+.badge-error { background-color: var(--error-color); }
 
 .badge-dot {
   width: 16rpx;
   height: 16rpx;
   border-radius: var(--border-radius-circle);
-  background-color: #F44336;
+  background-color: var(--error-color);
 }
 
 .badge-dot:empty { display: none; }

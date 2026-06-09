@@ -1,14 +1,14 @@
 <!-- 
   文件名: index.wxml
-  版本号: 2.0.0
-  更新日期: 2025-12-26
+  版本号: 2.1.0
+  更新日期: 2026-06-09
   描述: 用户中心页面结构模板
 -->
 
 <view class="container">
   <view class="header-section" bindtap="handleAvatarTap">
     <view class="user-info" wx:if="{{isLoggedIn}}">
-      <image class="avatar" src="{{userInfo.avatar || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+      <image class="avatar" src="{{userInfo.avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill"></image>
       <view class="info-content">
         <text class="nickname">{{userInfo.nickname || userInfo.username || '用户'}}</text>
         <text class="user-id">ID: {{userInfo.id || ''}}</text>
@@ -62,6 +62,6 @@
   </view>
 
   <view class="version-info">
-    <text class="version-text">苏铁 v1.0.18</text>
+    <text class="version-text">苏铁 v2.1.0</text>
   </view>
 </view>

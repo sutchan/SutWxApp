@@ -1,13 +1,11 @@
 /**
  * 文件名: index.js
- * 版本号: 2.0.0
- * 更新日期: 2025-12-30 14:30
+ * 版本号: 2.1.0
+ * 更新日期: 2026-06-09
  * 描述: 产品详情页逻辑控制层
  */
 
 const app = getApp();
-const authService = require("../../services/authService");
-const pointsService = require("../../services/pointsService");
 const cartService = require("../../services/cartService");
 
 Page({
@@ -29,6 +27,10 @@ Page({
     showReviewPopup: false,
     isLoggedIn: false,
     userInfo: null,
+    cartCount: 0,
+    currentSpecPrice: 0,
+    currentStock: 99,
+    currentSpecName: '',
     // 图片懒加载相关
     visibleImages: [],
     imageLoaded: {},
@@ -78,7 +80,7 @@ Page({
     return {
       title: productInfo ? productInfo.name : "分享商品",
       path: `/pages/product/detail?id=${this.data.productId}`,
-      imageUrl: productInfo ? productInfo.images[0] : "",
+      imageUrl: productInfo && productInfo.images && productInfo.images[0] ? productInfo.images[0] : "",
     };
   },
 
@@ -144,19 +146,32 @@ Page({
         
         if (res.data && res.data.success) {
           const productInfo = res.data.data;
-          const defaultSpecIndex = 
-            productInfo.specs && productInfo.specs.length > 0 ? 0 : 0;
+          if (!productInfo.specs) productInfo.specs = [];
+          if (!productInfo.images) productInfo.images = [];
+          if (!productInfo.params) productInfo.params = [];
+          if (!productInfo.tags) productInfo.tags = [];
 
-          // 初始化可见图片数组
+          const defaultSpecIndex = 
+            productInfo.specs.length > 0 ? 0 : -1;
+
+          const hasSpec = defaultSpecIndex >= 0;
+          const currentSpec = hasSpec ? productInfo.specs[defaultSpecIndex] : null;
+          const currentSpecPrice = currentSpec ? currentSpec.price : productInfo.price || 0;
+          const currentStock = currentSpec ? currentSpec.stock : productInfo.stock || 99;
+          const currentSpecName = currentSpec ? currentSpec.name : '';
+
           const visibleImages = productInfo.images.map((_, index) => index < 2);
 
           that.setData({
             productInfo,
             selectedSpecIndex: defaultSpecIndex,
             isFavorite: productInfo.isFavorite || false,
+            currentSpecPrice,
+            currentStock,
+            currentSpecName,
             visibleImages,
             imageLoaded: productInfo.images.reduce((acc, _, index) => {
-              acc[index] = index < 2; // 前两张图片初始化为已加载
+              acc[index] = index < 2;
               return acc;
             }, {})
           });
@@ -331,18 +346,29 @@ Page({
 
   handleSpecTap: function (e) {
     const { index } = e.currentTarget.dataset;
-    this.setData({ selectedSpecIndex: index });
+    const { productInfo } = this.data;
+    const spec = productInfo.specs && productInfo.specs[index];
+    const currentSpecPrice = spec ? spec.price : productInfo.price || 0;
+    const currentStock = spec ? spec.stock : productInfo.stock || 99;
+    const currentSpecName = spec ? spec.name : '';
+
+    this.setData({
+      selectedSpecIndex: index,
+      currentSpecPrice,
+      currentStock,
+      currentSpecName,
+    });
   },
 
   handleQuantityChange: function (e) {
     const { type } = e.currentTarget.dataset;
-    let { selectedQuantity } = this.data;
+    let { selectedQuantity, currentStock } = this.data;
 
     if (type === "minus") {
       selectedQuantity = Math.max(1, selectedQuantity - 1);
     } else if (type === "plus") {
       selectedQuantity = Math.min(
-        this.data.productInfo.stock || 99,
+        currentStock,
         selectedQuantity + 1,
       );
     }
@@ -354,7 +380,7 @@ Page({
     let quantity = parseInt(e.detail.value) || 1;
     quantity = Math.max(
       1,
-      Math.min(this.data.productInfo.stock || 99, quantity),
+      Math.min(this.data.currentStock || 99, quantity),
     );
     this.setData({ selectedQuantity: quantity });
   },
@@ -390,10 +416,18 @@ Page({
     this.setData({ isAddingToCart: true });
     const that = this;
 
+    const { productInfo, selectedSpecIndex } = this.data;
+    const spec = productInfo && productInfo.specs && productInfo.specs[selectedSpecIndex];
+    if (!spec) {
+      wx.showToast({ title: "请选择规格", icon: "error" });
+      this.setData({ isAddingToCart: false });
+      return;
+    }
+
     cartService
       .addToCart({
         productId: this.data.productId,
-        specId: this.data.productInfo.specs[this.data.selectedSpecIndex].id,
+        specId: spec.id,
         quantity: this.data.selectedQuantity,
       })
       .then(function (res) {
@@ -422,13 +456,17 @@ Page({
     }
 
     const { productInfo, selectedSpecIndex, selectedQuantity } = this.data;
-    const spec = productInfo.specs[selectedSpecIndex];
+    const hasSpecs = productInfo && productInfo.specs && productInfo.specs.length > 0;
+    const spec = hasSpecs && selectedSpecIndex >= 0 && selectedSpecIndex < productInfo.specs.length
+      ? productInfo.specs[selectedSpecIndex]
+      : null;
+
     const cartItem = {
       productId: productInfo.id,
       productName: productInfo.name,
-      productImage: productInfo.images[0],
-      specName: spec.name,
-      specPrice: spec.price,
+      productImage: productInfo.images && productInfo.images[0] ? productInfo.images[0] : '',
+      specName: spec ? spec.name : '',
+      specPrice: spec ? spec.price : productInfo.price || 0,
       quantity: selectedQuantity,
       selected: true,
     };
@@ -520,15 +558,5 @@ Page({
     });
   },
 
-  getCurrentSpecPrice: function () {
-    const { productInfo, selectedSpecIndex } = this.data;
-    if (
-      productInfo &&
-      productInfo.specs &&
-      productInfo.specs[selectedSpecIndex]
-    ) {
-      return productInfo.specs[selectedSpecIndex].price;
-    }
-    return productInfo ? productInfo.price : 0;
-  },
 });
+
