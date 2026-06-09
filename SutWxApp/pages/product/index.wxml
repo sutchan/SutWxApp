@@ -1,7 +1,7 @@
 <!-- 
   文件名: index.wxml
-  版本号: 2.0.0
-  更新日期: 2025-12-26
+  版本号: 2.1.0
+  更新日期: 2026-06-09
   描述: 产品详情页结构模板
 -->
 
@@ -71,7 +71,7 @@
   <view class="spec-section" bindtap="handleShowSpecPopup">
     <view class="spec-label">选择</view>
     <view class="spec-content">
-      <text class="spec-text">{{selectedSpecIndex >= 0 && productInfo.specs[selectedSpecIndex] ? productInfo.specs[selectedSpecIndex].name : '请选择规格'}}</text>
+      <text class="spec-text">{{currentSpecName || '请选择规格'}}</text>
     </view>
     <image class="arrow-icon" src="/images/arrow-right.png" mode="aspectFit"></image>
   </view>
@@ -206,13 +206,13 @@
       <view class="spec-popup-info">
         <view class="spec-popup-price">
           <text class="price-symbol">¥</text>
-          <text class="price-value">{{getCurrentSpecPrice()}}</text>
+          <text class="price-value">{{currentSpecPrice}}</text>
         </view>
         <view class="spec-popup-stock">
-          <text>库存: {{productInfo.specs[selectedSpecIndex].stock || 99}}</text>
+          <text>库存: {{currentStock}}</text>
         </view>
         <view class="spec-popup-selected">
-          <text>已选: {{productInfo.specs[selectedSpecIndex].name}}</text>
+          <text>已选: {{currentSpecName || '请选择规格'}}</text>
         </view>
       </view>
       <view class="spec-popup-close" bindtap="handleHideSpecPopup">
@@ -237,7 +237,7 @@
             <text>-</text>
           </view>
           <input class="quantity-input" type="number" value="{{selectedQuantity}}" bindinput="handleQuantityInput"></input>
-          <view class="quantity-btn {{selectedQuantity >= (productInfo.specs[selectedSpecIndex].stock || 99) ? 'disabled' : ''}}" bindtap="handleQuantityChange" data-type="plus">
+          <view class="quantity-btn {{selectedQuantity >= currentStock ? 'disabled' : ''}}" bindtap="handleQuantityChange" data-type="plus">
             <text>+</text>
           </view>
         </view>

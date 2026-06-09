@@ -1,74 +1,73 @@
 
-&lt;!--
+<!--
 文件名: index.wxml
-版本号: 2.0.0
-更新日期: 2026-05-06
+版本号: 2.1.0
+更新日期: 2026-06-09
 描述: 购物车页面模板，展示购物车商品列表
---&gt;
-&lt;view class="cart-container"&gt;
-  &lt;!-- 空状态 --&gt;
-  &lt;view wx:if="{{empty}}" class="empty-container"&gt;
-    &lt;image class="empty-icon" src="/images/placeholder.svg" mode="aspectFit"&gt;&lt;/image&gt;
-    &lt;text class="empty-text"&gt;购物车空空如也&lt;/text&gt;
-    &lt;button class="go-shopping-btn" bindtap="onGoShopping"&gt;去逛逛&lt;/button&gt;
-  &lt;/view&gt;
+-->
+<view class="cart-container">
+  <!-- 空状态 -->
+  <view wx:if="{{empty}}" class="empty-container">
+    <image class="empty-icon" src="/images/placeholder.svg" mode="aspectFit"></image>
+    <text class="empty-text">购物车空空如也</text>
+    <button class="go-shopping-btn" bindtap="onGoShopping">去逛逛</button>
+  </view>
 
-  &lt;!-- 商品列表 --&gt;
-  &lt;view wx:else class="cart-list"&gt;
-    &lt;view wx:for="{{cartList}}" wx:key="id" class="cart-item"&gt;
-      &lt;!-- 选择按钮 --&gt;
-      &lt;view class="select-box" bindtap="onSelectItem" data-index="{{index}}"&gt;
-        &lt;view class="select-icon {{item.selected ? 'selected' : ''}}"&gt;
-          &lt;text wx:if="{{item.selected}}" class="icon"&gt;✓&lt;/text&gt;
-        &lt;/view&gt;
-      &lt;/view&gt;
+  <!-- 商品列表 -->
+  <view wx:else class="cart-list">
+    <view wx:for="{{cartList}}" wx:key="id" class="cart-item">
+      <!-- 选择按钮 -->
+      <view class="select-box" bindtap="onSelectItem" data-index="{{index}}">
+        <view class="select-icon {{item.selected ? 'selected' : ''}}">
+          <text wx:if="{{item.selected}}" class="icon">✓</text>
+        </view>
+      </view>
 
-      &lt;!-- 商品图片 --&gt;
-      &lt;image class="product-image" src="{{item.image}}" mode="aspectFill"&gt;&lt;/image&gt;
+      <!-- 商品图片 -->
+      <image class="product-image" src="{{item.image}}" mode="aspectFill"></image>
 
-      &lt;!-- 商品信息 --&gt;
-      &lt;view class="product-info"&gt;
-        &lt;text class="product-name"&gt;{{item.name}}&lt;/text&gt;
-        &lt;text class="product-spec" wx:if="{{item.spec}}"&gt;{{item.spec}}&lt;/text&gt;
+      <!-- 商品信息 -->
+      <view class="product-info">
+        <text class="product-name">{{item.name}}</text>
+        <text class="product-spec" wx:if="{{item.spec}}">{{item.spec}}</text>
 
-        &lt;view class="product-bottom"&gt;
-          &lt;text class="product-price"&gt;¥{{item.price.toFixed(2)}}&lt;/text&gt;
+        <view class="product-bottom">
+          <text class="product-price">{{item.priceText}}</text>
 
-          &lt;view class="quantity-box"&gt;
-            &lt;view class="quantity-btn" bindtap="onDecreaseQuantity" data-index="{{index}}"&gt;-&lt;/view&gt;
-            &lt;text class="quantity-text"&gt;{{item.quantity}}&lt;/text&gt;
-            &lt;view class="quantity-btn" bindtap="onIncreaseQuantity" data-index="{{index}}"&gt;+&lt;/view&gt;
-          &lt;/view&gt;
-        &lt;/view&gt;
-      &lt;/view&gt;
+          <view class="quantity-box">
+            <view class="quantity-btn" bindtap="onDecreaseQuantity" data-index="{{index}}">-</view>
+            <text class="quantity-text">{{item.quantity}}</text>
+            <view class="quantity-btn" bindtap="onIncreaseQuantity" data-index="{{index}}">+</view>
+          </view>
+        </view>
+      </view>
 
-      &lt;!-- 删除按钮 --&gt;
-      &lt;view class="delete-btn" bindtap="onDeleteItem" data-index="{{index}}"&gt;
-        &lt;text class="delete-text"&gt;删除&lt;/text&gt;
-      &lt;/view&gt;
-    &lt;/view&gt;
-  &lt;/view&gt;
+      <!-- 删除按钮 -->
+      <view class="delete-btn" bindtap="onDeleteItem" data-index="{{index}}">
+        <text class="delete-text">删除</text>
+      </view>
+    </view>
+  </view>
 
-  &lt;!-- 底部栏 --&gt;
-  &lt;view wx:if="{{!empty}}" class="bottom-bar"&gt;
-    &lt;!-- 全选 --&gt;
-    &lt;view class="select-all-box" bindtap="onSelectAll"&gt;
-      &lt;view class="select-icon {{selectAll ? 'selected' : ''}}"&gt;
-        &lt;text wx:if="{{selectAll}}" class="icon"&gt;✓&lt;/text&gt;
-      &lt;/view&gt;
-      &lt;text class="select-all-text"&gt;全选&lt;/text&gt;
-    &lt;/view&gt;
+  <!-- 底部栏 -->
+  <view wx:if="{{!empty}}" class="bottom-bar">
+    <!-- 全选 -->
+    <view class="select-all-box" bindtap="onSelectAll">
+      <view class="select-icon {{selectAll ? 'selected' : ''}}">
+        <text wx:if="{{selectAll}}" class="icon">✓</text>
+      </view>
+      <text class="select-all-text">全选</text>
+    </view>
 
-    &lt;!-- 合计 --&gt;
-    &lt;view class="total-box"&gt;
-      &lt;text class="total-label"&gt;合计：&lt;/text&gt;
-      &lt;text class="total-price"&gt;¥{{totalPrice.toFixed(2)}}&lt;/text&gt;
-    &lt;/view&gt;
+    <!-- 合计 -->
+    <view class="total-box">
+      <text class="total-label">合计：</text>
+      <text class="total-price">{{totalPriceText}}</text>
+    </view>
 
-    &lt;!-- 结算按钮 --&gt;
-    &lt;button class="checkout-btn" bindtap="onCheckout" disabled="{{totalCount === 0}}"&gt;
+    <!-- 结算按钮 -->
+    <button class="checkout-btn" bindtap="onCheckout" disabled="{{totalCount === 0}}">
       结算({{totalCount}})
-    &lt;/button&gt;
-  &lt;/view&gt;
-&lt;/view&gt;
-
+    </button>
+  </view>
+</view>
