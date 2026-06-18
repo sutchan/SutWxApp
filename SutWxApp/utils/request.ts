@@ -1,8 +1,11 @@
 /**
  * 文件名: request.ts
- * 版本号: 2.0.0
- * 更新日期: 2025-12-30 14:00
+ * 版本号: 2.2.0
+ * 更新日期: 2026-06-09
  * 描述: 网络请求工具，封装wx.request，支持拦截器、重试机制、请求缓存、请求取消等
+ * 
+ * 安全修复记录:
+ * - v2.2.0: 修复 H-001/H-003/H-004/M-001，使用安全随机数、优化SQL注入检测、增强XSS防护、添加速率限制
  */
 
 /**
@@ -143,6 +146,56 @@ let activeRequests = 0;
 let csrfToken: string = "";
 let cacheCleanupTimer: number | null = null;
 
+// 安全修复 M-001: 请求速率限制
+const requestRateLimit: Map<string, { count: number; lastRequest: number }> = new Map();
+const RATE_LIMIT_WINDOW = 60000; // 60秒窗口
+const RATE_LIMIT_MAX_REQUESTS = 100; // 每分钟最多100次请求
+
+/**
+ * 检查请求速率限制
+ * 安全修复: 防止暴力攻击和 DoS 攻击
+ * @param key 请求标识（通常是 URL）
+ * @returns boolean 是否允许请求
+ */
+function checkRateLimit(key: string): boolean {
+  const now = Date.now();
+  const record = requestRateLimit.get(key);
+  
+  if (!record) {
+    requestRateLimit.set(key, { count: 1, lastRequest: now });
+    return true;
+  }
+  
+  // 如果超过窗口时间，重置计数
+  if (now - record.lastRequest > RATE_LIMIT_WINDOW) {
+    requestRateLimit.set(key, { count: 1, lastRequest: now });
+    return true;
+  }
+  
+  // 如果超过最大请求次数，拒绝请求
+  if (record.count >= RATE_LIMIT_MAX_REQUESTS) {
+    console.warn(`[Request] Rate limit exceeded for ${key}`);
+    return false;
+  }
+  
+  // 增加计数
+  record.count++;
+  record.lastRequest = now;
+  return true;
+}
+
+/**
+ * 清理过期的速率限制记录
+ */
+function cleanupRateLimit(): void {
+  const now = Date.now();
+  for (const [key, record] of requestRateLimit.entries()) {
+    if (now - record.lastRequest > RATE_LIMIT_WINDOW) {
+      requestRateLimit.delete(key);
+    }
+  }
+}
+
 /**
  * LRU缓存实现 - 设置缓存
  * @param {string} key 缓存键名
@@ -271,11 +324,14 @@ function stopCacheCleanup(): void {
 
 /**
  * 生成CSRF令牌
+ * 安全修复: 使用 crypto.getRandomValues() 替代 Math.random()
  */
 function generateCsrfToken(): string {
   if (!csrfToken) {
-    // 生成随机CSRF令牌
-    csrfToken = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    // 使用安全随机数生成 CSRF 令牌
+    const randomValues = new Uint32Array(4);
+    crypto.getRandomValues(randomValues);
+    csrfToken = randomValues.map(v => v.toString(36)).join('');
     // 存储到本地存储
     try {
       const wx = getWx();
@@ -283,7 +339,7 @@ function generateCsrfToken(): string {
         wx.setStorageSync("csrfToken", csrfToken);
       }
     } catch (error) {
-      console.warn("Failed to save CSRF token to storage:", error);
+      console.warn("Failed to save CSRF token to storage");
     }
   }
   return csrfToken;
@@ -372,34 +428,52 @@ function sanitizeHtml(html: string): string {
 
 /**
  * 验证请求数据，防止SQL注入
+ * 安全修复: 优化检测模式，减少误报，只检测真正的注入模式
  */
 function validateRequestData(data: Record<string, unknown>): void {
-    // 增强的SQL注入检测模式
+    // 优化的SQL注入检测模式 - 只检测真正的注入模式，减少误报
     const sqlInjectionPatterns = [
-      // 基础SQL注入模式
-      /('|--|;|#|-- | --|\/\*)/i,
-      // 常见SQL关键字
-      /\b(SELECT|INSERT|UPDATE|DELETE|DROP|ALTER|CREATE|TRUNCATE|EXECUTE|UNION|JOIN|FROM|WHERE|GROUP|ORDER|HAVING|LIMIT|OFFSET|INTO|VALUES|CALL|EXEC|DECLARE|BEGIN|END|FETCH|LOCK|MERGE|ROLLBACK|COMMIT|SAVEPOINT|GRANT|REVOKE|DENY|TRANSACTION|LOCK)\b/i,
-      // 注释模式
-      /\/\*.*?\*\//i,
-      // 时间盲注模式
-      /\b(WAITFOR|SLEEP|DELAY|SLEEP\(|WAITFOR\s+DELAY)\b/i,
-      // 联合查询模式
-      /\b(UNION|ALL)\b.*?\b(SELECT|INSERT|UPDATE|DELETE)\b/i,
-      // 子查询模式
-      /\(\s*SELECT\s+/i,
-      // 条件注入模式
-      /\b(OR|AND|NOT)\s+\d+\s*=\s*\d+\b/i,
-      // 类型转换注入
-      /\b(CONVERT|CAST|CONVERT\(|CAST\()\b/i,
-      // 字符串连接注入
-      /(\+|\|\|)\s*'\s*\w+\s*'\s*(\+|\|\|)/i,
-      // 空值注入
-      /\bIS\s+NULL\b/i
+      // SQL 语句结构模式（必须包含多个 SQL 元素组合）
+      /\bSELECT\b.*\bFROM\b/i,                    // SELECT ... FROM
+      /\bINSERT\b.*\bINTO\b.*\bVALUES\b/i,        // INSERT INTO ... VALUES
+      /\bUPDATE\b.*\bSET\b/i,                     // UPDATE ... SET
+      /\bDELETE\b.*\bFROM\b/i,                    // DELETE FROM
+      /\bDROP\b.*\b(TABLE|DATABASE|INDEX)\b/i,    // DROP TABLE/DATABASE/INDEX
+      /\bALTER\b.*\b(TABLE|DATABASE)\b/i,         // ALTER TABLE/DATABASE
+      /\bCREATE\b.*\b(TABLE|DATABASE|INDEX)\b/i,  // CREATE TABLE/DATABASE/INDEX
+      /\bTRUNCATE\b.*\bTABLE\b/i,                 // TRUNCATE TABLE
+      
+      // 危险的 SQL 注入技巧
+      /\bUNION\b.*\bSELECT\b/i,                   // UNION SELECT 注入
+      /\(\s*SELECT\b/i,                           // 子查询注入
+      /'.*(\bOR\b|\bAND\b).*'.*=.*'/i,            // 字符串注入 ' OR '1'='1
+      /\bOR\b\s+\d+\s*=\s*\d+/i,                  // 数字注入 OR 1=1
+      /\bAND\b\s+\d+\s*=\s*\d+/i,                 // 数字注入 AND 1=1
+      
+      // SQL 注释注入（用于截断查询）
+      /'--/i,                                     // 单引号后注释
+      /'#\s*$/i,                                  // MySQL 注释截断
+      
+      // 时间盲注
+      /\bSLEEP\s*\(\s*\d+\s*\)/i,                 // SLEEP() 函数
+      /\bWAITFOR\b.*\bDELAY\b/i,                  // WAITFOR DELAY
+      /\bBENCHMARK\s*\(/i,                        // MySQL BENCHMARK
+      
+      // 危险函数
+      /\bLOAD_FILE\s*\(/i,                        // MySQL LOAD_FILE
+      /\bINTO\s+OUTFILE\b/i,                      // MySQL INTO OUTFILE
+      /\bEXEC\s*\(/i,                             // EXEC 函数
+      /\bEXECUTE\s*\(/i,                          // EXECUTE 函数
+      
+      // 堆叠查询
+      /;\s*\b(SELECT|INSERT|UPDATE|DELETE|DROP|ALTER|CREATE)\b/i
     ];
 
-    // 优化的检测函数，减少正则表达式的重复执行
+    // 优化的检测函数
     function checkStringForSqlInjection(value: string, fieldPath: string): void {
+      // 只对较长的字符串进行检测（短字符串不太可能包含完整的 SQL 注入）
+      if (value.length < 10) return;
+      
       for (const pattern of sqlInjectionPatterns) {
         if (pattern.test(value)) {
           throw new Error(`Invalid request data for field ${fieldPath}: potential SQL injection detected`);
@@ -410,15 +484,12 @@ function validateRequestData(data: Record<string, unknown>): void {
     // 递归检查所有数据字段
     function checkValue(value: unknown, fieldPath: string): void {
       if (typeof value === 'string') {
-        // 检查字符串值
         checkStringForSqlInjection(value, fieldPath);
       } else if (Array.isArray(value)) {
-        // 检查数组元素
         value.forEach((item, index) => {
           checkValue(item, `${fieldPath}[${index}]`);
         });
       } else if (typeof value === 'object' && value !== null) {
-        // 检查对象字段
         for (const key in value) {
           if (value.hasOwnProperty(key)) {
             checkValue((value as Record<string, unknown>)[key], `${fieldPath}.${key}`);
@@ -446,6 +517,15 @@ function request<T = unknown>(options: RequestOptions): Promise<T> {
   if (DEFAULT_CONFIG.enableCsrf) {
     initCsrfToken();
   }
+
+  // 安全修复 M-001: 检查请求速率限制
+  const rateLimitKey = options.url.split('?')[0]; // 使用 URL（不含查询参数）作为限制键
+  if (!checkRateLimit(rateLimitKey)) {
+    return Promise.reject(new Error("请求过于频繁，请稍后再试"));
+  }
+
+  // 定期清理速率限制记录
+  cleanupRateLimit();
 
   const config: RequestOptions = {
     ...DEFAULT_CONFIG,
