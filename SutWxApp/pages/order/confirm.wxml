@@ -1,8 +1,8 @@
 
 &lt;!--
 文件名: confirm.wxml
-版本号: 2.0.0
-更新日期: 2026-05-06
+版本号: 3.0.0
+更新日期: 2026-07-01
 描述: 订单确认页面模板
 --&gt;
 &lt;view class="confirm-container"&gt;
@@ -33,7 +33,7 @@
         &lt;text class="product-name"&gt;{{item.name}}&lt;/text&gt;
         &lt;text class="product-spec" wx:if="{{item.spec}}"&gt;{{item.spec}}&lt;/text&gt;
         &lt;view class="product-bottom"&gt;
-          &lt;text class="product-price"&gt;¥{{item.price.toFixed(2)}}&lt;/text&gt;
+          &lt;text class="product-price"&gt;¥{{item.priceText}}&lt;/text&gt;
           &lt;text class="product-quantity"&gt;x{{item.quantity}}&lt;/text&gt;
         &lt;/view&gt;
       &lt;/view&gt;
@@ -56,15 +56,15 @@
   &lt;view class="price-section"&gt;
     &lt;view class="price-item"&gt;
       &lt;text class="price-label"&gt;商品金额&lt;/text&gt;
-      &lt;text class="price-value"&gt;¥{{totalPrice.toFixed(2)}}&lt;/text&gt;
+      &lt;text class="price-value"&gt;¥{{totalPriceText}}&lt;/text&gt;
     &lt;/view&gt;
     &lt;view class="price-item"&gt;
       &lt;text class="price-label"&gt;运费&lt;/text&gt;
-      &lt;text class="price-value"&gt;{{shippingFee === 0 ? '免运费' : '¥' + shippingFee.toFixed(2)}}&lt;/text&gt;
+      &lt;text class="price-value"&gt;{{shippingFee === 0 ? '免运费' : '¥' + shippingFeeText}}&lt;/text&gt;
     &lt;/view&gt;
     &lt;view class="price-item" wx:if="{{couponDiscount &gt; 0}}"&gt;
       &lt;text class="price-label"&gt;优惠券&lt;/text&gt;
-      &lt;text class="price-value discount"&gt;-¥{{couponDiscount.toFixed(2)}}&lt;/text&gt;
+      &lt;text class="price-value discount"&gt;-¥{{couponDiscountText}}&lt;/text&gt;
     &lt;/view&gt;
   &lt;/view&gt;
 
@@ -72,7 +72,7 @@
   &lt;view class="bottom-bar"&gt;
     &lt;view class="total-box"&gt;
       &lt;text class="total-label"&gt;合计：&lt;/text&gt;
-      &lt;text class="total-price"&gt;¥{{finalPrice.toFixed(2)}}&lt;/text&gt;
+      &lt;text class="total-price"&gt;¥{{finalPriceText}}&lt;/text&gt;
     &lt;/view&gt;
     &lt;button
       class="submit-btn"

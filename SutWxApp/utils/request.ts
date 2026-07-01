@@ -1,7 +1,7 @@
 /**
  * 文件名: request.ts
- * 版本号: 2.0.0
- * 更新日期: 2025-12-30 14:00
+ * 版本号: 3.0.0
+ * 更新日期: 2026-07-01
  * 描述: 网络请求工具，封装wx.request，支持拦截器、重试机制、请求缓存、请求取消等
  */
 
@@ -274,8 +274,29 @@ function stopCacheCleanup(): void {
  */
 function generateCsrfToken(): string {
   if (!csrfToken) {
-    // 生成随机CSRF令牌
-    csrfToken = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    // 使用安全的随机数生成方式
+    let randomString = "";
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    try {
+      if (typeof crypto !== "undefined" && crypto.getRandomValues) {
+        const array = new Uint32Array(32);
+        crypto.getRandomValues(array);
+        for (let i = 0; i < array.length; i++) {
+          randomString += chars[array[i] % chars.length];
+        }
+      } else {
+        // 降级到 Math.random()
+        for (let i = 0; i < 32; i++) {
+          randomString += chars[Math.floor(Math.random() * chars.length)];
+        }
+      }
+    } catch (e) {
+      // 降级到 Math.random()
+      for (let i = 0; i < 32; i++) {
+        randomString += chars[Math.floor(Math.random() * chars.length)];
+      }
+    }
+    csrfToken = randomString;
     // 存储到本地存储
     try {
       const wx = getWx();

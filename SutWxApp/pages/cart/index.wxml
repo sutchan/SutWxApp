@@ -1,8 +1,8 @@
 
 &lt;!--
 文件名: index.wxml
-版本号: 2.0.0
-更新日期: 2026-05-06
+版本号: 3.0.0
+更新日期: 2026-07-01
 描述: 购物车页面模板，展示购物车商品列表
 --&gt;
 &lt;view class="cart-container"&gt;
@@ -32,7 +32,7 @@
         &lt;text class="product-spec" wx:if="{{item.spec}}"&gt;{{item.spec}}&lt;/text&gt;
 
         &lt;view class="product-bottom"&gt;
-          &lt;text class="product-price"&gt;¥{{item.price.toFixed(2)}}&lt;/text&gt;
+          &lt;text class="product-price"&gt;¥{{item.priceText}}&lt;/text&gt;
 
           &lt;view class="quantity-box"&gt;
             &lt;view class="quantity-btn" bindtap="onDecreaseQuantity" data-index="{{index}}"&gt;-&lt;/view&gt;
@@ -62,7 +62,7 @@
     &lt;!-- 合计 --&gt;
     &lt;view class="total-box"&gt;
       &lt;text class="total-label"&gt;合计：&lt;/text&gt;
-      &lt;text class="total-price"&gt;¥{{totalPrice.toFixed(2)}}&lt;/text&gt;
+      &lt;text class="total-price"&gt;¥{{totalPriceText}}&lt;/text&gt;
     &lt;/view&gt;
 
     &lt;!-- 结算按钮 --&gt;

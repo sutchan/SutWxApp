@@ -1,22 +1,27 @@
 
 /**
  * 文件名: confirm.js
- * 版本号: 2.0.0
- * 更新日期: 2026-05-06
+ * 版本号: 3.0.0
+ * 更新日期: 2026-07-01
  * 描述: 订单确认页面，用户确认订单信息并提交
  */
 
 const orderService = require('../../services/orderService');
 const addressService = require('../../services/authService');
+const { formatPrice, formatProductListPrices } = require('../../utils/format');
 
 Page({
   data: {
     items: [],
     address: null,
     totalPrice: 0,
+    totalPriceText: '0.00',
     shippingFee: 0,
+    shippingFeeText: '0.00',
     couponDiscount: 0,
+    couponDiscountText: '0.00',
     finalPrice: 0,
+    finalPriceText: '0.00',
     remark: '',
     submitting: false
   },
@@ -25,7 +30,7 @@ Page({
     if (options.items) {
       try {
         const items = JSON.parse(decodeURIComponent(options.items));
-        this.setData({ items });
+        this.setData({ items: formatProductListPrices(items) });
         this.calculatePrice();
       } catch (error) {
         console.error('解析商品信息失败:', error);
@@ -67,9 +72,13 @@ Page({
 
     this.setData({
       totalPrice,
+      totalPriceText: formatPrice(totalPrice),
       shippingFee,
+      shippingFeeText: formatPrice(shippingFee),
       couponDiscount,
-      finalPrice
+      couponDiscountText: formatPrice(couponDiscount),
+      finalPrice,
+      finalPriceText: formatPrice(finalPrice)
     });
   },
 

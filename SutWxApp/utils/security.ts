@@ -1,7 +1,7 @@
 /**
  * 文件名: security.ts
- * 版本号: 2.0.0
- * 更新日期: 2025-12-29 15:30
+ * 版本号: 3.0.0
+ * 更新日期: 2026-07-01
  * 描述: 安全工具类，提供请求签名、敏感信息加密、数据脱敏等功能
  */
 
@@ -183,14 +183,7 @@ class SecurityUtil {
       .join("&");
 
     const signString = `${paramString}&key=${this.signConfig.appSecret}`;
-    // 使用简单的字符串哈希实现，确保不同参数返回不同签名
-    let hash = 0;
-    for (let i = 0; i < signString.length; i++) {
-      const char = signString.charCodeAt(i);
-      hash = (hash << 5) - hash + char;
-      hash = hash & hash;
-    }
-    return hash.toString(16).toUpperCase();
+    return this.md5(signString).toUpperCase();
   }
 
   /**
@@ -242,21 +235,24 @@ class SecurityUtil {
   }
 
   /**
-   * 加密数据 - 使用更安全的实现
+   * 加密数据 - 使用XOR混淆+Base64编码（前端数据保护，非银行级加密）
    * @param data 明文数据
    * @returns string 加密后的数据
    */
   encrypt(data: Record<string, unknown>): string {
     try {
       const jsonString = JSON.stringify(data);
-      
-      // 简化实现，直接返回Base64编码的JSON字符串
-      // 移除时间戳和随机数前缀，避免分割问题
+      const key = this.config.secretKey;
+      let encrypted = "";
+      for (let i = 0; i < jsonString.length; i++) {
+        encrypted += String.fromCharCode(
+          jsonString.charCodeAt(i) ^ key.charCodeAt(i % key.length)
+        );
+      }
       if (typeof Buffer !== "undefined") {
-        return Buffer.from(jsonString).toString("base64");
+        return Buffer.from(encrypted, "binary").toString("base64");
       } else {
-        // 浏览器环境下使用btoa
-        return btoa(unescape(encodeURIComponent(jsonString)));
+        return btoa(unescape(encodeURIComponent(encrypted)));
       }
     } catch (error) {
       console.error("[SecurityUtil] 加密失败:", error);
@@ -265,7 +261,7 @@ class SecurityUtil {
   }
 
   /**
-   * 解密数据 - 使用更安全的实现
+   * 解密数据 - 使用XOR混淆+Base64解码
    * @param encryptedData 加密数据
    * @returns Record<string, unknown> 解密后的数据
    */
@@ -273,14 +269,18 @@ class SecurityUtil {
     try {
       let decrypted: string;
       if (typeof Buffer !== "undefined") {
-        decrypted = Buffer.from(encryptedData, "base64").toString();
+        decrypted = Buffer.from(encryptedData, "base64").toString("binary");
       } else {
-        // 浏览器环境下使用atob
         decrypted = decodeURIComponent(escape(atob(encryptedData)));
       }
-      
-      // 直接解析JSON字符串，避免分割问题
-      return JSON.parse(decrypted);
+      const key = this.config.secretKey;
+      let jsonString = "";
+      for (let i = 0; i < decrypted.length; i++) {
+        jsonString += String.fromCharCode(
+          decrypted.charCodeAt(i) ^ key.charCodeAt(i % key.length)
+        );
+      }
+      return JSON.parse(jsonString);
     } catch (error) {
       console.error("[SecurityUtil] 解密失败:", error);
       throw new Error("数据解密失败");

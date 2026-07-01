@@ -1,17 +1,19 @@
 
 /**
  * 文件名: index.js
- * 版本号: 2.0.0
- * 更新日期: 2026-05-06
+ * 版本号: 3.0.0
+ * 更新日期: 2026-07-01
  * 描述: 购物车页面，展示购物车商品列表，支持数量调整、删除商品和结算功能
  */
 
 const cartService = require('../../services/cartService');
+const { formatPrice, formatCartListPrices } = require('../../utils/format');
 
 Page({
   data: {
     cartList: [],
     totalPrice: 0,
+    totalPriceText: '0.00',
     totalCount: 0,
     selectAll: false,
     loading: false,
@@ -38,8 +40,9 @@ Page({
       const selectAll = this.checkSelectAll(cartList);
 
       this.setData({
-        cartList,
+        cartList: formatCartListPrices(cartList),
         totalPrice,
+        totalPriceText: formatPrice(totalPrice),
         totalCount,
         selectAll,
         empty: cartList.length === 0,
@@ -98,8 +101,9 @@ Page({
     const selectAll = this.checkSelectAll(cartList);
 
     this.setData({
-      cartList,
+      cartList: formatCartListPrices(cartList),
       totalPrice,
+      totalPriceText: formatPrice(totalPrice),
       totalCount,
       selectAll
     });
@@ -112,7 +116,7 @@ Page({
    */
   onSelectAll() {
     const selectAll = !this.data.selectAll;
-    const cartList = this.data.cartList.map(item =&gt; ({
+    const cartList = this.data.cartList.map(item => ({
       ...item,
       selected: selectAll
     }));
@@ -121,8 +125,9 @@ Page({
     const totalCount = this.calculateTotalCount(cartList);
 
     this.setData({
-      cartList,
+      cartList: formatCartListPrices(cartList),
       totalPrice,
+      totalPriceText: formatPrice(totalPrice),
       totalCount,
       selectAll
     });
@@ -143,8 +148,9 @@ Page({
     const totalCount = this.calculateTotalCount(cartList);
 
     this.setData({
-      cartList,
+      cartList: formatCartListPrices(cartList),
       totalPrice,
+      totalPriceText: formatPrice(totalPrice),
       totalCount
     });
 
@@ -159,7 +165,7 @@ Page({
     const cartList = [...this.data.cartList];
     const item = cartList[index];
 
-    if (item.quantity &lt;= 1) {
+    if (item.quantity <= 1) {
       this.onDeleteItem(e);
       return;
     }
@@ -170,8 +176,9 @@ Page({
     const totalCount = this.calculateTotalCount(cartList);
 
     this.setData({
-      cartList,
+      cartList: formatCartListPrices(cartList),
       totalPrice,
+      totalPriceText: formatPrice(totalPrice),
       totalCount
     });
 

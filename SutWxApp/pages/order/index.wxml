@@ -1,8 +1,8 @@
 
 &lt;!--
 文件名: index.wxml
-版本号: 2.0.0
-更新日期: 2026-05-06
+版本号: 3.0.0
+更新日期: 2026-07-01
 描述: 订单列表页面模板
 --&gt;
 &lt;view class="order-container"&gt;
@@ -54,7 +54,7 @@
             &lt;text class="product-name"&gt;{{product.name}}&lt;/text&gt;
             &lt;text class="product-spec" wx:if="{{product.spec}}"&gt;{{product.spec}}&lt;/text&gt;
             &lt;view class="product-bottom"&gt;
-              &lt;text class="product-price"&gt;¥{{product.price.toFixed(2)}}&lt;/text&gt;
+              &lt;text class="product-price"&gt;¥{{product.priceText}}&lt;/text&gt;
               &lt;text class="product-quantity"&gt;x{{product.quantity}}&lt;/text&gt;
             &lt;/view&gt;
           &lt;/view&gt;
@@ -63,7 +63,7 @@
 
       &lt;!-- 订单底部 --&gt;
       &lt;view class="order-footer"&gt;
-        &lt;text class="order-total"&gt;共{{item.totalQuantity}}件商品 合计：&lt;text class="price"&gt;¥{{item.totalPrice.toFixed(2)}}&lt;/text&gt;&lt;/text&gt;
+        &lt;text class="order-total"&gt;共{{item.totalQuantity}}件商品 合计：&lt;text class="price"&gt;¥{{item.totalPriceText}}&lt;/text&gt;&lt;/text&gt;
         
         &lt;view class="order-actions"&gt;
           &lt;button
