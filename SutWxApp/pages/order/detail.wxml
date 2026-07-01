@@ -1,8 +1,8 @@
 
 &lt;!--
 文件名: detail.wxml
-版本号: 2.0.0
-更新日期: 2026-05-06
+版本号: 3.0.0
+更新日期: 2026-07-01
 描述: 订单详情页面模板
 --&gt;
 &lt;view class="detail-container" wx:if="{{!loading}}"&gt;
@@ -32,7 +32,7 @@
         &lt;text class="product-name"&gt;{{item.name}}&lt;/text&gt;
         &lt;text class="product-spec" wx:if="{{item.spec}}"&gt;{{item.spec}}&lt;/text&gt;
         &lt;view class="product-bottom"&gt;
-          &lt;text class="product-price"&gt;¥{{item.price.toFixed(2)}}&lt;/text&gt;
+          &lt;text class="product-price"&gt;¥{{item.priceText}}&lt;/text&gt;
           &lt;text class="product-quantity"&gt;x{{item.quantity}}&lt;/text&gt;
         &lt;/view&gt;
       &lt;/view&gt;
@@ -67,19 +67,19 @@
   &lt;view class="price-section"&gt;
     &lt;view class="price-item"&gt;
       &lt;text class="price-label"&gt;商品金额&lt;/text&gt;
-      &lt;text class="price-value"&gt;¥{{orderDetail.productPrice.toFixed(2)}}&lt;/text&gt;
+      &lt;text class="price-value"&gt;¥{{orderDetail.productPriceText}}&lt;/text&gt;
     &lt;/view&gt;
     &lt;view class="price-item"&gt;
       &lt;text class="price-label"&gt;运费&lt;/text&gt;
-      &lt;text class="price-value"&gt;¥{{orderDetail.shippingFee.toFixed(2)}}&lt;/text&gt;
+      &lt;text class="price-value"&gt;¥{{orderDetail.shippingFeeText}}&lt;/text&gt;
     &lt;/view&gt;
     &lt;view class="price-item" wx:if="{{orderDetail.couponDiscount &gt; 0}}"&gt;
       &lt;text class="price-label"&gt;优惠券&lt;/text&gt;
-      &lt;text class="price-value discount"&gt;-¥{{orderDetail.couponDiscount.toFixed(2)}}&lt;/text&gt;
+      &lt;text class="price-value discount"&gt;-¥{{orderDetail.couponDiscountText}}&lt;/text&gt;
     &lt;/view&gt;
     &lt;view class="price-item total"&gt;
       &lt;text class="price-label"&gt;实付金额&lt;/text&gt;
-      &lt;text class="price-value total-value"&gt;¥{{orderDetail.totalPrice.toFixed(2)}}&lt;/text&gt;
+      &lt;text class="price-value total-value"&gt;¥{{orderDetail.totalPriceText}}&lt;/text&gt;
     &lt;/view&gt;
   &lt;/view&gt;
 

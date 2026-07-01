@@ -1,13 +1,14 @@
 
 /**
  * 文件名: index.js
- * 版本号: 2.0.0
- * 更新日期: 2026-05-06
+ * 版本号: 3.0.0
+ * 更新日期: 2026-07-01
  * 描述: 分类页面，展示商品分类和分类下的商品列表
  */
 
 const categoryService = require('../../services/categoryService');
 const productService = require('../../services/productService');
+const { formatProductListPrices } = require('../../utils/format');
 
 Page({
   data: {
@@ -56,7 +57,7 @@ Page({
       const productList = await productService.getProductList({ categoryId });
       
       this.setData({
-        productList,
+        productList: formatProductListPrices(productList),
         loading: false
       });
     } catch (error) {

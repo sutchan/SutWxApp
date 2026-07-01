@@ -1,12 +1,13 @@
 
 /**
  * 文件名: index.js
- * 版本号: 2.0.0
- * 更新日期: 2026-05-06
+ * 版本号: 3.0.0
+ * 更新日期: 2026-07-01
  * 描述: 订单列表页面，展示用户订单列表，支持订单状态筛选和订单操作
  */
 
 const orderService = require('../../services/orderService');
+const { formatOrderListPrices } = require('../../utils/format');
 
 Page({
   data: {
@@ -55,7 +56,7 @@ Page({
       const orderList = await orderService.getOrderList(status);
 
       this.setData({
-        orderList,
+        orderList: formatOrderListPrices(orderList),
         empty: orderList.length === 0,
         loading: false
       });

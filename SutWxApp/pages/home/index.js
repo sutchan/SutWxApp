@@ -1,7 +1,7 @@
 /**
  * 文件名: index.js
- * 版本号: 2.1.0
- * 更新日期: 2026-06-09
+ * 版本号: 3.0.0
+ * 更新日期: 2025-12-26
  * 描述: 首页逻辑控制层
  */
 
@@ -85,15 +85,7 @@ Page({
       method: "GET",
       success: function (res) {
         if (res.data && res.data.success) {
-          const list = Array.isArray(res.data.data) ? res.data.data : [];
-          const normalized = list.map(function (item) {
-            return {
-              id: item.id,
-              imageUrl: item.imageUrl || item.imgUrl || item.image || "",
-              link: item.link || item.url || "",
-            };
-          });
-          that.setData({ bannerList: normalized });
+          that.setData({ bannerList: res.data.data });
         }
       },
       fail: function () {
@@ -141,49 +133,21 @@ Page({
       },
       success: function (res) {
         if (res.data && res.data.success) {
-          const rawList = res.data.data && res.data.data.list
-            ? res.data.data.list
-            : [];
-          const list = Array.isArray(rawList) ? rawList : [];
-          const hasMore =
-            res.data.data && typeof res.data.data.hasMore !== "undefined"
-              ? res.data.data.hasMore
-              : list.length >= that.data.pageSize;
-          const normalized = list.map(function (item) {
-            return {
-              id: item.id,
-              name: item.name || item.title || "未知商品",
-              imageUrl:
-                item.imageUrl ||
-                item.imgUrl ||
-                item.image ||
-                item.cover ||
-                "",
-              price:
-                typeof item.price === "number"
-                  ? item.price.toFixed(2)
-                  : item.price || item.salePrice || "0.00",
-            };
-          });
+          const { list, hasMore } = res.data.data;
           const newList =
             that.data.pageNum === 1
-              ? normalized
-              : [...that.data.productList, ...normalized];
+              ? list
+              : [...that.data.productList, ...list];
           that.setData({
             productList: newList,
             hasMore,
             isLoading: false,
           });
-        } else {
-          that.setData({ isLoading: false });
         }
       },
       fail: function () {
         console.error("获取产品列表失败");
-        that.setData({
-          productList: that.data.pageNum === 1 ? [] : that.data.productList,
-          isLoading: false,
-        });
+        that.setData({ isLoading: false });
       },
       complete: function () {
         wx.stopPullDownRefresh();
@@ -270,57 +234,5 @@ Page({
     wx.navigateTo({
       url: "/pages/points/points",
     });
-  },
-
-  handleFavorite: function (e) {
-    const { id } = e.currentTarget.dataset;
-    const productList = this.data.productList.map(function (item) {
-      if (item.id === id) {
-        item.isFavorite = !item.isFavorite;
-      }
-      return item;
-    });
-    this.setData({ productList });
-    wx.showToast({
-      title: productList.find(function (item) {
-        return item.id === id;
-      }).isFavorite
-        ? "已收藏"
-        : "已取消收藏",
-      icon: "none",
-    });
-  },
-
-  handleShare: function (e) {
-    const { id } = e.currentTarget.dataset;
-    const product = this.data.productList.find(function (item) {
-      return item.id === id;
-    });
-    wx.showShareMenu({
-      withShareTicket: true,
-    });
-    wx.showToast({
-      title: "点击右上角分享",
-      icon: "none",
-    });
-  },
-
-  onShareAppMessage: function (res) {
-    if (res && res.target && res.target.dataset && res.target.dataset.id) {
-      const id = res.target.dataset.id;
-      const product = this.data.productList.find(function (item) {
-        return item.id === id;
-      });
-      return {
-        title: product ? product.name : "推荐商品",
-        path: product
-          ? `/pages/product/detail?id=${id}`
-          : "/pages/home/index",
-      };
-    }
-    return {
-      title: "发现好物",
-      path: "/pages/home/index",
-    };
   },
 });
