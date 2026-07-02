@@ -1,12 +1,13 @@
 
 /**
  * 文件名: detail.js
- * 版本号: 2.0.0
- * 更新日期: 2026-05-06
+ * 版本号: 3.0.0
+ * 更新日期: 2026-07-01
  * 描述: 订单详情页面，展示订单详细信息
  */
 
 const orderService = require('../../services/orderService');
+const { formatOrderDetailPrices } = require('../../utils/format');
 
 Page({
   data: {
@@ -29,7 +30,7 @@ Page({
       this.setData({ loading: true });
       const orderDetail = await orderService.getOrderDetail(this.data.orderId);
       this.setData({
-        orderDetail,
+        orderDetail: formatOrderDetailPrices(orderDetail),
         loading: false
       });
     } catch (error) {

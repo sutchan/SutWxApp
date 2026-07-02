@@ -1,8 +1,8 @@
 
 &lt;!--
 文件名: index.wxml
-版本号: 2.0.0
-更新日期: 2026-05-06
+版本号: 3.0.0
+更新日期: 2026-07-01
 描述: 分类页面模板
 --&gt;
 &lt;view class="category-container"&gt;
@@ -34,7 +34,7 @@
           &lt;text class="product-name"&gt;{{item.name}}&lt;/text&gt;
           &lt;text class="product-desc" wx:if="{{item.desc}}"&gt;{{item.desc}}&lt;/text&gt;
           &lt;view class="product-bottom"&gt;
-            &lt;text class="product-price"&gt;¥{{item.price.toFixed(2)}}&lt;/text&gt;
+            &lt;text class="product-price"&gt;¥{{item.priceText}}&lt;/text&gt;
             &lt;button class="add-cart-btn"&gt;+&lt;/button&gt;
           &lt;/view&gt;
         &lt;/view&gt;

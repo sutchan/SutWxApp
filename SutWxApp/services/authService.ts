@@ -1,15 +1,11 @@
 /**
  * 文件名: authService.ts
- * 版本号: 2.2.0
- * 更新日期: 2026-06-09
+ * 版本号: 3.0.0
+ * 更新日期: 2025-12-29 15:00
  * 描述: 认证服务，处理用户登录、注册、信息管理等功能
- * 
- * 安全修复记录:
- * - v2.2.0: 修复 H-002，使用加密存储敏感数据；修复 M-002，优化错误日志
  */
 
 import request, { CancelToken } from "../utils/request";
-import securityUtil from "../utils/security";
 
 /**
  * 用户基本信息接口
@@ -463,20 +459,14 @@ class AuthService {
 
   /**
    * 获取存储的Token
-   * 安全修复: 从加密存储读取 Token
    * @returns string | null Token字符串
    */
   getToken(): string | null {
     try {
-      // 安全修复: 从加密存储读取 Token
-      const tokenData = securityUtil.secureRead<{ value: string }>("token");
-      if (tokenData && tokenData.value && typeof tokenData.value === "string" && tokenData.value.length > 0) {
-        return tokenData.value;
-      }
-      return null;
+      const token = wx.getStorageSync("token");
+      return typeof token === "string" && token.length > 0 ? token : null;
     } catch (error) {
-      // 安全修复: 不在日志中泄露敏感数据
-      console.error("[AuthService] 获取Token失败");
+      console.error("[AuthService] 获取Token失败:", error);
       return null;
     }
   }
@@ -486,17 +476,7 @@ class AuthService {
    * @returns boolean 是否已登录
    */
   isLoggedIn(): boolean {
-    // 快速检查标志位
-    try {
-      const hasToken = wx.getStorageSync("hasToken");
-      if (hasToken) {
-        return !!this.getToken();
-      }
-    } catch {
-      // 如果标志位读取失败，直接检查加密存储
-      return !!this.getToken();
-    }
-    return false;
+    return !!this.getToken();
   }
 
   /**
@@ -524,7 +504,6 @@ class AuthService {
 
   /**
    * 保存Token到存储
-   * 安全修复: 使用加密存储敏感数据
    * @param token Token字符串
    */
   private saveToken(token: string): void {
@@ -533,19 +512,14 @@ class AuthService {
         console.warn("[AuthService] 无效的Token格式");
         return;
       }
-      // 安全修复: 使用加密存储 Token
-      securityUtil.secureStore("token", { value: token });
-      // 同时保存一个标志位，用于快速判断是否已登录
-      wx.setStorageSync("hasToken", true);
+      wx.setStorageSync("token", token);
     } catch (error) {
-      // 安全修复: 不在日志中泄露敏感数据
-      console.error("[AuthService] 保存Token失败");
+      console.error("[AuthService] 保存Token失败:", error);
     }
   }
 
   /**
    * 保存用户信息到存储
-   * 安全修复: 使用加密存储敏感数据
    * @param userInfo 用户信息
    */
   private saveUserInfo(userInfo: UserInfo): void {
@@ -554,11 +528,9 @@ class AuthService {
         console.warn("[AuthService] 无效的用户信息格式");
         return;
       }
-      // 安全修复: 使用加密存储用户信息
-      securityUtil.secureStore("userInfo", userInfo as Record<string, unknown>);
+      wx.setStorageSync("userInfo", userInfo);
     } catch (error) {
-      // 安全修复: 不在日志中泄露敏感数据
-      console.error("[AuthService] 保存用户信息失败");
+      console.error("[AuthService] 保存用户信息失败:", error);
     }
   }
 
@@ -567,13 +539,11 @@ class AuthService {
    */
   private clearAuthData(): void {
     try {
-      // 清除加密存储的数据
-      securityUtil.secureRemove("token");
-      securityUtil.secureRemove("userInfo");
-      wx.removeStorageSync("hasToken");
+      wx.removeStorageSync("token");
+      wx.removeStorageSync("userInfo");
       wx.removeStorageSync("openid");
     } catch (error) {
-      console.error("[AuthService] 清除认证数据失败");
+      console.error("[AuthService] 清除认证数据失败:", error);
     }
   }
 

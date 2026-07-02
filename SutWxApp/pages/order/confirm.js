@@ -1,24 +1,27 @@
+
 /**
  * 文件名: confirm.js
- * 版本号: 2.1.0
- * 更新日期: 2026-06-09
+ * 版本号: 3.0.0
+ * 更新日期: 2026-07-01
  * 描述: 订单确认页面，用户确认订单信息并提交
  */
 
 const orderService = require('../../services/orderService');
+const addressService = require('../../services/authService');
+const { formatPrice, formatProductListPrices } = require('../../utils/format');
 
 Page({
   data: {
     items: [],
     address: null,
     totalPrice: 0,
+    totalPriceText: '0.00',
     shippingFee: 0,
+    shippingFeeText: '0.00',
     couponDiscount: 0,
+    couponDiscountText: '0.00',
     finalPrice: 0,
-    totalPriceText: '¥0.00',
-    shippingFeeText: '免运费',
-    couponDiscountText: '¥0.00',
-    finalPriceText: '¥0.00',
+    finalPriceText: '0.00',
     remark: '',
     submitting: false
   },
@@ -26,22 +29,8 @@ Page({
   onLoad(options) {
     if (options.items) {
       try {
-        const rawItems = JSON.parse(decodeURIComponent(options.items));
-        const items = rawItems.map((item) => {
-          const price = Number(item.price) || 0;
-          const quantity = Number(item.quantity) || 0;
-          return {
-            id: item.id,
-            name: item.name || '商品',
-            image: item.image || item.imageUrl || '/images/placeholder.svg',
-            spec: item.spec || '',
-            price: price,
-            priceText: '¥' + price.toFixed(2),
-            quantity: quantity,
-            quantityText: 'x' + quantity
-          };
-        });
-        this.setData({ items });
+        const items = JSON.parse(decodeURIComponent(options.items));
+        this.setData({ items: formatProductListPrices(items) });
         this.calculatePrice();
       } catch (error) {
         console.error('解析商品信息失败:', error);
@@ -59,9 +48,9 @@ Page({
    */
   async loadAddress() {
     try {
-      const addressList = wx.getStorageSync('addressList') || [];
-      if (addressList && addressList.length > 0) {
-        const defaultAddress = addressList.find(addr => addr.isDefault) || addressList[0];
+      const addressList = await addressService.getAddressList();
+      if (addressList &amp;&amp; addressList.length &gt; 0) {
+        const defaultAddress = addressList.find(addr =&gt; addr.isDefault) || addressList[0];
         this.setData({ address: defaultAddress });
       }
     } catch (error) {
@@ -73,31 +62,23 @@ Page({
    * 计算价格
    */
   calculatePrice() {
-    const items = this.data.items || [];
-    const totalPrice = items.reduce((total, item) => {
-      const price = Number(item.price) || 0;
-      const quantity = Number(item.quantity) || 0;
-      return total + (price * quantity);
+    const totalPrice = this.data.items.reduce((total, item) =&gt; {
+      return total + (item.price * item.quantity);
     }, 0);
 
-    const shippingFee = totalPrice >= 99 ? 0 : 10;
+    const shippingFee = totalPrice &gt;= 99 ? 0 : 10;
     const couponDiscount = 0;
     const finalPrice = totalPrice + shippingFee - couponDiscount;
 
-    const totalPriceText = '¥' + totalPrice.toFixed(2);
-    const shippingFeeText = shippingFee === 0 ? '免运费' : '¥' + shippingFee.toFixed(2);
-    const couponDiscountText = '¥' + couponDiscount.toFixed(2);
-    const finalPriceText = '¥' + finalPrice.toFixed(2);
-
     this.setData({
       totalPrice,
+      totalPriceText: formatPrice(totalPrice),
       shippingFee,
+      shippingFeeText: formatPrice(shippingFee),
       couponDiscount,
+      couponDiscountText: formatPrice(couponDiscount),
       finalPrice,
-      totalPriceText,
-      shippingFeeText,
-      couponDiscountText,
-      finalPriceText
+      finalPriceText: formatPrice(finalPrice)
     });
   },
 
@@ -131,7 +112,7 @@ Page({
 
     try {
       this.setData({ submitting: true });
-
+      
       const orderData = {
         items: this.data.items,
         addressId: this.data.address.id,
@@ -145,7 +126,7 @@ Page({
         icon: 'success'
       });
 
-      setTimeout(() => {
+      setTimeout(() =&gt; {
         wx.redirectTo({
           url: '/pages/order/detail?id=' + result.id
         });
@@ -160,3 +141,4 @@ Page({
     }
   }
 });
+

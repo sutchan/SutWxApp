@@ -1,12 +1,13 @@
 
 /**
  * 文件名: index.js
- * 版本号: 2.1.0
- * 更新日期: 2026-06-09
+ * 版本号: 3.0.0
+ * 更新日期: 2026-07-01
  * 描述: 购物车页面，展示购物车商品列表，支持数量调整、删除商品和结算功能
  */
 
 const cartService = require('../../services/cartService');
+const { formatPrice, formatCartListPrices } = require('../../utils/format');
 
 Page({
   data: {
@@ -34,8 +35,19 @@ Page({
     try {
       this.setData({ loading: true });
       const cartList = await cartService.getCartList();
-      this.updateCartState(cartList);
-      this.setData({ loading: false });
+      const totalPrice = this.calculateTotalPrice(cartList);
+      const totalCount = this.calculateTotalCount(cartList);
+      const selectAll = this.checkSelectAll(cartList);
+
+      this.setData({
+        cartList: formatCartListPrices(cartList),
+        totalPrice,
+        totalPriceText: formatPrice(totalPrice),
+        totalCount,
+        selectAll,
+        empty: cartList.length === 0,
+        loading: false
+      });
     } catch (error) {
       console.error('加载购物车失败:', error);
       wx.showToast({
@@ -47,55 +59,12 @@ Page({
   },
 
   /**
-   * 统一更新购物车状态（包含价格格式化）
-   */
-  updateCartState(cartList) {
-    const processedList = this.normalizeCartItems(cartList);
-    const totalPrice = this.calculateTotalPrice(processedList);
-    const totalCount = this.calculateTotalCount(processedList);
-    const selectAll = this.checkSelectAll(processedList);
-
-    this.setData({
-      cartList: processedList,
-      totalPrice,
-      totalPriceText: totalPrice.toFixed(2),
-      totalCount,
-      selectAll,
-      empty: processedList.length === 0
-    });
-  },
-
-  /**
-   * 标准化购物车商品数据字段，并预先格式化价格文本
-   * 统一字段：image（图片）、price（单价）、quantity（数量）、priceText（格式化后的价格字符串）
-   */
-  normalizeCartItems(cartList) {
-    if (!Array.isArray(cartList)) return [];
-
-    return cartList.map(item => {
-      const image = item.image || item.imageUrl || '/images/placeholder.svg';
-      const price = Number(item.price) || 0;
-      const quantity = Number(item.quantity) || 0;
-      const selected = typeof item.selected === 'boolean' ? item.selected : true;
-
-      return {
-        ...item,
-        image,
-        price,
-        priceText: price.toFixed(2),
-        quantity,
-        selected
-      };
-    });
-  },
-
-  /**
    * 计算选中商品的总价
    */
   calculateTotalPrice(cartList) {
     return cartList
-      .filter(item => item.selected)
-      .reduce((total, item) => {
+      .filter(item =&gt; item.selected)
+      .reduce((total, item) =&gt; {
         return total + (item.price * item.quantity);
       }, 0);
   },
@@ -105,8 +74,8 @@ Page({
    */
   calculateTotalCount(cartList) {
     return cartList
-      .filter(item => item.selected)
-      .reduce((total, item) => {
+      .filter(item =&gt; item.selected)
+      .reduce((total, item) =&gt; {
         return total + item.quantity;
       }, 0);
   },
@@ -115,8 +84,8 @@ Page({
    * 检查是否全选
    */
   checkSelectAll(cartList) {
-    if (!Array.isArray(cartList) || cartList.length === 0) return false;
-    return cartList.every(item => item.selected);
+    if (cartList.length === 0) return false;
+    return cartList.every(item =&gt; item.selected);
   },
 
   /**
@@ -132,9 +101,9 @@ Page({
     const selectAll = this.checkSelectAll(cartList);
 
     this.setData({
-      cartList,
+      cartList: formatCartListPrices(cartList),
       totalPrice,
-      totalPriceText: totalPrice.toFixed(2),
+      totalPriceText: formatPrice(totalPrice),
       totalCount,
       selectAll
     });
@@ -156,14 +125,14 @@ Page({
     const totalCount = this.calculateTotalCount(cartList);
 
     this.setData({
-      cartList,
+      cartList: formatCartListPrices(cartList),
       totalPrice,
-      totalPriceText: totalPrice.toFixed(2),
+      totalPriceText: formatPrice(totalPrice),
       totalCount,
       selectAll
     });
 
-    cartList.forEach(item => this.updateCartItem(item));
+    cartList.forEach(item =&gt; this.updateCartItem(item));
   },
 
   /**
@@ -179,9 +148,9 @@ Page({
     const totalCount = this.calculateTotalCount(cartList);
 
     this.setData({
-      cartList,
+      cartList: formatCartListPrices(cartList),
       totalPrice,
-      totalPriceText: totalPrice.toFixed(2),
+      totalPriceText: formatPrice(totalPrice),
       totalCount
     });
 
@@ -207,9 +176,9 @@ Page({
     const totalCount = this.calculateTotalCount(cartList);
 
     this.setData({
-      cartList,
+      cartList: formatCartListPrices(cartList),
       totalPrice,
-      totalPriceText: totalPrice.toFixed(2),
+      totalPriceText: formatPrice(totalPrice),
       totalCount
     });
 
@@ -226,7 +195,7 @@ Page({
     wx.showModal({
       title: '提示',
       content: '确定要删除该商品吗？',
-      success: async (res) => {
+      success: async (res) =&gt; {
         if (res.confirm) {
           try {
             await cartService.removeFromCart(item.id);
@@ -258,7 +227,7 @@ Page({
    * 结算
    */
   onCheckout() {
-    const selectedItems = this.data.cartList.filter(item => item.selected);
+    const selectedItems = this.data.cartList.filter(item =&gt; item.selected);
 
     if (selectedItems.length === 0) {
       wx.showToast({
@@ -282,3 +251,4 @@ Page({
     });
   }
 });
+
