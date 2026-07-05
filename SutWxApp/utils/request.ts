@@ -1,7 +1,7 @@
 /**
  * 文件名: request.ts
  * 版本号: 3.0.0
- * 更新日期: 2026-07-01
+ * 更新日期: 2026-07-05
  * 描述: 网络请求工具，封装wx.request，支持拦截器、重试机制、请求缓存、请求取消等
  */
 
@@ -248,14 +248,18 @@ function cleanupExpiredCache(): void {
  */
 function startCacheCleanup(): void {
   if (cacheCleanupTimer) return;
-  
-  // 检查是否存在window对象
-  const globalObj: any = typeof window !== 'undefined' ? window : typeof wx !== 'undefined' ? wx : typeof global !== 'undefined' ? global : {};
-  
+
+  // 优先使用 window.setInterval（浏览器环境），否则使用全局 setInterval（微信小程序环境）
+  // 注意：必须使用 setInterval 而非 setTimeout，回调签名一致且需用 clearInterval 清理
+  const setIntervalFn: typeof setInterval =
+    typeof window !== "undefined" && typeof window.setInterval === "function"
+      ? (window.setInterval as typeof setInterval).bind(window)
+      : setInterval;
+
   // 每5分钟清理一次过期缓存
-  cacheCleanupTimer = (globalObj.setInterval || setTimeout) (() => {
+  cacheCleanupTimer = setIntervalFn(() => {
     cleanupExpiredCache();
-  }, 5 * 60 * 1000);
+  }, 5 * 60 * 1000) as unknown as number;
 }
 
 /**
@@ -263,8 +267,12 @@ function startCacheCleanup(): void {
  */
 function stopCacheCleanup(): void {
   if (cacheCleanupTimer) {
-    const globalObj: any = typeof window !== 'undefined' ? window : typeof wx !== 'undefined' ? wx : typeof global !== 'undefined' ? global : {};
-    (globalObj.clearInterval || globalObj.clearTimeout)(cacheCleanupTimer);
+    // 与 startCacheCleanup 配套使用 clearInterval 清理（不能混用 clearTimeout）
+    if (typeof window !== "undefined" && typeof window.clearInterval === "function") {
+      window.clearInterval(cacheCleanupTimer);
+    } else {
+      clearInterval(cacheCleanupTimer);
+    }
     cacheCleanupTimer = null;
   }
 }
@@ -523,8 +531,12 @@ function request<T = unknown>(options: RequestOptions): Promise<T> {
     `${config.method}:${config.url}:${JSON.stringify(config.data || {})}`;
 
   // 检查是否在测试环境中运行
-  const isTestEnv = 
-    typeof jest !== "undefined" || process.env.NODE_ENV === "test";
+  // 微信小程序运行时无 process.env，访问会抛 ReferenceError，需用 typeof 守卫
+  const isTestEnv =
+    typeof jest !== "undefined" ||
+    (typeof process !== "undefined" &&
+      process.env &&
+      process.env.NODE_ENV === "test");
 
   // 在测试环境中禁用缓存，确保测试用例能够正确执行
   if (config.useCache && config.method === "GET" && !isTestEnv) {

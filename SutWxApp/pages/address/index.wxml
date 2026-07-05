@@ -68,7 +68,7 @@
         </view>
         <view class="form-item switch-item">
           <view class="form-label">设为默认地址</view>
-          <switch color="#ff4d4f" checked="{{formData.isDefault}}" bindchange="onSwitchChange"/>
+          <switch color="#F44336" checked="{{formData.isDefault}}" bindchange="onSwitchChange"/>
         </view>
       </view>
       <view class="modal-footer">

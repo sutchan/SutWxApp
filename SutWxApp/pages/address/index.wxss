@@ -1,3 +1,10 @@
+/**
+ * 文件名: index.wxss
+ * 版本号: 3.0.0
+ * 更新日期: 2026-07-05
+ * 描述: 地址管理页面样式表
+ */
+
 .container {
   min-height: 100vh;
   background-color: #f5f5f5;
@@ -53,7 +60,7 @@
 }
 
 .tag.default {
-  background-color: #ff4d4f;
+  background-color: var(--error-color);
   color: #fff;
   font-size: 20rpx;
   padding: 4rpx 12rpx;
@@ -86,7 +93,7 @@
 }
 
 .action-btn.delete {
-  color: #ff4d4f;
+  color: var(--error-color);
   background-color: #fff2f0;
 }
 
@@ -129,12 +136,12 @@
   justify-content: center;
   width: 90%;
   height: 96rpx;
-  background: linear-gradient(135deg, #ff4d4f 0%, #ff7875 100%);
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
   border-radius: 48rpx;
   color: #fff;
   font-size: 32rpx;
   font-weight: 500;
-  box-shadow: 0 8rpx 24rpx rgba(255, 77, 79, 0.35);
+  box-shadow: 0 8rpx 24rpx rgba(46, 125, 50, 0.35);
 }
 
 .add-address-btn .icon {
@@ -266,6 +273,6 @@
 
 .btn-confirm {
   margin-left: 20rpx;
-  background: linear-gradient(135deg, #ff4d4f 0%, #ff7875 100%);
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
   color: #fff;
 }

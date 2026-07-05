@@ -1,12 +1,15 @@
 /**
  * 文件名: index.js
  * 版本号: 3.0.0
- * 更新日期: 2025-12-28 10:30
+ * 更新日期: 2026-07-05
  * 描述: 地址管理页面，处理收货地址的增删改查
  */
 
 const app = getApp();
 const authService = require("../../../services/authService");
+
+// 错误色（与全局 --error-color 保持一致）
+const ERROR_COLOR = "#F44336";
 
 Page({
   data: {
@@ -15,6 +18,8 @@ Page({
     isEdit: false,
     editId: null,
     region: [],
+    // 是否为选择模式（从确认订单页等进入）
+    isSelectMode: false,
     formData: {
       name: "",
       phone: "",
@@ -27,6 +32,10 @@ Page({
   },
 
   onLoad: function (options) {
+    // 保存 select 参数：仅在选择模式下点击地址才回传并返回上一页
+    const isSelectMode =
+      options.select === "true" || options.select === true;
+    this.setData({ isSelectMode });
     this.loadAddressList();
   },
 
@@ -34,59 +43,52 @@ Page({
     this.loadAddressList();
   },
 
+  // 加载地址列表（getAddressList 回调直接接收数组）
   loadAddressList: function () {
     const that = this;
     wx.showLoading({ title: "加载中..." });
 
     authService.getAddressList({
-      success: function (res) {
+      success: function (list) {
         wx.hideLoading();
-        if (res.code === 0 && res.data) {
-          that.setData({
-            addressList: res.data.map((item) => ({
-              id: item.id,
-              name: item.name,
-              phone: item.phone.replace(/(\d{3})\d{4}(\d{4})/, "$1****$2"),
-              fullPhone: item.phone,
-              province: item.province,
-              city: item.city,
-              district: item.district,
-              detail: item.detail,
-              isDefault: item.isDefault === 1,
-              address: `${item.province}${item.city}${item.district}${item.detail}`,
-            })),
-          });
-        } else {
-          that.setData({ addressList: [] });
-        }
+        const addressList = (list || []).map((item) => ({
+          id: item.id,
+          name: item.name,
+          phone: String(item.phone || "").replace(
+            /(\d{3})\d{4}(\d{4})/,
+            "$1****$2"
+          ),
+          fullPhone: item.phone,
+          province: item.province,
+          city: item.city,
+          district: item.district,
+          detail: item.detail,
+          isDefault: item.isDefault === 1 || item.isDefault === true,
+          address: `${item.province}${item.city}${item.district}${item.detail}`,
+        }));
+        that.setData({ addressList });
       },
       fail: function (err) {
         wx.hideLoading();
         console.error("获取地址列表失败:", err);
-        wx.showToast({
-          title: "加载失败",
-          icon: "none",
-        });
+        wx.showToast({ title: "加载失败", icon: "none" });
       },
     });
   },
 
+  // 选择地址（仅选择模式生效）
   onSelectAddress: function (e) {
+    if (!this.data.isSelectMode) return;
+
     const id = e.currentTarget.dataset.id;
     const pages = getCurrentPages();
     if (pages.length >= 2) {
       const prevPage = pages[pages.length - 2];
-      const address = this.data.addressList.find((item) => item.id === id);
+      const address = this.data.addressList.find((item) => item.id == id);
       if (address) {
         prevPage.setData({
           selectedAddress: address,
-          "formData.receiverName": address.name,
-          "formData.receiverPhone": address.fullPhone,
-          "formData.receiverAddress": address.address,
-          "formData.receiverProvince": address.province,
-          "formData.receiverCity": address.city,
-          "formData.receiverDistrict": address.district,
-          "formData.receiverDetail": address.detail,
+          address: address,
         });
       }
     }
@@ -113,7 +115,7 @@ Page({
 
   onEditAddress: function (e) {
     const id = e.currentTarget.dataset.id;
-    const address = this.data.addressList.find((item) => item.id === id);
+    const address = this.data.addressList.find((item) => item.id == id);
     if (address) {
       this.setData({
         showModal: true,
@@ -140,7 +142,7 @@ Page({
     wx.showModal({
       title: "确认删除",
       content: "确定要删除这个收货地址吗？",
-      confirmColor: "#ff4d4f",
+      confirmColor: ERROR_COLOR,
       success: function (res) {
         if (res.confirm) {
           wx.showLoading({ title: "删除中..." });
@@ -150,14 +152,11 @@ Page({
             success: function (deleteRes) {
               wx.hideLoading();
               if (deleteRes.code === 0) {
-                wx.showToast({
-                  title: "删除成功",
-                  icon: "success",
-                });
+                wx.showToast({ title: "删除成功", icon: "success" });
                 that.loadAddressList();
               } else {
                 wx.showToast({
-                  title: res.message || "删除失败",
+                  title: deleteRes.message || "删除失败",
                   icon: "none",
                 });
               }
@@ -165,10 +164,7 @@ Page({
             fail: function (err) {
               wx.hideLoading();
               console.error("删除地址失败:", err);
-              wx.showToast({
-                title: "删除失败",
-                icon: "none",
-              });
+              wx.showToast({ title: "删除失败", icon: "none" });
             },
           });
         }
@@ -246,27 +242,18 @@ Page({
     const successCallback = (res) => {
       wx.hideLoading();
       if (res.code === 0) {
-        wx.showToast({
-          title: "保存成功",
-          icon: "success",
-        });
+        wx.showToast({ title: "保存成功", icon: "success" });
         this.setData({ showModal: false });
         this.loadAddressList();
       } else {
-        wx.showToast({
-          title: res.message || "保存失败",
-          icon: "none",
-        });
+        wx.showToast({ title: res.message || "保存失败", icon: "none" });
       }
     };
 
     const failCallback = (err) => {
       wx.hideLoading();
       console.error("保存地址失败:", err);
-      wx.showToast({
-        title: "保存失败",
-        icon: "none",
-      });
+      wx.showToast({ title: "保存失败", icon: "none" });
     };
 
     if (this.data.isEdit) {

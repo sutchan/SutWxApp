@@ -1,9 +1,8 @@
 
-&lt;view class="empty-state"&gt;
-  &lt;image wx:if="{{image}}" class="empty-image" src="{{image}}" mode="aspectFit"&gt;&lt;/image&gt;
-  &lt;text class="empty-text"&gt;{{text}}&lt;/text&gt;
-  &lt;button wx:if="{{showButton}}" class="empty-button" bindtap="onButtonTap"&gt;
+<view class="empty-state">
+  <image wx:if="{{image}}" class="empty-image" src="{{image}}" mode="aspectFit"></image>
+  <text class="empty-text">{{text}}</text>
+  <button wx:if="{{showButton}}" class="empty-button" bindtap="onButtonTap">
     {{buttonText}}
-  &lt;/button&gt;
-&lt;/view&gt;
-
+  </button>
+</view>

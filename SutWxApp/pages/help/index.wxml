@@ -13,7 +13,7 @@
   </view>
 
   <view class="help-categories">
-    <view class="category-item" wx:for="{{categories}}" wx:key="id" bindtap="onSelectCategory" data-id="{{item.id}}">
+    <view class="category-item {{selectedCategoryId == item.id ? 'active' : ''}}" wx:for="{{categories}}" wx:key="id" bindtap="onSelectCategory" data-id="{{item.id}}">
       <view class="category-icon">{{item.icon}}</view>
       <view class="category-name">{{item.name}}</view>
       <view class="category-count">{{item.count}}个问题</view>
@@ -23,7 +23,7 @@
   <view class="faq-section">
     <view class="section-title">常见问题</view>
     <view class="faq-list">
-      <view class="faq-item" wx:for="{{faqList}}" wx:key="id" bindtap="onToggleQuestion" data-id="{{item.id}}">
+      <view class="faq-item" wx:for="{{filteredList}}" wx:key="id" bindtap="onToggleQuestion" data-id="{{item.id}}">
         <view class="faq-question">
           <text class="question-text">{{item.question}}</text>
           <text class="toggle-icon">{{item.expanded ? '−' : '+'}}</text>
@@ -31,6 +31,9 @@
         <view class="faq-answer" wx:if="{{item.expanded}}">
           <text>{{item.answer}}</text>
         </view>
+      </view>
+      <view class="faq-empty" wx:if="{{filteredList.length === 0}}">
+        <text>暂无相关问题</text>
       </view>
     </view>
   </view>

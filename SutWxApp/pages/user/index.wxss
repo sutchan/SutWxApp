@@ -1,7 +1,7 @@
 /**
  * 文件名: index.wxss
  * 版本号: 3.0.0
- * 更新日期: 2025-12-26
+ * 更新日期: 2026-07-05
  * 描述: 用户中心页面样式表
  */
 
@@ -16,7 +16,7 @@ page {
 }
 
 .header-section {
-  background: linear-gradient(135deg, #e93b3d 0%, #ff6b6b 100%);
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
   padding: 40rpx 30rpx 100rpx;
 }
 
@@ -175,7 +175,7 @@ page {
   padding: 28rpx 0;
   text-align: center;
   font-size: 32rpx;
-  color: #e93b3d;
+  color: var(--error-color);
   font-weight: bold;
 }
 

@@ -2,7 +2,7 @@
 /**
  * 文件名: confirm.js
  * 版本号: 3.0.0
- * 更新日期: 2026-07-01
+ * 更新日期: 2026-07-05
  * 描述: 订单确认页面，用户确认订单信息并提交
  */
 
@@ -49,8 +49,8 @@ Page({
   async loadAddress() {
     try {
       const addressList = await addressService.getAddressList();
-      if (addressList &amp;&amp; addressList.length &gt; 0) {
-        const defaultAddress = addressList.find(addr =&gt; addr.isDefault) || addressList[0];
+      if (addressList && addressList.length > 0) {
+        const defaultAddress = addressList.find(addr => addr.isDefault) || addressList[0];
         this.setData({ address: defaultAddress });
       }
     } catch (error) {
@@ -62,11 +62,11 @@ Page({
    * 计算价格
    */
   calculatePrice() {
-    const totalPrice = this.data.items.reduce((total, item) =&gt; {
+    const totalPrice = this.data.items.reduce((total, item) => {
       return total + (item.price * item.quantity);
     }, 0);
 
-    const shippingFee = totalPrice &gt;= 99 ? 0 : 10;
+    const shippingFee = totalPrice >= 99 ? 0 : 10;
     const couponDiscount = 0;
     const finalPrice = totalPrice + shippingFee - couponDiscount;
 
@@ -116,6 +116,7 @@ Page({
       const orderData = {
         items: this.data.items,
         addressId: this.data.address.id,
+        address: this.data.address,
         remark: this.data.remark
       };
 
@@ -126,7 +127,7 @@ Page({
         icon: 'success'
       });
 
-      setTimeout(() =&gt; {
+      setTimeout(() => {
         wx.redirectTo({
           url: '/pages/order/detail?id=' + result.id
         });

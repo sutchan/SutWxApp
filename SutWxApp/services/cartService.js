@@ -2,11 +2,9 @@
 /**
  * 文件名: cartService.js
  * 版本号: 3.0.0
- * 更新日期: 2026-07-01
- * 描述: 购物车服务层，提供购物车相关的API调用和本地存储管理
+ * 更新日期: 2026-07-05
+ * 描述: 购物车服务层，提供购物车相关的本地存储管理
  */
-
-const request = require("../utils/request");
 
 const STORAGE_KEY_CART = "cart_list";
 
@@ -59,9 +57,14 @@ function calculateCartCount(cartList) {
 }
 
 function getMockProduct(productId) {
-  return mockProducts.find(p =&gt; p.id === productId) || mockProducts[0];
+  return mockProducts.find(p => p.id === productId) || mockProducts[0];
 }
 
+/**
+ * 添加商品到购物车
+ * @param {Object} options { productId, specId, quantity }
+ * @returns {Promise<Object>} 添加结果
+ */
 async function addToCart(options) {
   const { productId, specId, quantity = 1 } = options;
 
@@ -69,10 +72,10 @@ async function addToCart(options) {
     const product = getMockProduct(productId);
     const cartList = getCartFromStorage();
     const existingIndex = cartList.findIndex(function (item) {
-      return item.productId === productId &amp;&amp; item.specId === specId;
+      return item.productId === productId && item.specId === specId;
     });
 
-    if (existingIndex &gt;= 0) {
+    if (existingIndex >= 0) {
       cartList[existingIndex].quantity += quantity;
     } else {
       cartList.push({
@@ -105,26 +108,13 @@ async function addToCart(options) {
   }
 }
 
+/**
+ * 获取购物车列表
+ * @returns {Promise<Array>} 购物车列表
+ */
 async function getCartList() {
   try {
-    let cartList = getCartFromStorage();
-    
-    if (cartList.length === 0) {
-      const product = getMockProduct(1);
-      cartList = [{
-        id: 1,
-        productId: 1,
-        name: product.name,
-        image: product.image,
-        price: product.price,
-        spec: product.spec,
-        quantity: 1,
-        selected: true,
-        addTime: new Date().toISOString(),
-      }];
-      saveCartToStorage(cartList);
-    }
-
+    const cartList = getCartFromStorage();
     return cartList;
   } catch (error) {
     console.error("获取购物车列表失败:", error);
@@ -132,6 +122,11 @@ async function getCartList() {
   }
 }
 
+/**
+ * 更新购物车商品
+ * @param {Object} item 购物车商品信息
+ * @returns {Promise<Object>} 更新结果
+ */
 async function updateCartItem(item) {
   try {
     const cartList = getCartFromStorage();
@@ -139,7 +134,7 @@ async function updateCartItem(item) {
       return cartItem.id === item.id;
     });
 
-    if (targetIndex &gt;= 0) {
+    if (targetIndex >= 0) {
       cartList[targetIndex] = { ...cartList[targetIndex], ...item };
       saveCartToStorage(cartList);
       wx.setStorageSync("cartCount", calculateCartCount(cartList));
@@ -152,6 +147,11 @@ async function updateCartItem(item) {
   }
 }
 
+/**
+ * 删除购物车商品
+ * @param {number} cartId 购物车项ID
+ * @returns {Promise<Object>} 删除结果
+ */
 async function removeFromCart(cartId) {
   try {
     let cartList = getCartFromStorage();
@@ -168,6 +168,10 @@ async function removeFromCart(cartId) {
   }
 }
 
+/**
+ * 清空购物车
+ * @returns {Promise<Object>} 清空结果
+ */
 async function clearCart() {
   try {
     saveCartToStorage([]);
@@ -186,4 +190,3 @@ module.exports = {
   removeFromCart,
   clearCart,
 };
-

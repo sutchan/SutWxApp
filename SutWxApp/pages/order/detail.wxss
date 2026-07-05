@@ -2,7 +2,7 @@
 /**
  * 文件名: detail.wxss
  * 版本号: 3.0.0
- * 更新日期: 2026-07-01
+ * 更新日期: 2026-07-05
  * 描述: 订单详情页面样式
  */
 
@@ -14,7 +14,7 @@
 
 /* 订单状态 */
 .status-section {
-  background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+  background: linear-gradient(135deg, var(--primary-color), #4CAF50);
   padding: 60rpx 40rpx;
   color: white;
 }
@@ -112,7 +112,7 @@
 
 .product-price {
   font-size: 30rpx;
-  color: #ff6b6b;
+  color: var(--primary-color);
   font-weight: bold;
 }
 
@@ -173,7 +173,7 @@
 }
 
 .price-value.discount {
-  color: #ff6b6b;
+  color: var(--primary-color);
 }
 
 .price-item.total {
@@ -184,7 +184,7 @@
 
 .total-value {
   font-size: 36rpx;
-  color: #ff6b6b;
+  color: var(--primary-color);
   font-weight: bold;
 }
 
@@ -219,7 +219,27 @@
 }
 
 .action-btn.primary {
-  background-color: #ff6b6b;
+  background-color: var(--primary-color);
   color: white;
+}
+
+/* 空状态 */
+.empty-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 200rpx 0;
+}
+
+.empty-icon {
+  width: 200rpx;
+  height: 200rpx;
+  margin-bottom: 30rpx;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #999;
 }
 

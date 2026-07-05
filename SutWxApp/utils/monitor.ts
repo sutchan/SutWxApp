@@ -1,7 +1,7 @@
 /**
  * 文件名: monitor.ts
  * 版本号: 3.0.0
- * 更新日期: 2025-12-29 20:30
+ * 更新日期: 2026-07-05
  * 描述: 监控和日志工具类，用于收集和上报错误、性能数据等
  */
 
@@ -107,9 +107,16 @@ class MonitorUtil {
       clearInterval(this.timer);
     }
 
-    this.timer = window.setInterval(() => {
-      this.processLogQueue();
-    }, this.config.batchInterval);
+    // 兼容微信小程序环境（无 window 对象）：浏览器使用 window.setInterval，否则使用全局 setInterval
+    if (typeof window !== "undefined" && typeof window.setInterval === "function") {
+      this.timer = window.setInterval(() => {
+        this.processLogQueue();
+      }, this.config.batchInterval);
+    } else {
+      this.timer = setInterval(() => {
+        this.processLogQueue();
+      }, this.config.batchInterval);
+    }
   }
 
   /**
@@ -142,7 +149,6 @@ class MonitorUtil {
     // 实际上报逻辑
     console.log("[Monitor] 上报日志:", logs);
 
-    // 这里应该实现实际的上报逻辑，例如使用wx.request或其他方式
     if (typeof wx !== "undefined") {
       wx.request({
         url: this.config.reportUrl,

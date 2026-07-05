@@ -2,7 +2,7 @@
 /**
  * 文件名: index.js
  * 版本号: 3.0.0
- * 更新日期: 2026-07-01
+ * 更新日期: 2026-07-05
  * 描述: 订单列表页面，展示用户订单列表，支持订单状态筛选和订单操作
  */
 
@@ -30,7 +30,7 @@ Page({
 
   onPullDownRefresh() {
     this.loadOrderList();
-    setTimeout(() =&gt; {
+    setTimeout(() => {
       wx.stopPullDownRefresh();
     }, 1000);
   },
@@ -39,7 +39,7 @@ Page({
    * 切换标签
    */
   onTabChange(e) {
-    const activeTab = e.detail.index;
+    const activeTab = parseInt(e.currentTarget.dataset.index);
     this.setData({ activeTab });
     this.loadOrderList();
   },
@@ -88,7 +88,7 @@ Page({
     wx.showModal({
       title: '提示',
       content: '确定要取消订单吗？',
-      success: async (res) =&gt; {
+      success: async (res) => {
         if (res.confirm) {
           try {
             await orderService.cancelOrder(id);
@@ -128,7 +128,7 @@ Page({
     wx.showModal({
       title: '提示',
       content: '确定已收到商品吗？',
-      success: async (res) =&gt; {
+      success: async (res) => {
         if (res.confirm) {
           try {
             await orderService.confirmReceive(id);

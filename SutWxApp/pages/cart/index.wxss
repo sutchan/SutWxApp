@@ -1,7 +1,7 @@
 /**
  * 文件名: index.wxss
  * 版本号: 3.0.0
- * 更新日期: 2026-07-01
+ * 更新日期: 2026-07-05
  * 描述: 购物车页面样式 - Apple极简风格
  */
 
@@ -132,11 +132,6 @@
   font-weight: 700;
 }
 
-.product-price::before {
-  content: '¥';
-  font-size: 24rpx;
-}
-
 .quantity-box {
   display: flex;
   align-items: center;
@@ -223,11 +218,6 @@
   color: var(--primary-dark);
   font-weight: 700;
   margin-left: 10rpx;
-}
-
-.total-price::before {
-  content: '¥';
-  font-size: 26rpx;
 }
 
 .checkout-btn {

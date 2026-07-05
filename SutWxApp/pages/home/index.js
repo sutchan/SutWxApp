@@ -1,13 +1,31 @@
 /**
  * 文件名: index.js
  * 版本号: 3.0.0
- * 更新日期: 2025-12-26
+ * 更新日期: 2026-07-05
  * 描述: 首页逻辑控制层
  */
 
 const app = getApp();
 const authService = require("../../services/authService");
 const pointsService = require("../../services/pointsService");
+const productService = require("../../services/productService");
+const categoryService = require("../../services/categoryService");
+const { formatProductListPrices } = require("../../utils/format");
+
+// 已注册页面白名单，用于拦截非法跳转
+const REGISTERED_PAGES = [
+  "/pages/home/index",
+  "/pages/category/index",
+  "/pages/product/index",
+  "/pages/cart/index",
+  "/pages/order/index",
+  "/pages/order/detail",
+  "/pages/order/confirm",
+  "/pages/user/index",
+  "/pages/address/index",
+  "/pages/settings/index",
+  "/pages/help/index",
+];
 
 Page({
   data: {
@@ -16,27 +34,21 @@ Page({
     bannerList: [
       {
         id: 1,
-        imageUrl: "/images/banner-1.png",
-        link: "/pages/product/detail?id=1",
+        imageUrl: "/images/placeholder.svg",
+        link: "/pages/product/index?id=1",
       },
       {
         id: 2,
-        imageUrl: "/images/banner-2.png",
-        link: "/pages/product/detail?id=2",
+        imageUrl: "/images/placeholder.svg",
+        link: "/pages/product/index?id=2",
       },
       {
         id: 3,
-        imageUrl: "/images/banner-3.png",
+        imageUrl: "/images/placeholder.svg",
         link: "/pages/article/detail?id=1",
       },
     ],
-    categoryList: [
-      { id: 1, name: "全部", icon: "/images/category-all.png" },
-      { id: 2, name: "电子产品", icon: "/images/category-electronics.png" },
-      { id: 3, name: "服装", icon: "/images/category-clothing.png" },
-      { id: 4, name: "家居", icon: "/images/category-home.png" },
-      { id: 5, name: "美妆", icon: "/images/category-beauty.png" },
-    ],
+    categoryList: [],
     productList: [],
     searchKeyword: "",
     currentCategory: 0,
@@ -78,82 +90,46 @@ Page({
     }
   },
 
+  // 加载轮播图：无后端，使用本地默认 bannerList
   loadBanners: function () {
-    const that = this;
-    wx.request({
-      url: "/api/banner/list",
-      method: "GET",
-      success: function (res) {
-        if (res.data && res.data.success) {
-          that.setData({ bannerList: res.data.data });
-        }
-      },
-      fail: function () {
-        console.error("获取轮播图失败");
-      },
-    });
+    // 保留 data 中默认 bannerList 即可
   },
 
-  loadCategories: function () {
-    const that = this;
-    wx.request({
-      url: "/api/category/list",
-      method: "GET",
-      success: function (res) {
-        if (res.data && res.data.success) {
-          const defaultCategory = {
-            id: 0,
-            name: "全部",
-            icon: "/images/category-all.png",
-          };
-          const categories = [defaultCategory, ...res.data.data];
-          that.setData({ categoryList: categories });
-        }
-      },
-      fail: function () {
-        console.error("获取分类失败");
-      },
-    });
+  // 加载分类列表
+  loadCategories: async function () {
+    try {
+      const list = await categoryService.getCategoryList();
+      this.setData({ categoryList: list || [] });
+    } catch (e) {
+      console.error("获取分类失败", e);
+    }
   },
 
-  loadProductList: function () {
+  // 加载商品列表（使用 productService + 价格预格式化）
+  loadProductList: async function () {
     if (this.data.isLoading) return;
-
     this.setData({ isLoading: true });
-    const that = this;
-
-    wx.request({
-      url: "/api/product/list",
-      method: "GET",
-      data: {
-        pageNum: this.data.pageNum,
-        pageSize: this.data.pageSize,
-        categoryId: this.data.currentCategory,
+    try {
+      const list = await productService.getProductList({
+        categoryId: this.data.currentCategory || undefined,
         keyword: this.data.searchKeyword,
-      },
-      success: function (res) {
-        if (res.data && res.data.success) {
-          const { list, hasMore } = res.data.data;
-          const newList =
-            that.data.pageNum === 1
-              ? list
-              : [...that.data.productList, ...list];
-          that.setData({
-            productList: newList,
-            hasMore,
-            isLoading: false,
-          });
-        }
-      },
-      fail: function () {
-        console.error("获取产品列表失败");
-        that.setData({ isLoading: false });
-      },
-      complete: function () {
-        wx.stopPullDownRefresh();
-        that.setData({ isRefreshing: false });
-      },
-    });
+      });
+      const formatted = formatProductListPrices(list || []);
+      // 模拟分页：首页只展示前 pageSize * pageNum 条
+      const end = this.data.pageNum * this.data.pageSize;
+      const visible = formatted.slice(0, end);
+      this.setData({
+        productList: visible,
+        hasMore: formatted.length > end,
+        isLoading: false,
+      });
+    } catch (e) {
+      console.error("获取产品列表失败", e);
+      this.setData({ isLoading: false, productList: [] });
+    } finally {
+      wx.stopPullDownRefresh();
+      this.setData({ isRefreshing: false });
+    }
   },
 
   handleRefresh: function () {
@@ -167,7 +143,6 @@ Page({
 
   handleLoadMore: function () {
     if (!this.data.hasMore || this.data.isLoading) return;
-
     this.setData({
       pageNum: this.data.pageNum + 1,
     });
@@ -213,26 +188,53 @@ Page({
   handleProductTap: function (e) {
     const { id } = e.currentTarget.dataset;
     wx.navigateTo({
-      url: `/pages/product/detail?id=${id}`,
+      url: `/pages/product/index?id=${id}`,
     });
   },
 
+  // 点击轮播图，仅允许跳转已注册页面
   handleBannerTap: function (e) {
     const { link } = e.currentTarget.dataset;
-    if (link) {
+    if (!link) return;
+    const isRegistered = REGISTERED_PAGES.some((p) => link.indexOf(p) === 0);
+    if (isRegistered) {
       wx.navigateTo({ url: link });
+    } else {
+      wx.showToast({ title: "功能开发中", icon: "none" });
     }
   },
 
   handleSearchBarTap: function () {
-    wx.navigateTo({
-      url: "/pages/search/search",
-    });
+    wx.showToast({ title: "搜索功能开发中", icon: "none" });
   },
 
   handlePointsTap: function () {
-    wx.navigateTo({
-      url: "/pages/points/points",
+    wx.showToast({ title: "积分功能开发中", icon: "none" });
+  },
+
+  // 切换商品收藏状态
+  handleFavorite: function (e) {
+    const { id } = e.currentTarget.dataset;
+    const list = this.data.productList.map((item) => {
+      if (item.id == id) {
+        return { ...item, isFavorite: !item.isFavorite };
+      }
+      return item;
     });
+    this.setData({ productList: list });
+    const target = list.find((item) => item.id == id);
+    wx.showToast({
+      title: target && target.isFavorite ? "已收藏" : "已取消收藏",
+      icon: "none",
+    });
+  },
+
+  // 触发分享菜单
+  handleShare: function () {
+    wx.showShareMenu({
+      withShareTicket: true,
+      menus: ["shareAppMessage", "shareTimeline"],
+    });
+    wx.showToast({ title: "请点击右上角分享", icon: "none" });
   },
 });

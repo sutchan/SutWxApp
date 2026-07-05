@@ -1,7 +1,7 @@
 /**
  * 文件名: index.js
  * 版本号: 3.0.0
- * 更新日期: 2025-12-28 10:30
+ * 更新日期: 2026-07-05
  * 描述: 设置页面，处理用户账户安全、通知、隐私等设置
  */
 
@@ -60,21 +60,15 @@ Page({
     });
   },
 
+  // 导航到子页面：仅 help 已注册，其余提示开发中
   onNavigateTo: function (e) {
     const page = e.currentTarget.dataset.page;
-    const pageMap = {
-      password: "/pages/settings/password/index",
-      phone: "/pages/settings/phone/index",
-      about: "/pages/settings/about/index",
-      help: "/pages/help/index",
-      feedback: "/pages/settings/feedback/index",
-    };
-
-    if (pageMap[page]) {
-      wx.navigateTo({
-        url: pageMap[page],
-      });
+    if (page === "help") {
+      wx.navigateTo({ url: "/pages/help/index" });
+      return;
     }
+    // password/phone/about/feedback 等页面未注册
+    wx.showToast({ title: "功能开发中", icon: "none" });
   },
 
   onCheckVersion: function () {
@@ -83,7 +77,7 @@ Page({
       content: "当前已是最新版本",
       showCancel: false,
       confirmText: "知道了",
-      confirmColor: "#ff4d4f",
+      confirmColor: "#F44336",
     });
   },
 
@@ -93,7 +87,7 @@ Page({
     wx.showModal({
       title: "确认退出",
       content: "确定要退出登录吗？",
-      confirmColor: "#ff4d4f",
+      confirmColor: "#F44336",
       success: function (res) {
         if (res.confirm) {
           wx.showLoading({ title: "退出中..." });

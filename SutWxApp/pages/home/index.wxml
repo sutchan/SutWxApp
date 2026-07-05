@@ -1,14 +1,14 @@
-<!-- 
+<!--
   文件名: index.wxml
   版本号: 3.0.0
-  更新日期: 2025-12-26
+  更新日期: 2026-07-05
   描述: 首页结构模板
 -->
 
 <view class="container">
   <view class="header">
     <view class="search-bar" bindtap="handleSearchBarTap">
-      <image class="search-icon" src="/images/search.png" mode="aspectFit"></image>
+      <image class="search-icon" src="/images/placeholder.svg" mode="aspectFit"></image>
       <text class="search-placeholder">搜索商品</text>
     </view>
   </view>
@@ -27,7 +27,7 @@
     <scroll-view class="category-scroll" scroll-x="true" enhanced="true" show-scrollbar="false">
       <view class="category-list">
         <view class="category-item {{currentCategory === 0 ? 'active' : ''}}" bindtap="handleCategoryTap" data-id="0">
-          <image class="category-icon" src="/images/category-all.png" mode="aspectFit"></image>
+          <image class="category-icon" src="/images/placeholder.svg" mode="aspectFit"></image>
           <text class="category-name">全部</text>
         </view>
         <block wx:for="{{categoryList}}" wx:key="id" wx:for-item="category">
@@ -47,11 +47,11 @@
     <view class="product-grid">
       <block wx:for="{{productList}}" wx:key="id">
         <view class="product-card" bindtap="handleProductTap" data-id="{{item.id}}">
-          <image class="product-image" src="{{item.imageUrl}}" mode="aspectFill" lazy-load="true"></image>
+          <image class="product-image" src="{{item.image}}" mode="aspectFill" lazy-load="true"></image>
           <view class="product-info">
             <text class="product-name">{{item.name}}</text>
             <view class="product-bottom">
-              <text class="product-price">¥{{item.price}}</text>
+              <text class="product-price">{{item.priceText}}</text>
               <view class="product-actions">
                 <image class="action-icon" src="/images/favorite.png" catchtap="handleFavorite" data-id="{{item.id}}"></image>
                 <image class="action-icon" src="/images/share.png" catchtap="handleShare" data-id="{{item.id}}"></image>
@@ -68,7 +68,7 @@
       <text>没有更多了</text>
     </view>
     <view class="empty-tip" wx:if="{{productList.length === 0 && !isLoading}}">
-      <image class="empty-image" src="/images/empty.png" mode="aspectFit"></image>
+      <image class="empty-image" src="/images/empty.svg" mode="aspectFit"></image>
       <text class="empty-text">暂无商品</text>
     </view>
   </view>

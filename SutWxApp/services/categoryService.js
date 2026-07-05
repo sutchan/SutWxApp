@@ -2,7 +2,7 @@
 /**
  * 文件名: categoryService.js
  * 版本号: 3.0.0
- * 更新日期: 2026-07-01
+ * 更新日期: 2026-07-05
  * 描述: 分类服务层，提供分类相关功能
  */
 
@@ -16,6 +16,10 @@ const mockCategories = [
   { id: 7, name: "营养土肥", icon: "" }
 ];
 
+/**
+ * 获取分类列表
+ * @returns {Promise<Array>} 分类列表
+ */
 async function getCategoryList() {
   try {
     return mockCategories;
@@ -25,9 +29,14 @@ async function getCategoryList() {
   }
 }
 
+/**
+ * 获取分类详情
+ * @param {number} categoryId 分类ID
+ * @returns {Promise<Object|null>} 分类详情
+ */
 async function getCategoryDetail(categoryId) {
   try {
-    const category = mockCategories.find(c =&gt; c.id == categoryId);
+    const category = mockCategories.find(c => c.id == categoryId);
     return category || null;
   } catch (error) {
     console.error("获取分类详情失败:", error);
@@ -39,4 +48,3 @@ module.exports = {
   getCategoryList,
   getCategoryDetail
 };
-

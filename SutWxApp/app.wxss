@@ -13,6 +13,7 @@ page {
   --text-secondary: #86868B;
   --text-tertiary: #AEAEB2;
   --text-inverse: #FFFFFF;
+  --error-color: #F44336;
   --border-color: #E8E8ED;
   --background-primary: #FFFFFF;
   --background-secondary: #F5F5F7;

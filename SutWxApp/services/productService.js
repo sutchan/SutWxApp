@@ -2,7 +2,7 @@
 /**
  * 文件名: productService.js
  * 版本号: 3.0.0
- * 更新日期: 2026-07-01
+ * 更新日期: 2026-07-05
  * 描述: 产品服务层，提供产品相关功能
  */
 
@@ -111,22 +111,27 @@ const mockProducts = [
   }
 ];
 
+/**
+ * 获取产品列表
+ * @param {Object} params { categoryId, keyword }
+ * @returns {Promise<Array>} 产品列表
+ */
 async function getProductList(params = {}) {
   try {
     let products = [...mockProducts];
-    
+
     if (params.categoryId) {
-      products = products.filter(p =&gt; p.categoryId == params.categoryId);
+      products = products.filter(p => p.categoryId == params.categoryId);
     }
-    
+
     if (params.keyword) {
       const keyword = params.keyword.toLowerCase();
-      products = products.filter(p =&gt; 
-        p.name.toLowerCase().includes(keyword) || 
+      products = products.filter(p =>
+        p.name.toLowerCase().includes(keyword) ||
         p.desc.toLowerCase().includes(keyword)
       );
     }
-    
+
     return products;
   } catch (error) {
     console.error("获取产品列表失败:", error);
@@ -134,21 +139,31 @@ async function getProductList(params = {}) {
   }
 }
 
+/**
+ * 获取产品详情
+ * @param {number} productId 产品ID
+ * @returns {Promise<Object>} 产品详情
+ */
 async function getProductDetail(productId) {
   try {
-    const product = mockProducts.find(p =&gt; p.id == productId);
+    const product = mockProducts.find(p => p.id == productId);
     if (!product) {
       throw new Error("产品不存在");
     }
-    
+
     return {
       ...product,
       details: [
-        "产品参数1",
-        "产品参数2",
-        "产品参数3"
+        "品种：优质绿植",
+        "规格：标准盆栽",
+        "养护：喜阴凉通风环境",
+        "配送：全国包邮（偏远地区除外）"
       ],
-      tags: ["热销", "新品"]
+      tags: ["热销", "新品"],
+      specs: [
+        { id: 1, name: "中号盆", price: product.price, stock: product.stock },
+        { id: 2, name: "大号盆", price: product.price + 20, stock: Math.floor(product.stock / 2) }
+      ]
     };
   } catch (error) {
     console.error("获取产品详情失败:", error);
@@ -156,12 +171,18 @@ async function getProductDetail(productId) {
   }
 }
 
+/**
+ * 获取相关产品
+ * @param {number} productId 产品ID
+ * @param {number} limit 数量限制
+ * @returns {Promise<Array>} 相关产品列表
+ */
 async function getRelatedProducts(productId, limit = 4) {
   try {
-    const product = mockProducts.find(p =&gt; p.id == productId);
+    const product = mockProducts.find(p => p.id == productId);
     if (!product) return [];
-    
-    let related = mockProducts.filter(p =&gt; p.id != productId &amp;&amp; p.categoryId == product.categoryId);
+
+    let related = mockProducts.filter(p => p.id != productId && p.categoryId == product.categoryId);
     return related.slice(0, limit);
   } catch (error) {
     console.error("获取相关产品失败:", error);
@@ -169,9 +190,14 @@ async function getRelatedProducts(productId, limit = 4) {
   }
 }
 
+/**
+ * 收藏产品
+ * @param {number} productId 产品ID
+ * @returns {Promise<boolean>} 操作结果
+ */
 async function addToFavorite(productId) {
   try {
-    const product = mockProducts.find(p =&gt; p.id == productId);
+    const product = mockProducts.find(p => p.id == productId);
     if (product) {
       product.isFavorite = true;
     }
@@ -182,9 +208,14 @@ async function addToFavorite(productId) {
   }
 }
 
+/**
+ * 取消收藏
+ * @param {number} productId 产品ID
+ * @returns {Promise<boolean>} 操作结果
+ */
 async function removeFromFavorite(productId) {
   try {
-    const product = mockProducts.find(p =&gt; p.id == productId);
+    const product = mockProducts.find(p => p.id == productId);
     if (product) {
       product.isFavorite = false;
     }
@@ -202,4 +233,3 @@ module.exports = {
   addToFavorite,
   removeFromFavorite
 };
-

@@ -2,7 +2,7 @@
 /**
  * 文件名: index.wxss
  * 版本号: 3.0.0
- * 更新日期: 2026-07-01
+ * 更新日期: 2026-07-05
  * 描述: 订单列表页面样式
  */
 
@@ -33,7 +33,7 @@
 }
 
 .tab-item.active {
-  color: #ff6b6b;
+  color: var(--primary-color);
   font-weight: 500;
 }
 
@@ -42,7 +42,7 @@
   bottom: 0;
   width: 60rpx;
   height: 4rpx;
-  background-color: #ff6b6b;
+  background-color: var(--primary-color);
   border-radius: 2rpx;
 }
 
@@ -94,7 +94,7 @@
 
 .order-status {
   font-size: 26rpx;
-  color: #ff6b6b;
+  color: var(--primary-color);
 }
 
 /* 商品列表 */
@@ -149,7 +149,7 @@
 
 .product-price {
   font-size: 30rpx;
-  color: #ff6b6b;
+  color: var(--primary-color);
   font-weight: bold;
 }
 
@@ -174,7 +174,7 @@
 
 .order-total .price {
   font-size: 32rpx;
-  color: #ff6b6b;
+  color: var(--primary-color);
   font-weight: bold;
 }
 
@@ -200,7 +200,7 @@
 .pay-btn,
 .confirm-btn,
 .comment-btn {
-  background-color: #ff6b6b;
+  background-color: var(--primary-color);
   color: white;
 }
 

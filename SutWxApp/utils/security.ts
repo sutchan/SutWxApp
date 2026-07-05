@@ -1,7 +1,7 @@
 /**
  * 文件名: security.ts
  * 版本号: 3.0.0
- * 更新日期: 2026-07-01
+ * 更新日期: 2026-07-05
  * 描述: 安全工具类，提供请求签名、敏感信息加密、数据脱敏等功能
  */
 
@@ -132,10 +132,17 @@ class SecurityUtil {
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     let result = "";
     const randomValues = new Uint32Array(length);
-    crypto.getRandomValues(randomValues);
-
-    for (let i = 0; i < length; i++) {
-      result += chars[randomValues[i] % chars.length];
+    // 检查 crypto 是否存在，不存在则降级到 Math.random 生成随机字节数组
+    if (typeof crypto !== "undefined" && crypto.getRandomValues) {
+      crypto.getRandomValues(randomValues);
+      for (let i = 0; i < length; i++) {
+        result += chars[randomValues[i] % chars.length];
+      }
+    } else {
+      // 降级到 Math.random 生成随机字节数组
+      for (let i = 0; i < length; i++) {
+        result += chars[Math.floor(Math.random() * chars.length)];
+      }
     }
 
     return result;
@@ -158,10 +165,17 @@ class SecurityUtil {
     const chars = "0123456789";
     let result = "";
     const randomValues = new Uint32Array(length);
-    crypto.getRandomValues(randomValues);
-
-    for (let i = 0; i < length; i++) {
-      result += chars[randomValues[i] % chars.length];
+    // 检查 crypto 是否存在，不存在则降级到 Math.random 生成随机字节数组
+    if (typeof crypto !== "undefined" && crypto.getRandomValues) {
+      crypto.getRandomValues(randomValues);
+      for (let i = 0; i < length; i++) {
+        result += chars[randomValues[i] % chars.length];
+      }
+    } else {
+      // 降级到 Math.random 生成随机字节数组
+      for (let i = 0; i < length; i++) {
+        result += chars[Math.floor(Math.random() * chars.length)];
+      }
     }
 
     return result;
@@ -252,7 +266,8 @@ class SecurityUtil {
       if (typeof Buffer !== "undefined") {
         return Buffer.from(encrypted, "binary").toString("base64");
       } else {
-        return btoa(unescape(encodeURIComponent(encrypted)));
+        // 微信小程序环境无 btoa，使用内部 UTF-8 安全的 Base64 编码辅助函数
+        return this.base64Encode(encrypted);
       }
     } catch (error) {
       console.error("[SecurityUtil] 加密失败:", error);
@@ -271,7 +286,8 @@ class SecurityUtil {
       if (typeof Buffer !== "undefined") {
         decrypted = Buffer.from(encryptedData, "base64").toString("binary");
       } else {
-        decrypted = decodeURIComponent(escape(atob(encryptedData)));
+        // 微信小程序环境无 atob，使用内部 UTF-8 安全的 Base64 解码辅助函数
+        decrypted = this.base64Decode(encryptedData);
       }
       const key = this.config.secretKey;
       let jsonString = "";
@@ -288,17 +304,119 @@ class SecurityUtil {
   }
 
   /**
-   * Base64编码
+   * Base64编码（支持 UTF-8，纯 JS 实现，不依赖 btoa）
+   * @param input 输入字符串
+   * @returns Base64 编码字符串
    */
   private base64Encode(input: string): string {
-    return btoa(input);
+    // 将字符串转换为 UTF-8 字节序列
+    const utf8Bytes: number[] = [];
+    for (let i = 0; i < input.length; i++) {
+      let charCode = input.charCodeAt(i);
+      if (charCode < 0x80) {
+        utf8Bytes.push(charCode);
+      } else if (charCode < 0x800) {
+        utf8Bytes.push(0xc0 | (charCode >> 6));
+        utf8Bytes.push(0x80 | (charCode & 0x3f));
+      } else if (charCode < 0xd800 || charCode >= 0xe000) {
+        utf8Bytes.push(0xe0 | (charCode >> 12));
+        utf8Bytes.push(0x80 | ((charCode >> 6) & 0x3f));
+        utf8Bytes.push(0x80 | (charCode & 0x3f));
+      } else {
+        // 处理代理对（surrogate pairs）
+        i++;
+        charCode =
+          0x10000 +
+          (((charCode & 0x3ff) << 10) | (input.charCodeAt(i) & 0x3ff));
+        utf8Bytes.push(0xf0 | (charCode >> 18));
+        utf8Bytes.push(0x80 | ((charCode >> 12) & 0x3f));
+        utf8Bytes.push(0x80 | ((charCode >> 6) & 0x3f));
+        utf8Bytes.push(0x80 | (charCode & 0x3f));
+      }
+    }
+
+    // Base64 编码
+    const chars =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    let result = "";
+    for (let i = 0; i < utf8Bytes.length; i += 3) {
+      const b1 = utf8Bytes[i];
+      const b2 = utf8Bytes[i + 1];
+      const b3 = utf8Bytes[i + 2];
+
+      result += chars[b1 >> 2];
+      result += chars[((b1 & 0x03) << 4) | ((b2 ?? 0) >> 4)];
+      result += b2 === undefined ? "=" : chars[((b2 & 0x0f) << 2) | ((b3 ?? 0) >> 6)];
+      result += b3 === undefined ? "=" : chars[b3 & 0x3f];
+    }
+    return result;
   }
 
   /**
-   * Base64解码
+   * Base64解码（支持 UTF-8，纯 JS 实现，不依赖 atob）
+   * @param input Base64 编码字符串
+   * @returns 解码后的字符串
    */
   private base64Decode(input: string): string {
-    return atob(input);
+    const chars =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    const lookup: number[] = new Array(256).fill(-1);
+    for (let i = 0; i < chars.length; i++) {
+      lookup[chars.charCodeAt(i)] = i;
+    }
+
+    // 移除 padding 和无效字符
+    const cleanInput = input.replace(/[^A-Za-z0-9+/]/g, "");
+
+    // Base64 解码为字节序列
+    const bytes: number[] = [];
+    for (let i = 0; i < cleanInput.length; i += 4) {
+      const c1 = lookup[cleanInput.charCodeAt(i)] ?? 0;
+      const c2 = lookup[cleanInput.charCodeAt(i + 1)] ?? 0;
+      const c3 = lookup[cleanInput.charCodeAt(i + 2)] ?? 0;
+      const c4 = lookup[cleanInput.charCodeAt(i + 3)] ?? 0;
+
+      bytes.push((c1 << 2) | (c2 >> 4));
+      if (i + 2 < cleanInput.length) {
+        bytes.push(((c2 & 0x0f) << 4) | (c3 >> 2));
+      }
+      if (i + 3 < cleanInput.length) {
+        bytes.push(((c3 & 0x03) << 6) | c4);
+      }
+    }
+
+    // UTF-8 字节序列解码为字符串
+    let result = "";
+    let i = 0;
+    while (i < bytes.length) {
+      const b1 = bytes[i++];
+      if (b1 < 0x80) {
+        result += String.fromCharCode(b1);
+      } else if (b1 < 0xe0) {
+        const b2 = bytes[i++];
+        result += String.fromCharCode(((b1 & 0x1f) << 6) | (b2 & 0x3f));
+      } else if (b1 < 0xf0) {
+        const b2 = bytes[i++];
+        const b3 = bytes[i++];
+        result += String.fromCharCode(
+          ((b1 & 0x0f) << 12) | ((b2 & 0x3f) << 6) | (b3 & 0x3f),
+        );
+      } else {
+        const b2 = bytes[i++];
+        const b3 = bytes[i++];
+        const b4 = bytes[i++];
+        const codePoint =
+          ((b1 & 0x07) << 18) |
+          ((b2 & 0x3f) << 12) |
+          ((b3 & 0x3f) << 6) |
+          (b4 & 0x3f);
+        // 转换为 UTF-16 代理对
+        const adjusted = codePoint - 0x10000;
+        result += String.fromCharCode(0xd800 | (adjusted >> 10));
+        result += String.fromCharCode(0xdc00 | (adjusted & 0x3f));
+      }
+    }
+    return result;
   }
 
   /**

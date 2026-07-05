@@ -51,8 +51,12 @@ class CacheUtil {
    * 启动定时清理任务
    */
   private startCleanupTimer(): void {
-    if (typeof window !== "undefined") {
-      this.cleanupTimer = window.setInterval(() => {
+    // 兼容微信小程序环境（无 window 对象），使用全局 setInterval
+    const timer = (typeof window !== "undefined" && typeof window.setInterval === "function")
+      ? window.setInterval
+      : (typeof setInterval === "function" ? setInterval : null);
+    if (timer) {
+      this.cleanupTimer = timer(() => {
         this.cleanupExpired();
       }, this.CLEANUP_INTERVAL);
     }

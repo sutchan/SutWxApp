@@ -2,13 +2,13 @@
 /**
  * 文件名: orderService.js
  * 版本号: 3.0.0
- * 更新日期: 2026-07-01
+ * 更新日期: 2026-07-05
  * 描述: 订单服务层，提供订单相关功能
  */
 
-const request = require("../utils/request");
+const STORAGE_KEY_ORDERS = "order_list";
 
-const mockOrders = [
+const defaultMockOrders = [
   {
     id: 1,
     orderNo: "SU20260506001",
@@ -98,14 +98,36 @@ const mockOrders = [
   }
 ];
 
+function getOrdersFromStorage() {
+  try {
+    const data = wx.getStorageSync(STORAGE_KEY_ORDERS);
+    return data && data.length > 0 ? data : defaultMockOrders;
+  } catch (e) {
+    return defaultMockOrders;
+  }
+}
+
+function saveOrdersToStorage(orders) {
+  try {
+    wx.setStorageSync(STORAGE_KEY_ORDERS, orders);
+  } catch (e) {
+    console.error("保存订单数据失败:", e);
+  }
+}
+
+/**
+ * 获取订单列表
+ * @param {number|null} status 订单状态
+ * @returns {Promise<Array>} 订单列表
+ */
 async function getOrderList(status) {
   try {
-    let orders = [...mockOrders];
-    
-    if (status !== null &amp;&amp; status !== undefined) {
-      orders = orders.filter(order =&gt; order.status === status);
+    let orders = [...getOrdersFromStorage()];
+
+    if (status !== null && status !== undefined) {
+      orders = orders.filter(order => order.status === status);
     }
-    
+
     return orders;
   } catch (error) {
     console.error("获取订单列表失败:", error);
@@ -113,13 +135,19 @@ async function getOrderList(status) {
   }
 }
 
+/**
+ * 获取订单详情
+ * @param {number} orderId 订单ID
+ * @returns {Promise<Object>} 订单详情
+ */
 async function getOrderDetail(orderId) {
   try {
-    const order = mockOrders.find(o =&gt; o.id == orderId);
+    const orders = getOrdersFromStorage();
+    const order = orders.find(o => o.id == orderId);
     if (!order) {
       throw new Error("订单不存在");
     }
-    
+
     return {
       ...order,
       couponDiscount: 0
@@ -130,36 +158,51 @@ async function getOrderDetail(orderId) {
   }
 }
 
+/**
+ * 创建订单
+ * @param {Object} orderData { items, addressId, address, remark }
+ * @returns {Promise<Object>} 新订单
+ */
 async function createOrder(orderData) {
   try {
-    const { items, addressId, remark } = orderData;
-    
+    const { items, addressId, address, remark } = orderData;
+    const orders = getOrdersFromStorage();
+
+    const productPrice = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const shippingFee = productPrice >= 99 ? 0 : 10;
+    const now = new Date();
+    const pad = (n) => String(n).padStart(2, "0");
+
     const newOrder = {
       id: Date.now(),
-      orderNo: `SU${new Date().getFullYear()}${String(new Date().getMonth() + 1).padStart(2, '0')}${String(new Date().getDate()).padStart(2, '0')}${String(Math.floor(Math.random() * 1000)).padStart(3, '0')}`,
+      orderNo: `SU${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}${String(Math.floor(Math.random() * 1000)).padStart(3, "0")}`,
       status: 1,
       statusText: "待付款",
-      totalPrice: items.reduce((sum, item) =&gt; sum + (item.price * item.quantity), 0),
-      productPrice: items.reduce((sum, item) =&gt; sum + (item.price * item.quantity), 0),
-      shippingFee: items.reduce((sum, item) =&gt; sum + (item.price * item.quantity), 0) &gt;= 99 ? 0 : 10,
-      totalQuantity: items.reduce((sum, item) =&gt; sum + item.quantity, 0),
-      createTime: new Date().toLocaleString(),
-      products: items.map(item =&gt; ({
-        id: item.id,
-        name: item.name,
-        image: item.image,
+      totalPrice: productPrice + shippingFee,
+      productPrice,
+      shippingFee,
+      totalQuantity: items.reduce((sum, item) => sum + item.quantity, 0),
+      createTime: `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`,
+      products: items.map(item => ({
+        id: item.id || item.productId,
+        name: item.name || item.productName,
+        image: item.image || item.productImage || "/images/placeholder.svg",
         price: item.price,
         quantity: item.quantity,
-        spec: item.spec
+        spec: item.spec || item.specName || ""
       })),
-      address: {
-        name: "测试用户",
+      address: address || {
+        id: addressId,
+        name: "收货人",
         phone: "13800138000",
-        detail: "测试地址"
+        detail: "收货地址"
       },
       remark: remark || ""
     };
-    
+
+    orders.unshift(newOrder);
+    saveOrdersToStorage(orders);
+
     return newOrder;
   } catch (error) {
     console.error("创建订单失败:", error);
@@ -167,12 +210,19 @@ async function createOrder(orderData) {
   }
 }
 
+/**
+ * 取消订单
+ * @param {number} orderId 订单ID
+ * @returns {Promise<boolean>} 操作结果
+ */
 async function cancelOrder(orderId) {
   try {
-    const orderIndex = mockOrders.findIndex(o =&gt; o.id == orderId);
-    if (orderIndex &gt;= 0) {
-      mockOrders[orderIndex].status = 0;
-      mockOrders[orderIndex].statusText = "已取消";
+    const orders = getOrdersFromStorage();
+    const orderIndex = orders.findIndex(o => o.id == orderId);
+    if (orderIndex >= 0) {
+      orders[orderIndex].status = 0;
+      orders[orderIndex].statusText = "已取消";
+      saveOrdersToStorage(orders);
     }
     return true;
   } catch (error) {
@@ -181,13 +231,20 @@ async function cancelOrder(orderId) {
   }
 }
 
+/**
+ * 确认收货
+ * @param {number} orderId 订单ID
+ * @returns {Promise<boolean>} 操作结果
+ */
 async function confirmReceive(orderId) {
   try {
-    const orderIndex = mockOrders.findIndex(o =&gt; o.id == orderId);
-    if (orderIndex &gt;= 0) {
-      mockOrders[orderIndex].status = 4;
-      mockOrders[orderIndex].statusText = "已完成";
-      mockOrders[orderIndex].completeTime = new Date().toLocaleString();
+    const orders = getOrdersFromStorage();
+    const orderIndex = orders.findIndex(o => o.id == orderId);
+    if (orderIndex >= 0) {
+      orders[orderIndex].status = 4;
+      orders[orderIndex].statusText = "已完成";
+      orders[orderIndex].completeTime = new Date().toLocaleString();
+      saveOrdersToStorage(orders);
     }
     return true;
   } catch (error) {
@@ -203,4 +260,3 @@ module.exports = {
   cancelOrder,
   confirmReceive
 };
-

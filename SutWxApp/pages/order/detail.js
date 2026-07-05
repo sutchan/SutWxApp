@@ -2,7 +2,7 @@
 /**
  * 文件名: detail.js
  * 版本号: 3.0.0
- * 更新日期: 2026-07-01
+ * 更新日期: 2026-07-05
  * 描述: 订单详情页面，展示订单详细信息
  */
 
@@ -30,7 +30,7 @@ Page({
       this.setData({ loading: true });
       const orderDetail = await orderService.getOrderDetail(this.data.orderId);
       this.setData({
-        orderDetail: formatOrderDetailPrices(orderDetail),
+        orderDetail: orderDetail ? formatOrderDetailPrices(orderDetail) : null,
         loading: false
       });
     } catch (error) {
@@ -39,7 +39,7 @@ Page({
         title: '加载失败',
         icon: 'none'
       });
-      this.setData({ loading: false });
+      this.setData({ orderDetail: null, loading: false });
     }
   },
 
@@ -50,7 +50,7 @@ Page({
     wx.showModal({
       title: '提示',
       content: '确定要取消订单吗？',
-      success: async (res) =&gt; {
+      success: async (res) => {
         if (res.confirm) {
           try {
             await orderService.cancelOrder(this.data.orderId);
@@ -88,7 +88,7 @@ Page({
     wx.showModal({
       title: '提示',
       content: '确定已收到商品吗？',
-      success: async (res) =&gt; {
+      success: async (res) => {
         if (res.confirm) {
           try {
             await orderService.confirmReceive(this.data.orderId);

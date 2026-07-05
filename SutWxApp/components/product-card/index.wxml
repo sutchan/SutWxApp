@@ -1,16 +1,15 @@
 
-&lt;view class="product-card {{layout}}" bindtap="onProductTap"&gt;
-  &lt;image class="product-image" src="{{product.image}}" mode="aspectFill"&gt;&lt;/image&gt;
-  &lt;view class="product-info"&gt;
-    &lt;text class="product-name"&gt;{{product.name}}&lt;/text&gt;
-    &lt;text class="product-desc" wx:if="{{product.desc}}"&gt;{{product.desc}}&lt;/text&gt;
-    &lt;view class="product-bottom"&gt;
-      &lt;view class="price-box"&gt;
-        &lt;text class="product-price"&gt;¥{{product.priceText}}&lt;/text&gt;
-        &lt;text class="product-origin-price" wx:if="{{product.originPrice}}"&gt;¥{{product.originPriceText}}&lt;/text&gt;
-      &lt;/view&gt;
-      &lt;button class="add-cart-btn" catchtap="onAddCartTap"&gt;+&lt;/button&gt;
-    &lt;/view&gt;
-  &lt;/view&gt;
-&lt;/view&gt;
-
+<view class="product-card {{layout}}" bindtap="onProductTap">
+  <image class="product-image" src="{{product.image}}" mode="aspectFill"></image>
+  <view class="product-info">
+    <text class="product-name">{{product.name}}</text>
+    <text class="product-desc" wx:if="{{product.desc}}">{{product.desc}}</text>
+    <view class="product-bottom">
+      <view class="price-box">
+        <text class="product-price">¥{{product.priceText}}</text>
+        <text class="product-origin-price" wx:if="{{product.originPrice}}">¥{{product.originPriceText}}</text>
+      </view>
+      <button class="add-cart-btn" catchtap="onAddCartTap">+</button>
+    </view>
+  </view>
+</view>

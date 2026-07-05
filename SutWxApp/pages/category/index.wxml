@@ -1,50 +1,49 @@
 
-&lt;!--
+<!--
 文件名: index.wxml
 版本号: 3.0.0
-更新日期: 2026-07-01
+更新日期: 2026-07-05
 描述: 分类页面模板
---&gt;
-&lt;view class="category-container"&gt;
-  &lt;!-- 分类列表 --&gt;
-  &lt;scroll-view class="category-sidebar" scroll-y&gt;
-    &lt;view
+-->
+<view class="category-container">
+  <!-- 分类列表 -->
+  <scroll-view class="category-sidebar" scroll-y>
+    <view
       wx:for="{{categoryList}}"
       wx:key="id"
       class="category-item {{activeCategoryIndex === index ? 'active' : ''}}"
       data-index="{{index}}"
       bindtap="onCategoryChange"
-    &gt;
-      &lt;text&gt;{{item.name}}&lt;/text&gt;
-    &lt;/view&gt;
-  &lt;/scroll-view&gt;
+    >
+      <text>{{item.name}}</text>
+    </view>
+  </scroll-view>
 
-  &lt;!-- 商品列表 --&gt;
-  &lt;scroll-view class="product-area" scroll-y&gt;
-    &lt;view class="product-list"&gt;
-      &lt;view
+  <!-- 商品列表 -->
+  <scroll-view class="product-area" scroll-y>
+    <view class="product-list">
+      <view
         wx:for="{{productList}}"
         wx:key="id"
         class="product-card"
         data-id="{{item.id}}"
         bindtap="onViewProduct"
-      &gt;
-        &lt;image class="product-image" src="{{item.image}}" mode="aspectFill"&gt;&lt;/image&gt;
-        &lt;view class="product-info"&gt;
-          &lt;text class="product-name"&gt;{{item.name}}&lt;/text&gt;
-          &lt;text class="product-desc" wx:if="{{item.desc}}"&gt;{{item.desc}}&lt;/text&gt;
-          &lt;view class="product-bottom"&gt;
-            &lt;text class="product-price"&gt;¥{{item.priceText}}&lt;/text&gt;
-            &lt;button class="add-cart-btn"&gt;+&lt;/button&gt;
-          &lt;/view&gt;
-        &lt;/view&gt;
-      &lt;/view&gt;
-    &lt;/view&gt;
+      >
+        <image class="product-image" src="{{item.image}}" mode="aspectFill"></image>
+        <view class="product-info">
+          <text class="product-name">{{item.name}}</text>
+          <text class="product-desc" wx:if="{{item.desc}}">{{item.desc}}</text>
+          <view class="product-bottom">
+            <text class="product-price">¥{{item.priceText}}</text>
+            <button class="add-cart-btn" catchtap="onAddToCart" data-id="{{item.id}}">+</button>
+          </view>
+        </view>
+      </view>
+    </view>
 
-    &lt;!-- 空状态 --&gt;
-    &lt;view wx:if="{{productList.length === 0 &amp;&amp; !loading}}" class="empty-container"&gt;
-      &lt;text class="empty-text"&gt;暂无商品&lt;/text&gt;
-    &lt;/view&gt;
-  &lt;/scroll-view&gt;
-&lt;/view&gt;
-
+    <!-- 空状态 -->
+    <view wx:if="{{productList.length === 0 && !loading}}" class="empty-container">
+      <text class="empty-text">暂无商品</text>
+    </view>
+  </scroll-view>
+</view>
