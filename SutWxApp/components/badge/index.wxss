@@ -1,0 +1,71 @@
+/**
+ * 文件名: index.wxss
+ * 版本号: 3.0.0
+ * 更新日期: 2026-07-06
+ * 描述: Badge 徽章组件样式，参考 shadcn/ui 设计理念
+ */
+
+.s-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40rpx;
+  height: 40rpx;
+  padding: 0 12rpx;
+  border-radius: 20rpx;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  line-height: 1;
+  box-sizing: border-box;
+}
+
+/* 尺寸变体 */
+.s-badge-sm {
+  min-width: 32rpx;
+  height: 32rpx;
+  padding: 0 8rpx;
+  font-size: 20rpx;
+  border-radius: 16rpx;
+}
+
+.s-badge-md {
+  min-width: 40rpx;
+  height: 40rpx;
+  padding: 0 12rpx;
+  font-size: var(--font-size-xs);
+  border-radius: 20rpx;
+}
+
+/* 样式变体 - Default */
+.s-badge-default {
+  background-color: var(--primary-color);
+  color: var(--text-inverse);
+}
+
+/* 样式变体 - Secondary */
+.s-badge-secondary {
+  background-color: var(--background-tertiary);
+  color: var(--text-secondary);
+}
+
+/* 样式变体 - Destructive */
+.s-badge-destructive {
+  background-color: var(--error-color);
+  color: var(--text-inverse);
+}
+
+/* 样式变体 - Outline */
+.s-badge-outline {
+  background-color: transparent;
+  border: 2rpx solid var(--primary-color);
+  color: var(--primary-color);
+}
+
+/* 圆点样式 */
+.s-badge-dot {
+  width: 16rpx;
+  height: 16rpx;
+  min-width: 16rpx;
+  padding: 0;
+  border-radius: 50%;
+}

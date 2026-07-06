@@ -1,0 +1,17 @@
+<!--
+  文件名: index.wxml
+  版本号: 3.0.0
+  更新日期: 2026-07-06
+  描述: Price 价格组件模板
+-->
+
+<view class="{{priceClass}}">
+  <text wx:if="{{showSymbol}}" class="s-price-symbol">{{symbol}}</text>
+  <text class="s-price-integer">{{integerPart}}</text>
+  <text wx:if="{{decimalPart}}" class="s-price-decimal">.{{decimalPart}}</text>
+  <view wx:if="{{originalInteger}}" class="s-price-original">
+    <text wx:if="{{showSymbol}}" class="s-price-original-symbol">{{symbol}}</text>
+    <text class="s-price-original-integer">{{originalInteger}}</text>
+    <text wx:if="{{originalDecimal}}" class="s-price-original-decimal">.{{originalDecimal}}</text>
+  </view>
+</view>

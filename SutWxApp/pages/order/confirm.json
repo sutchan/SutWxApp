@@ -1,5 +1,9 @@
 
 {
-  "navigationBarTitleText": "确认订单"
+  "navigationBarTitleText": "确认订单",
+  "usingComponents": {
+    "s-price": "/components/price/index",
+    "s-button": "/components/button/index"
+  }
 }
 

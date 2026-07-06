@@ -1,0 +1,22 @@
+<!--
+  文件名: index.wxml
+  版本号: 3.0.0
+  更新日期: 2026-07-06
+  描述: Button 按钮组件模板
+-->
+
+<button
+  class="{{buttonClass}}"
+  disabled="{{disabled || loading}}"
+  open-type="{{openType}}"
+  bindtap="onTap"
+  bindgetphonenumber="onGetPhoneNumber"
+  bindgetuserinfo="onGetUserInfo"
+  bindopensetting="onOpenSetting"
+  bindchooseavatar="onChooseAvatar"
+>
+  <view class="s-button-content">
+    <view wx:if="{{loading}}" class="s-button-loading-spinner"></view>
+    <slot></slot>
+  </view>
+</button>

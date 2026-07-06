@@ -1,0 +1,46 @@
+<!--
+  文件名: index.wxml
+  版本号: 3.0.0
+  更新日期: 2026-07-06
+  描述: OrderCard 订单卡片组件模板
+-->
+
+<view class="s-order-card" bindtap="onTap">
+  <view class="s-order-card-header">
+    <view class="s-order-card-order-no">
+      订单号：{{order.orderNo}}
+    </view>
+    <view class="s-order-card-status {{statusClass}}">
+      {{order.statusText}}
+    </view>
+  </view>
+  
+  <view class="s-order-card-items">
+    <block wx:for="{{order.items}}" wx:key="id" wx:for-item="item" wx:for-index="index">
+      <view wx:if="{{index < 3}}" class="s-order-card-item">
+        <image class="s-order-card-item-image" src="{{item.image}}" mode="aspectFill" />
+        <view wx:if="{{index === 2 && order.itemCount > 3}}" class="s-order-card-item-more">
+          +{{order.itemCount - 3}}
+        </view>
+      </view>
+    </block>
+  </view>
+  
+  <view class="s-order-card-footer">
+    <view class="s-order-card-total">
+      <text class="s-order-card-total-text">共{{order.itemCount}}件商品，合计：</text>
+      <s-price value="{{order.totalPriceText}}" size="sm" color="text"></s-price>
+    </view>
+    <view wx:if="{{showActions && actionButtons.length > 0}}" class="s-order-card-actions">
+      <s-button 
+        wx:for="{{actionButtons}}" 
+        wx:key="key"
+        size="sm"
+        variant="{{item.variant}}"
+        data-action="{{item.key}}"
+        bind:tap="onActionTap"
+        catchtap="onActionTap"
+      >{{item.text}}</s-button>
+    </view>
+  </view>
+</view>

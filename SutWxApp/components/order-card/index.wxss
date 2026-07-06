@@ -1,0 +1,124 @@
+/**
+ * 文件名: index.wxss
+ * 版本号: 3.0.0
+ * 更新日期: 2026-07-06
+ * 描述: OrderCard 订单卡片组件样式，参考设计系统规范
+ */
+
+.s-order-card {
+  background-color: var(--background-primary);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  box-sizing: border-box;
+  margin-bottom: var(--spacing-md);
+}
+
+.s-order-card:active {
+  opacity: 0.9;
+}
+
+/* 头部 */
+.s-order-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-bottom: 1rpx solid var(--border-light);
+}
+
+.s-order-card-order-no {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.s-order-card-status {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+/* 状态颜色 */
+.s-order-status-pending {
+  color: var(--warning-color);
+}
+
+.s-order-status-shipping {
+  color: var(--info-color);
+}
+
+.s-order-status-completed {
+  color: var(--success-color);
+}
+
+.s-order-status-cancelled {
+  color: var(--text-tertiary);
+}
+
+/* 商品列表 */
+.s-order-card-items {
+  padding: var(--spacing-md) var(--spacing-lg);
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.s-order-card-item {
+  position: relative;
+  width: 128rpx;
+  height: 128rpx;
+  border-radius: var(--border-radius-md);
+  overflow: hidden;
+  background-color: var(--background-tertiary);
+  flex-shrink: 0;
+}
+
+.s-order-card-item-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.s-order-card-item-more {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-inverse);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+/* 底部 */
+.s-order-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-top: 1rpx solid var(--border-light);
+  gap: var(--spacing-md);
+}
+
+.s-order-card-total {
+  display: flex;
+  align-items: baseline;
+  flex: 1;
+  min-width: 0;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.s-order-card-total-text {
+  flex-shrink: 0;
+  margin-right: 4rpx;
+}
+
+/* 操作按钮 */
+.s-order-card-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  flex-shrink: 0;
+}

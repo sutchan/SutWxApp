@@ -1,4 +1,6 @@
 {
   "navigationBarTitleText": "帮助中心",
-  "usingComponents": {}
+  "usingComponents": {
+    "s-button": "/components/button/index"
+  }
 }

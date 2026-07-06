@@ -1,0 +1,106 @@
+/**
+ * 文件名: index.wxss
+ * 版本号: 3.0.0
+ * 更新日期: 2026-07-06
+ * 描述: Price 价格组件样式，参考设计系统规范
+ */
+
+.s-price {
+  display: inline-flex;
+  align-items: baseline;
+  box-sizing: border-box;
+}
+
+/* 颜色变体 */
+.s-price-primary {
+  color: var(--primary-color);
+}
+
+.s-price-error {
+  color: var(--error-color);
+}
+
+.s-price-text {
+  color: var(--text-primary);
+}
+
+/* 尺寸变体 - SM */
+.s-price-sm .s-price-symbol {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+}
+
+.s-price-sm .s-price-integer {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+}
+
+.s-price-sm .s-price-decimal {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+}
+
+/* 尺寸变体 - MD */
+.s-price-md .s-price-symbol {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.s-price-md .s-price-integer {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+}
+
+.s-price-md .s-price-decimal {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+/* 尺寸变体 - LG */
+.s-price-lg .s-price-symbol {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+}
+
+.s-price-lg .s-price-integer {
+  font-size: var(--font-size-h1);
+  font-weight: var(--font-weight-bold);
+}
+
+.s-price-lg .s-price-decimal {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+}
+
+/* 原价样式 */
+.s-price-original {
+  display: inline-flex;
+  align-items: baseline;
+  margin-left: var(--spacing-sm);
+  color: var(--text-tertiary);
+  text-decoration: line-through;
+}
+
+.s-price-sm .s-price-original {
+  font-size: var(--font-size-xs);
+}
+
+.s-price-md .s-price-original {
+  font-size: var(--font-size-sm);
+}
+
+.s-price-lg .s-price-original {
+  font-size: var(--font-size-md);
+}
+
+.s-price-original-symbol {
+  font-weight: var(--font-weight-regular);
+}
+
+.s-price-original-integer {
+  font-weight: var(--font-weight-regular);
+}
+
+.s-price-original-decimal {
+  font-weight: var(--font-weight-regular);
+}

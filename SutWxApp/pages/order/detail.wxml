@@ -2,7 +2,7 @@
 <!--
 文件名: detail.wxml
 版本号: 3.0.0
-更新日期: 2026-07-05
+更新日期: 2026-07-06
 描述: 订单详情页面模板
 -->
 <!-- 加载中 -->
@@ -12,10 +12,12 @@
 </view>
 
 <!-- 加载失败/空状态 -->
-<view wx:elif="{{!orderDetail}}" class="empty-container">
-  <image class="empty-icon" src="/images/placeholder.svg" mode="aspectFit"></image>
-  <text class="empty-text">订单信息加载失败</text>
-</view>
+<s-empty-state
+  wx:elif="{{!orderDetail}}"
+  image="/images/placeholder.svg"
+  title="订单信息加载失败"
+  description="请稍后重试"
+/>
 
 <!-- 订单详情 -->
 <view wx:else class="detail-container">
@@ -45,7 +47,7 @@
         <text class="product-name">{{item.name}}</text>
         <text class="product-spec" wx:if="{{item.spec}}">{{item.spec}}</text>
         <view class="product-bottom">
-          <text class="product-price">¥{{item.priceText}}</text>
+          <s-price value="{{item.priceText}}" size="sm"></s-price>
           <text class="product-quantity">x{{item.quantity}}</text>
         </view>
       </view>
@@ -80,57 +82,62 @@
   <view class="price-section">
     <view class="price-item">
       <text class="price-label">商品金额</text>
-      <text class="price-value">¥{{orderDetail.productPriceText}}</text>
+      <s-price value="{{orderDetail.productPriceText}}" size="sm" color="text"></s-price>
     </view>
     <view class="price-item">
       <text class="price-label">运费</text>
-      <text class="price-value">¥{{orderDetail.shippingFeeText}}</text>
+      <s-price value="{{orderDetail.shippingFeeText}}" size="sm" color="text"></s-price>
     </view>
     <view class="price-item" wx:if="{{orderDetail.couponDiscount > 0}}">
       <text class="price-label">优惠券</text>
-      <text class="price-value discount">-¥{{orderDetail.couponDiscountText}}</text>
+      <text class="discount-text">-<s-price value="{{orderDetail.couponDiscountText}}" size="sm" color="primary" show-symbol="{{false}}"></s-price></text>
     </view>
     <view class="price-item total">
       <text class="price-label">实付金额</text>
-      <text class="price-value total-value">¥{{orderDetail.totalPriceText}}</text>
+      <s-price value="{{orderDetail.totalPriceText}}" size="lg"></s-price>
     </view>
   </view>
 
   <!-- 底部操作栏 -->
   <view class="bottom-bar">
-    <button
+    <s-button
       wx:if="{{orderDetail.status === 1}}"
-      class="action-btn secondary"
+      size="sm"
+      variant="default"
       bindtap="onCancelOrder"
     >
       取消订单
-    </button>
-    <button
+    </s-button>
+    <s-button
       wx:if="{{orderDetail.status === 3}}"
-      class="action-btn secondary"
+      size="sm"
+      variant="default"
       bindtap="onViewLogistics"
     >
       查看物流
-    </button>
-    <button
-      class="action-btn secondary"
+    </s-button>
+    <s-button
+      size="sm"
+      variant="default"
       bindtap="onContactService"
     >
       联系客服
-    </button>
-    <button
+    </s-button>
+    <s-button
       wx:if="{{orderDetail.status === 1}}"
-      class="action-btn primary"
+      size="sm"
+      variant="primary"
       bindtap="onPayOrder"
     >
       立即支付
-    </button>
-    <button
+    </s-button>
+    <s-button
       wx:if="{{orderDetail.status === 3}}"
-      class="action-btn primary"
+      size="sm"
+      variant="primary"
       bindtap="onConfirmReceive"
     >
       确认收货
-    </button>
+    </s-button>
   </view>
 </view>

@@ -1,6 +1,6 @@
-
 {
   "component": true,
-  "usingComponents": {}
+  "usingComponents": {
+    "s-button": "/components/button/index"
+  }
 }
-

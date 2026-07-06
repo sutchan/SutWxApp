@@ -1,5 +1,10 @@
 
 {
-  "navigationBarTitleText": "订单详情"
+  "navigationBarTitleText": "订单详情",
+  "usingComponents": {
+    "s-empty-state": "/components/empty-state/index",
+    "s-price": "/components/price/index",
+    "s-button": "/components/button/index"
+  }
 }
 

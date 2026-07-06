@@ -2,7 +2,7 @@
 <!--
 文件名: index.wxml
 版本号: 3.0.0
-更新日期: 2026-07-05
+更新日期: 2026-07-06
 描述: 订单列表页面模板
 -->
 <view class="order-container">
@@ -21,10 +21,12 @@
   </view>
 
   <!-- 空状态 -->
-  <view wx:if="{{empty && !loading}}" class="empty-container">
-    <image class="empty-icon" src="/images/placeholder.svg" mode="aspectFit"></image>
-    <text class="empty-text">暂无订单</text>
-  </view>
+  <s-empty-state
+    wx:if="{{empty && !loading}}"
+    image="/images/placeholder.svg"
+    title="暂无订单"
+    description="快去挑选心仪的商品吧"
+  />
 
   <!-- 订单列表 -->
   <view wx:else class="order-list">
@@ -54,7 +56,7 @@
             <text class="product-name">{{product.name}}</text>
             <text class="product-spec" wx:if="{{product.spec}}">{{product.spec}}</text>
             <view class="product-bottom">
-              <text class="product-price">¥{{product.priceText}}</text>
+              <s-price value="{{product.priceText}}" size="sm"></s-price>
               <text class="product-quantity">x{{product.quantity}}</text>
             </view>
           </view>
@@ -63,41 +65,48 @@
 
       <!-- 订单底部 -->
       <view class="order-footer">
-        <text class="order-total">共{{item.totalQuantity}}件商品 合计：<text class="price">¥{{item.totalPriceText}}</text></text>
+        <view class="order-total">
+          <text>共{{item.totalQuantity}}件商品 合计：</text>
+          <s-price value="{{item.totalPriceText}}" size="md" color="text"></s-price>
+        </view>
 
         <view class="order-actions">
-          <button
+          <s-button
             wx:if="{{item.status === 1}}"
-            class="action-btn cancel-btn"
+            size="sm"
+            variant="default"
             catchtap="onCancelOrder"
             data-id="{{item.id}}"
           >
             取消订单
-          </button>
-          <button
+          </s-button>
+          <s-button
             wx:if="{{item.status === 1}}"
-            class="action-btn pay-btn"
+            size="sm"
+            variant="primary"
             catchtap="onPayOrder"
             data-id="{{item.id}}"
           >
             立即支付
-          </button>
-          <button
+          </s-button>
+          <s-button
             wx:if="{{item.status === 3}}"
-            class="action-btn confirm-btn"
+            size="sm"
+            variant="primary"
             catchtap="onConfirmReceive"
             data-id="{{item.id}}"
           >
             确认收货
-          </button>
-          <button
+          </s-button>
+          <s-button
             wx:if="{{item.status === 4}}"
-            class="action-btn comment-btn"
+            size="sm"
+            variant="default"
             catchtap="onCommentOrder"
             data-id="{{item.id}}"
           >
             评价
-          </button>
+          </s-button>
         </view>
       </view>
     </view>

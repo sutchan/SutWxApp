@@ -1,6 +1,7 @@
-
 {
   "component": true,
-  "usingComponents": {}
+  "usingComponents": {
+    "s-price": "/components/price/index",
+    "s-tag": "/components/tag/index"
+  }
 }
-

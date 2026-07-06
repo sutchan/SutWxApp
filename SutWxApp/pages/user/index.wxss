@@ -1,12 +1,13 @@
+
 /**
  * 文件名: index.wxss
  * 版本号: 3.0.0
- * 更新日期: 2026-07-05
+ * 更新日期: 2026-07-06
  * 描述: 用户中心页面样式表
  */
 
 page {
-  background-color: #f5f5f5;
+  background-color: var(--background-secondary);
 }
 
 .container {
@@ -16,8 +17,8 @@ page {
 }
 
 .header-section {
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-  padding: 40rpx 30rpx 100rpx;
+  background: var(--gradient-primary);
+  padding: var(--spacing-3xl) var(--spacing-lg) var(--spacing-5xl);
 }
 
 .user-info {
@@ -25,34 +26,22 @@ page {
   align-items: center;
 }
 
-.avatar {
-  width: 120rpx;
-  height: 120rpx;
-  border-radius: 50%;
-  border: 4rpx solid rgba(255, 255, 255, 0.3);
-  background-color: #ffffff;
-}
-
-.avatar.placeholder {
-  opacity: 0.8;
-}
-
 .info-content {
   flex: 1;
-  margin-left: 24rpx;
+  margin-left: var(--spacing-md);
 }
 
 .nickname {
   display: block;
-  font-size: 36rpx;
-  font-weight: bold;
-  color: #ffffff;
-  margin-bottom: 8rpx;
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-inverse);
+  margin-bottom: var(--spacing-xs);
 }
 
 .user-id {
   display: block;
-  font-size: 24rpx;
+  font-size: var(--font-size-sm);
   color: rgba(255, 255, 255, 0.8);
 }
 
@@ -69,19 +58,19 @@ page {
 }
 
 .login-text {
-  margin-left: 20rpx;
-  font-size: 32rpx;
-  color: #ffffff;
+  margin-left: var(--spacing-md);
+  font-size: var(--font-size-xl);
+  color: var(--text-inverse);
 }
 
 .stats-section {
   display: flex;
   align-items: center;
-  background-color: #ffffff;
-  margin: -60rpx 30rpx 20rpx;
-  border-radius: 16rpx;
-  padding: 40rpx 0;
-  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
+  background-color: var(--background-primary);
+  margin: -60rpx var(--spacing-lg) var(--spacing-md);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-xl) 0;
+  box-shadow: var(--shadow-md);
 }
 
 .stats-item {
@@ -92,55 +81,56 @@ page {
 }
 
 .stats-value {
-  font-size: 40rpx;
-  font-weight: bold;
-  color: #333333;
-  margin-bottom: 8rpx;
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-xs);
 }
 
 .stats-label {
-  font-size: 24rpx;
-  color: #999999;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
 }
 
 .stats-divider {
   width: 1rpx;
   height: 60rpx;
-  background-color: #eeeeee;
+  background-color: var(--border-light);
 }
 
 .menu-section {
   flex: 1;
-  padding: 0 30rpx;
+  padding: 0 var(--spacing-lg);
 }
 
 .menu-group {
-  background-color: #ffffff;
-  border-radius: 16rpx;
-  margin-bottom: 20rpx;
+  background-color: var(--background-primary);
+  border-radius: var(--border-radius-lg);
+  margin-bottom: var(--spacing-md);
   overflow: hidden;
+  box-shadow: var(--shadow-sm);
 }
 
 .menu-group-header {
-  padding: 24rpx 30rpx;
-  border-bottom: 1rpx solid #eeeeee;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-bottom: 1rpx solid var(--border-light);
 }
 
 .menu-group-name {
-  font-size: 28rpx;
-  font-weight: bold;
-  color: #333333;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
 }
 
 .menu-group-content {
-  padding: 10rpx 0;
+  padding: var(--spacing-xs) 0;
 }
 
 .menu-item {
   display: flex;
   align-items: center;
-  padding: 28rpx 30rpx;
-  border-bottom: 1rpx solid #f5f5f5;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-bottom: 1rpx solid var(--border-light);
 }
 
 .menu-item:last-child {
@@ -150,13 +140,13 @@ page {
 .menu-icon {
   width: 48rpx;
   height: 48rpx;
-  margin-right: 24rpx;
+  margin-right: var(--spacing-md);
 }
 
 .menu-name {
   flex: 1;
-  font-size: 30rpx;
-  color: #333333;
+  font-size: var(--font-size-md);
+  color: var(--text-primary);
 }
 
 .menu-arrow {
@@ -166,29 +156,19 @@ page {
 }
 
 .logout-section {
-  padding: 40rpx 30rpx;
+  padding: var(--spacing-xl) var(--spacing-lg);
 }
 
 .logout-btn {
-  background-color: #ffffff;
-  border-radius: 16rpx;
-  padding: 28rpx 0;
-  text-align: center;
-  font-size: 32rpx;
   color: var(--error-color);
-  font-weight: bold;
-}
-
-.logout-btn:active {
-  background-color: #f5f5f5;
 }
 
 .version-info {
-  padding: 40rpx 0;
+  padding: var(--spacing-xl) 0;
   text-align: center;
 }
 
 .version-text {
-  font-size: 24rpx;
-  color: #999999;
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary);
 }

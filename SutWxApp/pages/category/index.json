@@ -1,4 +1,7 @@
-
 {
-  "navigationBarTitleText": "商品分类"
+  "navigationBarTitleText": "商品分类",
+  "usingComponents": {
+    "s-product-card": "/components/product-card/index",
+    "s-empty-state": "/components/empty-state/index"
+  }
 }

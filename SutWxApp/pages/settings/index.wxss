@@ -1,49 +1,39 @@
+
 /**
  * 文件名: index.wxss
  * 版本号: 3.0.0
- * 更新日期: 2026-07-05
+ * 更新日期: 2026-07-06
  * 描述: 设置页面样式表
  */
 
 .container {
   min-height: 100vh;
-  background-color: #f5f5f5;
+  background-color: var(--background-secondary);
   padding-bottom: 120rpx;
 }
 
-.header {
-  background-color: #fff;
-  padding: 30rpx;
-  border-bottom: 1rpx solid #eee;
-}
-
-.title {
-  font-size: 36rpx;
-  font-weight: 600;
-  color: #333;
-}
-
 .settings-group {
-  margin-top: 20rpx;
-  background-color: #fff;
+  margin-top: var(--spacing-md);
+  background-color: var(--background-primary);
+  box-shadow: var(--shadow-sm);
 }
 
 .group-title {
-  padding: 24rpx 30rpx 12rpx;
-  font-size: 26rpx;
-  color: #999;
+  padding: var(--spacing-md) var(--spacing-lg) var(--spacing-xs);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
 }
 
 .settings-list {
-  padding: 0 30rpx;
+  padding: 0 var(--spacing-lg);
 }
 
 .settings-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 28rpx 0;
-  border-bottom: 1rpx solid #f5f5f5;
+  padding: var(--spacing-md) 0;
+  border-bottom: 1rpx solid var(--border-light);
 }
 
 .settings-item:last-child {
@@ -57,12 +47,12 @@
 
 .item-icon {
   font-size: 40rpx;
-  margin-right: 20rpx;
+  margin-right: var(--spacing-md);
 }
 
 .item-text {
-  font-size: 30rpx;
-  color: #333;
+  font-size: var(--font-size-md);
+  color: var(--text-primary);
 }
 
 .item-right {
@@ -72,7 +62,7 @@
 
 .arrow {
   font-size: 32rpx;
-  color: #ccc;
+  color: var(--text-quaternary);
 }
 
 .version {
@@ -81,9 +71,9 @@
 }
 
 .version-text {
-  font-size: 26rpx;
-  color: #999;
-  margin-right: 10rpx;
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary);
+  margin-right: var(--spacing-xs);
 }
 
 .switch-item .item-right {
@@ -91,19 +81,13 @@
 }
 
 .logout-btn {
-  margin: 60rpx 30rpx;
-  height: 96rpx;
-  line-height: 96rpx;
-  text-align: center;
-  background-color: #fff;
-  border-radius: 12rpx;
+  margin: var(--spacing-3xl) var(--spacing-lg);
   color: var(--error-color);
-  font-size: 32rpx;
 }
 
 .version-info {
   text-align: center;
-  padding: 40rpx;
-  font-size: 24rpx;
-  color: #ccc;
+  padding: var(--spacing-xl);
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary);
 }

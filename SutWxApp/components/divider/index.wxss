@@ -1,0 +1,94 @@
+/**
+ * 文件名: index.wxss
+ * 版本号: 3.0.0
+ * 更新日期: 2026-07-06
+ * 描述: Divider 分割线组件样式，参考 shadcn/ui 设计理念
+ */
+
+.s-divider {
+  box-sizing: border-box;
+}
+
+/* 水平分割线 */
+.s-divider-horizontal {
+  width: 100%;
+  height: 1rpx;
+  background-color: var(--border-light);
+  margin: var(--spacing-md) 0;
+}
+
+/* 垂直分割线 */
+.s-divider-vertical {
+  width: 1rpx;
+  height: 100%;
+  background-color: var(--border-light);
+  margin: 0 var(--spacing-md);
+  align-self: stretch;
+}
+
+/* 虚线样式 */
+.s-divider-dashed.s-divider-horizontal {
+  background: none;
+  border-top: 2rpx dashed var(--border-color);
+  height: 0;
+}
+
+.s-divider-dashed.s-divider-vertical {
+  background: none;
+  border-left: 2rpx dashed var(--border-color);
+  width: 0;
+}
+
+/* 带文字的分割线 */
+.s-divider-with-text {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  background: none;
+  height: auto;
+  margin: var(--spacing-md) 0;
+}
+
+.s-divider-line {
+  flex: 1;
+  height: 1rpx;
+  background-color: var(--border-light);
+}
+
+.s-divider-dashed .s-divider-line {
+  background: none;
+  border-top: 2rpx dashed var(--border-color);
+  height: 0;
+}
+
+.s-divider-text {
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+/* 文字位置 - 左侧 */
+.s-divider-text-left .s-divider-line-left {
+  flex: 0;
+  width: 0;
+}
+
+.s-divider-text-left .s-divider-line-right {
+  flex: 1;
+}
+
+/* 文字位置 - 居中 */
+.s-divider-text-center .s-divider-line {
+  flex: 1;
+}
+
+/* 文字位置 - 右侧 */
+.s-divider-text-right .s-divider-line-left {
+  flex: 1;
+}
+
+.s-divider-text-right .s-divider-line-right {
+  flex: 0;
+  width: 0;
+}

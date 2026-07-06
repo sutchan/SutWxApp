@@ -1,7 +1,10 @@
-
 {
   "navigationBarTitleText": "购物车",
   "enablePullDownRefresh": true,
-  "backgroundTextStyle": "dark"
+  "backgroundTextStyle": "dark",
+  "usingComponents": {
+    "s-price": "/components/price/index",
+    "s-button": "/components/button/index",
+    "s-empty-state": "/components/empty-state/index"
+  }
 }
-

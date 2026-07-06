@@ -1,102 +1,155 @@
+/**
+ * 文件名: index.wxss
+ * 版本号: 3.0.0
+ * 更新日期: 2026-07-06
+ * 描述: ProductCard 商品卡片组件样式，参考设计系统规范
+ */
 
-.product-card {
-  background-color: white;
-  border-radius: 16rpx;
+.s-product-card {
+  background-color: var(--background-primary);
+  border-radius: var(--border-radius-lg);
   overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  box-sizing: border-box;
 }
 
-.product-card.vertical {
-  width: 340rpx;
+.s-product-card:active {
+  opacity: 0.9;
+}
+
+/* 纵向布局（网格） */
+.s-product-card-vertical {
   display: flex;
   flex-direction: column;
 }
 
-.product-card.horizontal {
-  display: flex;
-  padding: 20rpx;
+.s-product-card-vertical .s-product-card-image-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 100%;
+  background-color: var(--background-tertiary);
 }
 
-.product-image {
-  background-color: #f5f5f5;
+.s-product-card-vertical .s-product-card-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.product-card.vertical .product-image {
-  width: 340rpx;
-  height: 340rpx;
+.s-product-card-vertical .s-product-card-tag {
+  position: absolute;
+  top: var(--spacing-sm);
+  left: var(--spacing-sm);
 }
 
-.product-card.horizontal .product-image {
-  width: 160rpx;
-  height: 160rpx;
-  border-radius: 12rpx;
-  margin-right: 20rpx;
-}
-
-.product-info {
+.s-product-card-vertical .s-product-card-content {
+  padding: var(--spacing-md);
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 
-.product-card.vertical .product-info {
-  padding: 20rpx;
+/* 横向布局（列表） */
+.s-product-card-horizontal {
+  display: flex;
+  padding: var(--spacing-md);
+  gap: var(--spacing-md);
 }
 
-.product-name {
-  font-size: 28rpx;
-  color: #333;
-  font-weight: 500;
+.s-product-card-horizontal .s-product-card-image-wrapper {
+  position: relative;
+  width: 200rpx;
+  height: 200rpx;
+  background-color: var(--background-tertiary);
+  border-radius: var(--border-radius-md);
   overflow: hidden;
-  text-overflow: ellipsis;
+  flex-shrink: 0;
+}
+
+.s-product-card-horizontal .s-product-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.s-product-card-horizontal .s-product-card-tag {
+  position: absolute;
+  top: var(--spacing-xs);
+  left: var(--spacing-xs);
+}
+
+.s-product-card-horizontal .s-product-card-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* 商品名称 */
+.s-product-card-name {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+  line-height: var(--line-height-tight);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
-  margin-bottom: 8rpx;
+  overflow: hidden;
 }
 
-.product-desc {
-  font-size: 24rpx;
-  color: #999;
+.s-product-card-vertical .s-product-card-name {
+  min-height: 80rpx;
+}
+
+/* 商品描述 */
+.s-product-card-desc {
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary);
+  margin-top: var(--spacing-xs);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  margin-bottom: 12rpx;
 }
 
-.product-bottom {
+/* 底部区域 */
+.s-product-card-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-top: auto;
+  padding-top: var(--spacing-sm);
 }
 
-.price-box {
-  display: flex;
-  align-items: baseline;
-}
-
-.product-price {
-  font-size: 32rpx;
-  color: #ff6b6b;
-  font-weight: bold;
-}
-
-.product-origin-price {
-  font-size: 24rpx;
-  color: #ccc;
-  text-decoration: line-through;
-  margin-left: 8rpx;
-}
-
-.add-cart-btn {
-  width: 56rpx;
-  height: 56rpx;
-  line-height: 56rpx;
-  padding: 0;
-  background-color: #ff6b6b;
-  color: white;
-  font-size: 32rpx;
+/* 加购按钮 */
+.s-product-card-cart {
+  width: 48rpx;
+  height: 48rpx;
   border-radius: 50%;
-  border: none;
+  background-color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
+.s-product-card-cart:active {
+  background-color: var(--primary-dark);
+  transform: scale(0.95);
+}
+
+.s-product-card-cart-icon {
+  color: var(--text-inverse);
+  font-size: 28rpx;
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+}
+
+/* 销量 */
+.s-product-card-sold {
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+  flex-shrink: 0;
+}

@@ -1,0 +1,10 @@
+<!--
+  文件名: index.wxml
+  版本号: 3.0.0
+  更新日期: 2026-07-06
+  描述: Badge 徽章组件模板
+-->
+
+<view class="{{badgeClass}}" wx:if="{{dot || displayContent}}">
+  <text wx:if="{{!dot}}">{{displayContent}}</text>
+</view>

@@ -2,7 +2,7 @@
 <!--
 文件名: confirm.wxml
 版本号: 3.0.0
-更新日期: 2026-07-05
+更新日期: 2026-07-06
 描述: 订单确认页面模板
 -->
 <view class="confirm-container">
@@ -33,7 +33,7 @@
         <text class="product-name">{{item.name}}</text>
         <text class="product-spec" wx:if="{{item.spec}}">{{item.spec}}</text>
         <view class="product-bottom">
-          <text class="product-price">¥{{item.priceText}}</text>
+          <s-price value="{{item.priceText}}" size="sm"></s-price>
           <text class="product-quantity">x{{item.quantity}}</text>
         </view>
       </view>
@@ -56,15 +56,16 @@
   <view class="price-section">
     <view class="price-item">
       <text class="price-label">商品金额</text>
-      <text class="price-value">¥{{totalPriceText}}</text>
+      <s-price value="{{totalPriceText}}" size="sm" color="text"></s-price>
     </view>
     <view class="price-item">
       <text class="price-label">运费</text>
-      <text class="price-value">{{shippingFee === 0 ? '免运费' : '¥' + shippingFeeText}}</text>
+      <text wx:if="{{shippingFee === 0}}" class="shipping-free">免运费</text>
+      <s-price wx:else value="{{shippingFeeText}}" size="sm" color="text"></s-price>
     </view>
     <view class="price-item" wx:if="{{couponDiscount > 0}}">
       <text class="price-label">优惠券</text>
-      <text class="price-value discount">-¥{{couponDiscountText}}</text>
+      <text class="discount-text">-<s-price value="{{couponDiscountText}}" size="sm" color="primary" show-symbol="{{false}}"></s-price></text>
     </view>
   </view>
 
@@ -72,14 +73,15 @@
   <view class="bottom-bar">
     <view class="total-box">
       <text class="total-label">合计：</text>
-      <text class="total-price">¥{{finalPriceText}}</text>
+      <s-price value="{{finalPriceText}}" size="lg"></s-price>
     </view>
-    <button
-      class="submit-btn"
+    <s-button
+      variant="primary"
       bindtap="onSubmitOrder"
-      disabled="{{submitting}}"
+      loading="{{submitting}}"
+      class="submit-btn"
     >
-      {{submitting ? '提交中...' : '提交订单'}}
-    </button>
+      {{submitting ? '提交中' : '提交订单'}}
+    </s-button>
   </view>
 </view>

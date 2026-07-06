@@ -1,14 +1,15 @@
+
 <!--
   文件名: index.wxml
   版本号: 3.0.0
-  更新日期: 2026-07-05
+  更新日期: 2026-07-06
   描述: 用户中心页面结构模板
 -->
 
 <view class="container">
   <view class="header-section" bindtap="handleAvatarTap">
     <view class="user-info" wx:if="{{isLoggedIn}}">
-      <image class="avatar" src="{{userInfo.avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+      <s-avatar src="{{userInfo.avatarUrl || '/images/default-avatar.png'}}" size="lg"></s-avatar>
       <view class="info-content">
         <text class="nickname">{{userInfo.nickName || userInfo.nickname || '用户'}}</text>
         <text class="user-id">ID: {{userInfo.id || ''}}</text>
@@ -16,7 +17,7 @@
       <image class="arrow-right" src="/images/arrow-right.svg" mode="aspectFit"></image>
     </view>
     <view class="login-prompt" wx:else bindtap="handleLogin">
-      <image class="avatar placeholder" src="/images/default-avatar.png" mode="aspectFill"></image>
+      <s-avatar src="/images/default-avatar.png" size="lg"></s-avatar>
       <text class="login-text">点击登录</text>
     </view>
   </view>
@@ -58,7 +59,7 @@
   </view>
 
   <view class="logout-section" wx:if="{{isLoggedIn}}">
-    <view class="logout-btn" bindtap="handleLogout">退出登录</view>
+    <s-button variant="default" block bindtap="handleLogout" class="logout-btn">退出登录</s-button>
   </view>
 
   <view class="version-info">

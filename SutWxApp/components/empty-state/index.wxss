@@ -1,33 +1,88 @@
+/**
+ * 文件名: index.wxss
+ * 版本号: 3.0.0
+ * 更新日期: 2026-07-06
+ * 描述: EmptyState 空状态组件样式，参考设计系统规范
+ */
 
-.empty-state {
+.s-empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-5xl) var(--spacing-xxl);
+  box-sizing: border-box;
+}
+
+/* 顶部图标布局（垂直） */
+.s-empty-state-top {
+  flex-direction: column;
+  text-align: center;
+}
+
+.s-empty-state-top .s-empty-state-media {
+  margin-bottom: var(--spacing-lg);
+}
+
+.s-empty-state-top .s-empty-state-content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 120rpx 0;
 }
 
-.empty-image {
-  width: 300rpx;
-  height: 300rpx;
-  margin-bottom: 30rpx;
+/* 左侧图标布局（水平） */
+.s-empty-state-left {
+  flex-direction: row;
+  text-align: left;
+  align-items: flex-start;
+  padding: var(--spacing-xxl) var(--spacing-lg);
 }
 
-.empty-text {
-  font-size: 28rpx;
-  color: #999;
-  margin-bottom: 40rpx;
+.s-empty-state-left .s-empty-state-media {
+  margin-right: var(--spacing-lg);
+  flex-shrink: 0;
 }
 
-.empty-button {
+.s-empty-state-left .s-empty-state-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1;
+  min-width: 0;
+}
+
+/* 图片样式 */
+.s-empty-state-image {
   width: 200rpx;
-  height: 70rpx;
-  line-height: 70rpx;
-  background-color: #ff6b6b;
-  color: white;
-  font-size: 26rpx;
-  border-radius: 35rpx;
-  border: none;
-  padding: 0;
+  height: 200rpx;
 }
 
+.s-empty-state-left .s-empty-state-image {
+  width: 120rpx;
+  height: 120rpx;
+}
+
+/* 标题 */
+.s-empty-state-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-xs);
+  line-height: var(--line-height-tight);
+}
+
+/* 描述 */
+.s-empty-state-description {
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary);
+  line-height: var(--line-height-normal);
+  max-width: 560rpx;
+}
+
+/* 操作按钮 */
+.s-empty-state-action {
+  margin-top: var(--spacing-lg);
+}
+
+.s-empty-state-left .s-empty-state-action {
+  margin-top: var(--spacing-md);
+}

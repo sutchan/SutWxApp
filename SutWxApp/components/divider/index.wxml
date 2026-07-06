@@ -1,0 +1,16 @@
+<!--
+  文件名: index.wxml
+  版本号: 3.0.0
+  更新日期: 2026-07-06
+  描述: Divider 分割线组件模板
+-->
+
+<view class="{{dividerClass}}" wx:if="{{!text || direction === 'vertical'}}">
+  <view wx:if="{{text}}" class="s-divider-text">{{text}}</view>
+</view>
+
+<view wx:else class="s-divider s-divider-horizontal s-divider-with-text s-divider-text-{{textPosition}}">
+  <view class="s-divider-line s-divider-line-left"></view>
+  <view class="s-divider-text">{{text}}</view>
+  <view class="s-divider-line s-divider-line-right"></view>
+</view>

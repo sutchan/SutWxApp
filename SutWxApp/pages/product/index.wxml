@@ -1,7 +1,7 @@
 <!--
   文件名: index.wxml
   版本号: 3.0.0
-  更新日期: 2026-07-05
+  更新日期: 2026-07-06
   描述: 产品详情页结构模板
 -->
 
@@ -44,13 +44,8 @@
     <view class="product-info-section">
       <view class="price-row">
         <view class="price-info">
-          <text class="price-label">促销价</text>
-          <text class="price-symbol">¥</text>
-          <text class="price-value">{{productInfo.priceText}}</text>
-          <text class="price-origin" wx:if="{{productInfo.originPriceText}}">¥{{productInfo.originPriceText}}</text>
-          <view class="discount-badge" wx:if="{{productInfo.discount}}">
-            <text>{{productInfo.discount}}折</text>
-          </view>
+          <s-tag size="sm" variant="error">促销价</s-tag>
+          <s-price value="{{productInfo.priceText}}" original="{{productInfo.originPriceText}}" size="lg" color="error"></s-price>
         </view>
         <view class="sales-info">
           <text>已售{{productInfo.sales || 0}}件</text>
@@ -67,9 +62,7 @@
 
       <view class="product-tags" wx:if="{{productInfo.tags && productInfo.tags.length > 0}}">
         <block wx:for="{{productInfo.tags}}" wx:key="index">
-          <view class="tag-item">
-            <text>{{item}}</text>
-          </view>
+          <s-tag size="sm" variant="light">{{item}}</s-tag>
         </block>
       </view>
     </view>
@@ -109,7 +102,7 @@
         <block wx:for="{{reviews}}" wx:key="id" wx:for-item="review">
           <view class="review-item">
             <view class="review-header">
-              <image class="review-avatar" src="{{review.avatar || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+              <s-avatar src="{{review.avatar || '/images/default-avatar.png'}}" size="sm"></s-avatar>
               <text class="review-username">{{review.nickname || '匿名用户'}}</text>
               <view class="review-rating">
                 <block wx:for="{{[1,2,3,4,5]}}" wx:for-item="star" wx:key="*this">
@@ -169,7 +162,7 @@
             ></image>
             <view class="related-info">
               <text class="related-name">{{item.name}}</text>
-              <text class="related-price">¥{{item.priceText}}</text>
+              <s-price value="{{item.priceText}}" size="sm" color="error"></s-price>
             </view>
           </view>
         </block>
@@ -190,14 +183,12 @@
       <view class="icon-item" bindtap="handleShowSpecPopup">
         <image src="/images/placeholder.svg" mode="aspectFit"></image>
         <text>购物车</text>
-        <view class="cart-badge" wx:if="{{cartCount > 0}}">
-          <text>{{cartCount > 99 ? '99+' : cartCount}}</text>
-        </view>
+        <s-badge wx:if="{{cartCount > 0}}" content="{{cartCount > 99 ? '99+' : cartCount}}" variant="error" size="sm"></s-badge>
       </view>
     </view>
     <view class="action-buttons">
-      <view class="btn-add-cart" bindtap="handleAddToCart">加入购物车</view>
-      <view class="btn-buy-now" bindtap="handleBuyNow">立即购买</view>
+      <s-button variant="default" block bind:tap="handleAddToCart">加入购物车</s-button>
+      <s-button variant="primary" block bind:tap="handleBuyNow">立即购买</s-button>
     </view>
   </view>
 
@@ -212,8 +203,7 @@
       ></image>
       <view class="spec-popup-info">
         <view class="spec-popup-price">
-          <text class="price-symbol">¥</text>
-          <text class="price-value">{{currentSpecPriceText}}</text>
+          <s-price value="{{currentSpecPriceText}}" size="lg" color="error"></s-price>
         </view>
         <view class="spec-popup-stock">
           <text>库存: {{productInfo.specs[selectedSpecIndex].stock || 99}}</text>
@@ -251,10 +241,9 @@
       </view>
     </scroll-view>
     <view class="spec-popup-footer">
-      <view class="btn-confirm" bindtap="handleConfirmAddToCart" wx:if="{{!isAddingToCart}}">确定</view>
-      <view class="btn-confirm loading" wx:if="{{isAddingToCart}}">
-        <text>加入中...</text>
-      </view>
+      <s-button variant="primary" block loading="{{isAddingToCart}}" bind:tap="handleConfirmAddToCart">
+        {{isAddingToCart ? '加入中...' : '确定'}}
+      </s-button>
     </view>
   </view>
 
@@ -271,7 +260,7 @@
         <block wx:for="{{reviews}}" wx:key="id">
           <view class="review-item">
             <view class="review-header">
-              <image class="review-avatar" src="{{review.avatar || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+              <s-avatar src="{{review.avatar || '/images/default-avatar.png'}}" size="sm"></s-avatar>
               <text class="review-username">{{review.nickname || '匿名用户'}}</text>
               <view class="review-rating">
                 <block wx:for="{{[1,2,3,4,5]}}" wx:for-item="star" wx:key="*this">

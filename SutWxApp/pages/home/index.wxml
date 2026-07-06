@@ -1,7 +1,7 @@
 <!--
   文件名: index.wxml
   版本号: 3.0.0
-  更新日期: 2026-07-05
+  更新日期: 2026-07-06
   描述: 首页结构模板
 -->
 
@@ -26,7 +26,7 @@
   <view class="category-section">
     <scroll-view class="category-scroll" scroll-x="true" enhanced="true" show-scrollbar="false">
       <view class="category-list">
-        <view class="category-item {{currentCategory === 0 ? 'active' : ''}}" bindtap="handleCategoryTap" data-id="0">
+        <view class="category-item {{currentCategory === 0 ? 'active' : ''}" bindtap="handleCategoryTap" data-id="0">
           <image class="category-icon" src="/images/placeholder.svg" mode="aspectFit"></image>
           <text class="category-name">全部</text>
         </view>
@@ -44,21 +44,16 @@
     <view class="section-header">
       <text class="section-title">推荐商品</text>
     </view>
-    <view class="product-grid">
+    <view class="product-grid" wx:if="{{productList.length > 0}}">
       <block wx:for="{{productList}}" wx:key="id">
-        <view class="product-card" bindtap="handleProductTap" data-id="{{item.id}}">
-          <image class="product-image" src="{{item.image}}" mode="aspectFill" lazy-load="true"></image>
-          <view class="product-info">
-            <text class="product-name">{{item.name}}</text>
-            <view class="product-bottom">
-              <text class="product-price">{{item.priceText}}</text>
-              <view class="product-actions">
-                <image class="action-icon" src="/images/favorite.png" catchtap="handleFavorite" data-id="{{item.id}}"></image>
-                <image class="action-icon" src="/images/share.png" catchtap="handleShare" data-id="{{item.id}}"></image>
-              </view>
-            </view>
-          </view>
-        </view>
+        <s-product-card
+          product="{{item}}"
+          layout="vertical"
+          showCart="{{false}}"
+          showTag="{{false}}"
+          bind:productTap="handleProductTap"
+          data-id="{{item.id}}"
+        ></s-product-card>
       </block>
     </view>
     <view class="loading-tip" wx:if="{{isLoading}}">
@@ -67,9 +62,11 @@
     <view class="loading-tip" wx:if="{{!hasMore && productList.length > 0}}">
       <text>没有更多了</text>
     </view>
-    <view class="empty-tip" wx:if="{{productList.length === 0 && !isLoading}}">
-      <image class="empty-image" src="/images/empty.svg" mode="aspectFit"></image>
-      <text class="empty-text">暂无商品</text>
-    </view>
+    <s-empty-state
+      wx:if="{{productList.length === 0 && !isLoading}}"
+      title="暂无商品"
+      description="去看看其他商品吧"
+      image="/images/empty.svg"
+    ></s-empty-state>
   </view>
 </view>

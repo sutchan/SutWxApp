@@ -1,17 +1,20 @@
-
 <!--
-文件名: index.wxml
-版本号: 3.0.0
-更新日期: 2026-07-05
-描述: 购物车页面模板，展示购物车商品列表
+  文件名: index.wxml
+  版本号: 3.0.0
+  更新日期: 2026-07-06
+  描述: 购物车页面模板，展示购物车商品列表
 -->
 <view class="cart-container">
   <!-- 空状态 -->
-  <view wx:if="{{empty}}" class="empty-container">
-    <image class="empty-icon" src="/images/placeholder.svg" mode="aspectFit"></image>
-    <text class="empty-text">购物车空空如也</text>
-    <button class="go-shopping-btn" bindtap="onGoShopping">去逛逛</button>
-  </view>
+  <s-empty-state
+    wx:if="{{empty}}"
+    title="购物车空空如也"
+    description="快去挑选心仪的商品吧"
+    image="/images/placeholder.svg"
+    showButton="{{true}}"
+    buttonText="去逛逛"
+    bind:buttonTap="onGoShopping"
+  ></s-empty-state>
 
   <!-- 商品列表 -->
   <view wx:else class="cart-list">
@@ -32,7 +35,7 @@
         <text class="product-spec" wx:if="{{item.spec}}">{{item.spec}}</text>
 
         <view class="product-bottom">
-          <text class="product-price">¥{{item.priceText}}</text>
+          <s-price value="{{item.priceText}}" size="md" color="error"></s-price>
 
           <view class="quantity-box">
             <view class="quantity-btn" bindtap="onDecreaseQuantity" data-index="{{index}}">-</view>
@@ -62,12 +65,17 @@
     <!-- 合计 -->
     <view class="total-box">
       <text class="total-label">合计：</text>
-      <text class="total-price">¥{{totalPriceText}}</text>
+      <s-price value="{{totalPriceText}}" size="lg" color="error"></s-price>
     </view>
 
     <!-- 结算按钮 -->
-    <button class="checkout-btn" bindtap="onCheckout" disabled="{{totalCount === 0}}">
+    <s-button
+      variant="primary"
+      size="md"
+      bind:tap="onCheckout"
+      disabled="{{totalCount === 0}}"
+    >
       结算({{totalCount}})
-    </button>
+    </s-button>
   </view>
 </view>

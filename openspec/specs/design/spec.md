@@ -1,224 +1,769 @@
 <!--
 文件名: spec.md
-版本号: 1.0.0
-更新日期: 2025-12-27
+版本号: 3.0.0
+更新日期: 2026-07-06
 作者: Sut
-描述: SutWxApp 项目 UI 设计规范文档，涵盖视觉设计语言、组件使用标准、响应式适配规则和动效设计原则
+描述: SutWxApp 微信小程序设计系统规范文档，参考 Apple Human Interface Guidelines 与 shadcn/ui 设计理念，定义完整的视觉语言、组件标准与交互规范
 -->
 
-# UI 设计规范
+# SutWxApp 设计系统规范
 
-## 目的
+## 概述
 
-本规范定义了苏铁微信小程序（SutWxApp）项目的视觉设计语言、组件使用标准、响应式适配规则和动效设计原则，旨在确保小程序界面的统一性、一致性和美观性。规范基于微信小程序原生开发框架和 WeUI 组件库，结合项目的品牌定位和用户特征，制定了完整的设计体系。本规范适用于产品设计、前端开发、测试和运维等各个环节，所有参与界面设计和开发的人员都应当遵循本规范的要求。
-
-苏铁微信小程序作为面向普通消费者的电商平台，界面设计直接影响用户体验和转化率。统一的视觉语言能够强化品牌形象，降低用户的学习成本；规范的组件使用能够保证界面的一致性，提高开发效率；合理的响应式适配能够适配不同尺寸的屏幕，提供良好的跨设备体验；恰当的动效设计能够增强交互反馈，提升用户满意度。本规范将从色彩、字体、组件、布局、动效等多个维度进行详细阐述，为设计和开发提供明确的指导。
-
-## 视觉设计语言
+SutWxApp 设计系统是一套面向微信小程序的完整设计语言体系，旨在为苏铁电商平台提供统一、精致、国际化水准的视觉与交互标准。本规范参考 Apple Human Interface Guidelines 的极简主义设计哲学，结合 shadcn/ui 的组件化设计理念，深度适配微信小程序技术栈特性。
 
 ### 设计原则
 
-项目界面设计遵循四项核心原则，这些原则指导所有界面设计和交互决策。第一项原则是简洁清晰，界面设计应当去除冗余元素，突出核心内容和操作入口，让用户能够快速找到所需信息和功能。信息层级应当清晰分明，通过视觉差异区分重要程度，避免信息过载导致的认知负担。
+**1. 清晰优先 (Clarity First)**
+文字在任何背景下都清晰可辨，图标精确易懂，装饰性元素服务于功能而非喧宾夺主。通过留白、字体层级和色彩对比建立清晰的视觉层次。
 
-第二项原则是一致性，同类功能和相似场景应当使用相同的设计模式，降低用户的学习成本。视觉元素（如颜色、字体、图标）应当保持统一的风格，形成完整的视觉语言系统。交互模式应当一致，相同操作在不同场景下应当产生相同或相似的反馈。
+**2. 遵从 (Deference)**
+界面协助用户理解内容并与之互动，而不是成为障碍。内容是界面的核心，框架和控件应退居次位，让用户专注于内容本身。
 
-第三项原则是可用性，界面设计应当符合用户的认知习惯和操作直觉，减少用户的思考成本。重要操作应当突出展示，次要操作应当适度收敛。错误提示应当明确指出问题和解决方案，引导用户完成操作。界面应当具备良好的可访问性，考虑不同用户群体的需求。
+**3. 深度 (Depth)**
+通过视觉层次和叠加层传达层级关系，赋予界面活力，帮助用户理解什么是重要的、什么是可交互的。微妙的阴影、圆角和半透明效果创造深度感。
 
-第四项原则是品牌表达，设计应当体现苏铁品牌的核心价值和精神内涵，在符合行业规范的基础上形成差异化的视觉特征。品牌色彩和视觉元素应当贯穿整个产品，在用户心智中建立统一的品牌形象。
+**4. 一致性 (Consistency)**
+相同的功能使用相同的视觉语言，相同的模式在不同场景下产生相同的结果。用户的知识和技能可以在产品的不同部分之间迁移。
 
-### 色彩系统
+**5. 反馈 (Feedback)**
+每一个操作都有即时的视觉反馈。状态变化有明确的过渡动画，用户的每一个动作都能感知到系统的响应。
 
-#### 主色调定义
+### 设计基调
 
-品牌主色调选择深绿色作为核心视觉元素，深绿色（色值 #2E7D32）象征自然、生机和品质，与苏铁品牌的定位相契合。主色调用于关键操作按钮、重要状态提示、品牌标识等需要强调的场景。主色调应当控制使用面积，避免大面积使用造成的视觉疲劳。
+- **风格**: 极简精致，克制优雅
+- **感受**: 信赖、品质、自然
+- **节奏**: 呼吸感强，留白充足
+- **动效**: 平滑自然，恰到好处
+
+---
+
+## 色彩系统
+
+色彩系统基于深绿色主色调构建，采用系统化的色阶设计，确保在各种场景下的一致性和可访问性。
+
+### 主色调 (Primary)
+
+深绿色象征自然、生机与品质，是苏铁品牌的核心识别色。
+
+| 色阶 | 色值 | 用途 |
+|------|------|------|
+| 50 | #E8F5E9 | 最浅背景、选中态背景 |
+| 100 | #C8E6C9 | 浅背景、禁用态背景 |
+| 200 | #A5D6A7 | 边框、分割线 |
+| 300 | #81C784 | 弱强调、辅助图标 |
+| 400 | #66BB6A | 悬停态、次级按钮 |
+| **500** | **#2E7D32** | **品牌主色、主要按钮、强调文字** |
+| 600 | #2E7D32 | 标准主色（同500） |
+| 700 | #1B5E20 | 按下态、深色背景文字 |
+| 800 | #1B5E20 | 深色主色（同700） |
+| 900 | #0D3D10 | 最深、极端强调 |
 
 ```css
-:root {
+page {
+  --primary-50: #E8F5E9;
+  --primary-100: #C8E6C9;
+  --primary-200: #A5D6A7;
+  --primary-300: #81C784;
+  --primary-400: #66BB6A;
+  --primary-500: #2E7D32;
+  --primary-600: #2E7D32;
+  --primary-700: #1B5E20;
+  --primary-800: #1B5E20;
+  --primary-900: #0D3D10;
+  
   --primary-color: #2E7D32;
-  --primary-hover: #1B5E20;
-  --primary-active: #388E3C;
-  --primary-light: #E8F5E9;
+  --primary-light: #F1F8E9;
   --primary-dark: #1B5E20;
 }
 ```
 
-主色调的明度变化形成完整的色彩系列。悬停状态使用略浅的色值（#388E3C），激活状态使用略深的色值（#1B5E20）。浅色背景（#E8F5E9）用于选中状态或强调区域。深色（#1B5E20）用于需要更高对比度的场景。
+**使用场景**:
+- 主按钮、主要操作、关键链接
+- 选中状态、激活状态
+- 品牌标识、重要标签
+- 进度条、图表主色
 
-#### 辅助色定义
+### 语义色 (Semantic Colors)
 
-辅助色包括功能性色彩和调节性色彩两大类。功能性色彩用于传达状态信息，具有明确的语义含义。成功状态使用绿色（#4CAF50），警告状态使用橙色（#FF9800），错误状态使用红色（#F44336），提示状态使用蓝色（#2196F3）。这些色彩应当在对应场景下使用，帮助用户快速理解界面状态。
+语义色用于传达明确的状态信息，帮助用户快速识别界面反馈。
+
+#### 成功色 (Success)
+
+| 色阶 | 色值 | 用途 |
+|------|------|------|
+| 50 | #E8F5E9 | 成功态背景 |
+| 100 | #C8E6C9 | 浅成功背景 |
+| 400 | #66BB6A | 弱成功强调 |
+| **500** | **#4CAF50** | **成功主色** |
+| 600 | #43A047 | 成功按下态 |
+| 700 | #388E3C | 深成功色 |
 
 ```css
-:root {
+page {
+  --success-50: #E8F5E9;
+  --success-100: #C8E6C9;
+  --success-400: #66BB6A;
+  --success-500: #4CAF50;
+  --success-600: #43A047;
+  --success-700: #388E3C;
+  
   --success-color: #4CAF50;
   --success-light: #E8F5E9;
+}
+```
+
+#### 警告色 (Warning)
+
+| 色阶 | 色值 | 用途 |
+|------|------|------|
+| 50 | #FFF8E1 | 警告态背景 |
+| 100 | #FFECB3 | 浅警告背景 |
+| 400 | #FFB74D | 弱警告强调 |
+| **500** | **#FF9800** | **警告主色** |
+| 600 | #FB8C00 | 警告按下态 |
+| 700 | #F57C00 | 深警告色 |
+
+```css
+page {
+  --warning-50: #FFF8E1;
+  --warning-100: #FFECB3;
+  --warning-400: #FFB74D;
+  --warning-500: #FF9800;
+  --warning-600: #FB8C00;
+  --warning-700: #F57C00;
+  
   --warning-color: #FF9800;
-  --warning-light: #FFF3E0;
+  --warning-light: #FFF8E1;
+}
+```
+
+#### 错误色 (Error)
+
+| 色阶 | 色值 | 用途 |
+|------|------|------|
+| 50 | #FFEBEE | 错误态背景 |
+| 100 | #FFCDD2 | 浅错误背景 |
+| 400 | #EF5350 | 弱错误强调 |
+| **500** | **#F44336** | **错误主色** |
+| 600 | #E53935 | 错误按下态 |
+| 700 | #D32F2F | 深错误色 |
+
+```css
+page {
+  --error-50: #FFEBEE;
+  --error-100: #FFCDD2;
+  --error-400: #EF5350;
+  --error-500: #F44336;
+  --error-600: #E53935;
+  --error-700: #D32F2F;
+  
   --error-color: #F44336;
   --error-light: #FFEBEE;
+}
+```
+
+#### 信息色 (Info)
+
+| 色阶 | 色值 | 用途 |
+|------|------|------|
+| 50 | #E3F2FD | 信息态背景 |
+| 100 | #BBDEFB | 浅信息背景 |
+| 400 | #64B5F6 | 弱信息强调 |
+| **500** | **#2196F3** | **信息主色** |
+| 600 | #1E88E5 | 信息按下态 |
+| 700 | #1976D2 | 深信息色 |
+
+```css
+page {
+  --info-50: #E3F2FD;
+  --info-100: #BBDEFB;
+  --info-400: #64B5F6;
+  --info-500: #2196F3;
+  --info-600: #1E88E5;
+  --info-700: #1976D2;
+  
   --info-color: #2196F3;
   --info-light: #E3F2FD;
 }
 ```
 
-调节性色彩用于丰富视觉层次，包括中性色和点缀色。中性色从纯白（#FFFFFF）到深灰（#212121）分为五个层级，用于文字、边框、背景等场景。点缀色用于特定的交互场景或活动推广，可根据具体需求选择。
+### 中性色 (Neutral Colors)
+
+中性色构成界面的基础框架，用于文字、背景、边框等元素，确保内容的可读性和界面的层次感。
+
+#### 文字色阶
+
+| 名称 | 色值 | 用途 | 对比度 (白色背景) |
+|------|------|------|-------------------|
+| Primary | #1D1D1F | 标题、正文、主要文字 | 15.8:1 |
+| Secondary | #86868B | 次要说明、辅助文字 | 3.5:1 |
+| Tertiary | #AEAEB2 | 占位符、禁用文字 | 2.3:1 |
+| Quaternary | #C7C7CC | 极次要文字、分割线 | 1.7:1 |
+| Inverse | #FFFFFF | 深色背景上的文字 | - |
 
 ```css
-:root {
-  --text-primary: #212121;
-  --text-secondary: #757575;
-  --text-disabled: #BDBDBD;
+page {
+  --text-primary: #1D1D1F;
+  --text-secondary: #86868B;
+  --text-tertiary: #AEAEB2;
+  --text-quaternary: #C7C7CC;
   --text-inverse: #FFFFFF;
-  
-  --border-color: #E0E0E0;
-  --border-light: #EEEEEE;
-  --border-dark: #BDBDBD;
-  
-  --bg-page: #F5F5F5;
-  --bg-card: #FFFFFF;
-  --bg-body: #FFFFFF;
-  
-  --shadow-color: rgba(0, 0, 0, 0.1);
 }
 ```
 
-#### 色彩使用规范
+#### 背景色阶
 
-色彩使用应当遵循以下规范，确保界面色彩的合理性和一致性。功能性色彩（成功、警告、错误、提示）应当严格按照语义使用，不应当随意混用。同一界面中功能性色彩不应超过三种，避免造成信息混乱。主色调和辅助色的使用面积比例应当控制在 7:2:1 左右，即主色调占 70%，辅助色占 20%，点缀色占 10%。
-
-文字色彩应当根据背景色选择合适的对比度，确保可读性。在浅色背景上使用深色文字，在深色背景上使用浅色文字。正文内容使用主文字色（#212121），次要说明使用次要文字色（#757575），禁用状态使用禁用文字色（#BDBDBD）。文字与背景的对比度应当满足 WCAG 2.1 标准的要求，正文对比度不低于 4.5:1，大标题对比度不低于 3:1。
-
-### 字体规范
-
-#### 字体家族定义
-
-项目使用系统默认字体作为首选字体，在不同操作系统上回退到相应的无衬线字体。中文使用苹方（PingFang SC）或思源黑体（Source Han Sans），英文使用 SF Pro 或 Segoe UI。字体家族定义应当包含完整的回退机制，确保在不同设备上都有良好的显示效果。
+| 名称 | 色值 | 用途 |
+|------|------|------|
+| Primary | #FFFFFF | 卡片、弹窗、主要内容区域背景 |
+| Secondary | #F5F5F7 | 页面背景、分组背景 |
+| Tertiary | #FAFAFA | 输入框背景、次要内容背景 |
+| Elevated | #FFFFFF | 浮层、下拉菜单背景（同 primary，但有阴影） |
 
 ```css
-:root {
-  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
-    'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial,
-    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+page {
+  --background-primary: #FFFFFF;
+  --background-secondary: #F5F5F7;
+  --background-tertiary: #FAFAFA;
+  --background-elevated: #FFFFFF;
 }
 ```
 
-等宽字体用于代码展示和数字对齐场景，使用系统等宽字体或专用等宽字体。
+#### 边框/分隔线色阶
+
+| 名称 | 色值 | 用途 |
+|------|------|------|
+| Default | #E8E8ED | 主要边框、分割线 |
+| Light | #F2F2F7 | 浅边框、细分割线 |
+| Dark | #D1D1D6 | 深边框、强调分割线 |
 
 ```css
-:root {
+page {
+  --border-color: #E8E8ED;
+  --border-light: #F2F2F7;
+  --border-dark: #D1D1D6;
+}
+```
+
+### 渐变色 (Gradients)
+
+渐变用于需要视觉强调的特殊场景，如品牌区、活动Banner等。
+
+| 名称 | 渐变方向 | 色值 | 用途 |
+|------|----------|------|------|
+| Primary | 135° | #2E7D32 → #66BB6A | 主按钮渐变、品牌区 |
+| Success | 135° | #4CAF50 → #81C784 | 成功状态渐变 |
+| Soft | 180° | #F1F8E9 → #FFFFFF | 柔和背景渐变 |
+| Overlay | 0° | rgba(0,0,0,0.6) → transparent | 图片文字遮罩 |
+
+```css
+page {
+  --gradient-primary: linear-gradient(135deg, #2E7D32 0%, #66BB6A 100%);
+  --gradient-success: linear-gradient(135deg, #4CAF50 0%, #81C784 100%);
+  --gradient-soft: linear-gradient(180deg, #F1F8E9 0%, #FFFFFF 100%);
+  --gradient-overlay: linear-gradient(0deg, rgba(0,0,0,0.6) 0%, transparent 100%);
+}
+```
+
+### 色彩使用规范
+
+**色彩比例**
+- 主色调: 约 10%（强调区域）
+- 中性色: 约 85%（文字、背景、边框）
+- 语义色: 约 5%（状态提示）
+
+**可访问性标准**
+- 正文文字对比度 ≥ 4.5:1（WCAG AA）
+- 大号文字（≥18px 或 ≥14px 加粗）对比度 ≥ 3:1
+- 图标颜色与背景对比度 ≥ 3:1
+- 不仅依赖颜色传达信息，需配合文字或图标
+
+**深色模式预留**
+- 所有颜色变量支持深色模式扩展
+- 使用语义化命名而非具体色值命名
+- 未来可通过 `prefers-color-scheme` 切换
+
+---
+
+## 字体系统
+
+字体系统遵循清晰易读的原则，建立统一的字号层级和字重体系，确保信息传达的效率和美感。
+
+### 字体栈
+
+```css
+page {
+  --font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text',
+    'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
   --font-mono: 'SF Mono', 'Fira Code', 'Consolas', 'Courier New', monospace;
 }
 ```
 
-#### 字号层级定义
+**字体说明**:
+- **iOS**: SF Pro Display (标题) / SF Pro Text (正文) / PingFang SC (中文)
+- **Android**: Roboto / 思源黑体 / 小米兰亭 / 华为黑体
+- **微信小程序**: 使用系统字体，确保最佳性能和一致性
 
-字号设计采用模数系统，以 2px 为基础递进单位，形成完整的字号层级。主字号为 14px，用于正文内容，是界面中占比最大的字号。标题使用更大的字号，通过字重变化进一步区分层级。
+### 字号层级
+
+字号采用模块化层级，从 12px 到 28px 分为 8 级，建立清晰的视觉层次。
+
+| 级别 | 变量名 | 字号 | 行高 | 字重 | 用途 |
+|------|--------|------|------|------|------|
+| H1 | --font-size-h1 | 28px | 1.2 (34px) | 700 Bold | 页面大标题、重要数值 |
+| H2 | --font-size-h2 | 22px | 1.25 (28px) | 600 Semibold | 页面标题、区块标题 |
+| H3 | --font-size-h3 | 18px | 1.3 (24px) | 600 Semibold | 卡片标题、列表主标题 |
+| XL | --font-size-xl | 18px | 1.4 (25px) | 500 Medium | 强调正文、按钮文字 |
+| LG | --font-size-lg | 16px | 1.5 (24px) | 500 Medium | 次级标题、重要正文 |
+| **MD** | **--font-size-md** | **14px** | **1.5 (21px)** | **400 Regular** | **正文基准、主要内容** |
+| SM | --font-size-sm | 12px | 1.5 (18px) | 400 Regular | 辅助说明、标签、次要信息 |
+| XS | --font-size-xs | 10px | 1.4 (14px) | 400 Regular | 角标、时间戳、极次要信息 |
 
 ```css
-:root {
-  --font-size-xs: 10px;
-  --font-size-sm: 12px;
-  --font-size-base: 14px;
-  --font-size-lg: 16px;
+page {
+  --font-size-h1: 28px;
+  --font-size-h2: 22px;
+  --font-size-h3: 18px;
   --font-size-xl: 18px;
-  --font-size-2xl: 20px;
-  --font-size-3xl: 24px;
-  --font-size-4xl: 30px;
-  --font-size-5xl: 36px;
+  --font-size-lg: 16px;
+  --font-size-md: 14px;
+  --font-size-sm: 12px;
+  --font-size-xs: 10px;
+  --font-size-xxl: 24px;
 }
 ```
 
-各字号的使用场景定义如下：10px 用于提示文字和标签；12px 用于辅助说明和次要信息；14px 用于正文内容；16px 用于标题和强调文字；18px 用于页面主标题；20px 用于弹窗标题；24px 用于区块标题；30px 和 36px 用于页面大标题。
+### 字重体系
 
-#### 字重与行高
-
-字重分为三个级别：Regular（400）用于正文内容，Medium（500）用于次要标题和强调文字，Semibold（600）用于主要标题和按钮文字。字重的选择应当与字号配合，较大的字号可以使用较细的字重，较小的字号应当使用较粗的字重以保证可读性。
+| 字重 | 变量名 | 数值 | 用途 |
+|------|--------|------|------|
+| Light | --font-weight-light | 300 | 超大号标题的细体、装饰性文字 |
+| Regular | --font-weight-regular | 400 | 正文、辅助文字、标签 |
+| Medium | --font-weight-medium | 500 | 按钮文字、次级标题、强调文字 |
+| Semibold | --font-weight-semibold | 600 | 标题、重要文字、列表主项 |
+| Bold | --font-weight-bold | 700 | 大标题、关键数值、强调文字 |
 
 ```css
-:root {
-  --font-weight-normal: 400;
+page {
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
+  --font-weight-normal: 400;
 }
 ```
 
-行高根据字号和内容类型确定。正文内容的行高为字号的 1.5 倍，确保多行文字的阅读舒适度。标题行高可以适当缩小，节省垂直空间。固定高度的元素应当根据高度设置合适的行高，实现垂直居中。
+### 行高体系
+
+| 类型 | 变量名 | 比例 | 用途 |
+|------|--------|------|------|
+| Tight | --line-height-tight | 1.2 | 大标题、单行文字 |
+| Normal | --line-height-normal | 1.5 | 正文、多行文字 |
+| Relaxed | --line-height-relaxed | 1.75 | 长文本、阅读型内容 |
 
 ```css
-:root {
-  --line-height-tight: 1.25;
+page {
+  --line-height-tight: 1.2;
   --line-height-normal: 1.5;
   --line-height-relaxed: 1.75;
 }
 ```
 
-### 图标规范
+### 字间距
 
-#### 图标风格定义
-
-项目图标采用线性图标风格，线条粗细为 1px 或 1.5px，圆角半径为 2px。图标尺寸基准为 24x24px，根据使用场景可以缩放为 16x16px、20x20px、32x32px 或 48x48px。图标应当保持统一的视觉大小，不同图标的实际像素尺寸可能略有差异，但视觉重量应当一致。
-
-图标线条应当使用主文字色（#212121），悬停或激活状态可以改为主色调（#2E7D32）。禁用状态的图标使用禁用文字色（#BDBDBD）。图标的线条端点应当统一为圆角或直角，项目选择圆角端点，与整体风格保持一致。
-
-#### 图标命名规范
-
-图标文件命名使用短横线分隔的小写字母，格式为 `{模块}-{功能}.png` 或 `{模块}-{功能}.svg`。例如，用户图标命名为 `user.png`，购物车图标命名为 `cart.png`，首页图标命名为 `home.png`。同一功能的多种状态使用后缀区分，如 `cart-active.png` 表示选中状态的购物车图标。
-
-图标存放在 `images/icons/` 目录下，按照功能模块组织子目录。常用图标应当制作成图标字体或 SVG Sprite，提高加载性能。图标资源应当包含 2x 和 3x 分辨率版本，支持视网膜屏幕的高清显示。
+| 类型 | 变量名 | 数值 | 用途 |
+|------|--------|------|------|
+| Tight | --letter-spacing-tight | -0.5px | 大号标题 |
+| Normal | --letter-spacing-normal | 0 | 正文、常规文字 |
+| Wide | --letter-spacing-wide | 0.5px | 标签、小字号大写 |
 
 ```css
-.icon {
-  width: 24px;
-  height: 24px;
-  display: inline-block;
-  vertical-align: middle;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-
-.icon-cart {
-  background-image: url('/images/icons/cart.png');
-}
-
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx) {
-  .icon-cart {
-    background-image: url('/images/icons/cart@2x.png');
-  }
+page {
+  --letter-spacing-tight: -0.5px;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.5px;
 }
 ```
 
-## 组件设计规范
+### 字体使用规范
+
+**层级构建**
+- 通过字号、字重、颜色三者配合建立层级
+- 重要内容: 大字号 + 中字重 + 主文字色
+- 次要内容: 小字号 + 常规字重 + 次文字色
+- 避免仅依赖颜色区分层级
+
+**中文排版**
+- 中英文混排时，英文与中文之间留一个空格
+- 数字与中文之间留一个空格
+- 标点符号使用全角中文标点
+- 避免行首出现标点符号
+
+**数字排版**
+- 价格、数量等数字使用等宽数字特性（font-variant-numeric: tabular-nums）
+- 金额整数部分加粗，小数部分保持常规字重
+- 大数字使用千分位分隔符
+
+---
+
+## 间距系统
+
+间距系统基于 4px 基准网格，确保界面元素的对齐一致性和视觉节奏感。
+
+### 间距刻度
+
+| 级别 | 变量名 | 数值 | 用途 |
+|------|--------|------|------|
+| 0 | --spacing-0 | 0px | 无边距 |
+| XS | --spacing-xs | 4px | 图标与文字间距、极小空隙 |
+| SM | --spacing-sm | 8px | 组件内部小间距、标签间距 |
+| MD | --spacing-md | 12px | 组件内边距、卡片内边距 |
+| LG | --spacing-lg | 16px | 组件间距、列表项间距 |
+| XL | --spacing-xl | 20px | 区块内间距、内容区域边距 |
+| XXL | --spacing-xxl | 24px | 区块间距、页面水平边距 |
+| 3XL | --spacing-3xl | 32px | 大区块间距、页面上下间距 |
+| 4XL | --spacing-4xl | 48px | 页面顶部/底部大间距 |
+| 5XL | --spacing-5xl | 64px | 极端大间距、特殊场景 |
+
+```css
+page {
+  --spacing-0: 0px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 20px;
+  --spacing-xxl: 24px;
+  --spacing-3xl: 32px;
+  --spacing-4xl: 48px;
+  --spacing-5xl: 64px;
+}
+```
+
+### 间距使用规范
+
+**内边距模式**
+
+| 组件类型 | 水平内边距 | 垂直内边距 |
+|----------|-----------|-----------|
+| 小按钮 | 12px | 6px |
+| 中按钮 | 16px | 10px |
+| 大按钮 | 20px | 14px |
+| 输入框 | 12px | 10px |
+| 卡片 | 16px | 16px |
+| 列表项 | 16px | 12px |
+| 页面内容 | 20px | - |
+
+**外边距模式**
+
+| 元素关系 | 间距 | 示例 |
+|----------|------|------|
+| 标题与正文 | 8px | 卡片标题与描述 |
+| 正文与正文 | 12px | 段落之间 |
+| 组件与组件 | 16px | 卡片之间、输入框之间 |
+| 区块与区块 | 24px | 内容模块之间 |
+| 页面顶/底部 | 32px | 页面首/末元素与边缘 |
+
+**间距黄金法则**
+- 优先使用预设间距值，避免随意数值
+- 垂直间距大于水平间距（阅读流方向）
+- 相关元素间距小，无关元素间距大
+- 对称布局使用对称间距，非对称布局保持视觉平衡
+
+---
+
+## 圆角系统
+
+圆角系统采用渐进式设计，元素越大圆角越大，营造柔和、友好的视觉感受。
+
+### 圆角刻度
+
+| 级别 | 变量名 | 数值 | 用途 |
+|------|--------|------|------|
+| None | --radius-none | 0px | 无圆角、直角元素 |
+| SM | --radius-sm | 8px | 小按钮、标签、小图标 |
+| **MD** | **--radius-md** | **12px** | **按钮、输入框、卡片（默认）** |
+| LG | --radius-lg | 16px | 大卡片、弹窗、图片容器 |
+| XL | --radius-xl | 24px | 大容器、底部弹窗、特殊组件 |
+| Full | --radius-full | 9999px | 圆形按钮、头像、药丸标签 |
+
+```css
+page {
+  --radius-none: 0px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+  
+  --border-radius-sm: 8px;
+  --border-radius-md: 12px;
+  --border-radius-lg: 16px;
+  --border-radius-xl: 24px;
+}
+```
+
+### 圆角使用规范
+
+**圆角与尺寸的关系**
+- 元素尺寸越小，圆角越小
+- 元素尺寸越大，圆角越大
+- 保持圆角与元素尺寸的比例协调
+
+**嵌套元素的圆角**
+- 外层容器圆角 > 内层元素圆角
+- 内层元素紧贴外层时，应减去边框/间距
+- 例如：卡片圆角 16px，卡片内图片圆角 12px
+
+**特殊场景**
+- 全屏弹窗: 顶部圆角 24px，底部直角
+- 底部操作栏: 顶部圆角 16px，底部直角
+- 头像、徽章: 使用全圆角 (50%)
+
+---
+
+## 阴影系统
+
+阴影系统用于创造深度感和层级关系，采用柔和的多层阴影设计。
+
+### 阴影刻度
+
+| 级别 | 变量名 | 值 | 用途 |
+|------|--------|-----|------|
+| None | --shadow-none | none | 无阴影 |
+| **SM** | **--shadow-sm** | **0 1px 3px rgba(0, 0, 0, 0.05)** | **卡片、输入框、按钮（默认）** |
+| MD | --shadow-md | 0 4px 12px rgba(0, 0, 0, 0.08) | 悬浮卡片、下拉菜单 |
+| LG | --shadow-lg | 0 12px 32px rgba(0, 0, 0, 0.1) | 弹窗、浮层、底部抽屉 |
+| XL | --shadow-xl | 0 20px 48px rgba(0, 0, 0, 0.12) | 模态框、全屏弹窗 |
+
+```css
+page {
+  --shadow-none: none;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 48px rgba(0, 0, 0, 0.12);
+}
+```
+
+### 阴影使用规范
+
+**阴影与层级**
+- 层级越高，阴影越大越深
+- 卡片使用 sm 阴影
+- 悬浮元素使用 md 阴影
+- 弹窗浮层使用 lg 阴影
+
+**阴影动画**
+- 悬停/激活态阴影变化应有过渡
+- 过渡时长与主过渡时长一致
+- 阴影变化配合轻微位移，增强立体感
+
+**注意事项**
+- 避免在小元素上使用大阴影
+- 深色模式下阴影透明度适当降低
+- 性能敏感的列表项避免使用阴影（可用边框替代）
+
+---
+
+## 图标系统
+
+图标采用线性风格，保持简洁、清晰、一致的视觉语言。
+
+### 图标风格
+
+- **风格**: 线性图标 (Outline)
+- **线条粗细**: 1.5px (24px 基准)
+- **圆角**: 圆角端点 (Round Cap)、圆角连接 (Round Join)
+- **网格**: 24×24px 基准网格，内边距 2px
+- **视觉重量**: 保持一致，不因形状不同而失衡
+
+### 图标尺寸
+
+| 尺寸 | 变量名 | 数值 | 用途 |
+|------|--------|------|------|
+| XS | --icon-size-xs | 16px | 小标签、角标旁 |
+| SM | --icon-size-sm | 20px | 列表项、按钮内图标 |
+| **MD** | **--icon-size-md** | **24px** | **导航栏、工具栏、默认尺寸** |
+| LG | --icon-size-lg | 32px | 空状态、大按钮 |
+| XL | --icon-size-xl | 48px | 插画式图标、特殊展示 |
+
+```css
+page {
+  --icon-size-xs: 16px;
+  --icon-size-sm: 20px;
+  --icon-size-md: 24px;
+  --icon-size-lg: 32px;
+  --icon-size-xl: 48px;
+}
+```
+
+### 图标颜色规范
+
+| 状态 | 颜色 | 场景 |
+|------|------|------|
+| Default | --text-primary | 默认图标、主要功能图标 |
+| Secondary | --text-secondary | 次要功能、辅助图标 |
+| Tertiary | --text-tertiary | 禁用态、占位图标 |
+| Primary | --primary-color | 激活态、选中态、强调图标 |
+| Inverse | --text-inverse | 深色背景上的图标 |
+
+### 图标来源与使用
+
+**推荐来源**
+- 微信小程序原生图标组件
+- IconPark (字节跳动开源图标库)
+- Phosphor Icons (精致线性图标)
+- 自定义 SVG 图标（需符合设计规范）
+
+**使用规范**
+- 图标与文字并排时，垂直居中对齐
+- 图标与文字间距: 4-8px
+- 可点击图标尺寸不小于 24×24px (热区 44×44px)
+- 状态变化应有过渡动画
+
+---
+
+## 动效系统
+
+动效系统遵循自然、流畅、克制的原则，为用户提供愉悦的交互反馈。
+
+### 缓动函数
+
+| 名称 | 变量名 | 值 | 用途 |
+|------|--------|-----|------|
+| Ease In | --ease-in | cubic-bezier(0.4, 0, 1, 1) | 元素消失、退出动画 |
+| Ease Out | --ease-out | cubic-bezier(0, 0, 0.2, 1) | 元素出现、进入动画 |
+| **Ease In Out** | **--ease-in-out** | **cubic-bezier(0.4, 0, 0.2, 1)** | **标准过渡、状态切换** |
+| Ease Out Back | --ease-out-back | cubic-bezier(0.34, 1.56, 0.64, 1) | 弹性出现、强调动画 |
+| Linear | --ease-linear | linear | 匀速动画、旋转动画 |
+
+```css
+page {
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-linear: linear;
+}
+```
+
+### 时长分级
+
+| 级别 | 变量名 | 时长 | 用途 |
+|------|--------|------|------|
+| Fast | --duration-fast | 150ms | 微交互、按钮反馈、颜色变化 |
+| **Normal** | **--duration-normal** | **300ms** | **标准过渡、页面切换、组件动画** |
+| Slow | --duration-slow | 500ms | 大型动画、弹窗进出、页面转场 |
+| Slower | --duration-slower | 800ms | 骨架屏渐变、特殊展示动画 |
+
+```css
+page {
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+  --duration-slower: 800ms;
+  
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+```
+
+### 过渡类型
+
+**1. 淡入淡出 (Fade)**
+- 用于: 模态框遮罩、提示条、状态切换
+- 时长: 150-300ms
+- 缓动: ease-in-out
+
+**2. 滑入滑出 (Slide)**
+- 向上滑入: 底部弹窗、抽屉
+- 向下滑入: 下拉菜单、通知
+- 向左/右滑入: 页面切换、轮播
+- 时长: 300ms
+- 缓动: ease-out
+
+**3. 缩放 (Scale)**
+- 用于: 按钮点击反馈、图标状态切换
+- 缩放比例: 0.95-1.05
+- 时长: 150ms
+- 缓动: ease-in-out
+
+**4. 位移 (Translate)**
+- 用于: 列表项移动、元素位置变化
+- 配合淡入淡出使用
+- 时长: 300ms
+- 缓动: ease-out
+
+### 动效设计原则
+
+**克制原则**
+- 动效服务于功能，不为动效而动效
+- 避免过度动画干扰用户注意力
+- 长列表、频繁触发的元素慎用复杂动画
+
+**性能原则**
+- 优先使用 transform 和 opacity 属性
+- 避免触发重排 (reflow) 的属性动画
+- 列表项动画使用 will-change 优化
+
+**可访问性**
+- 尊重用户的"减少动效"偏好
+- 重要信息不依赖动效传达
+- 动画时长适中，不造成等待焦虑
+
+---
+
+## 组件库规范
+
+组件库是设计系统的核心载体，确保界面元素的一致性和可复用性。
 
 ### 基础组件
 
-#### 按钮组件
+#### Button 按钮
 
-按钮是最常用的交互组件，项目定义了五种按钮类型。主按钮使用主色调背景和白色文字，用于页面中最重要的操作，如提交、购买、登录等。次按钮使用边框样式，背景为透明，用于次要操作，如取消、返回等。文字按钮没有边框和背景，仅使用文字样式，用于辅助操作，如查看更多、取消等。危险按钮使用红色背景，用于删除、退出等危险操作。幽灵按钮使用浅色背景和深色文字，用于在深色背景上的操作。
+按钮是最基础的交互组件，用于触发操作。
+
+**按钮类型**
+
+| 类型 | 样式 | 适用场景 |
+|------|------|----------|
+| Primary | 主色背景 + 白色文字 | 主要操作、确认、提交 |
+| Secondary | 浅灰背景 + 主文字色 | 次要操作、取消、返回 |
+| Outline | 透明背景 + 主色边框 + 主色文字 | 次要强调、选择操作 |
+| Ghost | 透明背景 + 文字色 | 辅助操作、更多、查看详情 |
+| Danger | 红色背景 + 白色文字 | 危险操作、删除、退出 |
+| Link | 纯文字 | 文字链接、跳转操作 |
+
+**按钮尺寸**
+
+| 尺寸 | 高度 | 内边距 | 字号 | 圆角 |
+|------|------|--------|------|------|
+| SM | 28px | 水平 12px | 12px | 8px |
+| **MD** | **40px** | **水平 16px** | **14px** | **12px** |
+| LG | 48px | 水平 20px | 16px | 12px |
+| Block | 48px | 水平 20px | 16px | 12px |
 
 ```css
-:root {
-  --btn-height-sm: 28px;
-  --btn-height-md: 36px;
-  --btn-height-lg: 44px;
-  --btn-padding-horizontal: 16px;
-  --btn-border-radius: 4px;
-}
-
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: var(--btn-height-md);
-  padding: 0 var(--btn-padding-horizontal);
-  border-radius: var(--btn-border-radius);
-  font-size: var(--font-size-base);
+  gap: var(--spacing-xs);
+  padding: 10px 16px;
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-md);
   font-weight: var(--font-weight-medium);
-  cursor: pointer;
-  transition: all 0.2s ease;
   border: none;
   outline: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
 }
 
 .btn-primary {
@@ -226,71 +771,132 @@
   color: #FFFFFF;
 }
 
-.btn-primary:hover {
-  background-color: var(--primary-hover);
-}
-
 .btn-primary:active {
-  background-color: var(--primary-active);
+  background-color: var(--primary-dark);
+  transform: scale(0.98);
 }
 
 .btn-primary:disabled {
   background-color: var(--primary-light);
-  color: var(--text-disabled);
+  color: var(--text-tertiary);
   cursor: not-allowed;
+  transform: none;
 }
 
 .btn-secondary {
-  background-color: transparent;
-  border: 1px solid var(--border-color);
+  background-color: var(--background-tertiary);
   color: var(--text-primary);
 }
 
-.btn-secondary:hover {
-  background-color: var(--bg-page);
+.btn-secondary:active {
+  background-color: var(--border-light);
+  transform: scale(0.98);
+}
+
+.btn-outline {
+  background-color: transparent;
+  border: 1px solid var(--primary-color);
+  color: var(--primary-color);
+}
+
+.btn-outline:active {
+  background-color: var(--primary-light);
+}
+
+.btn-ghost {
+  background-color: transparent;
+  color: var(--primary-color);
+}
+
+.btn-ghost:active {
+  background-color: var(--primary-light);
 }
 
 .btn-danger {
   background-color: var(--error-color);
   color: #FFFFFF;
 }
-```
 
-按钮尺寸分为三种：小号按钮高度 28px，用于表格操作或紧凑布局；中号按钮高度 36px，是默认尺寸，用于大多数场景；大号按钮高度 44px，用于页面主要操作或需要强调的场景。按钮宽度根据内容自动调整，最大宽度为 100%，超长文本使用省略号处理。
-
-#### 输入框组件
-
-输入框用于接收用户输入的信息，项目定义了多种输入框类型。基础输入框用于单行文本输入，如用户名、地址等。文本域用于多行文本输入，如备注、评价等。数字输入框用于数字输入，配置数字键盘和增减按钮。搜索输入框用于搜索场景，配置搜索图标和清除按钮。密码输入框用于密码输入，配置显示或隐藏密码的切换按钮。
-
-```css
-:root {
-  --input-height-md: 36px;
-  --input-height-lg: 44px;
-  --input-padding-horizontal: 12px;
-  --input-border-color: var(--border-color);
-  --input-focus-color: var(--primary-color);
+.btn-danger:active {
+  background-color: var(--error-600);
+  transform: scale(0.98);
 }
 
+.btn-sm {
+  height: 28px;
+  padding: 0 12px;
+  font-size: var(--font-size-sm);
+  border-radius: var(--border-radius-sm);
+}
+
+.btn-lg {
+  height: 48px;
+  padding: 0 20px;
+  font-size: var(--font-size-lg);
+}
+
+.btn-block {
+  width: 100%;
+  height: 48px;
+  font-size: var(--font-size-lg);
+}
+```
+
+**使用规范**
+- 一个操作区域内主按钮不超过 1 个
+- 按钮高度与输入框保持一致
+- 禁用状态不响应点击，视觉上弱化
+- 加载状态显示加载图标，文字可改为"加载中"
+
+#### Input 输入框
+
+输入框用于接收用户文本输入。
+
+**输入框类型**
+
+| 类型 | 样式 | 适用场景 |
+|------|------|----------|
+| Default | 边框 + 白色背景 | 表单输入、搜索 |
+| Filled | 填充背景 + 无边框 | 登录表单、深色背景 |
+| Underline | 底部边框 | 极简风格、设置项 |
+
+**输入框状态**
+
+| 状态 | 边框色 | 背景色 |
+|------|--------|--------|
+| Default | --border-color | --background-primary |
+| Focus | --primary-color | --background-primary |
+| Hover | --border-dark | --background-primary |
+| Disabled | --border-light | --background-tertiary |
+| Error | --error-color | --background-primary |
+
+```css
 .input {
-  height: var(--input-height-md);
-  padding: 0 var(--input-padding-horizontal);
-  border: 1px solid var(--input-border-color);
-  border-radius: var(--btn-border-radius);
-  font-size: var(--font-size-base);
+  width: 100%;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-md);
   color: var(--text-primary);
-  background-color: #FFFFFF;
+  background-color: var(--background-primary);
   outline: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: all var(--transition-fast);
+  box-sizing: border-box;
+}
+
+.input::placeholder {
+  color: var(--text-tertiary);
 }
 
 .input:focus {
-  border-color: var(--input-focus-color);
-  box-shadow: 0 0 0 2px var(--primary-light);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px var(--primary-50);
 }
 
 .input:disabled {
-  background-color: var(--bg-page);
-  color: var(--text-disabled);
+  background-color: var(--background-tertiary);
+  color: var(--text-tertiary);
   cursor: not-allowed;
 }
 
@@ -299,10 +905,11 @@
 }
 
 .input-error:focus {
-  box-shadow: 0 0 0 2px var(--error-light);
+  box-shadow: 0 0 0 3px var(--error-50);
 }
 
 .input-wrapper {
+  position: relative;
   display: flex;
   align-items: center;
 }
@@ -310,46 +917,291 @@
 .input-wrapper .input {
   flex: 1;
   border: none;
-  outline: none;
+  box-shadow: none;
 }
 
-.input-wrapper .input:focus {
-  box-shadow: none;
+.input-icon {
+  width: var(--icon-size-sm);
+  height: var(--icon-size-sm);
+  color: var(--text-tertiary);
+  flex-shrink: 0;
+}
+
+.input-icon-left {
+  margin-right: var(--spacing-sm);
+}
+
+.input-icon-right {
+  margin-left: var(--spacing-sm);
 }
 ```
 
-输入框应当配合标签使用，标签位于输入框上方或左侧，标识输入项的含义。必填项应当在标签后添加红色星号（*）。输入框下方应当显示占位符示例或帮助文字，引导用户正确输入。验证错误时应当在输入框下方显示错误提示，文字使用错误色。
+**使用规范**
+- 输入框高度与按钮高度一致 (40px md)
+- 标签文字放在输入框上方，间距 8px
+- 必填项标签后加红色星号 *
+- 错误提示放在输入框下方，间距 4px，使用错误色 12px 文字
+- 帮助文字放在输入框下方，使用次文字色 12px
 
-#### 卡片组件
+#### Badge 徽章
 
-卡片是承载内容的容器组件，用于展示一组相关的信息。商品卡片用于展示商品信息，包括商品图片、名称、价格、销量等。订单卡片用于展示订单信息，包括订单编号、状态、金额、商品列表等。用户卡片用于展示用户信息，包括头像、昵称、等级等。
+徽章用于标记状态、数量或提示。
+
+**徽章类型**
+
+| 类型 | 样式 | 适用场景 |
+|------|------|----------|
+| Dot | 小圆点 | 消息提示、新内容标记 |
+| Number | 圆形 + 数字 | 消息数量、购物车数量 |
+| Text | 圆角矩形 + 文字 | 状态标签、分类标记 |
+
+**徽章尺寸**
+
+| 尺寸 | 大小 | 字号 | 适用场景 |
+|------|------|------|----------|
+| SM | 16px | 10px | 紧凑布局、小图标旁 |
+| **MD** | **20px** | **12px** | **默认尺寸、列表项** |
+| LG | 24px | 12px | 突出显示、导航栏 |
 
 ```css
-:root {
-  --card-padding: 16px;
-  --card-bg: #FFFFFF;
-  --card-border-radius: 8px;
-  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 10px;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  line-height: 1;
+  color: #FFFFFF;
+  box-sizing: border-box;
 }
 
+.badge-primary {
+  background-color: var(--primary-color);
+}
+
+.badge-success {
+  background-color: var(--success-color);
+}
+
+.badge-warning {
+  background-color: var(--warning-color);
+}
+
+.badge-error {
+  background-color: var(--error-color);
+}
+
+.badge-info {
+  background-color: var(--info-color);
+}
+
+.badge-dot {
+  width: 8px;
+  height: 8px;
+  min-width: 8px;
+  padding: 0;
+  border-radius: 50%;
+}
+
+.badge-sm {
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  font-size: 10px;
+  border-radius: 8px;
+}
+
+.badge-lg {
+  min-width: 24px;
+  height: 24px;
+  padding: 0 8px;
+  font-size: var(--font-size-sm);
+  border-radius: 12px;
+}
+```
+
+#### Tag 标签
+
+标签用于分类、标记属性或筛选条件。
+
+**标签类型**
+
+| 类型 | 样式 | 适用场景 |
+|------|------|----------|
+| Filled | 填充背景 + 白色文字 | 主要分类、选中状态 |
+| Light | 浅色背景 + 深色文字 | 次要分类、普通标签 |
+| Outline | 透明背景 + 边框 | 可选择标签、筛选条件 |
+
+```css
+.tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  padding: 0 10px;
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-sm);
+  line-height: 1;
+  box-sizing: border-box;
+}
+
+.tag-filled {
+  background-color: var(--primary-color);
+  color: #FFFFFF;
+}
+
+.tag-light {
+  background-color: var(--primary-light);
+  color: var(--primary-color);
+}
+
+.tag-outline {
+  background-color: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+}
+
+.tag-outline-active {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+```
+
+#### Avatar 头像
+
+头像用于展示用户或实体形象。
+
+**头像尺寸**
+
+| 尺寸 | 大小 | 适用场景 |
+|------|------|----------|
+| SM | 32px | 评论、列表项 |
+| **MD** | **40px** | **导航栏、列表项（默认）** |
+| LG | 56px | 用户中心、个人主页 |
+| XL | 80px | 个人资料页、大展示 |
+
+```css
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: var(--background-tertiary);
+  flex-shrink: 0;
+}
+
+.avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-text {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-secondary);
+}
+
+.avatar-sm { width: 32px; height: 32px; }
+.avatar-lg { width: 56px; height: 56px; }
+.avatar-xl { width: 80px; height: 80px; }
+```
+
+#### Divider 分割线
+
+分割线用于分隔内容区块或列表项。
+
+**分割线类型**
+
+| 类型 | 样式 | 适用场景 |
+|------|------|----------|
+| Horizontal | 水平线 | 列表项分隔、区块分隔 |
+| Vertical | 垂直线 | 水平排列元素分隔 |
+| Dashed | 虚线 | 次要分隔、占位区分 |
+
+```css
+.divider {
+  height: 1px;
+  background-color: var(--border-light);
+  margin: var(--spacing-md) 0;
+}
+
+.divider-dashed {
+  background: none;
+  border-top: 1px dashed var(--border-color);
+}
+
+.divider-vertical {
+  width: 1px;
+  height: auto;
+  align-self: stretch;
+  margin: 0 var(--spacing-md);
+}
+
+.divider-with-text {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+}
+
+.divider-with-text::before,
+.divider-with-text::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background-color: var(--border-light);
+}
+```
+
+---
+
+### 复合组件
+
+#### Card 卡片
+
+卡片是承载内容的容器组件，用于将相关信息组织在一起。
+
+**卡片类型**
+
+| 类型 | 样式 | 适用场景 |
+|------|------|----------|
+| Elevated | 带阴影 + 圆角 | 商品卡片、内容卡片（默认） |
+| Outlined | 边框 + 无阴影 | 次要内容、分组容器 |
+| Filled | 填充背景 | 信息块、提示卡片 |
+
+```css
 .card {
-  background-color: var(--card-bg);
-  border-radius: var(--card-border-radius);
-  box-shadow: var(--card-shadow);
-  padding: var(--card-padding);
+  background-color: var(--background-primary);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: var(--spacing-lg);
+  overflow: hidden;
 }
 
-.card-hover:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-  transform: translateY(-2px);
-  transition: all 0.3s ease;
+.card-outlined {
+  box-shadow: none;
+  border: 1px solid var(--border-color);
+}
+
+.card-filled {
+  box-shadow: none;
+  background-color: var(--background-tertiary);
 }
 
 .card-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 12px;
+  margin-bottom: var(--spacing-md);
 }
 
 .card-title {
@@ -358,771 +1210,944 @@
   color: var(--text-primary);
 }
 
-.card-content {
-  font-size: var(--font-size-base);
+.card-subtitle {
+  font-size: var(--font-size-sm);
   color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.card-content {
+  font-size: var(--font-size-md);
+  color: var(--text-secondary);
+  line-height: var(--line-height-normal);
 }
 
 .card-footer {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  margin-top: 12px;
-  padding-top: 12px;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-md);
+  padding-top: var(--spacing-md);
   border-top: 1px solid var(--border-light);
+}
+
+.card-hover:active {
+  transform: scale(0.98);
+  transition: transform var(--transition-fast);
 }
 ```
 
-卡片内部应当有明确的信息层级结构。标题应当突出显示，正文使用常规字重和颜色，辅助信息使用次要颜色。重要操作按钮应当放置在卡片底部或右下角，与卡片内容有明显区分。卡片之间的间距应当保持一致，推荐使用 8px 或 16px 的间距。
+**使用规范**
+- 卡片间距: 16px (同组), 24px (不同组)
+- 卡片内边距: 16px (标准), 20px (大卡片)
+- 卡片圆角: 16px (标准), 12px (小卡片)
+- 卡片内的图片圆角: 12px
 
-#### 列表组件
+#### List 列表
 
-列表用于展示多项同类信息，支持点击操作进入详情或执行操作。基础列表用于展示简单的信息列表，每个列表项包含标题和副标题。图文列表用于展示带图片的信息列表，每个列表项包含图片、标题和副标题。操作列表用于展示可执行操作的列表，每个列表项包含操作说明和操作图标。
+列表用于展示多项同类信息。
+
+**列表类型**
+
+| 类型 | 样式 | 适用场景 |
+|------|------|----------|
+| Basic | 文字 + 箭头 | 导航列表、设置项 |
+| Thumbnail | 图片 + 文字 | 商品列表、搜索结果 |
+| Rich | 多元素复杂布局 | 订单列表、消息列表 |
 
 ```css
-:root {
-  --list-item-height: 56px;
-  --list-item-padding-horizontal: 16px;
-  --list-item-border-color: var(--border-light);
-}
-
 .list {
-  background-color: #FFFFFF;
+  background-color: var(--background-primary);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
 }
 
 .list-item {
   display: flex;
   align-items: center;
-  height: var(--list-item-height);
-  padding: 0 var(--list-item-padding-horizontal);
-  border-bottom: 1px solid var(--list-item-border-color);
-}
-
-.list-item:last-child {
-  border-bottom: none;
+  min-height: 52px;
+  padding: var(--spacing-md) var(--spacing-lg);
+  background-color: var(--background-primary);
+  transition: background-color var(--transition-fast);
+  position: relative;
 }
 
 .list-item:active {
-  background-color: var(--bg-page);
+  background-color: var(--background-tertiary);
+}
+
+.list-item + .list-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: var(--spacing-lg);
+  right: 0;
+  height: 1px;
+  background-color: var(--border-light);
 }
 
 .list-item-thumbnail {
-  width: 40px;
-  height: 40px;
-  border-radius: 4px;
-  margin-right: 12px;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--border-radius-md);
+  margin-right: var(--spacing-md);
   object-fit: cover;
+  flex-shrink: 0;
 }
 
 .list-item-content {
   flex: 1;
+  min-width: 0;
   overflow: hidden;
 }
 
 .list-item-title {
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-md);
   color: var(--text-primary);
-  white-space: nowrap;
+  font-weight: var(--font-weight-medium);
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .list-item-subtitle {
   font-size: var(--font-size-sm);
   color: var(--text-secondary);
   margin-top: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .list-item-extra {
-  margin-left: 12px;
+  margin-left: var(--spacing-md);
   font-size: var(--font-size-sm);
-  color: var(--text-secondary);
+  color: var(--text-tertiary);
+  flex-shrink: 0;
 }
 
 .list-item-arrow {
-  margin-left: 8px;
   width: 16px;
   height: 16px;
-  color: var(--text-disabled);
+  margin-left: var(--spacing-sm);
+  color: var(--text-tertiary);
+  flex-shrink: 0;
 }
 ```
 
-列表应当配合分隔线使用，分隔线位于列表项之间。分组列表应当在组标题和组内容之间添加分隔线，组标题使用较浅的背景色或较小的字号。列表应当有明确的首项和末项样式，与页面背景有明显的区分。
+#### NavBar 导航栏
 
-### 业务组件
-
-#### 商品卡片组件
-
-商品卡片是电商小程序的核心组件，用于展示商品信息并引导用户进行购买操作。商品卡片应当包含以下核心信息：商品主图、 商品名称、商品价格、 商品规格或属性、操作按钮（加入购物车、立即购买）。可选信息包括：销量、评价数、收藏状态、促销标签。
-
-```typescript
-// components/product-card/product-card.js
-Component({
-  properties: {
-    product: {
-      type: Object,
-      value: {
-        id: '',
-        name: '',
-        price: 0,
-        originalPrice: 0,
-        image: '',
-        sales: 0,
-        tags: []
-      }
-    },
-    showAddCart: {
-      type: Boolean,
-      value: true
-    }
-  },
-
-  data: {
-    isCollected: false
-  },
-
-  methods: {
-    onTap() {
-      this.triggerEvent('tap', { productId: this.data.product.id });
-    },
-
-    onAddCart() {
-      this.triggerEvent('addcart', { productId: this.data.product.id });
-    },
-
-    onCollect() {
-      this.setData({ isCollected: !this.data.isCollected });
-      this.triggerEvent('collect', { 
-        productId: this.data.product.id,
-        collected: this.data.isCollected
-      });
-    }
-  }
-});
-```
-
-商品卡片的布局应当根据展示场景选择合适的样式。列表展示时使用水平布局，图片在左，内容在右；网格展示时使用垂直布局，图片在上，内容在下。商品名称应当限制行数，超出部分使用省略号处理。价格应当突出显示，原价使用删除线样式。促销标签应当使用醒目的背景色，放置在商品图片左上角。
-
-#### 购物车项组件
-
-购物车项组件用于展示购物车中的单个商品，支持数量调整和规格切换操作。购物车项应当包含：商品图片、 商品名称、 商品规格、 商品单价、 数量选择器、 小计金额、 删除按钮。
-
-```typescript
-// components/cart-item/cart-item.js
-Component({
-  properties: {
-    item: {
-      type: Object,
-      value: {
-        id: '',
-        productId: '',
-        skuId: '',
-        name: '',
-        image: '',
-        price: 0,
-        quantity: 1,
-        maxQuantity: 99,
-        selected: true
-      }
-    }
-  },
-
-  data: {
-    tempQuantity: 1
-  },
-
-  observers: {
-    'item.quantity': function(quantity) {
-      this.setData({ tempQuantity: quantity });
-    }
-  },
-
-  methods: {
-    onSelect() {
-      this.triggerEvent('select', { 
-        itemId: this.data.item.id,
-        selected: !this.data.item.selected
-      });
-    },
-
-    onQuantityChange(e) {
-      const { value } = e.detail;
-      this.triggerEvent('quantitychange', {
-        itemId: this.data.item.id,
-        quantity: Math.max(1, Math.min(value, this.data.item.maxQuantity))
-      });
-    },
-
-    onDelete() {
-      wx.showModal({
-        title: '确认删除',
-        content: '确定要从购物车中删除该商品吗？',
-        success: (res) => {
-          if (res.confirm) {
-            this.triggerEvent('delete', { itemId: this.data.item.id });
-          }
-        }
-      });
-    }
-  }
-});
-```
-
-数量选择器应当限制最小值和最大值，防止数量超出合理范围。数量变化时应当实时更新小计金额。小计金额应当使用加粗字体显示，金额较大时可以考虑使用主色调。删除按钮应当有确认提示，防止误操作。
-
-#### 订单卡片组件
-
-订单卡片用于展示订单信息，支持订单操作和状态追踪。订单卡片应当包含：订单编号、 订单状态、 商品列表、 订单金额、 下单时间、 操作按钮（去支付、查看物流、确认收货、评价）。
-
-```typescript
-// components/order-card/order-card.js
-Component({
-  properties: {
-    order: {
-      type: Object,
-      value: {
-        id: '',
-        status: '',
-        statusText: '',
-        amount: 0,
-        productCount: 0,
-        products: [],
-        createTime: ''
-      }
-    }
-  },
-
-  methods: {
-    onTap() {
-      this.triggerEvent('tap', { orderId: this.data.order.id });
-    },
-
-    onPrimaryAction() {
-      const { status } = this.data.order;
-      const actionMap = {
-        'pending_payment': 'pay',
-        'pending_ship': 'remind',
-        'pending_receive': 'confirm',
-        'completed': 'review'
-      };
-      this.triggerEvent('action', { 
-        orderId: this.data.order.id,
-        action: actionMap[status]
-      });
-    }
-  }
-});
-```
-
-订单状态应当使用语义化的色彩区分。待付款状态使用警告色，待发货状态使用信息色，待收货和待评价状态使用主色，已完成状态使用成功色，已取消状态使用灰色。订单商品列表应当折叠显示，鼠标悬停或点击时展开查看详情。订单金额应当包含商品总额、运费、优惠等信息。
-
-## 布局与间距规范
-
-### 页面布局
-
-#### 标准页面结构
-
-小程序页面采用标准的布局结构，从上到下依次为状态栏、导航栏、内容区、标签栏（可选）。状态栏由微信小程序系统提供，高度为 24px 或 44px（全面屏设备），开发时需要适配不同设备。导航栏由微信小程序原生支持，高度为 44px，可以自定义样式或使用默认样式。内容区是页面主体内容的容器，应当占据屏幕的主要空间。标签栏用于多标签页面切换，高度为 50px 或 80px（全面屏设备）。
+导航栏是页面顶部的标题栏，承载页面标题和核心操作。
 
 ```css
-page {
-  min-height: 100vh;
-  background-color: var(--bg-page);
-  box-sizing: border-box;
-}
-
-.status-bar {
-  height: var(--status-bar-height, 24px);
-  background-color: #FFFFFF;
-}
-
 .navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   height: 44px;
+  padding: 0 var(--spacing-md);
+  background-color: var(--background-primary);
+  position: relative;
+}
+
+.navbar-title {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  max-width: 60%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.navbar-left,
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  min-width: 80px;
+  z-index: 1;
+}
+
+.navbar-right {
+  justify-content: flex-end;
+}
+
+.navbar-back {
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #FFFFFF;
-  border-bottom: 1px solid var(--border-light);
+  border-radius: var(--border-radius-sm);
 }
 
-.content {
-  min-height: calc(100vh - var(--status-bar-height, 24px) - 44px);
-  padding: 16px;
+.navbar-back:active {
+  background-color: var(--background-tertiary);
 }
+```
 
+#### TabBar 标签栏
+
+底部标签栏用于页面间的主导航切换。
+
+```css
 .tabbar {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  height: calc(var(--tabbar-height, 50px) + safe-area-inset-bottom));
-  background-color: #FFFFFF;
-  border-top: 1px solid var(--border-light);
   display: flex;
+  background-color: var(--background-primary);
+  border-top: 1px solid var(--border-light);
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
+  z-index: 100;
+}
+
+.tabbar-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 0;
+  gap: 2px;
+  transition: all var(--transition-fast);
+}
+
+.tabbar-icon {
+  width: 24px;
+  height: 24px;
+  color: var(--text-tertiary);
+  transition: color var(--transition-fast);
+}
+
+.tabbar-label {
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+  transition: color var(--transition-fast);
+}
+
+.tabbar-item.active .tabbar-icon,
+.tabbar-item.active .tabbar-label {
+  color: var(--primary-color);
+}
+
+.tabbar-item:active {
+  opacity: 0.7;
 }
 ```
 
-#### 内容布局模式
+#### SearchBar 搜索栏
 
-内容区采用固定宽度布局，最大宽度为 750rpx（微信小程序默认宽度），在所有设备上保持一致的显示效果。内容区内的元素按照功能分区布局，常见布局模式包括：单列布局、双列布局、卡片布局、列表布局。
-
-单列布局用于首页、商品详情等需要突出主体内容的场景，内容居中显示，左右留白。双列布局用于商品列表、订单列表等需要并排展示多项内容的场景，使用 Grid 或 Flex 布局实现等宽双列。卡片布局用于信息卡片集合，使用间距分隔卡片，卡片内部采用固定结构。列表布局用于信息流展示，每项内容垂直排列，使用分隔线区分。
+搜索栏用于输入搜索关键词。
 
 ```css
-.container {
-  max-width: 750rpx;
-  margin: 0 auto;
-  padding: 0 16px;
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--background-primary);
 }
 
+.search-bar-input-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  height: 36px;
+  padding: 0 12px;
+  background-color: var(--background-secondary);
+  border-radius: var(--border-radius-md);
+  gap: var(--spacing-sm);
+  transition: all var(--transition-fast);
+}
+
+.search-bar-input {
+  flex: 1;
+  height: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: var(--font-size-md);
+  color: var(--text-primary);
+}
+
+.search-bar-input::placeholder {
+  color: var(--text-tertiary);
+}
+
+.search-bar-icon {
+  width: 18px;
+  height: 18px;
+  color: var(--text-tertiary);
+  flex-shrink: 0;
+}
+
+.search-bar-cancel {
+  font-size: var(--font-size-md);
+  color: var(--primary-color);
+  padding: 0 4px;
+  white-space: nowrap;
+}
+```
+
+#### EmptyState 空状态
+
+空状态用于无数据时的展示和引导。
+
+```css
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-5xl) var(--spacing-xxl);
+  text-align: center;
+}
+
+.empty-state-icon {
+  width: 100px;
+  height: 100px;
+  margin-bottom: var(--spacing-lg);
+  color: var(--text-quaternary);
+}
+
+.empty-state-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.empty-state-description {
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary);
+  line-height: var(--line-height-normal);
+  max-width: 280px;
+}
+
+.empty-state-action {
+  margin-top: var(--spacing-lg);
+}
+```
+
+---
+
+### 业务组件
+
+#### ProductCard 商品卡片
+
+商品卡片是电商核心组件，用于展示商品信息。
+
+**布局类型**
+- 横向布局: 列表视图，图片在左，内容在右
+- 纵向布局: 网格视图，图片在上，内容在下
+
+```wxml
+<!-- 纵向布局商品卡片 -->
+<view class="product-card">
+  <view class="product-card-image-wrapper">
+    <image class="product-card-image" src="{{product.image}}" mode="aspectFill" />
+    <view class="product-card-tag" wx:if="{{product.tag}}">{{product.tag}}</view>
+  </view>
+  <view class="product-card-content">
+    <view class="product-card-name">{{product.name}}</view>
+    <view class="product-card-desc" wx:if="{{product.desc}}">{{product.desc}}</view>
+    <view class="product-card-footer">
+      <view class="product-card-price">
+        <text class="product-card-price-symbol">¥</text>
+        <text class="product-card-price-value">{{product.price}}</text>
+      </view>
+      <view class="product-card-sales" wx:if="{{product.sales}}">
+        已售 {{product.sales}}
+      </view>
+    </view>
+  </view>
+</view>
+```
+
+```css
+.product-card {
+  background-color: var(--background-primary);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.product-card-image-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 100%;
+  background-color: var(--background-tertiary);
+}
+
+.product-card-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.product-card-tag {
+  position: absolute;
+  top: var(--spacing-sm);
+  left: var(--spacing-sm);
+  height: 20px;
+  padding: 0 8px;
+  background-color: var(--error-color);
+  color: #FFFFFF;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  border-radius: var(--border-radius-sm);
+  display: flex;
+  align-items: center;
+}
+
+.product-card-content {
+  padding: var(--spacing-md);
+}
+
+.product-card-name {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+  line-height: var(--line-height-tight);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 40px;
+}
+
+.product-card-desc {
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary);
+  margin-top: var(--spacing-xs);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.product-card-footer {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-top: var(--spacing-sm);
+}
+
+.product-card-price {
+  display: flex;
+  align-items: baseline;
+  color: var(--error-color);
+}
+
+.product-card-price-symbol {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.product-card-price-value {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  margin-left: 1px;
+}
+
+.product-card-sales {
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+}
+```
+
+#### OrderCard 订单卡片
+
+订单卡片用于展示订单信息和操作入口。
+
+```css
+.order-card {
+  background-color: var(--background-primary);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+.order-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.order-card-order-no {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.order-card-status {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.order-card-status-pending { color: var(--warning-color); }
+.order-card-status-shipping { color: var(--info-color); }
+.order-card-status-completed { color: var(--success-color); }
+.order-card-status-cancelled { color: var(--text-tertiary); }
+
+.order-card-items {
+  padding: var(--spacing-md) var(--spacing-lg);
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.order-card-item-image {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--border-radius-md);
+  object-fit: cover;
+  background-color: var(--background-tertiary);
+}
+
+.order-card-item-more {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--border-radius-md);
+  background-color: var(--background-tertiary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary);
+}
+
+.order-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-top: 1px solid var(--border-light);
+}
+
+.order-card-total {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.order-card-total-price {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  margin-left: var(--spacing-xs);
+}
+
+.order-card-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+```
+
+#### AddressCard 地址卡片
+
+地址卡片用于展示收货地址信息。
+
+```css
+.address-card {
+  background-color: var(--background-primary);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.address-card-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+}
+
+.address-card-name {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+}
+
+.address-card-phone {
+  font-size: var(--font-size-md);
+  color: var(--text-secondary);
+}
+
+.address-card-tag {
+  margin-left: auto;
+  height: 20px;
+  padding: 0 8px;
+  background-color: var(--primary-light);
+  color: var(--primary-color);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  border-radius: var(--border-radius-sm);
+  display: flex;
+  align-items: center;
+}
+
+.address-card-detail {
+  font-size: var(--font-size-md);
+  color: var(--text-secondary);
+  line-height: var(--line-height-normal);
+}
+
+.address-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--spacing-md);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--border-light);
+}
+
+.address-card-default {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.address-card-actions {
+  display: flex;
+  gap: var(--spacing-lg);
+}
+
+.address-card-action {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+```
+
+#### Price 价格组件
+
+价格组件用于统一展示商品价格。
+
+```css
+.price {
+  display: inline-flex;
+  align-items: baseline;
+  color: var(--error-color);
+}
+
+.price-symbol {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.price-integer {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+}
+
+.price-decimal {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.price-original {
+  margin-left: var(--spacing-sm);
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary);
+  text-decoration: line-through;
+}
+
+.price-large .price-symbol {
+  font-size: var(--font-size-lg);
+}
+
+.price-large .price-integer {
+  font-size: var(--font-size-h1);
+}
+
+.price-large .price-decimal {
+  font-size: var(--font-size-lg);
+}
+
+.price-small .price-symbol {
+  font-size: var(--font-size-xs);
+}
+
+.price-small .price-integer {
+  font-size: var(--font-size-md);
+}
+
+.price-small .price-decimal {
+  font-size: var(--font-size-xs);
+}
+```
+
+---
+
+## 交互标准
+
+交互标准定义了产品的基本交互模式和反馈机制，确保用户体验的一致性和可预测性。
+
+### 导航模式
+
+#### 页面层级
+
+小程序采用三级导航结构：
+
+**一级导航 - TabBar**
+- 3-5 个主要页面
+- 底部固定位置
+- 切换时页面不销毁，状态保留
+- 示例: 首页、分类、购物车、我的
+
+**二级导航 - 页面跳转**
+- 从 TabBar 页面进入的详情页、列表页
+- 左滑返回或点击返回按钮
+- 页面栈深度建议不超过 5 层
+
+**三级导航 - 浮层/弹窗**
+- 筛选、选择、确认等操作
+- 不增加页面栈深度
+- 点击遮罩或关闭按钮退出
+
+#### 导航返回
+
+**返回方式**
+- 导航栏左侧返回按钮 (主要方式)
+- 左滑手势 (iOS 标准交互)
+- 操作完成后自动返回
+
+**返回时机**
+- 返回上一页: 常规返回
+- 返回首页: 多层级后的快捷返回
+- 返回指定页: 特定流程完成后
+
+### 反馈机制
+
+#### Toast 轻提示
+
+用于展示简短的操作反馈，2-3 秒后自动消失。
+
+**适用场景**
+- 操作成功提示 (如: 添加成功、已收藏)
+- 操作失败提示 (如: 网络错误)
+- 信息提示 (如: 已复制、无更多数据)
+
+**设计规范**
+- 位置: 屏幕中央偏上
+- 时长: 成功/信息 2s，错误 3s
+- 样式: 深色半透明背景 + 白色文字 + 图标
+- 圆角: 12px
+- 最小宽度: 120px，最大宽度: 80% 屏幕宽
+
+```
+┌─────────────────────┐
+│      ✓ 操作成功       │
+└─────────────────────┘
+```
+
+#### Modal 模态框
+
+用于需要用户确认或输入的重要操作。
+
+**适用场景**
+- 危险操作确认 (如: 删除、退出登录)
+- 重要信息确认 (如: 提交订单)
+- 简单表单输入 (如: 输入昵称)
+
+**设计规范**
+- 位置: 屏幕中央
+- 宽度: 80% 屏幕宽，最大 320px
+- 圆角: 16px
+- 按钮: 水平排列 2 个按钮，或垂直排列多个
+- 遮罩: 50% 黑色半透明
+
+**按钮排布**
+- 确认操作: 右侧主色按钮，左侧浅色按钮
+- 危险操作: 右侧红色按钮，左侧浅色按钮
+- 按钮高度: 44px
+
+#### Loading 加载状态
+
+用于数据加载过程中的等待提示。
+
+**类型**
+
+| 类型 | 适用场景 | 样式 |
+|------|----------|------|
+| 全屏加载 | 页面初始加载 | 居中加载图标 + 文字 |
+| 局部加载 | 组件内加载 | 小尺寸加载图标 |
+| 下拉刷新 | 列表顶部刷新 | 系统样式或自定义 |
+| 上拉加载 | 列表底部加载 | 加载图标 + "加载中" |
+| 骨架屏 | 内容加载预览 | 灰色占位块 + 渐变动画 |
+
+**设计规范**
+- 加载图标: 圆形旋转动画
+- 主色调: --primary-color
+- 尺寸: 24px (小), 32px (中), 48px (大)
+- 加载文字: 12px，次文字色
+
+### 错误状态
+
+#### 网络错误
+
+**表现形式**
+- 全屏错误页 (页面加载失败)
+- Toast 提示 (操作失败)
+- 错误占位图 (局部加载失败)
+
+**设计规范**
+- 图标: 网络错误图标
+- 标题: "网络连接失败"
+- 描述: "请检查网络设置后重试"
+- 操作: "重新加载" 按钮
+
+#### 服务器错误
+
+**表现形式**
+- 5xx 错误页
+- Toast 提示 "服务器繁忙，请稍后再试"
+
+#### 表单错误
+
+**表现形式**
+- 输入框边框变红
+- 下方显示错误提示文字
+- 提交按钮置灰或点击时提示
+
+**错误文字规范**
+- 简洁明确，说明问题
+- 提供解决方案或下一步操作
+- 避免技术性词汇
+
+### 空状态
+
+#### 空状态分类
+
+| 类型 | 场景 | 引导动作 |
+|------|------|----------|
+| 内容为空 | 暂无订单、暂无收藏 | 去逛逛、去添加 |
+| 搜索无结果 | 搜索关键词无匹配 | 修改关键词、推荐热门 |
+| 筛选无结果 | 筛选条件太严格 | 重置筛选、放宽条件 |
+| 列表到底 | 已加载全部内容 | 返回顶部 |
+
+#### 空状态设计
+
+- 插图: 简约线条风格，与主题相关
+- 标题: 16px 中字重，主文字色
+- 描述: 12px，次文字色
+- 操作按钮: 可选，主按钮或边框按钮
+- 间距: 插图与标题 24px，标题与描述 8px，描述与按钮 24px
+
+### 加载状态
+
+#### 加载类型
+
+| 类型 | 触发时机 | 消失时机 |
+|------|----------|----------|
+| 首次加载 | 进入页面 | 数据加载完成 |
+| 下拉刷新 | 下拉手势 | 刷新完成 |
+| 上拉加载 | 滚动到底部 | 加载完成 |
+| 操作加载 | 点击按钮 | 操作完成 |
+
+#### 骨架屏规范
+
+- 形状: 圆角矩形，与真实内容形状对应
+- 颜色: 浅灰背景 (--background-tertiary)
+- 动画: 从左到右的渐变高光动画
+- 时长: 1.5s 循环
+- 首次加载使用骨架屏，后续加载使用 Loading
+
+---
+
+## 布局规范
+
+### 页面结构
+
+标准页面从上到下依次为：
+
+```
+┌───────────────────────┐
+│      状态栏 (系统)      │
+├───────────────────────┤
+│      导航栏 NavBar     │
+├───────────────────────┤
+│                       │
+│                       │
+│      内容区域          │
+│                       │
+│                       │
+├───────────────────────┤
+│   标签栏 TabBar (可选)  │
+│   + 安全区域           │
+└───────────────────────┘
+```
+
+### 安全区域适配
+
+**顶部安全区域**
+- 状态栏高度: 20px (非全面屏) / 44px (全面屏)
+- 导航栏高度: 44px
+- 使用 `env(safe-area-inset-top)` 适配
+
+**底部安全区域**
+- TabBar 高度: 50px
+- 底部安全区域: 0px (非全面屏) / 34px (全面屏)
+- 使用 `env(safe-area-inset-bottom)` 适配
+
+```css
+.safe-area-top {
+  padding-top: constant(safe-area-inset-top);
+  padding-top: env(safe-area-inset-top);
+}
+
+.safe-area-bottom {
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+```
+
+### 内容区域边距
+
+- 页面左右边距: 20px
+- 内容区块上下间距: 24px
+- 卡片之间间距: 16px
+
+### 栅格系统
+
+双列网格布局用于商品列表等场景：
+
+```css
 .grid-2 {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 12px;
-}
-
-.flex-row {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-.flex-col {
-  display: flex;
-  flex-direction: column;
+  padding: 0 16px;
 }
 ```
 
-### 间距系统
-
-#### 间距基准与增量
-
-间距系统采用 4px 为基础增量，形成完整的间距层级。这一数值基于中文排版的特点和移动端界面的阅读习惯，能够保证元素之间的呼吸感，同时不会浪费有限的屏幕空间。
-
-```css
-:root {
-  --space-xs: 4px;
-  --space-sm: 8px;
-  --space-md: 16px;
-  --space-lg: 24px;
-  --space-xl: 32px;
-  --space-2xl: 40px;
-  --space-3xl: 48px;
-}
-```
-
-间距的使用应当遵循一致的规则。组件内部元素间距使用较小层级（4px、8px、16px），如图标与文字之间使用 4px，按钮内部文字与图标之间使用 8px。组件之间的间距使用中等层级（16px、24px），如卡片之间使用 16px，区块之间使用 24px。页面区块之间的间距使用较大层级（32px、40px），如主要功能区块之间使用 32px，页面上下内容之间使用 40px。
-
-```css
-/* 组件内部间距 */
-.btn-text-icon {
-  margin-left: var(--space-xs);
-}
-
-.card-item {
-  padding: var(--space-md);
-}
-
-/* 组件间距 */
-.card + .card {
-  margin-top: var(--space-md);
-}
-
-.section {
-  margin-bottom: var(--space-lg);
-}
-
-/* 页面间距 */
-.page-header {
-  margin-bottom: var(--space-xl);
-}
-
-.page-content {
-  padding: var(--space-md);
-}
-```
-
-#### 安全区域适配
-
-全面屏设备需要在底部预留安全区域，避免内容被屏幕圆角或底部手势区域遮挡。微信小程序提供了 safe-area 相关的 CSS 变量和布局方案，应当在需要底部定位的元素上使用。
-
-```css
-.container {
-  padding-bottom: constant(safe-area-inset-bottom);
-  padding-bottom: env(safe-area-inset-bottom);
-}
-
-.fixed-bottom {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding-bottom: constant(safe-area-inset-bottom);
-  padding-bottom: env(safe-area-inset-bottom);
-  background-color: #FFFFFF;
-}
-```
-
-## 响应式适配规范
-
-### 屏幕尺寸适配
-
-#### 宽度适配方案
-
-微信小程序使用 rpx（Responsive Pixel）作为尺寸单位，1rpx 等于屏幕宽度的 1/750。这一特性使得开发者无需关心设备像素比，只需按照设计稿的尺寸开发，即可在所有设备上按比例缩放。设计稿通常以 iPhone 6 的 750x1334 像素为基准，设计稿中的 px 数值直接转换为 rpx 数值即可。
-
-```css
-.element {
-  width: 750rpx;
-  padding: 20rpx;
-  font-size: 28rpx;
-  border-radius: 10rpx;
-}
-```
-
-对于需要固定尺寸的元素（如图标），应当在保持宽高比例的前提下使用 rpx 单位。如果需要在不同设备上显示不同的尺寸，可以通过 JS 获取设备信息后动态设置样式。
-
-```javascript
-wx.getSystemInfo({
-  success: (res) => {
-    const scale = res.windowWidth / 750;
-    const iconSize = Math.round(32 * scale);
-    this.setData({ iconSize });
-  }
-});
-```
-
-#### 字体大小适配
-
-字体大小使用 rpx 单位可以保证在不同设备上的显示比例一致。但对于极小或极大的字体，可能需要在不同设备上进行微调，以获得更好的阅读体验。项目定义了字体大小的基准值，并在必要时根据设备像素比进行调整。
-
-```css
-/* 基础字体大小 */
-page {
-  font-size: 28rpx;
-}
-
-/* 大屏幕设备适当增大字体 */
-@media screen and (min-width: 400px) {
-  page {
-    font-size: 30rpx;
-  }
-}
-
-/* 小屏幕设备适当减小字体 */
-@media screen and (max-width: 320px) {
-  page {
-    font-size: 26rpx;
-  }
-}
-```
-
-### 像素比适配
-
-#### 图片资源适配
-
-高分辨率屏幕（如 Retina 屏幕）需要更高分辨率的图片资源，以避免图片模糊。微信小程序会自动根据设备像素比选择合适的图片资源，开发者需要提供 @2x 和 @3x 分辨率版本的图片。图片文件名使用 `@2x.png` 或 `@3x.png` 后缀区分。
-
-```css
-.product-image {
-  width: 200rpx;
-  height: 200rpx;
-}
-
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx) {
-  .product-image {
-    background-image: url('/images/product@2x.png');
-  }
-}
-
-@media (-webkit-min-device-pixel-ratio: 3), (min-resolution: 3dppx) {
-  .product-image {
-    background-image: url('/images/product@3x.png');
-  }
-}
-```
-
-#### 边框适配
-
-在某些高分辨率设备上，1px 边框可能显示过粗或显示不清晰。可以使用 CSS transform 缩放技术实现更细的边框，或者使用 hairline 组件实现物理像素级别的边框。
-
-```css
-.hairline-border {
-  position: relative;
-}
-
-.hairline-border::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 200%;
-  height: 200%;
-  transform: scale(0.5);
-  transform-origin: 0 0;
-  border: 1px solid var(--border-color);
-  pointer-events: none;
-}
-```
-
-## 动效设计规范
-
-### 过渡动画
-
-#### 页面过渡动画
-
-页面切换时应当使用过渡动画，增强空间感和连续性。项目使用微信小程序原生提供的页面转场动画，通过配置 app.json 中的 `pageStyle` 实现。页面进入动画使用从右向左滑入，页面退出动画使用从左向右滑出。
-
-```json
-{
-  "pageStyle": {
-    "navigationStyle": "custom",
-    "backgroundTextStyle": "dark"
-  },
-  "window": {
-    "backgroundTextStyle": "dark",
-    "navigationBarBackgroundColor": "#FFFFFF",
-    "navigationBarTitleText": "苏铁商城",
-    "navigationBarTextStyle": "black"
-  }
-}
-```
-
-自定义页面转场动画可以在页面的 JSON 配置中声明，然后使用动画 API 实现。页面进入和退出应当使用对称的动画效果，动画时长控制在 250ms 到 300ms 之间。
-
-```javascript
-// page-transition.js
-const pageTransition = {
-  enter: {
-    duration: 300,
-    timingFunction: 'ease-out',
-    delay: 0
-  },
-  exit: {
-    duration: 250,
-    timingFunction: 'ease-in',
-    delay: 0
-  }
-};
-```
-
-#### 元素过渡动画
-
-界面元素的显示隐藏、状态变化应当使用过渡动画，提供视觉反馈。常见场景包括：按钮悬停和点击、列表项加载和删除、弹窗显示和关闭、开关状态切换。过渡动画应当平滑自然，动画时长控制在 150ms 到 300ms 之间。
-
-```css
-.fade-enter {
-  opacity: 0;
-}
-
-.fade-enter-active {
-  opacity: 1;
-  transition: opacity 300ms ease-out;
-}
-
-.fade-exit {
-  opacity: 1;
-}
-
-.fade-exit-active {
-  opacity: 0;
-  transition: opacity 250ms ease-in;
-}
-
-.slide-up-enter {
-  transform: translateY(20px);
-  opacity: 0;
-}
-
-.slide-up-enter-active {
-  transform: translateY(0);
-  opacity: 1;
-  transition: all 300ms ease-out;
-}
-```
-
-### 交互动效
-
-#### 点击反馈动效
-
-可交互元素应当提供即时的点击反馈，增强操作的确定感。常见的点击反馈包括：缩放效果、波纹效果、颜色变化。缩放效果适用于按钮等较大的交互区域，点击时元素略微缩小，释放时恢复。波纹效果适用于卡片等较大面积的交互区域，点击位置产生扩散的水波纹效果。
-
-```css
-.press-scale:active {
-  transform: scale(0.95);
-  transition: transform 0.1s ease;
-}
-
-.press-highlight {
-  transition: background-color 0.1s ease;
-}
-
-.press-highlight:active {
-  background-color: var(--bg-page);
-}
-```
-
-```javascript
-// ripple.js
-function createRipple(event, color) {
-  const button = event.currentTarget;
-  const rect = button.getBoundingClientRect();
-  const size = Math.max(rect.width, rect.height);
-  const x = event.clientX - rect.left - size / 2;
-  const y = event.clientY - rect.top - size / 2;
-  
-  const ripple = document.createElement('span');
-  ripple.style.cssText = `
-    position: absolute;
-    width: ${size}px;
-    height: ${size}px;
-    background: ${color};
-    border-radius: 50%;
-    transform: scale(0);
-    animation: ripple 0.6s linear;
-    pointer-events: none;
-  `;
-  
-  button.appendChild(ripple);
-  setTimeout(() => ripple.remove(), 600);
-}
-```
-
-#### 加载动效
-
-数据加载过程中应当显示加载动效，给用户明确的等待反馈。骨架屏用于展示内容的预期布局，在真实数据加载前显示。旋转加载图标用于小范围的加载状态，如按钮加载、下拉刷新。进度条用于展示加载进度的场景，如文件上传、下载。
-
-```css
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-.loading-spinner {
-  width: 24px;
-  height: 24px;
-  border: 2px solid var(--border-color);
-  border-top-color: var(--primary-color);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-
-.skeleton {
-  background: linear-gradient(
-    90deg,
-    var(--bg-page) 25%,
-    var(--border-light) 50%,
-    var(--bg-page) 75%
-  );
-  background-size: 200% 100%;
-  animation: skeleton-loading 1.5s infinite;
-}
-
-@keyframes skeleton-loading {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
-```
-
-## 无障碍设计规范
-
-### 语义化标签
-
-#### 结构语义化
-
-界面元素应当使用语义化的标签，便于屏幕阅读器正确解读页面结构。页面标题使用 `view` 容器配合适当的层级结构，而非全部使用 `div`。交互元素使用 `button` 而非 `view` 加点击事件。表单元素使用 `input`、`picker` 等原生组件，而非自定义模拟组件。
-
-```html
-<!-- 正确写法 -->
-<view class="header">
-  <view class="title">页面标题</view>
-</view>
-
-<button bindtap="onSubmit">提交</button>
-
-<input type="text" placeholder="请输入" />
-
-<!-- 错误写法 -->
-<view class="title" bindtap="onTitleTap">页面标题</view>
-
-<view class="button" bindtap="onSubmit">提交</view>
-
-<view class="input" bindinput="onInput">请输入</view>
-```
-
-#### ARIA 属性
-
-对于自定义组件或复杂交互，应当添加 ARIA 属性，使屏幕阅读器能够正确识别组件的功能和状态。常用的 ARIA 属性包括：aria-label 提供元素的可访问名称，aria-describedby 关联描述元素，aria-expanded 指示展开状态，aria-selected 指示选中状态，aria-disabled 指示禁用状态。
-
-```html
-<view 
-  class="collapse-item" 
-  aria-expanded="{{isExpanded}}"
-  aria-controls="collapse-content"
-  bindtap="toggle"
->
-  <text class="collapse-title">折叠面板标题</text>
-  <image 
-    class="arrow" 
-    src="/images/arrow.svg" 
-    aria-hidden="true"
-  />
-</view>
-<view 
-  id="collapse-content" 
-  class="collapse-content {{isExpanded ? 'show' : ''}}"
-  aria-hidden="{{!isExpanded}}"
->
-  折叠面板内容
-</view>
-```
-
-### 色彩对比度
-
-#### 对比度标准
-
-界面元素的色彩对比度应当满足 WCAG 2.1 标准的要求，确保视力障碍用户能够清晰阅读。正文文字与背景的对比度应当不低于 4.5:1，大号文字（18px 以上或 14px 加粗）与背景的对比度应当不低于 3:1。功能性色彩（按钮、链接、图标）应当满足同样的对比度要求。
-
-```css
-/* 高对比度文字样式 */
-.text-primary {
-  color: var(--text-primary);
-  background-color: #FFFFFF;
-}
-
-.text-secondary {
-  color: var(--text-secondary);
-  background-color: #FFFFFF;
-}
-
-/* 确保链接色彩满足对比度要求 */
-.link {
-  color: #1976D2;
-}
-
-.link:hover {
-  color: #1565C0;
-}
-```
-
-#### 视觉提示补充
-
-对于依赖色彩传达信息的场景，应当提供额外的视觉提示，如形状、文字或图标。状态指示器不应仅使用颜色区分，还应包含文字或图标。图表中的数据系列不应仅通过颜色区分，还应添加标签或图例。错误提示不应仅使用红色，还应包含错误图标和文字说明。
-
-```html
-<!-- 状态标签示例 -->
-<view class="status-tag {{status === 'success' ? 'success' : 'error'}}">
-  <image 
-    class="status-icon" 
-    src="/images/{{status === 'success' ? 'check' : 'close'}}.svg"
-    aria-hidden="true"
-  />
-  <text>{{statusText}}</text>
-</view>
-```
+- 列间距: 12px
+- 行间距: 12px
+- 左右边距: 16px
+- 卡片宽度自适应
+
+---
 
 ## 版本历史
 
 | 版本 | 更新日期 | 更新内容 | 作者 |
 |------|----------|----------|------|
+| 3.0.0 | 2026-07-06 | 设计系统全面升级，参考 Apple HIG 与 shadcn/ui 理念，新增完整色阶、字重体系、动效系统，重构组件规范 | Sut |
+| 2.0.0 | 2026-03-15 | 优化色彩系统，更新组件样式，新增业务组件规范 | Sut |
 | 1.0.0 | 2025-12-27 | 初始版本，完成 UI 设计规范文档 | Sut |

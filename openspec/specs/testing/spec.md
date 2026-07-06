@@ -1,560 +1,667 @@
 <!--
 文件名: spec.md
-版本号: 1.0.0
-更新日期: 2025-12-27
+版本号: 3.0.0
+更新日期: 2026-07-06
 作者: Sut
-描述: SutWxApp 项目测试规范文档，涵盖测试策略、测试环境、测试用例编写标准、测试执行流程和测试覆盖率要求
+描述: SutWxApp 项目测试规范文档，涵盖测试策略、测试环境、测试用例编写标准、测试执行流程和测试覆盖率要求，与代码实现保持一致
 -->
 
 # 测试规范
 
-## 目的
+## 1. 概述
 
-本规范定义了苏铁微信小程序（SutWxApp）项目的测试策略、测试环境配置、测试用例编写标准、测试执行流程和测试覆盖率要求，以确保产品质量和代码可靠性。本规范基于 Bun 测试框架（bun test）编写，涵盖单元测试、集成测试、端到端测试、性能测试和安全测试等多个方面。
+### 1.1 文档目的
 
-## 测试策略
+本规范定义了苏铁微信小程序（SutWxApp）项目的测试策略、测试环境配置、测试用例编写标准、测试执行流程和测试覆盖率要求，以确保产品质量和代码可靠性。本规范基于微信小程序技术栈，涵盖单元测试、集成测试、UI测试、性能测试和安全测试等多个方面。
 
-### 测试金字塔
+### 1.2 适用范围
 
-项目采用测试金字塔模型进行测试策略规划，从底层到顶层依次为单元测试、集成测试、端到端测试。测试金字塔强调底层测试数量多、执行速度快、覆盖范围广，顶层测试数量少但更接近真实用户场景。这一策略能够在保证测试覆盖率的同时，维持合理的测试执行时间和维护成本。
+本文档适用于 SutWxApp 项目的所有测试相关工作，包括：
 
-单元测试作为金字塔的基石，应当覆盖所有核心业务逻辑函数、公共工具函数和数据处理函数。单元测试应当独立运行，不依赖外部服务或网络连接，每个测试用例验证单一功能点。集成测试验证模块间的交互是否正确，包括服务层与数据访问层的交互、API 接口与业务逻辑的集成等。端到端测试模拟真实用户操作，验证完整功能流程，包括用户登录、商品浏览、订单创建、支付流程等关键业务场景。
+- 单元测试（工具函数、服务层、组件）
+- 集成测试（服务层与数据层、页面与服务层）
+- UI测试（页面交互、组件渲染）
+- 性能测试（加载速度、滚动流畅度）
+- 安全测试（数据安全、接口安全）
 
-### 测试类型定义
+### 1.3 测试原则
 
-**单元测试**应当覆盖以下场景：工具函数的功能验证、数据转换和格式化函数的正确性、业务逻辑函数的边界条件和异常处理、配置解析和环境变量处理的准确性。单元测试应当使用 Mock 技术隔离外部依赖，确保测试的稳定性和可重复性。每个单元测试文件应当对应源代码文件，测试文件命名格式为 `[源文件名].test.ts`，存放于 `tests/` 目录下的对应子目录中。
+1. **尽早测试**：测试应尽早介入，从需求阶段开始规划
+2. **全面覆盖**：核心功能100%覆盖，一般功能80%以上覆盖
+3. **自动化优先**：可自动化的测试用例优先自动化
+4. **用户视角**：从用户角度出发设计测试用例
+5. **持续测试**：测试融入开发流程，持续集成持续测试
 
-**集成测试**应当覆盖以下场景：服务层与数据访问层的交互验证、API 接口的请求处理和响应格式化、缓存机制的读写操作正确性、会话管理和认证授权的流程验证。集成测试可以使用真实的数据库连接或内存数据库，但应当避免对外部服务的真实调用。测试数据应当在每个测试用例执行前初始化，执行后清理，确保测试环境的独立性。
+## 2. 测试策略
 
-**端到端测试**应当覆盖以下场景：用户注册和登录流程、商品搜索和浏览流程、购物车添加和修改流程、订单创建和支付流程、积分获取和使用流程。端到端测试应当模拟真实用户操作，使用微信小程序模拟器或真实设备执行测试。测试数据应当使用测试账号，避免对生产数据产生影响。
+### 2.1 测试金字塔
 
-**性能测试**应当关注以下指标：API 接口的响应时间、数据库查询的执行时间、并发请求的处理能力、内存使用情况。性能测试应当在独立的测试环境中执行，避免与其他测试相互干扰。测试结果应当与基准值对比，识别性能退化或优化空间。
+项目采用测试金字塔模型进行测试策略规划，从底层到顶层依次为单元测试、集成测试、UI测试。
 
-**安全测试**应当覆盖以下场景：身份认证的安全性、权限校验的正确性、输入验证的有效性、敏感数据的保护措施。安全测试应当模拟常见的攻击场景，如 SQL 注入、XSS 攻击、CSRF 攻击等。安全测试应当由专门的安全测试人员或第三方机构执行，并生成详细的测试报告。
+**单元测试（底层，约 70%）**：
+- 工具函数测试
+- 服务层单元测试
+- 组件单元测试
+- 特点：数量多、执行快、易维护
 
-## 测试环境配置
+**集成测试（中层，约 20%）**：
+- 服务层与数据层集成
+- 页面与服务层交互
+- 组件间协作
+- 特点：验证模块间交互正确性
 
-### Bun 测试环境
+**UI测试（顶层，约 10%）**：
+- 关键业务流程端到端测试
+- 核心页面交互验证
+- 特点：接近真实用户场景，维护成本高
 
-项目使用 Bun 内置的测试框架（bun test）编写和运行测试。Bun 测试框架提供了高性能的测试执行能力，支持 TypeScript 原生运行，无需额外的编译步骤。测试环境的配置应当在 `package.json` 中定义，确保测试命令的一致性和可重复性。
+### 2.2 测试类型定义
 
-```json
-{
-  "scripts": {
-    "test": "bun test",
-    "test:coverage": "bun test --coverage",
-    "test:unit": "bun test tests/unit",
-    "test:integration": "bun test tests/integration",
-    "test:e2e": "bun test tests/e2e"
-  }
-}
-```
+#### 2.2.1 单元测试
 
-### 测试数据库配置
+**测试对象**：
+- 工具函数（format.js, security.ts, cache.ts, request.ts 等）
+- 服务层方法（authService, productService, orderService 等）
+- 自定义组件（button, badge, avatar, tag, divider, empty-state, product-card, price, order-card 等）
 
-集成测试使用独立的测试数据库，避免对开发数据库或生产数据库产生影响。测试数据库的配置通过环境变量管理，确保测试环境与生产环境的隔离。数据库连接配置应当在测试初始化阶段加载，测试完成后清理测试数据。
+**测试内容**：
+- 函数输入输出正确性
+- 边界条件处理
+- 异常情况处理
+- 状态变化验证
 
-```typescript
-// tests/setup.ts
-import { config } from 'dotenv';
+**测试要求**：
+- 每个工具函数至少3个测试用例（正常、边界、异常）
+- 服务层方法覆盖主要业务场景
+- 组件测试覆盖属性、事件、状态变化
 
-config({ path: '.env.test' });
+#### 2.2.2 集成测试
 
-export const testDbConfig = {
-  host: process.env.DB_HOST || 'localhost',
-  port: parseInt(process.env.DB_PORT || '3306'),
-  user: process.env.DB_USER || 'test',
-  password: process.env.DB_PASSWORD || 'test',
-  database: process.env.DB_NAME || 'sutwxapp_test',
+**测试对象**：
+- 页面逻辑与服务层交互
+- 服务层间调用
+- 组件组合使用
+
+**测试内容**：
+- 页面初始化数据加载
+- 用户操作触发的数据流
+- 错误处理和异常恢复
+- 状态管理正确性
+
+#### 2.2.3 UI测试
+
+**测试对象**：
+- 所有一级页面（首页、分类、购物车、我的）
+- 核心业务流程页面（商品详情、订单确认、订单列表）
+- 重要功能页面（地址管理、帮助中心、设置）
+
+**测试内容**：
+- 页面元素渲染正确性
+- 用户交互流程完整性
+- 页面跳转和导航正确性
+- 数据展示与实际数据一致性
+
+### 2.3 测试范围
+
+#### 2.3.1 已实现功能测试
+
+| 模块 | 页面/组件 | 测试优先级 |
+|------|----------|-----------|
+| 首页 | pages/home/index | P0 |
+| 分类页 | pages/category/index | P0 |
+| 商品详情 | pages/product/index | P0 |
+| 购物车 | pages/cart/index | P0 |
+| 订单列表 | pages/order/index | P0 |
+| 订单详情 | pages/order/detail | P0 |
+| 订单确认 | pages/order/confirm | P0 |
+| 用户中心 | pages/user/index | P0 |
+| 地址管理 | pages/address/index | P0 |
+| 帮助中心 | pages/help/index | P1 |
+| 设置页 | pages/settings/index | P1 |
+| 基础组件 | components/* | P1 |
+
+#### 2.3.2 开发中功能测试
+
+以下功能处于开发中，测试用例待补充：
+- 积分系统（积分明细、积分兑换）
+- 社交功能（用户关注、商品评价、点赞）
+- 完整搜索功能
+- 个人资料编辑
+
+## 3. 测试环境配置
+
+### 3.1 测试工具
+
+| 测试类型 | 工具/框架 | 说明 |
+|---------|----------|------|
+| 单元测试 | Jest / Bun test | JavaScript/TypeScript 单元测试 |
+| 组件测试 | miniprogram-simulate | 微信小程序组件测试 |
+| UI自动化测试 | 微信小程序自动化测试助手 | 小程序UI自动化 |
+| 性能测试 | 微信开发者工具性能面板 | 性能分析 |
+| 安全测试 | 手动测试 + 代码审查 | 安全漏洞检测 |
+
+### 3.2 测试数据
+
+#### 3.2.1 Mock 数据规范
+
+测试数据应当独立管理，避免硬编码。常用的测试数据管理方式包括：
+- 使用常量定义固定测试数据
+- 使用测试夹具（Fixtures）加载外部数据文件
+- 使用工厂函数动态生成测试数据
+
+#### 3.2.2 测试数据示例
+
+```javascript
+// 测试用户数据
+export const testUser = {
+  id: 'user_001',
+  nickName: '测试用户',
+  avatarUrl: '/images/default-avatar.png',
+  phone: '13800138000',
+  points: 1000,
+};
+
+// 测试商品数据
+export const testProduct = {
+  id: 1,
+  name: '测试商品',
+  desc: '这是一个测试商品',
+  image: '/images/placeholder.svg',
+  price: 99.9,
+  priceText: '99.90',
+  originPrice: 199.0,
+  sales: 100,
+  isFavorite: false,
+};
+
+// 测试地址数据
+export const testAddress = {
+  id: 1,
+  name: '张三',
+  phone: '13800138000',
+  province: '广东省',
+  city: '深圳市',
+  district: '南山区',
+  detail: '科技园路1号',
+  isDefault: true,
 };
 ```
 
-### Mock 服务配置
+### 3.3 Mock 服务配置
 
-对于外部依赖（如微信 API、第三方服务），应当使用 Mock 服务进行模拟。Mock 服务可以提供可控的测试数据，确保测试的稳定性和可重复性。项目使用 Mock 工具库（如 mockjs 或自定义 Mock 服务）实现测试数据的模拟。
+对于外部依赖（如微信 API、后端接口），应当使用 Mock 服务进行模拟：
 
-```typescript
-// tests/mocks/wechat-api.ts
-export const mockWechatLogin = (openid: string, sessionKey: string) => {
-  return {
-    errcode: 0,
-    errmsg: 'ok',
-    openid,
-    session_key: sessionKey,
-  };
-};
-
-export const mockUserInfo = (userId: string) => {
-  return {
-    userId,
-    nickname: '测试用户',
-    avatar: 'https://example.com/avatar.png',
-    points: 1000,
-  };
-};
-```
-
-## 测试文件组织
-
-### 目录结构
-
-测试文件统一存放在 `tests/` 目录下，按照测试类型进行组织：
-
-```
-tests/
-├── unit/                    # 单元测试
-│   ├── utils/              # 工具函数测试
-│   │   ├── date-helper.test.ts
-│   │   ├── format-helper.test.ts
-│   │   └── validator.test.ts
-│   ├── services/           # 服务层测试
-│   │   ├── user-service.test.ts
-│   │   ├── points-service.test.ts
-│   │   └── order-service.test.ts
-│   └── components/         # 组件测试（小程序）
-│       ├── button.test.ts
-│       └── card.test.ts
-├── integration/             # 集成测试
-│   ├── api/                # API 接口测试
-│   │   ├── user-api.test.ts
-│   │   ├── product-api.test.ts
-│   │   └── order-api.test.ts
-│   └── database/           # 数据库交互测试
-│       ├── user-repository.test.ts
-│       └── order-repository.test.ts
-├── e2e/                     # 端到端测试
-│   ├── user-flows.test.ts
-│   ├── shopping-flows.test.ts
-│   └── payment-flows.test.ts
-├── fixtures/                # 测试数据
-│   ├── users.json
-│   ├── products.json
-│   └── orders.json
-├── mocks/                   # Mock 服务
-│   ├── wechat-api.ts
-│   └── third-party.ts
-├── setup.ts                 # 测试环境初始化
-├── teardown.ts              # 测试环境清理
-└── coverage/                # 覆盖率报告
-```
-
-### 测试文件命名规范
-
-测试文件命名应当遵循以下规范：使用源文件名作为基础，添加 `.test.ts` 后缀；文件名使用小驼峰命名法，与源文件保持一致。例如，`user-service.ts` 对应的测试文件为 `user-service.test.ts`。
-
-对于组件测试，小程序组件文件 `component.js` 对应的测试文件为 `component.test.ts`，存放在组件目录或统一的组件测试目录中。
-
-## 测试用例编写标准
-
-### 测试结构规范
-
-每个测试文件应当包含清晰的测试结构，使用 `describe` 块组织相关测试，使用 `it` 或 `test` 定义单个测试用例。测试用例应当遵循 Arrange-Act-Assert 模式：首先准备测试数据（Arrange），然后执行被测功能（Act），最后验证结果是否符合预期（Assert）。
-
-```typescript
-// tests/unit/utils/date-helper.test.ts
-
-describe('日期处理工具', () => {
-  describe('formatDate', () => {
-    it('应当正确格式化日期为 YYYY-MM-DD 格式', () => {
-      // Arrange
-      const date = new Date('2025-12-27T10:30:00');
-      
-      // Act
-      const result = formatDate(date, 'YYYY-MM-DD');
-      
-      // Assert
-      expect(result).toBe('2025-12-27');
-    });
-
-    it('应当正确格式化日期为 YYYY年MM月DD日 格式', () => {
-      // Arrange
-      const date = new Date('2025-12-27');
-      
-      // Act
-      const result = formatDate(date, 'YYYY年MM月DD日');
-      
-      // Assert
-      expect(result).toBe('2025年12月27日');
-    });
-
-    it('应当处理无效日期输入', () => {
-      // Arrange
-      const invalidDate = null;
-      
-      // Act & Assert
-      expect(() => formatDate(invalidDate, 'YYYY-MM-DD')).toThrow();
-    });
-  });
-
-  describe('parseDate', () => {
-    it('应当正确解析 YYYY-MM-DD 格式的日期字符串', () => {
-      // Arrange
-      const dateString = '2025-12-27';
-      
-      // Act
-      const result = parseDate(dateString);
-      
-      // Assert
-      expect(result.getFullYear()).toBe(2025);
-      expect(result.getMonth()).toBe(11);
-      expect(result.getDate()).toBe(27);
-    });
-  });
-});
-```
-
-### 测试数据管理
-
-测试数据应当独立管理，避免在测试用例中硬编码。常用的测试数据管理方式包括：使用常量定义固定测试数据、使用测试夹具（Fixtures）加载外部数据文件、使用工厂函数动态生成测试数据。测试数据应当在每个测试用例执行前初始化，执行后清理，确保测试的独立性。
-
-```typescript
-// tests/fixtures/users.ts
-export const testUsers = [
-  {
-    id: 'user_001',
-    nickname: '测试用户1',
-    email: 'test1@example.com',
-    points: 1000,
+```javascript
+// Mock 微信 API
+export const mockWxApi = {
+  login: (callback) => {
+    callback({ code: 'test_code_123' });
   },
-  {
-    id: 'user_002',
-    nickname: '测试用户2',
-    email: 'test2@example.com',
-    points: 2000,
+  getUserProfile: (options) => {
+    options.success({
+      userInfo: {
+        nickName: '测试用户',
+        avatarUrl: '/images/default-avatar.png',
+      },
+    });
   },
-];
-
-export const createTestUser = (overrides = {}) => {
-  return {
-    id: `user_${Date.now()}`,
-    nickname: '新测试用户',
-    email: `user_${Date.now()}@example.com`,
-    points: 0,
-    ...overrides,
-  };
+  setStorageSync: () => {},
+  getStorageSync: () => null,
+  showToast: () => {},
+  showModal: (options) => {
+    options.success({ confirm: true });
+  },
+  navigateTo: () => {},
+  navigateBack: () => {},
 };
 ```
 
-### Mock 和 Stub 使用
+## 4. 测试用例设计规范
 
-对于外部依赖（如文件系统、网络请求、数据库连接），应当使用 Mock 或 Stub 进行隔离。Mock 技术可以控制外部依赖的行为，确保测试的稳定性和可重复性。项目推荐使用 Bun 内置的 Mock 功能或第三方 Mock 库（如 mock-fs、nock）。
+### 4.1 测试用例结构
 
-```typescript
-// tests/unit/services/points-service.test.ts
-describe('积分服务', () => {
-  describe('getUserPoints', () => {
-    it('应当返回用户当前积分', async () => {
-      // Arrange
-      const mockUserRepository = {
-        findById: vi.fn().mockResolvedValue({
-          id: 'user_001',
-          points: 1500,
-        }),
-      };
-      const pointsService = new PointsService(mockUserRepository);
-      
-      // Act
-      const result = await pointsService.getUserPoints('user_001');
-      
-      // Assert
-      expect(result).toBe(1500);
-      expect(mockUserRepository.findById).toHaveBeenCalledWith('user_001');
-    });
+每个测试用例应包含以下要素：
 
-    it('应当处理用户不存在的情况', async () => {
-      // Arrange
-      const mockUserRepository = {
-        findById: vi.fn().mockResolvedValue(null),
-      };
-      const pointsService = new PointsService(mockUserRepository);
-      
-      // Act
-      const result = await pointsService.getUserPoints('nonexistent');
-      
-      // Assert
-      expect(result).toBe(0);
-    });
+| 要素 | 说明 |
+|------|------|
+| 用例编号 | 唯一标识符，如 TC-HOME-001 |
+| 用例名称 | 简明描述测试目的 |
+| 前置条件 | 执行前需满足的条件 |
+| 测试步骤 | 详细的操作步骤 |
+| 预期结果 | 期望的输出或状态 |
+| 优先级 | P0/P1/P2 |
+| 测试类型 | 功能/性能/安全/兼容 |
+
+### 4.2 测试用例编写原则
+
+1. **独立性**：每个测试用例独立运行，不依赖其他用例结果
+2. **可重复性**：相同输入每次运行得到相同结果
+3. **清晰性**：步骤清晰，预期明确，无歧义
+4. **完整性**：覆盖正常、异常、边界场景
+5. **可维护性**：命名规范，结构清晰，易于修改
+
+## 5. 单元测试规范
+
+### 5.1 工具函数测试
+
+#### 5.1.1 格式化工具 (format.js)
+
+| 用例编号 | 用例名称 | 前置条件 | 测试步骤 | 预期结果 | 优先级 |
+|---------|---------|----------|---------|----------|--------|
+| TC-UT-FMT-001 | 价格格式化正常输入 | 无 | 调用价格格式化函数，传入99.9 | 返回格式化后的价格字符串 | P0 |
+| TC-UT-FMT-002 | 价格格式化整数 | 无 | 传入整数价格100 | 正确格式化，小数部分为00 | P1 |
+| TC-UT-FMT-003 | 价格格式化空值 | 无 | 传入null或undefined | 返回默认值或空字符串 | P1 |
+| TC-UT-FMT-004 | 商品列表价格批量格式化 | 无 | 传入商品列表数组 | 所有商品价格正确格式化 | P0 |
+| TC-UT-FMT-005 | 手机号脱敏 | 无 | 传入11位手机号 | 中间4位替换为**** | P1 |
+
+#### 5.1.2 安全工具 (security.ts)
+
+| 用例编号 | 用例名称 | 前置条件 | 测试步骤 | 预期结果 | 优先级 |
+|---------|---------|----------|---------|----------|--------|
+| TC-UT-SEC-001 | 数据加密解密 | 无 | 加密数据后解密 | 解密结果与原数据一致 | P0 |
+| TC-UT-SEC-002 | 签名生成验证 | 无 | 生成参数签名 | 签名格式正确，相同参数签名一致 | P0 |
+| TC-UT-SEC-003 | 安全随机数生成 | 无 | 生成指定长度随机数 | 长度正确，随机性良好 | P1 |
+| TC-UT-SEC-004 | XSS过滤 | 无 | 传入包含script标签的HTML | 危险标签被移除 | P0 |
+| TC-UT-SEC-005 | SQL注入检测 | 无 | 传入包含SQL关键字的输入 | 正确识别注入模式 | P1 |
+| TC-UT-SEC-006 | 数据脱敏-手机号 | 无 | 传入手机号 | 中间4位脱敏 | P1 |
+| TC-UT-SEC-007 | 数据脱敏-身份证 | 无 | 传入身份证号 | 中间部分脱敏 | P2 |
+
+#### 5.1.3 请求工具 (request.ts)
+
+| 用例编号 | 用例名称 | 前置条件 | 测试步骤 | 预期结果 | 优先级 |
+|---------|---------|----------|---------|----------|--------|
+| TC-UT-REQ-001 | GET请求成功 | Mock后端 | 发送GET请求 | 正确返回响应数据 | P0 |
+| TC-UT-REQ-002 | POST请求成功 | Mock后端 | 发送POST请求 | 正确传递请求体 | P0 |
+| TC-UT-REQ-003 | 请求失败重试 | Mock失败后成功 | 发送失败请求 | 自动重试，最终成功 | P1 |
+| TC-UT-REQ-004 | 请求超时处理 | Mock超时 | 设置短超时发送请求 | 正确抛出超时错误 | P1 |
+| TC-UT-REQ-005 | 401自动处理 | Mock 401响应 | 收到401状态码 | 清除token，跳转登录 | P0 |
+| TC-UT-REQ-006 | CSRF Token生成 | 无 | 获取CSRF Token | Token存在且格式正确 | P1 |
+| TC-UT-REQ-007 | 请求取消 | Mock延迟请求 | 发送请求后立即取消 | 请求成功取消 | P2 |
+
+### 5.2 服务层测试
+
+#### 5.2.1 认证服务 (authService)
+
+| 用例编号 | 用例名称 | 前置条件 | 测试步骤 | 预期结果 | 优先级 |
+|---------|---------|----------|---------|----------|--------|
+| TC-UT-AUTH-001 | 微信登录成功 | Mock wx.login | 调用微信登录方法 | 返回token和用户信息 | P0 |
+| TC-UT-AUTH-002 | 微信登录失败 | Mock登录失败 | 调用登录方法 | 正确抛出错误 | P1 |
+| TC-UT-AUTH-003 | Token存储验证 | 登录成功 | 检查本地存储 | Token正确保存 | P0 |
+| TC-UT-AUTH-004 | 用户信息存储 | 登录成功 | 检查本地存储 | 用户信息正确保存 | P0 |
+| TC-UT-AUTH-005 | 退出登录 | 已登录状态 | 调用退出方法 | 清除所有登录数据 | P0 |
+| TC-UT-AUTH-006 | 获取地址列表 | 已登录 | 调用getAddressList | 返回地址列表数组 | P0 |
+| TC-UT-AUTH-007 | 新增地址 | 已登录 | 调用addAddress | 地址添加成功 | P0 |
+| TC-UT-AUTH-008 | 编辑地址 | 已登录，存在地址 | 调用updateAddress | 地址更新成功 | P0 |
+| TC-UT-AUTH-009 | 删除地址 | 已登录，存在地址 | 调用deleteAddress | 地址删除成功 | P0 |
+
+#### 5.2.2 商品服务 (productService)
+
+| 用例编号 | 用例名称 | 前置条件 | 测试步骤 | 预期结果 | 优先级 |
+|---------|---------|----------|---------|----------|--------|
+| TC-UT-PROD-001 | 获取商品列表 | Mock后端 | 调用getProductList | 返回商品列表 | P0 |
+| TC-UT-PROD-002 | 按分类筛选商品 | Mock后端 | 传入categoryId | 返回该分类下的商品 | P0 |
+| TC-UT-PROD-003 | 关键词搜索商品 | Mock后端 | 传入keyword | 返回匹配的商品 | P1 |
+| TC-UT-PROD-004 | 获取商品详情 | Mock后端 | 传入商品ID | 返回商品详情 | P0 |
+| TC-UT-PROD-005 | 商品详情不存在 | Mock后端 | 传入无效ID | 抛出404错误 | P1 |
+
+#### 5.2.3 购物车服务 (cartService)
+
+| 用例编号 | 用例名称 | 前置条件 | 测试步骤 | 预期结果 | 优先级 |
+|---------|---------|----------|---------|----------|--------|
+| TC-UT-CART-001 | 获取购物车列表 | 已登录 | 调用getCartList | 返回购物车商品列表 | P0 |
+| TC-UT-CART-002 | 添加商品到购物车 | 已登录 | 调用addToCart | 商品成功添加 | P0 |
+| TC-UT-CART-003 | 修改商品数量 | 购物车有商品 | 调用updateQuantity | 数量正确更新 | P0 |
+| TC-UT-CART-004 | 删除购物车商品 | 购物车有商品 | 调用removeFromCart | 商品成功删除 | P0 |
+| TC-UT-CART-005 | 清空购物车 | 购物车有商品 | 调用clearCart | 购物车为空 | P1 |
+| TC-UT-CART-006 | 计算总价 | 购物车有商品 | 调用calculateTotal | 总价计算正确 | P0 |
+
+#### 5.2.4 订单服务 (orderService)
+
+| 用例编号 | 用例名称 | 前置条件 | 测试步骤 | 预期结果 | 优先级 |
+|---------|---------|----------|---------|----------|--------|
+| TC-UT-ORDER-001 | 获取订单列表 | 已登录 | 调用getOrderList | 返回订单列表 | P0 |
+| TC-UT-ORDER-002 | 按状态筛选订单 | 已登录 | 传入status参数 | 返回对应状态订单 | P0 |
+| TC-UT-ORDER-003 | 获取订单详情 | 已登录，存在订单 | 传入订单ID | 返回订单详情 | P0 |
+| TC-UT-ORDER-004 | 创建订单 | 已登录，有购物车商品 | 调用createOrder | 订单创建成功 | P0 |
+| TC-UT-ORDER-005 | 取消订单 | 待支付状态订单 | 调用cancelOrder | 订单状态变为已取消 | P0 |
+| TC-UT-ORDER-006 | 确认收货 | 配送中状态订单 | 调用confirmReceive | 订单状态变为已完成 | P1 |
+
+### 5.3 组件测试
+
+#### 5.3.1 Button 组件
+
+| 用例编号 | 用例名称 | 前置条件 | 测试步骤 | 预期结果 | 优先级 |
+|---------|---------|----------|---------|----------|--------|
+| TC-UT-BTN-001 | 默认按钮渲染 | 无 | 渲染默认按钮 | 按钮正常显示 | P0 |
+| TC-UT-BTN-002 | 主按钮样式 | 无 | 设置variant为primary | 显示主色背景样式 | P1 |
+| TC-UT-BTN-003 | 按钮点击事件 | 无 | 点击按钮 | 触发tap事件 | P0 |
+| TC-UT-BTN-004 | 禁用状态 | 无 | 设置disabled为true | 按钮不可点击，样式变灰 | P0 |
+| TC-UT-BTN-005 | 加载状态 | 无 | 设置loading为true | 显示加载动画 | P1 |
+| TC-UT-BTN-006 | 不同尺寸 | 无 | 设置不同size | 尺寸正确变化 | P1 |
+
+#### 5.3.2 ProductCard 组件
+
+| 用例编号 | 用例名称 | 前置条件 | 测试步骤 | 预期结果 | 优先级 |
+|---------|---------|----------|---------|----------|--------|
+| TC-UT-PC-001 | 纵向布局渲染 | 无 | 传入商品数据，纵向布局 | 商品信息正确展示 | P0 |
+| TC-UT-PC-002 | 横向布局渲染 | 无 | 设置layout为horizontal | 横向布局正确 | P1 |
+| TC-UT-PC-003 | 商品点击事件 | 无 | 点击商品卡片 | 触发productTap事件 | P0 |
+| TC-UT-PC-004 | 加入购物车点击 | 无 | 点击加购按钮 | 触发addCartTap事件 | P0 |
+| TC-UT-PC-005 | 显示标签 | 无 | 商品有tag属性 | 显示标签 | P1 |
+| TC-UT-PC-006 | 隐藏加购按钮 | 无 | 设置showCart为false | 不显示加购按钮 | P1 |
+
+#### 5.3.3 EmptyState 组件
+
+| 用例编号 | 用例名称 | 前置条件 | 测试步骤 | 预期结果 | 优先级 |
+|---------|---------|----------|---------|----------|--------|
+| TC-UT-ES-001 | 基础空状态渲染 | 无 | 只传title | 标题正确显示 | P0 |
+| TC-UT-ES-002 | 带描述空状态 | 无 | 传入description | 描述文字显示 | P1 |
+| TC-UT-ES-003 | 显示操作按钮 | 无 | 设置showButton为true | 显示操作按钮 | P1 |
+| TC-UT-ES-004 | 按钮点击事件 | 显示按钮 | 点击按钮 | 触发buttonTap事件 | P1 |
+| TC-UT-ES-005 | 自定义图片 | 无 | 传入image地址 | 显示自定义图片 | P2 |
+
+#### 5.3.4 其他组件
+
+| 组件 | 测试要点 | 优先级 |
+|------|---------|--------|
+| Badge | 不同变体、尺寸、dot模式、内容显示 | P1 |
+| Avatar | 图片头像、文字头像、不同尺寸 | P1 |
+| Tag | 不同变体、尺寸、可关闭 | P2 |
+| Divider | 水平/垂直、虚线、带文字 | P2 |
+| Price | 不同尺寸、带原价、不同颜色 | P0 |
+| OrderCard | 订单信息展示、操作按钮、状态显示 | P0 |
+
+## 6. 页面集成测试
+
+### 6.1 首页测试
+
+| 用例编号 | 用例名称 | 前置条件 | 测试步骤 | 预期结果 | 优先级 |
+|---------|---------|----------|---------|----------|--------|
+| TC-IT-HOME-001 | 首页数据加载 | 无 | 进入首页 | 轮播图、分类、商品列表正确显示 | P0 |
+| TC-IT-HOME-002 | 下拉刷新 | 首页已加载 | 下拉页面 | 触发刷新，商品列表更新 | P0 |
+| TC-IT-HOME-003 | 上拉加载更多 | 商品列表不满一页 | 滚动到底部 | 加载更多商品 | P1 |
+| TC-IT-HOME-004 | 分类筛选 | 首页已加载 | 点击分类标签 | 商品列表筛选为该分类 | P0 |
+| TC-IT-HOME-005 | 商品点击跳转 | 首页有商品 | 点击商品卡片 | 跳转商品详情页 | P0 |
+| TC-IT-HOME-006 | 轮播图点击 | 首页有轮播图 | 点击轮播图 | 跳转对应页面（已注册页面） | P1 |
+| TC-IT-HOME-007 | 非法跳转拦截 | 首页有轮播图 | 点击指向未注册页面的轮播图 | 提示功能开发中，不跳转 | P2 |
+| TC-IT-HOME-008 | 商品收藏切换 | 首页有商品 | 点击收藏按钮 | 收藏状态切换，提示正确 | P1 |
+
+### 6.2 购物车测试
+
+| 用例编号 | 用例名称 | 前置条件 | 测试步骤 | 预期结果 | 优先级 |
+|---------|---------|----------|---------|----------|--------|
+| TC-IT-CART-001 | 空购物车展示 | 购物车为空 | 进入购物车页 | 显示空状态 | P0 |
+| TC-IT-CART-002 | 购物车列表展示 | 购物车有商品 | 进入购物车页 | 商品列表正确显示 | P0 |
+| TC-IT-CART-003 | 商品数量增加 | 购物车有商品 | 点击+按钮 | 数量增加，总价更新 | P0 |
+| TC-IT-CART-004 | 商品数量减少 | 购物车有商品，数量>1 | 点击-按钮 | 数量减少，总价更新 | P0 |
+| TC-IT-CART-005 | 单选商品 | 购物车有多个商品 | 勾选单个商品 | 总价更新为选中商品价格 | P0 |
+| TC-IT-CART-006 | 全选商品 | 购物车有多个商品 | 点击全选框 | 所有商品被选中 | P0 |
+| TC-IT-CART-007 | 删除商品 | 购物车有商品 | 删除操作 | 商品从列表移除 | P0 |
+| TC-IT-CART-008 | 去结算跳转 | 购物车有选中商品 | 点击去结算 | 跳转订单确认页 | P0 |
+
+### 6.3 地址管理测试
+
+| 用例编号 | 用例名称 | 前置条件 | 测试步骤 | 预期结果 | 优先级 |
+|---------|---------|----------|---------|----------|--------|
+| TC-IT-ADDR-001 | 地址列表展示 | 有地址数据 | 进入地址管理页 | 地址列表正确显示 | P0 |
+| TC-IT-ADDR-002 | 默认地址标识 | 有默认地址 | 查看地址列表 | 默认地址有标识 | P0 |
+| TC-IT-ADDR-003 | 手机号脱敏显示 | 有地址数据 | 查看地址列表 | 手机号中间4位为**** | P1 |
+| TC-IT-ADDR-004 | 新增地址-正常 | 无 | 点击新增，填写正确信息，保存 | 地址添加成功，列表新增一项 | P0 |
+| TC-IT-ADDR-005 | 新增地址-姓名为空 | 无 | 新增时不填姓名 | 提示请输入收货人姓名 | P0 |
+| TC-IT-ADDR-006 | 新增地址-手机号格式错误 | 无 | 新增时填错误手机号 | 提示手机号码格式不正确 | P0 |
+| TC-IT-ADDR-007 | 新增地址-未选地区 | 无 | 新增时不选地区 | 提示请选择所在地区 | P1 |
+| TC-IT-ADDR-008 | 编辑地址 | 有地址数据 | 点击地址，修改信息，保存 | 地址信息更新 | P0 |
+| TC-IT-ADDR-009 | 删除地址确认 | 有地址数据 | 点击删除 | 弹出确认弹窗 | P0 |
+| TC-IT-ADDR-010 | 删除地址成功 | 有地址数据 | 确认删除 | 地址从列表移除 | P0 |
+| TC-IT-ADDR-011 | 选择模式-选择地址 | 从订单确认页进入 | 点击地址 | 回传地址数据并返回上一页 | P0 |
+
+### 6.4 帮助中心测试
+
+| 用例编号 | 用例名称 | 前置条件 | 测试步骤 | 预期结果 | 优先级 |
+|---------|---------|----------|---------|----------|--------|
+| TC-IT-HELP-001 | FAQ列表展示 | 无 | 进入帮助中心 | 显示所有FAQ列表 | P1 |
+| TC-IT-HELP-002 | 分类筛选 | 无 | 点击分类标签 | 只显示该分类下的问题 | P1 |
+| TC-IT-HELP-003 | 再次点击取消筛选 | 已选中分类 | 再次点击该分类 | 显示全部问题 | P1 |
+| TC-IT-HELP-004 | 问题展开 | 有问题列表 | 点击问题 | 答案展开显示 | P0 |
+| TC-IT-HELP-005 | 问题收起 | 问题已展开 | 再次点击问题 | 答案收起 | P0 |
+| TC-IT-HELP-006 | 关键词搜索 | 无 | 输入关键词搜索 | 显示匹配的问题 | P1 |
+| TC-IT-HELP-007 | 拨打客服电话 | 无 | 点击电话客服 | 调起拨号界面 | P1 |
+| TC-IT-HELP-008 | 复制邮箱 | 无 | 点击邮箱 | 邮箱地址复制到剪贴板 | P2 |
+
+### 6.5 设置页测试
+
+| 用例编号 | 用例名称 | 前置条件 | 测试步骤 | 预期结果 | 优先级 |
+|---------|---------|----------|---------|----------|--------|
+| TC-IT-SET-001 | 设置项展示 | 无 | 进入设置页 | 所有设置项正确显示 | P1 |
+| TC-IT-SET-002 | 消息推送开关 | 无 | 切换消息推送开关 | 状态切换，提示已保存 | P1 |
+| TC-IT-SET-003 | 设置持久化 | 修改过设置 | 退出再进入设置页 | 设置状态保持不变 | P1 |
+| TC-IT-SET-004 | 检查版本更新 | 无 | 点击检查更新 | 弹窗显示当前版本 | P1 |
+| TC-IT-SET-005 | 退出登录确认 | 已登录 | 点击退出登录 | 弹出确认弹窗 | P0 |
+| TC-IT-SET-006 | 退出登录成功 | 已登录 | 确认退出 | 清除登录数据，跳转用户中心 | P0 |
+| TC-IT-SET-007 | 跳转帮助中心 | 无 | 点击帮助中心 | 跳转帮助中心页 | P1 |
+| TC-IT-SET-008 | 开发中功能提示 | 无 | 点击账户安全等 | 提示功能开发中 | P2 |
+
+### 6.6 用户中心测试
+
+| 用例编号 | 用例名称 | 前置条件 | 测试步骤 | 预期结果 | 优先级 |
+|---------|---------|----------|---------|----------|--------|
+| TC-IT-USER-001 | 未登录状态展示 | 未登录 | 进入用户中心 | 显示游客头像和昵称 | P0 |
+| TC-IT-USER-002 | 已登录状态展示 | 已登录 | 进入用户中心 | 显示用户头像、昵称、积分 | P0 |
+| TC-IT-USER-003 | 点击头像-未登录 | 未登录 | 点击头像 | 触发登录流程 | P0 |
+| TC-IT-USER-004 | 点击头像-已登录 | 已登录 | 点击头像 | 提示个人资料开发中 | P1 |
+| TC-IT-USER-005 | 菜单跳转-订单 | 无 | 点击我的订单 | 跳转订单列表页 | P0 |
+| TC-IT-USER-006 | 菜单跳转-地址 | 无 | 点击收货地址 | 跳转地址管理页 | P0 |
+| TC-IT-USER-007 | 菜单跳转-帮助 | 无 | 点击帮助中心 | 跳转帮助中心页 | P1 |
+| TC-IT-USER-008 | 菜单跳转-设置 | 无 | 点击设置 | 跳转设置页 | P1 |
+| TC-IT-USER-009 | 退出登录 | 已登录 | 点击退出登录 | 确认后清除登录状态 | P0 |
+
+## 7. UI自动化测试
+
+### 7.1 测试范围
+
+UI自动化测试聚焦于核心业务流程，覆盖以下场景：
+
+1. **购物流程**：浏览商品 → 加入购物车 → 结算 → 提交订单
+2. **地址管理流程**：新增地址 → 编辑地址 → 删除地址
+3. **订单流程**：查看订单列表 → 查看订单详情 → 订单操作
+
+### 7.2 测试工具
+
+使用微信小程序自动化测试助手或其他支持小程序的UI自动化工具。
+
+### 7.3 测试用例示例
+
+```javascript
+// 购物流程UI测试
+describe('购物流程', () => {
+  it('完整购物流程测试', async () => {
+    // 1. 首页浏览商品
+    await page.waitFor('.product-card');
+    
+    // 2. 点击进入商品详情
+    await page.tap('.product-card:first-child');
+    await page.waitFor('.product-detail');
+    
+    // 3. 加入购物车
+    await page.tap('.add-cart-btn');
+    await page.waitFor('.toast');
+    expect(await page.getText('.toast')).toContain('成功');
+    
+    // 4. 进入购物车
+    await page.switchTab('/pages/cart/index');
+    await page.waitFor('.cart-item');
+    
+    // 5. 去结算
+    await page.tap('.checkout-btn');
+    await page.waitFor('.order-confirm');
+    
+    // 6. 提交订单
+    await page.tap('.submit-order-btn');
+    await page.waitFor('.order-detail');
   });
 });
 ```
 
-### 异步测试规范
+## 8. 性能测试
 
-异步测试应当正确处理 Promise 和 async/await 语法。Bun 测试框架原生支持异步测试，使用 `async it` 或 `async test` 定义异步测试用例。异步测试应当包含错误处理，确保 Promise rejected 情况能够被正确捕获和验证。
+### 8.1 性能指标
 
-```typescript
-// tests/integration/api/user-api.test.ts
-describe('用户 API', () => {
-  describe('GET /api/v1/users/:id', () => {
-    it('应当返回用户信息', async () => {
-      // Arrange
-      const testUser = await createTestUser();
-      await userRepository.create(testUser);
-      
-      // Act
-      const response = await fetch(`http://localhost:3000/api/v1/users/${testUser.id}`);
-      const body = await response.json();
-      
-      // Assert
-      expect(response.status).toBe(200);
-      expect(body.data.userId).toBe(testUser.id);
-      expect(body.data.nickname).toBe(testUser.nickname);
-    });
+| 指标 | 最低要求 | 目标值 |
+|------|---------|--------|
+| 首屏加载时间 | ≤ 3秒 | ≤ 2秒 |
+| 页面切换时间 | ≤ 1秒 | ≤ 500毫秒 |
+| 列表滚动帧率 | ≥ 50fps | ≥ 60fps |
+| 内存占用 | ≤ 150MB | ≤ 100MB |
+| 包体积 | ≤ 2MB | ≤ 1.5MB |
 
-    it('应当处理用户不存在的情况', async () => {
-      // Act
-      const response = await fetch('http://localhost:3000/api/v1/users/nonexistent');
-      const body = await response.json();
-      
-      // Assert
-      expect(response.status).toBe(404);
-      expect(body.code).toBe('USER_NOT_FOUND');
-    });
+### 8.2 测试工具
 
-    it('应当处理服务器错误', async () => {
-      // Arrange
-      vi.spyOn(userRepository, 'findById').mockRejectedValue(new Error('Database error'));
-      
-      // Act
-      const response = await fetch(`http://localhost:3000/api/v1/users/user_001`);
-      const body = await response.json();
-      
-      // Assert
-      expect(response.status).toBe(500);
-      expect(body.code).toBe('INTERNAL_ERROR');
-    });
-  });
-});
-```
+- 微信开发者工具 - 性能面板
+- 真机调试 - 性能监控
+- 代码审查 - 性能优化点检查
 
-## 测试覆盖率要求
+### 8.3 性能测试用例
 
-### 覆盖率指标
+| 用例编号 | 用例名称 | 测试方法 | 预期结果 | 优先级 |
+|---------|---------|----------|----------|--------|
+| TC-PERF-001 | 首页首屏加载 | 冷启动计时 | ≤ 3秒 | P0 |
+| TC-PERF-002 | 商品列表滚动帧率 | 快速滚动监控 | ≥ 50fps | P0 |
+| TC-PERF-003 | 页面切换性能 | 页面跳转计时 | ≤ 1秒 | P1 |
+| TC-PERF-004 | 内存占用 | 长时间使用监控 | ≤ 150MB | P1 |
+| TC-PERF-005 | 包体积检查 | 代码包大小统计 | ≤ 2MB | P1 |
+| TC-PERF-006 | 图片加载性能 | 大图加载监控 | ≤ 2秒 | P2 |
 
-项目设定了以下测试覆盖率指标，确保代码质量：
+## 9. 安全测试
+
+### 9.1 测试范围
+
+安全测试涵盖以下方面：
+
+1. **数据安全**：敏感数据存储、传输、展示
+2. **接口安全**：认证授权、签名验证、CSRF防护
+3. **输入验证**：XSS防护、SQL注入防护
+4. **权限控制**：未授权访问、越权操作
+
+### 9.2 已知安全问题
+
+根据安全报告（security_best_practices_report.md），项目存在以下需要关注的安全问题，测试时需重点验证修复效果：
+
+| 严重程度 | 问题描述 | 状态 |
+|---------|---------|------|
+| 严重 | 加密实现实际上是Base64编码而非真正的加密 | 待修复 |
+| 严重 | 使用已破解的MD5算法进行签名 | 待修复 |
+| 高危 | CSRF Token使用Math.random()生成 | 待修复 |
+| 高危 | 敏感数据直接存储在本地存储 | 待修复 |
+| 高危 | SQL注入检测可能过于严格导致误报 | 待优化 |
+| 高危 | XSS防护可能不完整 | 待优化 |
+
+### 9.3 安全测试用例
+
+| 用例编号 | 用例名称 | 测试方法 | 预期结果 | 优先级 |
+|---------|---------|----------|----------|--------|
+| TC-SEC-001 | 敏感数据存储检查 | 检查本地存储数据 | Token等敏感数据应加密存储 | P0 |
+| TC-SEC-002 | 请求签名验证 | 篡改请求参数 | 签名验证失败，请求被拒绝 | P0 |
+| TC-SEC-003 | CSRF防护 | 不带CSRF Token请求 | 请求被拒绝 | P1 |
+| TC-SEC-004 | XSS防护测试 | 输入<script>标签 | 脚本被过滤，不执行 | P0 |
+| TC-SEC-005 | SQL注入测试 | 输入SQL关键字 | 输入被拦截或正确转义 | P1 |
+| TC-SEC-006 | 手机号脱敏展示 | 查看地址列表 | 手机号中间4位脱敏 | P1 |
+| TC-SEC-007 | 未授权访问 | 未登录访问需要登录的页面 | 跳转登录或提示登录 | P0 |
+| TC-SEC-008 | Token过期处理 | Token过期后请求 | 自动清除并跳转登录 | P0 |
+| TC-SEC-009 | 错误日志敏感信息 | 查看console.error | 不输出敏感数据 | P2 |
+
+## 10. 兼容性测试
+
+### 10.1 测试范围
+
+| 平台 | 版本范围 |
+|------|---------|
+| iOS | 最新2个主要版本 |
+| Android | 最新3个主要版本 |
+| 微信 | 最新2个版本 |
+| 屏幕尺寸 | 小屏(5寸以下)、标准屏、大屏(6.5寸以上) |
+
+### 10.2 兼容性测试用例
+
+| 用例编号 | 用例名称 | 测试方法 | 预期结果 | 优先级 |
+|---------|---------|----------|----------|--------|
+| TC-COMP-001 | iOS最新版本兼容 | iOS最新版本测试 | 功能正常，UI无错乱 | P0 |
+| TC-COMP-002 | Android主流版本兼容 | Android主流版本测试 | 功能正常，UI无错乱 | P0 |
+| TC-COMP-003 | 小屏适配 | 5寸以下屏幕测试 | 布局不溢出，文字不重叠 | P1 |
+| TC-COMP-004 | 大屏适配 | 6.5寸以上屏幕测试 | 布局合理，无拉伸变形 | P1 |
+| TC-COMP-005 | 深色模式兼容 | 系统深色模式下测试 | 文字清晰可辨 | P2 |
+
+## 11. 测试执行流程
+
+### 11.1 开发阶段测试
+
+1. **单元测试**：开发人员编写，随代码一起提交
+2. **代码审查**：合并前进行代码审查，关注可测试性
+3. **本地测试**：开发人员本地运行相关测试
+
+### 11.2 集成阶段测试
+
+1. **冒烟测试**：验证核心功能是否正常
+2. **回归测试**：验证修改不影响现有功能
+3. **集成测试**：验证模块间交互正确性
+
+### 11.3 发布阶段测试
+
+1. **完整测试**：执行全部测试用例
+2. **性能测试**：验证性能指标达标
+3. **安全测试**：检查安全漏洞
+4. **兼容性测试**：验证多平台兼容性
+
+### 11.4 测试失败处理
+
+测试失败时，按照以下流程处理：
+
+1. **分析原因**：区分是测试用例问题还是代码问题
+2. **Bug记录**：记录Bug详情，包括复现步骤、预期结果、实际结果
+3. **Bug修复**：开发人员修复Bug
+4. **验证修复**：测试人员验证修复结果
+5. **回归测试**：确保修复不引入新问题
+
+## 12. 测试覆盖率要求
+
+### 12.1 覆盖率指标
 
 | 覆盖率类型 | 最低要求 | 目标值 | 说明 |
 |-----------|---------|--------|------|
-| 行覆盖率 | ≥80% | ≥90% | 被测试用例覆盖的代码行数比例 |
-| 分支覆盖率 | ≥70% | ≥80% | 条件分支（如 if/else）覆盖比例 |
-| 函数覆盖率 | ≥90% | ≥95% | 被调用的函数比例 |
-| 路径覆盖率 | ≥60% | ≥70% | 代码执行路径覆盖比例 |
+| 行覆盖率 | ≥70% | ≥80% | 被测试用例覆盖的代码行数比例 |
+| 函数覆盖率 | ≥80% | ≥90% | 被调用的函数比例 |
+| 分支覆盖率 | ≥60% | ≥70% | 条件分支覆盖比例 |
 
-### 覆盖率报告
+### 12.2 核心模块覆盖率要求
 
-测试覆盖率报告通过 `bun test --coverage` 命令生成，报告文件存放在 `coverage/` 目录下。覆盖率报告支持多种格式，包括 HTML、LCov 和 JSON。HTML 报告提供可视化的代码覆盖率展示，便于识别未覆盖的代码区域。
+| 模块 | 行覆盖率要求 | 函数覆盖率要求 |
+|------|-------------|---------------|
+| 工具函数 (utils/*) | ≥85% | ≥95% |
+| 服务层 (services/*) | ≥75% | ≥85% |
+| 组件 (components/*) | ≥60% | ≥70% |
 
-```bash
-# 运行测试并生成覆盖率报告
-bun run test:coverage
+## 13. 缺陷管理
 
-# 查看 HTML 覆盖率报告
-open coverage/index.html
-```
+### 13.1 缺陷等级
 
-### 覆盖率检查
+| 等级 | 定义 | 示例 |
+|------|------|------|
+| 致命 (Critical) | 系统崩溃、数据丢失、核心功能完全不可用 | 小程序白屏、支付错误 |
+| 严重 (Major) | 主要功能失效、数据错误 | 无法下单、价格计算错误 |
+| 一般 (Minor) | 次要功能问题、UI显示问题 | 某个按钮不显示、文字错位 |
+| 轻微 (Trivial) | 文案错误、样式微调建议 | 错别字、间距不一致 |
 
-持续集成流程应当包含覆盖率检查步骤，确保新代码的提交不会降低整体覆盖率。覆盖率检查可以通过以下方式实现：使用 Codecov、Coveralls 等覆盖率托管服务；在 Pull Request 中显示覆盖率变化；设置覆盖率阈值，不达标则阻断合并。
+### 13.2 缺陷生命周期
 
-```yaml
-# .github/workflows/test.yml
-- name: Run tests with coverage
-  run: bun run test:coverage
+1. **新建**：测试人员发现并提交Bug
+2. **确认**：开发人员确认Bug有效性
+3. **修复中**：开发人员正在修复
+4. **待验证**：修复完成，等待测试验证
+5. **已关闭**：验证通过，Bug关闭
+6. **重新打开**：验证未通过，重新打开
 
-- name: Upload coverage to Codecov
-  uses: codecov/codecov-action@v3
-  with:
-    files: ./coverage/lcov.info
-    fail_ci_if_error: true
-```
+## 14. 版本历史
 
-## 测试执行流程
-
-### 本地测试执行
-
-开发人员在本地环境中应当按照以下流程执行测试：
-
-首先，运行完整测试套件验证代码变更是否影响现有功能：
-
-```bash
-# 运行所有测试
-bun run test
-
-# 运行测试并生成覆盖率报告
-bun run test:coverage
-```
-
-其次，针对变更的模块运行单元测试，缩短反馈周期：
-
-```bash
-# 运行特定模块的测试
-bun run test:unit -- tests/unit/services/user-service.test.ts
-```
-
-最后，运行集成测试验证模块间的交互：
-
-```bash
-# 运行集成测试
-bun run test:integration
-```
-
-### 持续集成测试
-
-持续集成流程应当包含多个测试阶段，确保代码质量和稳定性：
-
-**第一阶段：代码检查**。在代码编译前执行代码静态检查，包括 TypeScript 类型检查、ESLint 代码规范检查。这一阶段可以快速发现代码问题，无需等待测试执行。
-
-**第二阶段：单元测试**。执行单元测试，验证核心业务逻辑的正确性。单元测试执行速度快，可以在短时间内获得反馈。
-
-**第三阶段：集成测试**。执行集成测试，验证模块间的交互是否正确。集成测试需要启动测试数据库，执行时间较长。
-
-**第四阶段：端到端测试**。执行端到端测试，验证完整功能流程。端到端测试执行时间最长，通常只在主分支合并前执行。
-
-```yaml
-# .github/workflows/ci.yml
-name: CI
-
-on:
-  push:
-    branches: [main, develop]
-  pull_request:
-    branches: [main, develop]
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v1
-        with:
-          bun-version: latest
-      
-      - name: Install dependencies
-        run: bun install
-      
-      - name: Type check
-        run: bun run typecheck
-      
-      - name: Lint
-        run: bun run lint
-      
-      - name: Unit tests
-        run: bun run test:unit
-      
-      - name: Integration tests
-        run: bun run test:integration
-        env:
-          DB_HOST: localhost
-          DB_PORT: 3306
-      
-      - name: Upload coverage
-        run: bun run test:coverage
-```
-
-### 测试失败处理
-
-测试失败时，应当按照以下流程处理：
-
-首先，分析测试失败的原因，区分是测试用例问题还是代码问题。测试用例问题包括测试数据不正确、测试逻辑有误、测试环境未正确配置等。代码问题包括功能实现有缺陷、代码逻辑错误、边界条件未处理等。
-
-其次，针对不同的问题类型采取相应的解决措施。测试用例问题应当修复测试用例本身；代码问题应当修复代码实现，并确保修复后所有相关测试通过。
-
-最后，记录测试失败的根因和解决措施，便于团队成员参考和学习。对于反复出现的测试失败问题，应当分析根本原因，优化测试策略或代码实现。
-
-## 小程序特定测试
-
-### 组件测试
-
-微信小程序组件的测试需要使用专门的小程序测试工具。项目推荐使用 `miniprogram-simulate` 或类似的测试库进行组件测试。组件测试应当验证组件的渲染正确性、事件处理、属性传递和生命周期方法。
-
-```typescript
-// tests/unit/components/card.test.ts
-import { simulate } from 'miniprogram-simulate';
-
-describe('商品卡片组件', () => {
-  it('应当正确渲染商品信息', async () => {
-    // Arrange
-    const product = {
-      id: 'prod_001',
-      name: '测试商品',
-      price: 99.9,
-      image: 'https://example.com/image.png',
-    };
-    
-    // Act
-    const component = simulate.render(product);
-    component.attach(document.createElement('parent'));
-    
-    // Assert
-    expect(component.data.name).toBe('测试商品');
-    expect(component.data.price).toBe(99.9);
-  });
-
-  it('应当正确处理点击事件', async () => {
-    // Arrange
-    const product = { id: 'prod_001', name: '测试商品', price: 99.9 };
-    let clickedProductId = null;
-    
-    const component = simulate.render(product, {
-      onItemClick: (id) => { clickedProductId = id; },
-    });
-    component.attach(document.createElement('parent'));
-    
-    // Act
-    component.dispatchEvent('tap');
-    
-    // Assert
-    expect(clickedProductId).toBe('prod_001');
-  });
-});
-### 页面测试
-
-小程序页面的测试需要模拟页面生命周期和路由参数。页面测试应当验证页面的初始化逻辑、数据加载、用户交互和页面跳转。
-
-```typescript
-// tests/unit/pages/home.test.ts
-import { simulate } from 'miniprogram-simulate';
-
-describe('首页', () => {
-  it('应当正确加载首页数据', async () => {
-    // Arrange
-    const mockBanners = [{ id: 1, image: 'banner1.png' }];
-    const mockProducts = [{ id: 1, name: '商品1', price: 99 }];
-    
-    vi.spyOn(bannerService, 'getBanners').mockResolvedValue(mockBanners);
-    vi.spyOn(productService, 'getRecommendProducts').mockResolvedValue(mockProducts);
-    
-    // Act
-    const page = simulate.render('/pages/home/index');
-    await page.instance.onLoad();
-    
-    // Assert
-    expect(page.data.banners).toEqual(mockBanners);
-    expect(page.data.products).toEqual(mockProducts);
-  });
-
-  it('应当正确处理下拉刷新', async () => {
-    // Arrange
-    const page = simulate.render('/pages/home/index');
-    await page.instance.onLoad();
-    
-    vi.spyOn(productService, 'getRecommendProducts').mockResolvedValue([
-      { id: 2, name: '新商品', price: 199 },
-    ]);
-    
-    // Act
-    await page.instance.onPullDownRefresh();
-    
-    // Assert
-    expect(productService.getRecommendProducts).toHaveBeenCalled();
-  });
-});
-```
-
-## 版本历史
-
-| 版本 | 更新日期 | 更新内容 | 作者 |
-|------|----------|----------|------|
+| 版本号 | 更新日期 | 更新内容 | 作者 |
+|--------|----------|----------|------|
+| 3.0.0 | 2026-07-06 | 全面更新测试规范，与代码实现对齐，补充页面测试用例、组件测试、安全测试 | Sut |
 | 1.0.0 | 2025-12-27 | 初始版本，完成测试规范文档 | Sut |

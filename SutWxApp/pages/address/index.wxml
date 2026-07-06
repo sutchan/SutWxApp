@@ -1,36 +1,38 @@
-<view class="container">
-  <view class="header">
-    <view class="title">地址管理</view>
-  </view>
 
+<!--
+  文件名: index.wxml
+  版本号: 3.0.0
+  更新日期: 2026-07-06
+  描述: 地址管理页面结构模板
+-->
+<view class="container">
   <view class="address-list" wx:if="{{addressList.length > 0}}">
     <view class="address-item" wx:for="{{addressList}}" wx:key="id" bindtap="onSelectAddress" data-id="{{item.id}}">
       <view class="address-info">
         <view class="user-info">
           <text class="name">{{item.name}}</text>
           <text class="phone">{{item.phone}}</text>
-          <text class="tag default" wx:if="{{item.isDefault}}">默认</text>
+          <s-tag wx:if="{{item.isDefault}}" variant="primary" size="sm">默认</s-tag>
         </view>
         <view class="address-detail">{{item.province}}{{item.city}}{{item.district}}{{item.detail}}</view>
       </view>
       <view class="address-actions">
         <view class="action-btn edit" catchtap="onEditAddress" data-id="{{item.id}}">
-          <text class="icon">✏️</text>
           <text>编辑</text>
         </view>
         <view class="action-btn delete" catchtap="onDeleteAddress" data-id="{{item.id}}">
-          <text class="icon">🗑️</text>
           <text>删除</text>
         </view>
       </view>
     </view>
   </view>
 
-  <view class="empty-state" wx:else>
-    <image class="empty-icon" src="/images/empty.svg" mode="aspectFit"></image>
-    <view class="empty-text">暂无收货地址</view>
-    <view class="empty-hint">添加收货地址，方便收货</view>
-  </view>
+  <s-empty-state
+    wx:else
+    image="/images/empty.svg"
+    title="暂无收货地址"
+    description="添加收货地址，方便收货"
+  />
 
   <view class="add-address-btn" bindtap="onAddAddress">
     <text class="icon">+</text>
@@ -68,12 +70,12 @@
         </view>
         <view class="form-item switch-item">
           <view class="form-label">设为默认地址</view>
-          <switch color="#F44336" checked="{{formData.isDefault}}" bindchange="onSwitchChange"/>
+          <switch color="#2E7D32" checked="{{formData.isDefault}}" bindchange="onSwitchChange"/>
         </view>
       </view>
       <view class="modal-footer">
-        <button class="btn-cancel" bindtap="onCloseModal">取消</button>
-        <button class="btn-confirm" bindtap="onSaveAddress">保存</button>
+        <s-button variant="default" bindtap="onCloseModal" class="btn-cancel">取消</s-button>
+        <s-button variant="primary" bindtap="onSaveAddress" class="btn-confirm">保存</s-button>
       </view>
     </view>
   </view>

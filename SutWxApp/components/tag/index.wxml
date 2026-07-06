@@ -1,0 +1,11 @@
+<!--
+  文件名: index.wxml
+  版本号: 3.0.0
+  更新日期: 2026-07-06
+  描述: Tag 标签组件模板
+-->
+
+<view class="{{tagClass}}" bindtap="onTap">
+  <slot></slot>
+  <view wx:if="{{closable}}" class="s-tag-close" catchtap="onClose">×</view>
+</view>

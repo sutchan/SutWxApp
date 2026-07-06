@@ -1,8 +1,7 @@
-
 /**
  * 文件名: index.js
  * 版本号: 3.0.0
- * 更新日期: 2026-07-05
+ * 更新日期: 2026-07-06
  * 描述: 分类页面，展示商品分类和分类下的商品列表
  */
 
@@ -85,9 +84,9 @@ Page({
    * 查看商品详情
    */
   onViewProduct(e) {
-    const { id } = e.currentTarget.dataset;
+    const { product } = e.detail;
     wx.navigateTo({
-      url: '/pages/product/index?id=' + id
+      url: '/pages/product/index?id=' + product.id
     });
   },
 
@@ -95,9 +94,9 @@ Page({
    * 加入购物车
    */
   async onAddToCart(e) {
-    const { id } = e.currentTarget.dataset;
+    const { product } = e.detail;
     try {
-      const result = await cartService.addToCart({ productId: id, quantity: 1 });
+      const result = await cartService.addToCart({ productId: product.id, quantity: 1 });
       wx.showToast({
         title: result.success ? '已加入购物车' : '添加失败',
         icon: result.success ? 'success' : 'none'

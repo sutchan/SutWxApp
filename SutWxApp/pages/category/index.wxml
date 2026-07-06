@@ -1,9 +1,8 @@
-
 <!--
-文件名: index.wxml
-版本号: 3.0.0
-更新日期: 2026-07-05
-描述: 分类页面模板
+  文件名: index.wxml
+  版本号: 3.0.0
+  更新日期: 2026-07-06
+  描述: 分类页面模板
 -->
 <view class="category-container">
   <!-- 分类列表 -->
@@ -21,29 +20,24 @@
 
   <!-- 商品列表 -->
   <scroll-view class="product-area" scroll-y>
-    <view class="product-list">
-      <view
+    <view class="product-list" wx:if="{{productList.length > 0}}">
+      <s-product-card
         wx:for="{{productList}}"
         wx:key="id"
-        class="product-card"
-        data-id="{{item.id}}"
-        bindtap="onViewProduct"
-      >
-        <image class="product-image" src="{{item.image}}" mode="aspectFill"></image>
-        <view class="product-info">
-          <text class="product-name">{{item.name}}</text>
-          <text class="product-desc" wx:if="{{item.desc}}">{{item.desc}}</text>
-          <view class="product-bottom">
-            <text class="product-price">¥{{item.priceText}}</text>
-            <button class="add-cart-btn" catchtap="onAddToCart" data-id="{{item.id}}">+</button>
-          </view>
-        </view>
-      </view>
+        product="{{item}}"
+        layout="horizontal"
+        showCart="{{true}}"
+        showTag="{{false}}"
+        bind:productTap="onViewProduct"
+        bind:addCartTap="onAddToCart"
+      ></s-product-card>
     </view>
 
     <!-- 空状态 -->
-    <view wx:if="{{productList.length === 0 && !loading}}" class="empty-container">
-      <text class="empty-text">暂无商品</text>
-    </view>
+    <s-empty-state
+      wx:if="{{productList.length === 0 && !loading}}"
+      title="暂无商品"
+      description="该分类下暂无商品"
+    ></s-empty-state>
   </scroll-view>
 </view>

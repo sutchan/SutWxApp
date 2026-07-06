@@ -1,0 +1,55 @@
+/**
+ * 文件名: index.wxss
+ * 版本号: 3.0.0
+ * 更新日期: 2026-07-06
+ * 描述: Avatar 头像组件样式，参考 shadcn/ui 设计理念
+ */
+
+.s-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: var(--background-tertiary);
+  flex-shrink: 0;
+}
+
+/* 尺寸变体 */
+.s-avatar-sm {
+  width: 64rpx;
+  height: 64rpx;
+}
+
+.s-avatar-md {
+  width: 80rpx;
+  height: 80rpx;
+}
+
+.s-avatar-lg {
+  width: 112rpx;
+  height: 112rpx;
+}
+
+.s-avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.s-avatar-text {
+  font-weight: var(--font-weight-medium);
+  color: var(--text-inverse);
+}
+
+.s-avatar-sm .s-avatar-text {
+  font-size: var(--font-size-sm);
+}
+
+.s-avatar-md .s-avatar-text {
+  font-size: var(--font-size-md);
+}
+
+.s-avatar-lg .s-avatar-text {
+  font-size: var(--font-size-lg);
+}

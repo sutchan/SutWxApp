@@ -1,0 +1,7 @@
+{
+  "component": true,
+  "usingComponents": {
+    "s-button": "/components/button/index",
+    "s-price": "/components/price/index"
+  }
+}

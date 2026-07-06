@@ -1,0 +1,18 @@
+<!--
+  文件名: index.wxml
+  版本号: 3.0.0
+  更新日期: 2026-07-06
+  描述: Avatar 头像组件模板
+-->
+
+<view class="{{avatarClass}}" bindtap="onTap" style="{{computedBgColor ? 'background-color: ' + computedBgColor + ';' : ''}}">
+  <image
+    wx:if="{{src}}"
+    class="s-avatar-image"
+    src="{{src}}"
+    mode="aspectFill"
+    binderror="onImageError"
+    bindload="onImageLoad"
+  />
+  <text wx:if="{{!src && firstLetter}}" class="s-avatar-text">{{firstLetter}}</text>
+</view>

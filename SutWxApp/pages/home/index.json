@@ -4,5 +4,9 @@
   "navigationBarTextStyle": "black",
   "backgroundColor": "#f5f5f5",
   "enablePullDownRefresh": true,
-  "backgroundTextStyle": "dark"
+  "backgroundTextStyle": "dark",
+  "usingComponents": {
+    "s-product-card": "/components/product-card/index",
+    "s-empty-state": "/components/empty-state/index"
+  }
 }

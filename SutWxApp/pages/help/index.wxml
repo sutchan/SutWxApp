@@ -1,3 +1,10 @@
+
+<!--
+  文件名: index.wxml
+  版本号: 3.0.0
+  更新日期: 2026-07-06
+  描述: 帮助中心页面结构模板
+-->
 <view class="container">
   <view class="header">
     <view class="title">帮助中心</view>
@@ -9,7 +16,7 @@
       <text class="search-icon">🔍</text>
       <input class="search-input" placeholder="搜索问题" value="{{searchKeyword}}" bindinput="onSearchInput" bindconfirm="onSearch"/>
     </view>
-    <view class="search-btn" bindtap="onSearch">搜索</view>
+    <s-button size="sm" variant="primary" bindtap="onSearch" class="search-btn">搜索</s-button>
   </view>
 
   <view class="help-categories">

@@ -1,0 +1,151 @@
+/**
+ * 文件名: index.wxss
+ * 版本号: 3.0.0
+ * 更新日期: 2026-07-06
+ * 描述: Button 按钮组件样式，参考 shadcn/ui 设计理念
+ */
+
+.s-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+  box-sizing: border-box;
+  line-height: 1.4;
+}
+
+.s-button::after {
+  border: none;
+}
+
+.s-button-content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+}
+
+/* 尺寸变体 */
+.s-button-sm {
+  height: 56rpx;
+  padding: 0 24rpx;
+  font-size: var(--font-size-sm);
+  border-radius: var(--border-radius-sm);
+}
+
+.s-button-md {
+  height: 80rpx;
+  padding: 0 32rpx;
+  font-size: var(--font-size-md);
+  border-radius: var(--border-radius-md);
+}
+
+.s-button-lg {
+  height: 96rpx;
+  padding: 0 40rpx;
+  font-size: var(--font-size-lg);
+  border-radius: var(--border-radius-md);
+}
+
+.s-button-block {
+  width: 100%;
+}
+
+/* 样式变体 - Primary */
+.s-button-primary {
+  background-color: var(--primary-color);
+  color: var(--text-inverse);
+}
+
+.s-button-primary:active {
+  background-color: var(--primary-dark);
+  transform: scale(0.98);
+}
+
+/* 样式变体 - Default (Secondary) */
+.s-button-default {
+  background-color: var(--background-tertiary);
+  color: var(--text-primary);
+}
+
+.s-button-default:active {
+  background-color: var(--border-light);
+  transform: scale(0.98);
+}
+
+/* 样式变体 - Ghost */
+.s-button-ghost {
+  background-color: transparent;
+  color: var(--text-primary);
+}
+
+.s-button-ghost:active {
+  background-color: var(--background-tertiary);
+  transform: scale(0.98);
+}
+
+/* 样式变体 - Link */
+.s-button-link {
+  background-color: transparent;
+  color: var(--primary-color);
+  padding: 0;
+  height: auto;
+  line-height: 1.5;
+  border-radius: 0;
+}
+
+.s-button-link:active {
+  opacity: 0.7;
+  transform: none;
+}
+
+/* 样式变体 - Destructive */
+.s-button-destructive {
+  background-color: var(--error-color);
+  color: var(--text-inverse);
+}
+
+.s-button-destructive:active {
+  background-color: var(--error-600);
+  transform: scale(0.98);
+}
+
+/* 禁用状态 */
+.s-button-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.s-button-disabled:active {
+  transform: none;
+}
+
+/* 加载状态 */
+.s-button-loading {
+  pointer-events: none;
+}
+
+.s-button-loading-spinner {
+  width: 32rpx;
+  height: 32rpx;
+  border: 3rpx solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: button-spin 0.8s linear infinite;
+}
+
+@keyframes button-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -1,15 +1,36 @@
+<!--
+  文件名: index.wxml
+  版本号: 3.0.0
+  更新日期: 2026-07-06
+  描述: ProductCard 商品卡片组件模板
+-->
 
-<view class="product-card {{layout}}" bindtap="onProductTap">
-  <image class="product-image" src="{{product.image}}" mode="aspectFill"></image>
-  <view class="product-info">
-    <text class="product-name">{{product.name}}</text>
-    <text class="product-desc" wx:if="{{product.desc}}">{{product.desc}}</text>
-    <view class="product-bottom">
-      <view class="price-box">
-        <text class="product-price">¥{{product.priceText}}</text>
-        <text class="product-origin-price" wx:if="{{product.originPrice}}">¥{{product.originPriceText}}</text>
+<view class="{{cardClass}}" bindtap="onProductTap">
+  <view class="s-product-card-image-wrapper">
+    <image
+      class="s-product-card-image"
+      src="{{product.image}}"
+      mode="aspectFill"
+    />
+    <view wx:if="{{showTag && product.tag}}" class="s-product-card-tag">
+      <s-tag size="sm" variant="error">{{product.tag}}</s-tag>
+    </view>
+  </view>
+  <view class="s-product-card-content">
+    <view class="s-product-card-name">{{product.name}}</view>
+    <view wx:if="{{product.desc}}" class="s-product-card-desc">{{product.desc}}</view>
+    <view class="s-product-card-footer">
+      <s-price
+        value="{{product.priceText}}"
+        original="{{product.originPriceText}}"
+        size="sm"
+      ></s-price>
+      <view wx:if="{{layout === 'vertical' && showCart}}" class="s-product-card-cart" catchtap="onAddCartTap">
+        <text class="s-product-card-cart-icon">+</text>
       </view>
-      <button class="add-cart-btn" catchtap="onAddCartTap">+</button>
+      <view wx:if="{{layout === 'horizontal' && product.soldText}}" class="s-product-card-sold">
+        {{product.soldText}}
+      </view>
     </view>
   </view>
 </view>

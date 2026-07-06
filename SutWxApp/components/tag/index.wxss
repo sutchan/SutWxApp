@@ -1,0 +1,104 @@
+/**
+ * 文件名: index.wxss
+ * 版本号: 3.0.0
+ * 更新日期: 2026-07-06
+ * 描述: Tag 标签组件样式，参考 shadcn/ui 设计理念
+ */
+
+.s-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 48rpx;
+  padding: 0 20rpx;
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-sm);
+  line-height: 1;
+  box-sizing: border-box;
+  font-weight: var(--font-weight-regular);
+}
+
+/* 尺寸变体 */
+.s-tag-sm {
+  height: 40rpx;
+  padding: 0 16rpx;
+  font-size: var(--font-size-xs);
+}
+
+.s-tag-md {
+  height: 48rpx;
+  padding: 0 20rpx;
+  font-size: var(--font-size-sm);
+}
+
+/* 样式变体 - Default */
+.s-tag-default {
+  background-color: var(--background-tertiary);
+  color: var(--text-secondary);
+}
+
+.s-tag-plain.s-tag-default {
+  background-color: transparent;
+  border: 2rpx solid var(--border-color);
+  color: var(--text-secondary);
+}
+
+/* 样式变体 - Primary */
+.s-tag-primary {
+  background-color: var(--primary-color);
+  color: var(--text-inverse);
+}
+
+.s-tag-plain.s-tag-primary {
+  background-color: transparent;
+  border: 2rpx solid var(--primary-color);
+  color: var(--primary-color);
+}
+
+/* 样式变体 - Success */
+.s-tag-success {
+  background-color: var(--success-color);
+  color: var(--text-inverse);
+}
+
+.s-tag-plain.s-tag-success {
+  background-color: transparent;
+  border: 2rpx solid var(--success-color);
+  color: var(--success-color);
+}
+
+/* 样式变体 - Warning */
+.s-tag-warning {
+  background-color: var(--warning-color);
+  color: var(--text-inverse);
+}
+
+.s-tag-plain.s-tag-warning {
+  background-color: transparent;
+  border: 2rpx solid var(--warning-color);
+  color: var(--warning-color);
+}
+
+/* 样式变体 - Error */
+.s-tag-error {
+  background-color: var(--error-color);
+  color: var(--text-inverse);
+}
+
+.s-tag-plain.s-tag-error {
+  background-color: transparent;
+  border: 2rpx solid var(--error-color);
+  color: var(--error-color);
+}
+
+/* 关闭按钮 */
+.s-tag-close {
+  margin-left: 8rpx;
+  font-size: var(--font-size-sm);
+  line-height: 1;
+  opacity: 0.7;
+}
+
+.s-tag-close:active {
+  opacity: 1;
+}

@@ -5,5 +5,11 @@
   "backgroundColor": "#f5f5f5",
   "enableShareAppMessage": true,
   "enableShareTimeline": true,
-  "usingComponents": {}
+  "usingComponents": {
+    "s-price": "/components/price/index",
+    "s-tag": "/components/tag/index",
+    "s-button": "/components/button/index",
+    "s-badge": "/components/badge/index",
+    "s-avatar": "/components/avatar/index"
+  }
 }

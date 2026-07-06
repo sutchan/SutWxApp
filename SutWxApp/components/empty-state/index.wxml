@@ -1,8 +1,19 @@
+<!--
+  文件名: index.wxml
+  版本号: 3.0.0
+  更新日期: 2026-07-06
+  描述: EmptyState 空状态组件模板
+-->
 
-<view class="empty-state">
-  <image wx:if="{{image}}" class="empty-image" src="{{image}}" mode="aspectFit"></image>
-  <text class="empty-text">{{text}}</text>
-  <button wx:if="{{showButton}}" class="empty-button" bindtap="onButtonTap">
-    {{buttonText}}
-  </button>
+<view class="{{emptyStateClass}}" bindtap="onTap">
+  <view class="s-empty-state-media">
+    <image wx:if="{{image}}" class="s-empty-state-image" src="{{image}}" mode="aspectFit"></image>
+  </view>
+  <view class="s-empty-state-content">
+    <view wx:if="{{title}}" class="s-empty-state-title">{{title}}</view>
+    <view wx:if="{{description}}" class="s-empty-state-description">{{description}}</view>
+    <view wx:if="{{showButton}}" class="s-empty-state-action">
+      <s-button variant="{{buttonVariant}}" bind:tap="onButtonTap">{{buttonText}}</s-button>
+    </view>
+  </view>
 </view>
