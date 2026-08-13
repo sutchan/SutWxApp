@@ -63,8 +63,8 @@ Page({
    */
   calculateTotalPrice(cartList) {
     return cartList
-      .filter(item =&gt; item.selected)
-      .reduce((total, item) =&gt; {
+      .filter(item => item.selected)
+      .reduce((total, item) => {
         return total + (item.price * item.quantity);
       }, 0);
   },
@@ -74,8 +74,8 @@ Page({
    */
   calculateTotalCount(cartList) {
     return cartList
-      .filter(item =&gt; item.selected)
-      .reduce((total, item) =&gt; {
+      .filter(item => item.selected)
+      .reduce((total, item) => {
         return total + item.quantity;
       }, 0);
   },
@@ -85,7 +85,7 @@ Page({
    */
   checkSelectAll(cartList) {
     if (cartList.length === 0) return false;
-    return cartList.every(item =&gt; item.selected);
+    return cartList.every(item => item.selected);
   },
 
   /**
@@ -132,7 +132,7 @@ Page({
       selectAll
     });
 
-    cartList.forEach(item =&gt; this.updateCartItem(item));
+    cartList.forEach(item => this.updateCartItem(item));
   },
 
   /**
@@ -195,7 +195,7 @@ Page({
     wx.showModal({
       title: '提示',
       content: '确定要删除该商品吗？',
-      success: async (res) =&gt; {
+      success: async (res) => {
         if (res.confirm) {
           try {
             await cartService.removeFromCart(item.id);
@@ -227,7 +227,7 @@ Page({
    * 结算
    */
   onCheckout() {
-    const selectedItems = this.data.cartList.filter(item =&gt; item.selected);
+    const selectedItems = this.data.cartList.filter(item => item.selected);
 
     if (selectedItems.length === 0) {
       wx.showToast({

@@ -50,7 +50,7 @@ Page({
     wx.showModal({
       title: '提示',
       content: '确定要取消订单吗？',
-      success: async (res) =&gt; {
+      success: async (res) => {
         if (res.confirm) {
           try {
             await orderService.cancelOrder(this.data.orderId);
@@ -88,7 +88,7 @@ Page({
     wx.showModal({
       title: '提示',
       content: '确定已收到商品吗？',
-      success: async (res) =&gt; {
+      success: async (res) => {
         if (res.confirm) {
           try {
             await orderService.confirmReceive(this.data.orderId);

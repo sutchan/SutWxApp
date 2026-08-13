@@ -1,10 +1,5 @@
 {
-  "name": "苏铁微信小程序",
-  "appid": "",
-  "versionName": "3.0.0",
-  "versionCode": "300",
-  "description": "苏铁微信小程序 - 精品植物和园艺用品电商平台",
-  "main": "app.js",
+  "appid": "touristappid",
   "pages": [
     "pages/home/index",
     "pages/category/index",
@@ -77,7 +72,6 @@
   "debug": false,
   "functionalPages": false,
   "independentPlugins": false,
-  "bundleName": "com.sut.wechatapp",
   "setting": {
     "urlCheck": true,
     "es6": true,
@@ -106,24 +100,6 @@
     "userConfirmedUseCompilerModuleSwitch": false
   },
   "condition": {},
-  "qqMapKey": "",
-  "googlePlayKey": {
-    "publicKey": ""
-  },
-  "permission": {
-    "scope.userLocation": {
-      "desc": "获取您的位置信息以便提供更好的服务"
-    }
-  },
-  "scopeList": [
-    "scope.userLocation",
-    "scope.userInfo",
-    "scope.address",
-    "scope.invoiceTitle",
-    "scope.werun",
-    "scope.record",
-    "scope.camera"
-  ],
   "sitemapLocation": "sitemap.json",
   "style": "v2"
 }

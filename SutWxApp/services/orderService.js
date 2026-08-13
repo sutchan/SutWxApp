@@ -102,8 +102,8 @@ async function getOrderList(status) {
   try {
     let orders = [...mockOrders];
     
-    if (status !== null &amp;&amp; status !== undefined) {
-      orders = orders.filter(order =&gt; order.status === status);
+    if (status !== null && status !== undefined) {
+      orders = orders.filter(order => order.status === status);
     }
     
     return orders;
@@ -115,7 +115,7 @@ async function getOrderList(status) {
 
 async function getOrderDetail(orderId) {
   try {
-    const order = mockOrders.find(o =&gt; o.id == orderId);
+    const order = mockOrders.find(o => o.id == orderId);
     if (!order) {
       throw new Error("订单不存在");
     }
@@ -139,12 +139,12 @@ async function createOrder(orderData) {
       orderNo: `SU${new Date().getFullYear()}${String(new Date().getMonth() + 1).padStart(2, '0')}${String(new Date().getDate()).padStart(2, '0')}${String(Math.floor(Math.random() * 1000)).padStart(3, '0')}`,
       status: 1,
       statusText: "待付款",
-      totalPrice: items.reduce((sum, item) =&gt; sum + (item.price * item.quantity), 0),
-      productPrice: items.reduce((sum, item) =&gt; sum + (item.price * item.quantity), 0),
-      shippingFee: items.reduce((sum, item) =&gt; sum + (item.price * item.quantity), 0) &gt;= 99 ? 0 : 10,
-      totalQuantity: items.reduce((sum, item) =&gt; sum + item.quantity, 0),
+      totalPrice: items.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+      productPrice: items.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+      shippingFee: items.reduce((sum, item) => sum + (item.price * item.quantity), 0) >= 99 ? 0 : 10,
+      totalQuantity: items.reduce((sum, item) => sum + item.quantity, 0),
       createTime: new Date().toLocaleString(),
-      products: items.map(item =&gt; ({
+      products: items.map(item => ({
         id: item.id,
         name: item.name,
         image: item.image,
@@ -169,8 +169,8 @@ async function createOrder(orderData) {
 
 async function cancelOrder(orderId) {
   try {
-    const orderIndex = mockOrders.findIndex(o =&gt; o.id == orderId);
-    if (orderIndex &gt;= 0) {
+    const orderIndex = mockOrders.findIndex(o => o.id == orderId);
+    if (orderIndex >= 0) {
       mockOrders[orderIndex].status = 0;
       mockOrders[orderIndex].statusText = "已取消";
     }
@@ -183,8 +183,8 @@ async function cancelOrder(orderId) {
 
 async function confirmReceive(orderId) {
   try {
-    const orderIndex = mockOrders.findIndex(o =&gt; o.id == orderId);
-    if (orderIndex &gt;= 0) {
+    const orderIndex = mockOrders.findIndex(o => o.id == orderId);
+    if (orderIndex >= 0) {
       mockOrders[orderIndex].status = 4;
       mockOrders[orderIndex].statusText = "已完成";
       mockOrders[orderIndex].completeTime = new Date().toLocaleString();

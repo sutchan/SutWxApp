@@ -116,12 +116,12 @@ async function getProductList(params = {}) {
     let products = [...mockProducts];
     
     if (params.categoryId) {
-      products = products.filter(p =&gt; p.categoryId == params.categoryId);
+      products = products.filter(p => p.categoryId == params.categoryId);
     }
     
     if (params.keyword) {
       const keyword = params.keyword.toLowerCase();
-      products = products.filter(p =&gt; 
+      products = products.filter(p => 
         p.name.toLowerCase().includes(keyword) || 
         p.desc.toLowerCase().includes(keyword)
       );
@@ -136,7 +136,7 @@ async function getProductList(params = {}) {
 
 async function getProductDetail(productId) {
   try {
-    const product = mockProducts.find(p =&gt; p.id == productId);
+    const product = mockProducts.find(p => p.id == productId);
     if (!product) {
       throw new Error("产品不存在");
     }
@@ -158,10 +158,10 @@ async function getProductDetail(productId) {
 
 async function getRelatedProducts(productId, limit = 4) {
   try {
-    const product = mockProducts.find(p =&gt; p.id == productId);
+    const product = mockProducts.find(p => p.id == productId);
     if (!product) return [];
     
-    let related = mockProducts.filter(p =&gt; p.id != productId &amp;&amp; p.categoryId == product.categoryId);
+    let related = mockProducts.filter(p => p.id != productId && p.categoryId == product.categoryId);
     return related.slice(0, limit);
   } catch (error) {
     console.error("获取相关产品失败:", error);
@@ -171,7 +171,7 @@ async function getRelatedProducts(productId, limit = 4) {
 
 async function addToFavorite(productId) {
   try {
-    const product = mockProducts.find(p =&gt; p.id == productId);
+    const product = mockProducts.find(p => p.id == productId);
     if (product) {
       product.isFavorite = true;
     }
@@ -184,7 +184,7 @@ async function addToFavorite(productId) {
 
 async function removeFromFavorite(productId) {
   try {
-    const product = mockProducts.find(p =&gt; p.id == productId);
+    const product = mockProducts.find(p => p.id == productId);
     if (product) {
       product.isFavorite = false;
     }

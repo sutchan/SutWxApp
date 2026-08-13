@@ -27,7 +27,7 @@ async function getCategoryList() {
 
 async function getCategoryDetail(categoryId) {
   try {
-    const category = mockCategories.find(c =&gt; c.id == categoryId);
+    const category = mockCategories.find(c => c.id == categoryId);
     return category || null;
   } catch (error) {
     console.error("获取分类详情失败:", error);

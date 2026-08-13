@@ -59,7 +59,7 @@ function calculateCartCount(cartList) {
 }
 
 function getMockProduct(productId) {
-  return mockProducts.find(p =&gt; p.id === productId) || mockProducts[0];
+  return mockProducts.find(p => p.id === productId) || mockProducts[0];
 }
 
 async function addToCart(options) {
@@ -69,10 +69,10 @@ async function addToCart(options) {
     const product = getMockProduct(productId);
     const cartList = getCartFromStorage();
     const existingIndex = cartList.findIndex(function (item) {
-      return item.productId === productId &amp;&amp; item.specId === specId;
+      return item.productId === productId && item.specId === specId;
     });
 
-    if (existingIndex &gt;= 0) {
+    if (existingIndex >= 0) {
       cartList[existingIndex].quantity += quantity;
     } else {
       cartList.push({
@@ -139,7 +139,7 @@ async function updateCartItem(item) {
       return cartItem.id === item.id;
     });
 
-    if (targetIndex &gt;= 0) {
+    if (targetIndex >= 0) {
       cartList[targetIndex] = { ...cartList[targetIndex], ...item };
       saveCartToStorage(cartList);
       wx.setStorageSync("cartCount", calculateCartCount(cartList));

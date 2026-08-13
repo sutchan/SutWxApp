@@ -2,6 +2,54 @@
 
 所有重要的项目变更都将记录在此文件中。
 
+## [3.0.1] - 2026-08-13
+
+### 修复内容
+
+#### 构建与死代码清理
+- 删除未引用的 TypeScript 死代码（services/*.ts、utils/request.ts、security.ts、monitor.ts、cache.ts、types/），统一运行体系为 JavaScript
+- 补齐缺失的 JS 运行依赖文件：utils/request.js（网络请求）、utils/monitor.js（监控上报）、services/authService.js（认证服务）
+- 新增缺失配置：sitemap.json、project.config.json（此前 app.json 引用 sitemap.json 但文件不存在）
+
+#### 安全加固
+- 移除 services/authService.ts 中硬编码的 appSecret 密钥，认证改为由后端签发 token
+- utils/store.js 接入敏感字段（token）混淆存储，避免明文落盘被直接读取
+- utils/request.js 保留 XSS/SQL 注入防护与 CSRF 校验能力
+
+#### 配置治理
+- 清理 app.json 中未使用的定位权限（scope.userLocation、requiredPrivateInfos）及冗余 scope/key 字段
+- 修正 appid 占位，移除非标准 app.json 字段（name/versionName/versionCode/description/main/bundleName）
+
+#### 版本统一
+- README 版本徽章与文件头注释统一至 3.0.1
+
+### 文件变更
+```
+新增:
+- SutWxApp/utils/request.js
+- SutWxApp/utils/monitor.js
+- SutWxApp/services/authService.js
+- SutWxApp/sitemap.json
+- SutWxApp/project.config.json
+
+删除（未引用死代码）:
+- SutWxApp/services/*.ts
+- SutWxApp/utils/request.ts
+- SutWxApp/utils/security.ts
+- SutWxApp/utils/monitor.ts
+- SutWxApp/utils/cache.ts
+- SutWxApp/types/wechat-miniprogram.d.ts
+
+已修改:
+- SutWxApp/app.json
+- SutWxApp/app.js
+- SutWxApp/utils/store.js
+- README.md
+- CHANGELOG.md
+```
+
+---
+
 ## [3.0.0] - 2026-07-01
 
 ### 重大更新

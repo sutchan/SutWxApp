@@ -35,7 +35,7 @@ Page({
         loading: false
       });
 
-      if (categoryList.length &gt; 0) {
+      if (categoryList.length > 0) {
         this.loadProductList(categoryList[0].id);
       }
     } catch (error) {
