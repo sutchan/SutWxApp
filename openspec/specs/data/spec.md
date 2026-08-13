@@ -1,18 +1,20 @@
 <!--
 文件名: spec.md
-版本号: 1.0.0
-更新日期: 2025-12-27
+版本号: 3.0.1
+更新日期: 2026-08-13
 作者: Sut
-描述: SutWxApp 项目数据规范文档，涵盖数据模型设计、数据库操作、数据校验和数据安全管理规范
+描述: SutWxApp 数据规范文档，涵盖前端数据模型设计、本地存储、接口数据校验与数据安全管理规范
 -->
 
 # 数据规范
 
 ## 目的
 
-本规范定义了苏铁微信小程序（SutWxApp）项目的数据管理标准，包括数据模型设计原则、数据库操作规范、数据校验规则和数据安全管理要求。规范覆盖项目使用的 MySQL、Redis 和 MongoDB 三种数据库，旨在确保数据设计的一致性、数据库操作的规范性、数据质量的可靠性和数据安全的有保障性。开发人员遵循本规范进行数据相关的设计和开发工作，可以有效避免数据质量问题，提高系统的可维护性和可扩展性。
+本规范定义了苏铁微信小程序（SutWxApp）项目的数据管理标准，包括前端数据模型设计原则、本地存储规范、前后端接口数据校验规则和数据安全管理要求。
 
-数据是电商系统的核心资产，规范的数据管理对于保障业务稳定运行至关重要。本规范从数据模型设计入手，定义了实体命名、属性规范、关系设计等基本原则；然后阐述了数据库操作的封装方式、事务处理、批量操作等最佳实践；接着制定了前端和后端数据校验的分工和规则；最后明确了数据备份、访问控制、加密存储等安全要求。所有参与项目开发的成员都应当熟悉并遵循本规范的内容。
+> 本项目为纯前端微信小程序，不含后端数据库。数据由外部 REST API 提供，前端通过 `services/*` 读取与提交；本地仅持久化 Token、用户信息、购物车等轻量数据。因此本规范聚焦「前端数据实体建模」「本地存储」「接口数据契约」与「数据安全」，不涉及数据库建表、事务与索引。
+
+数据是电商系统的核心资产，规范的数据管理对于保障业务稳定运行至关重要。本规范从数据模型设计入手，定义了实体命名、属性规范、关系设计等基本原则；然后阐述了前端本地存储的封装方式、缓存策略等最佳实践；接着制定了前后端接口数据的校验分工和规则；最后明确了本地数据安全、访问控制、敏感信息保护等要求。所有参与项目开发的成员都应当熟悉并遵循本规范的内容。
 
 ## 数据模型设计
 
@@ -20,11 +22,15 @@
 
 #### 实体命名规范
 
-数据库表和集合的命名应当遵循统一的原则，确保命名的一致性和可读性。实体名称使用英文复数形式，采用小写字母和下划线组合的蛇形命名法。例如，用户表命名为 `users`，商品表命名为 `products`，订单表命名为 `orders`，订单明细表命名为 `order_items`。这种命名方式符合数据库命名惯例，便于理解和维护。
+前端数据实体的命名应当遵循统一原则，确保与后端接口字段保持一致。实体名称使用英文，遵循以下约定：
 
-对于关联表或中间表，命名应当体现两张表的关系。例如，用户和角色的关联表命名为 `user_roles`，商品和标签的关联表命名为 `product_tags`。关联表名称按照字母顺序排列两张表名，避免顺序歧义。迁移表或日志表应当使用有明确含义的后缀，如 `_history`、`_archive`、`_log` 等，表明表的用途。
+- **接口字段**：使用小写字母和下划线组合的蛇形命名法（snake_case），与后端 REST API 返回字段保持一致，例如 `user_name`、`order_id`、`product_sku`。
+- **前端变量/JS 标识符**：使用小驼峰命名法（camelCase），例如 `userName`、`orderId`；在 `services/*` 做 snake_case ↔ camelCase 的转换。
+- **页面数据**：页面 `data` 中的字段使用语义化小驼峰命名。
 
-以下是常用实体表的命名示例：
+对于关联实体，命名应当体现关系。例如用户与地址使用 `user_addresses`，订单明细使用 `order_items`。
+
+以下是常用前端数据实体的命名示例：
 
 | 业务实体 | 表名称 | 说明 |
 |---------|--------|------|
@@ -54,11 +60,19 @@
 
 时间戳字段统一使用 `_at` 后缀，如 `created_at`、`updated_at`、`deleted_at`。状态字段使用 `_status` 后缀，如 `order_status`、`payment_status`。标志字段使用 `is_` 前缀，如 `is_active`、`is_deleted`、`is_default`。金额字段使用 `_amount` 后缀，精确到分。数量字段使用 `_count` 后缀。
 
-#### 文档命名规范
+#### 本地存储键命名规范
 
-MongoDB 集合的命名遵循与数据库表相同的规范，使用复数形式和蛇形命名法。文档应当包含明确的 `_id` 字段，推荐使用 ObjectId 类型，支持自动生成和时间排序。集合名称使用全小写，避免使用 `$` 或特殊字符。
+前端通过 `wx.setStorageSync` / `wx.getStorageSync` 持久化的数据，键名使用大写蛇形命名法（SCREAMING_SNAKE_CASE），避免与页面 `data` 字段混淆。例如：
 
-对于需要区分环境的集合，可以使用命名空间前缀。例如，开发环境的用户集合命名为 `dev_users`，测试环境的用户集合命名为 `test_users`。归档集合可以使用 `_archive` 后缀，如 `logs_archive`。时序集合可以使用 `_timeseries` 后缀，并配置合适的索引策略。
+| 存储键 | 内容 | 说明 |
+|--------|------|------|
+| `TOKEN` | 登录令牌 | `Authorization: Bearer <token>` 使用 |
+| `OPENID` | 微信 openid | 用户唯一标识 |
+| `USER_INFO` | 用户基本信息 | 昵称、头像等 |
+| `CART` | 购物车项 | 本地购物车缓存 |
+| `LANGUAGE` | 当前语言 | `zh_CN` / `en_US` |
+
+敏感信息（token、openid）仅存于微信安全存储，**禁止**写入日志或 `globalData` 后透传至第三方。
 
 ### 关系设计
 
@@ -100,136 +114,37 @@ JSON 字段使用 `JSON` 类型，MySQL 5.7.8 及以上版本支持原生 JSON �
 
 创建时间和更新时间字段应当设置默认值和自动更新。`created_at` 设置 `DEFAULT CURRENT_TIMESTAMP`，`updated_at` 设置 `DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP`。时区敏感的时间字段应当存储 UTC 时间，展示时根据用户时区转换。
 
-## 数据库操作规范
+## 数据访问规范
 
-### 数据访问层设计
+### 服务层封装（services/）
 
-#### 仓储模式
+前端通过 `services/*` 统一封装各业务域的网络请求，屏蔽接口细节，页面不直接调用 `wx.request`。
 
-项目采用仓储模式（Repository Pattern）封装数据访问逻辑，将业务逻辑与数据访问逻辑分离。每个实体对应一个仓储类，仓储类提供增删改查的通用方法。业务层通过仓储类访问数据，不直接操作数据库。这种设计模式提高了代码的可测试性和可维护性。
+- 每个业务域对应一个 Service 文件（如 `authService.js`、`orderService.js`）
+- Service 负责：拼接接口路径、携带 Token、做 snake_case ↔ camelCase 字段转换、统一错误处理
+- 所有请求经 `utils/request.js` 发出，享受拦截器、重试、缓存、取消、并发控制
+- Service 方法返回领域对象（camelCase），不暴露原始响应包络
 
-仓储接口定义在 `repositories/interfaces/` 目录下，仓储实现定义在 `repositories/mysql/` 或 `repositories/mongodb/` 目录下。仓储实现应当依赖数据库连接池或 ORM 框架，不直接处理连接管理。仓储类的方法应当返回领域对象或值对象，不直接返回数据库记录。
+```javascript
+// services/productService.js
+const request = require('../utils/request');
 
-```typescript
-// repositories/interfaces/user-repository.ts
-interface UserRepository {
-  findById(id: string): Promise<User | null>;
-  findByPhone(phone: string): Promise<User | null>;
-  create(user: CreateUserDTO): Promise<User>;
-  update(id: string, data: UpdateUserDTO): Promise<User>;
-  delete(id: string): Promise<void>;
-  findByIds(ids: string[]): Promise<User[]>;
-  findByCondition(condition: UserCondition): Promise<User[]>;
-}
-
-// repositories/mysql/user-repository.ts
-class MySQLUserRepository implements UserRepository {
-  constructor(
-    private db: Database,
-    private userMapper: UserMapper
-  ) {}
-
-  async findById(id: string): Promise<User | null> {
-    const row = await this.db.query(
-      'SELECT * FROM users WHERE id = ? AND deleted_at IS NULL',
-      [id]
-    );
-    return row ? this.userMapper.toDomain(row) : null;
-  }
-
-  async findByPhone(phone: string): Promise<User | null> {
-    const row = await this.db.query(
-      'SELECT * FROM users WHERE phone_number = ?',
-      [phone]
-    );
-    return row ? this.userMapper.toDomain(row) : null;
-  }
+function getProductDetail(id) {
+  return request.get(`/products/${id}`, { cache: true });
 }
 ```
 
-#### 查询构建器
+### 请求构建与防注入
 
-复杂的查询条件通过查询构建器（Query Builder）模式构建，避免 SQL 拼接带来的安全风险和可维护性问题。查询构建器提供链式调用的 API，支持条件添加、排序、分页等操作。查询构建器最终生成参数化的 SQL 语句，防止 SQL 注入攻击。
+- 查询参数通过 `utils/request.js` 的 `data` 字段传递，由底层做参数化编码，避免手工拼接 URL 引发注入/编码问题
+- 列表查询支持分页（`page` / `pageSize`）、排序（`sort` / `order`）参数，由后端解释
+- 写操作（POST/PUT/DELETE）不进入 GET 缓存，且自动失效相关缓存
 
-```typescript
-// query-builders/user-query-builder.ts
-class UserQueryBuilder {
-  private conditions: string[] = [];
-  private params: any[] = [];
-  private orders: string[] = [];
-  private limit?: number;
-  private offset?: number;
+### 一致性原则
 
-  wherePhone(phone: string): this {
-    this.conditions.push('phone_number = ?');
-    this.params.push(phone);
-    return this;
-  }
-
-  whereStatus(status: UserStatus): this {
-    this.conditions.push('status = ?');
-    this.params.push(status);
-    return this;
-  }
-
-  whereCreatedBetween(start: Date, end: Date): this {
-    this.conditions.push('created_at BETWEEN ? AND ?');
-    this.params.push(start, end);
-    return this;
-  }
-
-  orderByCreatedAt(desc: boolean = true): this {
-    this.orders.push(`created_at ${desc ? 'DESC' : 'ASC'}`);
-    return this;
-  }
-
-  limit(count: number, offset: number = 0): this {
-    this.limit = count;
-    this.offset = offset;
-    return this;
-  }
-
-  build(): { sql: string; params: any[] } {
-    let sql = 'SELECT * FROM users';
-    
-    if (this.conditions.length > 0) {
-      sql += ' WHERE ' + this.conditions.join(' AND ');
-    }
-    
-    if (this.orders.length > 0) {
-      sql += ' ORDER BY ' + this.orders.join(', ');
-    }
-    
-    if (this.limit) {
-      sql += ` LIMIT ${this.limit}`;
-      if (this.offset) {
-        sql += ` OFFSET ${this.offset}`;
-      }
-    }
-
-    return { sql, params: this.params };
-  }
-}
-```
-
-### 事务管理
-
-#### 事务边界定义
-
-事务用于保证数据操作的原子性、一致性、隔离性和持久性（ACID）。事务边界应当尽可能小，只包含必须在一个事务中执行的数据库操作。过长的事务会占用数据库连接，导致并发性能下降。过短的事务可能导致数据不一致。
-
-订单创建流程是事务边界的典型示例。创建订单涉及多个表的操作：插入订单主表、插入订单明细表、扣减商品库存、扣减用户积分（如使用积分抵扣）。这些操作必须在同一个事务中执行，任何一步失败都应该回滚所有操作。事务开始于订单创建操作之前，提交于所有操作成功完成之后。
-
-```typescript
-// services/order-service.ts
-async function createOrder(userId: string, items: OrderItemDTO[]): Promise<Order> {
-  return await this.db.transaction(async (conn) => {
-    // 验证商品库存
-    for (const item of items) {
-      const inventory = await this.inventoryRepository.findBySkuId(item.skuId);
-      if (!inventory || inventory.count < item.quantity) {
-        throw new BusinessError('商品库存不足');
-      }
+- 前端以服务端返回为唯一可信数据源；本地存储仅作缓存/离线兜底
+- 下单、改购物车等写操作后，应主动刷新本地缓存或重新拉取，避免脏数据
+- 登录态失效（401）时，清空 `TOKEN` / `USER_INFO` 等本地数据并跳转登录
     }
 
     // 创建订单
@@ -257,128 +172,53 @@ async function createOrder(userId: string, items: OrderItemDTO[]): Promise<Order
 
 ### 批量操作规范
 
-#### 批量插入规范
+#### 批量写入本地存储
 
-批量插入用于一次性插入多条记录，相比单条插入具有更高的效率。批量插入应当使用 `INSERT INTO ... VALUES (...), (...), (...)` 语法，而非在循环中执行单条插入。批量插入的记录数量应当有上限，避免单条 SQL 过大导致内存溢出或执行超时。
+前端批量写入（如批量更新购物车、批量缓存商品列表）应遵循：
 
-MySQL 默认允许的包大小（max_allowed_packet）为 4MB，需要根据实际数据量调整。每次批量插入建议控制在 1000 条以内，如果数据量较大应当分批执行。批量插入时应当处理主键冲突，可以选择忽略冲突（IGNORE）、更新冲突行（ON DUPLICATE KEY UPDATE）或替换冲突行（REPLACE）。
+- 合并为单次 `wx.setStorageSync` 写入，避免循环多次调用造成性能损耗
+- 单次写入数据量控制在合理范围（≤ 1MB），过大时分批或只缓存关键字段
+- 批量写入应提供失败兜底（catch 异常并提示），避免阻塞主流程
 
-```typescript
-async function batchInsertUsers(users: CreateUserDTO[]): Promise<void> {
-  const batchSize = 500;
-  
-  for (let i = 0; i < users.length; i += batchSize) {
-    const batch = users.slice(i, i + batchSize);
-    const values = batch.map(u => [
-      u.id,
-      u.phoneNumber,
-      u.nickname,
-      u.createdAt,
-    ]);
-    
-    const placeholders = batch.map(() => '(?, ?, ?, ?)').join(', ');
-    const sql = `INSERT INTO users (id, phone_number, nickname, created_at) VALUES ${placeholders}`;
-    
-    await this.db.execute(sql, values.flat());
+```javascript
+// utils/store.js 批量写入购物车示例
+function saveCart(items) {
+  try {
+    wx.setStorageSync('CART', items);
+  } catch (e) {
+    console.error('[store] 保存购物车失败', e);
   }
 }
 ```
 
-#### 批量更新规范
+#### 批量请求规范
 
-批量更新使用 `UPDATE ... CASE WHEN ... THEN ... END` 语法，在单条 SQL 中更新多条记录。相比循环单条更新，批量更新减少了数据库交互次数，提高了执行效率。批量更新应当使用参数化查询，避免 SQL 注入风险。
+- 多个独立接口请求应使用 `Promise.all` 并发，受 `utils/request.js` 并发队列约束（默认最大 5）
+- 合并可聚合的查询参数，减少请求次数
+- 批量请求失败时应区分「整体失败」与「部分失败」，给出明确反馈
 
-对于需要根据条件更新不同字段的场景，可以使用 `CASE` 表达式。批量更新同样需要注意 SQL 大小限制，单条 SQL 包含的参数过多时应当分批执行。批量更新操作应当在事务中执行，确保数据一致性。
+### 本地存储与缓存策略
 
-```typescript
-async function batchUpdateInventory(updates: InventoryUpdate[]): Promise<void> {
-  if (updates.length === 0) return;
+#### 本地存储设计原则
 
-  const sql = `UPDATE product_inventory SET count = CASE sku_id `;
-  const conditions: string[] = [];
-  const params: any[] = [];
+小程序本地存储（`wx.setStorageSync` / `wx.getStorageSync`）用于持久化轻量数据（Token、用户信息、购物车、语言偏好）。遵循原则：
 
-  for (const update of updates) {
-    conditions.push('WHEN ? THEN ?');
-    params.push(update.skuId, update.count);
-  }
+- 仅缓存读多写少、体积小的数据，避免存储大对象或列表
+- 单条存储体积建议 ≤ 1MB（微信单 key 上限约 1MB，总上限约 10MB）
+- 敏感数据（token、openid）只存本地存储，禁止写入日志或外传第三方
+- 提供统一的存取封装（如 `utils/store.js`），避免散落 `wx.setStorageSync` 调用
 
-  sql += conditions.join(' ') + ` END WHERE sku_id IN (${updates.map(() => '?').join(', ')})`;
-  params.push(...updates.map(u => u.skuId));
+#### 请求缓存（utils/request.js）
 
-  await this.db.execute(sql, params);
-}
-```
+网络层内置 LRU 缓存，用于减少重复请求、提升弱网体验：
 
-### 缓存策略
+- 默认缓存 50 条，TTL 5 分钟，可按接口配置 `cache` 选项
+- 仅对 GET 等幂等请求启用缓存；写操作（POST/PUT/DELETE）自动失效相关缓存
+- 失效策略采用「写后删除」而非「写后更新」，避免脏数据
 
-#### 缓存设计原则
+#### 缓存键命名
 
-Redis 缓存用于加速高频访问数据的读取，提升系统性能。缓存设计应当遵循以下原则：缓存的数据应当是读多写少的数据，缓存命中率低的场景不适合使用缓存；缓存的数据量应当在可控范围内，避免占用过多内存；缓存数据应当设置合理的过期时间，确保数据最终一致性。
-
-缓存策略采用旁路缓存模式（Cache-Aside）。读取数据时，首先查询缓存，如果缓存命中则直接返回，如果缓存未命中则查询数据库并将结果写入缓存。更新数据时，先更新数据库，然后删除缓存（而非更新缓存），避免缓存与数据库不一致。删除缓存后，下次读取会从数据库加载最新数据到缓存。
-
-#### 缓存键设计
-
-缓存键命名空间使用冒号分隔，格式为 `{项目}:{模块}:{标识}`。例如，用户信息的缓存键为 `sutwxapp:user:{userId}`，商品列表的缓存键为 `sutwxapp:product:list:{categoryId}`。缓存键应当简洁明了，避免过长。敏感数据不应缓存，或加密后缓存。
-
-```typescript
-// cache-keys.ts
-class CacheKeys {
-  private static readonly PREFIX = 'sutwxapp';
-
-  static user(userId: string): string {
-    return `${this.PREFIX}:user:${userId}`;
-  }
-
-  static userProfile(userId: string): string {
-    return `${this.PREFIX}:user:${userId}:profile`;
-  }
-
-  static product(productId: string): string {
-    return `${this.PREFIX}:product:${productId}`;
-  }
-
-  static productList(categoryId: string, page: number): string {
-    return `${this.PREFIX}:product:list:${categoryId}:${page}`;
-  }
-
-  static cart(userId: string): string {
-    return `${this.PREFIX}:cart:${userId}`;
-  }
-
-  static order(orderId: string): string {
-    return `${this.PREFIX}:order:${orderId}`;
-  }
-
-  static session(sessionId: string): string {
-    return `${this.PREFIX}:session:${sessionId}`;
-  }
-}
-
-// cache-service.ts
-class CacheService {
-  async get<T>(key: string): Promise<T | null> {
-    const value = await this.redis.get(key);
-    return value ? JSON.parse(value) : null;
-  }
-
-  async set(key: string, value: any, ttlSeconds: number = 3600): Promise<void> {
-    await this.redis.setex(key, ttlSeconds, JSON.stringify(value));
-  }
-
-  async delete(key: string): Promise<void> {
-    await this.redis.del(key);
-  }
-
-  async deletePattern(pattern: string): Promise<void> {
-    const keys = await this.redis.keys(pattern);
-    if (keys.length > 0) {
-      await this.redis.del(...keys);
-    }
-  }
-}
-```
+本地存储键使用大写蛇形命名（见「本地存储键命名规范」），请求缓存键由 `method + url + 参数` 归一化生成，避免冲突。
 
 ## 数据校验规范
 

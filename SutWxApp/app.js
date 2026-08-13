@@ -1,6 +1,6 @@
 /**
  * 文件名: app.js
- * 版本号: 3.0.1
+ * 版本号: 3.0.2
  * 更新日期: 2026-08-13
  * 描述: 微信小程序应用入口文件，处理应用生命周期事件和全局数据
  */
@@ -9,19 +9,27 @@
 const monitorUtil = require("./utils/monitor").default;
 const { CancelToken } = require("./utils/request");
 
+// 基础库版本号比较（微信官方推荐实现）
+function compareVersion(v1, v2) {
+  const a = v1.split(".").map((n) => parseInt(n, 10));
+  const b = v2.split(".").map((n) => parseInt(n, 10));
+  for (let i = 0; i < Math.max(a.length, b.length); i++) {
+    const x = a[i] || 0;
+    const y = b[i] || 0;
+    if (x > y) return 1;
+    if (x < y) return -1;
+  }
+  return 0;
+}
+
 App({
   onLaunch(options) {
-    console.log("[App] onLaunch - 小程序初始化");
     this.initApp();
   },
 
-  onShow(options) {
-    console.log("[App] onShow - 小程序显示");
-  },
+  onShow(options) {},
 
-  onHide() {
-    console.log("[App] onHide - 小程序隐藏");
-  },
+  onHide() {},
 
   onError(msg) {
     console.error("[App] onError - 小程序错误:", msg);
@@ -48,8 +56,8 @@ App({
     openid: null,
     appId: "",
     baseUrl: "https://api.example.com",
-    version: "3.0.0",
-    debug: true,
+    version: "3.0.2",
+    debug: false,
     request: {
       CancelToken,
     },
@@ -76,8 +84,6 @@ App({
       if (openid) {
         this.globalData.openid = openid;
       }
-
-      console.log("[App] loadStorageData - 数据加载完成");
     } catch (error) {
       console.error("[App] loadStorageData - 数据加载失败:", error);
     }
@@ -109,7 +115,6 @@ App({
       this.globalData.userInfo = null;
       this.globalData.openid = null;
 
-      console.log("[App] clearData - 数据清除完成");
     } catch (error) {
       console.error("[App] clearData - 数据清除失败:", error);
     }
@@ -118,13 +123,14 @@ App({
   checkVersion() {
     const systemInfo = wx.getSystemInfoSync();
     const SDKVersion = systemInfo.SDKVersion;
-
-    console.log("[App] checkVersion - SDK版本:", SDKVersion);
+    // 低版本基础库提示兼容
+    if (!SDKVersion || compareVersion(SDKVersion, "2.10.0") < 0) {
+      console.error("[App] checkVersion - 基础库版本过低:", SDKVersion);
+    }
   },
 
   reportAnalytics() {
     if (this.globalData.debug) {
-      console.log("[App] reportAnalytics - 调试模式，跳过数据上报");
       return;
     }
   },
@@ -164,7 +170,6 @@ App({
       wx.login({
         success: (loginRes) => {
           if (loginRes.code) {
-            console.log("[App] login - 登录凭证获取成功:", loginRes.code);
             resolve(loginRes.code);
           } else {
             reject(new Error("登录凭证获取失败"));

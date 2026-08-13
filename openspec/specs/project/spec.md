@@ -76,39 +76,33 @@
 
 ## 技术栈
 
+> 实际项目为**纯前端微信小程序**，使用 JavaScript 开发，不依赖后端服务与数据库。
+> 网络请求通过 `utils/request.js` 封装后对接后端 REST API（基地址见 `app.js` 的 `globalData.baseUrl`）。
+
 ### 前端技术栈
-- **框架**：微信小程序原生框架
-- **开发语言**：TypeScript
-- **UI组件库**：自定义组件（遵循Apple设计风格）
-- **开发工具**：微信开发者工具、VS Code、Bun
+- **框架**：微信小程序原生框架（WXML / WXSS / JS）
+- **开发语言**：JavaScript（ES6+），不使用 TypeScript
+- **UI**：自定义组件 + 全局 CSS 变量设计系统（遵循 Apple 极简设计风格）
+- **状态管理**：基于 `wx.setStorageSync` 的本地存储 + `utils/store.js` 轻量状态管理
+- **路由**：微信小程序原生路由（`app.json` 中声明）
+- **网络请求**：`wx.request` + `utils/request.js` 封装（拦截器、重试、LRU 缓存、请求取消、并发队列）
+- **开发工具**：微信开发者工具、VS Code
+- **多语言**：`.po` / `.pot` 文件（gettext 风格）配合 `i18n` 工具
 
-### 后端技术栈
-- **运行时**：Bun 1.x
-- **开发语言**：TypeScript
-- **Web框架**：Hono / Bun原生HTTP服务器
-- **数据库**：
-  - MySQL 8.x（关系型数据）
-  - Redis 7.x（缓存、会话管理）
-  - MongoDB 6.x（非关系型数据）
-- **认证授权**：JWT + RBAC
-- **API设计**：RESTful API
-
-### 基础设施
-- **包管理器**：Bun
-- **容器化**：Docker
-- **容器编排**：Kubernetes（生产环境）、Docker Compose（开发环境）
-- **CI/CD**：GitHub Actions（使用Bun）
-- **监控**：Prometheus + Grafana
-- **日志**：Bun内置日志 + ELK Stack
+### 后端说明（外部依赖）
+- 小程序本身不含后端代码；数据接口由外部 REST API 提供。
+- 请求封装统一在 `services/*` 中，便于对接任意后端实现。
 
 ## 项目结构
 
 ### 目录结构
 ```
 SutWxApp/
-├── app.js              # 小程序入口文件
-├── app.json            # 全局配置
-├── app.wxss            # 全局样式
+├── app.js              # 小程序入口文件（App 实例、生命周期、全局数据）
+├── app.json            # 全局配置（页面路由、tabBar、窗口样式）
+├── app.wxss            # 全局样式（Apple 设计系统 CSS 变量）
+├── sitemap.json        # 索引配置
+├── project.config.json # 微信开发者工具项目配置
 ├── components/         # 自定义组件
 │   ├── empty-state/    # 空状态组件
 │   └── product-card/    # 商品卡片组件
@@ -118,7 +112,7 @@ SutWxApp/
 │   ├── sut-wechat-mini.pot    # 翻译模板
 │   ├── sut-wechat-mini-zh_CN.po # 中文翻译
 │   └── sut-wechat-mini-en_US.po # 英文翻译
-├── pages/              # 页面文件
+├── pages/              # 页面文件（每个页面含 .js/.wxml/.wxss/.json）
 │   ├── home/           # 首页
 │   ├── category/       # 分类页
 │   ├── product/        # 商品详情页
@@ -128,18 +122,22 @@ SutWxApp/
 │   │   ├── detail/     # 订单详情
 │   │   └── confirm/    # 订单确认
 │   ├── user/           # 用户中心
-│   ├── address/        # 地址管理
-│   ├── settings/        # 设置页
-│   └── help/           # 帮助中心
-├── services/           # 服务层（API调用封装）
-├── types/              # TypeScript类型定义
-│   └── wechat-miniprogram.d.ts
+│   ├── address/        # 地址管理（分包）
+│   ├── settings/        # 设置页（分包）
+│   └── help/           # 帮助中心（分包）
+├── services/           # 服务层（API 调用封装，按业务域拆分）
+│   ├── authService.js  # 认证服务
+│   ├── productService.js # 商品服务
+│   ├── categoryService.js # 分类服务
+│   ├── cartService.js  # 购物车服务
+│   ├── orderService.js # 订单服务
+│   └── addressService.js # 地址服务
 ├── utils/              # 工具类
-│   ├── request.ts      # 网络请求封装
-│   ├── cache.ts        # 缓存工具
-│   ├── security.ts     # 安全工具
-│   ├── monitor.ts      # 监控工具
-│   └── store.js        # 状态管理
+│   ├── request.js      # 网络请求封装（拦截器/重试/缓存/取消/队列）
+│   ├── format.js       # 格式化工具（价格、日期等）
+│   ├── monitor.js      # 监控与错误上报
+│   ├── store.js        # 轻量状态管理
+│   └── compress-images.js # 图片压缩工具
 ├── docs/               # 项目文档
 └── openspec/           # 规范文档
 ```

@@ -42,7 +42,7 @@
 
    - 打开微信开发者工具
    - 点击「导入项目」或「+」号
-   - 选择项目目录：`SutWxApp/`
+   - 选择项目目录：`SutWxApp/SutWxApp/`
    - 填写项目名称和 AppID（如果没有 AppID，可以选择「测试号」）
    - 点击「导入」或「确定」
 
@@ -53,26 +53,33 @@
    - 修改代码实时预览
    - 使用真机调试功能
 
+> 小程序为纯前端应用，数据接口由外部 REST API 提供（`app.js` 的 `globalData.baseUrl`）。本地联调时将该地址指向后端测试环境即可。
+
 ## 项目结构
 
 ```
 SutWxApp/
-├── app.js                  # 小程序入口
-├── app.json                # 全局配置
-├── app.wxss                # 全局样式（Apple风格）
+├── app.js                  # 小程序入口（App 实例、生命周期、全局数据）
+├── app.json                # 全局配置（路由、tabBar、窗口）
+├── app.wxss                # 全局样式（Apple 风格 CSS 变量）
 ├── components/             # 自定义组件
+│   ├── empty-state/        # 空状态组件
+│   └── product-card/       # 商品卡片组件
 ├── images/                 # 图片资源
-│   └── tabbar/             # tabBar图标
-├── locales/                # 多语言文件
-├── pages/                  # 页面文件
-│   ├── cart/               # 购物车页
-│   ├── category/           # 分类页
+│   └── tabbar/             # tabBar 图标
+├── locales/                # 多语言文件（.po / .pot）
+├── pages/                  # 页面文件（每页含 .js/.wxml/.wxss/.json）
 │   ├── home/               # 首页
-│   ├── order/              # 订单相关
-│   └── user/               # 用户中心
-├── services/               # 服务层
-├── types/                  # 类型定义
-└── utils/                  # 工具类
+│   ├── category/           # 分类页
+│   ├── product/            # 商品详情页
+│   ├── cart/               # 购物车
+│   ├── order/              # 订单模块（列表/详情/确认）
+│   ├── user/               # 用户中心
+│   ├── address/            # 地址管理（分包）
+│   ├── settings/           # 设置页（分包）
+│   └── help/               # 帮助中心（分包）
+├── services/               # 服务层（API 调用封装）
+└── utils/                  # 工具类（请求/格式化/监控/状态/图片压缩）
 ```
 
 ## 页面导航
@@ -81,31 +88,52 @@ SutWxApp/
 |------|------|------|
 | 首页 | pages/home/index | 商品展示、分类导航、搜索 |
 | 分类 | pages/category/index | 商品分类浏览 |
+| 商品详情 | pages/product/index | 商品信息、规格、加购 |
 | 购物车 | pages/cart/index | 购物车管理 |
-| 用户中心 | pages/user/index | 个人中心、设置 |
+| 订单列表 | pages/order/index | 我的订单 |
+| 订单详情 | pages/order/detail | 订单明细、状态 |
+| 订单确认 | pages/order/confirm | 下单结算 |
+| 用户中心 | pages/user/index | 个人中心、设置入口 |
+| 地址管理 | pages/address/index | 收货地址增删改查 |
+| 设置 | pages/settings/index | 语言、版本等设置 |
+| 帮助中心 | pages/help/index | 常见问题、反馈 |
 
 ## 核心功能
 
-- 商品浏览与搜索
-- 商品分类导航
+- 商品浏览、搜索与分类导航
+- 商品详情与加购
 - 购物车管理
-- 订单管理
-- 用户中心
-- 地址管理
-- 设置页面
+- 订单创建、支付与状态跟踪
+- 收货地址管理
+- 用户中心与个人设置
+- 多语言（中文 / 英文）
+- 帮助中心与反馈
 
 ## 技术栈
 
-- **框架**：微信小程序原生框架
-- **开发语言**：JavaScript / TypeScript
-- **UI风格**：Apple极简设计
-- **开发工具**：微信开发者工具
+- **框架**：微信小程序原生框架（WXML / WXSS / JS）
+- **开发语言**：JavaScript（ES6+）
+- **UI 风格**：Apple 极简设计（全局 CSS 变量设计系统）
+- **状态管理**：`utils/store.js` + 本地存储
+- **网络请求**：`wx.request` + `utils/request.js`（拦截器 / 重试 / LRU 缓存 / 取消 / 并发队列）
+- **多语言**：gettext 风格 `.po` / `.pot`
+- **开发工具**：微信开发者工具、VS Code
 
 ## 相关文档
 
-- [项目规范](openspec/README.md)
+- [项目规范总览](openspec/README.md)
+- [需求与规格（openspec/specs）](openspec/specs/)
+  - [项目规范](openspec/specs/project/spec.md)
+  - [架构规范](openspec/specs/architecture/spec.md)
+  - [数据规范](openspec/specs/data/spec.md)
+  - [开发规范](openspec/specs/development/spec.md)
+  - [设计规范](openspec/specs/design/spec.md)
+  - [运维与发布规范](openspec/specs/ops/spec.md)
+  - [测试规范](openspec/specs/testing/spec.md)
 - [高保真原型](openspec/prototype/prototype.html)
 - [项目概览](docs/PROJECT_OVERVIEW.md)
+- [技术栈报告](openspec/TECH_STACK_REPORT.md)
+- [改进报告](openspec/IMPROVEMENTS_REPORT.md)
 
 ## 版本历史
 

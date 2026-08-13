@@ -6,16 +6,12 @@
 ## 环境要求
 
 ### 前端开发环境
-- **微信开发者工具**：最新稳定版
-- **Bun**：v1.0.0+
-- **VS Code**：最新稳定版（用于代码编辑）
-- **TypeScript**：v5.3.0+
-
-### 后端开发环境
-- **Bun**：v1.0.0+
-- **MySQL**：v8.0+
-- **Redis**：v7.0+
+- **微信开发者工具**：最新稳定版（用于预览、调试、上传）
+- **VS Code**：最新稳定版（用于代码编辑，可选）
+- **Node.js**：仅用于运行可能的脚本工具（如图片压缩、i18n 处理）
 - **Git**：最新稳定版
+
+> 本项目为纯前端微信小程序，使用 JavaScript 开发，**无需 Bun、TypeScript 编译器或数据库**。
 
 ## 项目安装
 
@@ -25,8 +21,10 @@ git clone https://github.com/sutchan/SutWxApp.git
 cd SutWxApp
 ```
 
-### 2. 安装依赖
-- 使用 Bun 安装：`bun install`
+### 2. 用微信开发者工具打开
+- 打开微信开发者工具 → 导入项目
+- 项目目录选择 `SutWxApp/SutWxApp`
+- 填入自己的小程序 AppID（测试号可使用「测试号」）
 
 ## 项目配置
 
@@ -36,70 +34,34 @@ cd SutWxApp
 ```json
 {
   "appid": "your-app-id-here"
-  // 其他配置
 }
 ```
 
-2. **在 app.js 中配置 API 基础 URL**：
+2. **在 app.js 中配置 API 基础 URL**（`globalData.baseUrl`）：
 ```javascript
 App({
   globalData: {
-    apiBaseUrl: 'https://your-api-server.com/api/v1'
+    baseUrl: 'https://your-api-server.com'
   }
-  // 其他配置
 })
 ```
 
-### 后端配置
-
-1. **数据库配置（config/database.js）**：
-```javascript
-module.exports = {
-  host: 'localhost',
-  port: 3306,
-  user: 'root',
-  password: 'your-password',
-  database: 'sutwxapp',
-  charset: 'utf8mb4'
-};
-```
-
-2. **Redis配置（config/redis.js）**：
-```javascript
-module.exports = {
-  host: 'localhost',
-  port: 6379,
-  password: '',
-  db: 0
-};
-```
-
-3. **JWT配置（config/jwt.js）**：
-```javascript
-module.exports = {
-  secret: 'your-jwt-secret-key',
-  expiresIn: '7d'
-};
-```
+3. **配置合法域名**：在微信公众平台「开发 > 开发设置 > 服务器域名」中添加 request 合法域名（HTTPS）。
 
 ## 开发工具配置
 
-### VS Code 配置
+### VS Code 配置（可选）
 
-**必需插件**：
+**推荐插件**：
 - ESLint：代码检查
 - Prettier：代码格式化
-- Vetur：Vue.js支持（如果适用）
-- 微信代码片段：微信小程序代码片段
-- GitLens：Git增强功能
+- 微信小程序相关代码片段插件
+- GitLens：Git 增强
 
 **VS Code 设置**：
 ```json
 {
   "editor.formatOnSave": true,
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
-  },
   "prettier.singleQuote": true,
   "prettier.trailingComma": "es5",
   "prettier.tabWidth": 2
@@ -109,7 +71,7 @@ module.exports = {
 ### 微信开发者工具配置
 **必需设置**：
 - 调试基础库：最新稳定版
-- ES6转ES5：开启
+- ES6 转 ES5：开启
 - 增强编译：开启
 - 代码压缩：开启
 - 上传时自动压缩：开启
@@ -117,21 +79,18 @@ module.exports = {
 **域名白名单配置**：
 1. 登录微信公众平台
 2. 导航到开发 > 开发设置
-3. 将API服务器域名添加到服务器域名列表
+3. 将 API 服务器域名添加到服务器域名列表（需 HTTPS）
 
 ## 运行项目
 
-### 前端
+### 前端（小程序）
 1. 打开微信开发者工具
-2. 从`SutWxApp/SutWxApp`目录导入项目
-3. 点击"编译"按钮运行项目
-4. 点击"预览"按钮在真机上测试
+2. 从 `SutWxApp/SutWxApp` 目录导入项目
+3. 点击「编译」按钮运行项目
+4. 点击「预览」按钮在真机上测试
+5. 点击「上传」按钮上传代码包用于提审发布
 
-### 后端
-1. 导航到后端目录
-2. 启动服务：
-   - 生产环境：`npm start`
-   - 开发环境（热重载）：`npm run dev`
+> 小程序无本地后端进程；接口由 `globalData.baseUrl` 指向的外部服务承载。本地联调可将 `baseUrl` 指向后端测试地址。
 
 ## 代码规范
 

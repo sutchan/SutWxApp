@@ -34,64 +34,49 @@
 
 ## 测试环境配置
 
-### Bun 测试环境
+### 小程序测试体系
 
-项目使用 Bun 内置的测试框架（bun test）编写和运行测试。Bun 测试框架提供了高性能的测试执行能力，支持 TypeScript 原生运行，无需额外的编译步骤。测试环境的配置应当在 `package.json` 中定义，确保测试命令的一致性和可重复性。
+微信小程序的前端测试分为两个层面：
+
+1. **开发者工具手动/自动化测试**：微信开发者工具提供模拟器、真机预览与「自动化测试」能力（基于 miniprogram-automator），用于端到端流程验证。
+2. **逻辑层单元测试**：纯 JS 工具与 Service 可使用 Node 环境下的测试运行器（如 Jest / Vitest）执行，不依赖小程序运行时。
+
+> 本项目为纯前端小程序，**无需 Bun 或数据库**。单元测试建议采用 Jest（或项目既有 Node 测试工具），配置在 `SutWxApp/package.json` 的 `scripts.test`。
 
 ```json
 {
   "scripts": {
-    "test": "bun test",
-    "test:coverage": "bun test --coverage",
-    "test:unit": "bun test tests/unit",
-    "test:integration": "bun test tests/integration",
-    "test:e2e": "bun test tests/e2e"
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "test:unit": "jest tests/unit"
   }
 }
 ```
 
-### 测试数据库配置
+### 测试数据与环境隔离
 
-集成测试使用独立的测试数据库，避免对开发数据库或生产数据库产生影响。测试数据库的配置通过环境变量管理，确保测试环境与生产环境的隔离。数据库连接配置应当在测试初始化阶段加载，测试完成后清理测试数据。
-
-```typescript
-// tests/setup.ts
-import { config } from 'dotenv';
-
-config({ path: '.env.test' });
-
-export const testDbConfig = {
-  host: process.env.DB_HOST || 'localhost',
-  port: parseInt(process.env.DB_PORT || '3306'),
-  user: process.env.DB_USER || 'test',
-  password: process.env.DB_PASSWORD || 'test',
-  database: process.env.DB_NAME || 'sutwxapp_test',
-};
-```
+- 单元测试使用独立的 Mock 数据与本地存储桩，避免对生产/开发数据产生影响
+- 通过环境变量或测试配置区分测试基址（`baseUrl`），不写死到代码
+- 测试结束后清理临时写入的本地存储（`wx.setStorageSync` 的桩实现）
 
 ### Mock 服务配置
 
-对于外部依赖（如微信 API、第三方服务），应当使用 Mock 服务进行模拟。Mock 服务可以提供可控的测试数据，确保测试的稳定性和可重复性。项目使用 Mock 工具库（如 mockjs 或自定义 Mock 服务）实现测试数据的模拟。
+对于外部依赖（微信登录、后端 REST API），应当使用 Mock 进行模拟，保证测试稳定可重复。可在 `tests/mocks/` 下提供可控的测试数据：
 
-```typescript
-// tests/mocks/wechat-api.ts
-export const mockWechatLogin = (openid: string, sessionKey: string) => {
-  return {
-    errcode: 0,
-    errmsg: 'ok',
-    openid,
-    session_key: sessionKey,
-  };
-};
+```javascript
+// tests/mocks/wechat-api.js
+export const mockWechatLogin = (openid, sessionKey) => ({
+  errcode: 0,
+  errmsg: 'ok',
+  openid,
+  session_key: sessionKey,
+});
 
-export const mockUserInfo = (userId: string) => {
-  return {
-    userId,
-    nickname: '测试用户',
-    avatar: 'https://example.com/avatar.png',
-    points: 1000,
-  };
-};
+export const mockUserInfo = (userId) => ({
+  userId,
+  nickname: '测试用户',
+  avatar: 'https://example.com/avatar.png',
+});
 ```
 
 ## 测试文件组织
@@ -140,9 +125,9 @@ tests/
 
 ### 测试文件命名规范
 
-测试文件命名应当遵循以下规范：使用源文件名作为基础，添加 `.test.ts` 后缀；文件名使用小驼峰命名法，与源文件保持一致。例如，`user-service.ts` 对应的测试文件为 `user-service.test.ts`。
+测试文件命名应当遵循以下规范：使用源文件名作为基础，添加 `.test.js` 后缀；文件名使用小驼峰命名法，与源文件保持一致。例如，`user-service.js` 对应的测试文件为 `user-service.test.js`。
 
-对于组件测试，小程序组件文件 `component.js` 对应的测试文件为 `component.test.ts`，存放在组件目录或统一的组件测试目录中。
+对于组件测试，小程序组件文件 `component.js` 对应的测试文件为 `component.test.js`，存放在组件目录或统一的组件测试目录中。
 
 ## 测试用例编写标准
 

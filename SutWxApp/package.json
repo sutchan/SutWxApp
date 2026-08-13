@@ -1,0 +1,32 @@
+{
+  "name": "sut-wx-app",
+  "version": "3.0.2",
+  "description": "苏小糖微信小程序商城",
+  "main": "app.js",
+  "scripts": {
+    "lint": "eslint . --ext .js",
+    "test": "jest",
+    "lint:fix": "eslint . --ext .js --fix"
+  },
+  "keywords": [
+    "wechat",
+    "miniprogram",
+    "ecommerce"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "jest": "^29.7.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/__tests__/**/*.test.js"
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "json"
+    ]
+  }
+}

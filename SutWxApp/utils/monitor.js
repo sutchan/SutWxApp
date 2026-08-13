@@ -1,6 +1,6 @@
 /**
  * 文件名: monitor.js
- * 版本号: 3.0.1
+ * 版本号: 3.0.2
  * 更新日期: 2026-08-13
  * 描述: 性能监控工具，包含性能监控、错误收集、用户行为追踪和上传机制
  */
@@ -150,7 +150,7 @@ function addToBuffer(data) {
   dataBuffer.push(data);
 
   if (dataBuffer.length >= DEFAULT_CONFIG.maxBatchSize) {
-    reportData();
+    reportData().catch(() => {});
   }
 }
 
@@ -194,11 +194,13 @@ function reportData(customData) {
   };
 
   return new Promise((resolve) => {
-    if (!wx.request) {
+    // 必须使用原始请求引用，避免被 monitorApi 包裹后递归上报监控数据
+    const realRequest = originalRequest || wx.request;
+    if (!realRequest) {
       resolve(false);
       return;
     }
-    wx.request({
+    realRequest({
       url: `${DEFAULT_CONFIG.reportUrl}`,
       method: "POST",
       data: payload,

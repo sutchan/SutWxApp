@@ -1,6 +1,6 @@
 /**
  * 文件名: request.js
- * 版本号: 3.0.1
+ * 版本号: 3.0.2
  * 更新日期: 2026-08-13
  * 描述: 网络请求工具，封装wx.request，支持拦截器、重试机制、请求缓存、请求取消等
  */
@@ -545,7 +545,7 @@ function request(options) {
             const jitter = Math.random() * delay * 0.5;
             const retryDelayWithJitter = delay + jitter;
 
-            console.log(`请求失败，${retryCount}/${maxRetry}，${Math.round(retryDelayWithJitter)}ms后重试`, err);
+            console.warn(`请求失败，${retryCount}/${maxRetry}，${Math.round(retryDelayWithJitter)}ms后重试`);
             setTimeout(sendRequest, retryDelayWithJitter);
           } else {
             let errorMessage = "网络请求失败";
@@ -722,6 +722,16 @@ request.addResponseInterceptor = function (interceptor) {
   }
 };
 
+/**
+ * 判断一个错误是否由请求取消触发
+ * @param {Error} error 待判断的错误
+ * @returns {boolean}
+ */
+function isCancel(error) {
+  return !!error && error.message === "Request cancelled";
+}
+
 module.exports = request;
 module.exports.default = request;
 module.exports.CancelToken = CancelToken;
+module.exports.isCancel = isCancel;
