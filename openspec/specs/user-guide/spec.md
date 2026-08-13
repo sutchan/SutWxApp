@@ -18,9 +18,11 @@
 
 ### 项目简介
 
-苏铁微信小程序采用微信小程序原生框架开发，前端使用 TypeScript 语言编写，后端采用 Bun 1.x 运行时配合 Hono 框架构建 RESTful API 服务。数据存储层使用 MySQL、Redis 和 MongoDB 三种数据库，分别处理关系型数据、缓存数据和文档型数据。项目遵循模块化设计原则，将功能拆分为用户模块、商品模块、订单模块、积分模块、支付模块、物流模块和客服模块等独立模块，各模块之间通过服务层进行通信，保持低耦合高内聚的特性。
+苏铁微信小程序采用微信小程序原生框架开发，前端使用 JavaScript（ES6+）编写。项目为纯前端应用，数据由外部 REST API 提供，网络层统一封装于 `utils/request.js` 与 `services/*`。界面遵循 Apple 极简设计风格，基于全局 CSS 变量设计系统（见 `app.wxss`）。项目遵循模块化设计原则，将功能拆分为用户模块、商品模块、订单模块、购物车模块、地址模块等，页面、组件、服务、工具各司其职，保持低耦合高内聚。
 
-项目的技术栈选择充分考虑了性能和开发效率。Bun 作为 JavaScript 运行时，提供了比 Node.js 更快的启动速度和执行性能，同时内置了包管理器、测试框架和打包工具，简化了开发工具链。TypeScript 的类型系统为代码提供了更好的可维护性和 IDE 支持，减少运行时错误。WeUI 组件库提供了符合微信设计规范的 UI 组件，加速界面开发的同时保证了用户体验的一致性。
+> 本项目不含后端服务与数据库。后端服务的实现、部署与运维由对应团队负责，不在本仓库内。如需本地联调，将 `app.js` 的 `globalData.baseUrl` 指向后端测试地址即可。
+
+项目的技术栈选择充分考虑了开发效率与一致性。微信小程序原生框架无需额外构建步骤，开发体验直观；全局 CSS 变量设计系统保证了多页面视觉统一；`utils/request.js` 内置拦截器、重试、LRU 缓存、请求取消与并发控制，简化了网络层处理。
 
 ### 开发环境搭建
 
@@ -28,90 +30,35 @@
 
 在开始开发之前，需要准备好以下软件环境。微信开发者工具是开发微信小程序的必备工具，用于小程序的调试、预览和上传。开发者需要前往微信公众平台官网下载并安装最新版本的微信开发者工具。安装完成后，使用微信扫码登录，并在工具中创建一个小程序项目来验证环境是否正常。
 
-Bun 是项目的包管理器和运行时环境。访问 Bun 官网（https://bun.sh）下载适用于 Windows 的安装包，或使用以下命令通过命令行安装。如果已经安装了 Bun，可以通过 `bun --version` 命令验证安装版本，确保版本号在 1.0.0 以上。
+Visual Studio Code 是推荐的代码编辑器，提供小程序语法高亮、ESLint 代码规范检查与 Prettier 格式化支持。推荐安装以下插件提升效率：ESLint（代码规范检查）、Prettier（代码格式化）、微信小程序相关代码片段插件、GitLens（Git 操作增强）。
 
-```bash
-# Windows 安装
-npm install -g bun
-
-# 验证安装
-bun --version
-```
-
-Visual Studio Code 是推荐的代码编辑器，它提供了优秀的 TypeScript 支持和丰富的插件生态。推荐安装以下 VS Code 插件以提升开发效率：ESLint 用于代码规范检查，Prettier 用于代码格式化，微信小程序代码片段提供小程序语法高亮和代码补全，GitLens 增强 Git 操作界面。
-
-MySQL 8.0 用于存储关系型数据，Redis 7.0 用于缓存和会话管理，MongoDB 6.0 用于存储文档型数据。开发环境可以选择在本机安装这些数据库，或者使用 Docker 容器运行。对于使用 Docker 的开发者，可以使用以下命令快速启动数据库服务。
-
-```bash
-# 使用 Docker 启动 MySQL
-docker run --name sutwxapp-mysql -e MYSQL_ROOT_PASSWORD=root -p 3306:3306 -d mysql:8.0
-
-# 使用 Docker 启动 Redis
-docker run --name sutwxapp-redis -p 6379:6379 -d redis:7.0
-
-# 使用 Docker 启动 MongoDB
-docker run --name sutwxapp-mongodb -p 27017:27017 -d mongo:6.0
-```
+> 本项目为纯前端小程序，无需 Bun、数据库或 Docker。若需要运行图片压缩、i18n 处理等可选脚本工具，安装 Node.js（LTS）即可。
 
 #### 项目初始化
 
-克隆项目仓库到本地后，进入项目根目录执行依赖安装命令。Bun 会自动读取 package.json 文件并安装所有依赖项。安装完成后，需要配置环境变量文件来设置数据库连接、Redis 连接和微信小程序配置等信息。
+克隆项目仓库到本地后，用微信开发者工具打开小程序目录即可，无需安装后端依赖。
 
 ```bash
 # 克隆仓库
 git clone https://github.com/sutchan/SutWxApp.git
 cd SutWxApp
 
-# 安装依赖
-bun install
-
-# 复制环境配置文件
-cp .env.example .env
-
-# 编辑配置文件
-nano .env
+# 用微信开发者工具打开 SutWxApp/SutWxApp 目录
 ```
 
-环境配置文件 `.env` 包含以下关键配置项。数据库配置需要设置 MySQL 连接信息，包括主机地址、端口号、用户名、密码和数据库名称。Redis 配置需要设置缓存连接信息。微信小程序配置包括 AppID 和 APPSECRET，这些信息在微信公众平台获取。JWT 配置包括密钥和过期时间，用于用户认证 Token 的生成和验证。
-
-```dotenv
-# 服务器配置
-PORT=3000
-HOST=localhost
-
-# 数据库配置
-DB_HOST=localhost
-DB_PORT=3306
-DB_USER=root
-DB_PASSWORD=your_password
-DB_NAME=sutwxapp
-
-# Redis配置
-REDIS_HOST=localhost
-REDIS_PORT=6379
-
-# 微信小程序配置
-APPID=wx1234567890abcdef
-APPSECRET=1234567890abcdef1234567890abcdef
-
-# JWT配置
-JWT_SECRET=your-jwt-secret-key
-JWT_EXPIRES_IN=7d
-```
+小程序在 `app.js` 的 `globalData` 中配置后端基地址（`baseUrl`）。本地联调时将其指向后端测试环境地址（需 HTTPS）。微信公众平台「开发设置」中需将对应域名加入 request 合法域名。
 
 #### 启动服务
 
-开发环境启动分为前端和后端两部分。前端使用微信开发者工具打开项目目录（`SutWxApp/SutWxApp`）即可启动小程序开发服务器。微信开发者工具支持热重载，修改代码后会自动刷新预览界面。后端服务使用 Bun 启动开发服务器，支持 TypeScript 直接运行和热重载功能。
+开发环境只需启动小程序前端：
 
-```bash
-# 启动后端开发服务器（热重载）
-bun run dev
+1. 打开微信开发者工具
+2. 导入项目，目录选择 `SutWxApp/SutWxApp`
+3. 填写 AppID（或使用测试号）
+4. 点击「编译」启动预览，支持热重载
+5. 点击「预览」可在真机扫码调试
 
-# 或使用生产模式启动
-bun start
-```
-
-启动后，可以通过浏览器访问 `http://localhost:3000/api/v1/health` 来验证后端服务是否正常运行。如果返回健康检查响应，则表示服务启动成功。小程序前端的 API 请求需要配置为指向本地后端服务地址，配置方式为修改 `app.js` 中的 `apiBaseUrl` 值。
+小程序前端通过 `globalData.baseUrl` 指向的后端服务获取数据，无需本地后端进程。
 
 ### 代码结构说明
 

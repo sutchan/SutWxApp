@@ -2,6 +2,52 @@
 
 所有重要的项目变更都将记录在此文件中。
 
+## [3.0.2] - 2026-08-13
+
+### 修复内容
+
+#### 安全与存储统一
+- 移除 utils/store.js 中 XOR 混淆伪安全层，统一 token 为明文单键存储
+- 解决 authService 写明文、store.commit 写混淆、request.js 读明文三者路径不一致的隐患
+- app.js 关闭调试日志（debug:false），清理生产相关 console.log
+
+#### 监控修复
+- 修复 utils/monitor.js 监控上报递归陷阱（上报请求被 monitorApi 包裹器递归触发）
+- 清理 addToBuffer 中 reportData 浮空 Promise
+
+#### 请求层重构
+- pages/product/index.js、pages/home/index.js 改用 utils/request.js 封装（真实 CancelToken + 自动鉴权/CSRF）
+- product/index.js、home/index.js 按职责拆分为 parts.js / utils.js 子模块（单文件≤200行）
+- utils/request.js 新增 isCancel 静态方法，统一取消判定
+
+#### 工程化
+- 新增 package.json（lint/test 脚本）、.eslintrc.js 质量门禁
+- 新增 __tests__ 纯函数单元测试（product/home utils、format）
+
+### 文件变更
+```
+新增:
+- SutWxApp/package.json
+- SutWxApp/.eslintrc.js
+- SutWxApp/__tests__/product.utils.test.js
+- SutWxApp/__tests__/product.parts.test.js
+- SutWxApp/__tests__/home.utils.test.js
+- SutWxApp/pages/product/utils.js
+- SutWxApp/pages/product/parts.js
+- SutWxApp/pages/home/utils.js
+- SutWxApp/pages/home/parts.js
+
+修改:
+- SutWxApp/utils/store.js
+- SutWxApp/utils/monitor.js
+- SutWxApp/utils/request.js
+- SutWxApp/app.js
+- SutWxApp/pages/product/index.js
+- SutWxApp/pages/home/index.js
+- SutWxApp/pages/order/confirm.js
+- README.md
+```
+
 ## [3.0.1] - 2026-08-13
 
 ### 修复内容

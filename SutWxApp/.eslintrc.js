@@ -9,7 +9,6 @@ module.exports = {
   env: {
     es2021: true,
     node: true,
-    "wechat-app": true,
   },
   parserOptions: {
     ecmaVersion: 2021,
