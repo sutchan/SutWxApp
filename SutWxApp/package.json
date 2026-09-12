@@ -26,6 +26,7 @@
     "node": ">=18"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.7",
     "eslint": "^10.10.0",
     "jest": "^30.5.1"
   },

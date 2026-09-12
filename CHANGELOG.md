@@ -7,7 +7,8 @@
 ### 变更内容
 
 #### 工程配置
-- 新增 `eslint.config.js`（ESLint 10 扁平配置），通过 `FlatCompat` 复用 `SutWxApp/.eslintrc.js` 既有规则、全局变量与 overrides，`npm run lint` 恢复正常。
+- 新增 `SutWxApp/eslint.config.js`（ESLint 10 扁平配置，纯声明式、无 `@eslint/eslintrc` 依赖）：recommended 规则来自 eslint 自带的 `@eslint/js`，node / 微信小程序全局变量就地声明，原 `.eslintrc.js` 删除（避免双规则源）。
+- `package.json` 的 `lint` / `lint:fix` 脚本移除 flat config 下已废除的 `--ext .js` 参数。
 - 版本单一来源同步：package.json / app.js globalData.version / README 徽章统一至 3.0.10。
 
 ## [3.0.9] - 2026-09-12
