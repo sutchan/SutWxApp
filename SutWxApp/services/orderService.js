@@ -1,109 +1,64 @@
-
 /**
  * 文件名: orderService.js
- * 版本号: 3.0.8
+ * 版本号: 3.0.9
  * 更新日期: 2026-09-12
  * 描述: 订单服务层，提供订单相关功能
  */
 
-const mockOrders = [
-  {
-    id: 1,
-    orderNo: "SU20260506001",
+const { mockOrders } = require("./orderService.mock");
+
+/**
+ * 生成订单编号（SU + 年月日 + 3 位随机序号）
+ * @returns {string}
+ */
+function genOrderNo() {
+  return `SU${new Date().getFullYear()}${String(new Date().getMonth() + 1).padStart(2, "0")}${String(new Date().getDate()).padStart(2, "0")}${String(Math.floor(Math.random() * 1000)).padStart(3, "0")}`;
+}
+
+/**
+ * 组装订单对象
+ * @param {Array} items 下单商品列表
+ * @param {string} [remark] 订单备注
+ * @returns {Object}
+ */
+function buildOrderPayload(items, remark) {
+  const total = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const shippingFee = total >= 99 ? 0 : 10;
+  return {
+    id: Date.now(),
+    orderNo: genOrderNo(),
     status: 1,
     statusText: "待付款",
-    totalPrice: 29.9,
-    productPrice: 29.9,
-    shippingFee: 0,
-    totalQuantity: 1,
-    createTime: "2026-05-06 10:30:00",
-    products: [
-      {
-        id: 1,
-        name: "绿萝盆栽",
-        image: "/images/placeholder.svg",
-        price: 29.9,
-        quantity: 1,
-        spec: "中号盆"
-      }
-    ],
+    totalPrice: total,
+    productPrice: total,
+    shippingFee,
+    totalQuantity: items.reduce((sum, item) => sum + item.quantity, 0),
+    createTime: new Date().toLocaleString(),
+    products: items.map((item) => ({
+      id: item.id,
+      name: item.name,
+      image: item.image,
+      price: item.price,
+      quantity: item.quantity,
+      spec: item.spec,
+    })),
     address: {
-      name: "张三",
+      name: "测试用户",
       phone: "13800138000",
-      detail: "北京市朝阳区某某街道123号"
-    }
-  },
-  {
-    id: 2,
-    orderNo: "SU20260506002",
-    status: 3,
-    statusText: "待收货",
-    totalPrice: 137.9,
-    productPrice: 127.9,
-    shippingFee: 10,
-    totalQuantity: 3,
-    createTime: "2026-05-05 15:20:00",
-    products: [
-      {
-        id: 2,
-        name: "多肉植物组合",
-        image: "/images/placeholder.svg",
-        price: 49.9,
-        quantity: 2,
-        spec: "5株装"
-      },
-      {
-        id: 3,
-        name: "发财树",
-        image: "/images/placeholder.svg",
-        price: 38.1,
-        quantity: 1,
-        spec: "1米高"
-      }
-    ],
-    address: {
-      name: "李四",
-      phone: "13900139000",
-      detail: "上海市浦东新区某某路456号"
-    }
-  },
-  {
-    id: 3,
-    orderNo: "SU20260506003",
-    status: 4,
-    statusText: "已完成",
-    totalPrice: 88.0,
-    productPrice: 88.0,
-    shippingFee: 0,
-    totalQuantity: 1,
-    createTime: "2026-05-01 09:10:00",
-    completeTime: "2026-05-04 14:20:00",
-    products: [
-      {
-        id: 3,
-        name: "发财树",
-        image: "/images/placeholder.svg",
-        price: 88.0,
-        quantity: 1,
-        spec: "1米高"
-      }
-    ],
-    address: {
-      name: "王五",
-      phone: "13700137000",
-      detail: "广州市天河区某某巷789号"
-    }
-  }
-];
+      detail: "测试地址",
+    },
+    remark: remark || "",
+  };
+}
 
 async function getOrderList(status) {
   try {
     let orders = [...mockOrders];
-    
+
     if (status !== null && status !== undefined) {
-      orders = orders.filter(order => order.status === status);
+      orders = orders.filter((order) => order.status === status);
     }
-    
+
     return orders;
   } catch (error) {
     console.error("获取订单列表失败:", error);
@@ -113,14 +68,14 @@ async function getOrderList(status) {
 
 async function getOrderDetail(orderId) {
   try {
-    const order = mockOrders.find(o => o.id == orderId);
+    const order = mockOrders.find((o) => o.id == orderId);
     if (!order) {
       throw new Error("订单不存在");
     }
-    
+
     return {
       ...order,
-      couponDiscount: 0
+      couponDiscount: 0,
     };
   } catch (error) {
     console.error("获取订单详情失败:", error);
@@ -132,34 +87,7 @@ async function createOrder(orderData) {
   try {
     // 注：addressId 暂未使用（当前为 mock 地址），待接入 WordPress/WooCommerce 订单接口后回填真实收货地址
     const { items, remark } = orderData;
-    
-    const newOrder = {
-      id: Date.now(),
-      orderNo: `SU${new Date().getFullYear()}${String(new Date().getMonth() + 1).padStart(2, '0')}${String(new Date().getDate()).padStart(2, '0')}${String(Math.floor(Math.random() * 1000)).padStart(3, '0')}`,
-      status: 1,
-      statusText: "待付款",
-      totalPrice: items.reduce((sum, item) => sum + (item.price * item.quantity), 0),
-      productPrice: items.reduce((sum, item) => sum + (item.price * item.quantity), 0),
-      shippingFee: items.reduce((sum, item) => sum + (item.price * item.quantity), 0) >= 99 ? 0 : 10,
-      totalQuantity: items.reduce((sum, item) => sum + item.quantity, 0),
-      createTime: new Date().toLocaleString(),
-      products: items.map(item => ({
-        id: item.id,
-        name: item.name,
-        image: item.image,
-        price: item.price,
-        quantity: item.quantity,
-        spec: item.spec
-      })),
-      address: {
-        name: "测试用户",
-        phone: "13800138000",
-        detail: "测试地址"
-      },
-      remark: remark || ""
-    };
-    
-    return newOrder;
+    return buildOrderPayload(items, remark);
   } catch (error) {
     console.error("创建订单失败:", error);
     throw error;
@@ -168,7 +96,7 @@ async function createOrder(orderData) {
 
 async function cancelOrder(orderId) {
   try {
-    const orderIndex = mockOrders.findIndex(o => o.id == orderId);
+    const orderIndex = mockOrders.findIndex((o) => o.id == orderId);
     if (orderIndex >= 0) {
       mockOrders[orderIndex].status = 0;
       mockOrders[orderIndex].statusText = "已取消";
@@ -182,7 +110,7 @@ async function cancelOrder(orderId) {
 
 async function confirmReceive(orderId) {
   try {
-    const orderIndex = mockOrders.findIndex(o => o.id == orderId);
+    const orderIndex = mockOrders.findIndex((o) => o.id == orderId);
     if (orderIndex >= 0) {
       mockOrders[orderIndex].status = 4;
       mockOrders[orderIndex].statusText = "已完成";
@@ -200,6 +128,5 @@ module.exports = {
   getOrderDetail,
   createOrder,
   cancelOrder,
-  confirmReceive
+  confirmReceive,
 };
-

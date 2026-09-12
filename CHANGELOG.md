@@ -2,6 +2,20 @@
 
 所有重要的项目变更都将记录在此文件中。
 
+## [3.0.9] - 2026-09-12
+
+### 变更内容
+
+#### 源代码按职责拆分（单文件 ≤200 行）
+- `utils/request.js`（738 行）拆分为：`request-config.js`（共享配置）、`request-platform.js`（wx 环境辅助）、`request-cache.js`（LRU 缓存）、`request-security.js`（CSRF / XSS / SQL 注入防护）、`request-cancel.js`（取消令牌）、`request-api.js`（配置组装与公共 API 注册）、`request.js`（主模块编排）。
+- `utils/monitor.js`（557 行）拆分为：`monitor-config.js`、`monitor-utils.js`（会话/系统信息工具）、`monitor-core.js`（上报核心）、`monitor-collectors.js`（网络/FPS/内存/页面/API 采集器）、`monitor.js`（主模块编排）。
+- `services/productService.js` 与 `services/orderService.js` 的商品/订单演示数据抽离至 `*.mock.js`。
+- `pages/product/index.js`（410 行）加载与交互逻辑分别下沉到 `behaviors/product-loaders.js` 与 `behaviors/product-actions.js`。
+- `pages/address/index.js` 校验/格式化/回调抽离至 `validators.js` / `format.js` / `handlers.js`。
+- `pages/cart/index.js` 金额与数量计算抽离至 `calc.js`。
+- `app.js` 存储/主题/登录/带鉴权请求逻辑抽离至 `helpers.js`。
+- 拆分后各模块保持导出契约不变，ESLint 与 Jest 门禁全绿。
+
 ## [3.0.8] - 2026-09-12
 
 ### 变更内容
