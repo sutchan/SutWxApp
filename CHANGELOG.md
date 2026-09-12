@@ -2,6 +2,42 @@
 
 所有重要的项目变更都将记录在此文件中。
 
+## [3.0.6] - 2026-09-12
+
+### 新增功能：支持 WordPress WooCommerce 商品
+
+#### 商品数据接入 WooCommerce
+- 新增 `models/product.js`：`mapWooCommerceProduct` / `mapWooCommerceProducts` 将 WooCommerce 商品（WP REST `wp-json/wc/v3/products`）映射为小程序统一商品 DTO（价格、原价、图集、分类、库存、SKU、规格、评分、富文本详情）。
+- `services/productService.js` 增加数据源开关：默认 `mock`；当 `app.js` 的 `globalData.productSource` 设为 `woocommerce` 时，调用 `/api/product/list`、`/api/product/detail`（由配套 WP 插件映射）并经 `models/product.js` 映射后返回。
+- 商品详情页 `pages/product/index.js` 改为经 `productService.getProductDetail` 获取并映射，统一列表与详情的数据来源；mock 商品补充 `specs` 以保证规格/加购可用。
+- 新增单元测试 `__tests__/product.mapper.test.js` 覆盖映射与容错。
+
+#### 文档同步
+- `data/spec.md` 新增「WooCommerce 商品实体映射」字段对照表。
+- `api/spec.md` 新增「WooCommerce 商品接口」端点与契约说明。
+- `features/spec.md` 新增「2.4 WooCommerce 商品」功能需求。
+- `architecture/spec.md` / `user-guide/spec.md` 补充 WooCommerce 数据源说明。
+
+### 文件变更
+```
+新增:
+- SutWxApp/models/product.js
+- SutWxApp/__tests__/product.mapper.test.js
+
+修改:
+- SutWxApp/services/productService.js
+- SutWxApp/pages/product/index.js
+- SutWxApp/app.js
+- SutWxApp/package.json
+- openspec/specs/data/spec.md
+- openspec/specs/api/spec.md
+- openspec/specs/features/spec.md
+- openspec/specs/architecture/spec.md
+- openspec/specs/user-guide/spec.md
+- README.md
+- CHANGELOG.md
+```
+
 ## [3.0.5] - 2026-09-12
 
 ### 文档完善（WordPress 对接准确性）

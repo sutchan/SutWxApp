@@ -321,6 +321,20 @@ https://api.example.com/v{version}/{resource}/{id}?{query_parameters}
   }
   ```
 
+### WooCommerce 商品接口（数据源：WordPress + WooCommerce 插件）
+
+小程序商品数据可来自 WooCommerce。配套 WP 插件将 WooCommerce REST（`wp-json/wc/v3/products`）映射为小程序命名空间端点，由 `services/productService.js` 消费并经 `models/product.js` 映射为统一 DTO。
+
+- **获取商品列表**
+  - **URL**: `GET /api/product/list`
+  - **查询参数**: `page`、`pageSize`、`categoryId`、`keyword`（与现有列表筛选一致）
+  - **响应**: `{ "list": [ <WooCommerce 商品> ], "total": 100, "page": 1, "pageSize": 20 }` 或数组；字段经 `mapWooCommerceProduct` 映射
+- **获取商品详情**
+  - **URL**: `GET /api/product/detail?id={id}`
+  - **响应**: 单个 <WooCommerce 商品> 对象（映射为 DTO）
+
+> 若后端直接返回已映射的 DTO，则 `mapWooCommerceProduct` 幂等透传；若返回原始 WooCommerce JSON，则自动转换。接口无需鉴权（`needAuth: false`）。商品数据源由 `app.js` 的 `globalData.productSource`（`mock` 默认 / `woocommerce`）切换。
+
 ### 订单API
 
 #### 创建订单

@@ -7,6 +7,7 @@
 
 const app = getApp();
 const cartService = require("../../services/cartService");
+const productService = require("../../services/productService");
 const request = require("../../utils/request");
 const { getCurrentSpecPrice, buildVisibleImages, buildImageLoadedMap } = require("./utils");
 const { adjustQuantity, parseQuantity, buildBuyNowItem } = require("./parts");
@@ -127,14 +128,13 @@ Page({
     if (this.data.isLoading) return;
     this.setData({ isLoading: true });
 
-    this.doRequest("productDetail", {
-      url: "/api/product/detail",
-      method: "GET",
-      data: { id: this.data.productId },
-    })
-      .then((data) => {
+    const token = new request.CancelToken();
+    this.requestTokens.productDetail = token;
+
+    productService
+      .getProductDetail(this.data.productId, { cancelToken: token })
+      .then((productInfo) => {
         if (!this.data.isPageVisible) return;
-        const productInfo = data;
         this.setData({
           productInfo,
           selectedSpecIndex: 0,

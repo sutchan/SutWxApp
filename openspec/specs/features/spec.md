@@ -136,6 +136,30 @@ GET /api/v1/products/{id}/reviews
 GET /api/v1/products/{id}/related
 ```
 
+### 2.4 WooCommerce 商品（WordPress 电商插件）
+
+#### 2.4.1 功能描述
+
+商品数据支持来自 **WooCommerce**（WordPress 电商插件）。小程序通过 `services/productService.js` 调用 `/api/product/list`、`/api/product/detail` 获取商品，并由 `models/product.js` 将 WooCommerce 商品映射为统一 DTO，在首页、分类页、商品详情页展示商品图文与价格。
+
+#### 2.4.2 功能需求
+
+| 需求编号 | 需求描述 | 优先级 | 验收标准 |
+|---------|---------|--------|----------|
+| FR-WC-001 | 从 WooCommerce 拉取商品列表 | P0 | 分类/搜索筛选可用 |
+| FR-WC-002 | 商品详情展示（图文/价格/库存） | P0 | 与 WP 后台一致 |
+| FR-WC-003 | 多规格商品展示 | P1 | 规格联动价格/库存 |
+| FR-WC-004 | 商品详情富文本渲染 | P1 | 支持 rich-text / wxParse |
+
+#### 2.4.3 接口设计
+
+```
+GET /api/product/list
+GET /api/product/detail?id={id}
+```
+
+> 数据源开关：`app.js` 的 `globalData.productSource`（`mock` 默认 / `woocommerce`），配套 WP 插件将 `wp-json/wc/v3/products` 映射为上述端点。
+
 ## 3. 用户管理功能
 
 ### 3.1 用户注册与登录

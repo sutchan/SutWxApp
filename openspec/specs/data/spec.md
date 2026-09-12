@@ -64,6 +64,29 @@
 
 > 字段命名仍以 snake_case ↔ camelCase 转换为准；WP 返回字段（如 `date_gmt`、`featured_media`）在 `services/*` 中做映射，页面只使用语义化 camelCase。
 
+#### WooCommerce 商品实体映射
+
+商品信息可来自 **WooCommerce**（WordPress 电商插件）。小程序经 `services/productService.js` 调用 `/api/product/list`、`/api/product/detail`（由配套 WP 插件将 WooCommerce REST `wp-json/wc/v3/products` 映射而来），再由 `models/product.js` 的 `mapWooCommerceProduct()` 转换为统一商品 DTO。
+
+| WooCommerce 字段 | 小程序 DTO 字段 | 说明 |
+|------------------|----------------|------|
+| `id` | `id` | 商品 ID |
+| `name` | `name` | 商品名称 |
+| `price` / `regular_price` / `sale_price` | `price` / `originPrice` | 当前价 / 原价（划线价） |
+| `images[].src` | `image` / `images` | 主图 / 图集 |
+| `categories[].id\|name` | `categoryId` / `categoryName` | 所属分类 |
+| `total_sales` | `sales` | 销量 |
+| `manage_stock` / `stock_quantity` / `stock_status` | `stock` / `stockStatus` | 库存与状态 |
+| `sku` | `sku` | 货号 |
+| `short_description` | `desc` | 短描述（已去标签） |
+| `description` | `description` | 详情（富文本，需 rich-text / wxParse 渲染） |
+| `attributes`（variation） | `specs` | 规格选项 |
+| `average_rating` / `rating_count` | `rating` / `reviewCount` | 评分与评价数 |
+| `type` | `type` | simple / variable 等 |
+| `permalink` | `permalink` | 原文链接 |
+
+> 字段命名仍以 snake_case ↔ camelCase 转换为准；`mapWooCommerceProduct` 对「已是 DTO」的输入做幂等规整（补全 `specs` 等默认值），便于 mock 与真实数据混用。
+
 #### 属性命名规范
 
 数据表字段和文档属性的命名同样采用蛇形命名法，使用小写字母和下划线组合。字段命名应当准确反映字段的含义，避免使用缩写或模糊的名称。例如，用户姓名字段命名为 `user_name` 而非 `name` 或 `un`，手机号字段命名为 `phone_number` 而非 `mobile` 或 `tel`。

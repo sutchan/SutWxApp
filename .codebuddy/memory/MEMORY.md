@@ -29,6 +29,7 @@
 - 鉴权：典型为微信 `wx.login` 拿 code → 插件签发 token（非通用 JWT）；用户以 openid 关联 WP 用户。
 - 文章 HTML 渲染：参考项目用 `wxParse`（HTML→WXML）；本项目 `utils/request.js` 的 `sanitizeHtml()` 做安全清洗，渲染层待补（建议 rich-text / towxml / wxParse）。
 - 本项目当前用自定义 `/api/*` + `/auth/*`（占位 baseUrl、部分 mock），属于"插件/代理命名空间"的等价约定；接入真实 WP 时建议采用插件命名空间方案并补齐渲染层。
+- 已落地 WooCommerce 商品支持（v3.0.6）：`SutWxApp/models/product.js` 的 `mapWooCommerceProduct` 将 WC 商品（`wp-json/wc/v3/products`）映射为统一商品 DTO（price/originPrice/images/category/stock/sku/specs/rating/description 等）；`services/productService.js` 用 `globalData.productSource`（`mock` 默认 / `woocommerce`）切换数据源，WooCommerce 路径调 `/api/product/list`、`/api/product/detail`（由配套 WP 插件映射）；详情页 `pages/product/index.js` 改为经 `productService.getProductDetail` 获取。单测 `__tests__/product.mapper.test.js`。
 
 ## 工具链坑（Windows/PowerShell）
 - `node -e "..."` 内嵌正则/中文易被 PowerShell 破坏，复杂脚本改用临时 `.mjs` 文件。

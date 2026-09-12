@@ -1,10 +1,33 @@
-
 /**
  * 文件名: productService.js
- * 版本号: 3.0.0
- * 更新日期: 2026-07-01
- * 描述: 产品服务层，提供产品相关功能
+ * 版本号: 3.0.6
+ * 更新日期: 2026-09-12
+ * 描述: 产品服务层，提供产品相关功能（支持 WooCommerce 数据源）
  */
+
+const request = require("../utils/request");
+const { mapWooCommerceProduct, mapWooCommerceProducts } = require("../models/product");
+
+// 商品数据源：'mock'（默认，演示/离线）| 'woocommerce'（WordPress + WooCommerce 插件）
+function getProductSource() {
+  try {
+    const app = typeof getApp === "function" ? getApp() : null;
+    if (app && app.globalData && app.globalData.productSource) {
+      return app.globalData.productSource;
+    }
+  } catch (e) {
+    // 测试或非小程序环境：回退 mock
+  }
+  return "mock";
+}
+
+// 兼容后端包络 { code, data } 或直接返回数据
+function unwrap(res) {
+  if (res && typeof res === "object" && "code" in res && res.data !== undefined) {
+    return res.data;
+  }
+  return res;
+}
 
 const mockProducts = [
   {
@@ -22,7 +45,8 @@ const mockProducts = [
     description: "绿萝是净化空气的最佳植物之一，适合放在室内养护",
     isFavorite: false,
     rating: 4.8,
-    reviewCount: 256
+    reviewCount: 256,
+    specs: [{ id: 0, name: "默认规格", price: 29.9, stock: 100 }],
   },
   {
     id: 2,
@@ -39,7 +63,8 @@ const mockProducts = [
     description: "精选5种不同的多肉植物，包含精美花盆",
     isFavorite: false,
     rating: 4.9,
-    reviewCount: 189
+    reviewCount: 189,
+    specs: [{ id: 0, name: "默认规格", price: 49.9, stock: 50 }],
   },
   {
     id: 3,
@@ -56,7 +81,8 @@ const mockProducts = [
     description: "发财树寓意吉祥，适合放在办公室或家中",
     isFavorite: false,
     rating: 4.7,
-    reviewCount: 134
+    reviewCount: 134,
+    specs: [{ id: 0, name: "默认规格", price: 88.0, stock: 30 }],
   },
   {
     id: 4,
@@ -73,7 +99,8 @@ const mockProducts = [
     description: "精选优质蝴蝶兰，花期长，花色艳丽",
     isFavorite: false,
     rating: 4.9,
-    reviewCount: 98
+    reviewCount: 98,
+    specs: [{ id: 0, name: "默认规格", price: 128.0, stock: 25 }],
   },
   {
     id: 5,
@@ -90,7 +117,8 @@ const mockProducts = [
     description: "优质陶瓷材质，简约现代设计",
     isFavorite: false,
     rating: 4.6,
-    reviewCount: 312
+    reviewCount: 312,
+    specs: [{ id: 0, name: "默认规格", price: 39.9, stock: 200 }],
   },
   {
     id: 6,
@@ -107,26 +135,40 @@ const mockProducts = [
     description: "专门为绿植配置的营养土，富含养分",
     isFavorite: false,
     rating: 4.8,
-    reviewCount: 456
-  }
+    reviewCount: 456,
+    specs: [{ id: 0, name: "默认规格", price: 19.9, stock: 500 }],
+  },
 ];
 
 async function getProductList(params = {}) {
+  if (getProductSource() === "woocommerce") {
+    try {
+      const raw = await request.get("/api/product/list", params, { needAuth: false });
+      const payload = unwrap(raw);
+      const list = (payload && (payload.list || payload)) || [];
+      return mapWooCommerceProducts(list);
+    } catch (error) {
+      console.error("WooCommerce 商品列表获取失败:", error);
+      return [];
+    }
+  }
+
   try {
     let products = [...mockProducts];
-    
+
     if (params.categoryId) {
-      products = products.filter(p => p.categoryId == params.categoryId);
+      products = products.filter((p) => p.categoryId == params.categoryId);
     }
-    
+
     if (params.keyword) {
       const keyword = params.keyword.toLowerCase();
-      products = products.filter(p => 
-        p.name.toLowerCase().includes(keyword) || 
-        p.desc.toLowerCase().includes(keyword)
+      products = products.filter(
+        (p) =>
+          p.name.toLowerCase().includes(keyword) ||
+          p.desc.toLowerCase().includes(keyword),
       );
     }
-    
+
     return products;
   } catch (error) {
     console.error("获取产品列表失败:", error);
@@ -134,21 +176,32 @@ async function getProductList(params = {}) {
   }
 }
 
-async function getProductDetail(productId) {
-  try {
-    const product = mockProducts.find(p => p.id == productId);
+async function getProductDetail(productId, options = {}) {
+  if (getProductSource() === "woocommerce") {
+    const reqOptions = { needAuth: false };
+    if (options && options.cancelToken) reqOptions.cancelToken = options.cancelToken;
+    const raw = await request.get(
+      "/api/product/detail",
+      { id: productId },
+      reqOptions,
+    );
+    const product = mapWooCommerceProduct(unwrap(raw));
     if (!product) {
       throw new Error("产品不存在");
     }
-    
+    return product;
+  }
+
+  try {
+    const product = mockProducts.find((p) => p.id == productId);
+    if (!product) {
+      throw new Error("产品不存在");
+    }
+
     return {
       ...product,
-      details: [
-        "产品参数1",
-        "产品参数2",
-        "产品参数3"
-      ],
-      tags: ["热销", "新品"]
+      details: ["产品参数1", "产品参数2", "产品参数3"],
+      tags: ["热销", "新品"],
     };
   } catch (error) {
     console.error("获取产品详情失败:", error);
@@ -158,10 +211,12 @@ async function getProductDetail(productId) {
 
 async function getRelatedProducts(productId, limit = 4) {
   try {
-    const product = mockProducts.find(p => p.id == productId);
+    const product = mockProducts.find((p) => p.id == productId);
     if (!product) return [];
-    
-    let related = mockProducts.filter(p => p.id != productId && p.categoryId == product.categoryId);
+
+    let related = mockProducts.filter(
+      (p) => p.id != productId && p.categoryId == product.categoryId,
+    );
     return related.slice(0, limit);
   } catch (error) {
     console.error("获取相关产品失败:", error);
@@ -171,7 +226,7 @@ async function getRelatedProducts(productId, limit = 4) {
 
 async function addToFavorite(productId) {
   try {
-    const product = mockProducts.find(p => p.id == productId);
+    const product = mockProducts.find((p) => p.id == productId);
     if (product) {
       product.isFavorite = true;
     }
@@ -184,7 +239,7 @@ async function addToFavorite(productId) {
 
 async function removeFromFavorite(productId) {
   try {
-    const product = mockProducts.find(p => p.id == productId);
+    const product = mockProducts.find((p) => p.id == productId);
     if (product) {
       product.isFavorite = false;
     }
@@ -200,6 +255,7 @@ module.exports = {
   getProductDetail,
   getRelatedProducts,
   addToFavorite,
-  removeFromFavorite
+  removeFromFavorite,
+  mapWooCommerceProduct,
+  mapWooCommerceProducts,
 };
-

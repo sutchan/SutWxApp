@@ -29,6 +29,7 @@
 - 后端为 WordPress 网站，作为无头 CMS 提供网站内容（文章、页面、分类、媒体、自定义文章类型）。
 - 小程序通过 REST API 获取内容；当前接口以 `/api/*` 暴露，对应 WP 侧由配套插件注册的自定义 REST 命名空间（如 `wp-json/minapper/v1/`、`wp-json/watch-life-net/v1/`，亦可复用核心 `wp-json/wp/v2/`），鉴权走 `/auth/*`（微信 `wx.login` code 换取的 token，或 JWT）。
 - 参考实现：微慕 Minapper / Watch-Life（`https://github.com/iamxjb/winxin-app-watch-life.net`）+ 配套 WP 插件 `rest-api-to-miniprogram`；其文章 HTML 渲染采用 `wxParse`（HTML→WXML）。
+- 商品数据可来自 **WooCommerce** 插件：小程序经 `services/productService.js` 调用 `/api/product/list`、`/api/product/detail`（插件将 `wp-json/wc/v3/products` 映射而来），由 `models/product.js` 的 `mapWooCommerceProduct()` 转为统一 DTO，在首页/分类/详情页展示。数据源由 `app.js` 的 `globalData.productSource`（`mock` / `woocommerce`）切换。
 - 商品/订单/购物车等电商数据可由 WordPress + WooCommerce 提供，同样经上述 API 层暴露。
 
 ### 内容渲染与排版优化（核心能力）
