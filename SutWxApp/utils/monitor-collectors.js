@@ -9,6 +9,7 @@ const CONFIG = require("./monitor-config");
 const { getWx } = require("./request-platform");
 const { getCurrentTime } = require("./monitor-utils");
 const core = require("./monitor-core");
+const report = require("./monitor-report");
 
 let memoryMonitor = null;
 
@@ -25,7 +26,7 @@ function monitorNetwork() {
   });
   wx.onNetworkStatusChange((res) => {
     core.setNetworkStatus(res.networkType, res.isConnected && res.networkType !== "none");
-    core.behavior("network_change", {
+    report.behavior("network_change", {
       networkType: res.networkType,
       isConnected: res.isConnected,
     });
@@ -44,7 +45,7 @@ function monitorFPS() {
     const delta = now - lastTime;
     if (delta >= 1000) {
       const fps = Math.round((frameCount * 1000) / delta);
-      core.performance("fps", fps);
+      report.performance("fps", fps);
       frameCount = 0;
       lastTime = now;
     }
@@ -98,7 +99,7 @@ function monitorPageLoad() {
       const startTime = getCurrentTime();
       currentPage.onLoad = function (...args) {
         const loadTime = getCurrentTime() - startTime;
-        core.performance("page_load", loadTime, { page: currentPage.route });
+        report.performance("page_load", loadTime, { page: currentPage.route });
         return originalOnLoad.apply(this, args);
       };
     }
@@ -120,12 +121,12 @@ function monitorApi() {
     const originalFail = options.fail;
     options.success = function (res) {
       const duration = getCurrentTime() - startTime;
-      core.performance("api_request", duration, { url, status: res.statusCode });
+      report.performance("api_request", duration, { url, status: res.statusCode });
       if (originalSuccess) originalSuccess(res);
     };
     options.fail = function (err) {
       const duration = getCurrentTime() - startTime;
-      core.error(`API请求失败: ${url}`, { url, duration, err });
+      report.error(`API请求失败: ${url}`, { url, duration, err });
       if (originalFail) originalFail(err);
     };
     const realRequest = core.getOriginalRequest();

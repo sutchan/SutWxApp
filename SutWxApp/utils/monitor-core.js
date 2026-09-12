@@ -10,7 +10,6 @@ const { checkWx } = require("./request-platform");
 const { generateSessionId, getCurrentPagePath, getCurrentTime } = require("./monitor-utils");
 
 const dataBuffer = [];
-let reportTimer = null;
 let lastReportTime = 0;
 const sessionId = generateSessionId();
 let behaviorMode = "normal";
@@ -111,47 +110,6 @@ function reportData(customData) {
 }
 
 /**
- * 启动自动上报定时器
- */
-function startAutoReport() {
-  if (!CONFIG.enableAutoReport) return;
-  if (reportTimer) return;
-
-  const globalObj =
-    typeof window !== "undefined"
-      ? window
-      : typeof wx !== "undefined"
-        ? wx
-        : typeof global !== "undefined"
-          ? global
-          : {};
-
-  reportTimer = (globalObj.setInterval || setTimeout)(() => {
-    if (dataBuffer.length > 0) {
-      reportData();
-    }
-  }, CONFIG.reportInterval);
-}
-
-/**
- * 停止自动上报定时器
- */
-function stopAutoReport() {
-  if (reportTimer) {
-    const globalObj =
-      typeof window !== "undefined"
-        ? window
-        : typeof wx !== "undefined"
-          ? wx
-          : typeof global !== "undefined"
-            ? global
-            : {};
-    (globalObj.clearInterval || globalObj.clearTimeout)(reportTimer);
-    reportTimer = null;
-  }
-}
-
-/**
  * 设置行为模式
  * @param {string} mode 行为模式
  */
@@ -197,8 +155,6 @@ module.exports = {
   createMonitorData,
   addToBuffer,
   reportData,
-  startAutoReport,
-  stopAutoReport,
   setBehaviorMode,
   getOriginalRequest,
   setOriginalRequest,

@@ -7,6 +7,9 @@
 
 const CONFIG = require("./monitor-config");
 const core = require("./monitor-core");
+const report = require("./monitor-report");
+const observers = require("./monitor-observers");
+const scheduler = require("./monitor-scheduler");
 const collectors = require("./monitor-collectors");
 
 /**
@@ -32,10 +35,10 @@ function init(config = {}) {
     collectors.monitorApi();
   }
   if (CONFIG.enableAutoReport) {
-    core.startAutoReport();
+    scheduler.startAutoReport();
   }
 
-  core.behavior("monitor_init", {
+  report.behavior("monitor_init", {
     appId: CONFIG.appId,
     sessionId: core.getSessionId(),
   });
@@ -45,24 +48,24 @@ function init(config = {}) {
  * 销毁监控
  */
 function destroy() {
-  core.stopAutoReport();
+  scheduler.stopAutoReport();
   collectors.resetCollectors();
 }
 
 const monitor = {
   init,
   destroy,
-  error: core.error,
-  performance: core.performance,
-  behavior: core.behavior,
+  error: report.error,
+  performance: report.performance,
+  behavior: report.behavior,
   reportData: core.reportData,
   setBehaviorMode: core.setBehaviorMode,
-  mark: core.mark,
-  measure: core.measure,
-  addRouteObserver: core.addRouteObserver,
-  removeRouteObserver: core.removeRouteObserver,
-  startAutoReport: core.startAutoReport,
-  stopAutoReport: core.stopAutoReport,
+  mark: observers.mark,
+  measure: observers.measure,
+  addRouteObserver: observers.addRouteObserver,
+  removeRouteObserver: observers.removeRouteObserver,
+  startAutoReport: scheduler.startAutoReport,
+  stopAutoReport: scheduler.stopAutoReport,
 };
 
 module.exports = monitor;

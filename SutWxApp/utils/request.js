@@ -10,8 +10,11 @@ const { checkWx } = require("./request-platform");
 const cache = require("./request-cache");
 const security = require("./request-security");
 const { CancelToken, isCancel } = require("./request-cancel");
-const { buildRequestConfig, mapStatusCodeErrorMessage, registerRequestApi } =
-  require("./request-api");
+const {
+  buildRequestConfig,
+  handleResponse,
+  registerRequestApi,
+} = require("./request-api");
 
 const requestInterceptors = [];
 const responseInterceptors = [];
@@ -114,40 +117,7 @@ function request(options) {
               processedResponse = result;
             }
           }
-
-          if (CONFIG.enableXssProtection && processedResponse.data !== undefined) {
-            processedResponse.data = security.deepSanitize(processedResponse.data);
-          }
-
-          if (
-            processedResponse.statusCode &&
-            processedResponse.statusCode >= 200 &&
-            processedResponse.statusCode < 300
-          ) {
-            if (config.useCache && config.method === "GET") {
-              cache.cacheSet(cacheKey, processedResponse.data);
-            }
-            resolve(processedResponse.data);
-          } else {
-            const errorMessage = mapStatusCodeErrorMessage(
-              processedResponse.statusCode,
-              processedResponse,
-            );
-            if (processedResponse.statusCode === 401) {
-              if (wxInstance.removeStorageSync && wxInstance.navigateTo) {
-                try {
-                  wxInstance.removeStorageSync("token");
-                  wxInstance.removeStorageSync("userInfo");
-                  setTimeout(() => {
-                    wxInstance.navigateTo({ url: "/pages/home/index" });
-                  }, 500);
-                } catch (error) {
-                  console.warn("清除存储和跳转失败:", error);
-                }
-              }
-            }
-            reject(new Error(errorMessage));
-          }
+          handleResponse(processedResponse, config, cacheKey, resolve, reject, processedConfig, wxInstance);
         },
         fail: (err) => {
           activeRequests--;
@@ -163,7 +133,6 @@ function request(options) {
             const delay = retryDelay * Math.pow(2, retryCount - 1);
             const jitter = Math.random() * delay * 0.5;
             const retryDelayWithJitter = delay + jitter;
-
             console.warn(
               `请求失败，${retryCount}/${maxRetry}，${Math.round(retryDelayWithJitter)}ms后重试`,
             );
