@@ -1,11 +1,11 @@
 # SutWxApp - 苏铁微信小程序
 
-![版本](https://img.shields.io/badge/version-3.0.3-blue)
+![版本](https://img.shields.io/badge/version-3.0.4-blue)
 ![设计风格](https://img.shields.io/badge/design-Apple%20Style-green)
 
 ## 简介
 
-苏铁微信小程序是一款面向消费者的电商平台，提供植物和园艺相关商品的浏览、购物车、订单管理、用户中心等核心功能。界面设计采用 Apple 极简风格，提供优质的用户体验。
+苏铁微信小程序以 **WordPress 网站为后端（headless CMS）**，在微信侧对网站内容进行「优化排版并显示」，提供文章/商品浏览、购物车、订单管理、用户中心等核心功能。界面设计采用 Apple 极简风格，提供优质的用户体验。
 
 ## 设计风格
 
@@ -53,7 +53,7 @@
    - 修改代码实时预览
    - 使用真机调试功能
 
-> 小程序为纯前端应用，数据接口由外部 REST API 提供（`app.js` 的 `globalData.baseUrl`）。本地联调时将该地址指向后端测试环境即可。
+> 小程序为纯前端应用，后端为 **WordPress 网站**，内容经 REST API 提供（基地址见 `app.js` 的 `globalData.baseUrl`）。本地联调时将该地址指向 WordPress 站点或其 API 代理即可。
 
 ## 项目结构
 
@@ -118,6 +118,7 @@ SutWxApp/
 - **网络请求**：`wx.request` + `utils/request.js`（拦截器 / 重试 / LRU 缓存 / 取消 / 并发队列）
 - **多语言**：gettext 风格 `.po` / `.pot`
 - **开发工具**：微信开发者工具、VS Code
+- **后端**：WordPress 网站（headless CMS），内容经 REST API（`/api/*`）提供
 
 ## 相关文档
 

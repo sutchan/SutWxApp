@@ -5,7 +5,7 @@
 
 ## 技术栈
 
-> 实际项目为**纯前端微信小程序**，使用 JavaScript 开发，不含后端服务与数据库。
+> 实际项目为**纯前端微信小程序**，使用 JavaScript 开发，代码仓库内不含后端服务与数据库。后端为 **WordPress 网站（headless CMS）**，内容经 REST API 提供。
 
 ### 前端技术栈
 - **微信小程序框架**：原生微信小程序开发框架（WXML / WXSS / JS）
@@ -18,9 +18,24 @@
 - **本地存储**：`wx.setStorageSync` / `wx.getStorageSync`
 - **多语言**：gettext 风格 `.po` / `.pot` 文件
 
-### 外部依赖（后端 API）
-- 小程序通过 `services/*` 调用外部 REST API；基地址见 `app.js` 的 `globalData.baseUrl`。
-- 认证方式：`Authorization: Bearer <token>`（见 `app.js` 的 `requestWithToken`）。
+### 外部依赖（WordPress 后端 API）
+- 后端为 **WordPress 网站（headless CMS）**；小程序通过 `services/*` 调用其 REST API，基地址见 `app.js` 的 `globalData.baseUrl`。
+- 接口约定：内容以 `/api/*` 暴露（由 WordPress 插件或反向代理桥接 WP REST API `/wp-json/wp/v2/`），鉴权 `/auth/*`（`Authorization: Bearer <token>`，见 `app.js` 的 `requestWithToken`）。
+- 内容模型：文章（posts）、页面（pages）、分类（categories）、标签（tags）、媒体（media）及自定义文章类型（如 WooCommerce 商品/订单）均由 WordPress 提供。
+
+## WordPress 后端与内容渲染
+
+### 后端形态（headless CMS）
+- 后端为 WordPress 网站，作为无头 CMS 提供网站内容（文章、页面、分类、媒体、自定义文章类型）。
+- 小程序通过 REST API 获取内容；当前接口以 `/api/*` 暴露（由 WordPress 插件或反向代理桥接 WP REST API `/wp-json/wp/v2/`），鉴权走 `/auth/*`（JWT）。
+- 商品/订单/购物车等电商数据可由 WordPress + WooCommerce 提供，同样经上述 API 层暴露。
+
+### 内容渲染与排版优化（核心能力）
+- WordPress 文章/页面正文为 HTML，小程序需在微信侧「优化排版并显示网站内容」。
+- 渲染方案：使用 `rich-text` 组件或 HTML→WXML 解析器（如 towxml / wxparse）将 WP HTML 渲染为可显示的富文本；图片、视频等媒体按微信尺寸约束适配。
+- 安全清洗：`utils/request.js` 的 `sanitizeHtml()` 在响应层剥离 `<script>`/`<iframe>`/事件属性/`javascript:` 等危险内容，作为渲染前的安全兜底（详见「安全设计」）。
+- 排版规范：沿用 `app.wxss` 全局 CSS 变量设计系统（Apple 极简风格），对正文统一字号、行高、图片圆角与间距，保证网站内容在微信内阅读体验一致。
+- 图片优化：WP 媒体图经 `utils/compress-images.js` / CDN 适配，避免大图拖慢首屏。
 
 ## 架构设计原则
 

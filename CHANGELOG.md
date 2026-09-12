@@ -2,6 +2,35 @@
 
 所有重要的项目变更都将记录在此文件中。
 
+## [3.0.4] - 2026-09-12
+
+### 文档完善
+
+#### 明确 WordPress 后端定位
+- 在项目规范、架构规范、README、项目概览、API 规范、数据规范中补充「后端为 WordPress 网站（headless CMS）」说明
+- 说明接口约定：内容以 `/api/*` 暴露（由 WordPress 插件或反向代理桥接 WP REST API `/wp-json/wp/v2/`），鉴权 `/auth/*`（JWT）
+- 架构规范新增「WordPress 后端与内容渲染」章节，补全「内容渲染与排版优化（核心能力）」：HTML→WXML 渲染、`sanitizeHtml` 安全清洗、排版规范与图片优化
+- 数据规范新增「WordPress 内容实体映射」（文章/页面/分类/媒体/自定义文章类型）
+- 修正陈旧的 `openspec/项目概述.md` 技术栈（原 Node.js+Express+MySQL 等虚构内容）与项目背景，对齐 WordPress 内容展示定位
+
+### 文件变更
+```
+新增:
+（无）
+
+修改:
+- README.md
+- openspec/specs/project/spec.md
+- openspec/specs/architecture/spec.md
+- openspec/specs/data/spec.md
+- openspec/specs/api/spec.md
+- openspec/项目概述.md
+- docs/PROJECT_OVERVIEW.md
+- SutWxApp/app.js
+- SutWxApp/package.json
+- CHANGELOG.md
+```
+
 ## [3.0.3] - 2026-09-12
 
 ### 变更内容

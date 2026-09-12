@@ -4,9 +4,9 @@
 
 ## 项目简介
 
-苏铁微信小程序（SutWxApp）是一个专注于精品植物和园艺用品的电商小程序，为用户提供商品浏览、搜索、加购、下单、订单跟踪与个人中心等核心购物体验。界面采用 Apple 极简设计风格，支持中英文多语言。
+苏铁微信小程序（SutWxApp）以 **WordPress 网站为后端（headless CMS）**，在微信侧对网站内容进行「优化排版并显示」，为用户提供文章/商品浏览、搜索、加购、下单、订单跟踪与个人中心等核心体验。界面采用 Apple 极简设计风格，支持中英文多语言。
 
-> 本项目为**纯前端微信小程序**，使用 JavaScript 开发，不含后端服务与数据库。数据由外部 REST API 提供，网络层统一封装于 `utils/request.js` 与 `services/*`。
+> 本项目为**纯前端微信小程序**，使用 JavaScript 开发，代码仓库内不含后端服务与数据库。后端为 **WordPress 网站（headless CMS）**，内容经 REST API 提供，网络层统一封装于 `utils/request.js` 与 `services/*`。
 
 ## 技术栈
 
@@ -19,10 +19,11 @@
 - 多语言：gettext 风格 `.po` / `.pot`（见 `locales/`）
 - 开发工具：微信开发者工具、VS Code
 
-### 后端说明（外部依赖）
-- 小程序通过 `services/*` 调用外部 REST API，基地址见 `app.js` 的 `globalData.baseUrl`
+### 后端说明（WordPress 无头 CMS）
+- 小程序通过 `services/*` 调用 WordPress 提供的 REST API，基地址见 `app.js` 的 `globalData.baseUrl`
+- 当前接口以 `/api/*` 暴露（由 WordPress 插件或反向代理桥接 WP REST API `/wp-json/wp/v2/`），鉴权 `/auth/*`（JWT）
 - 认证：`Authorization: Bearer <token>`（本地存储键 `TOKEN`）
-- 后端服务的实现与运维由对应团队负责，不在本仓库内
+- 后端（WordPress 站点）的实现与运维由对应团队负责，不在本仓库内
 
 ## 项目结构
 
