@@ -2,6 +2,14 @@
 
 所有重要的项目变更都将记录在此文件中。
 
+## [3.0.10] - 2026-09-13
+
+### 变更内容
+
+#### 工程配置
+- 新增 `eslint.config.js`（ESLint 10 扁平配置），通过 `FlatCompat` 复用 `SutWxApp/.eslintrc.js` 既有规则、全局变量与 overrides，`npm run lint` 恢复正常。
+- 版本单一来源同步：package.json / app.js globalData.version / README 徽章统一至 3.0.10。
+
 ## [3.0.9] - 2026-09-12
 
 ### 变更内容

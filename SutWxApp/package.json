@@ -1,11 +1,11 @@
 {
   "name": "sut-wx-app",
-  "version": "3.0.9",
+  "version": "3.0.10",
   "description": "苏小糖微信小程序商城",
   "main": "app.js",
   "scripts": {
-    "lint": "eslint . --ext .js",
-    "lint:fix": "eslint . --ext .js --fix",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "test": "jest",
     "test:coverage": "jest --ci --coverage",
     "check:version": "node scripts/check-version.js",
