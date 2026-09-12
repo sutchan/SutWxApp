@@ -1,5 +1,5 @@
 # 文件路径: .github/workflows/miniprogram-deploy.yml
-# 版本号: 1.0.0
+# 版本号: 1.0.1
 # 更新日期: 2026-09-12
 # 描述: 小程序持续部署流水线：手动触发，经 miniprogram-ci 生成预览二维码或上传体验版
 
@@ -101,4 +101,4 @@ jobs:
 
       - name: 清理私钥
         if: always()
-        run: rm -f "$MINIPROGRAM_PRIVATE_KEY_PATH"
+        run: rm -f "$MINIPROGRAM_PRIVATE_KEY_PATH" || true

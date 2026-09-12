@@ -17,15 +17,29 @@
 - 原型审查与修复（2026-09-12）：②`phImg()` 渐变 `id="g"` 经复核为**误报**——其产物均为 `<img src="data:...svg">` 引用，SVG 在图片上下文内隔离解析，`url(#g)` 不会跨图串色，无需修改。①商品详情图轮播**已修复**：dots 绑 `onclick="goDetailSlide(k);startDetailAuto()"`，进入商品页经 `setPage` 启动 `startDetailAuto()` 自动播放（3.5s/张，匹配 `prefers-reduced-motion` 时停止），离开页面 `stopDetailAuto()`；同时 bump 原型构建版本至 v3.1.2（仅改原型内版本徽章与文件头，未动设计规范 v3.1.1 与小程序版本 3.0.4）。P3 项（文件头"单文件自包含"注释因两个兄弟页略过时、可点击元素缺 role/tabindex/aria）维持原型演示级，未改。
 
 ## 版本管理
-- 版本单一来源：`SutWxApp/package.json` 的 `version` 字段与 `SutWxApp/app.js` 的 `globalData.version`（两者须一致），当前 **3.0.4**。
-- 同步展示位：根 `README.md` 版本徽章、`CHANGELOG.md` 顶部新版本小节。
+- 版本单一来源：`SutWxApp/package.json` 的 `version` 字段与 `SutWxApp/app.js` 的 `globalData.version`（两者须一致），当前 **3.0.8**。
+- 同步展示位：根 `README.md` 版本徽章（`badge/version-x.y.z`）、`CHANGELOG.md` 顶部新版本小节；由 `npm run check:version` 强制校验（CI 亦拦截）。
 - 仅更新被改动文件的 `// 版本号: x.y.z` 头注释，禁止全仓库批量刷写。
 - 每次修改至少 bump patch；变更记录写入根 `CHANGELOG.md`（倒序，`## [x.y.z] - YYYY-MM-DD`，无版本比较链接）。
+- 踩坑：`CHANGELOG.md` 可能先出现新版本小节而 `package.json`/`app.js`/README 未 bump（3.0.8 即如此，本次已补齐）——写文档前先跑 `npm run check:version` 实查。
 
 ## 工程与质量
-- 质量门禁在 `SutWxApp/package.json`：`npm run lint`（eslint . --ext .js）、`npm test`（jest，testMatch `**/__tests__/**/*.test.js`，`__tests__/` 下为纯函数单测）。
+- 质量门禁在 `SutWxApp/package.json`：`npm run lint`（eslint . --ext .js）、`npm test`（jest，testMatch `**/__tests__/**/*.test.js`，`__tests__/` 下为纯函数单测）、`npm run check`（版本+配置校验）、`npm run ci`（= lint + check + test）。
+- **ESLint 基线（2026-09-12 实测）**：0 error / 11 warning（warning 全是 `eqeqeq` 松比较，属 dataset 字符串场景，故意保留）。若出现 error，优先检查：`__tests__` 的 `env.jest`、globals（`Behavior`/`getCurrentPages`/`window`/`requestAnimationFrame`）、`utils/compress-images.js` 的 Node ESM override 是否被覆盖。
+- 单测基线：5 suites / 32 tests 通过，语句覆盖率 ~82%（`npm run test:coverage`）。
 - 源文件单文件 ≤200 行，超出按职责拆分（如 `pages/product/parts.js`、`pages/home/utils.js`）。
 - 约定为业务逻辑加中文注释，未启用 i18n 代码层（多语言走 `locales/` 的 .po/.pot）。
+- `SutWxApp/images/tabbar/` 现为 8 个图标（home/category/cart/user 各含 -active），**全部为同一占位图**（MD5 相同），真实图标待美术资源替换。
+
+## CI/CD（2026-09-12 落地，v3.0.8）
+- `.github/workflows/ci.yml`：push（main/dev/feature/fix/hotfix）+ PR + 手动；jobs = `lint` / `test`（`test:coverage` + 覆盖率 Artifact）/ `checks`（纯 Node 校验，无需装依赖）；Node 20、npm 缓存指向 `SutWxApp/package-lock.json`、`defaults.run.working-directory: SutWxApp`、concurrency 取消旧运行。
+- `.github/workflows/release.yml`：推送 `v*.*.*` Tag（或手动输入 tag）→ 校验 Tag 与版本一致 → 抽 `CHANGELOG.md` 小节（`scripts/changelog-section.js`）→ `softprops/action-gh-release@v2`。仓库目前**尚无 Tag**。
+- `.github/workflows/miniprogram-deploy.yml`：`workflow_dispatch`（preview/upload）→ 私钥写 `$RUNNER_TEMP` → `npm install --no-save miniprogram-ci@^2` → `node scripts/deploy.js` → 结束清理私钥。Secret：`MINIPROGRAM_PRIVATE_KEY`（必填）、`MINIPROGRAM_APPID`（`project.config.json` 仍为占位 `touristappid` 时必填）。**尚未在 GitHub 上真实执行过**。
+- `.github/dependabot.yml`：npm（`/SutWxApp`）+ github-actions，每周一 09:00 Asia/Shanghai。
+- 校验脚本：`SutWxApp/scripts/check-version.js`、`SutWxApp/scripts/check-config.js`（JSON 可解析/页面 js+wxml 必需/tabBar 图标 ≤40KB/sitemap/未引用页面告警）；`SutWxApp/scripts/deploy.js`；仓库根 `scripts/changelog-section.js`。
+- `project.config.json` 的 `packOptions.ignore` 忽略 `__tests__`/`scripts`/`node_modules`/`coverage`/`package*.json`/`.eslintrc.js`/`utils/compress-images.js`（与 deploy.js 的 ignores 保持一致）；`.gitignore` 屏蔽上传私钥与 `preview.jpg`。
+- 仓库根 `/tests`（.ts/.js）被 `.gitignore` 忽略，是本地遗留、不参与 CI；真实测试在 `SutWxApp/__tests__/`。
+- 本仓库存在**自动提交机制**：会话过程中会自动 commit（如 `ci: 新增 CI/CD 流水线与版本配置校验`）。副作用：排查时产生的临时输出文件（`SutWxApp/ci-*.txt`）曾被一并提交，需事后用 node 脚本删除。
 
 ## WordPress 后端对接（参考实现）
 - 项目以 WordPress 为后端（headless CMS），在微信侧优化排版显示网站内容（文章/商品等）。
