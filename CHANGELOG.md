@@ -36,6 +36,14 @@
 - `.gitignore` 增加上传私钥、预览二维码与覆盖率产物忽略规则。
 - `.eslintrc.js` 为工程脚本放开 `no-console`，并忽略 `coverage/` 产物。
 
+#### 代码质量：ESLint 门禁清零
+- 修复历史遗留的 138 个 ESLint error，使 CI 代码检查门禁可直接启用：
+  - 单元测试文件补充 Jest 环境声明，消除批量 `no-undef`
+  - 补充 `Behavior`、`getCurrentPages`、`window`、`requestAnimationFrame` 等小程序与宿主环境全局声明
+  - `utils/compress-images.js` 按 Node ESM 构建脚本单独处理，并加入上传忽略清单（不随代码包上传）
+  - 清理未使用变量（`app` / `that` / `request` / `addressId` / 订单操作空回调中的 `id`）与失效的 TypeScript 注释指令
+- 当前状态：`npm run lint` 0 error / 11 warning（warning 均为 `eqeqeq` 松比较，源于小程序 dataset 取值为字符串的场景，保留原逻辑）
+
 ### 文件变更
 ```
 新增:
@@ -63,8 +71,16 @@
 - SutWxApp/app.js
 - SutWxApp/.eslintrc.js
 - SutWxApp/project.config.json
+- SutWxApp/pages/address/index.js
+- SutWxApp/pages/order/index.js
+- SutWxApp/pages/settings/index.js
+- SutWxApp/pages/user/index.js
+- SutWxApp/services/cartService.js
+- SutWxApp/services/orderService.js
+- SutWxApp/utils/store.js
 - openspec/specs/ops/spec.md
 - openspec/specs/testing/spec.md
+- openspec/specs/development/spec.md
 
 删除:
 - openspec/prototype/（空目录）

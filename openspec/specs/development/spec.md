@@ -260,20 +260,17 @@ docs: 更新API文档
 ## CI/CD
 
 ### 持续集成
-- CI系统应自动运行测试、代码检查和构建
-- 支持多环境构建
-- 生成构建报告
+- 已落地 GitHub Actions 流水线（`.github/workflows/ci.yml`）：push（main / dev / feature / fix / hotfix）与 PR 时自动执行 ESLint、Jest 单元测试（覆盖率报告归档）与一致性校验（版本号单一来源、小程序配置完整性）
+- 任一阶段失败即阻断合并，建议在分支保护中将 `lint` / `test` / `checks` 设为必需检查
 
 ### 持续部署
-- CD系统应在通过测试后自动部署到目标环境
-- 支持蓝绿部署或滚动更新
-- 自动回滚失败部署
+- 小程序形态不支持蓝绿部署或滚动更新：代码经 `miniprogram-ci` 上传为体验版后，由人工在微信公众平台提交审核并可控放量发布
+- 回滚方式为重新上传上一稳定版本代码包，配合 Git Tag 保留可重打源码（详见 `openspec/specs/ops/spec.md`）
+- 版本发布由 Tag 触发（`v*.*.*`，须与项目版本号一致），自动创建 GitHub Release
 
 ### CI/CD工具
-- GitHub Actions
-- GitLab CI/CD
-- Jenkins
-- CircleCI
+- GitHub Actions（当前使用，Node.js 20 运行环境）
+- 其余工具（GitLab CI/CD、Jenkins、CircleCI）未采用；如迁移需同步更新本节与 `openspec/specs/ops/spec.md`
 
 ## 版本管理
 

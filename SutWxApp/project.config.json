@@ -29,6 +29,10 @@
       {
         "type": "file",
         "value": ".eslintrc.js"
+      },
+      {
+        "type": "file",
+        "value": "utils/compress-images.js"
       }
     ],
     "include": []

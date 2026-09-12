@@ -21,6 +21,7 @@ const IGNORE_RULES = [
   { type: "file", value: "package.json" },
   { type: "file", value: "package-lock.json" },
   { type: "file", value: ".eslintrc.js" },
+  { type: "file", value: "utils/compress-images.js" },
 ];
 
 /** 读取命令行参数 --name=value */
