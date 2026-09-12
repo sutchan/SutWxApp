@@ -16,17 +16,55 @@
 - 新增 `prototype/README.md` 原型目录索引：文件清单、设计依据（设计令牌与语义色策略）、维护约定
 - README「相关文档」区补充原型三件套链接
 
+### 新增功能：CI/CD 流水线
+
+#### 持续集成（GitHub Actions）
+- 新增 `.github/workflows/ci.yml`：push（main / dev / feature / fix / hotfix）、PR 与手动触发，执行 ESLint 检查、Jest 单元测试（覆盖率报告归档）、版本号与小程序配置校验三项门禁。
+- 新增 `SutWxApp/scripts/check-version.js`：比对 `package.json`、`app.js` 的 `globalData.version`、README 版本徽章、`CHANGELOG.md` 首个版本小节，并支持校验发布 Tag 与版本号一致。
+- 新增 `SutWxApp/scripts/check-config.js`：校验全部 JSON 可解析、页面四件套完整、tabBar 图标存在且不超过 40KB、分包与 sitemap 指向文件存在、页面是否被 `app.json` 引用。
+- 修复 `app.json` tabBar 引用的 `images/tabbar/cart.png`、`cart-active.png` 缺失（会导致开发者工具资源缺失报错），补齐为与其余图标一致的占位图。
+
+#### 持续交付
+- 新增 `.github/workflows/release.yml`：推送 `v*.*.*` Tag 时校验 Tag 与版本号一致，并抽取 `CHANGELOG.md` 对应小节自动创建 GitHub Release。
+- 新增 `.github/workflows/miniprogram-deploy.yml`：手动触发，经 `miniprogram-ci` 生成预览二维码或上传体验版，需配置 `MINIPROGRAM_PRIVATE_KEY`（必填）与 `MINIPROGRAM_APPID` Secret；私钥运行期临时落盘并在结束后清理。
+- 新增仓库根 `scripts/changelog-section.js`（发布说明抽取）与 `SutWxApp/scripts/deploy.js`（预览 / 上传实现）。
+
+#### 工程与依赖治理
+- `SutWxApp/package.json` 新增 `check`、`ci`、`test:coverage`、`deploy:preview`、`deploy:upload` 脚本，并声明 `engines.node >= 18`。
+- `project.config.json` 补充 `packOptions.ignore`，上传时忽略 `__tests__`、`scripts`、`node_modules`、`package*.json` 等开发文件，减小代码包体积。
+- 新增 `.github/dependabot.yml`：npm 开发依赖与 GitHub Actions 每周检查更新。
+- `.gitignore` 增加上传私钥、预览二维码与覆盖率产物忽略规则。
+- `.eslintrc.js` 为工程脚本放开 `no-console`，并忽略 `coverage/` 产物。
+
 ### 文件变更
 ```
 新增:
 - prototype/README.md
 - prototype/prototype-extra.html
 - prototype/wireframes.html
+- .github/workflows/ci.yml
+- .github/workflows/release.yml
+- .github/workflows/miniprogram-deploy.yml
+- .github/dependabot.yml
+- scripts/changelog-section.js
+- SutWxApp/scripts/check-version.js
+- SutWxApp/scripts/check-config.js
+- SutWxApp/scripts/deploy.js
+- SutWxApp/images/tabbar/cart.png
+- SutWxApp/images/tabbar/cart-active.png
 
 修改:
 - prototype/prototype.html（覆盖为 v3.1.1 最新版）
 - README.md
 - CHANGELOG.md
+- .gitignore
+- .github/CONTRIBUTING.md
+- SutWxApp/package.json
+- SutWxApp/app.js
+- SutWxApp/.eslintrc.js
+- SutWxApp/project.config.json
+- openspec/specs/ops/spec.md
+- openspec/specs/testing/spec.md
 
 删除:
 - openspec/prototype/（空目录）

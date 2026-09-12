@@ -1,0 +1,60 @@
+# 文件路径: .github/workflows/release.yml
+# 版本号: 1.0.0
+# 更新日期: 2026-09-12
+# 描述: 持续交付流水线：推送 v*.*.* Tag 时校验版本一致性并以 CHANGELOG 小节创建 GitHub Release
+
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "已存在的 Tag 名称（如 v3.0.8），用于补发 Release"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: 创建 GitHub Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 配置 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # 支持 Tag 推送与手动补发两种触发方式
+      - name: 解析目标 Tag
+        run: echo "TAG=${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}" >> "$GITHUB_ENV"
+
+      - name: 校验 Tag 与项目版本号一致
+        env:
+          RELEASE_TAG: ${{ env.TAG }}
+        run: node SutWxApp/scripts/check-version.js
+
+      - name: 从 CHANGELOG 提取发布说明
+        run: node scripts/changelog-section.js "$TAG" > release-notes.md
+
+      - name: 创建 Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.TAG }}
+          name: ${{ env.TAG }}
+          body_path: release-notes.md
+          draft: false
+          prerelease: ${{ contains(env.TAG, '-') }}

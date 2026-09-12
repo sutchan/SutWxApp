@@ -1,7 +1,8 @@
 # SutWxApp - 苏铁微信小程序
 
-![版本](https://img.shields.io/badge/version-3.0.7-blue)
+![版本](https://img.shields.io/badge/version-3.0.8-blue)
 ![设计风格](https://img.shields.io/badge/design-Apple%20Style-green)
+![CI](https://github.com/sutchan/SutWxApp/actions/workflows/ci.yml/badge.svg)
 
 ## 简介
 
@@ -146,6 +147,48 @@ SutWxApp/
 - **多语言**：gettext 风格 `.po` / `.pot`
 - **开发工具**：微信开发者工具、VS Code
 - **后端**：WordPress 网站（headless CMS），内容经 REST API（`/api/*`）提供
+- **质量门禁**：ESLint + Jest（GitHub Actions 自动执行）
+- **交付**：GitHub Actions + `miniprogram-ci`（预览 / 上传体验版）
+
+## 持续集成与交付（CI/CD）
+
+项目基于 GitHub Actions 建立质量门禁与交付流水线，工作流位于 `.github/workflows/`：
+
+| 工作流 | 触发方式 | 作用 |
+|--------|----------|------|
+| `ci.yml` | push（main / dev / feature / fix / hotfix）、PR、手动 | ESLint 检查、Jest 单元测试（覆盖率归档）、版本号与小程序配置校验 |
+| `release.yml` | 推送 `v*.*.*` Tag（或手动补发） | 校验 Tag 与版本号一致，并抽取 `CHANGELOG.md` 对应小节创建 GitHub Release |
+| `miniprogram-deploy.yml` | 手动触发 | 经 `miniprogram-ci` 生成预览二维码或上传体验版 |
+
+### 本地质量门禁
+
+```bash
+cd SutWxApp
+npm ci                # 安装依赖
+npm run lint          # ESLint 检查
+npm test              # 单元测试
+npm run check         # 版本号一致性 + 小程序配置完整性校验
+npm run ci            # 等价于 CI 全流程：lint + check + test
+```
+
+### 上传小程序（CD）
+
+上传依赖微信公众平台「开发管理 > 开发设置 > 小程序代码上传」生成的密钥，需在仓库 Secrets 中配置：
+
+| Secret | 说明 |
+|--------|------|
+| `MINIPROGRAM_PRIVATE_KEY` | 上传密钥文件内容（必填） |
+| `MINIPROGRAM_APPID` | 小程序 AppID（`project.config.json` 仍为占位值 `touristappid` 时必填） |
+
+配置完成后在 Actions 中手动运行 `Deploy MiniProgram` 工作流，选择 `preview`（生成预览二维码）或 `upload`（上传体验版）。私钥文件不会入库，由工作流在运行期临时写入并在结束后删除。
+
+### 发布流程
+
+1. 同步版本号：`SutWxApp/package.json`、`SutWxApp/app.js` 的 `globalData.version`、README 版本徽章、`CHANGELOG.md` 新版本小节
+2. 本地执行 `npm run ci` 自检通过
+3. 提交并推送后打 Tag：`git tag v3.0.8 && git push origin v3.0.8`
+4. Tag 触发 `release.yml` 自动创建 GitHub Release
+5. 在 Actions 中运行部署工作流上传体验版，再到微信公众平台提交审核
 
 ## 相关文档
 

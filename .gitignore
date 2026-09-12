@@ -12,3 +12,11 @@ fix-*
 /backup
 /.workbuddy
 SutWxApp/node_modules/.bin/create-jest
+coverage/
+
+# 小程序代码上传私钥与预览产物（切勿入库）
+private.*.key
+*.private.key
+SutWxApp/private.key
+SutWxApp/preview.jpg
+.miniprogram-ci/

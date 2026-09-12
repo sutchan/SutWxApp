@@ -1,9 +1,9 @@
 <!--
 文件名: CONTRIBUTING.md
-版本号: 1.0.0
+版本号: 1.0.1
 更新日期: 2026-09-12
 作者: Sut
-描述: 苏铁微信小程序（SutWxApp）贡献指南，涵盖开发环境、分支策略、提交规范与版本管理
+描述: 苏铁微信小程序（SutWxApp）贡献指南，涵盖开发环境、分支策略、提交规范、CI/CD 与版本管理
 -->
 
 # 贡献指南
@@ -85,9 +85,32 @@ cd SutWxApp
 
 **每次修改都应同步升级一次最小版本号**，并：
 
-1. 更新 `SutWxApp/app.js` 的 `globalData.version`
-2. 在 `CHANGELOG.md` 追加对应版本小节（含变更总结、动机、测试说明）
-3. 提交信息在正文或页脚标注新版本号（如 `chore: 同步文档并更新版本至 v3.0.2`）
+1. 更新 `SutWxApp/package.json` 与 `SutWxApp/app.js` 的 `globalData.version`（两者须一致）
+2. 更新 `README.md` 版本徽章
+3. 在 `CHANGELOG.md` 追加对应版本小节（含变更总结、动机、测试说明）
+4. 提交信息在正文或页脚标注新版本号（如 `chore: 同步文档并更新版本至 v3.0.8`）
+
+执行 `npm run check:version` 可一键校验上述版本号是否一致，CI 也会强制拦截。
+
+## 持续集成与交付
+
+仓库使用 GitHub Actions 建立质量门禁与交付流水线（配置位于 `.github/workflows/`）：
+
+| 工作流 | 触发方式 | 作用 |
+|--------|----------|------|
+| `ci.yml` | push（main / dev / feature / fix / hotfix）、PR、手动 | ESLint、Jest 单测（覆盖率归档）、版本号与小程序配置校验 |
+| `release.yml` | 推送 `v*.*.*` Tag | 创建 GitHub Release（正文取 `CHANGELOG.md` 对应小节） |
+| `miniprogram-deploy.yml` | 手动触发 | 经 `miniprogram-ci` 生成预览二维码或上传体验版 |
+
+提交 PR 前请在本地执行等价的完整自检：
+
+```bash
+cd SutWxApp
+npm ci
+npm run ci          # lint + check + test
+```
+
+上传到微信公众平台由维护者在 Actions 中手动触发 `Deploy MiniProgram`，需要仓库 Secrets 配置 `MINIPROGRAM_PRIVATE_KEY`（上传密钥）与 `MINIPROGRAM_APPID`（AppID）。上传私钥严禁入库，`.gitignore` 已屏蔽 `private.*.key` 等文件。
 
 ## Pull Request 流程
 
@@ -96,11 +119,11 @@ cd SutWxApp
 3. 创建 PR 到 `main` 或 `dev`
 4. PR 标题遵循提交规范；描述包含：变更总结 + 动机 + 测试说明
 5. 通过以下检查后由维护者合并：
-   - [ ] ESLint + Prettier 检查通过
+   - [ ] CI 全部工作流（lint / test / checks）绿灯
    - [ ] 代码逻辑正确，无遗留 `console.log` / `debugger`
-   - [ ] 涉及变更时补充/更新测试
+   - [ ] 涉及变更时补充/更新 `SutWxApp/__tests__/` 下的单元测试
    - [ ] `CHANGELOG.md` 已更新
-   - [ ] 版本号已同步
+   - [ ] 版本号已同步（`npm run check:version` 通过）
 
 ## 编码约定
 

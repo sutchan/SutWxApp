@@ -1,0 +1,106 @@
+# 文件路径: .github/workflows/ci.yml
+# 版本号: 1.0.0
+# 更新日期: 2026-09-12
+# 描述: 持续集成流水线：ESLint 代码检查、Jest 单元测试、版本与小程序配置一致性校验
+
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+      - "feature/**"
+      - "fix/**"
+      - "hotfix/**"
+  pull_request:
+    branches:
+      - main
+      - dev
+  workflow_dispatch:
+
+# 最小权限：CI 只读仓库内容
+permissions:
+  contents: read
+
+# 同一分支的重复推送取消上一次未完成的运行，节省额度
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# 小程序工程位于 SutWxApp/ 子目录，所有命令默认在该目录执行
+defaults:
+  run:
+    working-directory: SutWxApp
+
+jobs:
+  # ---------- 1. 代码静态检查 ----------
+  lint:
+    name: ESLint 代码检查
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 配置 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: SutWxApp/package-lock.json
+
+      - name: 安装依赖
+        run: npm ci
+
+      - name: 运行 ESLint
+        run: npm run lint
+
+  # ---------- 2. 单元测试 ----------
+  test:
+    name: Jest 单元测试
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 配置 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: SutWxApp/package-lock.json
+
+      - name: 安装依赖
+        run: npm ci
+
+      - name: 运行单元测试（含覆盖率）
+        run: npm run test:coverage
+
+      - name: 归档覆盖率报告
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: SutWxApp/coverage/
+          if-no-files-found: ignore
+          retention-days: 7
+
+  # ---------- 3. 版本与配置一致性校验 ----------
+  checks:
+    name: 版本 / 小程序配置校验
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 配置 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # 纯 Node 内置模块实现，无需安装依赖，秒级完成
+      - name: 校验版本号一致性
+        run: node scripts/check-version.js
+
+      - name: 校验 app.json 页面与资源配置
+        run: node scripts/check-config.js

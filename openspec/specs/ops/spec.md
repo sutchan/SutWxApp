@@ -1,9 +1,9 @@
 <!--
 文件名: spec.md
-版本号: 3.0.1
-更新日期: 2026-08-13
+版本号: 3.0.8
+更新日期: 2026-09-12
 作者: Sut
-描述: SutWxApp 运维与发布规范，描述微信小程序的发布流程、版本管理、监控、权限与故障处理
+描述: SutWxApp 运维与发布规范，描述微信小程序的发布流程、CI/CD 流水线、版本管理、监控、权限与故障处理
 -->
 
 # 运维与发布规范
@@ -42,6 +42,34 @@
   - 或利用「体验版」先验证再全量发布
 - 建议每次发布前在 Git 打 Tag，保留可重打的源码版本
 
+## CI/CD 流水线
+
+### 持续集成（GitHub Actions）
+
+工作流 `ci.yml` 在 push（main / dev / feature / fix / hotfix）、PR 与手动触发时执行三项门禁，任一失败即阻断合并：
+
+| 阶段 | 命令 | 说明 |
+|------|------|------|
+| 代码检查 | `npm run lint` | ESLint 校验全部 `.js` 源码与工程脚本 |
+| 单元测试 | `npm run test:coverage` | Jest 运行 `__tests__/` 用例，覆盖率报告归档为 Artifact |
+| 一致性校验 | `npm run check` | 版本号单一来源一致性 + 小程序配置完整性（JSON 可解析、页面四件套、tabBar 图标 ≤ 40KB、分包与 sitemap 指向文件存在） |
+
+运行环境为 `ubuntu-latest` + Node.js 20，工作目录 `SutWxApp/`，依赖以 `npm ci` 依据 `package-lock.json` 锁定安装；同一分支的重复推送会取消上一次未完成的运行。
+
+### 持续交付
+
+- **Release**：推送 `v*.*.*` Tag 触发 `release.yml`，先校验 Tag 与 `package.json` 版本号一致，再抽取 `CHANGELOG.md` 对应小节创建 GitHub Release。
+- **小程序上传**：`miniprogram-deploy.yml` 手动触发，经 `miniprogram-ci` 生成预览二维码（`preview`）或上传体验版（`upload`）；须在仓库 Secrets 配置 `MINIPROGRAM_PRIVATE_KEY`（上传密钥，必填）与 `MINIPROGRAM_APPID`（AppID，`project.config.json` 仍为占位值 `touristappid` 时必填）。
+- **密钥安全**：上传私钥仅在运行期写入临时文件、任务结束即删除；`.gitignore` 已屏蔽 `private.*.key` 等文件，禁止入库。
+- **代码包精简**：`project.config.json` 的 `packOptions.ignore` 与部署脚本的 `ignores` 保持一致，上传时忽略 `__tests__`、`scripts`、`node_modules`、`package*.json` 等开发文件。
+- **依赖治理**：`dependabot.yml` 每周检查 npm 开发依赖与 GitHub Actions 版本，以 PR 形式提出更新。
+
+### 质量门禁与合并要求
+
+- 提交前本地执行 `npm run ci`（等价于 CI 全流程，需先 `npm ci`）
+- PR 须 CI 全绿方可合并；建议在分支保护中将 `lint` / `test` / `checks` 三项设为必需检查
+- 发布 Tag 必须与项目版本号一致，由 `check-version.js` 强制校验
+
 ## 版本管理
 
 ### 版本号格式
@@ -51,13 +79,16 @@
 - **PATCH**：向下兼容的问题修正
 
 ### 版本来源（单一来源）
-- `app.js` 的 `globalData.version`：运行时展示版本
+- `SutWxApp/package.json` 的 `version`：工程与 CI 的权威版本号
+- `app.js` 的 `globalData.version`：运行时展示版本（须与 `package.json` 一致）
+- README 版本徽章与 `CHANGELOG.md` 首个版本小节：对外展示版本
 - 上传代码包时填写的版本号：公众平台显示版本
-- 两者应保持一致，并在 CHANGELOG 中记录
+- 以上各处由 `npm run check:version` 强制校验一致性，并在 CHANGELOG 中记录
 
 ### 发布检查清单
-- [ ] 代码已合并至发布分支并打 Tag
-- [ ] `globalData.version` 已更新
+- [ ] 代码已合并至发布分支并打 Tag（Tag 名与版本号一致，如 `v3.0.8`）
+- [ ] `package.json` 与 `globalData.version` 已更新，README 徽章与 CHANGELOG 已同步
+- [ ] CI 流水线全部通过（lint / test / checks）
 - [ ] 真机预览核心流程通过（登录、浏览、加购、下单）
 - [ ] 线上监控无异常告警
 - [ ] CHANGELOG 已追加本次版本说明
@@ -143,5 +174,6 @@
 
 | 版本 | 更新日期 | 更新内容 | 作者 |
 |------|----------|----------|------|
+| 3.0.8 | 2026-09-12 | 新增「CI/CD 流水线」章节：GitHub Actions 质量门禁、Tag 自动发布、miniprogram-ci 预览/上传与密钥安全要求 | Sut |
 | 3.0.1 | 2026-08-13 | 重写为小程序真实发布与运维规范，去除虚构的 Docker/K8s/数据库运维内容 | Sut |
 | 1.0.0 | 2025-12-26 | 初始版本 | Sut |

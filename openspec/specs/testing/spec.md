@@ -1,9 +1,9 @@
 <!--
 文件名: spec.md
-版本号: 1.0.0
-更新日期: 2025-12-27
+版本号: 1.0.1
+更新日期: 2026-09-12
 作者: Sut
-描述: SutWxApp 项目测试规范文档，涵盖测试策略、测试环境、测试用例编写标准、测试执行流程和测试覆盖率要求
+描述: SutWxApp 项目测试规范文档，涵盖测试策略、测试环境、测试用例编写标准、测试执行流程、覆盖率要求与 GitHub Actions 持续集成
 -->
 
 # 测试规范
@@ -385,58 +385,67 @@ bun run test:integration
 
 ### 持续集成测试
 
-持续集成流程应当包含多个测试阶段，确保代码质量和稳定性：
+项目已建立 GitHub Actions 持续集成流水线（`.github/workflows/ci.yml`），运行环境为 `ubuntu-latest` + Node.js 20，工作目录为 `SutWxApp/`，依赖通过 `npm ci` 按 `package-lock.json` 锁定安装；同一分支的重复推送会取消上一次未完成的运行。流水线包含三个阶段，任一阶段失败即阻断合并：
 
-**第一阶段：代码检查**。在代码编译前执行代码静态检查，包括 TypeScript 类型检查、ESLint 代码规范检查。这一阶段可以快速发现代码问题，无需等待测试执行。
+**第一阶段：代码检查**。执行 `npm run lint`（ESLint），在测试前快速发现代码规范问题，无需等待测试执行。
 
-**第二阶段：单元测试**。执行单元测试，验证核心业务逻辑的正确性。单元测试执行速度快，可以在短时间内获得反馈。
+**第二阶段：单元测试**。执行 `npm run test:coverage`（Jest），运行 `SutWxApp/__tests__/` 下的用例并生成覆盖率报告，报告以 Artifact 形式归档 7 天。
 
-**第三阶段：集成测试**。执行集成测试，验证模块间的交互是否正确。集成测试需要启动测试数据库，执行时间较长。
+**第三阶段：一致性校验**。执行 `npm run check`，校验版本号单一来源一致性（`package.json` / `app.js` / README 徽章 / `CHANGELOG.md`）与小程序配置完整性（JSON 可解析、页面四件套齐全、tabBar 图标不超过 40KB、分包与 sitemap 指向文件存在）。
 
-**第四阶段：端到端测试**。执行端到端测试，验证完整功能流程。端到端测试执行时间最长，通常只在主分支合并前执行。
+CI 不依赖数据库或外部服务：单元测试通过 Mock 隔离微信 API 与后端接口，保证可重复执行。
 
 ```yaml
-# .github/workflows/ci.yml
+# .github/workflows/ci.yml（节选）
 name: CI
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main, dev, "feature/**", "fix/**", "hotfix/**"]
   pull_request:
-    branches: [main, develop]
+    branches: [main, dev]
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: SutWxApp/package-lock.json
+
+      - name: 安装依赖
+        run: npm ci
+        working-directory: SutWxApp
+
+      - name: 运行 ESLint
+        run: npm run lint
+        working-directory: SutWxApp
+
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v1
+
+      - uses: actions/setup-node@v4
         with:
-          bun-version: latest
-      
-      - name: Install dependencies
-        run: bun install
-      
-      - name: Type check
-        run: bun run typecheck
-      
-      - name: Lint
-        run: bun run lint
-      
-      - name: Unit tests
-        run: bun run test:unit
-      
-      - name: Integration tests
-        run: bun run test:integration
-        env:
-          DB_HOST: localhost
-          DB_PORT: 3306
-      
-      - name: Upload coverage
-        run: bun run test:coverage
+          node-version: 20
+          cache: npm
+          cache-dependency-path: SutWxApp/package-lock.json
+
+      - name: 安装依赖
+        run: npm ci
+        working-directory: SutWxApp
+
+      - name: 单元测试与覆盖率
+        run: npm run test:coverage
+        working-directory: SutWxApp
 ```
+
+> 说明：本节为项目实际流水线的事实描述，测试以 `SutWxApp/__tests__/` 下的 Jest 用例为准，本地可用 `npm test` 复现 CI 结果。
 
 ### 测试失败处理
 
@@ -542,4 +551,5 @@ describe('首页', () => {
 
 | 版本 | 更新日期 | 更新内容 | 作者 |
 |------|----------|----------|------|
+| 1.0.1 | 2026-09-12 | 「持续集成测试」章节改写为项目实际 GitHub Actions 流水线（Node.js 20 + ESLint + Jest + 一致性校验），移除失效的 Bun 示例 | Sut |
 | 1.0.0 | 2025-12-27 | 初始版本，完成测试规范文档 | Sut |
