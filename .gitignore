@@ -1,7 +1,7 @@
 *.code-workspace
 /.trae
 /docs_backup_*
-/node_modules
+*/node_modules
 /tests
 SutWxApp.code-workspace
 test_fixes.js
@@ -11,3 +11,4 @@ fix-*
 /test
 /backup
 /.workbuddy
+SutWxApp/node_modules/.bin/create-jest
