@@ -1,0 +1,65 @@
+name: Bug 反馈
+description: 报告苏铁微信小程序中存在的问题或异常行为
+title: "[bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢反馈问题！请尽量填写以下信息，以便我们快速复现与定位。
+  - type: textarea
+    id: description
+    attributes:
+      label: 问题描述
+      description: 简明描述你遇到的问题。
+      placeholder: 例如：进入商品详情页后，加入购物车按钮无响应。
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: 复现步骤
+      description: 一步一步描述如何复现该问题。
+      placeholder: |
+        1. 打开小程序首页
+        2. 点击某个商品进入详情页
+        3. 点击「加入购物车」
+        4. 观察现象
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 预期行为
+      description: 你期望发生什么？
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: 实际行为
+      description: 实际发生了什么？（如有报错信息请粘贴）
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: 环境信息
+      description: 微信基础库版本、设备型号、系统版本、小程序版本（见「设置」）。
+      placeholder: 基础库 3.x.x / iOS 17 / 小程序 v3.0.1
+    validations:
+      required: false
+  - type: textarea
+    id: logs
+    attributes:
+      label: 日志 / 截图
+      description: 如有开发者工具控制台日志或相关截图，请附上（注意隐去 Token 等敏感信息）。
+    validations:
+      required: false
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: 提交前检查
+      options:
+        - label: 我已检索是否已有相同或相关问题
+        - label: 我确认该问题可在最新版本复现

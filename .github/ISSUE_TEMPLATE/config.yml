@@ -1,0 +1,8 @@
+# .github/ISSUE_TEMPLATE/config.yml
+# Issue 模板配置：置空联系链接，启用空白 Issue，设置默认标签
+
+blank_issues_enabled: true
+contact_links:
+  - name: 安全漏洞报告
+    url: https://github.com/sutchan/SutWxApp/security/advisories/new
+    about: 请勿在公开 Issue 报告安全漏洞，请通过私有安全通告提交

@@ -1,1128 +1,412 @@
 <!--
 文件名: spec.md
-版本号: 1.0.0
-更新日期: 2025-12-27
-作者: Sut
-描述: SutWxApp 项目 UI 设计规范文档，涵盖视觉设计语言、组件使用标准、响应式适配规则和动效设计原则
+版本号: 3.1.0
+更新日期: 2026-09-12
+作者: SutWxApp Design（彩格调 / Cai）
+描述: SutWxApp 权威设计规范 v3.1.0 —— 以 app.wxss v3.0.0 代码为唯一事实来源，Apple 极简风格 + 自然绿品牌。本版本完成设计令牌权威化、语义色策略确立（品牌价签）、系统级红橙脏值纠正清单。
 -->
 
-# UI 设计规范
+# 苏铁微信小程序（SutWxApp）UI 设计规范
 
-## 目的
+## 1. 文档信息
 
-本规范定义了苏铁微信小程序（SutWxApp）项目的视觉设计语言、组件使用标准、响应式适配规则和动效设计原则，旨在确保小程序界面的统一性、一致性和美观性。规范基于微信小程序原生开发框架和 WeUI 组件库，结合项目的品牌定位和用户特征，制定了完整的设计体系。本规范适用于产品设计、前端开发、测试和运维等各个环节，所有参与界面设计和开发的人员都应当遵循本规范的要求。
+| 项目 | 内容 |
+|------|------|
+| 文件名 | openspec/specs/design/spec.md |
+| 版本号 | v3.1.0 |
+| 更新日期 | 2026-09-12 |
+| 描述 | 权威设计规范：Apple 极简风格 + 自然绿品牌，含语义色策略与脏值纠正清单 |
+| 作者 | SutWxApp Design |
 
-苏铁微信小程序作为面向普通消费者的电商平台，界面设计直接影响用户体验和转化率。统一的视觉语言能够强化品牌形象，降低用户的学习成本；规范的组件使用能够保证界面的一致性，提高开发效率；合理的响应式适配能够适配不同尺寸的屏幕，提供良好的跨设备体验；恰当的动效设计能够增强交互反馈，提升用户满意度。本规范将从色彩、字体、组件、布局、动效等多个维度进行详细阐述，为设计和开发提供明确的指导。
+## 2. 目的与适用边界
 
-## 视觉设计语言
+本规范以 `app.wxss v3.0.0` 的实际代码令牌为唯一事实来源，提炼、补全并纠正为权威设计规范。任何设计与实现与本规范冲突时，以本规范为准；本规范与 `app.wxss` 冲突时，以本规范声明的新令牌值与纠正决策为准，并同步回写代码。
 
-### 设计原则
+适用边界：
 
-项目界面设计遵循四项核心原则，这些原则指导所有界面设计和交互决策。第一项原则是简洁清晰，界面设计应当去除冗余元素，突出核心内容和操作入口，让用户能够快速找到所需信息和功能。信息层级应当清晰分明，通过视觉差异区分重要程度，避免信息过载导致的认知负担。
+- 微信小程序**原生开发框架**（非 uni-app / Taro），rpx 基准宽 750。
+- **纯前端**设计规范，不涉及后端接口与数据结构。
+- 覆盖核心 6 页流程：首页、分类、商品详情、购物车、订单确认、我的。
+- 涉及原生 tabBar（首页/分类/购物车/我的）、原生导航栏（白色、标题"苏铁"）与全面屏安全区适配。
 
-第二项原则是一致性，同类功能和相似场景应当使用相同的设计模式，降低用户的学习成本。视觉元素（如颜色、字体、图标）应当保持统一的风格，形成完整的视觉语言系统。交互模式应当一致，相同操作在不同场景下应当产生相同或相似的反馈。
+## 3. 设计原则
 
-第三项原则是可用性，界面设计应当符合用户的认知习惯和操作直觉，减少用户的思考成本。重要操作应当突出展示，次要操作应当适度收敛。错误提示应当明确指出问题和解决方案，引导用户完成操作。界面应当具备良好的可访问性，考虑不同用户群体的需求。
+结合本项目定位（精品植物/园艺 C 端电商，受众偏好大图、低决策成本）：
 
-第四项原则是品牌表达，设计应当体现苏铁品牌的核心价值和精神内涵，在符合行业规范的基础上形成差异化的视觉特征。品牌色彩和视觉元素应当贯穿整个产品，在用户心智中建立统一的品牌形象。
+1. **极简克制**：大面积留白、白色卡片浮于浅灰页面之上，每屏只强调一个视觉焦点（大图商品 / 一个主 CTA）。文字只用三级灰阶，不引入第四级。
+2. **自然品牌**：绿色是品牌唯一的"强调色"——主操作、选中态、价格强调、tabBar 选中均归绿，让用户建立"绿色 = 苏铁"的品牌联想。除此之外不得出现任何第二强调色系（红色系仅作错误警示）。
+3. **一致性**：同语义同色、同层级同间距、同交互同反馈。凡可引用 CSS 变量的地方必须引用变量，禁止新写硬编码色值。
+4. **可用优先**：移动端新手友好——主 CTA 醒目（主色绿 + 白字）、价格信息清晰（品牌价签策略）、触控区 ≥ 88rpx、安全区不遮挡底部固定栏。
 
-### 色彩系统
+## 4. 视觉设计语言
 
-#### 主色调定义
+### 4.1 色彩系统
 
-品牌主色调选择深绿色作为核心视觉元素，深绿色（色值 #2E7D32）象征自然、生机和品质，与苏铁品牌的定位相契合。主色调用于关键操作按钮、重要状态提示、品牌标识等需要强调的场景。主色调应当控制使用面积，避免大面积使用造成的视觉疲劳。
+#### 4.1.1 权威 Token 表
+
+| Token | 色值 | 用途 | 语义色 |
+|-------|------|------|--------|
+| `--primary-color` | `#2E7D32` | 主色绿：主 CTA、选中态、链接、tabBar 选中、loading 指示 | 是（品牌主色） |
+| `--primary-dark` | `#1B5E20` | 深绿：促销价/价格强调（"品牌价签"）、按压态 | 是（主色派生） |
+| `--primary-light` | `#F1F8E9` | 浅绿：折扣标签底色、选中态浅底、按钮按压底 | 是（主色派生） |
+| `--text-primary` | `#1D1D1F` | 主文字：标题、正文、价格数字（配合价签策略） | 是 |
+| `--text-secondary` | `#86868B` | 次要文字：说明、原价（配删除线）、副标题 | 是 |
+| `--text-tertiary` | `#AEAEB2` | 三级文字：占位符、禁用、极弱提示 | 是 |
+| `--text-inverse` | `#FFFFFF` | 反白文字（主色/深色底上） | 是 |
+| `--background-primary` | `#FFFFFF` | 卡片/表面背景 | 是 |
+| `--background-secondary` | `#F5F5F7` | 页面背景（`page` 默认） | 是 |
+| `--background-tertiary` | `#FAFAFA` | 三级背景：按压态、次级面板 | 是 |
+| `--border-color` | `#E8E8ED` | 分隔线、描边 | 是 |
+| `--error-color` | `#F44336` | 错误/警示：表单错误、删除确认、警示 toast。**禁止用于价格与品牌 CTA** | 是（受控语义色） |
+| `--error-light` | `#FFEBEE` | 错误浅底 | 是 |
+| `--success-color` | `#4CAF50` | 成功：下单成功、支付成功提示 | 是 |
+| `--success-light` | `#E8F5E9` | 成功浅底 | 是 |
+| `--warning-color` | `#FF9800` | 警告：库存紧张等系统级提示（非促销） | 是 |
+| `--warning-light` | `#FFF3E0` | 警告浅底 | 是 |
+| `--info-color` | `#2196F3` | 信息：物流信息等中性提示 | 是 |
+| `--info-light` | `#E3F2FD` | 信息浅底 | 是 |
+
+色彩占比约定：中性色（白/灰阶）≥ 85%，主色绿 ≤ 10%，状态语义色 ≤ 5%。
+
+#### 4.1.2 合并后的 CSS 变量块（权威定义，已剔除脏值）
 
 ```css
-:root {
+page {
+  /* ===== 品牌绿 ===== */
   --primary-color: #2E7D32;
-  --primary-hover: #1B5E20;
-  --primary-active: #388E3C;
-  --primary-light: #E8F5E9;
+  --primary-light: #F1F8E9;
   --primary-dark: #1B5E20;
-}
-```
 
-主色调的明度变化形成完整的色彩系列。悬停状态使用略浅的色值（#388E3C），激活状态使用略深的色值（#1B5E20）。浅色背景（#E8F5E9）用于选中状态或强调区域。深色（#1B5E20）用于需要更高对比度的场景。
+  /* ===== 文字三级 ===== */
+  --text-primary: #1D1D1F;
+  --text-secondary: #86868B;
+  --text-tertiary: #AEAEB2;
+  --text-inverse: #FFFFFF;
 
-#### 辅助色定义
+  /* ===== 背景三级 / 边框 ===== */
+  --background-primary: #FFFFFF;
+  --background-secondary: #F5F5F7;
+  --background-tertiary: #FAFAFA;
+  --border-color: #E8E8ED;
 
-辅助色包括功能性色彩和调节性色彩两大类。功能性色彩用于传达状态信息，具有明确的语义含义。成功状态使用绿色（#4CAF50），警告状态使用橙色（#FF9800），错误状态使用红色（#F44336），提示状态使用蓝色（#2196F3）。这些色彩应当在对应场景下使用，帮助用户快速理解界面状态。
-
-```css
-:root {
+  /* ===== 受控语义色（各含主+浅） ===== */
+  --error-color: #F44336;
+  --error-light: #FFEBEE;
   --success-color: #4CAF50;
   --success-light: #E8F5E9;
   --warning-color: #FF9800;
   --warning-light: #FFF3E0;
-  --error-color: #F44336;
-  --error-light: #FFEBEE;
   --info-color: #2196F3;
   --info-light: #E3F2FD;
-}
-```
 
-调节性色彩用于丰富视觉层次，包括中性色和点缀色。中性色从纯白（#FFFFFF）到深灰（#212121）分为五个层级，用于文字、边框、背景等场景。点缀色用于特定的交互场景或活动推广，可根据具体需求选择。
-
-```css
-:root {
-  --text-primary: #212121;
-  --text-secondary: #757575;
-  --text-disabled: #BDBDBD;
-  --text-inverse: #FFFFFF;
-  
-  --border-color: #E0E0E0;
-  --border-light: #EEEEEE;
-  --border-dark: #BDBDBD;
-  
-  --bg-page: #F5F5F5;
-  --bg-card: #FFFFFF;
-  --bg-body: #FFFFFF;
-  
-  --shadow-color: rgba(0, 0, 0, 0.1);
-}
-```
-
-#### 色彩使用规范
-
-色彩使用应当遵循以下规范，确保界面色彩的合理性和一致性。功能性色彩（成功、警告、错误、提示）应当严格按照语义使用，不应当随意混用。同一界面中功能性色彩不应超过三种，避免造成信息混乱。主色调和辅助色的使用面积比例应当控制在 7:2:1 左右，即主色调占 70%，辅助色占 20%，点缀色占 10%。
-
-文字色彩应当根据背景色选择合适的对比度，确保可读性。在浅色背景上使用深色文字，在深色背景上使用浅色文字。正文内容使用主文字色（#212121），次要说明使用次要文字色（#757575），禁用状态使用禁用文字色（#BDBDBD）。文字与背景的对比度应当满足 WCAG 2.1 标准的要求，正文对比度不低于 4.5:1，大标题对比度不低于 3:1。
-
-### 字体规范
-
-#### 字体家族定义
-
-项目使用系统默认字体作为首选字体，在不同操作系统上回退到相应的无衬线字体。中文使用苹方（PingFang SC）或思源黑体（Source Han Sans），英文使用 SF Pro 或 Segoe UI。字体家族定义应当包含完整的回退机制，确保在不同设备上都有良好的显示效果。
-
-```css
-:root {
-  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
-    'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial,
-    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-}
-```
-
-等宽字体用于代码展示和数字对齐场景，使用系统等宽字体或专用等宽字体。
-
-```css
-:root {
-  --font-mono: 'SF Mono', 'Fira Code', 'Consolas', 'Courier New', monospace;
-}
-```
-
-#### 字号层级定义
-
-字号设计采用模数系统，以 2px 为基础递进单位，形成完整的字号层级。主字号为 14px，用于正文内容，是界面中占比最大的字号。标题使用更大的字号，通过字重变化进一步区分层级。
-
-```css
-:root {
+  /* ===== 字号 ===== */
   --font-size-xs: 10px;
   --font-size-sm: 12px;
-  --font-size-base: 14px;
+  --font-size-md: 14px;
   --font-size-lg: 16px;
   --font-size-xl: 18px;
-  --font-size-2xl: 20px;
-  --font-size-3xl: 24px;
-  --font-size-4xl: 30px;
-  --font-size-5xl: 36px;
-}
-```
+  --font-size-xxl: 24px;
+  --font-size-h1: 28px;
+  --font-size-h2: 22px;
+  --font-size-h3: 18px;
 
-各字号的使用场景定义如下：10px 用于提示文字和标签；12px 用于辅助说明和次要信息；14px 用于正文内容；16px 用于标题和强调文字；18px 用于页面主标题；20px 用于弹窗标题；24px 用于区块标题；30px 和 36px 用于页面大标题。
+  /* ===== 间距 ===== */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 20px;
+  --spacing-xxl: 24px;
 
-#### 字重与行高
+  /* ===== 圆角 ===== */
+  --border-radius-sm: 8px;
+  --border-radius-md: 12px;
+  --border-radius-lg: 16px;
+  --border-radius-xl: 24px;
 
-字重分为三个级别：Regular（400）用于正文内容，Medium（500）用于次要标题和强调文字，Semibold（600）用于主要标题和按钮文字。字重的选择应当与字号配合，较大的字号可以使用较细的字重，较小的字号应当使用较粗的字重以保证可读性。
+  /* ===== 阴影 ===== */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.1);
 
-```css
-:root {
-  --font-weight-normal: 400;
-  --font-weight-medium: 500;
-  --font-weight-semibold: 600;
-  --font-weight-bold: 700;
-}
-```
+  /* ===== 过渡（统一曲线） ===== */
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 
-行高根据字号和内容类型确定。正文内容的行高为字号的 1.5 倍，确保多行文字的阅读舒适度。标题行高可以适当缩小，节省垂直空间。固定高度的元素应当根据高度设置合适的行高，实现垂直居中。
-
-```css
-:root {
-  --line-height-tight: 1.25;
-  --line-height-normal: 1.5;
-  --line-height-relaxed: 1.75;
-}
-```
-
-### 图标规范
-
-#### 图标风格定义
-
-项目图标采用线性图标风格，线条粗细为 1px 或 1.5px，圆角半径为 2px。图标尺寸基准为 24x24px，根据使用场景可以缩放为 16x16px、20x20px、32x32px 或 48x48px。图标应当保持统一的视觉大小，不同图标的实际像素尺寸可能略有差异，但视觉重量应当一致。
-
-图标线条应当使用主文字色（#212121），悬停或激活状态可以改为主色调（#2E7D32）。禁用状态的图标使用禁用文字色（#BDBDBD）。图标的线条端点应当统一为圆角或直角，项目选择圆角端点，与整体风格保持一致。
-
-#### 图标命名规范
-
-图标文件命名使用短横线分隔的小写字母，格式为 `{模块}-{功能}.png` 或 `{模块}-{功能}.svg`。例如，用户图标命名为 `user.png`，购物车图标命名为 `cart.png`，首页图标命名为 `home.png`。同一功能的多种状态使用后缀区分，如 `cart-active.png` 表示选中状态的购物车图标。
-
-图标存放在 `images/icons/` 目录下，按照功能模块组织子目录。常用图标应当制作成图标字体或 SVG Sprite，提高加载性能。图标资源应当包含 2x 和 3x 分辨率版本，支持视网膜屏幕的高清显示。
-
-```css
-.icon {
-  width: 24px;
-  height: 24px;
-  display: inline-block;
-  vertical-align: middle;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-
-.icon-cart {
-  background-image: url('/images/icons/cart.png');
-}
-
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx) {
-  .icon-cart {
-    background-image: url('/images/icons/cart@2x.png');
-  }
-}
-```
-
-## 组件设计规范
-
-### 基础组件
-
-#### 按钮组件
-
-按钮是最常用的交互组件，项目定义了五种按钮类型。主按钮使用主色调背景和白色文字，用于页面中最重要的操作，如提交、购买、登录等。次按钮使用边框样式，背景为透明，用于次要操作，如取消、返回等。文字按钮没有边框和背景，仅使用文字样式，用于辅助操作，如查看更多、取消等。危险按钮使用红色背景，用于删除、退出等危险操作。幽灵按钮使用浅色背景和深色文字，用于在深色背景上的操作。
-
-```css
-:root {
-  --btn-height-sm: 28px;
-  --btn-height-md: 36px;
-  --btn-height-lg: 44px;
-  --btn-padding-horizontal: 16px;
-  --btn-border-radius: 4px;
-}
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: var(--btn-height-md);
-  padding: 0 var(--btn-padding-horizontal);
-  border-radius: var(--btn-border-radius);
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-medium);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  border: none;
-  outline: none;
-}
-
-.btn-primary {
-  background-color: var(--primary-color);
-  color: #FFFFFF;
-}
-
-.btn-primary:hover {
-  background-color: var(--primary-hover);
-}
-
-.btn-primary:active {
-  background-color: var(--primary-active);
-}
-
-.btn-primary:disabled {
-  background-color: var(--primary-light);
-  color: var(--text-disabled);
-  cursor: not-allowed;
-}
-
-.btn-secondary {
-  background-color: transparent;
-  border: 1px solid var(--border-color);
+  background-color: var(--background-secondary);
   color: var(--text-primary);
-}
-
-.btn-secondary:hover {
-  background-color: var(--bg-page);
-}
-
-.btn-danger {
-  background-color: var(--error-color);
-  color: #FFFFFF;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  font-size: var(--font-size-md);
+  line-height: 1.5;
 }
 ```
 
-按钮尺寸分为三种：小号按钮高度 28px，用于表格操作或紧凑布局；中号按钮高度 36px，是默认尺寸，用于大多数场景；大号按钮高度 44px，用于页面主要操作或需要强调的场景。按钮宽度根据内容自动调整，最大宽度为 100%，超长文本使用省略号处理。
+**废弃令牌**（禁止再引用）：`#2a9d8f`（青，原 `.bg-secondary` / `.btn-secondary`）、`#f4a261`（橙，原 `.bg-accent`）、`#e93b3d` / `#ff6b6b` / `#ff9700` / `#ff8e53`（旧版红橙促销系，见 §8 纠正清单）。
 
-#### 输入框组件
+#### 4.1.3 语义色策略（核心决策）
 
-输入框用于接收用户输入的信息，项目定义了多种输入框类型。基础输入框用于单行文本输入，如用户名、地址等。文本域用于多行文本输入，如备注、评价等。数字输入框用于数字输入，配置数字键盘和增减按钮。搜索输入框用于搜索场景，配置搜索图标和清除按钮。密码输入框用于密码输入，配置显示或隐藏密码的切换按钮。
+1. **CTA / 主操作按钮** → 主色绿 `#2E7D32` + 白字。加购、立即购买、去支付、提交订单、确认规格等所有"推动转化"的按钮一律绿。同一屏最多一个实心绿大按钮（商品详情底栏允许"加购浅层 + 购买主色"的双绿组合，见 §5）。
+2. **价格 / 促销强调（品牌价签策略）**：
+   - 促销价/现价：主色**深绿 `#1B5E20`**，¥ 符号用小号、数字用大号加粗；不使用红色。
+   - 原价：次要文字色 `#86868B` + 删除线。
+   - 折扣标签/促销角标：浅绿底 `#F1F8E9` + 主色字 `#2E7D32`（或深绿底 + 白字，二选一全局统一，推荐前者）。
+   - 购物车角标（badge）：主色绿 `#2E7D32` 底 + 白字（角标属品牌计数，非警示）。
+3. **红色 `#F44336` 仅作错误/警示语义**：表单校验错误、删除/退出登录等危险操作确认、错误 toast。不得出现在价格、折扣、加购按钮、tabBar 角标、"我的"头部等品牌或营销场景。
+4. **状态语义严格对号**：success 绿 / warning 橙 / error 红 / info 蓝，不跨语义混用；同一屏状态色不超过 2 种。
+
+### 4.2 字体规范
+
+字体栈（app.wxss 实际值，权威）：
 
 ```css
-:root {
-  --input-height-md: 36px;
-  --input-height-lg: 44px;
-  --input-padding-horizontal: 12px;
-  --input-border-color: var(--border-color);
-  --input-focus-color: var(--primary-color);
-}
-
-.input {
-  height: var(--input-height-md);
-  padding: 0 var(--input-padding-horizontal);
-  border: 1px solid var(--input-border-color);
-  border-radius: var(--btn-border-radius);
-  font-size: var(--font-size-base);
-  color: var(--text-primary);
-  background-color: #FFFFFF;
-  outline: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.input:focus {
-  border-color: var(--input-focus-color);
-  box-shadow: 0 0 0 2px var(--primary-light);
-}
-
-.input:disabled {
-  background-color: var(--bg-page);
-  color: var(--text-disabled);
-  cursor: not-allowed;
-}
-
-.input-error {
-  border-color: var(--error-color);
-}
-
-.input-error:focus {
-  box-shadow: 0 0 0 2px var(--error-light);
-}
-
-.input-wrapper {
-  display: flex;
-  align-items: center;
-}
-
-.input-wrapper .input {
-  flex: 1;
-  border: none;
-  outline: none;
-}
-
-.input-wrapper .input:focus {
-  box-shadow: none;
-}
+font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'PingFang SC',
+  'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
 ```
 
-输入框应当配合标签使用，标签位于输入框上方或左侧，标识输入项的含义。必填项应当在标签后添加红色星号（*）。输入框下方应当显示占位符示例或帮助文字，引导用户正确输入。验证错误时应当在输入框下方显示错误提示，文字使用错误色。
+字号层级（px，代码实际值；rpx 换算按 1px = 2rpx）：
 
-#### 卡片组件
+| Token | 值 | 用途 |
+|-------|-----|------|
+| `--font-size-xs` | 10px | 极小标签、badge 文字 |
+| `--font-size-sm` | 12px | 辅助说明、原价、时间戳 |
+| `--font-size-md` | 14px | **正文默认**（page 基准） |
+| `--font-size-lg` | 16px | 次级标题、按钮大字号 |
+| `--font-size-xl` | 18px | 模块标题（h3） |
+| `--font-size-xxl` | 24px | 强调数字、区块标题 |
+| `--font-size-h1` | 28px | 页面大标题 |
+| `--font-size-h2` | 22px | 二级大标题 |
+| `--font-size-h3` | 18px | 三级标题（=xl） |
 
-卡片是承载内容的容器组件，用于展示一组相关的信息。商品卡片用于展示商品信息，包括商品图片、名称、价格、销量等。订单卡片用于展示订单信息，包括订单编号、状态、金额、商品列表等。用户卡片用于展示用户信息，包括头像、昵称、等级等。
+字重：`font-light` 300 / `font-normal` 400 / `font-medium` 500（按钮、tabBar 选中、次级强调）/ `font-bold` 700（标题、价格数字、主 CTA 文字）。
+行高：正文 1.5（page 默认）；多行描述 1.6；标题可收紧至 1.25。
+
+### 4.3 间距系统
+
+基准档位：4 / 8 / 12 / 16 / 20 / 24（`--spacing-xs` ~ `--spacing-xxl`，px）。
+
+用途规则：
+
+- **xs(4)**：图标与文字之间、badge 内边距。
+- **sm(8)**：按钮内部图文间距、相关元素组内间距。
+- **md(12)**：卡片默认内边距与卡片纵向间距、列表项内边距。
+- **lg(16)**：页面左右安全留白（配合 30rpx 传统页可接受 32rpx，推荐归一为 16px）、区块间主间距。
+- **xl(20)**：大区块内边距、页面级上下分隔。
+- **xxl(24)**：页面顶部标题区、大间距分隔（如 banner 与内容区之间）。
+
+禁止：未定义的魔法间距值（如 10/15/18/26rpx 一律就近归档到上述档位）。
+
+### 4.4 圆角 / 阴影 / 过渡
+
+| 类别 | Token | 值 | 典型用法 |
+|------|-------|-----|----------|
+| 圆角 | `--border-radius-sm` | 8px | 小按钮、tag、输入框、规格项 |
+| 圆角 | `--border-radius-md` | 12px | 卡片、按钮、搜索栏（=24rpx） |
+| 圆角 | `--border-radius-lg` | 16px | 大卡片、弹层顶部（=32rpx） |
+| 圆角 | `--border-radius-xl` | 24px | 特大容器；胶囊/全圆按钮用 50% 或高度一半 |
+| 阴影 | `--shadow-sm` | 0 1px 3px rgba(0,0,0,.05) | 卡片默认、tabBar 选中项 |
+| 阴影 | `--shadow-md` | 0 4px 12px rgba(0,0,0,.08) | 吸顶栏、悬浮卡片 |
+| 阴影 | `--shadow-lg` | 0 12px 32px rgba(0,0,0,.1) | 弹层、浮层容器 |
+| 过渡 | `--transition-fast` | 0.15s | 按压反馈、颜色/透明度变化 |
+| 过渡 | `--transition-normal` | 0.3s | 弹层出入场、展开收起 |
+| 过渡 | `--transition-slow` | 0.5s | 大区块位移、banner 类氛围动画 |
+
+所有过渡统一曲线 `cubic-bezier(0.4, 0, 0.2, 1)`，禁止 `ease-in-out`、`linear`（spin 骨架除外）等散落写法。
+
+## 5. 组件设计规范
+
+> 每个组件标注【合规基准】与【常见违规】。组件样式实现优先复用 `app.wxss` 基础类与 CSS 变量。
+
+### 5.1 按钮（.btn 系列）
+
+**合规基准**
+- 主按钮 `.btn-primary`：背景 `--primary-color`，白字，圆角 md，字重 500，按压 `:active` → `opacity: .8; transform: scale(0.98)`（transition-fast）。
+- 次按钮：白底 + `2rpx solid --border-color` 描边 + 主文字色（替代旧 `.btn-secondary` 青色填充）。
+- 描边按钮 `.btn-outline`：透明底 + 2rpx 主色描边 + 主色字，按压底变 `--primary-light`。
+- 危险按钮：`--error-color` 底 + 白字，仅用于删除/退出登录，必须有确认弹窗。
+- 禁用 `.btn-disabled`：`opacity: .5` + not-allowed，不改色。
+- 尺寸：sm（padding xs/md，字 sm）/ 默认（sm/lg，字 md）/ lg（md/xl，字 lg）；`.btn-block` 占满行。
+- 底部固定栏主按钮高度 88rpx、全圆角（胶囊）。
+
+**常见违规**
+- ✗ `.btn-secondary` 使用青色 `#2a9d8f` 填充 → 改为白底描边次按钮（见 §8）。
+- ✗ 加购/立即购买按钮使用 `#ff9700` / `#e93b3d` / `#ff6b6b` → 一律改 `.btn-primary` 绿。
+
+### 5.2 输入框
+
+**合规基准**：白底、`1rpx solid --border-color`、圆角 md、字 md、padding md；聚焦边框变 `--primary-color`；禁用态 `--background-tertiary` 底 + `--text-tertiary` 字。搜索栏为胶囊形态（圆角全圆、`--background-secondary` 底、含搜索图标与 placeholder 三级灰）。校验错误时边框/提示用 `--error-color`。
+**常见违规**：✗ 聚焦用红色或蓝色边框；✗ 圆角小于 8px。
+
+### 5.3 卡片（.card）
+
+**合规基准**：`--background-primary` 白底、圆角 md、`--shadow-sm`、padding md、卡片间 margin-bottom md。按压卡片加 `.card-hover`（active scale 0.98）。
+**常见违规**：✗ 卡片带彩色边框或彩色底；✗ 阴影过重（超 shadow-md）。
+
+### 5.4 列表项（.list-item）
+
+**合规基准**：白底、padding md、底部 `1rpx solid --border-color` 分隔（末项无）、active 背景变 `--background-tertiary`。左侧图标 48rpx + 右侧箭头（`--text-tertiary` 透明度处理）。
+**常见违规**：✗ 分隔线用纯黑或带色分隔线；✗ "我的"页菜单项图标用红橙色。
+
+### 5.5 商品卡（竖卡 340rpx / 横卡 160rpx 两形态）
+
+**合规基准**
+- 竖卡：图上 340rpx 方图，下方信息区（名称 2 行截断、价格行、销量）。圆角 md、白底、shadow-sm。
+- 横卡：图左 160rpx，信息右侧。
+- 价格：深绿 `#1B5E20` 数字加粗 + ¥ 小号；原价 `--text-secondary` 删除线。
+- 折扣/促销标签：`--primary-light` 浅绿底 + 主色字，圆角 sm，置于图左上角。
+- 加购按钮：圆形或小号 `.btn-primary` 绿底白字（或主色描边图标按钮），禁止红色。
+- 名称用 `.text-ellipsis-2`。
+
+**常见违规**
+- ✗ `components/product-card/index.wxss` 价格 `color: #ff6b6b`、加购按钮 `background-color: #ff6b6b` → 价格改 `--primary-dark`，按钮改 `--primary-color`（P1，见 §8）。
+
+### 5.6 购物车项
+
+**合规基准**：白底行卡；左侧圆形勾选框；商品图 160rpx 圆角 sm；名称 1-2 行；规格文字 sm 灰；数量步进器靠下右；单价深绿加粗。左滑/长按删除走确认弹窗（error 语义仅限确认弹窗按钮）。
+**常见违规**：✗ 单价用红色；✗ 勾选框未选/选中态用红橙。
+
+### 5.7 订单卡
+
+**合规基准**：白底圆角 md；头部（状态文字 + 时间）+ 商品缩略行 + 合计金额 + 底部操作按钮。状态色：待付款 → warning 橙、待发货 → info 蓝、待收货/待评价 → 主色绿、已完成 → success 绿、已取消 → `--text-tertiary`。主操作按钮（去支付等）为 `.btn-primary` 绿。
+**常见违规**：✗ 状态与金额使用 `#ff6b6b`（order/index、order/detail、order/confirm 多处）→ 按状态色表与价签策略替换（P0/P1，见 §8）。
+
+### 5.8 空状态（empty-state）
+
+**合规基准**：居中布局，插画/图标 ≤ 200rpx，主文案 `--text-tertiary`（md），描述 `--text-secondary`（sm），可选操作用 `.btn-outline`。
+**常见违规**：✗ `components/empty-state/index.wxss:26` 背景使用 `#ff6b6b` → 改 `--primary-light` 或 `--background-tertiary`（P1）。
+
+### 5.9 tabBar（原生）
+
+**合规基准**：`app.json` 配置 `color: #86868B`（未选中，对应 --text-secondary）、`selectedColor: #2E7D32`（选中，主色绿）、`backgroundColor: #FFFFFF`、`borderStyle: white/black`（推荐 white 配 1px --border-color 视觉）。图标提供选中/未选中两套 PNG（81x81 建议尺寸）。
+**常见违规**：✗ 选中色用红/橙；✗ 用自定义 tabBar 破坏原生手势体验。
+
+### 5.10 导航栏（原生）
+
+**合规基准**：`navigationBarBackgroundColor: #FFFFFF`、`navigationBarTextStyle: black`、`navigationBarTitleText: "苏铁"`（首页），内页各自命名。不做自定义导航，让出胶囊区。
+**常见违规**：✗ 页面级覆盖为彩色导航（如红色头部）；✗ 标题字号超 xl。
+
+### 5.11 底部固定栏（结算/操作栏）
+
+**合规基准**：`position: fixed; bottom: 0; left/right: 0`，白底，顶部 `1rpx` 边框或 `--shadow-md` 上投影，`z-index: 100`。内边距公式：
 
 ```css
-:root {
-  --card-padding: 16px;
-  --card-bg: #FFFFFF;
-  --card-border-radius: 8px;
-  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-}
-
-.card {
-  background-color: var(--card-bg);
-  border-radius: var(--card-border-radius);
-  box-shadow: var(--card-shadow);
-  padding: var(--card-padding);
-}
-
-.card-hover:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-  transform: translateY(-2px);
-  transition: all 0.3s ease;
-}
-
-.card-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
-}
-
-.card-title {
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-semibold);
-  color: var(--text-primary);
-}
-
-.card-content {
-  font-size: var(--font-size-base);
-  color: var(--text-secondary);
-}
-
-.card-footer {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid var(--border-light);
-}
+padding: 16rpx 24rpx;
+padding-bottom: calc(16rpx + constant(safe-area-inset-bottom));
+padding-bottom: calc(16rpx + env(safe-area-inset-bottom));
 ```
 
-卡片内部应当有明确的信息层级结构。标题应当突出显示，正文使用常规字重和颜色，辅助信息使用次要颜色。重要操作按钮应当放置在卡片底部或右下角，与卡片内容有明显区分。卡片之间的间距应当保持一致，推荐使用 8px 或 16px 的间距。
-
-#### 列表组件
-
-列表用于展示多项同类信息，支持点击操作进入详情或执行操作。基础列表用于展示简单的信息列表，每个列表项包含标题和副标题。图文列表用于展示带图片的信息列表，每个列表项包含图片、标题和副标题。操作列表用于展示可执行操作的列表，每个列表项包含操作说明和操作图标。
-
-```css
-:root {
-  --list-item-height: 56px;
-  --list-item-padding-horizontal: 16px;
-  --list-item-border-color: var(--border-light);
-}
-
-.list {
-  background-color: #FFFFFF;
-}
-
-.list-item {
-  display: flex;
-  align-items: center;
-  height: var(--list-item-height);
-  padding: 0 var(--list-item-padding-horizontal);
-  border-bottom: 1px solid var(--list-item-border-color);
-}
-
-.list-item:last-child {
-  border-bottom: none;
-}
-
-.list-item:active {
-  background-color: var(--bg-page);
-}
-
-.list-item-thumbnail {
-  width: 40px;
-  height: 40px;
-  border-radius: 4px;
-  margin-right: 12px;
-  object-fit: cover;
-}
-
-.list-item-content {
-  flex: 1;
-  overflow: hidden;
-}
-
-.list-item-title {
-  font-size: var(--font-size-base);
-  color: var(--text-primary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.list-item-subtitle {
-  font-size: var(--font-size-sm);
-  color: var(--text-secondary);
-  margin-top: 2px;
-}
-
-.list-item-extra {
-  margin-left: 12px;
-  font-size: var(--font-size-sm);
-  color: var(--text-secondary);
-}
-
-.list-item-arrow {
-  margin-left: 8px;
-  width: 16px;
-  height: 16px;
-  color: var(--text-disabled);
-}
-```
-
-列表应当配合分隔线使用，分隔线位于列表项之间。分组列表应当在组标题和组内容之间添加分隔线，组标题使用较浅的背景色或较小的字号。列表应当有明确的首项和末项样式，与页面背景有明显的区分。
-
-### 业务组件
-
-#### 商品卡片组件
-
-商品卡片是电商小程序的核心组件，用于展示商品信息并引导用户进行购买操作。商品卡片应当包含以下核心信息：商品主图、 商品名称、商品价格、 商品规格或属性、操作按钮（加入购物车、立即购买）。可选信息包括：销量、评价数、收藏状态、促销标签。
-
-```typescript
-// components/product-card/product-card.js
-Component({
-  properties: {
-    product: {
-      type: Object,
-      value: {
-        id: '',
-        name: '',
-        price: 0,
-        originalPrice: 0,
-        image: '',
-        sales: 0,
-        tags: []
-      }
-    },
-    showAddCart: {
-      type: Boolean,
-      value: true
-    }
-  },
-
-  data: {
-    isCollected: false
-  },
-
-  methods: {
-    onTap() {
-      this.triggerEvent('tap', { productId: this.data.product.id });
-    },
-
-    onAddCart() {
-      this.triggerEvent('addcart', { productId: this.data.product.id });
-    },
-
-    onCollect() {
-      this.setData({ isCollected: !this.data.isCollected });
-      this.triggerEvent('collect', { 
-        productId: this.data.product.id,
-        collected: this.data.isCollected
-      });
-    }
-  }
-});
-```
-
-商品卡片的布局应当根据展示场景选择合适的样式。列表展示时使用水平布局，图片在左，内容在右；网格展示时使用垂直布局，图片在上，内容在下。商品名称应当限制行数，超出部分使用省略号处理。价格应当突出显示，原价使用删除线样式。促销标签应当使用醒目的背景色，放置在商品图片左上角。
-
-#### 购物车项组件
-
-购物车项组件用于展示购物车中的单个商品，支持数量调整和规格切换操作。购物车项应当包含：商品图片、 商品名称、 商品规格、 商品单价、 数量选择器、 小计金额、 删除按钮。
-
-```typescript
-// components/cart-item/cart-item.js
-Component({
-  properties: {
-    item: {
-      type: Object,
-      value: {
-        id: '',
-        productId: '',
-        skuId: '',
-        name: '',
-        image: '',
-        price: 0,
-        quantity: 1,
-        maxQuantity: 99,
-        selected: true
-      }
-    }
-  },
-
-  data: {
-    tempQuantity: 1
-  },
-
-  observers: {
-    'item.quantity': function(quantity) {
-      this.setData({ tempQuantity: quantity });
-    }
-  },
-
-  methods: {
-    onSelect() {
-      this.triggerEvent('select', { 
-        itemId: this.data.item.id,
-        selected: !this.data.item.selected
-      });
-    },
-
-    onQuantityChange(e) {
-      const { value } = e.detail;
-      this.triggerEvent('quantitychange', {
-        itemId: this.data.item.id,
-        quantity: Math.max(1, Math.min(value, this.data.item.maxQuantity))
-      });
-    },
-
-    onDelete() {
-      wx.showModal({
-        title: '确认删除',
-        content: '确定要从购物车中删除该商品吗？',
-        success: (res) => {
-          if (res.confirm) {
-            this.triggerEvent('delete', { itemId: this.data.item.id });
-          }
-        }
-      });
-    }
-  }
-});
-```
-
-数量选择器应当限制最小值和最大值，防止数量超出合理范围。数量变化时应当实时更新小计金额。小计金额应当使用加粗字体显示，金额较大时可以考虑使用主色调。删除按钮应当有确认提示，防止误操作。
-
-#### 订单卡片组件
-
-订单卡片用于展示订单信息，支持订单操作和状态追踪。订单卡片应当包含：订单编号、 订单状态、 商品列表、 订单金额、 下单时间、 操作按钮（去支付、查看物流、确认收货、评价）。
-
-```typescript
-// components/order-card/order-card.js
-Component({
-  properties: {
-    order: {
-      type: Object,
-      value: {
-        id: '',
-        status: '',
-        statusText: '',
-        amount: 0,
-        productCount: 0,
-        products: [],
-        createTime: ''
-      }
-    }
-  },
-
-  methods: {
-    onTap() {
-      this.triggerEvent('tap', { orderId: this.data.order.id });
-    },
-
-    onPrimaryAction() {
-      const { status } = this.data.order;
-      const actionMap = {
-        'pending_payment': 'pay',
-        'pending_ship': 'remind',
-        'pending_receive': 'confirm',
-        'completed': 'review'
-      };
-      this.triggerEvent('action', { 
-        orderId: this.data.order.id,
-        action: actionMap[status]
-      });
-    }
-  }
-});
-```
-
-订单状态应当使用语义化的色彩区分。待付款状态使用警告色，待发货状态使用信息色，待收货和待评价状态使用主色，已完成状态使用成功色，已取消状态使用灰色。订单商品列表应当折叠显示，鼠标悬停或点击时展开查看详情。订单金额应当包含商品总额、运费、优惠等信息。
-
-## 布局与间距规范
-
-### 页面布局
-
-#### 标准页面结构
-
-小程序页面采用标准的布局结构，从上到下依次为状态栏、导航栏、内容区、标签栏（可选）。状态栏由微信小程序系统提供，高度为 24px 或 44px（全面屏设备），开发时需要适配不同设备。导航栏由微信小程序原生支持，高度为 44px，可以自定义样式或使用默认样式。内容区是页面主体内容的容器，应当占据屏幕的主要空间。标签栏用于多标签页面切换，高度为 50px 或 80px（全面屏设备）。
-
-```css
-page {
-  min-height: 100vh;
-  background-color: var(--bg-page);
-  box-sizing: border-box;
-}
-
-.status-bar {
-  height: var(--status-bar-height, 24px);
-  background-color: #FFFFFF;
-}
-
-.navbar {
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #FFFFFF;
-  border-bottom: 1px solid var(--border-light);
-}
-
-.content {
-  min-height: calc(100vh - var(--status-bar-height, 24px) - 44px);
-  padding: 16px;
-}
-
-.tabbar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: calc(var(--tabbar-height, 50px) + safe-area-inset-bottom));
-  background-color: #FFFFFF;
-  border-top: 1px solid var(--border-light);
-  display: flex;
-}
-```
-
-#### 内容布局模式
-
-内容区采用固定宽度布局，最大宽度为 750rpx（微信小程序默认宽度），在所有设备上保持一致的显示效果。内容区内的元素按照功能分区布局，常见布局模式包括：单列布局、双列布局、卡片布局、列表布局。
-
-单列布局用于首页、商品详情等需要突出主体内容的场景，内容居中显示，左右留白。双列布局用于商品列表、订单列表等需要并排展示多项内容的场景，使用 Grid 或 Flex 布局实现等宽双列。卡片布局用于信息卡片集合，使用间距分隔卡片，卡片内部采用固定结构。列表布局用于信息流展示，每项内容垂直排列，使用分隔线区分。
-
-```css
-.container {
-  max-width: 750rpx;
-  margin: 0 auto;
-  padding: 0 16px;
-}
-
-.grid-2 {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-}
-
-.flex-row {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-.flex-col {
-  display: flex;
-  flex-direction: column;
-}
-```
-
-### 间距系统
-
-#### 间距基准与增量
-
-间距系统采用 4px 为基础增量，形成完整的间距层级。这一数值基于中文排版的特点和移动端界面的阅读习惯，能够保证元素之间的呼吸感，同时不会浪费有限的屏幕空间。
-
-```css
-:root {
-  --space-xs: 4px;
-  --space-sm: 8px;
-  --space-md: 16px;
-  --space-lg: 24px;
-  --space-xl: 32px;
-  --space-2xl: 40px;
-  --space-3xl: 48px;
-}
-```
-
-间距的使用应当遵循一致的规则。组件内部元素间距使用较小层级（4px、8px、16px），如图标与文字之间使用 4px，按钮内部文字与图标之间使用 8px。组件之间的间距使用中等层级（16px、24px），如卡片之间使用 16px，区块之间使用 24px。页面区块之间的间距使用较大层级（32px、40px），如主要功能区块之间使用 32px，页面上下内容之间使用 40px。
-
-```css
-/* 组件内部间距 */
-.btn-text-icon {
-  margin-left: var(--space-xs);
-}
-
-.card-item {
-  padding: var(--space-md);
-}
-
-/* 组件间距 */
-.card + .card {
-  margin-top: var(--space-md);
-}
-
-.section {
-  margin-bottom: var(--space-lg);
-}
-
-/* 页面间距 */
-.page-header {
-  margin-bottom: var(--space-xl);
-}
-
-.page-content {
-  padding: var(--space-md);
-}
-```
-
-#### 安全区域适配
-
-全面屏设备需要在底部预留安全区域，避免内容被屏幕圆角或底部手势区域遮挡。微信小程序提供了 safe-area 相关的 CSS 变量和布局方案，应当在需要底部定位的元素上使用。
-
-```css
-.container {
-  padding-bottom: constant(safe-area-inset-bottom);
-  padding-bottom: env(safe-area-inset-bottom);
-}
-
-.fixed-bottom {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding-bottom: constant(safe-area-inset-bottom);
-  padding-bottom: env(safe-area-inset-bottom);
-  background-color: #FFFFFF;
-}
-```
-
-## 响应式适配规范
-
-### 屏幕尺寸适配
-
-#### 宽度适配方案
-
-微信小程序使用 rpx（Responsive Pixel）作为尺寸单位，1rpx 等于屏幕宽度的 1/750。这一特性使得开发者无需关心设备像素比，只需按照设计稿的尺寸开发，即可在所有设备上按比例缩放。设计稿通常以 iPhone 6 的 750x1334 像素为基准，设计稿中的 px 数值直接转换为 rpx 数值即可。
-
-```css
-.element {
-  width: 750rpx;
-  padding: 20rpx;
-  font-size: 28rpx;
-  border-radius: 10rpx;
-}
-```
-
-对于需要固定尺寸的元素（如图标），应当在保持宽高比例的前提下使用 rpx 单位。如果需要在不同设备上显示不同的尺寸，可以通过 JS 获取设备信息后动态设置样式。
-
-```javascript
-wx.getSystemInfo({
-  success: (res) => {
-    const scale = res.windowWidth / 750;
-    const iconSize = Math.round(32 * scale);
-    this.setData({ iconSize });
-  }
-});
-```
-
-#### 字体大小适配
-
-字体大小使用 rpx 单位可以保证在不同设备上的显示比例一致。但对于极小或极大的字体，可能需要在不同设备上进行微调，以获得更好的阅读体验。项目定义了字体大小的基准值，并在必要时根据设备像素比进行调整。
-
-```css
-/* 基础字体大小 */
-page {
-  font-size: 28rpx;
-}
-
-/* 大屏幕设备适当增大字体 */
-@media screen and (min-width: 400px) {
-  page {
-    font-size: 30rpx;
-  }
-}
-
-/* 小屏幕设备适当减小字体 */
-@media screen and (max-width: 320px) {
-  page {
-    font-size: 26rpx;
-  }
-}
-```
-
-### 像素比适配
-
-#### 图片资源适配
-
-高分辨率屏幕（如 Retina 屏幕）需要更高分辨率的图片资源，以避免图片模糊。微信小程序会自动根据设备像素比选择合适的图片资源，开发者需要提供 @2x 和 @3x 分辨率版本的图片。图片文件名使用 `@2x.png` 或 `@3x.png` 后缀区分。
-
-```css
-.product-image {
-  width: 200rpx;
-  height: 200rpx;
-}
-
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx) {
-  .product-image {
-    background-image: url('/images/product@2x.png');
-  }
-}
-
-@media (-webkit-min-device-pixel-ratio: 3), (min-resolution: 3dppx) {
-  .product-image {
-    background-image: url('/images/product@3x.png');
-  }
-}
-```
-
-#### 边框适配
-
-在某些高分辨率设备上，1px 边框可能显示过粗或显示不清晰。可以使用 CSS transform 缩放技术实现更细的边框，或者使用 hairline 组件实现物理像素级别的边框。
-
-```css
-.hairline-border {
-  position: relative;
-}
-
-.hairline-border::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 200%;
-  height: 200%;
-  transform: scale(0.5);
-  transform-origin: 0 0;
-  border: 1px solid var(--border-color);
-  pointer-events: none;
-}
-```
-
-## 动效设计规范
-
-### 过渡动画
-
-#### 页面过渡动画
-
-页面切换时应当使用过渡动画，增强空间感和连续性。项目使用微信小程序原生提供的页面转场动画，通过配置 app.json 中的 `pageStyle` 实现。页面进入动画使用从右向左滑入，页面退出动画使用从左向右滑出。
-
-```json
-{
-  "pageStyle": {
-    "navigationStyle": "custom",
-    "backgroundTextStyle": "dark"
-  },
-  "window": {
-    "backgroundTextStyle": "dark",
-    "navigationBarBackgroundColor": "#FFFFFF",
-    "navigationBarTitleText": "苏铁商城",
-    "navigationBarTextStyle": "black"
-  }
-}
-```
-
-自定义页面转场动画可以在页面的 JSON 配置中声明，然后使用动画 API 实现。页面进入和退出应当使用对称的动画效果，动画时长控制在 250ms 到 300ms 之间。
-
-```javascript
-// page-transition.js
-const pageTransition = {
-  enter: {
-    duration: 300,
-    timingFunction: 'ease-out',
-    delay: 0
-  },
-  exit: {
-    duration: 250,
-    timingFunction: 'ease-in',
-    delay: 0
-  }
-};
-```
-
-#### 元素过渡动画
-
-界面元素的显示隐藏、状态变化应当使用过渡动画，提供视觉反馈。常见场景包括：按钮悬停和点击、列表项加载和删除、弹窗显示和关闭、开关状态切换。过渡动画应当平滑自然，动画时长控制在 150ms 到 300ms 之间。
-
-```css
-.fade-enter {
-  opacity: 0;
-}
-
-.fade-enter-active {
-  opacity: 1;
-  transition: opacity 300ms ease-out;
-}
-
-.fade-exit {
-  opacity: 1;
-}
-
-.fade-exit-active {
-  opacity: 0;
-  transition: opacity 250ms ease-in;
-}
-
-.slide-up-enter {
-  transform: translateY(20px);
-  opacity: 0;
-}
-
-.slide-up-enter-active {
-  transform: translateY(0);
-  opacity: 1;
-  transition: all 300ms ease-out;
-}
-```
-
-### 交互动效
-
-#### 点击反馈动效
-
-可交互元素应当提供即时的点击反馈，增强操作的确定感。常见的点击反馈包括：缩放效果、波纹效果、颜色变化。缩放效果适用于按钮等较大的交互区域，点击时元素略微缩小，释放时恢复。波纹效果适用于卡片等较大面积的交互区域，点击位置产生扩散的水波纹效果。
-
-```css
-.press-scale:active {
-  transform: scale(0.95);
-  transition: transform 0.1s ease;
-}
-
-.press-highlight {
-  transition: background-color 0.1s ease;
-}
-
-.press-highlight:active {
-  background-color: var(--bg-page);
-}
-```
-
-```javascript
-// ripple.js
-function createRipple(event, color) {
-  const button = event.currentTarget;
-  const rect = button.getBoundingClientRect();
-  const size = Math.max(rect.width, rect.height);
-  const x = event.clientX - rect.left - size / 2;
-  const y = event.clientY - rect.top - size / 2;
-  
-  const ripple = document.createElement('span');
-  ripple.style.cssText = `
-    position: absolute;
-    width: ${size}px;
-    height: ${size}px;
-    background: ${color};
-    border-radius: 50%;
-    transform: scale(0);
-    animation: ripple 0.6s linear;
-    pointer-events: none;
-  `;
-  
-  button.appendChild(ripple);
-  setTimeout(() => ripple.remove(), 600);
-}
-```
-
-#### 加载动效
-
-数据加载过程中应当显示加载动效，给用户明确的等待反馈。骨架屏用于展示内容的预期布局，在真实数据加载前显示。旋转加载图标用于小范围的加载状态，如按钮加载、下拉刷新。进度条用于展示加载进度的场景，如文件上传、下载。
-
-```css
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-.loading-spinner {
-  width: 24px;
-  height: 24px;
-  border: 2px solid var(--border-color);
-  border-top-color: var(--primary-color);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-
-.skeleton {
-  background: linear-gradient(
-    90deg,
-    var(--bg-page) 25%,
-    var(--border-light) 50%,
-    var(--bg-page) 75%
-  );
-  background-size: 200% 100%;
-  animation: skeleton-loading 1.5s infinite;
-}
-
-@keyframes skeleton-loading {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
-```
-
-## 无障碍设计规范
-
-### 语义化标签
-
-#### 结构语义化
-
-界面元素应当使用语义化的标签，便于屏幕阅读器正确解读页面结构。页面标题使用 `view` 容器配合适当的层级结构，而非全部使用 `div`。交互元素使用 `button` 而非 `view` 加点击事件。表单元素使用 `input`、`picker` 等原生组件，而非自定义模拟组件。
-
-```html
-<!-- 正确写法 -->
-<view class="header">
-  <view class="title">页面标题</view>
-</view>
-
-<button bindtap="onSubmit">提交</button>
-
-<input type="text" placeholder="请输入" />
-
-<!-- 错误写法 -->
-<view class="title" bindtap="onTitleTap">页面标题</view>
-
-<view class="button" bindtap="onSubmit">提交</view>
-
-<view class="input" bindinput="onInput">请输入</view>
-```
-
-#### ARIA 属性
-
-对于自定义组件或复杂交互，应当添加 ARIA 属性，使屏幕阅读器能够正确识别组件的功能和状态。常用的 ARIA 属性包括：aria-label 提供元素的可访问名称，aria-describedby 关联描述元素，aria-expanded 指示展开状态，aria-selected 指示选中状态，aria-disabled 指示禁用状态。
-
-```html
-<view 
-  class="collapse-item" 
-  aria-expanded="{{isExpanded}}"
-  aria-controls="collapse-content"
-  bindtap="toggle"
->
-  <text class="collapse-title">折叠面板标题</text>
-  <image 
-    class="arrow" 
-    src="/images/arrow.svg" 
-    aria-hidden="true"
-  />
-</view>
-<view 
-  id="collapse-content" 
-  class="collapse-content {{isExpanded ? 'show' : ''}}"
-  aria-hidden="{{!isExpanded}}"
->
-  折叠面板内容
-</view>
-```
-
-### 色彩对比度
-
-#### 对比度标准
-
-界面元素的色彩对比度应当满足 WCAG 2.1 标准的要求，确保视力障碍用户能够清晰阅读。正文文字与背景的对比度应当不低于 4.5:1，大号文字（18px 以上或 14px 加粗）与背景的对比度应当不低于 3:1。功能性色彩（按钮、链接、图标）应当满足同样的对比度要求。
-
-```css
-/* 高对比度文字样式 */
-.text-primary {
-  color: var(--text-primary);
-  background-color: #FFFFFF;
-}
-
-.text-secondary {
-  color: var(--text-secondary);
-  background-color: #FFFFFF;
-}
-
-/* 确保链接色彩满足对比度要求 */
-.link {
-  color: #1976D2;
-}
-
-.link:hover {
-  color: #1565C0;
-}
-```
-
-#### 视觉提示补充
-
-对于依赖色彩传达信息的场景，应当提供额外的视觉提示，如形状、文字或图标。状态指示器不应仅使用颜色区分，还应包含文字或图标。图表中的数据系列不应仅通过颜色区分，还应添加标签或图例。错误提示不应仅使用红色，还应包含错误图标和文字说明。
-
-```html
-<!-- 状态标签示例 -->
-<view class="status-tag {{status === 'success' ? 'success' : 'error'}}">
-  <image 
-    class="status-icon" 
-    src="/images/{{status === 'success' ? 'check' : 'close'}}.svg"
-    aria-hidden="true"
-  />
-  <text>{{statusText}}</text>
-</view>
-```
-
-## 版本历史
+对应页面内容区需预留等高 padding-bottom（如 120rpx + 安全区）避免遮挡。主按钮 `height: 88rpx`、圆角 44rpx（胶囊）、`.btn-primary` 绿。
+**常见违规**：✗ 忘记 `env(safe-area-inset-bottom)`；✗ 双按钮使用橙+红配对（商品详情页 `btn-add-cart #ff9700` / `btn-buy-now #e93b3d`）→ 双绿方案：加购 = 深绿 `#1B5E20`（或主色描边），立即购买 = 主色绿 `#2E7D32`，白字（P0）。
+
+### 5.12 底部弹层（popup：规格 / 评价）
+
+**合规基准**：复用 `.popup` / `.popup-mask` / `.popup-content` 体系——mask `rgba(0,0,0,.5)`、内容白底、顶部圆角 lg、`max-height: 80vh`、入场 `slideUp 0.3s`（transform 过渡），点 mask 关闭。规格项（spec-item）：默认 `--background-tertiary` 底 + 主文字色 + 圆角 sm；**选中态改 `--primary-color` 绿底白字**。弹层底部按钮区固定并含安全区 padding。
+**常见违规**：✗ 规格选中态用 `#e93b3d` 红底（product/index.wxss:615）→ 改绿（P0）；✗ 弹层宽度不满屏、圆角朝下。
+
+### 5.13 徽标（badge）
+
+**合规基准**：`.badge` 胶囊（圆角 50%、padding 2rpx/8rpx、字号 xs、白字）。计数 badge 用 `.badge-primary` 主色绿。红点 `.badge-dot` 16rpx 纯圆，**保留 `--error-color` 红**（红点属警示语义，允许）。`content` 为空隐藏。
+**常见违规**：✗ 商品详情页内 `cart-badge` 用 `#e93b3d` → 统一 `.badge-primary` 绿（P1）；✗ badge 底色随意用 accent 橙。
+
+### 5.14 数量步进器
+
+**合规基准**：`− / 数字输入 / ＋` 三段，按钮 56rpx 方形、`--background-tertiary` 底、圆角 sm 拼接（左右两端各自圆角），字号 md，触控区≥56rpx；禁用端 `opacity: .5`；最小 1、最大 maxQuantity，越界禁止并给轻提示。
+**常见违规**：✗ 按钮底色用彩色；✗ 数字输入区无宽度约束。
+
+### 5.15 勾选框（圆形 checkbox）
+
+**合规基准**：40rpx 圆形；未选中 `2rpx solid --border-color` 白底；选中 `--primary-color` 绿底 + 白色对勾（或描边变主色圆点）；禁用 `--text-tertiary`。全选/单选行为一致，触控区≥88rpx（含 padding）。
+**常见违规**：✗ 选中态用红/橙填充；✗ 勾选框触控区过小难点按。
+
+## 6. 布局与栅格
+
+- **基准宽**：750rpx；所有尺寸优先 rpx，字号 token 为 px（page 内 1px≈2rpx 换算使用）。
+- **页面骨架**：`.container`（min-height 100vh，flex column）+ `.content`（flex:1，padding md）。
+- **单列布局**：首页信息流、商品详情主体、购物车列表——纵向堆叠，卡片间 md。
+- **双列布局**：商品网格（首页/分类）——`display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px`，竖卡 340rpx 图。
+- **侧栏布局**：分类页——左侧分类导航（固定宽 ~180rpx，`--background-secondary` 底，选中项主色绿字+浅绿底/左侧主色竖条）+ 右侧商品滚动区。
+- **安全区**：
+  - 全局工具类 `.safe-area-top` / `.safe-area-bottom`（constant + env 双写法，代码已提供）。
+  - 底部固定栏 padding 公式见 §5.11；涉及 tabBar 的页面无需额外处理（原生 tabBar 自带安全区）。
+  - 自定义头部区域叠加在图片上时使用 `.safe-area-top`。
+- **吸顶**：分类页侧栏/搜索栏可用 `position: sticky`（工具类 `.sticky`）。
+
+## 7. 动效规范
+
+| 场景 | 时长/曲线 | 说明 |
+|------|-----------|------|
+| 快速反馈（按压、颜色变化） | `--transition-fast` 0.15s | 按钮/卡片/列表项 ：active |
+| 标准过渡（弹层、展开收起） | `--transition-normal` 0.3s | popup slideUp、mask 淡入 |
+| 慢速氛围（banner、大区块） | `--transition-slow` 0.5s | 轮播、骨架屏 |
+| 点击反馈 | scale(0.98) + transition-fast | 统一用 `.btn:active` / `.card-hover:active` 模式，禁止 scale < 0.95 |
+| 弹层入场 | slideUp 0.3s（translateY 100%→0） | 退场反向或淡出 |
+| 遮罩 | opacity 淡入 0.3s | rgba(0,0,0,.5) |
+| 页面切换 | 微信原生转场 | 不自定义页面级动画 |
+
+**加载**：
+- `loading-spinner`：40rpx 圆环，`--border-color` 轨道 + `--primary-color` 高亮弧，spin 0.8s linear infinite（唯一允许 linear 场景）。
+- 骨架屏：`--background-secondary` 底 + 呼吸/扫光动画，形状对齐目标内容（卡片矩形、圆形头像、商品图方块），禁止转圈代替骨架。
+- `loading-overlay` 全屏遮罩（rgba 0.5, z-index 9999）仅用于提交订单等强阻塞操作。
+
+## 8. 脏值纠正清单
+
+> 优先级：**P0 = 系统级/核心转化路径**（app.wxss 类定义、商品详情页、组件库）；**P1 = 组件级/次级页面**（我的、订单、分类、组件内非转化元素）。
+
+### 8.1 app.wxss 自身（P0，随 v3.1.0 立即回写）
+
+| # | 位置 | 现状（脏值） | 建议替换 | 说明 |
+|---|------|--------------|----------|------|
+| 1 | `.bg-secondary`（L233） | `background-color: #2a9d8f`（青） | `var(--background-secondary)`（#F5F5F7） | 类名本意即"次级背景"，被误填品牌外青色 |
+| 2 | `.btn-secondary`（L300） | `background-color: #2a9d8f`（青） | 改为白底 + `2rpx solid var(--border-color)` + 主文字色 | 次按钮语义为描边非彩色填充 |
+| 3 | `.bg-accent`（L234） | `background-color: #f4a261`（橙） | `var(--primary-light)`（#F1F8E9）或直接删除该类 | 无橙 accent 语义；如需强调用绿系浅底 |
+| 4 | `.badge-dot`（L379） | `#F44336` | 保留，但改写为 `var(--error-color)` | 红点属警示语义，允许保留，须变量化 |
+
+### 8.2 商品详情页 pages/product/index.wxss（P0，核心转化路径）
+
+| # | 行 | 选择器 | 脏值 | 建议替换 |
+|---|-----|--------|------|----------|
+| 1 | 91/97/103 | `.price-label` / `.price-symbol` / `.price-value` | `#e93b3d` | `var(--primary-dark)`（品牌价签） |
+| 2 | 115 | `.discount-badge` | `#e93b3d` | `var(--primary-light)` 底 + 主色字 |
+| 3 | 317 | `.load-more text` | `#e93b3d` | `var(--text-secondary)`（中性"加载更多"） |
+| 4 | 405 | `.related-price` | `#e93b3d` | `var(--primary-dark)` |
+| 5 | 453 | `.cart-badge` | `#e93b3d` | `var(--primary-color)` |
+| 6 | 482 | `.btn-add-cart` | `#ff9700` | `var(--primary-dark)` 深绿白字（双绿底栏） |
+| 7 | 487 | `.btn-buy-now` | `#e93b3d` | `var(--primary-color)` 绿白字 |
+| 8 | 615 | `.spec-item.active` | `#e93b3d` | `var(--primary-color)` |
+| 9 | 682 | `.btn-confirm` | `#e93b3d` | `var(--primary-color)` |
+
+另：全页硬编码灰阶（#333/#666/#999/#f5f5f5/#eee）建议随重构统一映射到 `--text-*` / `--background-*` / `--border-color`。
+
+### 8.3 组件（P1）
+
+| # | 文件:行 | 脏值 | 建议替换 |
+|---|---------|------|----------|
+| 1 | components/product-card/index.wxss:80 | `color: #ff6b6b`（价格） | `var(--primary-dark)` |
+| 2 | components/product-card/index.wxss:96 | `background-color: #ff6b6b`（加购按钮） | `var(--primary-color)` |
+| 3 | components/empty-state/index.wxss:26 | `background-color: #ff6b6b`（插画底） | `var(--primary-light)` |
+
+### 8.4 我的 / 订单 / 分类 / 订单确认（P1）
+
+| # | 文件:行 | 现状 | 建议替换 |
+|---|---------|------|----------|
+| 1 | pages/user/index.wxss:19 | 头部 `linear-gradient(135deg, #e93b3d, #ff6b6b)` 红渐变 | `linear-gradient(135deg, #2E7D32, #1B5E20)` 绿渐变（品牌头部） |
+| 2 | pages/user/index.wxss:178 | `.logout-btn` 文字 `#e93b3d` | **保留红**但改 `var(--error-color)`（退出登录 = 危险操作，语义正确） |
+| 3 | pages/order/confirm.wxss:112/166/196 | `color: #ff6b6b`（金额/强调） | `var(--primary-dark)` |
+| 4 | pages/order/confirm.wxss:205 | `background-color: #ff6b6b`（提交订单按钮） | `var(--primary-color)`（P0 级转化按钮，可与 P1 批次同改） |
+| 5 | pages/order/detail.wxss:17 | 状态头部渐变 `#ff6b6b → #ff8e53` | 按状态色表：完成态用绿渐变 `#4CAF50 → #2E7D32`；取消态用 `--background-tertiary` 灰 |
+| 6 | pages/order/detail.wxss:115/176/187 | `color: #ff6b6b` | 金额 `var(--primary-dark)`；状态文字按状态色表 |
+| 7 | pages/order/detail.wxss:222 | `background-color: #ff6b6b`（操作按钮） | `var(--primary-color)` |
+| 8 | pages/order/index.wxss:36/97/152/177 | `color: #ff6b6b` | 同上：金额深绿、状态按色表 |
+| 9 | pages/order/index.wxss:45/203 | `background-color: #ff6b6b`（tab 指示/按钮） | 指示条/按钮 `var(--primary-color)` |
+| 10 | pages/category/index.wxss:33/108 | `color: #ff6b6b`（分类选中/价格） | 选中文字 `var(--primary-color)`；价格 `var(--primary-dark)` |
+| 11 | pages/category/index.wxss:45/117 | `background-color: #ff6b6b`（选中底/角标） | `var(--primary-color)` |
+
+**纠正总原则**：红 → 绿（品牌 CTA/价格/选中/角标）、橙 → 绿或删除、青 → 中性灰/描边；仅危险确认类场景保留红且必须走 `--error-color` 变量。纠正完成后，全仓库禁止出现 `#e93b3d / #ff6b6b / #ff9700 / #ff8e53 / #2a9d8f / #f4a261`。
+
+## 9. 版本历史
 
 | 版本 | 更新日期 | 更新内容 | 作者 |
 |------|----------|----------|------|
-| 1.0.0 | 2025-12-27 | 初始版本，完成 UI 设计规范文档 | Sut |
+| 3.1.0 | 2026-09-12 | 以 app.wxss v3.0.0 代码为事实来源全面重写：确立绿系语义色策略（品牌价签/绿 CTA）、受控状态色、合并权威 CSS 变量块（剔除青/橙/红橙脏值）、补全 15 类组件规范（含合规基准与常见违规）、布局/动效落地规则，并输出系统级脏值纠正清单（P0/P1） | SutWxApp Design（彩格调） |
+| 1.0.0 | 2025-12-27 | 初始版本（颜色/字号体系已过时，被本版取代） | Sut |
