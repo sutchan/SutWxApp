@@ -2,6 +2,36 @@
 
 所有重要的项目变更都将记录在此文件中。
 
+## [3.0.8] - 2026-09-12
+
+### 变更内容
+
+#### 项目结构精简：原型目录归一
+- 高保真原型三件套统一归集至仓库根 `prototype/` 目录，作为项目唯一原型目录：
+  - `prototype.html`：核心 6 页（首页 / 分类 / 商品详情 / 购物车 / 订单确认 / 我的）
+  - `prototype-extra.html`：扩展 5 页（订单列表 / 订单详情 / 地址管理 / 设置 / 帮助中心）
+  - `wireframes.html`：组件库规范（基础 10 / 复合 6 / 业务 6 组件 + 使用规则）
+- 根目录旧版 `prototype/prototype.html`（v3.1.0 首轮版）由 v3.1.1 最新版覆盖
+- 删除空的 `openspec/prototype/` 目录，`openspec/` 回归规范文档单一职责
+- 新增 `prototype/README.md` 原型目录索引：文件清单、设计依据（设计令牌与语义色策略）、维护约定
+- README「相关文档」区补充原型三件套链接
+
+### 文件变更
+```
+新增:
+- prototype/README.md
+- prototype/prototype-extra.html
+- prototype/wireframes.html
+
+修改:
+- prototype/prototype.html（覆盖为 v3.1.1 最新版）
+- README.md
+- CHANGELOG.md
+
+删除:
+- openspec/prototype/（空目录）
+```
+
 ## [3.0.7] - 2026-09-12
 
 ### 新增功能：WordPress 后台可配置主题换肤

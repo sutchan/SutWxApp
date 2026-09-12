@@ -33,6 +33,8 @@
 
 - 已落地主题换肤（v3.0.7）：`SutWxApp/models/theme.js` 内置 5 套默认配色预设（`THEME_PRESETS`：sut-green/sky-blue/sunny-orange/violet/graphite），`resolveTheme({presetId,custom})` 合并后台自定义色值，`toCssVars` 生成对应 `app.wxss` CSS 变量的声明字符串；`services/themeService.js` 从 `/api/theme` 拉取（缓存优先、失败回退默认）并经 `globalData.theme`/`themeStyle` + `wx.setNavigationBarColor`/`wx.setTabBarStyle` 全站下发；`behaviors/theme.js` 注入页面根容器 `style="{{themeStyle}}"`，`app.js` 启动加载。配套 WP 插件实现 `/api/theme`（返回 `presetId` 或 `custom` 色值）。category/cart/order 等 wxml 为 HTML 实体转义存储，编辑须用属性片段精确匹配。
 
+- 原型截图流程（README 界面预览）：用缓存 Chromium（`C:\Users\Admin\AppData\Local\ms-playwright\chromium-1228\chrome-win64\chrome.exe`）+ `playwright-core` 渲染 `prototype/prototype.html`，`switchTab()/openProduct()/goOrder()` 切屏后截取 `.phone` 元素存至 `docs/screenshots/`（home/category/product/cart/order/user + theme-green/blue/orange）。临时依赖装在仓库外 `.shots/`，用完删除，勿提交。
+
 ## 工具链坑（Windows/PowerShell）
 - `node -e "..."` 内嵌正则/中文易被 PowerShell 破坏，复杂脚本改用临时 `.mjs` 文件。
 - `git mv` 到不存在的目录会失败（需先建目录）；移动后若源路径残留文件，需实查磁盘状态。

@@ -30,6 +30,30 @@
 | #86868B | 次要文字 |
 | #F5F5F7 | 页面背景 |
 
+## 界面预览（高保真原型）
+
+下图来自核心高保真原型 `prototype/prototype.html`。原型统一存放于仓库根 `prototype/` 目录，浏览器直接打开即可交互。
+
+### 核心页面
+
+| 首页 | 分类 | 商品详情 |
+|------|------|----------|
+| ![首页](docs/screenshots/home.png) | ![分类](docs/screenshots/category.png) | ![商品详情](docs/screenshots/product.png) |
+
+### 更多页面
+
+| 购物车 | 订单确认 | 我的 |
+|--------|----------|------|
+| ![购物车](docs/screenshots/cart.png) | ![订单确认](docs/screenshots/order.png) | ![我的](docs/screenshots/user.png) |
+
+### 主题换肤
+
+主题由 WordPress 后台可配置，小程序自带多套默认配色预设。下方为同一首页在三种预设下的效果：
+
+| 苏铁绿（默认） | 天空蓝 | 暖阳橙 |
+|------|------|------|
+| ![苏铁绿](docs/screenshots/theme-green.png) | ![天空蓝](docs/screenshots/theme-blue.png) | ![暖阳橙](docs/screenshots/theme-orange.png) |
+
 ## 快速开始
 
 ### 环境准备
@@ -134,7 +158,10 @@ SutWxApp/
   - [设计规范](openspec/specs/design/spec.md)
   - [运维与发布规范](openspec/specs/ops/spec.md)
   - [测试规范](openspec/specs/testing/spec.md)
-- [高保真原型](prototype/prototype.html)
+- [原型目录（prototype/）](prototype/README.md)
+  - [核心 6 页高保真原型](prototype/prototype.html)：首页 / 分类 / 商品详情 / 购物车 / 订单确认 / 我的
+  - [扩展 5 页原型](prototype/prototype-extra.html)：订单列表 / 订单详情 / 地址管理 / 设置 / 帮助中心
+  - [组件库规范](prototype/wireframes.html)：基础 / 复合 / 业务组件与使用规则
 - [项目概览](docs/PROJECT_OVERVIEW.md)
 - [技术栈报告](openspec/TECH_STACK_REPORT.md)
 - [改进报告](openspec/IMPROVEMENTS_REPORT.md)
