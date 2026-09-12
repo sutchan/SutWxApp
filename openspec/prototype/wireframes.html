@@ -1,0 +1,2195 @@
+<!DOCTYPE html>
+<!--
+  文件名: wireframes.html
+  项目: 苏铁微信小程序 (SutWxApp) 组件库规范展示页
+  设计系统: SutWxApp Design Spec v3.1.1 (openspec/specs/design/spec.md)
+  说明: 单文件自包含文档版式组件规范页，全部样式/脚本/图形内联，无外部依赖。
+        宽幅文档版式（max-width 1200px + 左侧粘性目录），无手机壳。
+        语义色策略: 品牌 CTA/价格/选中态/角标 = 绿系；红色仅限错误/危险语义。
+        废弃色警示区的 5 个旧版脏值仅以灰色文本标注出现于「废弃色警示区」（见 4.1 节），
+        全文件不含任何废弃色渲染样式。
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>苏铁 · 组件库规范 v3.1.1</title>
+<style>
+/* ============================================================
+   1. 设计令牌（权威来源: spec.md §4.1.2 / §4.1.4）
+   ============================================================ */
+:root {
+  /* 品牌绿 */
+  --primary-color: #2E7D32;
+  --primary-light: #F1F8E9;
+  --primary-dark: #1B5E20;
+
+  /* 文字三级 */
+  --text-primary: #1D1D1F;
+  --text-secondary: #86868B;
+  --text-tertiary: #AEAEB2;
+  --text-inverse: #FFFFFF;
+
+  /* 背景三级 / 边框 */
+  --background-primary: #FFFFFF;
+  --background-secondary: #F5F5F7;
+  --background-tertiary: #FAFAFA;
+  --border-color: #E8E8ED;
+
+  /* 受控语义色 */
+  --error-color: #F44336;
+  --error-light: #FFEBEE;
+  --success-color: #4CAF50;
+  --success-light: #E8F5E9;
+  --warning-color: #FF9800;
+  --warning-light: #FFF3E0;
+  --info-color: #2196F3;
+  --info-light: #E3F2FD;
+
+  /* 字号 */
+  --font-size-xs: 10px;
+  --font-size-sm: 12px;
+  --font-size-md: 14px;
+  --font-size-lg: 16px;
+  --font-size-xl: 18px;
+  --font-size-xxl: 24px;
+  --font-size-h1: 28px;
+  --font-size-h2: 22px;
+
+  /* 间距 */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 20px;
+  --spacing-xxl: 24px;
+
+  /* 圆角 */
+  --border-radius-sm: 8px;
+  --border-radius-md: 12px;
+  --border-radius-lg: 16px;
+  --border-radius-xl: 24px;
+
+  /* 阴影 */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.1);
+
+  /* 过渡（统一曲线） */
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* 品牌衍生渐变 token（v3.1.1） */
+  --grad-leaf-1: #F1F8E9, #C8E6C9;
+  --grad-leaf-2: #E8F5E9, #DCEDC8;
+  --grad-leaf-3: #F1F8E9, #A5D6A7;
+  --grad-leaf-4: #E8F5E9, #C5E1A5;
+  --grad-leaf-5: #F1F8E9, #D7EFD3;
+  --grad-leaf-6: #E8F5E9, #B9DFC0;
+  --grad-banner-1: #F1F8E9, #C8E6C9;
+  --grad-banner-2: #E8F5E9, #DCEDC8;
+  --grad-banner-3: #F1F8E9, #A5D6A7;
+  --grad-user-header: #2E7D32, #1B5E20;
+}
+
+/* ============================================================
+   2. 文档版式基础
+   ============================================================ */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  font-size: var(--font-size-md);
+  line-height: 1.5;
+  color: var(--text-primary);
+  background: var(--background-secondary);
+}
+
+.doc {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  gap: 40px;
+  padding: 0 var(--spacing-xl);
+}
+
+/* 左侧粘性目录 */
+.toc {
+  width: 200px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  max-height: 100vh;
+  padding: 40px 0 40px;
+  overflow-y: auto;
+}
+.toc-title {
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--text-tertiary);
+  margin-bottom: var(--spacing-md);
+}
+.toc nav a {
+  display: block;
+  padding: 7px 12px;
+  margin: 2px 0;
+  border-radius: var(--border-radius-sm);
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  text-decoration: none;
+  border-left: 2px solid transparent;
+  transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
+}
+.toc nav a:hover { background: var(--background-tertiary); color: var(--text-primary); }
+.toc nav a.active {
+  background: var(--primary-light);
+  color: var(--primary-color);
+  font-weight: 500;
+  border-left-color: var(--primary-color);
+}
+.toc nav a.sub { padding-left: 26px; font-size: 11px; }
+
+/* 主内容 */
+.doc-main { flex: 1; min-width: 0; padding-bottom: 80px; }
+
+/* 3. 头部横幅 */
+.hero {
+  margin: 40px 0 48px;
+  background: linear-gradient(135deg, var(--grad-banner-1));
+  border-radius: var(--border-radius-xl);
+  padding: 44px 40px;
+  position: relative;
+  overflow: hidden;
+}
+.hero-leaves { position: absolute; right: -20px; top: -30px; opacity: 0.5; }
+.hero-leaves svg { display: block; }
+.hero-kicker {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  letter-spacing: 3px;
+  color: var(--primary-color);
+  margin-bottom: var(--spacing-sm);
+}
+.hero h1 {
+  font-size: var(--font-size-h1);
+  font-weight: 700;
+  line-height: 1.25;
+  margin-bottom: var(--spacing-sm);
+}
+.hero p { color: var(--text-secondary); font-size: var(--font-size-md); max-width: 560px; }
+.hero-badges { margin-top: var(--spacing-lg); display: flex; gap: var(--spacing-sm); flex-wrap: wrap; }
+.hbadge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+}
+.hbadge.green { background: var(--primary-color); color: var(--text-inverse); }
+.hbadge.light { background: rgba(255,255,255,.75); color: var(--primary-dark); }
+.hbadge.plain { background: rgba(255,255,255,.75); color: var(--text-secondary); }
+
+/* 4. 章节与组件展示格 */
+section { margin-bottom: 56px; }
+.sec-head { margin-bottom: var(--spacing-xl); }
+.sec-index {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: var(--primary-color);
+  letter-spacing: 1px;
+}
+.sec-head h2 {
+  font-size: var(--font-size-h2);
+  font-weight: 700;
+  margin: 2px 0 4px;
+}
+.sec-head p { color: var(--text-secondary); font-size: var(--font-size-sm); max-width: 640px; }
+
+.comp {
+  background: var(--background-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  margin-bottom: var(--spacing-lg);
+  overflow: hidden;
+}
+.comp-head {
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+.comp-head h3 { font-size: var(--font-size-lg); font-weight: 600; }
+.comp-head .no { font-size: var(--font-size-xs); color: var(--text-tertiary); font-weight: 500; }
+.comp-head .spec {
+  margin-left: auto;
+  font-size: var(--font-size-xs);
+  color: var(--primary-dark);
+  background: var(--primary-light);
+  padding: 2px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.comp-body { padding: var(--spacing-lg); }
+.comp-body + .comp-body { border-top: 1px dashed var(--border-color); }
+.demo-row { display: flex; gap: var(--spacing-lg); flex-wrap: wrap; align-items: flex-end; }
+.demo-col { display: flex; flex-direction: column; gap: var(--spacing-sm); align-items: center; }
+.demo-label {
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+  text-align: center;
+}
+.comp-note {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin-top: var(--spacing-md);
+  padding-top: var(--spacing-md);
+  border-top: 1px dashed var(--border-color);
+}
+.comp-note b { color: var(--text-primary); font-weight: 500; }
+
+/* ============================================================
+   5. 组件样式（对齐 spec §5）
+   ============================================================ */
+/* —— 5.1 按钮 —— */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  border: none;
+  border-radius: var(--border-radius-md);
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity var(--transition-fast), transform var(--transition-fast),
+    background-color var(--transition-fast), color var(--transition-fast);
+  user-select: none;
+}
+.btn:active:not(.is-disabled) { opacity: 0.8; transform: scale(0.98); }
+.btn.is-disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-sm { padding: var(--spacing-xs) var(--spacing-md); font-size: var(--font-size-sm); }
+.btn-md { padding: var(--spacing-sm) var(--spacing-lg); font-size: var(--font-size-md); }
+.btn-lg { padding: var(--spacing-md) var(--spacing-xl); font-size: var(--font-size-lg); }
+.btn-primary { background: var(--primary-color); color: var(--text-inverse); }
+.btn-secondary { background: var(--background-primary); color: var(--text-primary); border: 1px solid var(--border-color); }
+.btn-secondary:active:not(.is-disabled) { background: var(--background-tertiary); }
+.btn-outline { background: transparent; color: var(--primary-color); border: 1px solid var(--primary-color); }
+.btn-outline:active:not(.is-disabled) { background: var(--primary-light); }
+.btn-danger { background: var(--error-color); color: var(--text-inverse); }
+.btn-icon {
+  width: 36px; height: 36px; padding: 0;
+  border-radius: 50%;
+  background: var(--primary-color);
+  color: var(--text-inverse);
+}
+.btn-icon.ghost { background: var(--primary-light); color: var(--primary-color); }
+
+/* —— 5.2 输入框 —— */
+.field { display: flex; flex-direction: column; gap: var(--spacing-xs); }
+.field-label { font-size: var(--font-size-sm); font-weight: 500; color: var(--text-primary); }
+.field-label em { font-style: normal; color: var(--error-color); }
+.input {
+  width: 240px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--background-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-md);
+  font-family: inherit;
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+.input::placeholder { color: var(--text-tertiary); }
+.input:focus { border-color: var(--primary-color); }
+.input.is-error { border-color: var(--error-color); }
+.input:disabled, .input[readonly].is-disabled {
+  background: var(--background-tertiary);
+  color: var(--text-tertiary);
+  cursor: not-allowed;
+}
+.field-error { font-size: var(--font-size-xs); color: var(--error-color); display: none; }
+.field.is-invalid .field-error { display: block; }
+.field.is-invalid .input { border-color: var(--error-color); }
+.textarea { width: 320px; height: 84px; resize: vertical; line-height: 1.6; }
+
+/* —— 5.3 勾选框 —— */
+.chk {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: var(--background-primary);
+  cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+  flex-shrink: 0;
+}
+.chk svg { opacity: 0; transform: scale(0.5); transition: all var(--transition-fast); }
+.chk.is-checked { background: var(--primary-color); border-color: var(--primary-color); }
+.chk.is-checked svg { opacity: 1; transform: scale(1); }
+.chk.is-disabled { background: var(--background-tertiary); border-color: var(--border-color); cursor: not-allowed; }
+.chk.is-disabled svg { opacity: 0.4; }
+
+/* —— 5.4 数量步进器 —— */
+.stepper { display: inline-flex; align-items: stretch; }
+.stepper button {
+  width: 28px; height: 28px;
+  border: none;
+  background: var(--background-tertiary);
+  color: var(--text-primary);
+  font-size: var(--font-size-md);
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity var(--transition-fast), background var(--transition-fast);
+}
+.stepper button:active:not(:disabled) { background: var(--primary-light); color: var(--primary-color); }
+.stepper button:first-child { border-radius: var(--border-radius-sm) 0 0 var(--border-radius-sm); }
+.stepper button:last-child { border-radius: 0 var(--border-radius-sm) var(--border-radius-sm) 0; }
+.stepper button:disabled { opacity: 0.5; cursor: not-allowed; }
+.stepper .stepper-num {
+  width: 40px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--background-tertiary);
+  border-left: 1px solid var(--border-color);
+  border-right: 1px solid var(--border-color);
+  font-size: var(--font-size-md);
+  font-weight: 500;
+}
+
+/* —— 5.5 徽标 —— */
+.badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 999px;
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  padding: 1px 8px;
+  line-height: 1.5;
+}
+.badge-primary { background: var(--primary-color); color: var(--text-inverse); }
+.badge-dot { width: 8px; height: 8px; padding: 0; background: var(--error-color); }
+.badge-anchor { position: relative; display: inline-block; }
+.badge-anchor .badge { position: absolute; top: -6px; right: -10px; }
+
+/* —— 5.6 标签 tag —— */
+.tag {
+  display: inline-flex; align-items: center;
+  padding: 2px 8px;
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+}
+.tag-discount { background: var(--primary-light); color: var(--primary-color); }
+.tag-dark { background: var(--primary-dark); color: var(--text-inverse); }
+.tag-neutral { background: var(--background-tertiary); color: var(--text-secondary); }
+
+/* —— 5.7 开关 —— */
+.switch {
+  width: 48px; height: 28px;
+  border-radius: 999px;
+  background: var(--border-color);
+  position: relative;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+  border: none;
+  display: inline-block;
+  vertical-align: middle;
+}
+.switch::after {
+  content: '';
+  position: absolute; top: 3px; left: 3px;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--background-primary);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast);
+}
+.switch.is-on { background: var(--primary-color); }
+.switch.is-on::after { transform: translateX(20px); }
+.switch.is-disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* —— 5.8 加载 —— */
+.loading-spinner {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--border-color);
+  border-top-color: var(--primary-color);
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.skeleton {
+  background: var(--background-secondary);
+  border-radius: var(--border-radius-sm);
+  position: relative;
+  overflow: hidden;
+}
+.skeleton::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.65), transparent);
+  animation: shimmer 1.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+@keyframes shimmer { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+.skel-card { display: flex; gap: var(--spacing-md); }
+.skel-thumb { width: 80px; height: 80px; flex-shrink: 0; }
+.skel-lines { flex: 1; display: flex; flex-direction: column; gap: var(--spacing-sm); justify-content: center; }
+.skel-line { height: 12px; }
+.skel-line.w60 { width: 60%; } .skel-line.w90 { width: 90%; } .skel-line.w40 { width: 40%; }
+.skel-avatar { width: 40px; height: 40px; border-radius: 50%; }
+
+/* —— 5.9 toast —— */
+.toast-demo-btns { display: flex; gap: var(--spacing-sm); flex-wrap: wrap; }
+#toast-stage {
+  position: fixed;
+  top: 24px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 9000;
+  display: flex; flex-direction: column; align-items: center;
+  gap: var(--spacing-sm);
+  pointer-events: none;
+}
+.toast {
+  display: flex; align-items: center; gap: var(--spacing-sm);
+  background: var(--text-primary);
+  color: var(--text-inverse);
+  padding: 10px 20px;
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-sm);
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity var(--transition-normal), transform var(--transition-normal);
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+.toast .t-ico { width: 16px; height: 16px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.toast-success .t-ico { background: var(--success-color); }
+.toast-warning .t-ico { background: var(--warning-color); }
+.toast-error .t-ico { background: var(--error-color); }
+
+/* —— 5.10 空状态 —— */
+.empty-state { text-align: center; padding: var(--spacing-xl) var(--spacing-lg); }
+.empty-art {
+  width: 100px; height: 100px;
+  margin: 0 auto var(--spacing-md);
+  background: linear-gradient(135deg, var(--grad-leaf-1));
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+.empty-main { font-size: var(--font-size-md); color: var(--text-tertiary); }
+.empty-desc { font-size: var(--font-size-sm); color: var(--text-secondary); margin: var(--spacing-xs) 0 var(--spacing-lg); }
+
+/* —— 复合：表单 —— */
+.form-card { max-width: 375px; }
+.form-body { padding: var(--spacing-lg); display: flex; flex-direction: column; gap: var(--spacing-lg); }
+.form-item { display: flex; flex-direction: column; gap: var(--spacing-xs); }
+.form-item .input { width: 100%; }
+.form-row-end { display: flex; align-items: center; justify-content: space-between; }
+.form-row-end .fl { font-size: var(--font-size-md); }
+
+/* —— 复合：卡片 —— */
+.ui-card {
+  background: var(--background-primary);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: var(--spacing-md);
+  transition: transform var(--transition-fast);
+}
+.ui-card:active { transform: scale(0.98); }
+.card-header { display: flex; align-items: center; justify-content: space-between; padding-bottom: var(--spacing-sm); border-bottom: 1px solid var(--border-color); margin-bottom: var(--spacing-md); }
+.card-title { font-size: var(--font-size-lg); font-weight: 600; }
+.card-content { color: var(--text-secondary); font-size: var(--font-size-sm); line-height: 1.6; margin-bottom: var(--spacing-md); }
+.card-footer { display: flex; justify-content: flex-end; gap: var(--spacing-sm); padding-top: var(--spacing-sm); border-top: 1px dashed var(--border-color); }
+
+/* —— 复合：列表项 —— */
+.list { background: var(--background-primary); border-radius: var(--border-radius-md); overflow: hidden; width: 320px; box-shadow: var(--shadow-sm); }
+.list-item {
+  display: flex; align-items: center; gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  border-bottom: 1px solid var(--border-color);
+  background: var(--background-primary);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+.list-item:last-child { border-bottom: none; }
+.list-item:active { background: var(--background-tertiary); }
+.li-ico {
+  width: 24px; height: 24px;
+  border-radius: var(--border-radius-sm);
+  background: var(--primary-light);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  color: var(--primary-color);
+}
+.li-main { flex: 1; min-width: 0; }
+.li-title { font-size: var(--font-size-md); }
+.li-desc { font-size: var(--font-size-xs); color: var(--text-secondary); margin-top: 2px; }
+.li-arrow { color: var(--text-tertiary); flex-shrink: 0; }
+.li-thumb { width: 48px; height: 48px; border-radius: var(--border-radius-sm); flex-shrink: 0; overflow: hidden; }
+
+/* —— 复合：分组列表 —— */
+.group + .group { margin-top: var(--spacing-md); }
+.group-label { font-size: var(--font-size-xs); color: var(--text-tertiary); padding: 0 var(--spacing-sm) var(--spacing-xs); }
+
+/* —— 复合：弹层 —— */
+.popup-stage { display: flex; justify-content: center; }
+.popup-mask {
+  position: fixed; inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 8000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-normal);
+}
+.popup-mask.show { opacity: 1; pointer-events: auto; }
+.popup-content {
+  position: fixed; left: 50%; bottom: 0;
+  transform: translate(-50%, 100%);
+  width: 375px; max-width: calc(100vw - 32px);
+  max-height: 80vh;
+  background: var(--background-primary);
+  border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+  z-index: 8001;
+  display: flex; flex-direction: column;
+  transition: transform var(--transition-normal);
+}
+.popup-content.show { transform: translate(-50%, 0); }
+.popup-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: var(--spacing-lg);
+  border-bottom: 1px solid var(--border-color);
+}
+.popup-head h4 { font-size: var(--font-size-lg); font-weight: 600; }
+.popup-close { border: none; background: var(--background-secondary); width: 28px; height: 28px; border-radius: 50%; cursor: pointer; color: var(--text-secondary); font-size: var(--font-size-md); line-height: 1; font-family: inherit; }
+.popup-body { padding: var(--spacing-lg); overflow-y: auto; }
+.spec-group + .spec-group { margin-top: var(--spacing-lg); }
+.spec-group-label { font-size: var(--font-size-sm); color: var(--text-secondary); margin-bottom: var(--spacing-sm); }
+.spec-chips { display: flex; gap: var(--spacing-sm); flex-wrap: wrap; }
+.spec-item {
+  padding: 6px 16px;
+  border-radius: var(--border-radius-sm);
+  background: var(--background-tertiary);
+  color: var(--text-primary);
+  font-size: var(--font-size-md);
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+.spec-item.active { background: var(--primary-color); color: var(--text-inverse); }
+.popup-foot {
+  padding: var(--spacing-lg);
+  border-top: 1px solid var(--border-color);
+  padding-bottom: calc(var(--spacing-lg) + env(safe-area-inset-bottom, 0px));
+}
+.popup-foot .btn { width: 100%; height: 44px; border-radius: 999px; }
+.popup-spec-row { display: flex; align-items: center; justify-content: space-between; margin-top: var(--spacing-lg); }
+.popup-spec-row .pl { font-size: var(--font-size-md); }
+
+/* —— 复合：状态标签 —— */
+.status-tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+}
+.st-warning { color: var(--warning-color); background: var(--warning-light); }
+.st-info { color: var(--info-color); background: var(--info-light); }
+.st-primary { color: var(--primary-color); background: var(--primary-light); }
+.st-success { color: var(--success-color); background: var(--success-light); }
+.st-muted { color: var(--text-tertiary); background: var(--background-secondary); }
+
+/* —— 业务：商品卡 —— */
+.biz-stage {
+  background: var(--background-secondary);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-lg);
+  display: flex; gap: var(--spacing-lg); flex-wrap: wrap; align-items: flex-start;
+}
+.product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--spacing-md); width: 340px; }
+.p-card {
+  background: var(--background-primary);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: transform var(--transition-fast);
+}
+.p-card:active { transform: scale(0.98); }
+.p-img { position: relative; aspect-ratio: 1; }
+.p-img svg { display: block; width: 100%; height: 100%; }
+.p-img .tag { position: absolute; top: var(--spacing-sm); left: var(--spacing-sm); }
+.p-info { padding: var(--spacing-md); }
+.p-name {
+  font-size: var(--font-size-md);
+  line-height: 1.5;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.9em;
+}
+.p-price-row { display: flex; align-items: baseline; gap: var(--spacing-xs); margin-top: var(--spacing-sm); }
+.price-symbol { color: var(--primary-dark); font-size: var(--font-size-sm); font-weight: 700; }
+.price-value { color: var(--primary-dark); font-size: var(--font-size-xl); font-weight: 700; }
+.price-origin { color: var(--text-secondary); font-size: var(--font-size-sm); text-decoration: line-through; }
+.p-bottom { display: flex; align-items: center; justify-content: space-between; margin-top: var(--spacing-sm); }
+.p-sales { font-size: var(--font-size-xs); color: var(--text-tertiary); }
+.p-cart-btn {
+  width: 28px; height: 28px; border-radius: 50%;
+  border: none; cursor: pointer;
+  background: var(--primary-color);
+  color: var(--text-inverse);
+  display: flex; align-items: center; justify-content: center;
+  transition: transform var(--transition-fast), opacity var(--transition-fast);
+}
+.p-cart-btn:active { transform: scale(0.98); opacity: 0.8; }
+/* 横卡 */
+.p-card-h { display: flex; width: 340px; }
+.p-card-h .p-img { width: 80px; height: 80px; aspect-ratio: auto; flex-shrink: 0; }
+.p-card-h .p-info { padding: var(--spacing-sm) var(--spacing-md); flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.p-card-h .p-name { -webkit-line-clamp: 2; min-height: 0; font-size: var(--font-size-sm); }
+
+/* —— 业务：购物车项 —— */
+.cart-item {
+  display: flex; align-items: center; gap: var(--spacing-md);
+  background: var(--background-primary);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: var(--spacing-md);
+  width: 375px;
+}
+.cart-img { width: 80px; height: 80px; border-radius: var(--border-radius-sm); overflow: hidden; flex-shrink: 0; }
+.cart-img svg { display: block; width: 100%; height: 100%; }
+.cart-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.cart-name { font-size: var(--font-size-md); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.cart-spec { font-size: var(--font-size-xs); color: var(--text-secondary); background: var(--background-tertiary); align-self: flex-start; padding: 1px 8px; border-radius: var(--border-radius-sm); }
+.cart-bottom { display: flex; align-items: center; justify-content: space-between; }
+.cart-price { color: var(--primary-dark); font-weight: 700; font-size: var(--font-size-lg); }
+.cart-price .price-symbol { font-size: var(--font-size-sm); }
+.cart-del { border: none; background: none; cursor: pointer; color: var(--text-tertiary); padding: 4px; font-family: inherit; }
+.cart-del:hover { color: var(--error-color); }
+
+/* —— 业务：订单卡 —— */
+.order-card { width: 375px; }
+.order-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--spacing-md); }
+.order-no { font-size: var(--font-size-sm); color: var(--text-secondary); }
+.order-status { font-size: var(--font-size-sm); font-weight: 500; }
+.order-status.st-warn { color: var(--warning-color); }
+.order-status.st-info { color: var(--info-color); }
+.order-status.st-success { color: var(--success-color); }
+.order-goods { display: flex; gap: var(--spacing-sm); margin-bottom: var(--spacing-md); }
+.order-thumb { width: 56px; height: 56px; border-radius: var(--border-radius-sm); overflow: hidden; flex-shrink: 0; }
+.order-thumb svg { display: block; width: 100%; height: 100%; }
+.order-goods-meta { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 2px; }
+.order-goods-name { font-size: var(--font-size-md); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.order-goods-spec { font-size: var(--font-size-xs); color: var(--text-secondary); }
+.order-total { display: flex; justify-content: flex-end; align-items: baseline; gap: 4px; font-size: var(--font-size-sm); color: var(--text-secondary); margin-bottom: var(--spacing-md); }
+.order-total b { color: var(--primary-dark); font-size: var(--font-size-lg); }
+.order-actions { display: flex; justify-content: flex-end; gap: var(--spacing-sm); padding-top: var(--spacing-sm); border-top: 1px dashed var(--border-color); }
+
+/* —— 业务：地址卡 —— */
+.addr-card { width: 340px; }
+.addr-line { display: flex; align-items: baseline; gap: var(--spacing-sm); }
+.addr-name { font-size: var(--font-size-lg); font-weight: 600; }
+.addr-phone { font-size: var(--font-size-sm); color: var(--text-secondary); }
+.addr-detail { font-size: var(--font-size-sm); color: var(--text-secondary); margin: var(--spacing-xs) 0 var(--spacing-md); line-height: 1.6; }
+.addr-ops { display: flex; justify-content: space-between; align-items: center; padding-top: var(--spacing-sm); border-top: 1px dashed var(--border-color); }
+.addr-ops-btns { display: flex; gap: var(--spacing-md); }
+.op-btn { border: none; background: none; cursor: pointer; font-size: var(--font-size-sm); color: var(--text-secondary); display: inline-flex; align-items: center; gap: 4px; font-family: inherit; padding: 2px; }
+.op-btn:hover { color: var(--primary-color); }
+.op-btn.danger:hover { color: var(--error-color); }
+
+/* —— 业务：分类侧栏 —— */
+.cat-demo { display: flex; width: 340px; border-radius: var(--border-radius-md); overflow: hidden; box-shadow: var(--shadow-sm); }
+.cat-side { width: 90px; background: var(--background-secondary); flex-shrink: 0; }
+.cat-item {
+  position: relative;
+  padding: var(--spacing-md) var(--spacing-sm);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  text-align: center;
+  cursor: pointer;
+  transition: color var(--transition-fast), background var(--transition-fast);
+}
+.cat-item.active { color: var(--primary-color); background: var(--background-primary); font-weight: 500; }
+.cat-item.active::before {
+  content: '';
+  position: absolute; left: 0; top: 50%;
+  transform: translateY(-50%);
+  width: 3px; height: 20px;
+  border-radius: 0 2px 2px 0;
+  background: var(--primary-color);
+}
+.cat-main { flex: 1; background: var(--background-primary); padding: var(--spacing-md); }
+
+/* —— 业务：tabBar —— */
+.tabbar {
+  width: 375px;
+  background: var(--background-primary);
+  border-top: 1px solid var(--border-color);
+  border-radius: 0 0 var(--border-radius-md) var(--border-radius-md);
+  display: flex;
+  padding: 6px 0 calc(6px + env(safe-area-inset-bottom, 0px));
+}
+.tab-item {
+  flex: 1;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+.tab-item.active { color: var(--primary-color); font-weight: 500; }
+.tab-item .badge-anchor { position: relative; }
+
+/* ============================================================
+   6. 使用规则区
+   ============================================================ */
+.rules-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacing-md); }
+.rule-card { padding: var(--spacing-lg); }
+.rule-card h4 { font-size: var(--font-size-md); font-weight: 600; margin-bottom: var(--spacing-sm); display: flex; align-items: center; gap: var(--spacing-sm); }
+.rule-card p { font-size: var(--font-size-sm); color: var(--text-secondary); line-height: 1.6; }
+.rule-ico { width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; }
+.rule-ico.ok { background: var(--success-light); color: var(--success-color); }
+/* 废弃色警示区 */
+.deprecated-zone {
+  background: var(--background-tertiary);
+  border: 1px dashed var(--text-tertiary);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-lg);
+}
+.deprecated-zone h4 { font-size: var(--font-size-md); font-weight: 600; color: var(--text-secondary); margin-bottom: var(--spacing-sm); }
+.deprecated-list { display: flex; gap: var(--spacing-md); flex-wrap: wrap; }
+.deprecated-item { text-align: center; }
+.deprecated-swatch {
+  width: 72px; height: 48px;
+  border-radius: var(--border-radius-sm);
+  background: repeating-linear-gradient(45deg, #E8E8ED, #E8E8ED 6px, #F5F5F7 6px, #F5F5F7 12px);
+  border: 1px solid var(--border-color);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: var(--spacing-xs);
+}
+.deprecated-swatch span { font-size: var(--font-size-xs); color: var(--text-tertiary); }
+.deprecated-hex {
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+  text-decoration: line-through;
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+}
+.deprecated-flag { font-size: var(--font-size-xs); color: var(--error-color); font-weight: 500; }
+/* Do / Don't */
+.dd-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-md); }
+.dd-card { border-radius: var(--border-radius-md); padding: var(--spacing-md) var(--spacing-lg); }
+.dd-card.do { background: var(--success-light); }
+.dd-card.dont { background: var(--error-light); }
+.dd-label { font-size: var(--font-size-xs); font-weight: 700; letter-spacing: 1px; margin-bottom: var(--spacing-xs); display: flex; align-items: center; gap: 6px; }
+.dd-card.do .dd-label { color: var(--success-color); }
+.dd-card.dont .dd-label { color: var(--error-color); }
+.dd-card .dd-desc { font-size: var(--font-size-sm); color: var(--text-primary); }
+.dd-card .dd-demo { margin-top: var(--spacing-sm); }
+.dd-banned-swatch {
+  display: inline-flex; width: 28px; height: 28px; border-radius: 50%;
+  background: repeating-linear-gradient(45deg, #E8E8ED, #E8E8ED 4px, #F5F5F7 4px, #F5F5F7 8px);
+  align-items: center; justify-content: center;
+  color: var(--text-tertiary); font-size: var(--font-size-sm);
+  border: 1px dashed var(--text-tertiary);
+}
+.dd-banned-pill {
+  display: inline-flex; align-items: center; padding: 8px 16px; border-radius: 999px;
+  border: 1px dashed var(--text-tertiary); background: var(--background-tertiary);
+  color: var(--text-tertiary); font-size: var(--font-size-sm);
+  text-decoration: line-through;
+}
+/* 速查表 */
+.token-table { width: 100%; border-collapse: collapse; font-size: var(--font-size-sm); }
+.token-table th {
+  text-align: left; font-size: var(--font-size-xs); color: var(--text-tertiary);
+  font-weight: 500; letter-spacing: 1px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-bottom: 1px solid var(--border-color);
+}
+.token-table td { padding: var(--spacing-sm) var(--spacing-md); border-bottom: 1px solid var(--border-color); vertical-align: middle; }
+.token-table tr:last-child td { border-bottom: none; }
+.token-name { font-family: 'SF Mono', Menlo, Consolas, monospace; font-size: var(--font-size-xs); color: var(--text-secondary); }
+.token-val { font-family: 'SF Mono', Menlo, Consolas, monospace; font-size: var(--font-size-xs); color: var(--text-primary); }
+.sp-bar { display: inline-block; height: 10px; border-radius: 3px; background: var(--primary-color); opacity: 0.75; vertical-align: middle; }
+.radius-demo { display: inline-block; width: 48px; height: 28px; border: 1.5px solid var(--primary-color); background: var(--primary-light); vertical-align: middle; }
+.fs-demo { font-weight: 500; color: var(--text-primary); white-space: nowrap; }
+/* 公式块 */
+.formula-block {
+  background: var(--text-primary);
+  color: #E8E8ED;
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-lg);
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: var(--font-size-xs);
+  line-height: 1.8;
+  overflow-x: auto;
+}
+.formula-block .c { color: #86868B; }
+.formula-block .g { color: #A5D6A7; }
+.safe-demo {
+  width: 320px;
+  background: var(--background-primary);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+.safe-content { padding: var(--spacing-lg); padding-bottom: 90px; color: var(--text-secondary); font-size: var(--font-size-sm); }
+.safe-bar {
+  position: relative;
+  background: var(--background-primary);
+  border-top: 1px solid var(--border-color);
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+  padding: var(--spacing-md) var(--spacing-lg);
+  display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-md);
+}
+.safe-area-hatch {
+  height: 20px;
+  background: repeating-linear-gradient(45deg, var(--primary-light), var(--primary-light) 4px, var(--background-primary) 4px, var(--background-primary) 8px);
+  display: flex; align-items: center; justify-content: center;
+  font-size: var(--font-size-xs);
+  color: var(--primary-color);
+}
+.safe-bar .btn { height: 36px; flex: 1; border-radius: 999px; }
+.safe-btn-secondary { background: var(--primary-dark); color: var(--text-inverse); border: none; }
+.safe-note { font-size: var(--font-size-xs); color: var(--text-tertiary); margin-top: var(--spacing-sm); line-height: 1.8; }
+
+/* 页脚 */
+.doc-footer {
+  border-top: 1px solid var(--border-color);
+  margin-top: var(--spacing-xxl);
+  padding-top: var(--spacing-lg);
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: var(--spacing-sm);
+}
+
+/* 动效降级：prefers-reduced-motion（P1-2）
+   —— 关停骨架屏 shimmer / spinner 等无限循环动画与装饰过渡，
+      功能与信息保留（骨架块仍可见，仅不再动） */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* 响应式 */
+@media (max-width: 960px) {
+  .doc { flex-direction: column; }
+  .toc { position: static; width: 100%; max-height: none; padding: 24px 0 0; }
+  .toc nav { display: flex; flex-wrap: wrap; gap: 6px; }
+  .toc nav a { border: 1px solid var(--border-color); border-radius: 999px; border-left: 1px solid var(--border-color); }
+  .dd-row { grid-template-columns: 1fr; }
+  .r-token-cols { grid-template-columns: 1fr !important; }
+}
+</style>
+</head>
+<body>
+<div id="toast-stage"></div>
+
+<div class="doc">
+
+  <!-- ============ 左侧粘性目录 ============ -->
+  <aside class="toc">
+    <div class="toc-title">COMPONENT LIBRARY</div>
+    <nav id="toc-nav">
+      <a href="#sec-basic" class="active">一、基础组件</a>
+      <a href="#c-btn" class="sub">按钮 Button</a>
+      <a href="#c-input" class="sub">输入框 Input</a>
+      <a href="#c-checkbox" class="sub">勾选框 Checkbox</a>
+      <a href="#c-stepper" class="sub">步进器 Stepper</a>
+      <a href="#c-badge" class="sub">徽标 Badge</a>
+      <a href="#c-tag" class="sub">标签 Tag</a>
+      <a href="#c-switch" class="sub">开关 Switch</a>
+      <a href="#c-loading" class="sub">加载 Loading</a>
+      <a href="#c-toast" class="sub">轻提示 Toast</a>
+      <a href="#c-empty" class="sub">空状态 Empty</a>
+      <a href="#sec-composite">二、复合组件</a>
+      <a href="#c-form" class="sub">表单 Form</a>
+      <a href="#c-card" class="sub">卡片 Card</a>
+      <a href="#c-listitem" class="sub">列表项 List Item</a>
+      <a href="#c-group" class="sub">分组列表 Group</a>
+      <a href="#c-popup" class="sub">底部弹层 Popup</a>
+      <a href="#c-status" class="sub">状态标签组</a>
+      <a href="#sec-business">三、业务组件</a>
+      <a href="#c-product" class="sub">商品卡</a>
+      <a href="#c-cart" class="sub">购物车项</a>
+      <a href="#c-order" class="sub">订单卡</a>
+      <a href="#c-address" class="sub">地址卡</a>
+      <a href="#c-category" class="sub">分类侧栏项</a>
+      <a href="#c-tabbar" class="sub">tabBar</a>
+      <a href="#sec-rules">四、使用规则</a>
+      <a href="#r-color" class="sub">色彩三原则 · 废弃色</a>
+      <a href="#r-dd" class="sub">Do / Don't 对照</a>
+      <a href="#r-token" class="sub">间距 · 圆角 · 字号</a>
+      <a href="#r-safe" class="sub">安全区与固定栏</a>
+    </nav>
+  </aside>
+
+  <!-- ============ 主内容 ============ -->
+  <main class="doc-main">
+
+    <!-- 头部 -->
+    <header class="hero" id="top">
+      <div class="hero-leaves" aria-hidden="true">
+        <svg width="220" height="180" viewBox="0 0 220 180" fill="none">
+          <path d="M150 20 C195 45 205 105 150 155 C95 105 105 45 150 20 Z" fill="#2E7D32" opacity="0.18"/>
+          <path d="M150 30 L150 148" stroke="#2E7D32" opacity="0.25" stroke-width="2"/>
+          <path d="M70 55 C105 72 112 118 70 152 C28 118 35 72 70 55 Z" fill="#1B5E20" opacity="0.22"/>
+          <path d="M70 63 L70 146" stroke="#1B5E20" opacity="0.3" stroke-width="2"/>
+        </svg>
+      </div>
+      <div class="hero-kicker">SUTWXAPP · COMPONENT LIBRARY SPEC</div>
+      <h1>苏铁小程序 · 组件库规范展示页</h1>
+      <p>以 spec.md §4 视觉语言与 §5 组件规范为唯一事实来源，逐条对齐【合规基准】。所有示例均可交互体验，规格标注与规范一致。</p>
+      <div class="hero-badges">
+        <span class="hbadge green">v3.1.1</span>
+        <span class="hbadge light">Apple 极简 · 自然绿品牌</span>
+        <span class="hbadge plain">2026-09-12 · SutWxApp Design</span>
+      </div>
+    </header>
+
+    <!-- ==================================================
+         一、基础组件
+         ================================================== -->
+    <section id="sec-basic">
+      <div class="sec-head">
+        <div class="sec-index">PART 01</div>
+        <h2>基础组件</h2>
+        <p>最小可复用单元，样式与行为均对齐 spec §5.1–5.15 的合规基准；每个组件附关键规格标注。</p>
+      </div>
+
+      <!-- 1. 按钮 -->
+      <article class="comp" id="c-btn">
+        <div class="comp-head">
+          <span class="no">1.1</span><h3>按钮 Button</h3>
+          <span class="spec">圆角 12px · 按压 opacity .8 + scale .98 · transition-fast</span>
+        </div>
+        <div class="comp-body">
+          <div class="demo-row">
+            <div class="demo-col">
+              <button class="btn btn-primary btn-sm">加入购物车</button>
+              <button class="btn btn-primary btn-md">加入购物车</button>
+              <button class="btn btn-primary btn-lg">去支付</button>
+              <div class="demo-label">主按钮 · 绿底白字</div>
+            </div>
+            <div class="demo-col">
+              <button class="btn btn-secondary btn-sm">查看详情</button>
+              <button class="btn btn-secondary btn-md">查看详情</button>
+              <button class="btn btn-secondary btn-lg">查看详情</button>
+              <div class="demo-label">次按钮 · 白底描边</div>
+            </div>
+            <div class="demo-col">
+              <button class="btn btn-outline btn-sm">浏览更多</button>
+              <button class="btn btn-outline btn-md">浏览更多</button>
+              <button class="btn btn-outline btn-lg">去逛逛</button>
+              <div class="demo-label">描边按钮 · 按压变浅绿底</div>
+            </div>
+            <div class="demo-col">
+              <button class="btn btn-danger btn-sm">删除</button>
+              <button class="btn btn-danger btn-md">删除地址</button>
+              <button class="btn btn-danger btn-lg">退出登录</button>
+              <div class="demo-label">危险按钮 · 仅删除/退出，需确认弹窗</div>
+            </div>
+            <div class="demo-col">
+              <button class="btn btn-primary btn-sm is-disabled">已售罄</button>
+              <button class="btn btn-primary btn-md is-disabled">已售罄</button>
+              <button class="btn btn-outline btn-md is-disabled">不可用</button>
+              <div class="demo-label">禁用 · opacity .5，不改色</div>
+            </div>
+            <div class="demo-col">
+              <button class="btn btn-icon" aria-label="加购">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 3h2l2.4 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 7H6"/><circle cx="10" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg>
+              </button>
+              <button class="btn btn-icon ghost" aria-label="收藏">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3l2.7 5.6 6.1.8-4.5 4.2 1.1 6-5.4-3-5.4 3 1.1-6L3.2 9.4l6.1-.8L12 3z"/></svg>
+              </button>
+              <div class="demo-label">图标按钮 · 实心 / 浅绿 ghost</div>
+            </div>
+          </div>
+          <div class="comp-note"><b>按压态：</b>全部按钮统一 <b>:active → opacity .8 + scale(0.98)</b>，曲线 cubic-bezier(0.4, 0, 0.2, 1)，禁止 scale &lt; 0.95。底部固定栏主按钮高度 44px（88rpx）胶囊全圆。</div>
+        </div>
+      </article>
+
+      <!-- 2. 输入框 -->
+      <article class="comp" id="c-input">
+        <div class="comp-head">
+          <span class="no">1.2</span><h3>输入框 Input</h3>
+          <span class="spec">白底 · 1px 描边 · 圆角 12px · 聚焦变主色边框</span>
+        </div>
+        <div class="comp-body">
+          <div class="demo-row">
+            <div class="demo-col">
+              <input class="input" placeholder="默认态 · 搜索植物名称">
+              <div class="demo-label">默认</div>
+            </div>
+            <div class="demo-col">
+              <input class="input" value="聚焦态（点击试试）">
+              <div class="demo-label">聚焦 → 边框主色绿</div>
+            </div>
+            <div class="demo-col">
+              <input class="input is-error" value="13000">
+              <div class="demo-label" style="color: var(--error-color);">错误 → 边框 error 红</div>
+            </div>
+            <div class="demo-col">
+              <input class="input" value="禁用输入内容" disabled>
+              <div class="demo-label">禁用 · 三级底 + 三级字</div>
+            </div>
+          </div>
+        </div>
+        <div class="comp-body">
+          <div style="display:flex; gap: var(--spacing-xl); flex-wrap: wrap;">
+            <div class="field is-invalid">
+              <label class="field-label">手机号 <em>*</em></label>
+              <input class="input" value="13000">
+              <span class="field-error">请输入正确的手机号码</span>
+            </div>
+            <div class="field">
+              <label class="field-label">养护备注</label>
+              <textarea class="input textarea" placeholder="选填，如：请附赠缓释肥…"></textarea>
+            </div>
+          </div>
+          <div class="comp-note"><b>违规警示：</b>聚焦边框禁止使用红色或蓝色（仅错误态可用红）；圆角不得小于 8px；搜索栏为胶囊形态 + 三级灰 placeholder。</div>
+        </div>
+      </article>
+
+      <!-- 3. 勾选框 -->
+      <article class="comp" id="c-checkbox">
+        <div class="comp-head">
+          <span class="no">1.3</span><h3>圆形勾选框 Checkbox</h3>
+          <span class="spec">20px 圆形 · 选中绿底白勾 · 触控区 ≥ 44px</span>
+        </div>
+        <div class="comp-body">
+          <div class="demo-row" style="align-items: center;">
+            <div class="demo-col">
+              <button class="chk" type="button" onclick="this.classList.toggle('is-checked')" aria-label="未选中，点击切换">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg>
+              </button>
+              <div class="demo-label">未选中</div>
+            </div>
+            <div class="demo-col">
+              <button class="chk is-checked" type="button" onclick="this.classList.toggle('is-checked')" aria-label="选中，点击切换">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg>
+              </button>
+              <div class="demo-label">选中 · 绿底白勾（可点击）</div>
+            </div>
+            <div class="demo-col">
+              <button class="chk is-disabled" type="button" aria-label="禁用" disabled>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg>
+              </button>
+              <div class="demo-label">禁用 · 三级灰</div>
+            </div>
+          </div>
+          <div class="comp-note"><b>违规警示：</b>选中态禁止红/橙填充；实际触控区（含 padding）≥ 88rpx。</div>
+        </div>
+      </article>
+
+      <!-- 4. 步进器 -->
+      <article class="comp" id="c-stepper">
+        <div class="comp-head">
+          <span class="no">1.4</span><h3>数量步进器 Stepper</h3>
+          <span class="spec">按钮 28px · 三级底 · 圆角 8px 拼接 · 最小 1 / 最大 99</span>
+        </div>
+        <div class="comp-body">
+          <div class="demo-row" style="align-items: center;">
+            <div class="stepper" data-min="1" data-max="99">
+              <button type="button" data-step="-1" onclick="stepClick(this)">−</button>
+              <span class="stepper-num">1</span>
+              <button type="button" data-step="1" onclick="stepClick(this)">＋</button>
+            </div>
+            <span class="demo-label" style="text-align:left;">试试点到 0 或 100 → 数值被钳制在 1–99</span>
+          </div>
+          <div class="comp-note"><b>规则：</b>越界禁止并给轻提示；禁用端 opacity .5；按钮底色禁止使用彩色；数字输入区须有宽度约束。</div>
+        </div>
+      </article>
+
+      <!-- 5. 徽标 -->
+      <article class="comp" id="c-badge">
+        <div class="comp-head">
+          <span class="no">1.5</span><h3>徽标 Badge</h3>
+          <span class="spec">胶囊 · 字号 10px · 计数徽标绿底 / 红点保留警示红</span>
+        </div>
+        <div class="comp-body">
+          <div class="demo-row" style="align-items: center;">
+            <div class="demo-col">
+              <span class="badge badge-primary">12</span>
+              <div class="demo-label">数字角标 · 绿</div>
+            </div>
+            <div class="demo-col">
+              <span class="badge-anchor" style="padding: 6px;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1D1D1F" stroke-width="1.8" stroke-linecap="round"><path d="M3 3h2l2.4 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 7H6"/><circle cx="10" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg>
+                <span class="badge badge-primary">8</span>
+              </span>
+              <div class="demo-label">购物车角标（品牌计数=绿）</div>
+            </div>
+            <div class="demo-col">
+              <span class="badge badge-primary" style="background: var(--primary-dark);">新品尝鲜</span>
+              <div class="demo-label">文字徽标 · 深绿底白字</div>
+            </div>
+            <div class="demo-col">
+              <span class="badge-anchor" style="padding: 6px;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1D1D1F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+                <span class="badge badge-dot"></span>
+              </span>
+              <div class="demo-label">红点 · 警示语义（唯一允许红）</div>
+            </div>
+          </div>
+          <div class="comp-note"><b>违规警示：</b>商品详情页购物车角标曾用旧版红 → 统一 <b>.badge-primary 绿</b>；badge 底色禁止使用 accent 橙；content 为空时隐藏。</div>
+        </div>
+      </article>
+
+      <!-- 6. 标签 -->
+      <article class="comp" id="c-tag">
+        <div class="comp-head">
+          <span class="no">1.6</span><h3>标签 Tag</h3>
+          <span class="spec">圆角 8px · 字号 10px · 折扣标签浅绿底主色字</span>
+        </div>
+        <div class="comp-body">
+          <div class="demo-row">
+            <span class="tag tag-discount">限时直降</span>
+            <span class="tag tag-discount">满 99 减 10</span>
+            <span class="tag tag-dark">铁树珍品</span>
+            <span class="tag tag-neutral">顺丰冷链</span>
+            <span class="tag tag-neutral">7 天成活保障</span>
+          </div>
+          <div class="comp-note"><b>品牌价签策略：</b>折扣/促销标签统一「浅绿底 #F1F8E9 + 主色字」（或深绿底白字，二选一全局统一，推荐前者）。</div>
+        </div>
+      </article>
+
+      <!-- 7. 开关 -->
+      <article class="comp" id="c-switch">
+        <div class="comp-head">
+          <span class="no">1.7</span><h3>开关 Switch</h3>
+          <span class="spec">48×28px · 滑块 22px · 选中主色绿 · transition-fast</span>
+        </div>
+        <div class="comp-body">
+          <div class="demo-row" style="align-items: center;">
+            <button class="switch" type="button" onclick="this.classList.toggle('is-on')" role="switch" aria-checked="false" aria-label="演示开关"></button>
+            <span class="demo-label">默认关（点击切换）</span>
+            <button class="switch is-on" type="button" onclick="this.classList.toggle('is-on')" role="switch" aria-checked="true" aria-label="演示开关"></button>
+            <span class="demo-label">默认开</span>
+            <button class="switch is-on is-disabled" type="button" aria-label="禁用开关" disabled></button>
+            <span class="demo-label">禁用</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- 8. 加载 -->
+      <article class="comp" id="c-loading">
+        <div class="comp-head">
+          <span class="no">1.8</span><h3>加载 Loading</h3>
+          <span class="spec">spinner 20px · 0.8s linear（唯一允许 linear）· 骨架屏扫光</span>
+        </div>
+        <div class="comp-body">
+          <div class="demo-row" style="align-items: center;">
+            <div class="demo-col">
+              <div class="loading-spinner"></div>
+              <div class="demo-label">loading-spinner</div>
+            </div>
+            <div class="demo-col">
+              <div class="skel-card" style="width: 220px;">
+                <div class="skeleton skel-thumb"></div>
+                <div class="skel-lines">
+                  <div class="skeleton skel-line w90"></div>
+                  <div class="skeleton skel-line w60"></div>
+                  <div class="skeleton skel-line w40"></div>
+                </div>
+              </div>
+              <div class="demo-label">骨架屏 · 商品卡形态</div>
+            </div>
+            <div class="demo-col">
+              <div class="skel-card" style="width: 160px; align-items:center;">
+                <div class="skeleton skel-avatar"></div>
+                <div class="skel-lines" style="flex:1;">
+                  <div class="skeleton skel-line w90"></div>
+                  <div class="skeleton skel-line w60"></div>
+                </div>
+              </div>
+              <div class="demo-label">骨架屏 · 头像行形态</div>
+            </div>
+          </div>
+          <div class="comp-note"><b>规则：</b>骨架屏形状对齐目标内容（卡片矩形 / 圆形头像 / 商品图方块），<b>禁止转圈代替骨架</b>；loading-overlay 全屏遮罩仅用于提交订单等强阻塞操作。</div>
+        </div>
+      </article>
+
+      <!-- 9. toast -->
+      <article class="comp" id="c-toast">
+        <div class="comp-head">
+          <span class="no">1.9</span><h3>轻提示 Toast</h3>
+          <span class="spec">深色底白字 · 圆角 12px · 0.3s 入场 · 顶部居中</span>
+        </div>
+        <div class="comp-body">
+          <div class="toast-demo-btns">
+            <button class="btn btn-primary btn-md" onclick="showToast('success','已加入购物车')">触发成功 Toast</button>
+            <button class="btn btn-secondary btn-md" onclick="showToast('warning','库存紧张，每人限购 2 件')">触发警告 Toast</button>
+            <button class="btn btn-danger btn-md" onclick="showToast('error','网络异常，支付未完成')">触发错误 Toast</button>
+          </div>
+          <div class="comp-note"><b>语义对号：</b>success 绿 / warning 橙 / error 红，不跨语义混用；error toast 用于失败提示，危险操作（删除等）走确认弹窗。</div>
+        </div>
+      </article>
+
+      <!-- 10. 空状态 -->
+      <article class="comp" id="c-empty">
+        <div class="comp-head">
+          <span class="no">1.10</span><h3>空状态 Empty State</h3>
+          <span class="spec">插画 ≤ 100px · 主文案三级灰 · 操作用描边按钮</span>
+        </div>
+        <div class="comp-body">
+          <div class="empty-state" style="max-width: 375px; margin: 0 auto;">
+            <div class="empty-art">
+              <svg width="52" height="52" viewBox="0 0 64 64" fill="none">
+                <path d="M32 8 C48 18 52 40 32 56 C12 40 16 18 32 8 Z" fill="none" stroke="#2E7D32" stroke-width="2.5" opacity="0.55"/>
+                <path d="M32 14 L32 52" stroke="#2E7D32" stroke-width="2" opacity="0.4"/>
+                <path d="M32 28 L24 22 M32 36 L40 30 M32 44 L24 38" stroke="#2E7D32" stroke-width="2" opacity="0.4" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="empty-main">购物车还是空的</div>
+            <div class="empty-desc">去挑选一盆心仪的绿植吧</div>
+            <button class="btn btn-outline btn-md">去逛逛</button>
+          </div>
+          <div class="comp-note"><b>纠正记录：</b>插画底曾用旧版红 → 改为 <b>--primary-light 浅绿或三级灰</b>（P1）。</div>
+        </div>
+      </article>
+    </section>
+    <!-- ==================================================
+         二、复合组件
+         ================================================== -->
+    <section id="sec-composite">
+      <div class="sec-head">
+        <div class="sec-index">PART 02</div>
+        <h2>复合组件</h2>
+        <p>由基础组件按规范组合而成，直接对应小程序真实页面中的可复用块。</p>
+      </div>
+
+      <!-- 1. 表单 -->
+      <article class="comp" id="c-form">
+        <div class="comp-head">
+          <span class="no">2.1</span><h3>表单 Form（地址编辑）</h3>
+          <span class="spec">校验错误 → error 红 · 默认地址开关绿色 · 提交按钮绿</span>
+        </div>
+        <div class="comp-body">
+          <div class="demo-row" style="justify-content: center;">
+            <div class="ui-card form-card">
+              <div class="form-body" id="addr-form">
+                <div class="form-item" data-field="name">
+                  <label class="field-label">收货人 <em>*</em></label>
+                  <input class="input" placeholder="请输入收货人姓名" data-validate="name">
+                  <span class="field-error">请输入收货人姓名</span>
+                </div>
+                <div class="form-item" data-field="phone">
+                  <label class="field-label">手机号 <em>*</em></label>
+                  <input class="input" placeholder="请输入 11 位手机号" data-validate="phone">
+                  <span class="field-error">请输入正确的 11 位手机号</span>
+                </div>
+                <div class="form-item" data-field="region">
+                  <label class="field-label">所在地区 <em>*</em></label>
+                  <input class="input" placeholder="省 / 市 / 区" data-validate="region">
+                  <span class="field-error">请选择所在地区</span>
+                </div>
+                <div class="form-item" data-field="detail">
+                  <label class="field-label">详细地址 <em>*</em></label>
+                  <input class="input" placeholder="街道、楼牌号、门牌号" data-validate="detail">
+                  <span class="field-error">请填写详细地址</span>
+                </div>
+                <div class="form-row-end">
+                  <span class="fl">设为默认地址</span>
+                  <button class="switch is-on" type="button" onclick="this.classList.toggle('is-on')" role="switch" aria-checked="true" aria-label="默认地址开关"></button>
+                </div>
+                <button class="btn btn-primary btn-md" style="width:100%; height:44px; border-radius:999px;" onclick="validateAddrForm()">保存地址（校验演示）</button>
+              </div>
+            </div>
+          </div>
+          <div class="comp-note"><b>演示：</b>直接点击「保存地址」触发校验 → 空项变红并提示；填入合法姓名 + 11 位手机号后再保存可体验通过路径。校验错误一律用 <b>--error-color</b>，其余状态不得用红。</div>
+        </div>
+      </article>
+
+      <!-- 2. 卡片 -->
+      <article class="comp" id="c-card">
+        <div class="comp-head">
+          <span class="no">2.2</span><h3>卡片 Card</h3>
+          <span class="spec">白底 · 圆角 12px · shadow-sm · padding 12px · 按压 scale .98</span>
+        </div>
+        <div class="comp-body">
+          <div class="demo-row">
+            <div class="ui-card" style="width: 340px;">
+              <div class="card-header">
+                <span class="card-title">养护提醒</span>
+                <span class="tag tag-discount">本周</span>
+              </div>
+              <div class="card-content">您的「苏铁 · 造型款」已 7 天未浇水，当前室温 24℃，建议明日清晨补水 200ml，并保持散射光环境。</div>
+              <div class="card-footer">
+                <button class="btn btn-secondary btn-sm">稍后提醒</button>
+                <button class="btn btn-primary btn-sm">立即记录</button>
+              </div>
+            </div>
+            <span class="demo-label" style="align-self:center; max-width: 140px;">header / content / footer 三段结构；卡片间 margin 12px；禁止彩色边框或彩色底</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- 3. 列表项 -->
+      <article class="comp" id="c-listitem">
+        <div class="comp-head">
+          <span class="no">2.3</span><h3>列表项 List Item</h3>
+          <span class="spec">白底 · padding 12px · 1px 分隔线（末项无）· active 三级底</span>
+        </div>
+        <div class="comp-body">
+          <div class="demo-row">
+            <div class="list">
+              <div class="list-item">
+                <span class="li-ico">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                </span>
+                <div class="li-main">
+                  <div class="li-title">收货地址管理</div>
+                  <div class="li-desc">已保存 3 个地址</div>
+                </div>
+                <svg class="li-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+              </div>
+              <div class="list-item">
+                <span class="li-ico">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+                </span>
+                <div class="li-main">
+                  <div class="li-title">我的订单</div>
+                  <div class="li-desc">查看全部订单与售后</div>
+                </div>
+                <svg class="li-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+              </div>
+              <div class="list-item">
+                <span class="li-ico">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a7.8 7.8 0 0 0 .1-6l1.5-2.3-2-2-2.3 1.5a7.8 7.8 0 0 0-6-.1L8.4 3.6l-2 2 1.5 2.3a7.8 7.8 0 0 0-.1 6L3.6 16.2l2 2 2.3-1.5a7.8 7.8 0 0 0 6 .1l2.3 1.6 2-2-1.5-2.3z"/></svg>
+                </span>
+                <div class="li-main"><div class="li-title">设置</div></div>
+                <svg class="li-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+              </div>
+            </div>
+            <div class="list" style="width: 340px;">
+              <div class="list-item">
+                <span class="li-thumb">
+                  <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="display:block;width:100%;height:100%;">
+                    <defs><linearGradient id="lg-th1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F1F8E9"/><stop offset="1" stop-color="#C8E6C9"/></linearGradient></defs>
+                    <rect width="100" height="100" fill="url(#lg-th1)"/>
+                    <path d="M50 18 C70 30 74 62 50 84 C26 62 30 30 50 18 Z" fill="#2E7D32" opacity="0.3"/>
+                    <path d="M50 24 L50 80" stroke="#1B5E20" opacity="0.35" stroke-width="2"/>
+                  </svg>
+                </span>
+                <div class="li-main">
+                  <div class="li-title">苏铁 · 造型盆景款</div>
+                  <div class="li-desc">规格：含陶盆 · 高约 45cm　｜　下单 7 天内发货</div>
+                </div>
+              </div>
+              <div class="list-item">
+                <span class="li-thumb">
+                  <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="display:block;width:100%;height:100%;">
+                    <defs><linearGradient id="lg-th2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E8F5E9"/><stop offset="1" stop-color="#DCEDC8"/></linearGradient></defs>
+                    <rect width="100" height="100" fill="url(#lg-th2)"/>
+                    <path d="M50 14 C72 26 76 60 50 86 C24 60 28 26 50 14 Z" fill="#1B5E20" opacity="0.26"/>
+                    <path d="M50 20 L50 82" stroke="#1B5E20" opacity="0.3" stroke-width="2"/>
+                  </svg>
+                </span>
+                <div class="li-main">
+                  <div class="li-title">琴叶榕 · 客厅大型绿植</div>
+                  <div class="li-desc">规格：原盆原土 · 高约 120cm　｜　顺丰冷链</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="comp-note"><b>违规警示：</b>分隔线禁止纯黑或带色；图标 24px（48rpx）；「我的」页菜单图标禁止红橙色。</div>
+        </div>
+      </article>
+
+      <!-- 4. 分组列表 -->
+      <article class="comp" id="c-group">
+        <div class="comp-head">
+          <span class="no">2.4</span><h3>分组列表 Group List（设置页式）</h3>
+          <span class="spec">组间 12px · 组标签 10px 三级灰 · 行内分隔用边框色</span>
+        </div>
+        <div class="comp-body">
+          <div class="demo-row">
+            <div style="width: 340px;">
+              <div class="group">
+                <div class="group-label">账户</div>
+                <div class="list">
+                  <div class="list-item">
+                    <span class="li-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/></svg></span>
+                    <div class="li-main"><div class="li-title">个人信息</div></div>
+                    <svg class="li-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+                  </div>
+                  <div class="list-item">
+                    <span class="li-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span>
+                    <div class="li-main"><div class="li-title">账号与安全</div></div>
+                    <svg class="li-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+                  </div>
+                </div>
+              </div>
+              <div class="group">
+                <div class="group-label">偏好</div>
+                <div class="list">
+                  <div class="list-item">
+                    <div class="li-main"><div class="li-title">养护提醒推送</div><div class="li-desc">按植物习性推送浇水 / 施肥提醒</div></div>
+                    <button class="switch is-on" type="button" onclick="this.classList.toggle('is-on')" role="switch" aria-checked="true" aria-label="养护提醒开关"></button>
+                  </div>
+                  <div class="list-item">
+                    <div class="li-main"><div class="li-title">清空缓存</div></div>
+                    <span style="font-size: var(--font-size-sm); color: var(--text-tertiary);">12.6 MB</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 5. 底部弹层 -->
+      <article class="comp" id="c-popup">
+        <div class="comp-head">
+          <span class="no">2.5</span><h3>底部弹层 Popup（规格选择）</h3>
+          <span class="spec">mask 50% · 顶部圆角 16px · slideUp 0.3s · max-height 80vh</span>
+        </div>
+        <div class="comp-body">
+          <div class="popup-stage">
+            <button class="btn btn-primary btn-md" onclick="openPopup()">选择规格（打开弹层演示）</button>
+          </div>
+          <div class="comp-note"><b>联动演示：</b>规格 chip 选中态 = 主色绿底白字（真实可切换）；弹层内步进器带 1–99 钳制；底部确认按钮高度 44px 胶囊并含安全区 padding；点遮罩可关闭。</div>
+        </div>
+      </article>
+
+      <!-- 6. 状态标签组 -->
+      <article class="comp" id="c-status">
+        <div class="comp-head">
+          <span class="no">2.6</span><h3>状态标签组（订单五态）</h3>
+          <span class="spec">按 spec §5.7 状态色表对号 · 语义色不跨用</span>
+        </div>
+        <div class="comp-body">
+          <div class="demo-row">
+            <div class="demo-col"><span class="status-tag st-warning">待付款</span><div class="demo-label">warning 橙字浅橙底</div></div>
+            <div class="demo-col"><span class="status-tag st-info">待发货</span><div class="demo-label">info 蓝字浅蓝底</div></div>
+            <div class="demo-col"><span class="status-tag st-primary">待收货</span><div class="demo-label">主色绿字浅绿底</div></div>
+            <div class="demo-col"><span class="status-tag st-primary">待评价</span><div class="demo-label">主色绿字浅绿底</div></div>
+            <div class="demo-col"><span class="status-tag st-success">已完成</span><div class="demo-label">success 绿字浅绿底</div></div>
+            <div class="demo-col"><span class="status-tag st-muted">已取消</span><div class="demo-label">三级灰（中性，非红）</div></div>
+          </div>
+          <div class="comp-note"><b>规则：</b>状态色严格对号入座（success 绿 / warning 橙 / error 红 / info 蓝）；同一屏状态色不超过 2 种；<b>警告橙仅作系统级提示语义（如库存紧张），禁止用于促销与营销场景</b>。</div>
+        </div>
+      </article>
+    </section>
+
+    <!-- ==================================================
+         三、业务组件
+         ================================================== -->
+    <section id="sec-business">
+      <div class="sec-head">
+        <div class="sec-index">PART 03</div>
+        <h2>业务组件</h2>
+        <p>结合小程序核心 6 页流程的真实结构（spec §5.5–5.9、§5.11–5.12），含品牌价签与双绿底栏等关键策略。</p>
+      </div>
+
+      <!-- 1. 商品卡 -->
+      <article class="comp" id="c-product">
+        <div class="comp-head">
+          <span class="no">3.1</span><h3>商品卡（竖版 340rpx / 横版 160rpx）</h3>
+          <span class="spec">促销价深绿粗体 · 原价灰删除线 · 折扣浅绿标签 · 加购绿</span>
+        </div>
+        <div class="comp-body">
+          <div class="biz-stage">
+            <div class="product-grid">
+              <div class="p-card">
+                <div class="p-img">
+                  <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+                    <defs><linearGradient id="lg-p1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F1F8E9"/><stop offset="1" stop-color="#A5D6A7"/></linearGradient></defs>
+                    <rect width="100" height="100" fill="url(#lg-p1)"/>
+                    <path d="M50 14 C74 28 78 62 50 86 C22 62 26 28 50 14 Z" fill="#2E7D32" opacity="0.32"/>
+                    <path d="M50 20 L50 82" stroke="#1B5E20" opacity="0.35" stroke-width="2"/>
+                  </svg>
+                  <span class="tag tag-discount">新品 9 折</span>
+                </div>
+                <div class="p-info">
+                  <div class="p-name">苏铁 · 造型盆景款 含手作陶盆</div>
+                  <div class="p-price-row">
+                    <span class="price-symbol">¥</span><span class="price-value">268</span>
+                    <span class="price-origin">¥298</span>
+                  </div>
+                  <div class="p-bottom">
+                    <span class="p-sales">已售 326</span>
+                    <button class="p-cart-btn" aria-label="加入购物车" onclick="showToast('success','已加入购物车')">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M3 3h2l2.4 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 7H6"/><circle cx="10" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="p-card">
+                <div class="p-img">
+                  <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+                    <defs><linearGradient id="lg-p2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E8F5E9"/><stop offset="1" stop-color="#C5E1A5"/></linearGradient></defs>
+                    <rect width="100" height="100" fill="url(#lg-p2)"/>
+                    <path d="M50 16 C70 28 72 60 50 84 C28 60 30 28 50 16 Z" fill="#1B5E20" opacity="0.28"/>
+                    <path d="M50 22 L50 80" stroke="#1B5E20" opacity="0.32" stroke-width="2"/>
+                  </svg>
+                  <span class="tag tag-discount">满 99 减 10</span>
+                </div>
+                <div class="p-info">
+                  <div class="p-name">琴叶榕 · 客厅大型绿植 原盆原土</div>
+                  <div class="p-price-row">
+                    <span class="price-symbol">¥</span><span class="price-value">159</span>
+                    <span class="price-origin">¥199</span>
+                  </div>
+                  <div class="p-bottom">
+                    <span class="p-sales">已售 1,208</span>
+                    <button class="p-cart-btn" aria-label="加入购物车" onclick="showToast('success','已加入购物车')">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M3 3h2l2.4 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 7H6"/><circle cx="10" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="p-card p-card-h">
+              <div class="p-img">
+                <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+                  <defs><linearGradient id="lg-p3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F1F8E9"/><stop offset="1" stop-color="#D7EFD3"/></linearGradient></defs>
+                  <rect width="100" height="100" fill="url(#lg-p3)"/>
+                  <path d="M50 16 C68 28 70 60 50 84 C30 60 32 28 50 16 Z" fill="#2E7D32" opacity="0.3"/>
+                  <path d="M50 22 L50 80" stroke="#1B5E20" opacity="0.32" stroke-width="2"/>
+                </svg>
+              </div>
+              <div class="p-info">
+                <div class="p-name">龟背竹 · 北欧风观叶盆栽</div>
+                <div class="p-price-row">
+                  <span class="price-symbol">¥</span><span class="price-value">89</span>
+                  <span class="price-origin">¥109</span>
+                </div>
+                <div class="p-bottom">
+                  <span class="p-sales">已售 865</span>
+                  <button class="p-cart-btn" aria-label="加入购物车" onclick="showToast('success','已加入购物车')">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M3 3h2l2.4 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 7H6"/><circle cx="10" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="comp-note"><b>品牌价签：</b>¥ 小号 + 数字大号加粗（--primary-dark）；原价 --text-secondary 删除线；折扣标签置于图左上角；名称 2 行截断（.text-ellipsis-2）；<b>价格与加购按钮禁止任何红色（曾用旧版红，P1 已纠正）</b>。</div>
+        </div>
+      </article>
+
+      <!-- 2. 购物车项 -->
+      <article class="comp" id="c-cart">
+        <div class="comp-head">
+          <span class="no">3.2</span><h3>购物车项 Cart Item</h3>
+          <span class="spec">图 80px 圆角 8px · 单价深绿 · 步进器右下 · 删除走确认弹窗</span>
+        </div>
+        <div class="comp-body">
+          <div class="biz-stage" style="justify-content: center;">
+            <div class="cart-item">
+              <button class="chk is-checked" type="button" onclick="this.classList.toggle('is-checked')" aria-label="选择商品">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg>
+              </button>
+              <div class="cart-img">
+                <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+                  <defs><linearGradient id="lg-c1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F1F8E9"/><stop offset="1" stop-color="#A5D6A7"/></linearGradient></defs>
+                  <rect width="100" height="100" fill="url(#lg-c1)"/>
+                  <path d="M50 14 C74 28 78 62 50 86 C22 62 26 28 50 14 Z" fill="#2E7D32" opacity="0.32"/>
+                  <path d="M50 20 L50 82" stroke="#1B5E20" opacity="0.35" stroke-width="2"/>
+                </svg>
+              </div>
+              <div class="cart-main">
+                <div class="cart-name">苏铁 · 造型盆景款</div>
+                <span class="cart-spec">含陶盆 · 高约 45cm</span>
+                <div class="cart-bottom">
+                  <span class="cart-price"><span class="price-symbol">¥</span>268</span>
+                  <div class="stepper" data-min="1" data-max="99">
+                    <button type="button" data-step="-1" onclick="stepClick(this)">−</button>
+                    <span class="stepper-num">1</span>
+                    <button type="button" data-step="1" onclick="stepClick(this)">＋</button>
+                  </div>
+                </div>
+              </div>
+              <button class="cart-del" aria-label="删除" onclick="showToast('warning','真实场景将弹出删除确认弹窗（红色仅限确认按钮）')">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18"/><path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="comp-note"><b>违规警示：</b>单价禁止红色；勾选框选中态禁止红/橙；左滑/长按删除必须走确认弹窗，红色仅允许出现在确认弹窗按钮上。</div>
+        </div>
+      </article>
+
+      <!-- 3. 订单卡 -->
+      <article class="comp" id="c-order">
+        <div class="comp-head">
+          <span class="no">3.3</span><h3>订单卡 Order Card</h3>
+          <span class="spec">状态按 §5.7 色表 · 合计深绿 · 主操作 .btn-primary 绿</span>
+        </div>
+        <div class="comp-body">
+          <div class="biz-stage">
+            <div class="ui-card order-card">
+              <div class="order-head">
+                <span class="order-no">订单号：ST202609120001</span>
+                <span class="order-status st-warn">待付款</span>
+              </div>
+              <div class="order-goods">
+                <div class="order-thumb">
+                  <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+                    <defs><linearGradient id="lg-o1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F1F8E9"/><stop offset="1" stop-color="#C8E6C9"/></linearGradient></defs>
+                    <rect width="100" height="100" fill="url(#lg-o1)"/>
+                    <path d="M50 16 C70 28 72 60 50 84 C28 60 30 28 50 16 Z" fill="#2E7D32" opacity="0.3"/>
+                  </svg>
+                </div>
+                <div class="order-goods-meta">
+                  <span class="order-goods-name">苏铁 · 造型盆景款</span>
+                  <span class="order-goods-spec">含陶盆 · 高约 45cm × 1</span>
+                </div>
+              </div>
+              <div class="order-total">合计：<b><span class="price-symbol">¥</span>268.00</b></div>
+              <div class="order-actions">
+                <button class="btn btn-secondary btn-sm">取消订单</button>
+                <button class="btn btn-primary btn-sm">去支付</button>
+              </div>
+            </div>
+            <div class="ui-card order-card">
+              <div class="order-head">
+                <span class="order-no">订单号：ST202609100002</span>
+                <span class="order-status st-success">已完成</span>
+              </div>
+              <div class="order-goods">
+                <div class="order-thumb">
+                  <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+                    <defs><linearGradient id="lg-o2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E8F5E9"/><stop offset="1" stop-color="#DCEDC8"/></linearGradient></defs>
+                    <rect width="100" height="100" fill="url(#lg-o2)"/>
+                    <path d="M50 14 C72 26 76 60 50 86 C24 60 28 26 50 14 Z" fill="#1B5E20" opacity="0.26"/>
+                  </svg>
+                </div>
+                <div class="order-goods-meta">
+                  <span class="order-goods-name">琴叶榕 · 客厅大型绿植</span>
+                  <span class="order-goods-spec">原盆原土 · 高约 120cm × 1</span>
+                </div>
+              </div>
+              <div class="order-total">合计：<b><span class="price-symbol">¥</span>159.00</b></div>
+              <div class="order-actions">
+                <button class="btn btn-secondary btn-sm">查看物流</button>
+                <button class="btn btn-outline btn-sm">评价晒图</button>
+              </div>
+            </div>
+          </div>
+          <div class="comp-note"><b>纠正记录：</b>订单模块金额与状态曾用旧版红 → 金额改 <b>--primary-dark</b>，状态按色表替换（P0/P1）；状态头部渐变：完成态用绿渐变，取消态用三级灰。</div>
+        </div>
+      </article>
+
+      <!-- 4. 地址卡 -->
+      <article class="comp" id="c-address">
+        <div class="comp-head">
+          <span class="no">3.4</span><h3>地址卡 Address Card</h3>
+          <span class="spec">默认徽标浅绿 · 编辑/删除次级灰 · 删除需确认弹窗</span>
+        </div>
+        <div class="comp-body">
+          <div class="biz-stage" style="justify-content: center;">
+            <div class="ui-card addr-card">
+              <div class="addr-line">
+                <span class="addr-name">沈知绿</span>
+                <span class="addr-phone">138****6621</span>
+                <span class="tag tag-discount" style="margin-left: auto;">默认</span>
+              </div>
+              <div class="addr-detail">浙江省杭州市西湖区文三路 138 号 绿洲公寓 3 幢 2 单元 502 室</div>
+              <div class="addr-ops">
+                <span class="demo-label" style="text-align:left;">顺丰冷链可送达</span>
+                <div class="addr-ops-btns">
+                  <button class="op-btn">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.8 2.8 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+                    编辑
+                  </button>
+                  <button class="op-btn danger" onclick="showToast('warning','真实场景将弹出删除确认弹窗')">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18"/><path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+                    删除
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 5. 分类侧栏项 -->
+      <article class="comp" id="c-category">
+        <div class="comp-head">
+          <span class="no">3.5</span><h3>分类侧栏项 Category Item</h3>
+          <span class="spec">侧栏宽 90px（180rpx）· 选中绿字白底 + 左侧 3px 主色竖条</span>
+        </div>
+        <div class="comp-body">
+          <div class="biz-stage" style="justify-content: center;">
+            <div class="cat-demo">
+              <div class="cat-side">
+                <div class="cat-item active">观叶植物</div>
+                <div class="cat-item">多肉沙植</div>
+                <div class="cat-item">开花植物</div>
+                <div class="cat-item">水培绿植</div>
+                <div class="cat-item">园艺工具</div>
+                <div class="cat-item">营养土肥</div>
+              </div>
+              <div class="cat-main">
+                <div class="p-card p-card-h" style="width:100%; box-shadow:none; border:1px solid var(--border-color);">
+                  <div class="p-img">
+                    <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+                      <defs><linearGradient id="lg-ct1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F1F8E9"/><stop offset="1" stop-color="#B9DFC0"/></linearGradient></defs>
+                      <rect width="100" height="100" fill="url(#lg-ct1)"/>
+                      <path d="M50 16 C68 28 70 60 50 84 C30 60 32 28 50 16 Z" fill="#2E7D32" opacity="0.3"/>
+                    </svg>
+                  </div>
+                  <div class="p-info">
+                    <div class="p-name">龟背竹 · 观叶盆栽</div>
+                    <div class="p-price-row"><span class="price-symbol">¥</span><span class="price-value">89</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="comp-note"><b>纠正记录：</b>分类页选中文字与角标曾用旧版红 → 选中文字/竖条改 <b>--primary-color</b>，价格改 <b>--primary-dark</b>（P1）。</div>
+        </div>
+      </article>
+
+      <!-- 6. tabBar -->
+      <article class="comp" id="c-tabbar">
+        <div class="comp-head">
+          <span class="no">3.6</span><h3>tabBar（原生）</h3>
+          <span class="spec">未选中 #86868B · 选中 #2E7D32 · 白底 · 角标品牌绿</span>
+        </div>
+        <div class="comp-body">
+          <div class="biz-stage" style="justify-content: center;">
+            <div class="tabbar" role="tablist">
+              <div class="tab-item active" role="tab" aria-selected="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
+                首页
+              </div>
+              <div class="tab-item" role="tab" aria-selected="false">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+                分类
+              </div>
+              <div class="tab-item" role="tab" aria-selected="false">
+                <span class="badge-anchor">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 3h2l2.4 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 7H6"/><circle cx="10" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg>
+                  <span class="badge badge-primary">3</span>
+                </span>
+                购物车
+              </div>
+              <div class="tab-item" role="tab" aria-selected="false">
+                <span class="badge-anchor">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/></svg>
+                  <span class="badge badge-dot"></span>
+                </span>
+                我的
+              </div>
+            </div>
+          </div>
+          <div class="comp-note"><b>配置：</b>color: #86868B / selectedColor: #2E7D32 / backgroundColor: #FFFFFF；图标需提供选中/未选中两套 PNG（81×81 建议）；<b>选中色禁止红/橙，角标为品牌计数用绿</b>；不使用自定义 tabBar 以保留原生手势。</div>
+        </div>
+      </article>
+    </section>
+    <!-- ==================================================
+         四、使用规则
+         ================================================== -->
+    <section id="sec-rules">
+      <div class="sec-head">
+        <div class="sec-index">PART 04</div>
+        <h2>组件使用规则</h2>
+        <p>对齐 spec §3 设计原则、§4.1.3 语义色策略与 §8 脏值纠正清单；任何实现与本区冲突时以 spec.md 为准。</p>
+      </div>
+
+      <!-- 色彩三原则 + 废弃色 -->
+      <article class="comp" id="r-color">
+        <div class="comp-head">
+          <span class="no">4.1</span><h3>色彩使用三原则 · 废弃色警示区</h3>
+          <span class="spec">中性 ≥ 85% · 主色绿 ≤ 10% · 语义色 ≤ 5%</span>
+        </div>
+        <div class="comp-body">
+          <div class="rules-grid">
+            <div class="ui-card rule-card">
+              <h4><span class="rule-ico ok">✓</span>CTA 一律绿</h4>
+              <p>加购、立即购买、去支付、提交订单等一切转化按钮一律 <b>--primary-color 绿 + 白字</b>。同一屏最多一个实心绿大按钮；商品详情底栏允许「加购深绿 + 购买主色绿」双绿组合。</p>
+            </div>
+            <div class="ui-card rule-card">
+              <h4><span class="rule-ico ok">✓</span>价格禁红</h4>
+              <p>促销价/现价 = <b>--primary-dark 深绿</b>（¥ 小号 + 数字大号加粗）；原价 = --text-secondary + 删除线；折扣标签 = 浅绿底主色字。价格场景永不使用红色。</p>
+            </div>
+            <div class="ui-card rule-card">
+              <h4><span class="rule-ico ok">✓</span>红仅危险</h4>
+              <p><b>--error-color #F44336</b> 仅用于表单校验错误、删除/退出登录确认、错误 toast。购物车角标是品牌计数用绿；红点（badge-dot）属警示语义可保留红。</p>
+            </div>
+          </div>
+        </div>
+        <div class="comp-body">
+          <div class="deprecated-zone">
+            <h4>废弃色警示区 —— 以下 5 个旧版脏值已全面废除（spec §8 纠正总原则：全仓库禁止出现）</h4>
+            <div class="deprecated-list">
+              <div class="deprecated-item">
+                <div class="deprecated-swatch"><span>已废弃</span></div>
+                <div class="deprecated-hex">#e93b3d</div>
+                <div class="deprecated-flag">禁止使用 · 旧版促销红</div>
+              </div>
+              <div class="deprecated-item">
+                <div class="deprecated-swatch"><span>已废弃</span></div>
+                <div class="deprecated-hex">#ff6b6b</div>
+                <div class="deprecated-flag">禁止使用 · 旧版价格/按钮红</div>
+              </div>
+              <div class="deprecated-item">
+                <div class="deprecated-swatch"><span>已废弃</span></div>
+                <div class="deprecated-hex">#ff9700</div>
+                <div class="deprecated-flag">禁止使用 · 旧版加购橙</div>
+              </div>
+              <div class="deprecated-item">
+                <div class="deprecated-swatch"><span>已废弃</span></div>
+                <div class="deprecated-hex">#2a9d8f</div>
+                <div class="deprecated-flag">禁止使用 · 旧版青（.btn-secondary）</div>
+              </div>
+              <div class="deprecated-item">
+                <div class="deprecated-swatch"><span>已废弃</span></div>
+                <div class="deprecated-hex">#f4a261</div>
+                <div class="deprecated-flag">禁止使用 · 旧版 accent 橙</div>
+              </div>
+            </div>
+            <p style="font-size: var(--font-size-sm); color: var(--text-secondary); margin-top: var(--spacing-md);">
+              替换方向：<b>红 → 绿</b>（CTA/价格/选中/角标）、<b>橙 → 绿或删除</b>、<b>青 → 中性灰/描边</b>；仅危险确认场景保留红且必须走 <b>--error-color</b> 变量。本区色块刻意以灰色斜纹渲染，不代表废弃色真实观感。
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <!-- Do / Don't -->
+      <article class="comp" id="r-dd">
+        <div class="comp-head">
+          <span class="no">4.2</span><h3>Do / Don't 对照卡</h3>
+          <span class="spec">高频纠错场景 · 逐条对齐 spec §8 纠正清单</span>
+        </div>
+        <div class="comp-body">
+          <div class="dd-row">
+            <div class="dd-card do">
+              <div class="dd-label">✓ DO · 加购按钮</div>
+              <div class="dd-desc">主色绿底白字，统一 .btn-primary / 圆形图标按钮</div>
+              <div class="dd-demo"><button class="btn btn-primary btn-sm">加入购物车</button></div>
+            </div>
+            <div class="dd-card dont">
+              <div class="dd-label">✗ DON'T · 加购按钮</div>
+              <div class="dd-desc">曾用旧版红橙加购（详情页加购橙 / 商品卡加购红）——已废弃</div>
+              <div class="dd-demo" style="display:flex; align-items:center; gap:8px;">
+                <span class="dd-banned-swatch">✕</span>
+                <span style="font-size: var(--font-size-xs); color: var(--text-tertiary); text-decoration: line-through;">红/橙加购 · 已废弃禁止使用</span>
+              </div>
+            </div>
+          </div>
+          <div class="dd-row" style="margin-top: var(--spacing-md);">
+            <div class="dd-card do">
+              <div class="dd-label">✓ DO · 促销价</div>
+              <div class="dd-desc">深绿粗体数字 + ¥ 小号，原价灰删除线</div>
+              <div class="dd-demo"><span class="price-symbol">¥</span><span class="price-value">268</span>　<span class="price-origin">¥298</span></div>
+            </div>
+            <div class="dd-card dont">
+              <div class="dd-label">✗ DON'T · 红色价格</div>
+              <div class="dd-desc">价格/金额使用红色（订单、分类、确认页多处旧版写法）——一律改 --primary-dark</div>
+              <div class="dd-demo"><span style="font-size: var(--font-size-xl); font-weight: 700; color: var(--text-tertiary); text-decoration: line-through;">¥268</span>　<span class="demo-label">红色价格 · 已废弃禁止使用</span></div>
+            </div>
+          </div>
+          <div class="dd-row" style="margin-top: var(--spacing-md);">
+            <div class="dd-card do">
+              <div class="dd-label">✓ DO · 规格选中</div>
+              <div class="dd-desc">主色绿底白字（spec-item.active）</div>
+              <div class="dd-demo"><button class="spec-item active">含陶盆</button>　<button class="spec-item">裸根</button></div>
+            </div>
+            <div class="dd-card dont">
+              <div class="dd-label">✗ DON'T · 红底选中</div>
+              <div class="dd-desc">商品详情规格选中态曾用旧版红底（P0）——一律改绿</div>
+              <div class="dd-demo"><span class="dd-banned-pill">含陶盆（红底 · 已废弃）</span></div>
+            </div>
+          </div>
+          <div class="dd-row" style="margin-top: var(--spacing-md);">
+            <div class="dd-card do">
+              <div class="dd-label">✓ DO · 详情底栏双绿</div>
+              <div class="dd-desc">加购 = 深绿 #1B5E20 白字 · 立即购买 = 主色绿 #2E7D32 白字 · 88rpx 胶囊</div>
+              <div class="dd-demo" style="display:flex; gap:8px;"><button class="btn btn-md safe-btn-secondary">加入购物车</button><button class="btn btn-primary btn-md">立即购买</button></div>
+            </div>
+            <div class="dd-card dont">
+              <div class="dd-label">✗ DON'T · 橙红配对底栏</div>
+              <div class="dd-desc">曾用「加购橙 + 购买红」双暖色配对（P0）——已按双绿方案纠正</div>
+              <div class="dd-demo" style="display:flex; gap:8px;"><span class="dd-banned-pill">加购（橙）</span><span class="dd-banned-pill">购买（红）</span></div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 速查表 -->
+      <article class="comp" id="r-token">
+        <div class="comp-head">
+          <span class="no">4.3</span><h3>间距 · 圆角 · 字号速查表</h3>
+          <span class="spec">魔法间距值一律就近归档 · 过渡统一 cubic-bezier(0.4, 0, 0.2, 1)</span>
+        </div>
+        <div class="comp-body">
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-xl);" class="r-token-cols">
+            <div>
+              <table class="token-table">
+                <thead><tr><th>间距 token</th><th>值</th><th>示例</th><th>典型用法</th></tr></thead>
+                <tbody>
+                  <tr><td class="token-name">--spacing-xs</td><td class="token-val">4px</td><td><span class="sp-bar" style="width:4px;"></span></td><td>图标与文字间距、badge 内边距</td></tr>
+                  <tr><td class="token-name">--spacing-sm</td><td class="token-val">8px</td><td><span class="sp-bar" style="width:8px;"></span></td><td>按钮内图文间距、组内间距</td></tr>
+                  <tr><td class="token-name">--spacing-md</td><td class="token-val">12px</td><td><span class="sp-bar" style="width:12px;"></span></td><td>卡片内边距与卡片间距、列表项</td></tr>
+                  <tr><td class="token-name">--spacing-lg</td><td class="token-val">16px</td><td><span class="sp-bar" style="width:16px;"></span></td><td>页面左右安全留白、区块主间距</td></tr>
+                  <tr><td class="token-name">--spacing-xl</td><td class="token-val">20px</td><td><span class="sp-bar" style="width:20px;"></span></td><td>大区块内边距、页面级上下分隔</td></tr>
+                  <tr><td class="token-name">--spacing-xxl</td><td class="token-val">24px</td><td><span class="sp-bar" style="width:24px;"></span></td><td>页面顶部标题区、大间距分隔</td></tr>
+                </tbody>
+              </table>
+              <table class="token-table" style="margin-top: var(--spacing-lg);">
+                <thead><tr><th>圆角 token</th><th>值</th><th>示例</th><th>典型用法</th></tr></thead>
+                <tbody>
+                  <tr><td class="token-name">--border-radius-sm</td><td class="token-val">8px</td><td><span class="radius-demo" style="border-radius:8px;"></span></td><td>小按钮、tag、输入框、规格项</td></tr>
+                  <tr><td class="token-name">--border-radius-md</td><td class="token-val">12px</td><td><span class="radius-demo" style="border-radius:12px;"></span></td><td>卡片、按钮、搜索栏（24rpx）</td></tr>
+                  <tr><td class="token-name">--border-radius-lg</td><td class="token-val">16px</td><td><span class="radius-demo" style="border-radius:16px;"></span></td><td>大卡片、弹层顶部（32rpx）</td></tr>
+                  <tr><td class="token-name">--border-radius-xl</td><td class="token-val">24px</td><td><span class="radius-demo" style="border-radius:24px;"></span></td><td>特大容器；胶囊用 50% 或半高</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div>
+              <table class="token-table">
+                <thead><tr><th>字号 token</th><th>值</th><th>示例</th><th>典型用法</th></tr></thead>
+                <tbody>
+                  <tr><td class="token-name">--font-size-xs</td><td class="token-val">10px</td><td><span class="fs-demo" style="font-size:10px;">badge 文字 10px</span></td><td>极小标签、badge 文字</td></tr>
+                  <tr><td class="token-name">--font-size-sm</td><td class="token-val">12px</td><td><span class="fs-demo" style="font-size:12px;">辅助说明 12px</span></td><td>辅助说明、原价、时间戳</td></tr>
+                  <tr><td class="token-name">--font-size-md</td><td class="token-val">14px</td><td><span class="fs-demo" style="font-size:14px;">正文默认 14px</span></td><td><b>正文默认</b>（page 基准）</td></tr>
+                  <tr><td class="token-name">--font-size-lg</td><td class="token-val">16px</td><td><span class="fs-demo" style="font-size:16px;">次级标题 16px</span></td><td>次级标题、按钮大字号</td></tr>
+                  <tr><td class="token-name">--font-size-xl / h3</td><td class="token-val">18px</td><td><span class="fs-demo" style="font-size:18px;">模块标题 18px</span></td><td>模块标题（h3 = xl）</td></tr>
+                  <tr><td class="token-name">--font-size-h2</td><td class="token-val">22px</td><td><span class="fs-demo" style="font-size:22px;">二级大标题 22px</span></td><td>二级大标题</td></tr>
+                  <tr><td class="token-name">--font-size-xxl</td><td class="token-val">24px</td><td><span class="fs-demo" style="font-size:24px;">强调数字 24px</span></td><td>强调数字、区块标题</td></tr>
+                  <tr><td class="token-name">--font-size-h1</td><td class="token-val">28px</td><td><span class="fs-demo" style="font-size:28px;">页面大标题 28px</span></td><td>页面大标题</td></tr>
+                </tbody>
+              </table>
+              <p style="font-size: var(--font-size-sm); color: var(--text-secondary); margin-top: var(--spacing-md); line-height: 1.7;">
+                <b>字重：</b>300 light / 400 normal / 500 medium（按钮、tabBar 选中）/ 700 bold（标题、价格数字、主 CTA）。<br>
+                <b>行高：</b>正文 1.5 · 多行描述 1.6 · 标题可收紧至 1.25。<br>
+                <b>阴影：</b>卡片 shadow-sm · 吸顶/悬浮 shadow-md · 弹层 shadow-lg，禁止超过 shadow-md 的卡片阴影。
+              </p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 安全区 -->
+      <article class="comp" id="r-safe">
+        <div class="comp-head">
+          <span class="no">4.4</span><h3>安全区与底部固定栏公式</h3>
+          <span class="spec">constant + env 双写法 · 内容区预留等高 padding-bottom</span>
+        </div>
+        <div class="comp-body">
+          <div style="display:flex; gap: var(--spacing-xl); flex-wrap: wrap; align-items: flex-start;">
+            <div style="flex:1; min-width: 300px;">
+              <div class="formula-block">
+                <span class="c">/* 底部固定栏（结算/操作栏）—— spec §5.11 */</span><br>
+                .bottom-bar {<br>
+                &nbsp;&nbsp;position: fixed; bottom: 0; left: 0; right: 0;<br>
+                &nbsp;&nbsp;z-index: 100; background: #FFFFFF;<br>
+                &nbsp;&nbsp;padding: 16rpx 24rpx;<br>
+                &nbsp;&nbsp;<span class="g">padding-bottom: calc(16rpx + constant(safe-area-inset-bottom));</span><br>
+                &nbsp;&nbsp;<span class="g">padding-bottom: calc(16rpx + env(safe-area-inset-bottom));</span><br>
+                }<br>
+                <span class="c">/* 页面内容区需预留等高，避免遮挡 */</span><br>
+                .content { padding-bottom: <span class="g">120rpx</span> <span class="c">/* + 安全区 */</span>; }<br>
+                <span class="c">/* 主按钮：高度 88rpx，圆角 44rpx（胶囊） */</span>
+              </div>
+              <div class="safe-note">· 涉及原生 tabBar 的页面无需额外处理（原生 tabBar 自带安全区）<br>· 自定义头部叠加在图片上时使用 .safe-area-top<br>· 弹层底部按钮区同样需要安全区 padding（见 2.5 演示）</div>
+            </div>
+            <div>
+              <div class="safe-demo">
+                <div class="safe-content">页面内容区……底部预留 120rpx + 安全区，固定栏不遮挡末行内容。</div>
+                <div class="safe-bar">
+                  <button class="btn btn-md safe-btn-secondary">加入购物车</button>
+                  <button class="btn btn-primary btn-md">立即购买</button>
+                </div>
+                <div class="safe-area-hatch">safe-area-inset-bottom（安全区示意）</div>
+              </div>
+            </div>
+          </div>
+          <div class="comp-note"><b>违规警示：</b>忘记 <b>env(safe-area-inset-bottom)</b> 是高频缺陷；双按钮禁止橙+红配对（商品详情旧版），一律双绿方案。</div>
+        </div>
+      </article>
+    </section>
+
+    <footer class="doc-footer">
+      <span>SutWxApp 组件库规范展示页 · 依据 openspec/specs/design/spec.md v3.1.1 生成</span>
+      <span>单文件自包含 · 无外部依赖 · 图片均为内联 SVG</span>
+    </footer>
+  </main>
+</div>
+
+<!-- ============ 底部弹层（规格选择） ============ -->
+<div class="popup-mask" id="popup-mask" onclick="closePopup()"></div>
+<div class="popup-content" id="popup-content" role="dialog" aria-modal="true" aria-label="选择规格">
+  <div class="popup-head">
+    <h4>选择规格</h4>
+    <button class="popup-close" onclick="closePopup()" aria-label="关闭">✕</button>
+  </div>
+  <div class="popup-body">
+    <div class="spec-group">
+      <div class="spec-group-label">盆器搭配</div>
+      <div class="spec-chips" data-single>
+        <button class="spec-item active" onclick="pickSpec(this)">含手作陶盆</button>
+        <button class="spec-item" onclick="pickSpec(this)">素烧盆</button>
+        <button class="spec-item" onclick="pickSpec(this)">裸根发货</button>
+      </div>
+    </div>
+    <div class="spec-group">
+      <div class="spec-group-label">植株规格</div>
+      <div class="spec-chips" data-single>
+        <button class="spec-item" onclick="pickSpec(this)">高约 35cm</button>
+        <button class="spec-item active" onclick="pickSpec(this)">高约 45cm</button>
+        <button class="spec-item" onclick="pickSpec(this)">高约 60cm</button>
+      </div>
+    </div>
+    <div class="popup-spec-row">
+      <span class="pl">购买数量</span>
+      <div class="stepper" data-min="1" data-max="99">
+        <button type="button" data-step="-1" onclick="stepClick(this)">−</button>
+        <span class="stepper-num">1</span>
+        <button type="button" data-step="1" onclick="stepClick(this)">＋</button>
+      </div>
+    </div>
+  </div>
+  <div class="popup-foot">
+    <button class="btn btn-primary" onclick="closePopup(); showToast('success','已确认规格（演示）')">确定</button>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   交互脚本：toast / 弹层 / 步进器 / 表单校验 / 目录滚动高亮
+   ============================================================ */
+
+/* ---- toast（顶部居中，0.3s 入场，2.2s 自动消失） ---- */
+function showToast(type, msg) {
+  var stage = document.getElementById('toast-stage');
+  var icons = {
+    success: '<svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg>',
+    warning: '<svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"><path d="M12 5v8"/><circle cx="12" cy="18" r="1.6" fill="#fff" stroke="none"/></svg>',
+    error: '<svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>'
+  };
+  var el = document.createElement('div');
+  el.className = 'toast toast-' + type;
+  el.setAttribute('role', 'alert');
+  el.innerHTML = '<span class="t-ico">' + icons[type] + '</span>' + msg;
+  stage.appendChild(el);
+  requestAnimationFrame(function () { el.classList.add('show'); });
+  setTimeout(function () {
+    el.classList.remove('show');
+    setTimeout(function () { el.remove(); }, 350);
+  }, 2200);
+}
+
+/* ---- 底部弹层 ---- */
+var popupMask = document.getElementById('popup-mask');
+var popupContent = document.getElementById('popup-content');
+function openPopup() {
+  popupMask.classList.add('show');
+  popupContent.classList.add('show');
+}
+function closePopup() {
+  popupMask.classList.remove('show');
+  popupContent.classList.remove('show');
+}
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape') closePopup();
+});
+
+/* ---- 规格 chip 单选 ---- */
+function pickSpec(btn) {
+  var group = btn.closest('.spec-chips');
+  var items = group.querySelectorAll('.spec-item');
+  for (var i = 0; i < items.length; i++) items[i].classList.remove('active');
+  btn.classList.add('active');
+}
+
+/* ---- 步进器（min 1 / max 99 钳制 + 轻提示） ---- */
+function stepClick(btn) {
+  var box = btn.closest('.stepper');
+  var numEl = box.querySelector('.stepper-num');
+  var min = parseInt(box.getAttribute('data-min'), 10) || 1;
+  var max = parseInt(box.getAttribute('data-max'), 10) || 99;
+  var delta = parseInt(btn.getAttribute('data-step'), 10) || 0;
+  var next = parseInt(numEl.textContent, 10) + delta;
+  if (next < min) {
+    showToast('warning', '数量最少为 ' + min);
+    return;
+  }
+  if (next > max) {
+    showToast('warning', '数量最多为 ' + max);
+    return;
+  }
+  numEl.textContent = next;
+  syncStepperButtons(box, min, max);
+}
+function syncStepperButtons(box, min, max) {
+  var num = parseInt(box.querySelector('.stepper-num').textContent, 10);
+  var minus = box.querySelector('[data-step="-1"]');
+  var plus = box.querySelector('[data-step="1"]');
+  if (minus) minus.disabled = num <= min;
+  if (plus) plus.disabled = num >= max;
+}
+/* 初始化全部步进器的禁用态 */
+document.querySelectorAll('.stepper').forEach(function (box) {
+  syncStepperButtons(box, parseInt(box.getAttribute('data-min'), 10) || 1, parseInt(box.getAttribute('data-max'), 10) || 99);
+});
+
+/* ---- 地址表单校验演示 ---- */
+function validateAddrForm() {
+  var form = document.getElementById('addr-form');
+  var rules = {
+    name: function (v) { return v.trim().length > 0; },
+    phone: function (v) { return /^1\d{10}$/.test(v.trim()); },
+    region: function (v) { return v.trim().length > 0; },
+    detail: function (v) { return v.trim().length > 0; }
+  };
+  var allOk = true;
+  form.querySelectorAll('.form-item').forEach(function (item) {
+    var key = item.getAttribute('data-field');
+    var input = item.querySelector('input');
+    var ok = rules[key](input.value);
+    item.classList.toggle('is-invalid', !ok);
+    if (!ok) allOk = false;
+  });
+  if (allOk) {
+    showToast('success', '地址保存成功（演示）');
+  } else {
+    showToast('error', '请检查标红的表单项');
+  }
+}
+/* 输入时清除错误态 */
+document.querySelectorAll('#addr-form input').forEach(function (input) {
+  input.addEventListener('input', function () {
+    input.closest('.form-item').classList.remove('is-invalid');
+  });
+});
+
+/* ---- 目录滚动高亮（scrollspy） ---- */
+(function () {
+  var links = document.querySelectorAll('#toc-nav a');
+  var map = {};
+  links.forEach(function (a) {
+    var id = a.getAttribute('href').slice(1);
+    map[id] = a;
+  });
+  var targets = Object.keys(map).map(function (id) { return document.getElementById(id); }).filter(Boolean);
+  function onScroll() {
+    var pos = window.scrollY + 120;
+    var currentId = targets[0] ? targets[0].id : null;
+    targets.forEach(function (t) {
+      if (t.offsetTop <= pos) currentId = t.id;
+    });
+    links.forEach(function (a) { a.classList.remove('active'); });
+    if (currentId && map[currentId]) {
+      map[currentId].classList.add('active');
+      /* 若为子项，同步高亮其所属分区块 */
+    }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+</script>
+</body>
+</html>

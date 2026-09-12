@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<!--
+  文件名: prototype-extra.html
+  项目: 苏铁微信小程序 (SutWxApp) 高保真交互原型 · 扩展页
+  设计系统: SutWxApp Design Spec v3.1.1 (openspec/specs/design/spec.md)
+  说明: 与 prototype.html 同壳（375×812 手机壳 / 状态栏 / 胶囊 / 导航栏 / 同 :root token）。
+        单文件内含 5 个扩展页：订单列表(#orders) / 订单详情(#order-detail) /
+        地址管理(#address) / 设置(#settings) / 帮助中心(#help)，hash 路由 + 返回主原型。
+        图片一律内联 SVG / 品牌渐变 token 占位，无外部依赖。
+        语义色策略: CTA/选中态/价格 = 绿系；红仅限错误/危险确认；订单状态按 spec §5.7 色表。
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>苏铁 · 扩展页原型（订单 / 地址 / 设置 / 帮助）</title>
+<style>
+/* ============================================================
+   1. 设计令牌（权威来源: spec.md §4.1.2 / §4.1.4，与主原型一致）
+   ============================================================ */
+:root {
+  /* 品牌绿 */
+  --primary-color: #2E7D32;
+  --primary-light: #F1F8E9;
+  --primary-dark: #1B5E20;
+
+  /* 文字三级 */
+  --text-primary: #1D1D1F;
+  --text-secondary: #86868B;
+  --text-tertiary: #AEAEB2;
+  --text-inverse: #FFFFFF;
+
+  /* 背景三级 / 边框 */
+  --background-primary: #FFFFFF;
+  --background-secondary: #F5F5F7;
+  --background-tertiary: #FAFAFA;
+  --border-color: #E8E8ED;
+
+  /* 受控语义色 */
+  --error-color: #F44336;
+  --error-light: #FFEBEE;
+  --success-color: #4CAF50;
+  --success-light: #E8F5E9;
+  --warning-color: #FF9800;
+  --warning-light: #FFF3E0;
+  --info-color: #2196F3;
+  --info-light: #E3F2FD;
+
+  /* 字号 */
+  --font-size-xs: 10px;
+  --font-size-sm: 12px;
+  --font-size-md: 14px;
+  --font-size-lg: 16px;
+  --font-size-xl: 18px;
+  --font-size-xxl: 24px;
+
+  /* 间距 */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 20px;
+  --spacing-xxl: 24px;
+
+  /* 圆角 */
+  --border-radius-sm: 8px;
+  --border-radius-md: 12px;
+  --border-radius-lg: 16px;
+  --border-radius-xl: 24px;
+
+  /* 阴影 */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.1);
+
+  /* 过渡（统一曲线） */
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* 品牌衍生渐变 token（spec v3.1.1） */
+  --grad-leaf-1: #F1F8E9, #C8E6C9;
+  --grad-leaf-2: #E8F5E9, #DCEDC8;
+  --grad-leaf-3: #F1F8E9, #A5D6A7;
+  --grad-leaf-4: #E8F5E9, #C5E1A5;
+  --grad-leaf-5: #F1F8E9, #D7EFD3;
+  --grad-leaf-6: #E8F5E9, #B9DFC0;
+  --grad-user-header: #2E7D32, #1B5E20;
+}
+
+/* ============================================================
+   2. 舞台与手机壳（与主原型同壳）
+   ============================================================ */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  font-size: var(--font-size-md);
+  line-height: 1.5;
+  color: var(--text-primary);
+  background: linear-gradient(160deg, #EEF3EC 0%, #F5F5F7 45%, #E7EDE6 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: var(--spacing-xl);
+}
+.stage-hint {
+  position: fixed; left: 32px; top: 28px;
+  color: var(--text-secondary); font-size: var(--font-size-sm);
+  letter-spacing: 0.5px; user-select: none;
+}
+.stage-hint strong { display: block; font-size: var(--font-size-lg); color: var(--text-primary); margin-bottom: 4px; font-weight: 700; }
+.wf-link { color: var(--text-tertiary); font-size: var(--font-size-xs); text-decoration: none; border-bottom: 1px dashed var(--border-color); transition: color var(--transition-fast); }
+.wf-link:hover, .wf-link:active { color: var(--primary-color); }
+
+/* —— 无障碍降级：系统开启"减弱动态效果"时关闭装饰性动画 —— */
+@media (prefers-reduced-motion: reduce) {
+  .page.active { animation: none; }
+  .o-tab .tab-line { animation: none; }
+  .switch::after { transition: none; }
+}
+
+.phone {
+  width: 375px; height: 812px;
+  background: #1D1D1F; border-radius: 54px; padding: 10px;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.28), 0 4px 12px rgba(0,0,0,0.14);
+  flex-shrink: 0;
+}
+.phone-inner {
+  width: 100%; height: 100%;
+  background: var(--background-secondary);
+  border-radius: 44px; overflow: hidden; position: relative;
+  display: flex; flex-direction: column;
+}
+.island {
+  position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+  width: 110px; height: 30px; background: #1D1D1F; border-radius: 20px; z-index: 60;
+}
+
+/* ============================================================
+   3. 状态栏 / 导航栏
+   ============================================================ */
+.statusbar {
+  height: 50px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 26px 0 30px;
+  font-size: 15px; font-weight: 600; color: var(--text-primary);
+  position: relative; z-index: 55;
+  background: var(--background-primary);
+}
+.statusbar .sb-icons { display: flex; align-items: center; gap: 6px; }
+.statusbar svg { display: block; }
+.navbar {
+  height: 44px; flex-shrink: 0;
+  background: var(--background-primary);
+  display: flex; align-items: center; justify-content: center;
+  position: relative; z-index: 55;
+  border-bottom: 0.5px solid var(--border-color);
+}
+.navbar .nav-title { font-size: var(--font-size-lg); font-weight: 600; color: var(--text-primary); }
+.nav-back {
+  position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+  height: 32px; display: flex; align-items: center; gap: 2px; padding: 0 8px;
+  cursor: pointer; color: var(--text-primary);
+  border-radius: var(--border-radius-md);
+  transition: background var(--transition-fast);
+  font-size: var(--font-size-sm);
+}
+.nav-back:active { background: var(--background-tertiary); }
+.capsule {
+  position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+  width: 87px; height: 32px;
+  border: 0.5px solid rgba(0,0,0,0.1);
+  background: rgba(255,255,255,0.6);
+  border-radius: 16px;
+  display: flex; align-items: center; justify-content: space-evenly;
+  z-index: 56;
+}
+.capsule .cap-divider { width: 0.5px; height: 18px; background: rgba(0,0,0,0.12); }
+.capsule .cap-dot { width: 16px; height: 16px; border-radius: 50%; border: 1.6px solid var(--text-primary); position: relative; }
+.capsule .cap-dot::after { content:''; position:absolute; inset: 4px; border-radius: 50%; background: var(--text-primary); }
+.capsule .cap-dot.more::after { box-shadow: 4px 0 0 var(--text-primary), -4px 0 0 var(--text-primary); width: 3px; height: 3px; inset: 6px 8px; }
+
+/* ============================================================
+   4. 页面容器
+   ============================================================ */
+.body-area { flex: 1; position: relative; overflow: hidden; }
+.page {
+  position: absolute; inset: 0;
+  display: none; flex-direction: column;
+  background: var(--background-secondary);
+}
+.page.active { display: flex; animation: pageIn var(--transition-normal); }
+@keyframes pageIn { from { opacity: 0.35; transform: translateX(18px); } to { opacity: 1; transform: none; } }
+.page-scroll { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+.page-scroll::-webkit-scrollbar { width: 0; height: 0; }
+.safe-bottom { padding-bottom: calc(24px + env(safe-area-inset-bottom)); }
+
+/* ============================================================
+   5. 通用组件
+   ============================================================ */
+.card {
+  background: var(--background-primary);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-sm);
+}
+.card-hover { transition: transform var(--transition-fast), box-shadow var(--transition-fast); cursor: pointer; }
+.card-hover:active { transform: scale(0.98); box-shadow: var(--shadow-md); }
+.price-sym { font-size: var(--font-size-sm); font-weight: 700; color: var(--primary-dark); }
+.price-num { font-size: var(--font-size-xl); font-weight: 700; color: var(--primary-dark); }
+.price-origin { font-size: var(--font-size-sm); color: var(--text-secondary); text-decoration: line-through; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  border: none; cursor: pointer; font-family: inherit;
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-md); font-weight: 500;
+  transition: opacity var(--transition-fast), transform var(--transition-fast), background var(--transition-fast);
+}
+.btn:active { transform: scale(0.98); opacity: 0.8; }
+.btn-primary { background: var(--primary-color); color: var(--text-inverse); }
+.btn-outline { background: transparent; border: 1px solid var(--primary-color); color: var(--primary-color); }
+.btn-outline:active { background: var(--primary-light); opacity: 1; }
+.btn-danger { background: var(--error-color); color: var(--text-inverse); }
+.btn-sm { height: 30px; padding: 0 14px; font-size: var(--font-size-sm); border-radius: 999px; }
+.section-title { font-size: var(--font-size-xl); font-weight: 700; color: var(--text-primary); }
+.demo-note {
+  font-size: var(--font-size-xs); color: var(--text-secondary);
+  text-align: center; padding: var(--spacing-sm) var(--spacing-lg) var(--spacing-lg);
+  opacity: 0.75; user-select: none;
+}
+
+/* —— Toast / 遮罩 / 弹层 / 弹窗 —— */
+.toast {
+  position: absolute; left: 50%; bottom: 120px; transform: translateX(-50%) translateY(10px);
+  background: rgba(29, 29, 31, 0.9); color: var(--text-inverse);
+  font-size: var(--font-size-sm); padding: 10px 18px;
+  border-radius: var(--border-radius-md);
+  z-index: 300; pointer-events: none;
+  opacity: 0; transition: opacity var(--transition-normal), transform var(--transition-normal);
+  max-width: 260px; text-align: center;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.mask {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 200; opacity: 0; pointer-events: none;
+  transition: opacity var(--transition-normal); /* mask fade 0.3s */
+}
+.mask.show { opacity: 1; pointer-events: auto; }
+.popup {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  background: var(--background-primary);
+  border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+  z-index: 210;
+  transform: translateY(100%);
+  transition: transform var(--transition-normal);
+  max-height: 82%;
+  display: flex; flex-direction: column;
+  box-shadow: var(--shadow-lg);
+}
+.popup.show { transform: translateY(0); }
+.popup-title { font-size: var(--font-size-lg); font-weight: 700; text-align: center; padding: var(--spacing-lg) 0 var(--spacing-sm); }
+.popup-close {
+  position: absolute; right: var(--spacing-lg); top: var(--spacing-lg);
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--background-secondary);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: var(--text-secondary);
+}
+.popup-close:active { background: var(--border-color); }
+.modal-wrap {
+  position: absolute; inset: 0; z-index: 250;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity var(--transition-normal);
+}
+.modal-wrap.show { opacity: 1; pointer-events: auto; }
+.modal-wrap .modal-mask { position: absolute; inset: 0; background: rgba(0,0,0,0.5); }
+.modal {
+  position: relative; width: 280px;
+  background: var(--background-primary);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-xl);
+  text-align: center;
+  transform: scale(0.92); transition: transform var(--transition-normal);
+  box-shadow: var(--shadow-lg);
+}
+.modal-wrap.show .modal { transform: scale(1); }
+.modal .modal-title { font-size: var(--font-size-lg); font-weight: 700; margin-bottom: var(--spacing-sm); }
+.modal .modal-desc { font-size: var(--font-size-sm); color: var(--text-secondary); margin-bottom: var(--spacing-xl); }
+.modal .modal-btns { display: flex; gap: var(--spacing-md); }
+.modal .modal-btns .btn { flex: 1; height: 40px; }
+
+/* —— 表单 —— */
+.form-item { padding: 0 var(--spacing-lg) var(--spacing-md); }
+.form-label { font-size: var(--font-size-sm); color: var(--text-secondary); margin-bottom: 6px; }
+.form-input, .form-textarea {
+  width: 100%; border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  padding: 10px var(--spacing-md);
+  font-size: var(--font-size-md); font-family: inherit; color: var(--text-primary);
+  background: var(--background-primary); outline: none;
+  transition: border-color var(--transition-fast);
+}
+.form-input::placeholder, .form-textarea::placeholder { color: var(--text-tertiary); }
+.form-input:focus, .form-textarea:focus { border-color: var(--primary-color); }
+.form-textarea { height: 84px; resize: none; line-height: 1.6; }
+.picker-input { cursor: pointer; display: flex; align-items: center; justify-content: space-between; }
+.picker-input .ph-hold { color: var(--text-tertiary); }
+
+/* —— 开关（绿） —— */
+.switch {
+  width: 44px; height: 26px; border-radius: 13px;
+  background: var(--border-color); position: relative;
+  transition: background var(--transition-fast); cursor: pointer; flex-shrink: 0;
+}
+.switch::after {
+  content: ''; position: absolute; top: 2px; left: 2px;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: #fff; box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast);
+}
+.switch.on { background: var(--primary-color); }
+.switch.on::after { transform: translateX(18px); }
+
+/* ============================================================
+   6. 订单列表（#orders）
+   ============================================================ */
+.o-tabs {
+  flex-shrink: 0; display: flex;
+  background: var(--background-primary);
+  border-bottom: 0.5px solid var(--border-color);
+  position: sticky; top: 0; z-index: 30;
+}
+.o-tab {
+  flex: 1; text-align: center; padding: 11px 0 9px;
+  font-size: var(--font-size-md); color: var(--text-secondary);
+  cursor: pointer; position: relative;
+  transition: color var(--transition-fast);
+}
+.o-tab.active { color: var(--primary-color); font-weight: 600; }
+.o-tab .tab-line {
+  position: absolute; left: 50%; bottom: 0; transform: translateX(-50%);
+  width: 20px; height: 2.5px; border-radius: 2px;
+  background: var(--primary-color);
+  animation: lineIn var(--transition-fast);
+}
+@keyframes lineIn { from { width: 0; } to { width: 20px; } }
+
+.order-list { padding: var(--spacing-md); display: flex; flex-direction: column; gap: var(--spacing-md); }
+.order-card { overflow: hidden; cursor: pointer; }
+.oc-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-bottom: 0.5px solid var(--border-color);
+}
+.oc-no { font-size: var(--font-size-sm); color: var(--text-secondary); }
+.oc-status { font-size: var(--font-size-sm); font-weight: 600; padding: 1px 8px; border-radius: var(--border-radius-sm); }
+/* 订单状态语义色（spec §5.7 色表） */
+.st-warn    { color: var(--warning-color); background: var(--warning-light); }
+.st-info    { color: var(--info-color);    background: var(--info-light); }
+.st-primary { color: var(--primary-color); background: var(--primary-light); }
+.st-success { color: var(--success-color); background: var(--success-light); }
+.st-muted   { color: var(--text-tertiary); background: var(--background-tertiary); }
+.oc-thumbs { display: flex; gap: var(--spacing-sm); padding: var(--spacing-md) var(--spacing-lg) var(--spacing-xs); overflow-x: auto; }
+.oc-thumbs::-webkit-scrollbar { display: none; }
+.oc-thumb { position: relative; flex-shrink: 0; width: 56px; height: 56px; }
+.oc-thumb img { width: 100%; height: 100%; border-radius: var(--border-radius-sm); object-fit: cover; display: block; background: var(--background-secondary); }
+.oc-thumb .qty {
+  position: absolute; right: -4px; bottom: -4px;
+  background: var(--background-secondary); color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  font-size: var(--font-size-xs); line-height: 1;
+  padding: 2px 5px; border-radius: 8px;
+}
+.oc-foot {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: var(--spacing-sm) var(--spacing-lg) var(--spacing-md);
+}
+.oc-total { font-size: var(--font-size-sm); color: var(--text-secondary); }
+.oc-actions { display: flex; gap: var(--spacing-sm); }
+
+/* ============================================================
+   7. 订单详情（#order-detail）
+   ============================================================ */
+.od-hero {
+  background: linear-gradient(135deg, var(--grad-user-header));
+  color: var(--text-inverse);
+  padding: var(--spacing-lg) var(--spacing-lg) var(--spacing-xl);
+}
+.od-status { font-size: var(--font-size-xl); font-weight: 700; }
+.od-desc { font-size: var(--font-size-sm); opacity: 0.85; margin-top: 4px; }
+/* 时间轴进度（已激活节点绿色） */
+.timeline { display: flex; margin-top: var(--spacing-lg); }
+.tl-node { flex: 1; text-align: center; position: relative; }
+.tl-node .dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: rgba(255,255,255,0.35);
+  margin: 4px auto 6px; position: relative; z-index: 2;
+  transition: background var(--transition-normal);
+}
+.tl-node::before {
+  content: ''; position: absolute; top: 8px; left: -50%; width: 100%; height: 2px;
+  background: rgba(255,255,255,0.35);
+}
+.tl-node:first-child::before { display: none; }
+.tl-node.on .dot { background: #fff; box-shadow: 0 0 0 3px rgba(255,255,255,0.25); }
+.tl-node.on::before { background: rgba(255,255,255,0.75); }
+.tl-node .tl-txt { font-size: var(--font-size-xs); opacity: 0.75; }
+.tl-node.on .tl-txt { opacity: 1; font-weight: 600; }
+
+.od-address { margin: var(--spacing-md); padding: var(--spacing-lg); position: relative; overflow: hidden; }
+.addr-stripe {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 3px;
+  background: repeating-linear-gradient(105deg, var(--primary-color) 0 14px, var(--primary-light) 14px 20px, #A5D6A7 20px 34px, var(--primary-light) 34px 40px);
+}
+.oa-row { display: flex; align-items: baseline; gap: var(--spacing-sm); }
+.oa-name { font-size: var(--font-size-lg); font-weight: 700; }
+.oa-phone { font-size: var(--font-size-sm); color: var(--text-secondary); }
+.oa-detail { font-size: var(--font-size-sm); color: var(--text-secondary); margin-top: 4px; line-height: 1.5; }
+
+.od-items { margin: 0 var(--spacing-md) var(--spacing-md); padding: var(--spacing-xs) var(--spacing-md); }
+.od-item { display: flex; gap: var(--spacing-md); padding: var(--spacing-md) 0; align-items: center; }
+.od-item + .od-item { border-top: 0.5px solid var(--border-color); }
+.od-item .oi-img { width: 64px; height: 64px; border-radius: var(--border-radius-sm); object-fit: cover; flex-shrink: 0; background: var(--background-secondary); }
+.od-item .oi-info { flex: 1; min-width: 0; }
+.od-item .oi-name { font-size: var(--font-size-md); font-weight: 500; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.od-item .oi-spec { font-size: var(--font-size-xs); color: var(--text-tertiary); margin-top: 2px; }
+.od-item .oi-bottom { display: flex; justify-content: space-between; align-items: baseline; margin-top: 4px; }
+.od-item .oi-qty { font-size: var(--font-size-sm); color: var(--text-secondary); }
+
+.od-summary { margin: 0 var(--spacing-md) var(--spacing-md); padding: var(--spacing-md) var(--spacing-lg); }
+.price-line { display: flex; justify-content: space-between; padding: 6px 0; font-size: var(--font-size-sm); }
+.price-line .pl-label { color: var(--text-secondary); }
+.price-line .pl-value { font-weight: 500; }
+.price-line .pl-value.discount { color: var(--primary-dark); font-weight: 600; }
+.price-line.total { border-top: 0.5px solid var(--border-color); margin-top: 4px; padding-top: 10px; align-items: baseline; }
+.price-line.total .pl-value { font-size: var(--font-size-xxl); font-weight: 700; color: var(--primary-dark); }
+
+.od-info { margin: 0 var(--spacing-md) var(--spacing-md); padding: var(--spacing-sm) var(--spacing-lg); }
+.info-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 9px 0; font-size: var(--font-size-sm);
+  border-bottom: 0.5px solid var(--border-color);
+}
+.info-row:last-child { border-bottom: none; }
+.info-row .ir-label { color: var(--text-secondary); }
+.info-row .ir-value { color: var(--text-primary); display: flex; align-items: center; gap: 6px; }
+.copy-btn {
+  font-size: var(--font-size-xs); color: var(--primary-color);
+  background: var(--primary-light); border-radius: var(--border-radius-sm);
+  padding: 2px 8px; cursor: pointer;
+  transition: background var(--transition-fast);
+}
+.copy-btn:active { background: #E2EFDA; }
+
+.od-bottom {
+  flex-shrink: 0;
+  background: var(--background-primary);
+  border-top: 0.5px solid var(--border-color);
+  padding: var(--spacing-md) var(--spacing-lg) calc(var(--spacing-lg) + env(safe-area-inset-bottom));
+  display: flex; align-items: center; gap: var(--spacing-md);
+  justify-content: flex-end;
+  box-shadow: 0 -4px 12px rgba(0,0,0,0.04);
+  z-index: 40;
+}
+
+/* ============================================================
+   8. 地址管理（#address）
+   ============================================================ */
+.addr-list { padding: var(--spacing-md); display: flex; flex-direction: column; gap: var(--spacing-md); }
+.addr-card { padding: var(--spacing-lg); position: relative; }
+.addr-card.default { border: 1.5px solid var(--primary-color); }
+.ac-top { display: flex; align-items: center; gap: var(--spacing-sm); flex-wrap: wrap; }
+.ac-name { font-size: var(--font-size-lg); font-weight: 700; }
+.ac-phone { font-size: var(--font-size-sm); color: var(--text-secondary); }
+.ac-tag {
+  font-size: var(--font-size-xs); color: var(--primary-color);
+  background: var(--primary-light);
+  padding: 1px 8px; border-radius: var(--border-radius-sm);
+}
+.ac-def {
+  font-size: var(--font-size-xs); color: var(--text-inverse);
+  background: var(--primary-color);
+  padding: 1px 8px; border-radius: var(--border-radius-sm);
+}
+.ac-detail { font-size: var(--font-size-sm); color: var(--text-secondary); margin-top: 6px; line-height: 1.55; }
+.ac-actions {
+  display: flex; justify-content: flex-end; gap: var(--spacing-lg);
+  margin-top: var(--spacing-md); padding-top: var(--spacing-md);
+  border-top: 0.5px solid var(--border-color);
+}
+.ac-act { display: flex; align-items: center; gap: 4px; font-size: var(--font-size-sm); color: var(--text-secondary); cursor: pointer; transition: color var(--transition-fast); }
+.ac-act:active { color: var(--primary-color); }
+.ac-act.del:active { color: var(--error-color); }
+.ac-set-def { margin-left: auto; display: flex; align-items: center; gap: 6px; font-size: var(--font-size-xs); color: var(--text-secondary); cursor: pointer; }
+.add-addr-bar {
+  flex-shrink: 0; padding: var(--spacing-md) var(--spacing-lg) calc(var(--spacing-lg) + env(safe-area-inset-bottom));
+  background: var(--background-primary); border-top: 0.5px solid var(--border-color);
+}
+.add-addr-bar .btn { width: 100%; height: 44px; border-radius: 999px; font-size: var(--font-size-lg); font-weight: 600; }
+.tag-chips { display: flex; gap: var(--spacing-sm); }
+.tag-chip {
+  padding: 5px 14px; border-radius: var(--border-radius-sm);
+  background: var(--background-tertiary);
+  font-size: var(--font-size-sm); color: var(--text-primary); cursor: pointer;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+.tag-chip.active { background: var(--primary-color); color: var(--text-inverse); font-weight: 500; }
+.switch-row { display: flex; align-items: center; justify-content: space-between; padding: var(--spacing-sm) 0 var(--spacing-xs); }
+.switch-row .form-label { margin-bottom: 0; }
+.region-row {
+  padding: 11px var(--spacing-md); border-bottom: 0.5px solid var(--border-color);
+  font-size: var(--font-size-md); cursor: pointer; transition: background var(--transition-fast);
+}
+.region-row:active, .region-row:hover { background: var(--primary-light); }
+.region-row .rr-name { font-weight: 500; }
+.region-row .rr-hint { font-size: var(--font-size-xs); color: var(--text-tertiary); margin-left: 8px; }
+
+/* ============================================================
+   9. 设置（#settings）
+   ============================================================ */
+.set-group { margin: var(--spacing-md) var(--spacing-md) 0; overflow: hidden; }
+.set-group-title { padding: var(--spacing-md) var(--spacing-lg) 4px; font-size: var(--font-size-xs); color: var(--text-tertiary); }
+.set-item {
+  display: flex; align-items: center; gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+.set-item + .set-item { border-top: 0.5px solid var(--border-color); }
+.set-item:active { background: var(--background-tertiary); }
+.set-ico {
+  width: 32px; height: 32px; border-radius: var(--border-radius-sm);
+  background: var(--primary-light); color: var(--primary-color);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.set-name { font-size: var(--font-size-md); font-weight: 500; }
+.set-arrow { margin-left: auto; color: var(--text-tertiary); display: flex; }
+.set-extra { margin-left: auto; font-size: var(--font-size-sm); color: var(--text-tertiary); }
+.set-item.static { cursor: default; }
+.set-item.static:active { background: transparent; }
+.seg {
+  margin-left: auto; display: flex;
+  background: var(--background-secondary); border-radius: var(--border-radius-sm); padding: 2px;
+}
+.seg span {
+  padding: 4px 14px; font-size: var(--font-size-sm); border-radius: 6px;
+  color: var(--text-secondary); cursor: pointer;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+.seg span.on { background: var(--background-primary); color: var(--primary-color); font-weight: 600; box-shadow: var(--shadow-sm); }
+.logout-btn {
+  margin: var(--spacing-lg) var(--spacing-md) var(--spacing-sm);
+  background: var(--background-primary);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-lg);
+  text-align: center;
+  color: var(--error-color); /* 危险语义：唯一允许红色处 */
+  font-size: var(--font-size-md); font-weight: 500;
+  cursor: pointer;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+.logout-btn:active { background: var(--error-light); transform: scale(0.98); }
+.version-tip { text-align: center; font-size: var(--font-size-xs); color: var(--text-tertiary); padding: var(--spacing-md) 0 var(--spacing-xxl); }
+
+/* ============================================================
+   10. 帮助中心（#help）
+   ============================================================ */
+.help-search { padding: var(--spacing-md) var(--spacing-lg) 0; }
+.search-bar {
+  display: flex; align-items: center; gap: var(--spacing-sm);
+  background: var(--background-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  padding: 9px var(--spacing-lg);
+  color: var(--text-tertiary);
+  transition: border-color var(--transition-fast);
+}
+.search-bar:focus-within { border-color: var(--primary-color); }
+.search-bar input {
+  flex: 1; border: none; outline: none; background: transparent;
+  font-size: var(--font-size-md); font-family: inherit; color: var(--text-primary);
+}
+.search-bar input::placeholder { color: var(--text-tertiary); }
+.faq-list { padding: var(--spacing-sm) var(--spacing-md) 0; display: flex; flex-direction: column; gap: var(--spacing-sm); }
+.faq-item { overflow: hidden; }
+.faq-q {
+  display: flex; align-items: center; gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+  cursor: pointer; font-size: var(--font-size-md); font-weight: 500;
+  transition: background var(--transition-fast);
+}
+.faq-q:active { background: var(--background-tertiary); }
+.faq-q .fq-ico {
+  width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
+  background: var(--primary-light); color: var(--primary-color);
+  font-size: 12px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+.faq-q .fq-arrow { margin-left: auto; color: var(--text-tertiary); display: flex; transition: transform var(--transition-normal); flex-shrink: 0; }
+.faq-item.open .fq-arrow { transform: rotate(90deg); }
+.faq-a {
+  max-height: 0; overflow: hidden;
+  transition: max-height var(--transition-normal), padding var(--transition-normal);
+  padding: 0 var(--spacing-lg);
+  font-size: var(--font-size-sm); color: var(--text-secondary); line-height: 1.7;
+}
+.faq-item.open .faq-a { max-height: 200px; padding-bottom: var(--spacing-lg); }
+.help-contact { margin: var(--spacing-md) var(--spacing-md) 0; padding: var(--spacing-lg); display: flex; align-items: center; gap: var(--spacing-md); }
+.help-contact .hc-ico {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--primary-light); color: var(--primary-color);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.help-contact .hc-name { font-size: var(--font-size-md); font-weight: 600; }
+.help-contact .hc-sub { font-size: var(--font-size-xs); color: var(--text-tertiary); margin-top: 2px; }
+.help-contact .btn { margin-left: auto; }
+.feedback-bar {
+  margin: var(--spacing-md) var(--spacing-md) 0;
+  padding: var(--spacing-lg);
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer; transition: background var(--transition-fast);
+}
+.feedback-bar:active { background: var(--background-tertiary); }
+.feedback-bar .fb-name { font-size: var(--font-size-md); font-weight: 500; }
+.feedback-bar .fb-sub { font-size: var(--font-size-xs); color: var(--text-tertiary); margin-top: 2px; }
+/* 反馈弹层问题类型 chips */
+.type-chips { display: flex; flex-wrap: wrap; gap: var(--spacing-sm); padding: 0 var(--spacing-lg) var(--spacing-md); }
+.type-chip {
+  padding: 6px 14px; border-radius: var(--border-radius-sm);
+  background: var(--background-tertiary);
+  font-size: var(--font-size-sm); color: var(--text-primary); cursor: pointer;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+.type-chip.active { background: var(--primary-color); color: var(--text-inverse); font-weight: 500; }
+</style>
+</head>
+<body>
+
+<div class="stage-hint">
+  <strong>苏铁 SutWxApp · 扩展页原型</strong>
+  订单 / 地址 / 设置 / 帮助 · 设计规范 v3.1.1<br>
+  <a class="wf-link" href="prototype.html">← 返回主原型</a>&nbsp;&nbsp;<a class="wf-link" href="wireframes.html">组件库 →</a>
+</div>
+
+<div class="phone">
+  <div class="phone-inner">
+    <div class="island"></div>
+
+    <!-- 状态栏 -->
+    <div class="statusbar">
+      <span>9:41</span>
+      <div class="sb-icons">
+        <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+        <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><path d="M8 9.6a2 2 0 0 1 2 1.9L8 12l-2-.5a2 2 0 0 1 2-1.9zM8 5.8c1.8 0 3.5.7 4.7 1.9l-1.4 1.4A4.7 4.7 0 0 0 8 7.8c-1.3 0-2.5.5-3.3 1.3L3.3 7.7A6.6 6.6 0 0 1 8 5.8zM8 2c2.9 0 5.5 1.1 7.4 3l-1.4 1.4A8.5 8.5 0 0 0 8 4C5.6 4 3.4 5 1.9 6.5L.5 5A10.4 10.4 0 0 1 8 2z"/></svg>
+        <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0.5" y="0.5" width="21" height="11" rx="3" fill="none" stroke="currentColor" opacity="0.4"/><rect x="2" y="2" width="15" height="8" rx="1.5" fill="currentColor"/><path d="M23 4v4a2.2 2.2 0 0 0 0-4z" fill="currentColor" opacity="0.4"/></svg>
+      </div>
+    </div>
+
+    <!-- 导航栏 -->
+    <div class="navbar">
+      <div class="nav-back" onclick="goBack()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        <span id="navBackText">返回</span>
+      </div>
+      <span class="nav-title" id="navTitle">订单列表</span>
+      <div class="capsule">
+        <div class="cap-dot more"></div>
+        <div class="cap-divider"></div>
+        <div class="cap-dot"></div>
+      </div>
+    </div>
+
+    <!-- ============ 页面区 ============ -->
+    <div class="body-area">
+
+      <!-- ========== 页面 1: 订单列表 #orders ========== -->
+      <div class="page" id="page-orders">
+        <div class="o-tabs" id="oTabs"></div>
+        <div class="page-scroll">
+          <div id="orderListWrap"></div>
+          <div class="demo-note">* 演示数据，正式版由后端接口提供</div>
+        </div>
+      </div>
+
+      <!-- ========== 页面 2: 订单详情 #order-detail ========== -->
+      <div class="page" id="page-order-detail">
+        <div class="page-scroll" id="orderDetailBody"></div>
+        <div class="od-bottom" id="orderDetailBar"></div>
+      </div>
+
+      <!-- ========== 页面 3: 地址管理 #address ========== -->
+      <div class="page" id="page-address">
+        <div class="page-scroll">
+          <div class="addr-list" id="addrList"></div>
+          <div class="demo-note">* 演示数据，正式版由后端接口提供</div>
+        </div>
+        <div class="add-addr-bar">
+          <button class="btn btn-primary" onclick="openAddrPopup()">＋ 新增地址</button>
+        </div>
+      </div>
+
+      <!-- ========== 页面 4: 设置 #settings ========== -->
+      <div class="page" id="page-settings">
+        <div class="page-scroll">
+          <!-- 账号与安全 -->
+          <div class="set-group card">
+            <div class="set-group-title">账号与安全</div>
+            <div class="set-item" onclick="toast('修改密码演示')">
+              <div class="set-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15" r="1.2" fill="currentColor"/></svg></div>
+              <span class="set-name">修改密码</span>
+              <div class="set-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></div>
+            </div>
+            <div class="set-item" onclick="toast('更换手机号演示')">
+              <div class="set-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2.5" width="10" height="19" rx="2.4"/><path d="M11 18.5h2"/></svg></div>
+              <span class="set-name">更换手机号</span>
+              <span class="set-extra">138****6688</span>
+              <div class="set-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></div>
+            </div>
+          </div>
+
+          <!-- 通用 -->
+          <div class="set-group card">
+            <div class="set-group-title">通用</div>
+            <div class="set-item static">
+              <div class="set-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9S14.5 18.4 12 21c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3z"/></svg></div>
+              <span class="set-name">语言切换</span>
+              <div class="seg" id="langSeg">
+                <span class="on" onclick="pickLang(this,'zh')">中文</span>
+                <span onclick="pickLang(this,'en')">English</span>
+              </div>
+            </div>
+            <div class="set-item static">
+              <div class="set-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 8-3 8h18s-3-1-3-8"/><path d="M10.3 20a2 2 0 0 0 3.4 0"/></svg></div>
+              <span class="set-name">消息推送</span>
+              <div class="switch on" id="swPush" onclick="toggleSwitch(this,'消息推送已开启','消息推送已关闭')"></div>
+            </div>
+            <div class="set-item static">
+              <div class="set-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.4"/><path d="M3.5 7l8.5 6 8.5-6"/></svg></div>
+              <span class="set-name">邮件通知</span>
+              <div class="switch" id="swMail" onclick="toggleSwitch(this,'邮件通知已开启','邮件通知已关闭')"></div>
+            </div>
+          </div>
+
+          <!-- 存储 -->
+          <div class="set-group card">
+            <div class="set-group-title">存储</div>
+            <div class="set-item" onclick="clearCache()">
+              <div class="set-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7h14l-1.2 12.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8L5 7z"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M10 11.5v5M14 11.5v5"/></svg></div>
+              <span class="set-name">清除缓存</span>
+              <span class="set-extra" id="cacheSize">36.5 MB</span>
+              <div class="set-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></div>
+            </div>
+          </div>
+
+          <!-- 关于 -->
+          <div class="set-group card">
+            <div class="set-group-title">关于</div>
+            <div class="set-item" onclick="toast('关于苏铁演示')">
+              <div class="set-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><circle cx="12" cy="8" r="0.4" fill="currentColor"/></svg></div>
+              <span class="set-name">关于苏铁</span>
+              <div class="set-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></div>
+            </div>
+            <div class="set-item" onclick="location.hash='#help'">
+              <div class="set-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.2a2.6 2.6 0 0 1 5 1c0 1.7-2.4 2-2.4 3.6"/><circle cx="12" cy="17" r="0.4" fill="currentColor"/></svg></div>
+              <span class="set-name">帮助中心</span>
+              <div class="set-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></div>
+            </div>
+            <div class="set-item" onclick="toast('已是最新版本')">
+              <div class="set-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11A8 8 0 0 0 6.3 6.3L4 8.5"/><path d="M4 4v4.5H8.5"/><path d="M4 13a8 8 0 0 0 13.7 4.7L20 15.5"/><path d="M20 20v-4.5h-4.5"/></svg></div>
+              <span class="set-name">检查更新</span>
+              <span class="set-extra">v3.1.1</span>
+              <div class="set-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></div>
+            </div>
+          </div>
+
+          <!-- 退出登录（红 = 危险语义，须确认弹窗） -->
+          <div class="logout-btn" onclick="openLogoutModal()">退出登录</div>
+          <div class="version-tip">苏铁 v3.1.1 · 让每一片叶子都被善待</div>
+          <div class="demo-note" style="padding-top:0">* 演示数据，正式版由后端接口提供</div>
+        </div>
+      </div>
+
+      <!-- ========== 页面 5: 帮助中心 #help ========== -->
+      <div class="page" id="page-help">
+        <div class="page-scroll">
+          <div class="help-search">
+            <div class="search-bar">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+              <input id="helpSearchInput" placeholder="搜索问题，如：售后 / 浇水" oninput="filterFaq(this.value)">
+            </div>
+          </div>
+          <div class="section-title" style="font-size:var(--font-size-lg);padding:var(--spacing-lg) var(--spacing-lg) var(--spacing-sm)">常见问题</div>
+          <div class="faq-list" id="faqList"></div>
+          <div class="help-contact card" onclick="toast('在线客服演示')">
+            <div class="hc-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 16 0"/><rect x="2.5" y="12" width="4" height="6" rx="2"/><rect x="17.5" y="12" width="4" height="6" rx="2"/><path d="M19.5 18a4 4 0 0 1-4 3.5h-2"/></svg></div>
+            <div>
+              <div class="hc-name">在线客服</div>
+              <div class="hc-sub">工作日 9:00 - 21:00 · 养护问题一对一解答</div>
+            </div>
+            <button class="btn btn-outline btn-sm">咨询</button>
+          </div>
+          <div class="feedback-bar card" onclick="openFeedback()">
+            <div>
+              <div class="fb-name">意见反馈</div>
+              <div class="fb-sub">帮助我们做得更好</div>
+            </div>
+            <div class="set-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></div>
+          </div>
+          <div class="demo-note" style="padding-top:var(--spacing-lg)">* 演示数据，正式版由后端接口提供</div>
+        </div>
+      </div>
+
+      <!-- ========== 全局浮层 ========== -->
+      <div class="mask" id="gMask" onclick="closeAllPopups()"></div>
+
+      <!-- 地址新增/编辑弹层 -->
+      <div class="popup" id="addrPopup">
+        <div class="popup-title" id="addrPopupTitle">新增地址</div>
+        <div class="popup-close" onclick="closeAddrPopup()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </div>
+        <div class="page-scroll" style="padding-bottom:var(--spacing-md)">
+          <div class="form-item"><div class="form-label">收货人</div>
+            <input class="form-input" id="afName" placeholder="请输入收货人姓名" maxlength="20"></div>
+          <div class="form-item"><div class="form-label">手机号码</div>
+            <input class="form-input" id="afPhone" type="tel" placeholder="请输入手机号码" maxlength="11"></div>
+          <div class="form-item"><div class="form-label">所在地区</div>
+            <div class="form-input picker-input" onclick="openRegionPicker()">
+              <span id="afRegion" class="ph-hold">请选择省 / 市 / 区</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-tertiary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+            </div></div>
+          <div class="form-item"><div class="form-label">详细地址</div>
+            <textarea class="form-textarea" id="afDetail" placeholder="街道、门牌号、楼栋单元室号" maxlength="80"></textarea></div>
+          <div class="form-item"><div class="form-label">地址标签</div>
+            <div class="tag-chips" id="afTags">
+              <span class="tag-chip active" onclick="pickTag(this)">家</span>
+              <span class="tag-chip" onclick="pickTag(this)">公司</span>
+              <span class="tag-chip" onclick="pickTag(this)">学校</span>
+            </div></div>
+          <div class="form-item"><div class="switch-row">
+            <span class="form-label">设为默认地址</span>
+            <div class="switch" id="afDefault" onclick="this.classList.toggle('on')"></div>
+          </div></div>
+        </div>
+        <div style="padding:var(--spacing-md) var(--spacing-lg) calc(var(--spacing-lg) + env(safe-area-inset-bottom));border-top:0.5px solid var(--border-color)">
+          <button class="btn btn-primary" style="width:100%;height:44px;border-radius:999px;font-size:var(--font-size-lg);font-weight:600" onclick="saveAddr()">保存</button>
+        </div>
+      </div>
+
+      <!-- 地区选择弹层 -->
+      <div class="popup" id="regionPopup">
+        <div class="popup-title">选择所在地区</div>
+        <div class="popup-close" onclick="closeRegionPicker()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </div>
+        <div class="page-scroll" id="regionList" style="padding-bottom:calc(var(--spacing-lg) + env(safe-area-inset-bottom))"></div>
+        <div class="demo-note" style="padding-top:0;margin-top:auto;border-top:0.5px solid var(--border-color)">演示：省市区级联已简化</div>
+      </div>
+
+      <!-- 意见反馈弹层 -->
+      <div class="popup" id="fbPopup">
+        <div class="popup-title">意见反馈</div>
+        <div class="popup-close" onclick="closeFeedback()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </div>
+        <div class="page-scroll" style="padding-bottom:var(--spacing-md)">
+          <div class="form-item" style="padding-top:0"><div class="form-label">问题类型</div></div>
+          <div class="type-chips" id="fbTypes">
+            <span class="type-chip active" onclick="pickType(this)">功能异常</span>
+            <span class="type-chip" onclick="pickType(this)">体验建议</span>
+            <span class="type-chip" onclick="pickType(this)">商品问题</span>
+            <span class="type-chip" onclick="pickType(this)">其他</span>
+          </div>
+          <div class="form-item"><div class="form-label">问题描述</div>
+            <textarea class="form-textarea" id="fbText" placeholder="请详细描述您遇到的问题或建议（不少于 5 个字）" maxlength="300"></textarea></div>
+        </div>
+        <div style="padding:var(--spacing-md) var(--spacing-lg) calc(var(--spacing-lg) + env(safe-area-inset-bottom));border-top:0.5px solid var(--border-color)">
+          <button class="btn btn-primary" style="width:100%;height:44px;border-radius:999px;font-size:var(--font-size-lg);font-weight:600" onclick="submitFeedback()">提交反馈</button>
+        </div>
+      </div>
+
+      <!-- 中央确认弹窗（危险操作专用，红色仅限此处） -->
+      <div class="modal-wrap" id="modalWrap">
+        <div class="modal-mask" onclick="closeModal()"></div>
+        <div class="modal">
+          <div class="modal-title" id="modalTitle">确认</div>
+          <div class="modal-desc" id="modalDesc"></div>
+          <div class="modal-btns">
+            <button class="btn btn-outline" onclick="closeModal()">取消</button>
+            <button class="btn btn-danger" id="modalOk">确认</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Toast -->
+      <div class="toast" id="toastEl"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   数据层（植物/园艺主题，真实感演示数据）
+   ============================================================ */
+var PRODUCTS = [
+  { id:1, name:'苏铁盆栽 铁树绿植' }, { id:2, name:'琴叶榕 大叶观叶植物' },
+  { id:3, name:'龟背竹 开背大苗' }, { id:4, name:'多肉植物组合套装' },
+  { id:5, name:'玉露 冰灯玉露盆栽' }, { id:6, name:'蝴蝶兰 年宵花礼盒' },
+  { id:7, name:'果汁阳台月季盆栽' }, { id:8, name:'园艺工具三件套' },
+  { id:9, name:'红陶花盆套装 素烧' }, { id:10, name:'进口泥炭营养土 5L' },
+  { id:11, name:'文竹 云竹盆栽' }, { id:12, name:'自动浇水滴灌套装' },
+  { id:13, name:'缓释肥 园艺通用肥' }
+];
+function byId(id){ for (var i=0;i<PRODUCTS.length;i++){ if (PRODUCTS[i].id===id) return PRODUCTS[i]; } return null; }
+function fmt(n){ return (Math.round(n*100)/100).toString(); }
+
+/* 占位图工厂：内联 SVG（渐变取自品牌衍生 token + 几何叶形 + 首字），与主原型一致 */
+function readGradToken(varName) {
+  return getComputedStyle(document.documentElement)
+    .getPropertyValue(varName).split(',').map(function(s){ return s.trim(); });
+}
+var GRADS = ['--grad-leaf-1','--grad-leaf-2','--grad-leaf-3','--grad-leaf-4','--grad-leaf-5','--grad-leaf-6']
+  .map(readGradToken);
+function phImg(name, seed) {
+  var g = GRADS[seed % GRADS.length];
+  var ch = name.charAt(0);
+  var leafRot = (seed * 37) % 360;
+  var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400">'
+    + '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">'
+    + '<stop offset="0" stop-color="' + g[0] + '"/><stop offset="1" stop-color="' + g[1] + '"/>'
+    + '</linearGradient></defs>'
+    + '<rect width="400" height="400" fill="url(#g)"/>'
+    + '<g transform="translate(285 255) rotate(' + (leafRot % 40 + 10) + ') scale(2.1)" opacity="0.35">'
+    + '<path d="M0 -46 C30 -26 34 14 0 46 C-34 14 -30 -26 0 -46Z" fill="#2E7D32"/>'
+    + '<path d="M0 -38 L0 40" stroke="#F1F8E9" stroke-width="3" fill="none"/></g>'
+    + '<g transform="translate(96 108) rotate(-24) scale(1.2)" opacity="0.25">'
+    + '<path d="M0 -46 C30 -26 34 14 0 46 C-34 14 -30 -26 0 -46Z" fill="#1B5E20"/></g>'
+    + '<circle cx="70" cy="330" r="34" fill="#2E7D32" opacity="0.12"/>'
+    + '<text x="200" y="228" text-anchor="middle" font-family="PingFang SC, Microsoft YaHei, sans-serif" '
+    + 'font-size="120" font-weight="700" fill="#1B5E20" opacity="0.55">' + ch + '</text></svg>';
+  return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+}
+function pIdx(p){ return PRODUCTS.indexOf(p); }
+
+/* ============================================================
+   基础交互：Toast / 确认弹窗 / 页面栈
+   ============================================================ */
+var toastTimer = null;
+function toast(msg) {
+  var el = document.getElementById('toastEl');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ el.classList.remove('show'); }, 1600);
+}
+var modalCallback = null;
+function openModal(title, desc, cb) {
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalDesc').textContent = desc;
+  modalCallback = cb;
+  document.getElementById('modalWrap').classList.add('show');
+}
+function closeModal(){ document.getElementById('modalWrap').classList.remove('show'); modalCallback = null; }
+document.getElementById('modalOk').onclick = function(){ var cb = modalCallback; closeModal(); if (cb) cb(); };
+
+var PAGE_TITLES = { 'orders':'订单列表', 'order-detail':'订单详情', 'address':'地址管理', 'settings':'设置', 'help':'帮助中心' };
+var VALID_HASH = ['orders','order-detail','address','settings','help'];
+var pageStack = [];
+var state = { page: 'orders', orderTab: '全部', detailNo: null };
+
+function showPage(key) {
+  if (document.getElementById('page-' + key) === null) key = 'orders';
+  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+  document.getElementById('page-' + key).classList.add('active');
+  document.getElementById('navTitle').textContent = PAGE_TITLES[key];
+  document.getElementById('navBackText').textContent = pageStack.length > 1 ? PAGE_TITLES[pageStack[pageStack.length - 2]] || '返回' : '主原型';
+  state.page = key;
+  if (pageStack[pageStack.length - 1] !== key) pageStack.push(key);
+}
+/* 返回：栈内回退；栈底则回主原型 */
+function goBack() {
+  if (pageStack.length > 1) {
+    pageStack.pop();
+    var key = pageStack[pageStack.length - 1];
+    if (key === 'order-detail') key = 'orders'; /* 详情刷新后由列表承载 */
+    if (key !== pageStack[pageStack.length - 1]) pageStack[pageStack.length - 1] = key;
+    document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+    document.getElementById('page-' + key).classList.add('active');
+    document.getElementById('navTitle').textContent = PAGE_TITLES[key];
+    document.getElementById('navBackText').textContent = pageStack.length > 1 ? (PAGE_TITLES[pageStack[pageStack.length - 2]] || '返回') : '主原型';
+    state.page = key;
+    if (key === 'orders') renderOrders();
+  } else {
+    location.href = 'prototype.html';
+  }
+}
+/* hash 路由：#orders / #order-detail / #address / #settings / #help */
+function route() {
+  var h = (location.hash || '#orders').replace('#', '');
+  if (VALID_HASH.indexOf(h) < 0) h = 'orders';
+  pageStack = [];
+  if (h === 'order-detail') {
+    showPage('orders');
+    openOrderDetail(state.detailNo || ORDERS[2].no, true);
+  } else {
+    showPage(h);
+  }
+  if (h === 'orders') renderOrders();
+  if (h === 'address') renderAddr();
+  if (h === 'help') renderFaq();
+}
+window.addEventListener('hashchange', route);
+
+/* ============================================================
+   1. 订单列表（#orders）
+   ============================================================ */
+var ORDER_TABS = ['全部', '待付款', '待发货', '待收货', '已完成'];
+var ORDERS = [
+  { no:'ST20260912150128', status:'待付款', time:'2026-09-12 15:01', pay:'微信支付',
+    items:[ { pid:6, spec:'双剑礼盒', price:99, qty:1 }, { pid:10, spec:'5L 装', price:19.9, qty:2 } ], ship:0 },
+  { no:'ST20260908093341', status:'待付款', time:'2026-09-08 09:33', pay:'微信支付',
+    items:[ { pid:1, spec:'小苗 带盆', price:168, qty:1 } ], ship:8 },
+  { no:'ST20260905171205', status:'待收货', time:'2026-09-05 17:12', pay:'微信支付',
+    items:[ { pid:2, spec:'110-120cm 带盆', price:199, qty:1 } ], ship:0 },
+  { no:'ST20260828204519', status:'已完成', time:'2026-08-28 20:45', pay:'微信支付',
+    items:[ { pid:4, spec:'9棵装', price:59.9, qty:1 }, { pid:9, spec:'小号三只装', price:35, qty:1 } ], ship:0 },
+  { no:'ST20260815111237', status:'已完成', time:'2026-08-15 11:12', pay:'微信支付',
+    items:[ { pid:3, spec:'中苗 带盆', price:89, qty:2 } ], ship:0 }
+];
+var STATUS_CLS = { '待付款':'st-warn', '待发货':'st-info', '待收货':'st-primary', '已完成':'st-success', '已取消':'st-muted' };
+var STATUS_DESC = {
+  '待付款':'请在 24 小时内完成支付，超时订单将自动取消',
+  '待发货':'商家正在打包，出圃检疫通过后即安排发货',
+  '待收货':'包裹运输中，请注意查收并验苗',
+  '已完成':'交易完成，感谢您对苏铁的信任',
+  '已取消':'订单已取消，期待下次光临'
+};
+function orderTotal(o) {
+  var g = o.items.reduce(function(s, it){ return s + it.price * it.qty; }, 0);
+  return g + (o.ship || 0);
+}
+function orderQty(o) { return o.items.reduce(function(s, it){ return s + it.qty; }, 0); }
+
+function renderOrderTabs() {
+  document.getElementById('oTabs').innerHTML = ORDER_TABS.map(function(t) {
+    var on = state.orderTab === t;
+    return '<div class="o-tab' + (on ? ' active' : '') + '" onclick="setOrderTab(\'' + t + '\')">' + t
+      + (on ? '<div class="tab-line"></div>' : '') + '</div>';
+  }).join('');
+}
+function setOrderTab(t) { state.orderTab = t; renderOrders(); }
+
+function renderOrders() {
+  renderOrderTabs();
+  var list = state.orderTab === '全部' ? ORDERS : ORDERS.filter(function(o){ return o.status === state.orderTab; });
+  var wrap = document.getElementById('orderListWrap');
+  if (!list.length) {
+    /* 空状态 tab 演示（待发货暂无订单） */
+    wrap.innerHTML =
+      '<div class="empty-state">'
+      + '<div class="es-art"><svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h14v18l-2.3-1.6L14.4 21l-2.4-1.6L9.6 21l-2.3-1.6L5 21V3z"/><path d="M9 8h6M9 12h6"/></svg></div>'
+      + '<div class="es-main">暂无' + state.orderTab + '订单</div>'
+      + '<div class="es-sub">下单后可在这里跟踪物流与售后</div>'
+      + '<a class="btn btn-outline" href="prototype.html" style="text-decoration:none">去逛逛</a>'
+      + '</div>' + DEMO_NOTE_LOCAL;
+    return;
+  }
+  wrap.innerHTML = '<div class="order-list">' + list.map(function(o) {
+    var thumbs = o.items.map(function(it) {
+      var p = byId(it.pid);
+      return '<div class="oc-thumb"><img src="' + phImg(p.name, pIdx(p)) + '" alt=""><span class="qty">x' + it.qty + '</span></div>';
+    }).join('');
+    var btns = '';
+    if (o.status === '待付款') {
+      btns = '<button class="btn btn-outline btn-sm" onclick="orderAction(event,\'cancel\',\'' + o.no + '\')">取消订单</button>'
+           + '<button class="btn btn-primary btn-sm" onclick="orderAction(event,\'pay\',\'' + o.no + '\')">去支付</button>';
+    } else if (o.status === '待收货') {
+      btns = '<button class="btn btn-outline btn-sm" onclick="orderAction(event,\'logistics\',\'' + o.no + '\')">查看物流</button>'
+           + '<button class="btn btn-primary btn-sm" onclick="orderAction(event,\'confirm\',\'' + o.no + '\')">确认收货</button>';
+    } else if (o.status === '已完成') {
+      btns = '<button class="btn btn-outline btn-sm" onclick="orderAction(event,\'review\',\'' + o.no + '\')">评价</button>'
+           + '<button class="btn btn-primary btn-sm" onclick="orderAction(event,\'rebuy\',\'' + o.no + '\')">再次购买</button>';
+    }
+    return '<div class="card card-hover order-card" onclick="openOrderDetail(\'' + o.no + '\')">'
+      + '<div class="oc-head"><span class="oc-no">订单号：' + o.no + '</span>'
+      + '<span class="oc-status ' + STATUS_CLS[o.status] + '">' + o.status + '</span></div>'
+      + '<div class="oc-thumbs">' + thumbs + '</div>'
+      + '<div class="oc-foot"><span class="oc-total">共' + orderQty(o) + '件商品 合计：<span class="price-sym">¥</span><span class="price-num" style="font-size:var(--font-size-lg)">' + fmt(orderTotal(o)) + '</span></span>'
+      + '<span class="oc-actions">' + btns + '</span></div></div>';
+  }).join('') + '</div>' + DEMO_NOTE_LOCAL;
+}
+function orderAction(e, act, no) {
+  e.stopPropagation();
+  var o = null;
+  ORDERS.forEach(function(x){ if (x.no === no) o = x; });
+  if (!o) return;
+  if (act === 'pay') { toast('唤起微信支付（演示）'); }
+  else if (act === 'cancel') {
+    openModal('取消订单', '取消后优惠券将退回账户，确定取消该订单吗？', function() {
+      o.status = '已取消'; renderOrders(); toast('订单已取消');
+    });
+  }
+  else if (act === 'confirm') {
+    openModal('确认收货', '请确认已收到商品并验苗无误。收货后 7 天内仍可申请售后。', function() {
+      o.status = '已完成'; renderOrders(); toast('确认收货成功');
+    });
+  }
+  else if (act === 'logistics') { toast('物流演示：顺丰速运 SF1357 8866 2210（运输中）'); }
+  else if (act === 'review') { toast('评价演示：跳转评价页'); }
+  else if (act === 'rebuy') { toast('商品已再次加入购物车（演示）'); }
+}
+
+/* ============================================================
+   2. 订单详情（#order-detail）
+   ============================================================ */
+var TIMELINE = ['提交订单', '付款成功', '商家发货', '确认收货', '交易完成'];
+var TIMELINE_ON = { '待付款':1, '待发货':2, '待收货':3, '已完成':5, '已取消':0 };
+function findOrder(no) {
+  var r = null;
+  ORDERS.forEach(function(o){ if (o.no === no) r = o; });
+  return r;
+}
+function openOrderDetail(no, replaceStack) {
+  state.detailNo = no;
+  renderOrderDetail(findOrder(no));
+  if (replaceStack) { pageStack = ['orders', 'order-detail']; showPage2('order-detail'); }
+  else {
+    showPage('order-detail');
+    document.getElementById('page-order-detail').querySelector('.page-scroll').scrollTop = 0;
+  }
+}
+/* showPage 不入栈的变体（用于 hash 直达详情时保持 orders→detail 的栈） */
+function showPage2(key) {
+  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+  document.getElementById('page-' + key).classList.add('active');
+  document.getElementById('navTitle').textContent = PAGE_TITLES[key];
+  document.getElementById('navBackText').textContent = '订单列表';
+  state.page = key;
+}
+function renderOrderDetail(o) {
+  if (!o) return;
+  var onN = TIMELINE_ON[o.status] != null ? TIMELINE_ON[o.status] : 1;
+  var tl = TIMELINE.map(function(t, i) {
+    return '<div class="tl-node' + (i < onN ? ' on' : '') + '"><div class="dot"></div><div class="tl-txt">' + t + '</div></div>';
+  }).join('');
+  var addr = '张女士 138****6688';
+  var addrDetail = '江苏省 苏州市 姑苏区 人民路 1188 号苏铁雅苑 3 栋 2 单元 502';
+  var goods = o.items.reduce(function(s, it){ return s + it.price * it.qty; }, 0);
+  var coupon = o.status === '待付款' ? 10 : 0;
+  var items = o.items.map(function(it) {
+    var p = byId(it.pid);
+    return '<div class="od-item"><img class="oi-img" src="' + phImg(p.name, pIdx(p)) + '" alt="">'
+      + '<div class="oi-info"><div class="oi-name">' + p.name + '</div><div class="oi-spec">' + it.spec + '</div>'
+      + '<div class="oi-bottom"><span><span class="price-sym">¥</span><span class="price-num" style="font-size:var(--font-size-lg)">' + fmt(it.price) + '</span></span>'
+      + '<span class="oi-qty">x' + it.qty + '</span></div></div></div>';
+  }).join('');
+  var pay = o.status === '待付款' ? '微信支付（待支付）' : '微信支付';
+  document.getElementById('orderDetailBody').innerHTML =
+    '<!-- 状态头部 + 进度时间轴（已激活节点绿色） -->'
+    + '<div class="od-hero"><div class="od-status">订单' + o.status + '</div>'
+    + '<div class="od-desc">' + STATUS_DESC[o.status] + '</div>'
+    + '<div class="timeline">' + tl + '</div></div>'
+    + '<!-- 收货地址 -->'
+    + '<div class="card od-address"><div class="oa-row"><span class="oa-name">张女士</span><span class="oa-phone">138****6688</span><span class="ac-def">默认</span></div>'
+    + '<div class="oa-detail">' + addrDetail + '</div><div class="addr-stripe"></div></div>'
+    + '<!-- 商品清单 -->'
+    + '<div class="card od-items">' + items + '</div>'
+    + '<!-- 金额明细 -->'
+    + '<div class="card od-summary">'
+    + '<div class="price-line"><span class="pl-label">商品金额</span><span class="pl-value">¥' + fmt(goods) + '</span></div>'
+    + '<div class="price-line"><span class="pl-label">运费</span><span class="pl-value">' + (o.ship ? '¥' + fmt(o.ship) : '免运费') + '</span></div>'
+    + (coupon ? '<div class="price-line"><span class="pl-label">优惠券</span><span class="pl-value discount">-¥' + fmt(coupon) + '</span></div>' : '')
+    + '<div class="price-line total"><span class="pl-label">实付款</span><span class="pl-value"><span class="price-sym" style="font-size:var(--font-size-md)">¥</span>' + fmt(Math.max(orderTotal(o) - coupon, 0)) + '</span></div>'
+    + '</div>'
+    + '<!-- 订单信息 -->'
+    + '<div class="card od-info">'
+    + '<div class="info-row"><span class="ir-label">订单编号</span><span class="ir-value">' + o.no + '<span class="copy-btn" onclick="copyOrderNo(event)">复制</span></span></div>'
+    + '<div class="info-row"><span class="ir-label">下单时间</span><span class="ir-value">' + o.time + '</span></div>'
+    + '<div class="info-row"><span class="ir-label">支付方式</span><span class="ir-value">' + pay + '</span></div>'
+    + '</div>'
+    + '<div class="demo-note">* 演示数据，正式版由后端接口提供</div>';
+  /* 底部操作栏按状态变化 */
+  var bar = '<button class="btn btn-outline" style="height:40px;padding:0 18px" onclick="toast(\'在线客服演示\')">联系客服</button>';
+  if (o.status === '待付款') {
+    bar += '<button class="btn btn-outline" style="height:40px;padding:0 18px" onclick="orderAction(event,\'cancel\',\'' + o.no + '\')">取消订单</button>'
+         + '<button class="btn btn-primary" style="height:40px;padding:0 24px" onclick="orderAction(event,\'pay\',\'' + o.no + '\')">立即支付</button>';
+  } else if (o.status === '待收货') {
+    bar += '<button class="btn btn-outline" style="height:40px;padding:0 18px" onclick="orderAction(event,\'logistics\',\'' + o.no + '\')">查看物流</button>'
+         + '<button class="btn btn-primary" style="height:40px;padding:0 24px" onclick="orderAction(event,\'confirm\',\'' + o.no + '\')">确认收货</button>';
+  } else if (o.status === '已完成') {
+    bar += '<button class="btn btn-outline" style="height:40px;padding:0 18px" onclick="orderAction(event,\'review\',\'' + o.no + '\')">评价</button>'
+         + '<button class="btn btn-primary" style="height:40px;padding:0 24px" onclick="orderAction(event,\'rebuy\',\'' + o.no + '\')">再次购买</button>';
+  }
+  document.getElementById('orderDetailBar').innerHTML = bar;
+}
+function copyOrderNo(e) {
+  e.stopPropagation();
+  var no = state.detailNo || '';
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(no).then(function(){ toast('订单号已复制'); }, function(){ toast('订单号已复制（演示）'); });
+  } else { toast('订单号已复制（演示）'); }
+}
+
+/* ============================================================
+   3. 地址管理（#address）
+   ============================================================ */
+var ADDRS = [
+  { id:1, name:'张女士', phone:'138****6688', region:'江苏省 苏州市 姑苏区', detail:'人民路 1188 号苏铁雅苑 3 栋 2 单元 502', tag:'家', isDefault:true },
+  { id:2, name:'李先生', phone:'139****2210', region:'上海市 浦东新区', detail:'张江高科技园区博云路 2 号 601', tag:'公司', isDefault:false },
+  { id:3, name:'周同学', phone:'137****9955', region:'浙江省 杭州市 西湖区', detail:'文三路 90 号东部软件园 5F', tag:'公司', isDefault:false }
+];
+var REGION_PRESETS = [
+  '江苏省 苏州市 姑苏区', '江苏省 南京市 鼓楼区', '上海市 浦东新区', '上海市 徐汇区',
+  '浙江省 杭州市 西湖区', '广东省 广州市 天河区', '北京市 朝阳区', '四川省 成都市 锦江区'
+];
+var addrSeq = 4;
+var editAddrId = null;
+var formTag = '家';
+
+function renderAddr() {
+  var wrap = document.getElementById('addrList');
+  if (!ADDRS.length) {
+    wrap.innerHTML =
+      '<div class="empty-state"><div class="es-art"><svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-5.4 7-11a7 7 0 1 0-14 0c0 5.6 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg></div>'
+      + '<div class="es-main">暂无收货地址</div><div class="es-sub">添加收货地址，方便绿植安心到家</div></div>';
+    return;
+  }
+  wrap.innerHTML = ADDRS.map(function(a) {
+    return '<div class="card addr-card' + (a.isDefault ? ' default' : '') + '">'
+      + '<div class="ac-top"><span class="ac-name">' + a.name + '</span><span class="ac-phone">' + a.phone + '</span>'
+      + '<span class="ac-tag">' + a.tag + '</span>'
+      + (a.isDefault ? '<span class="ac-def">默认</span>' : '') + '</div>'
+      + '<div class="ac-detail">' + a.region + ' ' + a.detail + '</div>'
+      + '<div class="ac-actions">'
+      + '<div class="ac-act" onclick="openAddrPopup(' + a.id + ')">'
+      + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19.5 8.5a2.1 2.1 0 0 0-3-3L5 17v3z"/><path d="M13.5 6.5l3 3"/></svg>编辑</div>'
+      + '<div class="ac-act del" onclick="askDelAddr(' + a.id + ')">'
+      + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M9 7V5a1.5 1.5 0 0 1 1.5-1.5h3A1.5 1.5 0 0 1 15 5v2"/><path d="M6.5 7l1 12.2a2 2 0 0 0 2 1.8h5a2 2 0 0 0 2-1.8l1-12.2"/></svg>删除</div>'
+      + (a.isDefault ? '' : '<div class="ac-set-def" onclick="setDefaultAddr(' + a.id + ')"><div class="switch" style="transform:scale(0.8)"></div>设为默认</div>')
+      + '</div></div>';
+  }).join('');
+}
+function setDefaultAddr(id) {
+  ADDRS.forEach(function(a){ a.isDefault = (a.id === id); });
+  renderAddr();
+  toast('已设为默认地址');
+}
+function askDelAddr(id) {
+  var a = null;
+  ADDRS.forEach(function(x){ if (x.id === id) a = x; });
+  openModal('删除地址', '确定删除「' + a.name + '」的收货地址吗？', function() {
+    ADDRS = ADDRS.filter(function(x){ return x.id !== id; });
+    if (a.isDefault && ADDRS.length) ADDRS[0].isDefault = true;
+    renderAddr();
+    toast('地址已删除');
+  });
+}
+/* 新增/编辑弹层 */
+function openAddrPopup(id) {
+  editAddrId = id || null;
+  document.getElementById('addrPopupTitle').textContent = id ? '编辑地址' : '新增地址';
+  var a = null;
+  if (id) ADDRS.forEach(function(x){ if (x.id === id) a = x; });
+  document.getElementById('afName').value = a ? a.name : '';
+  document.getElementById('afPhone').value = a ? a.phone : '';
+  var rg = document.getElementById('afRegion');
+  rg.textContent = a ? a.region : '请选择省 / 市 / 区';
+  rg.style.color = a ? 'var(--text-primary)' : 'var(--text-tertiary)';
+  document.getElementById('afDetail').value = a ? a.detail : '';
+  formTag = a ? a.tag : '家';
+  document.querySelectorAll('#afTags .tag-chip').forEach(function(c) {
+    c.classList.toggle('active', c.textContent === formTag);
+  });
+  document.getElementById('afDefault').classList.toggle('on', a ? a.isDefault : false);
+  document.getElementById('gMask').classList.add('show');
+  document.getElementById('addrPopup').classList.add('show');
+}
+function closeAddrPopup() {
+  document.getElementById('gMask').classList.remove('show');
+  document.getElementById('addrPopup').classList.remove('show');
+}
+function pickTag(el) {
+  document.querySelectorAll('#afTags .tag-chip').forEach(function(c){ c.classList.remove('active'); });
+  el.classList.add('active');
+  formTag = el.textContent;
+}
+function saveAddr() {
+  var name = document.getElementById('afName').value.trim();
+  var phone = document.getElementById('afPhone').value.trim();
+  var region = document.getElementById('afRegion').textContent.trim();
+  var detail = document.getElementById('afDetail').value.trim();
+  var isDef = document.getElementById('afDefault').classList.contains('on');
+  if (!name) { toast('请填写收货人姓名'); return; }
+  if (!/^1\d{10}$|^1\d{2}\*{4}\d{4}$/.test(phone)) { toast('请填写正确的手机号码'); return; }
+  if (region === '请选择省 / 市 / 区') { toast('请选择所在地区'); return; }
+  if (!detail) { toast('请填写详细地址'); return; }
+  if (isDef) ADDRS.forEach(function(a){ a.isDefault = false; });
+  if (editAddrId) {
+    ADDRS.forEach(function(a) {
+      if (a.id === editAddrId) { a.name = name; a.phone = phone; a.region = region; a.detail = detail; a.tag = formTag; a.isDefault = isDef || a.isDefault && ADDRS.length === 1; }
+    });
+    toast('地址已保存');
+  } else {
+    ADDRS.push({ id: addrSeq++, name: name, phone: phone, region: region, detail: detail, tag: formTag, isDefault: isDef });
+    toast('新增地址成功');
+  }
+  renderAddr();
+  closeAddrPopup();
+}
+/* 地区选择弹层（演示：预设地区单选） */
+function openRegionPicker() {
+  document.getElementById('regionList').innerHTML = REGION_PRESETS.map(function(r, i) {
+    return '<div class="region-row" onclick="pickRegion(\'' + r + '\')"><span class="rr-name">' + r + '</span>'
+      + (i < 3 ? '<span class="rr-hint">可配送</span>' : '') + '</div>';
+  }).join('');
+  document.getElementById('gMask').classList.add('show');
+  document.getElementById('regionPopup').classList.add('show');
+}
+function closeRegionPicker() {
+  document.getElementById('regionPopup').classList.remove('show');
+  /* 地址弹层仍在下方，恢复其遮罩 */
+  if (document.getElementById('addrPopup').classList.contains('show')) return;
+  document.getElementById('gMask').classList.remove('show');
+}
+function pickRegion(r) {
+  var rg = document.getElementById('afRegion');
+  rg.textContent = r;
+  rg.style.color = 'var(--text-primary)';
+  closeRegionPicker();
+}
+
+/* ============================================================
+   4. 设置（#settings）
+   ============================================================ */
+function pickLang(el, lang) {
+  document.querySelectorAll('#langSeg span').forEach(function(s){ s.classList.remove('on'); });
+  el.classList.add('on');
+  toast(lang === 'zh' ? '语言已切换为中文（演示）' : 'Language switched to English (demo)');
+}
+function toggleSwitch(el, onMsg, offMsg) {
+  el.classList.toggle('on');
+  toast(el.classList.contains('on') ? onMsg : offMsg);
+}
+function clearCache() {
+  var el = document.getElementById('cacheSize');
+  if (el.textContent !== '0 B') {
+    el.textContent = '0 B';
+    toast('缓存已清理');
+  } else {
+    toast('缓存已经很干净啦');
+  }
+}
+function openLogoutModal() {
+  openModal('退出登录', '退出后将无法同步购物车与收藏记录，确定退出吗？', function() {
+    toast('已退出登录（演示）');
+  });
+}
+
+/* ============================================================
+   5. 帮助中心（#help）
+   ============================================================ */
+var FAQS = [
+  { q:'植物收到后叶片发蔫、耷拉怎么办？',
+    a:'这是运输后的正常"缓苗反应"。请先放在通风散射光处 2-3 天，浇透一次定根水，避免暴晒与频繁移动；一般一周内即可恢复挺立。若两周后仍无好转，可联系客服申请售后。' },
+  { q:'下单后多久发货？物流时效是几天？',
+    a:'现苗现发，48 小时内出圃检疫并打包发出；江浙沪皖约 1-2 天送达，其余地区 2-4 天。冬季低温期会加保温棉与加热包，极端天气可能延迟 1-2 天发货。' },
+  { q:'植物运输损坏、枯死如何申请售后？',
+    a:'签收后 48 小时内拍照（含包装与整株）联系在线客服，经确认后支持免费补发或全额退款；7 天内出现明显质量问题凭照片同样可申请售后，全程无需寄回。' },
+  { q:'新手室内养什么植物比较容易成活？',
+    a:'推荐虎皮兰、绿萝、龟背竹、金钱树等耐阴耐旱品种，两周浇一次水即可；避免频繁浇水与直晒。可在商品页筛选"新手友好"标签，附赠养护卡照做即可。' },
+  { q:'优惠券怎么使用？可以叠加吗？',
+    a:'提交订单页会自动展示可用优惠券，点击勾选即可抵扣；每单限用一张，不与运费专享券叠加。优惠券自领取起 30 天有效，退款后自动退回账户。' },
+  { q:'多肉植物多久浇一次水？夏天休眠期呢？',
+    a:'遵循"干透浇透"：春秋 7-10 天一次，夏季休眠期 15-20 天沿盆边少量给水，冬季 20 天以上。宁干勿湿，浇水避免叶心积水，配合颗粒土与通风更安全。' }
+];
+var faqOpen = [true, false, false, false, false, false];
+function renderFaq() {
+  document.getElementById('faqList').innerHTML = FAQS.map(function(f, i) {
+    return '<div class="card faq-item' + (faqOpen[i] ? ' open' : '') + '" id="faq' + i + '">'
+      + '<div class="faq-q" onclick="toggleFaq(' + i + ')"><span class="fq-ico">Q' + (i + 1) + '</span><span>' + f.q + '</span>'
+      + '<span class="fq-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span></div>'
+      + '<div class="faq-a">' + f.a + '</div></div>';
+  }).join('');
+}
+function toggleFaq(i) {
+  faqOpen[i] = !faqOpen[i];
+  var el = document.getElementById('faq' + i);
+  if (el) el.classList.toggle('open', faqOpen[i]);
+}
+function filterFaq(kw) {
+  kw = (kw || '').trim();
+  renderFaq();
+  FAQS.forEach(function(f, i) {
+    var hit = !kw || f.q.indexOf(kw) >= 0 || f.a.indexOf(kw) >= 0;
+    var el = document.getElementById('faq' + i);
+    if (el) el.style.display = hit ? '' : 'none';
+  });
+  if (kw) toast('已为你筛选相关问题');
+}
+/* 意见反馈弹层 */
+var fbType = '功能异常';
+function openFeedback() {
+  document.getElementById('fbText').value = '';
+  document.getElementById('gMask').classList.add('show');
+  document.getElementById('fbPopup').classList.add('show');
+}
+function closeFeedback() {
+  document.getElementById('fbPopup').classList.remove('show');
+  document.getElementById('gMask').classList.remove('show');
+}
+function pickType(el) {
+  document.querySelectorAll('#fbTypes .type-chip').forEach(function(c){ c.classList.remove('active'); });
+  el.classList.add('active');
+  fbType = el.textContent;
+}
+function submitFeedback() {
+  var txt = document.getElementById('fbText').value.trim();
+  if (txt.length < 5) { toast('请描述至少 5 个字，便于我们跟进'); return; }
+  closeFeedback();
+  toast('感谢反馈！我们会尽快处理');
+}
+function closeAllPopups() {
+  closeAddrPopup();
+  closeRegionPicker();
+  closeFeedback();
+}
+
+/* ============================================================
+   初始化（hash 路由进入对应页）
+   ============================================================ */
+var DEMO_NOTE_LOCAL = '<div class="demo-note">* 演示数据，正式版由后端接口提供</div>';
+route();
+</script>
+</body>
+</html>
