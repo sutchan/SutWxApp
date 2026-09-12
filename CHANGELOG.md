@@ -2,6 +2,36 @@
 
 所有重要的项目变更都将记录在此文件中。
 
+## [3.0.3] - 2026-09-12
+
+### 变更内容
+
+#### 项目结构精简
+- 高保真原型统一迁移至仓库根 `prototype/` 目录，作为项目唯一原型目录
+- 删除仓库根 `prototype.html` 重定向占位页（迁移后已无必要）
+- 删除空的 `openspec/prototype/` 目录，规范文档目录职责更单一
+- README 原型链接同步更新为 `prototype/prototype.html`
+
+#### 版本同步
+- `SutWxApp/package.json` 版本号升至 3.0.3
+- `SutWxApp/app.js` 头注释与 `globalData.version` 同步至 3.0.3
+
+### 文件变更
+```
+新增:
+- prototype/prototype.html
+
+删除:
+- prototype.html（根目录重定向占位页）
+- openspec/prototype/prototype.html
+
+修改:
+- README.md
+- CHANGELOG.md
+- SutWxApp/package.json
+- SutWxApp/app.js
+```
+
 ## [3.0.2] - 2026-08-13
 
 ### 修复内容

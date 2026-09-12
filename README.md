@@ -1,6 +1,6 @@
 # SutWxApp - 苏铁微信小程序
 
-![版本](https://img.shields.io/badge/version-3.0.2-blue)
+![版本](https://img.shields.io/badge/version-3.0.3-blue)
 ![设计风格](https://img.shields.io/badge/design-Apple%20Style-green)
 
 ## 简介
@@ -130,7 +130,7 @@ SutWxApp/
   - [设计规范](openspec/specs/design/spec.md)
   - [运维与发布规范](openspec/specs/ops/spec.md)
   - [测试规范](openspec/specs/testing/spec.md)
-- [高保真原型](openspec/prototype/prototype.html)
+- [高保真原型](prototype/prototype.html)
 - [项目概览](docs/PROJECT_OVERVIEW.md)
 - [技术栈报告](openspec/TECH_STACK_REPORT.md)
 - [改进报告](openspec/IMPROVEMENTS_REPORT.md)

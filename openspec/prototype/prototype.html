@@ -2,10 +2,12 @@
 <!--
   文件名: prototype.html
   项目: 苏铁微信小程序 (SutWxApp) 高保真交互原型
-  设计系统: SutWxApp Design Spec v3.1.0 (openspec/specs/design/spec.md)
+  设计系统: SutWxApp Design Spec v3.1.1 (openspec/specs/design/spec.md)
   说明: 单文件自包含原型，全部样式/脚本/图形内联，无外部依赖。
         图片一律使用内联 SVG / CSS 渐变占位（几何叶片 + 品牌绿渐变）。
         语义色策略: 品牌 CTA/价格/选中态/角标 = 绿系；红色仅限错误/危险确认。
+        渐变: 品牌衍生渐变 token（--grad-leaf-* / --grad-banner-* / --grad-user-header），
+              SVG 占位工厂与 banner 内联样式均从 token 取色，禁止散落硬编码。
 -->
 <html lang="zh-CN">
 <head>
@@ -14,7 +16,7 @@
 <title>苏铁 · 小程序高保真原型</title>
 <style>
 /* ============================================================
-   1. 设计令牌（权威来源: spec.md §4.1.2）
+   1. 设计令牌（权威来源: spec.md §4.1.2 / §4.1.4）
    ============================================================ */
 :root {
   /* 品牌绿 */
@@ -75,6 +77,20 @@
   --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* 品牌衍生渐变 token（spec v3.1.1 · 值为逗号分隔的两档色标，
+     CSS 用法 linear-gradient(135deg, var(--grad-banner-1))；
+     SVG 占位工厂按逗号拆分取色标，禁止绕过 token 硬编码渐变） */
+  --grad-leaf-1: #F1F8E9, #C8E6C9;
+  --grad-leaf-2: #E8F5E9, #DCEDC8;
+  --grad-leaf-3: #F1F8E9, #A5D6A7;
+  --grad-leaf-4: #E8F5E9, #C5E1A5;
+  --grad-leaf-5: #F1F8E9, #D7EFD3;
+  --grad-leaf-6: #E8F5E9, #B9DFC0;
+  --grad-banner-1: #F1F8E9, #C8E6C9;
+  --grad-banner-2: #E8F5E9, #DCEDC8;
+  --grad-banner-3: #F1F8E9, #A5D6A7;
+  --grad-user-header: #2E7D32, #1B5E20;
 }
 
 /* ============================================================
@@ -573,7 +589,7 @@ body {
 .review-body { font-size: var(--font-size-sm); color: var(--text-primary); margin-top: 6px; line-height: 1.6; }
 .review-meta { font-size: var(--font-size-xs); color: var(--text-tertiary); margin-top: 4px; }
 
-/* 产品参数 */
+/* 产品参数 / 图文详情 */
 .params-card { padding: var(--spacing-lg); margin: 0 var(--spacing-md) var(--spacing-md); }
 .params-row {
   display: flex; justify-content: space-between; padding: 9px 0;
@@ -583,6 +599,15 @@ body {
 .params-row:last-child { border-bottom: none; }
 .params-row .pn { color: var(--text-secondary); }
 .params-row .pv { color: var(--text-primary); font-weight: 500; }
+.detail-article-img {
+  width: 100%; aspect-ratio: 16/10; object-fit: cover;
+  border-radius: var(--border-radius-sm); display: block;
+  background: var(--background-secondary);
+}
+.detail-article-text {
+  font-size: var(--font-size-sm); color: var(--text-secondary);
+  line-height: 1.6; margin-top: var(--spacing-md);
+}
 
 /* 为你推荐横滑 */
 .related-scroll { display: flex; gap: var(--spacing-md); padding: 0 var(--spacing-lg) var(--spacing-xxl); overflow-x: auto; }
@@ -770,7 +795,7 @@ body {
    12. 我的
    ============================================================ */
 .user-header {
-  background: linear-gradient(135deg, #2E7D32, #1B5E20);
+  background: linear-gradient(135deg, var(--grad-user-header));
   padding: var(--spacing-xl) var(--spacing-lg) 56px;
   color: var(--text-inverse);
   position: relative;
@@ -843,7 +868,7 @@ body {
 
 <div class="stage-hint">
   <strong>苏铁 SutWxApp · 交互原型</strong>
-  设计规范 v3.1.0 · Apple 极简 + 自然绿<br>
+  设计规范 v3.1.1 · Apple 极简 + 自然绿<br>
   可点击体验：首页 / 分类 / 商品详情 / 购物车 / 订单确认 / 我的
 </div>
 
@@ -891,20 +916,20 @@ body {
             </div>
           </div>
 
-          <!-- Banner 轮播 -->
+          <!-- Banner 轮播（渐变统一引自 --grad-banner-* token） -->
           <div class="banner-wrap">
             <div class="banner-viewport">
               <div class="banner-track" id="bannerTrack">
-                <div class="banner-slide" style="background:linear-gradient(135deg,#F1F8E9,#C8E6C9)">
+                <div class="banner-slide" style="background:linear-gradient(135deg,var(--grad-banner-1))">
                   <div class="bn-copy"><div class="bn-title">春植上新</div><div class="bn-sub">新手绿植 8 折起 · 净化你的呼吸</div></div>
                   <svg class="bn-leaf" width="150" height="150" viewBox="0 0 100 100" fill="#2E7D32"><path d="M50 8 C78 26 84 62 50 94 C16 62 22 26 50 8Z" opacity="0.9"/><path d="M50 16 L50 88" stroke="#F1F8E9" stroke-width="2" fill="none"/></svg>
                   <svg class="bn-leaf b2" width="120" height="120" viewBox="0 0 100 100" fill="#1B5E20"><path d="M50 8 C78 26 84 62 50 94 C16 62 22 26 50 8Z"/></svg>
                 </div>
-                <div class="banner-slide" style="background:linear-gradient(135deg,#E8F5E9,#DCEDC8)">
+                <div class="banner-slide" style="background:linear-gradient(135deg,var(--grad-banner-2))">
                   <div class="bn-copy"><div class="bn-title">多肉专区</div><div class="bn-sub">萌系多肉 ¥19.9 起 · 桌面治愈系</div></div>
                   <svg class="bn-leaf" width="150" height="150" viewBox="0 0 100 100" fill="#558B2F"><circle cx="50" cy="62" r="26" opacity="0.9"/><circle cx="28" cy="48" r="15" opacity="0.7"/><circle cx="72" cy="46" r="17" opacity="0.75"/></svg>
                 </div>
-                <div class="banner-slide" style="background:linear-gradient(135deg,#F1F8E9,#A5D6A7)">
+                <div class="banner-slide" style="background:linear-gradient(135deg,var(--grad-banner-3))">
                   <div class="bn-copy"><div class="bn-title">园艺工具节</div><div class="bn-sub">专业工具三件套 · 打理更轻松</div></div>
                   <svg class="bn-leaf" width="150" height="150" viewBox="0 0 100 100" fill="#2E7D32"><path d="M20 80 Q35 20 80 16 Q76 60 20 80Z" opacity="0.85"/><path d="M24 76 Q50 48 76 20" stroke="#F1F8E9" stroke-width="2" fill="none"/></svg>
                 </div>
@@ -1018,7 +1043,7 @@ body {
       <!-- ========== 页面 6: 我的 ========== -->
       <div class="page" id="page-user">
         <div class="page-scroll">
-          <!-- 头部（绿渐变） -->
+          <!-- 头部（品牌绿渐变 token） -->
           <div class="user-header">
             <div class="user-row" onclick="toast('个人信息演示')">
               <div class="avatar-lg">苏</div>
@@ -1215,12 +1240,15 @@ var CATS = [
 ];
 
 /* ============================================================
-   占位图工厂：内联 SVG（品牌绿渐变 + 几何叶形 + 首字）
+   占位图工厂：内联 SVG（渐变从品牌衍生 token 读取 + 几何叶形 + 首字）
    ============================================================ */
-var GRADS = [
-  ['#F1F8E9','#C8E6C9'],['#E8F5E9','#DCEDC8'],['#F1F8E9','#A5D6A7'],
-  ['#E8F5E9','#C5E1A5'],['#F1F8E9','#D7EFD3'],['#E8F5E9','#B9DFC0']
-];
+/* GRADS 从 :root 的 --grad-leaf-1 ~ -6 token 读取色标对（spec v3.1.1），不在 JS 中硬编码 */
+function readGradToken(varName) {
+  return getComputedStyle(document.documentElement)
+    .getPropertyValue(varName).split(',').map(function(s){ return s.trim(); });
+}
+var GRADS = ['--grad-leaf-1','--grad-leaf-2','--grad-leaf-3','--grad-leaf-4','--grad-leaf-5','--grad-leaf-6']
+  .map(readGradToken);
 function phImg(name, seed) {
   var g = GRADS[seed % GRADS.length];
   var ch = name.charAt(0);
@@ -1259,6 +1287,7 @@ var state = {
   favMap: {},
   spec: { sel: 0, qty: 1, intent: 'cart' }
 };
+var CART_MAX_QTY = 99; /* 购物车数量上限钳制 */
 
 /* ============================================================
    基础交互：Toast / 弹窗 / 页面切换
@@ -1453,6 +1482,13 @@ function renderProduct() {
       + '<div class="section-title" style="font-size:var(--font-size-lg);margin-bottom:var(--spacing-sm)">产品参数</div>'
       + p.params.map(function(r){ return '<div class="params-row"><span class="pn">' + r[0] + '</span><span class="pv">' + r[1] + '</span></div>'; }).join('')
     + '</div>'
+    + '<!-- 图文详情（占位：品牌渐变图 + 说明文字，无外链） -->'
+    + '<div class="card params-card">'
+      + '<div class="section-title" style="font-size:var(--font-size-lg);margin-bottom:var(--spacing-md)">图文详情</div>'
+      + '<img class="detail-article-img" src="' + phImg(p.name, idx + 3) + '" alt="">'
+      + '<div class="detail-article-text">' + p.desc + '</div>'
+      + '<div class="detail-article-text" style="margin-top:var(--spacing-sm)">每株植物出圃前均经过 48 小时适应驯化与状态筛查，专业防震包装发货；收货后 7 天内如有质量问题，凭照片即可申请售后。养护疑问可随时联系在线客服获取一对一指导。</div>'
+    + '</div>'
     + '<!-- 为你推荐 -->'
     + '<div class="section-header"><span class="section-title">为你推荐</span></div>'
     + '<div class="related-scroll">'
@@ -1592,7 +1628,7 @@ function renderCart() {
       + '<div class="stepper">'
       + '<button class="minus' + (c.qty <= 1 ? ' disabled' : '') + '" onclick="cartStep(' + i + ',-1)">−</button>'
       + '<span class="stepper-num">' + c.qty + '</span>'
-      + '<button class="plus" onclick="cartStep(' + i + ',1)">+</button>'
+      + '<button class="plus' + (c.qty >= CART_MAX_QTY ? ' disabled' : '') + '" onclick="cartStep(' + i + ',1)">+</button>'
       + '</div></div></div>'
       + '<div class="ci-del" onclick="askDelete(' + i + ')">删除</div>'
       + '</div>';
@@ -1607,6 +1643,8 @@ function toggleSelectAll() {
 }
 function cartStep(i, d) {
   var c = state.cart[i];
+  /* P1-1: 库存上限钳制，越界提示且数值不变 */
+  if (d > 0 && c.qty >= CART_MAX_QTY) { toast('已达购买上限'); return; }
   if (d < 0 && c.qty <= 1) return;
   c.qty += d;
   renderCart();
