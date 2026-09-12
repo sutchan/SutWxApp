@@ -9,7 +9,10 @@ const request = require("../../utils/request");
 const { buildBannerList } = require("./utils");
 const { pickCategory } = require("./parts");
 
+const themeBehavior = require("../../behaviors/theme");
+
 Page({
+  behaviors: [themeBehavior],
   data: {
     bannerList: [],
     categories: [],

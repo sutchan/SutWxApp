@@ -31,6 +31,8 @@
 - 本项目当前用自定义 `/api/*` + `/auth/*`（占位 baseUrl、部分 mock），属于"插件/代理命名空间"的等价约定；接入真实 WP 时建议采用插件命名空间方案并补齐渲染层。
 - 已落地 WooCommerce 商品支持（v3.0.6）：`SutWxApp/models/product.js` 的 `mapWooCommerceProduct` 将 WC 商品（`wp-json/wc/v3/products`）映射为统一商品 DTO（price/originPrice/images/category/stock/sku/specs/rating/description 等）；`services/productService.js` 用 `globalData.productSource`（`mock` 默认 / `woocommerce`）切换数据源，WooCommerce 路径调 `/api/product/list`、`/api/product/detail`（由配套 WP 插件映射）；详情页 `pages/product/index.js` 改为经 `productService.getProductDetail` 获取。单测 `__tests__/product.mapper.test.js`。
 
+- 已落地主题换肤（v3.0.7）：`SutWxApp/models/theme.js` 内置 5 套默认配色预设（`THEME_PRESETS`：sut-green/sky-blue/sunny-orange/violet/graphite），`resolveTheme({presetId,custom})` 合并后台自定义色值，`toCssVars` 生成对应 `app.wxss` CSS 变量的声明字符串；`services/themeService.js` 从 `/api/theme` 拉取（缓存优先、失败回退默认）并经 `globalData.theme`/`themeStyle` + `wx.setNavigationBarColor`/`wx.setTabBarStyle` 全站下发；`behaviors/theme.js` 注入页面根容器 `style="{{themeStyle}}"`，`app.js` 启动加载。配套 WP 插件实现 `/api/theme`（返回 `presetId` 或 `custom` 色值）。category/cart/order 等 wxml 为 HTML 实体转义存储，编辑须用属性片段精确匹配。
+
 ## 工具链坑（Windows/PowerShell）
 - `node -e "..."` 内嵌正则/中文易被 PowerShell 破坏，复杂脚本改用临时 `.mjs` 文件。
 - `git mv` 到不存在的目录会失败（需先建目录）；移动后若源路径残留文件，需实查磁盘状态。

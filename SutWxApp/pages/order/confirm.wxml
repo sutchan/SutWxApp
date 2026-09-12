@@ -5,7 +5,7 @@
 更新日期: 2026-07-01
 描述: 订单确认页面模板
 --&gt;
-&lt;view class="confirm-container"&gt;
+&lt;view class="confirm-container" id="page-root" style="{{themeStyle}}"&gt;
   &lt;!-- 收货地址 --&gt;
   &lt;view class="address-section" bindtap="onSelectAddress"&gt;
     &lt;view wx:if="{{address}}" class="address-info"&gt;

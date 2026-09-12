@@ -160,6 +160,29 @@ GET /api/product/detail?id={id}
 
 > 数据源开关：`app.js` 的 `globalData.productSource`（`mock` 默认 / `woocommerce`），配套 WP 插件将 `wp-json/wc/v3/products` 映射为上述端点。
 
+## 2.5 主题换肤（WordPress 后台可配置）
+
+### 2.5.1 功能描述
+
+小程序主题支持由 **WordPress 后台设置**，并自带多种默认配色预设。启动后从 `/api/theme` 拉取主题配置，合并内置预设与自定义色值，全站动态换肤（CSS 变量绑定到各页面根容器，并同步导航栏与 tabBar 配色）。
+
+### 2.5.2 功能需求
+
+| 需求编号 | 需求描述 | 优先级 | 验收标准 |
+|---------|---------|--------|----------|
+| FR-TH-001 | 内置多套默认配色预设 | P1 | 至少 5 套（苏铁绿/天空蓝/暖阳橙/紫罗兰/石墨黑） |
+| FR-TH-002 | WordPress 后台配置主题 | P1 | 切换 presetId 或自定义主色全站生效 |
+| FR-TH-003 | 全站动态换肤 | P0 | 页面/CSS 变量/导航栏/tabBar 同步 |
+| FR-TH-004 | 后端不可用时回退默认预设 | P0 | 离线/接口异常仍可用 |
+
+### 2.5.3 接口设计
+
+```
+GET /api/theme
+```
+
+> 内置预设见 `models/theme.js`（`THEME_PRESETS`）；主题加载与下发见 `services/themeService.js` 与 `behaviors/theme.js`。
+
 ## 3. 用户管理功能
 
 ### 3.1 用户注册与登录

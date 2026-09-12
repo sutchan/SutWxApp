@@ -12,7 +12,10 @@ const request = require("../../utils/request");
 const { getCurrentSpecPrice, buildVisibleImages, buildImageLoadedMap } = require("./utils");
 const { adjustQuantity, parseQuantity, buildBuyNowItem } = require("./parts");
 
+const themeBehavior = require("../../behaviors/theme");
+
 Page({
+  behaviors: [themeBehavior],
   data: {
     productId: null,
     productInfo: null,

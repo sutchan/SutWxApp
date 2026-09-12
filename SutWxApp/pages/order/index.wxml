@@ -5,7 +5,7 @@
 更新日期: 2026-07-01
 描述: 订单列表页面模板
 --&gt;
-&lt;view class="order-container"&gt;
+&lt;view class="order-container" id="page-root" style="{{themeStyle}}"&gt;
   &lt;!-- 标签页 --&gt;
   &lt;view class="tabs"&gt;
     &lt;view

@@ -10,7 +10,10 @@ const categoryService = require('../../services/categoryService');
 const productService = require('../../services/productService');
 const { formatProductListPrices } = require('../../utils/format');
 
+const themeBehavior = require("../../behaviors/theme");
+
 Page({
+  behaviors: [themeBehavior],
   data: {
     categoryList: [],
     activeCategoryIndex: 0,

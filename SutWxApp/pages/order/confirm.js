@@ -10,7 +10,10 @@ const orderService = require('../../services/orderService');
 const addressService = require('../../services/addressService');
 const { formatPrice, formatProductListPrices } = require('../../utils/format');
 
+const themeBehavior = require("../../behaviors/theme");
+
 Page({
+  behaviors: [themeBehavior],
   data: {
     items: [],
     address: null,

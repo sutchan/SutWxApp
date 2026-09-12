@@ -1,6 +1,6 @@
 /**
  * 文件名: app.js
- * 版本号: 3.0.6
+ * 版本号: 3.0.7
  * 更新日期: 2026-09-12
  * 描述: 微信小程序应用入口文件，处理应用生命周期事件和全局数据
  */
@@ -8,6 +8,7 @@
 // 引入监控工具和请求取消令牌
 const monitorUtil = require("./utils/monitor").default;
 const { CancelToken } = require("./utils/request");
+const themeService = require("./services/themeService");
 
 // 基础库版本号比较（微信官方推荐实现）
 function compareVersion(v1, v2) {
@@ -57,7 +58,9 @@ App({
     appId: "",
     baseUrl: "https://api.example.com",
     productSource: "mock", // 'mock'（默认）| 'woocommerce'：商品数据源（WooCommerce 需配套 WP 插件）
-    version: "3.0.6",
+    theme: null, // 当前主题色值（由 themeService 加载）
+    themeStyle: "", // 当前主题 CSS 变量声明字符串（供页面根容器绑定）
+    version: "3.0.7",
     debug: false,
     request: {
       CancelToken,
@@ -68,6 +71,16 @@ App({
     this.loadStorageData();
     this.checkVersion();
     this.reportAnalytics();
+    this.loadTheme();
+  },
+
+  // 加载并应用主题（后台 /api/theme 配置，失败回退内置默认预设）
+  loadTheme() {
+    themeService
+      .loadAndApplyTheme(this)
+      .catch((err) => {
+        console.error("[App] loadTheme - 主题加载失败:", err);
+      });
   },
 
   loadStorageData() {

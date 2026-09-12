@@ -9,7 +9,10 @@
 const orderService = require('../../services/orderService');
 const { formatOrderDetailPrices } = require('../../utils/format');
 
+const themeBehavior = require("../../behaviors/theme");
+
 Page({
+  behaviors: [themeBehavior],
   data: {
     orderId: null,
     orderDetail: null,

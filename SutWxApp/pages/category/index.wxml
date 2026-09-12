@@ -5,7 +5,7 @@
 更新日期: 2026-07-01
 描述: 分类页面模板
 --&gt;
-&lt;view class="category-container"&gt;
+&lt;view class="category-container" id="page-root" style="{{themeStyle}}"&gt;
   &lt;!-- 分类列表 --&gt;
   &lt;scroll-view class="category-sidebar" scroll-y&gt;
     &lt;view

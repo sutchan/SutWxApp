@@ -1,6 +1,6 @@
 # SutWxApp - 苏铁微信小程序
 
-![版本](https://img.shields.io/badge/version-3.0.6-blue)
+![版本](https://img.shields.io/badge/version-3.0.7-blue)
 ![设计风格](https://img.shields.io/badge/design-Apple%20Style-green)
 
 ## 简介
@@ -62,6 +62,8 @@ SutWxApp/
 ├── app.js                  # 小程序入口（App 实例、生命周期、全局数据）
 ├── app.json                # 全局配置（路由、tabBar、窗口）
 ├── app.wxss                # 全局样式（Apple 风格 CSS 变量）
+├── models/                 # 数据模型（商品 / 主题映射）
+├── behaviors/              # 页面复用 Behavior（主题注入）
 ├── components/             # 自定义组件
 │   ├── empty-state/        # 空状态组件
 │   └── product-card/       # 商品卡片组件
@@ -107,6 +109,7 @@ SutWxApp/
 - 收货地址管理
 - 用户中心与个人设置
 - 多语言（中文 / 英文）
+- 主题换肤：WordPress 后台可配置，内置多套默认配色预设（苏铁绿 / 天空蓝 / 暖阳橙 / 紫罗兰 / 石墨黑），全站动态生效
 - 帮助中心与反馈
 
 ## 技术栈

@@ -9,7 +9,10 @@
 const cartService = require('../../services/cartService');
 const { formatPrice, formatCartListPrices } = require('../../utils/format');
 
+const themeBehavior = require("../../behaviors/theme");
+
 Page({
+  behaviors: [themeBehavior],
   data: {
     cartList: [],
     totalPrice: 0,

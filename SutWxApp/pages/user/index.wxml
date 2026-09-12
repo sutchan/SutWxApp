@@ -5,7 +5,7 @@
   描述: 用户中心页面结构模板
 -->
 
-<view class="container">
+<view class="container" id="page-root" style="{{themeStyle}}">
   <view class="header-section" bindtap="handleAvatarTap">
     <view class="user-info" wx:if="{{isLoggedIn}}">
       <image class="avatar" src="{{userInfo.avatar || '/images/default-avatar.png'}}" mode="aspectFill"></image>

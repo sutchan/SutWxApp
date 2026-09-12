@@ -8,7 +8,10 @@
 const app = getApp();
 const authService = require("../../../services/authService");
 
+const themeBehavior = require("../../behaviors/theme");
+
 Page({
+  behaviors: [themeBehavior],
   data: {
     messagePush: true,
     emailNotify: false,

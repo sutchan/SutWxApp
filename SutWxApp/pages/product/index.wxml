@@ -5,7 +5,7 @@
   描述: 产品详情页结构模板
 -->
 
-<view class="container">
+<view class="container" id="page-root" style="{{themeStyle}}">
   <view class="product-image-section">
     <swiper class="product-image-swiper" indicator-dots="true" indicator-color="rgba(0,0,0,0.3)" indicator-active-color="#ffffff" circular="true" bindchange="handleImageChange">
       <block wx:for="{{productInfo.images}}" wx:key="index">

@@ -2,6 +2,52 @@
 
 所有重要的项目变更都将记录在此文件中。
 
+## [3.0.7] - 2026-09-12
+
+### 新增功能：WordPress 后台可配置主题换肤
+
+#### 内置多套默认配色预设
+- 新增 `models/theme.js`：内置 5 套默认配色预设（苏铁绿 / 天空蓝 / 暖阳橙 / 紫罗兰 / 石墨黑），并支持后端 `presetId` + `custom` 色值合并解析（`resolveTheme`）、CSS 变量字符串生成（`toCssVars`）。
+- 新增 `services/themeService.js`：从 `/api/theme` 拉取主题配置（缓存优先、失败回退默认），并在 `app.js` 启动时写入 `globalData.theme` / `themeStyle`，动态下发到导航栏（`wx.setNavigationBarColor`）与 tabBar（`wx.setTabBarStyle`）。
+- 新增 `behaviors/theme.js`：页面 Behavior，从 `globalData.themeStyle` 读取 CSS 变量声明并注入页面根容器，实现全站动态换肤。
+
+#### 全站页面接入
+- 11 个页面（首页 / 分类 / 商品详情 / 购物车 / 订单列表 / 订单详情 / 订单确认 / 用户中心 / 地址 / 设置 / 帮助）根容器绑定 `themeStyle`，并在 JS 注册 `themeBehavior`。
+
+#### 文档与测试
+- 新增单元测试 `__tests__/theme.mapper.test.js` 覆盖预设解析、后端配置合并、CSS 变量生成。
+- `api/spec.md` 新增「主题接口」端点与契约。
+- `features/spec.md` 新增「2.5 主题换肤」功能需求。
+- README 补充主题换肤说明与项目结构。
+
+### 文件变更
+```
+新增:
+- SutWxApp/models/theme.js
+- SutWxApp/services/themeService.js
+- SutWxApp/behaviors/theme.js
+- SutWxApp/__tests__/theme.mapper.test.js
+
+修改:
+- SutWxApp/app.js
+- SutWxApp/pages/home/index.js + .wxml
+- SutWxApp/pages/category/index.js + .wxml
+- SutWxApp/pages/product/index.js + .wxml
+- SutWxApp/pages/cart/index.js + .wxml
+- SutWxApp/pages/order/index.js + .wxml
+- SutWxApp/pages/order/detail.js + .wxml
+- SutWxApp/pages/order/confirm.js + .wxml
+- SutWxApp/pages/user/index.js + .wxml
+- SutWxApp/pages/address/index.js + .wxml
+- SutWxApp/pages/settings/index.js + .wxml
+- SutWxApp/pages/help/index.js + .wxml
+- SutWxApp/package.json
+- openspec/specs/api/spec.md
+- openspec/specs/features/spec.md
+- README.md
+- CHANGELOG.md
+```
+
 ## [3.0.6] - 2026-09-12
 
 ### 新增功能：支持 WordPress WooCommerce 商品

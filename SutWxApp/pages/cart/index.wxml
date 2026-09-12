@@ -5,7 +5,7 @@
 更新日期: 2026-07-01
 描述: 购物车页面模板，展示购物车商品列表
 --&gt;
-&lt;view class="cart-container"&gt;
+&lt;view class="cart-container" id="page-root" style="{{themeStyle}}"&gt;
   &lt;!-- 空状态 --&gt;
   &lt;view wx:if="{{empty}}" class="empty-container"&gt;
     &lt;image class="empty-icon" src="/images/placeholder.svg" mode="aspectFit"&gt;&lt;/image&gt;

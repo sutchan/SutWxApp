@@ -335,6 +335,30 @@ https://api.example.com/v{version}/{resource}/{id}?{query_parameters}
 
 > 若后端直接返回已映射的 DTO，则 `mapWooCommerceProduct` 幂等透传；若返回原始 WooCommerce JSON，则自动转换。接口无需鉴权（`needAuth: false`）。商品数据源由 `app.js` 的 `globalData.productSource`（`mock` 默认 / `woocommerce`）切换。
 
+### 主题接口（WordPress 后台可配置小程序主题）
+
+小程序主题由微信侧内置多套默认配色预设，并支持 WordPress 后台下发自定义配置。配套 WP 插件在 `/api/theme` 暴露当前主题，由 `services/themeService.js` 拉取并经 `models/theme.js` 解析合并为统一色值。
+
+- **获取主题配置**
+  - **URL**: `GET /api/theme`
+  - **认证**: 不需要
+  - **响应**（可直接返回对象，或包络 `{ code, data }`）：
+    ```json
+    {
+      "presetId": "sky-blue",
+      "custom": {
+        "primaryColor": "#E91E63",
+        "primaryLight": "#FCE4EC",
+        "primaryDark": "#AD1457"
+      }
+    }
+    ```
+  - `presetId`：内置预设 id（`sut-green` / `sky-blue` / `sunny-orange` / `violet` / `graphite`），缺省用 `sut-green`。
+  - `custom`：可选，按字段覆盖主题色值（仅接受合法十六进制色），支持 `primaryColor`、`primaryLight`、`primaryDark` 等。
+  - 解析后的色值经 `toCssVars` 转为 CSS 变量声明字符串，绑定到各页面根容器；同时下发到导航栏（`wx.setNavigationBarColor`）与 tabBar（`wx.setTabBarStyle`）。
+
+> 后端不可用时回退内置默认预设；主题配置在 `app.js` 启动时加载并缓存到本地（`appTheme`）。
+
 ### 订单API
 
 #### 创建订单

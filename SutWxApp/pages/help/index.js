@@ -5,7 +5,10 @@
  * 描述: 帮助中心页面，提供常见问题解答和客服联系方式
  */
 
+const themeBehavior = require("../../behaviors/theme");
+
 Page({
+  behaviors: [themeBehavior],
   data: {
     searchKeyword: "",
     categories: [

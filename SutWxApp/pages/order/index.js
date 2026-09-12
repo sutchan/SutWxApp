@@ -9,7 +9,10 @@
 const orderService = require('../../services/orderService');
 const { formatOrderListPrices } = require('../../utils/format');
 
+const themeBehavior = require("../../behaviors/theme");
+
 Page({
+  behaviors: [themeBehavior],
   data: {
     tabs: ['全部', '待付款', '待发货', '待收货', '已完成'],
     activeTab: 0,

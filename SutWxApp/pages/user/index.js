@@ -7,7 +7,10 @@
 
 const app = getApp();
 
+const themeBehavior = require("../../behaviors/theme");
+
 Page({
+  behaviors: [themeBehavior],
   data: {
     userInfo: null,
     points: 0,
