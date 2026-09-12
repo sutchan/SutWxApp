@@ -1,6 +1,6 @@
 /**
  * 文件名: app.js
- * 版本号: 3.0.4
+ * 版本号: 3.0.5
  * 更新日期: 2026-09-12
  * 描述: 微信小程序应用入口文件，处理应用生命周期事件和全局数据
  */
@@ -56,7 +56,7 @@ App({
     openid: null,
     appId: "",
     baseUrl: "https://api.example.com",
-    version: "3.0.4",
+    version: "3.0.5",
     debug: false,
     request: {
       CancelToken,

@@ -20,14 +20,15 @@
 
 ### 外部依赖（WordPress 后端 API）
 - 后端为 **WordPress 网站（headless CMS）**；小程序通过 `services/*` 调用其 REST API，基地址见 `app.js` 的 `globalData.baseUrl`。
-- 接口约定：内容以 `/api/*` 暴露（由 WordPress 插件或反向代理桥接 WP REST API `/wp-json/wp/v2/`），鉴权 `/auth/*`（`Authorization: Bearer <token>`，见 `app.js` 的 `requestWithToken`）。
+- 接口约定：内容以 `/api/*` 暴露（即由配套 WordPress 插件或反向代理在 WP 侧注册的自定义 REST 命名空间，如 `wp-json/<plugin>/v1/`；核心 `wp-json/wp/v2/` 亦可复用），鉴权 `/auth/*`（`Authorization: Bearer <token>`，或微信 `wx.login` code 签发的 token，见 `app.js` 的 `requestWithToken`）。
 - 内容模型：文章（posts）、页面（pages）、分类（categories）、标签（tags）、媒体（media）及自定义文章类型（如 WooCommerce 商品/订单）均由 WordPress 提供。
 
 ## WordPress 后端与内容渲染
 
 ### 后端形态（headless CMS）
 - 后端为 WordPress 网站，作为无头 CMS 提供网站内容（文章、页面、分类、媒体、自定义文章类型）。
-- 小程序通过 REST API 获取内容；当前接口以 `/api/*` 暴露（由 WordPress 插件或反向代理桥接 WP REST API `/wp-json/wp/v2/`），鉴权走 `/auth/*`（JWT）。
+- 小程序通过 REST API 获取内容；当前接口以 `/api/*` 暴露，对应 WP 侧由配套插件注册的自定义 REST 命名空间（如 `wp-json/minapper/v1/`、`wp-json/watch-life-net/v1/`，亦可复用核心 `wp-json/wp/v2/`），鉴权走 `/auth/*`（微信 `wx.login` code 换取的 token，或 JWT）。
+- 参考实现：微慕 Minapper / Watch-Life（`https://github.com/iamxjb/winxin-app-watch-life.net`）+ 配套 WP 插件 `rest-api-to-miniprogram`；其文章 HTML 渲染采用 `wxParse`（HTML→WXML）。
 - 商品/订单/购物车等电商数据可由 WordPress + WooCommerce 提供，同样经上述 API 层暴露。
 
 ### 内容渲染与排版优化（核心能力）

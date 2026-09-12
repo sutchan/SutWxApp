@@ -1,7 +1,7 @@
 # SutWxApp 项目长期记忆
 
 ## 项目概况
-- 苏铁微信小程序（电商），位于 `SutWxApp/` 子目录（纯前端原生小程序：WXML/WXSS/JS，无后端代码），数据来自外部 REST API（`app.js` 的 `globalData.baseUrl`）。
+- 苏铁微信小程序，位于 `SutWxApp/` 子目录（纯前端原生小程序：WXML/WXSS/JS，无后端代码）。**后端为 WordPress（headless CMS）**，内容经 REST API 提供（`app.js` 的 `globalData.baseUrl`）；当前代码接口约定 `/api/*`、鉴权 `/auth/*`，但 `productService`/`categoryService` 仍为 mock、baseUrl 占位未真对接。
 - 界面 Apple 极简风格 + 品牌绿（#2E7D32 / #1B5E20 / #F1F8E9）。
 - 文档体系：`openspec/`（`specs/` 10 个规范：api/architecture/data/design/development/features/ops/project/testing/user-guide，另有 `archive/`、`项目概述.md`、`README.md`、`AGENTS.md`、`IMPROVEMENTS_REPORT.md`、`TECH_STACK_REPORT.md`、`docs_mapping_plan.md`）。
 
@@ -12,7 +12,7 @@
 - 根目录 `SutWxApp.code-workspace` 受 `.gitignore` 忽略但**必须保留在磁盘，不得删除**。
 
 ## 版本管理
-- 版本单一来源：`SutWxApp/package.json` 的 `version` 字段与 `SutWxApp/app.js` 的 `globalData.version`（两者须一致），当前 **3.0.3**。
+- 版本单一来源：`SutWxApp/package.json` 的 `version` 字段与 `SutWxApp/app.js` 的 `globalData.version`（两者须一致），当前 **3.0.4**。
 - 同步展示位：根 `README.md` 版本徽章、`CHANGELOG.md` 顶部新版本小节。
 - 仅更新被改动文件的 `// 版本号: x.y.z` 头注释，禁止全仓库批量刷写。
 - 每次修改至少 bump patch；变更记录写入根 `CHANGELOG.md`（倒序，`## [x.y.z] - YYYY-MM-DD`，无版本比较链接）。
@@ -21,6 +21,14 @@
 - 质量门禁在 `SutWxApp/package.json`：`npm run lint`（eslint . --ext .js）、`npm test`（jest，testMatch `**/__tests__/**/*.test.js`，`__tests__/` 下为纯函数单测）。
 - 源文件单文件 ≤200 行，超出按职责拆分（如 `pages/product/parts.js`、`pages/home/utils.js`）。
 - 约定为业务逻辑加中文注释，未启用 i18n 代码层（多语言走 `locales/` 的 .po/.pot）。
+
+## WordPress 后端对接（参考实现）
+- 项目以 WordPress 为后端（headless CMS），在微信侧优化排版显示网站内容（文章/商品等）。
+- 经典开源参考：**微慕 Minapper / Watch-Life**（`https://github.com/iamxjb/winxin-app-watch-life.net`），配套 WP 插件 `rest-api-to-miniprogram`（gitee：iamxjb/rest-api-to-miniprogram）。
+- 真实对接形态（来自参考项目源码）：配套 WP 插件在 WP 侧注册**自定义 REST 命名空间**（如 `wp-json/minapper/v1/`、`wp-json/watch-life-net/v1/`），小程序直接调用该命名空间路由（如 `posts`/`categories`/`comments`/`wechatshop/product/getlist`），而非裸 `wp-json/wp/v2/`；核心 `wp-json/wp/v2/` 亦可复用。
+- 鉴权：典型为微信 `wx.login` 拿 code → 插件签发 token（非通用 JWT）；用户以 openid 关联 WP 用户。
+- 文章 HTML 渲染：参考项目用 `wxParse`（HTML→WXML）；本项目 `utils/request.js` 的 `sanitizeHtml()` 做安全清洗，渲染层待补（建议 rich-text / towxml / wxParse）。
+- 本项目当前用自定义 `/api/*` + `/auth/*`（占位 baseUrl、部分 mock），属于"插件/代理命名空间"的等价约定；接入真实 WP 时建议采用插件命名空间方案并补齐渲染层。
 
 ## 工具链坑（Windows/PowerShell）
 - `node -e "..."` 内嵌正则/中文易被 PowerShell 破坏，复杂脚本改用临时 `.mjs` 文件。

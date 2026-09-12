@@ -2,6 +2,30 @@
 
 所有重要的项目变更都将记录在此文件中。
 
+## [3.0.5] - 2026-09-12
+
+### 文档完善（WordPress 对接准确性）
+
+#### 校正接口与鉴权描述（参考微慕 Minapper/Watch-Life）
+- 架构规范、API 规范将「裸 `wp-json/wp/v2/` 桥接」更正为「配套 WordPress 插件注册的自定义 REST 命名空间（如 `wp-json/<plugin>/v1/`；核心 `wp-json/wp/v2/` 亦可复用）」
+- 鉴权说明由「JWT」补充为「微信 `wx.login` code 换取 token 或 JWT」
+- 架构规范「WordPress 后端与内容渲染」补充参考实现链接（微慕 Minapper/Watch-Life + 配套插件 `rest-api-to-miniprogram`；文章 HTML 渲染采用 `wxParse`）
+- README「相关文档」新增 WordPress 对接参考实现链接
+
+### 文件变更
+```
+新增:
+（无）
+
+修改:
+- openspec/specs/architecture/spec.md
+- openspec/specs/api/spec.md
+- README.md
+- SutWxApp/app.js
+- SutWxApp/package.json
+- CHANGELOG.md
+```
+
 ## [3.0.4] - 2026-09-12
 
 ### 文档完善

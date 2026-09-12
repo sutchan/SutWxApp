@@ -3,7 +3,7 @@
 ## 目的
 本规范定义了苏铁微信小程序（SutWxApp）项目的API设计和使用，包括API结构、设计原则、认证机制、核心接口、错误处理和版本管理。
 
-> 后端为 **WordPress 网站（headless CMS）**。小程序通过 REST API 消费网站内容，当前接口以 `/api/*` 暴露（由 WordPress 插件或反向代理桥接 WP REST API `/wp-json/wp/v2/`），鉴权走 `/auth/*`（JWT）。下文端点约定以小程序实际调用路径为准；若后续改为直连 WP REST，可将 `/api/*` 映射为 `/wp-json/wp/v2/*`。
+> 后端为 **WordPress 网站（headless CMS）**。小程序通过 REST API 消费网站内容，当前接口以 `/api/*` 暴露（对应 WP 侧由配套插件注册的自定义 REST 命名空间，如 `wp-json/<plugin>/v1/`；核心 `wp-json/wp/v2/` 亦可复用），鉴权走 `/auth/*`（微信 `wx.login` code 换取的 token 或 JWT）。下文端点约定以小程序实际调用路径为准；若后续改为直连 WP REST，可将 `/api/*` 映射为对应命名空间路由。参考实现：微慕 Minapper / Watch-Life（`https://github.com/iamxjb/winxin-app-watch-life.net`）。
 
 ## 设计原则
 

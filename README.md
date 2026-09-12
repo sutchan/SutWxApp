@@ -1,6 +1,6 @@
 # SutWxApp - 苏铁微信小程序
 
-![版本](https://img.shields.io/badge/version-3.0.4-blue)
+![版本](https://img.shields.io/badge/version-3.0.5-blue)
 ![设计风格](https://img.shields.io/badge/design-Apple%20Style-green)
 
 ## 简介
@@ -135,6 +135,7 @@ SutWxApp/
 - [项目概览](docs/PROJECT_OVERVIEW.md)
 - [技术栈报告](openspec/TECH_STACK_REPORT.md)
 - [改进报告](openspec/IMPROVEMENTS_REPORT.md)
+- [WordPress 对接参考实现（微慕 Minapper/Watch-Life）](https://github.com/iamxjb/winxin-app-watch-life.net)
 
 ## 版本历史
 
