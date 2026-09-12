@@ -6,10 +6,15 @@
 - 文档体系：`openspec/`（`specs/` 10 个规范：api/architecture/data/design/development/features/ops/project/testing/user-guide，另有 `archive/`、`项目概述.md`、`README.md`、`AGENTS.md`、`IMPROVEMENTS_REPORT.md`、`TECH_STACK_REPORT.md`、`docs_mapping_plan.md`）。
 
 ## 目录约定（2026-09-12 起）
-- **原型目录统一为仓库根 `/prototype/`**：唯一原型文件 `prototype/prototype.html`（单文件自包含，所有样式/脚本/图形内联，无外部资源引用）。
+- **原型目录统一为仓库根 `/prototype/`**，含 3 个文件（彼此相对跳转，均为本地文件、无网络依赖）：
+  - `prototype/prototype.html`：主原型（设计规范 v3.1.1 + v3.2 动效：骨架屏/Ken Burns/飞入购物车/涟漪/`prefers-reduced-motion`；13 个商品 + 脱敏评价数据；渐变走 `--grad-*` token；原型内部构建版本 v3.1.2）。
+  - `prototype/prototype-extra.html`：地址/订单/设置/帮助等二级页。
+  - `prototype/wireframes.html`：组件库。
+  - 注：文件头注释仍写"单文件自包含 / 无外部依赖"，实际已依赖两个兄弟页（"无外部"= 无 CDN/网络资源），注释轻微过时，未修。
 - 已删除根目录 `prototype.html` 重定向占位页；已移除 `openspec/prototype/`（规范目录只放规范文档）。
-- 引用原型时使用相对路径 `prototype/prototype.html`（README「相关文档」已指向该路径）。
+- 引用主原型时使用相对路径 `prototype/prototype.html`（README「相关文档」已指向该路径）。
 - 根目录 `SutWxApp.code-workspace` 受 `.gitignore` 忽略但**必须保留在磁盘，不得删除**。
+- 原型审查与修复（2026-09-12）：②`phImg()` 渐变 `id="g"` 经复核为**误报**——其产物均为 `<img src="data:...svg">` 引用，SVG 在图片上下文内隔离解析，`url(#g)` 不会跨图串色，无需修改。①商品详情图轮播**已修复**：dots 绑 `onclick="goDetailSlide(k);startDetailAuto()"`，进入商品页经 `setPage` 启动 `startDetailAuto()` 自动播放（3.5s/张，匹配 `prefers-reduced-motion` 时停止），离开页面 `stopDetailAuto()`；同时 bump 原型构建版本至 v3.1.2（仅改原型内版本徽章与文件头，未动设计规范 v3.1.1 与小程序版本 3.0.4）。P3 项（文件头"单文件自包含"注释因两个兄弟页略过时、可点击元素缺 role/tabindex/aria）维持原型演示级，未改。
 
 ## 版本管理
 - 版本单一来源：`SutWxApp/package.json` 的 `version` 字段与 `SutWxApp/app.js` 的 `globalData.version`（两者须一致），当前 **3.0.4**。

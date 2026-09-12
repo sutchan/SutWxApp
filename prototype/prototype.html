@@ -2,7 +2,7 @@
 <!--
   文件名: prototype.html
   项目: 苏铁微信小程序 (SutWxApp) 高保真交互原型
-  设计系统: SutWxApp Design Spec v3.1.1 (openspec/specs/design/spec.md)
+  设计系统: SutWxApp Design Spec v3.1.1 ｜ 原型构建 v3.1.2 (openspec/specs/design/spec.md)
   说明: 单文件自包含原型，全部样式/脚本/图形内联，无外部依赖。
         图片一律使用内联 SVG / CSS 渐变占位（几何叶片 + 品牌绿渐变）。
         语义色策略: 品牌 CTA/价格/选中态/角标 = 绿系；红色仅限错误/危险确认。
@@ -1180,7 +1180,7 @@ body {
           <!-- 退出登录（红 = 危险语义） -->
           <div class="logout-btn" onclick="openLogoutModal()">退出登录</div>
           <div class="demo-note" style="padding-bottom:0">* 演示数据，正式版由后端接口提供</div>
-          <div class="version-tip">苏铁 v3.1.1 · 让每一片叶子都被善待 · <a class="wf-link" href="wireframes.html">组件库</a></div>
+          <div class="version-tip">苏铁 v3.1.2 · 让每一片叶子都被善待 · <a class="wf-link" href="wireframes.html">组件库</a></div>
         </div>
       </div>
 
@@ -1446,6 +1446,7 @@ function setPage(key) {
   });
   playSkeleton(key);
   state.tab = key;
+  if (key === 'product') startDetailAuto(); else stopDetailAuto();
 }
 /* —— 骨架屏：每页首次进入展示 1.2s（token 灰阶 + 扫光）→ 淡出露出内容 —— */
 var skelSeen = {};
@@ -1632,7 +1633,7 @@ function renderProduct() {
       + [0,1,2,3].map(function(k){ return '<div class="sw-item"><img src="' + phImg(p.name + k, idx + k) + '" alt=""></div>'; }).join('')
       + '</div></div>'
       + '<div class="sw-counter" id="pdCounter">1/4</div>'
-      + '<div class="sw-dots" id="pdDots"><i class="on"></i><i></i><i></i><i></i></div>'
+      + '<div class="sw-dots" id="pdDots">' + [0,1,2,3].map(function(k){ return '<i class="' + (k===0?'on':'') + '" onclick="goDetailSlide(' + k + ');startDetailAuto()"></i>'; }).join('') + '</div>'
     + '</div>'
     + '<!-- 价格区（品牌价签策略） -->'
     + '<div class="detail-info">'
@@ -1708,6 +1709,16 @@ function goDetailSlide(i) {
   tr.style.transform = 'translateX(-' + (detailSlide * 100) + '%)';
   document.getElementById('pdCounter').textContent = (detailSlide + 1) + '/' + detailCount;
   document.querySelectorAll('#pdDots i').forEach(function(d, j){ d.classList.toggle('on', j === detailSlide); });
+}
+/* 详情图轮播自动播放：进入商品页启动，离开或降低动效偏好时停止 */
+var detailTimer = null;
+function startDetailAuto() {
+  stopDetailAuto();
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  detailTimer = setInterval(function(){ goDetailSlide(detailSlide + 1); }, 3500);
+}
+function stopDetailAuto() {
+  if (detailTimer) { clearInterval(detailTimer); detailTimer = null; }
 }
 function toggleDetailFav() {
   state.favMap[state.productId] = !state.favMap[state.productId];
