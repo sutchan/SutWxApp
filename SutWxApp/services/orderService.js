@@ -1,12 +1,10 @@
 
 /**
  * 文件名: orderService.js
- * 版本号: 3.0.0
- * 更新日期: 2026-07-01
+ * 版本号: 3.0.8
+ * 更新日期: 2026-09-12
  * 描述: 订单服务层，提供订单相关功能
  */
-
-const request = require("../utils/request");
 
 const mockOrders = [
   {
@@ -132,7 +130,8 @@ async function getOrderDetail(orderId) {
 
 async function createOrder(orderData) {
   try {
-    const { items, addressId, remark } = orderData;
+    // 注：addressId 暂未使用（当前为 mock 地址），待接入 WordPress/WooCommerce 订单接口后回填真实收货地址
+    const { items, remark } = orderData;
     
     const newOrder = {
       id: Date.now(),

@@ -1,0 +1,11 @@
+PASS __tests__/theme.mapper.test.js (5.153 s)
+PASS __tests__/product.mapper.test.js (5.088 s)
+PASS __tests__/product.parts.test.js (5.674 s)
+PASS __tests__/product.utils.test.js (5.511 s)
+PASS __tests__/home.utils.test.js (5.604 s)
+
+Test Suites: 5 passed, 5 total
+Tests:       32 passed, 32 total
+Snapshots:   0 total
+Time:        10.237 s
+Ran all test suites.

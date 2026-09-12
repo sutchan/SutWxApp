@@ -3,11 +3,9 @@
 /docs_backup_*
 */node_modules
 /tests
-SutWxApp.code-workspace
 test_fixes.js
 /coverage
 fix-*
-/test
 /test
 /backup
 /.workbuddy
@@ -20,3 +18,4 @@ private.*.key
 SutWxApp/private.key
 SutWxApp/preview.jpg
 .miniprogram-ci/
+*.txt

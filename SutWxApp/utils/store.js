@@ -1,12 +1,9 @@
 /**
  * 文件名: store.js
- * 版本号: 3.0.2
- * 更新日期: 2026-08-13
+ * 版本号: 3.0.8
+ * 更新日期: 2026-09-12
  * 描述: 应用状态管理工具，用于存储和管理全局状态
  */
-
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
 
 // 初始状态
 const initialState = {

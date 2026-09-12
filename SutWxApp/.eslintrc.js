@@ -21,9 +21,14 @@ module.exports = {
     getApp: "readonly",
     getPage: "readonly",
     Component: "readonly",
+    Behavior: "readonly",
+    getCurrentPages: "readonly",
     requirePlugin: "readonly",
     module: "writable",
     exports: "writable",
+    // H5 / 非小程序宿主环境下的能力探测分支（代码内以 typeof 判断后使用）
+    window: "readonly",
+    requestAnimationFrame: "readonly",
   },
   extends: "eslint:recommended",
   rules: {
@@ -38,6 +43,26 @@ module.exports = {
     {
       // 工程脚本（校验/部署）属 CLI 工具，需要直接向控制台输出结果
       files: ["scripts/**/*.js"],
+      rules: {
+        "no-console": "off",
+      },
+    },
+    {
+      // 单元测试运行于 Jest 环境
+      files: ["__tests__/**/*.js"],
+      env: {
+        jest: true,
+      },
+    },
+    {
+      // 图片压缩工具为 Node ESM 脚本（构建期使用，不参与小程序打包）
+      files: ["utils/compress-images.js"],
+      env: {
+        node: true,
+      },
+      parserOptions: {
+        sourceType: "module",
+      },
       rules: {
         "no-console": "off",
       },

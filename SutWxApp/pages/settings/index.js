@@ -1,7 +1,7 @@
 /**
  * 文件名: index.js
- * 版本号: 3.0.0
- * 更新日期: 2025-12-28 10:30
+ * 版本号: 3.0.8
+ * 更新日期: 2026-09-12
  * 描述: 设置页面，处理用户账户安全、通知、隐私等设置
  */
 
@@ -31,7 +31,6 @@ Page({
   },
 
   loadSettings: function () {
-    const that = this;
     const settings = wx.getStorageSync("userSettings");
 
     if (settings) {
@@ -91,8 +90,6 @@ Page({
   },
 
   onLogout: function () {
-    const that = this;
-
     wx.showModal({
       title: "确认退出",
       content: "确定要退出登录吗？",

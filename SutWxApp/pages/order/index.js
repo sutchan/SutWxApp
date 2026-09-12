@@ -1,8 +1,8 @@
 
 /**
  * 文件名: index.js
- * 版本号: 3.0.0
- * 更新日期: 2026-07-01
+ * 版本号: 3.0.8
+ * 更新日期: 2026-09-12
  * 描述: 订单列表页面，展示用户订单列表，支持订单状态筛选和订单操作
  */
 
@@ -115,8 +115,7 @@ Page({
   /**
    * 支付订单
    */
-  onPayOrder(e) {
-    const { id } = e.currentTarget.dataset;
+  onPayOrder() {
     wx.showToast({
       title: '支付功能开发中',
       icon: 'none'
@@ -155,8 +154,7 @@ Page({
   /**
    * 评价订单
    */
-  onCommentOrder(e) {
-    const { id } = e.currentTarget.dataset;
+  onCommentOrder() {
     wx.showToast({
       title: '评价功能开发中',
       icon: 'none'

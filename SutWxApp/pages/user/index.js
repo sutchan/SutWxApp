@@ -1,11 +1,9 @@
 /**
  * 文件名: index.js
- * 版本号: 3.0.0
- * 更新日期: 2025-12-26
+ * 版本号: 3.0.8
+ * 更新日期: 2026-09-12
  * 描述: 用户中心页面逻辑控制层
  */
-
-const app = getApp();
 
 const themeBehavior = require("../../behaviors/theme");
 
