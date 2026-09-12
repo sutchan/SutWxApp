@@ -51,7 +51,7 @@ jobs:
         run: node scripts/changelog-section.js "$TAG" > release-notes.md
 
       - name: 创建 Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ env.TAG }}
           name: ${{ env.TAG }}
