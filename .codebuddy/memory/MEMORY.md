@@ -17,14 +17,15 @@
 - 原型审查与修复（2026-09-12）：②`phImg()` 渐变 `id="g"` 经复核为**误报**——其产物均为 `<img src="data:...svg">` 引用，SVG 在图片上下文内隔离解析，`url(#g)` 不会跨图串色，无需修改。①商品详情图轮播**已修复**：dots 绑 `onclick="goDetailSlide(k);startDetailAuto()"`，进入商品页经 `setPage` 启动 `startDetailAuto()` 自动播放（3.5s/张，匹配 `prefers-reduced-motion` 时停止），离开页面 `stopDetailAuto()`；同时 bump 原型构建版本至 v3.1.2（仅改原型内版本徽章与文件头，未动设计规范 v3.1.1 与小程序版本 3.0.4）。P3 项（文件头"单文件自包含"注释因两个兄弟页略过时、可点击元素缺 role/tabindex/aria）维持原型演示级，未改。
 
 ## 版本管理
-- 版本单一来源：`SutWxApp/package.json` 的 `version` 字段与 `SutWxApp/app.js` 的 `globalData.version`（两者须一致），当前 **3.0.8**。
+- 版本单一来源：`SutWxApp/package.json` 的 `version` 字段与 `SutWxApp/app.js` 的 `globalData.version`（两者须一致），当前 **3.0.10**（2026-09-13 实测 `npm run check:version` 四处一致通过）。
+- 规范文档完成度（2026-09-13 核实）：openspec/specs 共 10 类，已全部有内容——原空文档 `testing`（v1.0.1）、`user-guide`（v1.0.0）已填充；IMPROVEMENTS_REPORT 中建议新增的 `data`（v3.0.1）、`design`（v3.1.1）已新建落地；`design/spec.md` 为 UI 设计权威源（以 app.wxss 代码为事实来源）。IMPROVEMENTS_REPORT.md 自身为 2025-12-27 旧文档，其"测试/用户指南为空、data/design 建议新增"等结论已过时。
 - 同步展示位：根 `README.md` 版本徽章（`badge/version-x.y.z`）、`CHANGELOG.md` 顶部新版本小节；由 `npm run check:version` 强制校验（CI 亦拦截）。
 - 仅更新被改动文件的 `// 版本号: x.y.z` 头注释，禁止全仓库批量刷写。
 - 每次修改至少 bump patch；变更记录写入根 `CHANGELOG.md`（倒序，`## [x.y.z] - YYYY-MM-DD`，无版本比较链接）。
 - 踩坑：`CHANGELOG.md` 可能先出现新版本小节而 `package.json`/`app.js`/README 未 bump（3.0.8 即如此，本次已补齐）——写文档前先跑 `npm run check:version` 实查。
 
 ## 工程与质量
-- 质量门禁在 `SutWxApp/package.json`：`npm run lint`（eslint . --ext .js）、`npm test`（jest，testMatch `**/__tests__/**/*.test.js`，`__tests__/` 下为纯函数单测）、`npm run check`（版本+配置校验）、`npm run ci`（= lint + check + test）。
+- 质量门禁在 `SutWxApp/package.json`：`npm run lint`（eslint .，ESLint 10 纯声明式扁平配置 `eslint.config.js`，无 `--ext`）、`npm test`（jest，testMatch `**/__tests__/**/*.test.js`，`__tests__/` 下为纯函数单测）、`npm run check`（版本+配置校验）、`npm run ci`（= lint + check + test）。
 - **ESLint 基线（2026-09-12 实测）**：0 error / 11 warning（warning 全是 `eqeqeq` 松比较，属 dataset 字符串场景，故意保留）。若出现 error，优先检查：`__tests__` 的 `env.jest`、globals（`Behavior`/`getCurrentPages`/`window`/`requestAnimationFrame`）、`utils/compress-images.js` 的 Node ESM override 是否被覆盖。
 - 单测基线：5 suites / 32 tests 通过，语句覆盖率 ~82%（`npm run test:coverage`）。
 - 源文件单文件 ≤200 行，超出按职责拆分（如 `pages/product/parts.js`、`pages/home/utils.js`）。
