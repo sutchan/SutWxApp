@@ -9,6 +9,34 @@
 - 新增 `docs/wordpress-plugin/DEVELOPMENT_PLAN.md`：后端插件分阶段开发计划（P0 脚手架 → P1 只读 MVP → P2 主题配置 → P3 鉴权基建 → P4 联调测试 → P5 订单支付预留），含技术决策、验收与风险对策。
 - 完善 `openspec/specs/api/spec.md`：补全缺失的「文章 API」「分类 API」契约（与 `services/{post,category}Service.js`、`models/{post,category}.js` 对齐），并新增「端点与后端命名空间映射」说明与后续阶段标注。
 - 更新 `openspec/README.md`、`README.md` 索引，链接后端规范与插件开发计划。
+- 同步 `openspec/specs/architecture/spec.md`：外部依赖/后端形态章节对齐自研插件 `sutwx-app-api`（命名空间 `sutwx/v1`、数据源切换、阶段基线），服务层补全 `postService`/`themeService`/`dataSource`，部署说明注明插件随站点部署。
+- 同步 `docs/PROJECT_OVERVIEW.md`：项目结构树对齐真实代码（补 `models/`、`behaviors/`、`pages/article/`、`postService`、`themeService`、`dataSource`、`richtext` 等），后端说明链接插件规范/计划，补全文章与主题换肤模块说明。
+
+## [3.2.0] - 2026-09-13
+
+### 新功能（后端插件 P1 内容只读 MVP，插件版本 0.1.0 → 0.2.0）
+- `sutwx-app-api/` 新增映射层与字段净化：
+  - `includes/sanitize.php`：`sutwx_strip_text`（去标签）、`sutwx_excerpt`（60 字摘要截断）、`sutwx_attachment_url`（附件 ID→URL）。
+  - `includes/mappings/map-product.php`：WC 商品 → 商品 DTO（价格/划线价/图集/分类/销量/库存/规格 specs——简单商品默认规格、可变商品按 variation 属性展开，逻辑与小程序 `models/product.js` 对齐）。
+  - `includes/mappings/map-post.php`：WP 文章 → 文章 DTO（wp_kses_post 预清洗正文、特色图、60 字摘要、日期/链接/作者/分类）。
+  - `includes/mappings/map-category.php`：WC `product_cat` → 分类 DTO（缩略图图标、count/parent/slug/permalink）。
+- 6 个内容端点接入真实查询（`/api/theme` 沿用 P0）：
+  - `product/list`（WP_Query→`wc_get_product`，支持 page/pageSize/categoryId/keyword）、`product/detail`（404 统一错误包络）。
+  - `post/list`（WP_Query，keyword 搜索）、`post/detail`。
+  - `category/list`（`get_terms(product_cat)`，parentId 筛选）、`category/detail`。
+- 新增独立映射单测 `sutwx-app-api/tests/run-mapping-tests.php`（自建 WP/WC 桩 + 假对象，25+ 断言覆盖字段完整性与缺省过滤，无需 WP 环境可跑）。
+- 版本号由 3.1.0 升级至 3.2.0（插件 P1 为 minor 变更）。
+
+## [3.1.0] - 2026-09-13
+
+### 新功能（后端插件 P0 脚手架落地）
+- 新增 `sutwx-app-api/` WordPress 插件骨架（独立版本 0.1.0）：
+  - `sutwx-app-api.php`：插件入口，声明 `Requires Plugins: woocommerce`（WP 6.5+ 依赖约束）与常量（`SUTWX_API_REST_NS=sutwx/v1` 等）。
+  - `includes/class-loader.php`：统一注册 `rest_api_init` 路由、`/api/*` 重写规则（→ `index.php?rest_route=/sutwx/v1/$1`）、激活/停用 flush、后台菜单占位与 WooCommerce 缺失提示。
+  - `includes/class-rest-base.php`：统一 `{code,message,data,timestamp,requestId}` 包络与错误处理基类，含分页参数规整（`pageSize` 强制上限 50）。
+  - `includes/rest/`：7 个只读路由骨架——`product/{list,detail}`、`post/{list,detail}`、`category/{list,detail}`（占位包络，P1 实现映射）、`theme`（已返回真实默认配置 `{"presetId":"sut-green"}`，达成 P0 验收）。
+  - `readme.txt`：安装与 `baseUrl` 配置说明（含「固定链接保存刷新」与 `wp-json/sutwx/v1` 备选直连）。
+- 版本号由 3.0.14 升级至 3.1.0（新增插件骨架为 minor 变更）。
 
 ## [3.0.14] - 2026-09-13
 

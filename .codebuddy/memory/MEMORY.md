@@ -8,18 +8,20 @@
 - 去重公共模块（v3.0.14 抽出）：`utils/text.js`（`toNumber`/`stripHtml`）、`utils/api.js`（`unwrap`）、`services/dataSource.js`（`getDataSource`）；各 service/model 改引用，导出契约不变。
 
 ## 版本（单一来源）
-- 权威：`SutWxApp/package.json` 的 `version` 与 `SutWxApp/app.js` 的 `globalData.version`，当前 **3.0.14**（`npm run check:version` 校验）。展示位同步 README 徽章 + `CHANGELOG.md` 顶节。
+- 权威：`SutWxApp/package.json` 的 `version` 与 `SutWxApp/app.js` 的 `globalData.version`，当前 **3.1.0**（`npm run check:version` 校验）。展示位同步 README 徽章 + `CHANGELOG.md` 顶节。
 - 每次改动 bump 最小版本（≥patch）；仅更新被改文件的 `// 版本号:` 头注释，禁止全仓库批量刷写。改文档前先实查版本（会话间隙常被外部 bump）。
 
 ## 原型目录
 - 统一为仓库根 `/prototype/`（`prototype.html` 主 + `prototype-extra.html` 二级页 + `wireframes.html` 组件库，彼此相对跳转、无 CDN）。引用用相对路径 `prototype/prototype.html`。
 - 截图流程：缓存 Chromium + `playwright-core` 渲染后截 `.phone` 元素存 `docs/screenshots/`；临时依赖装仓库外 `.shots/`，用完删。
 
-## 后端插件规划（2026-09-13 立项，缺代码仅文档）
-- 插件名 `sutwx-app-api`（独立 WP 插件，自研不依赖微慕）。规范 `openspec/specs/backend/spec.md`，开发计划 `docs/wordpress-plugin/DEVELOPMENT_PLAN.md`。
+## 后端插件（2026-09-13 立项并落地 P0，插件独立版本 0.1.0）
+- 插件名 `sutwx-app-api`（独立 WP 插件，自研不依赖微慕），代码在仓库根 `sutwx-app-api/`。规范 `openspec/specs/backend/spec.md`，开发计划 `docs/wordpress-plugin/DEVELOPMENT_PLAN.md`。
 - 决策基线（已与产品确认）：① 商品数据源=**WooCommerce**；② v1=**只读 MVP**（文章/商品/分类/主题，全部免登录）；③ 鉴权=**wx.login→JWT**（基建本期落地，内容端点仍公开）；④ 订单/支付=**本期不做，仅预留契约**。
+- **P0 已落地（v3.1.0）**：入口声明 `Requires Plugins: woocommerce`；常量 `SUTWX_API_REST_NS=sutwx/v1`、`SUTWX_API_THEME_OPTION=sutwx_theme`；`class-loader.php` 注册路由 + `/api/*`→`rest_route=/sutwx/v1/$1` 重写 + 激活 flush + 默认主题 option；`class-rest-base.php` 提供 `{code,message,data,timestamp,requestId}` 包络与分页规整（pageSize≤50）；7 路由骨架中 `theme` 已真实返回 `{"presetId":"sut-green"}`（P0 验收达成），其余 6 个为占位。本机无 PHP，`php -l` 未跑。
 - 小程序实际公开端点：`/api/product/{list,detail}`、`/api/post/{list,detail}`、`/api/category/{list,detail}`、`/api/theme`（均在 `services/*.js` + `models/*.js` 有映射，DTO 字段见 backend/spec.md）。`utils/api.unwrap` 兼容 `{code,data}` 包络或裸数据。
 - 命名空间映射：插件注册 `sutwx/v1` + rewrite `/api/*` → `rest_route=/sutwx/v1/$1`（推荐，使 spec 路径即真实路径）；备选直连 `wp-json/sutwx/v1`。预设列表（`sut-green` 等 5 套）须与 `models/theme.js` 同步。
+- **P0 待办**：本地 WP+WC 测试环境就绪（含示例商品/文章/分类）。**P1**：`mappings/map-{product,post,category}.php` + 6 端点真实回调 + 映射单测。
 
 ## 工程与质量
 - 门禁：`npm run lint`（eslint 10 纯声明式 flat config `eslint.config.js`，**零外部 require**）/ `npm test`（jest，`__tests__/**/*.test.js`）/ `npm run check`（版本+配置）/ `npm run ci`（lint+check+test）。

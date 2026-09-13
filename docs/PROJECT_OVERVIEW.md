@@ -21,17 +21,20 @@
 
 ### 后端说明（WordPress 无头 CMS）
 - 小程序通过 `services/*` 调用 WordPress 提供的 REST API，基地址见 `app.js` 的 `globalData.baseUrl`
-- 当前接口以 `/api/*` 暴露（由 WordPress 插件或反向代理桥接 WP REST API `/wp-json/wp/v2/`），鉴权 `/auth/*`（JWT）
+- 当前接口以 `/api/*` 暴露（由配套 WordPress 插件 `sutwx-app-api` 桥接 WP REST API），鉴权 `/auth/*`（JWT）
 - 认证：`Authorization: Bearer <token>`（本地存储键 `TOKEN`）
-- 后端（WordPress 站点）的实现与运维由对应团队负责，不在本仓库内
+- 内容端点（商品/分类/文章/主题）免登录；商品与文章数据源可经 `globalData.productSource` 在 `mock` / `woocommerce` 间切换
+- 后端插件规范见 [`openspec/specs/backend/spec.md`](../openspec/specs/backend/spec.md)，开发计划见 [`docs/wordpress-plugin/DEVELOPMENT_PLAN.md`](wordpress-plugin/DEVELOPMENT_PLAN.md)
 
 ## 项目结构
 
 ```
 SutWxApp/
-├── app.js                  # 小程序入口（App 实例、生命周期、全局数据）
-├── app.json                # 全局配置（页面路由、tabBar、窗口）
-├── app.wxss                # 全局样式（Apple 风格 CSS 变量）
+├── app.js                  # 小程序入口（App 实例、生命周期、全局数据、主题加载）
+├── app.json                # 全局配置（页面路由、tabBar、窗口、分包）
+├── app.wxss                # 全局样式（Apple 风格 CSS 变量，主题变量定义处）
+├── models/                 # 数据模型与映射层（商品/分类/文章/主题 → 统一 DTO）
+├── behaviors/              # 页面复用 Behavior（主题注入 themeBehavior）
 ├── components/             # 自定义组件
 │   ├── empty-state/        # 空状态组件
 │   └── product-card/       # 商品卡片组件
@@ -42,25 +45,29 @@ SutWxApp/
 │   ├── category/           # 分类页
 │   ├── product/            # 商品详情页
 │   ├── cart/               # 购物车
-│   ├── order/              # 订单模块
-│   │   ├── index/          # 订单列表
-│   │   ├── detail/         # 订单详情
-│   │   └── confirm/        # 订单确认
+│   ├── order/              # 订单模块（列表/详情/确认）
 │   ├── user/               # 用户中心
 │   ├── address/            # 地址管理（分包）
 │   ├── settings/           # 设置页（分包）
-│   └── help/               # 帮助中心（分包）
-├── services/               # 服务层（API 调用封装）
+│   ├── help/               # 帮助中心（分包）
+│   └── article/            # 文章列表/详情（分包，rich-text 渲染 WP HTML）
+├── services/               # 服务层（API 调用封装，mock/WooCommerce 双源切换）
 │   ├── authService.js      # 认证服务
 │   ├── productService.js   # 商品服务
 │   ├── categoryService.js  # 分类服务
+│   ├── postService.js      # 文章服务
+│   ├── themeService.js     # 主题服务（/api/theme 拉取与应用）
+│   ├── dataSource.js       # 数据源判定（getDataSource）
 │   ├── cartService.js      # 购物车服务
 │   ├── orderService.js     # 订单服务
 │   └── addressService.js   # 地址服务
 ├── utils/                  # 工具类
 │   ├── request.js          # 网络请求封装（拦截器/重试/缓存/取消/队列）
+│   ├── richtext.js         # 文章 HTML 安全清洗（rich-text 渲染用）
+│   ├── text.js             # 共享工具（toNumber / stripHtml）
+│   ├── api.js              # 响应包络解包（unwrap）
 │   ├── format.js           # 格式化工具（价格、日期等）
-│   ├── monitor.js          # 监控与错误上报
+│   ├── monitor*.js         # 监控与错误上报（core/collectors/scheduler/report 等）
 │   ├── store.js            # 轻量状态管理
 │   └── compress-images.js  # 图片压缩工具
 └── locales/                # 多语言文件
@@ -106,6 +113,15 @@ SutWxApp/
 - 地址管理（pages/address）
 - 设置页面（pages/settings）
 - 帮助中心（pages/help）
+
+### 7. 文章模块（pages/article）
+- WordPress 文章列表（`services/postService.js`）
+- 文章详情（`rich-text` 渲染经 `utils/richtext.js` 安全清洗的 HTML）
+- 帮助中心「养护文章」入口
+
+### 8. 主题换肤（全站）
+- 内置 5 套配色预设（`models/theme.js`），WordPress 后台可下发自定义配色
+- `themeService.js` 启动加载并缓存；`behaviors/theme.js` 注入各页面根容器 CSS 变量，同步导航栏与 tabBar
 
 ## 开发规范
 
@@ -159,6 +175,10 @@ SutWxApp/
 
 ## 版本历史
 
+### 2026-09-13（文档）
+- 新增后端插件规范 `openspec/specs/backend/spec.md` 与开发计划 `docs/wordpress-plugin/DEVELOPMENT_PLAN.md`（商品=WooCommerce、v1 只读 MVP、wx.login→JWT、订单/支付预留）
+- `api/spec.md` 补全文章/分类接口契约与端点命名空间映射
+
 ### v3.0.1 (2026-08-13)
 - 清理 TypeScript 死代码，统一为 JavaScript
 - 完善项目规范文档，修正技术栈描述与真实代码一致
@@ -180,6 +200,8 @@ SutWxApp/
 
 - 仓库：https://github.com/sutchan/SutWxApp
 - 规范文档：`openspec/README.md`
+- 后端插件规范：[`openspec/specs/backend/spec.md`](../openspec/specs/backend/spec.md)
+- 后端插件开发计划：[`docs/wordpress-plugin/DEVELOPMENT_PLAN.md`](wordpress-plugin/DEVELOPMENT_PLAN.md)
 - 变更记录：[`CHANGELOG.md`](../CHANGELOG.md)
 
 ## 许可证

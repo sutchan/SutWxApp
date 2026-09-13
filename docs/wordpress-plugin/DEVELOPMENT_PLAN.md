@@ -28,21 +28,21 @@
 
 ### P0 — 脚手架与环境（约 1–2 天）
 
-- [ ] 初始化插件 `sutwx-app-api.php`、声明 `Requires: WooCommerce`。
-- [ ] `class-loader.php` 统一注册 `rest_api_init` 与后台菜单。
-- [ ] 注册命名空间 `sutwx/v1` 与 6 个路由骨架（返回占位包络）。
-- [ ] 加入 `/api/*` rewrite 规则，`baseUrl` 配置说明写入插件 readme。
+- [x] 初始化插件 `sutwx-app-api.php`、声明 `Requires: WooCommerce`。
+- [x] `class-loader.php` 统一注册 `rest_api_init` 与后台菜单。
+- [x] 注册命名空间 `sutwx/v1` 与 6 个路由骨架（返回占位包络）。
+- [x] 加入 `/api/*` rewrite 规则，`baseUrl` 配置说明写入插件 readme。
 - [ ] 本地 WP + WC 测试环境就绪（含示例商品/文章/分类）。
 
 **验收**：`GET /api/theme` 返回 `{code:200,data:{presetId:"sut-green"}}`。
 
 ### P1 — 内容只读 MVP（约 3–4 天）
 
-- [ ] `map-product.php`：WC 商品 → 商品 DTO（字段见后端规范）。
-- [ ] `map-post.php`：WP 文章（含 `_embedded` 特色图）→ 文章 DTO。
-- [ ] `map-category.php`：WC `product_cat` → 分类 DTO。
-- [ ] 实现 `product/list`、`product/detail`、`post/list`、`post/detail`、`category/list`、`category/detail` 六个回调 + 分页/筛选/关键词。
-- [ ] 单元测试：各映射函数字段完整性。
+- [x] `map-product.php`：WC 商品 → 商品 DTO（字段见后端规范）。
+- [x] `map-post.php`：WP 文章（含特色图）→ 文章 DTO。
+- [x] `map-category.php`：WC `product_cat` → 分类 DTO。
+- [x] 实现 `product/list`、`product/detail`、`post/list`、`post/detail`、`category/list`、`category/detail` 六个回调 + 分页/筛选/关键词。
+- [x] 单元测试：各映射函数字段完整性（`tests/run-mapping-tests.php`，独立运行无需 WP 环境）。
 
 **验收**：小程序 `app.js` 改 `productSource:"woocommerce"`、`baseUrl` 指向本地，首页/分类/文章列表与详情展示真实数据。
 
