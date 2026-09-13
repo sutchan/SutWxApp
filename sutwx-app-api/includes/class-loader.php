@@ -75,10 +75,17 @@ final class Sutwx_Loader {
 	}
 
 	/**
-	 * 后台菜单占位（设置页于 P2 实现）。
+	 * 后台「设置 → 小程序设置」菜单（主题预设 + 自定义色）。
 	 */
 	public static function register_admin_menu() {
-		// P2：add_options_page( '小程序设置', '小程序设置', 'manage_options', 'sutwx-app-api', ... )。
+		require_once SUTWX_API_DIR . 'admin/settings-page.php';
+		add_options_page(
+			__( '小程序设置', 'sutwx-app-api' ),
+			__( '小程序设置', 'sutwx-app-api' ),
+			'manage_options',
+			'sutwx-app-api',
+			array( 'Sutwx_Settings_Page', 'render' )
+		);
 	}
 
 	/**

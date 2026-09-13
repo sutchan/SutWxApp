@@ -60,4 +60,36 @@ if ( ! function_exists( 'sutwx_attachment_url' ) ) {
 		}
 		return '';
 	}
+
+	if ( ! function_exists( 'sutwx_is_valid_color' ) ) {
+		/**
+		 * 校验十六进制颜色字符串（#RGB 或 #RRGGBB）。
+		 *
+		 * @param string $value 颜色值。
+		 * @return bool
+		 */
+		function sutwx_is_valid_color( $value ) {
+			return is_string( $value )
+				&& preg_match( '/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/', trim( $value ) ) === 1;
+		}
+	}
+
+	if ( ! function_exists( 'sutwx_sanitize_color' ) ) {
+		/**
+		 * 标准化颜色：合法返回小写十六进制，非法返回 null。
+		 *
+		 * @param string $value 颜色值。
+		 * @return string|null
+		 */
+		function sutwx_sanitize_color( $value ) {
+			if ( ! is_string( $value ) ) {
+				return null;
+			}
+			$value = trim( $value );
+			if ( ! sutwx_is_valid_color( $value ) ) {
+				return null;
+			}
+			return strtolower( $value );
+		}
+	}
 }

@@ -1,22 +1,21 @@
 <?php
 /**
- * /api/theme 路由：读取后台主题配置返回（P0 已可用，P2 补后台设置页）。
+ * /api/theme 路由：读取后台主题配置返回（P2 接入 Sutwx_Settings 校验后输出）。
  *
  * @package SutwxAppApi
- * @version 0.1.0
+ * @version 0.3.0
  */
 
 defined( 'ABSPATH' ) || exit;
+
+if ( ! class_exists( 'Sutwx_Settings' ) ) {
+	require_once SUTWX_API_DIR . 'includes/class-settings.php';
+}
 
 /**
  * 主题路由控制器。
  */
 class Sutwx_Rest_Theme extends Sutwx_Rest_Base {
-
-	/**
-	 * 默认预设（与小程序 models/theme.js 的 THEME_PRESETS 对齐）。
-	 */
-	const DEFAULT_PRESET = 'sut-green';
 
 	/**
 	 * 注册 /theme。
@@ -34,25 +33,13 @@ class Sutwx_Rest_Theme extends Sutwx_Rest_Base {
 	}
 
 	/**
-	 * 返回主题配置：{ presetId, custom? }。
+	 * 返回主题配置：{ presetId, custom? }（custom 已由 Sutwx_Settings 清洗）。
 	 *
 	 * @param WP_REST_Request $request 请求。
 	 * @return array
 	 */
 	public function get_item( $request ) {
-		$option = get_option( SUTWX_API_THEME_OPTION, array() );
-
-		$preset_id = isset( $option['presetId'] ) && is_string( $option['presetId'] )
-			? $option['presetId']
-			: self::DEFAULT_PRESET;
-
-		$data = array( 'presetId' => $preset_id );
-
-		// 自定义色按字段覆盖（P2 在设置页做 sanitize 后写入，此处原样透出）。
-		if ( isset( $option['custom'] ) && is_array( $option['custom'] ) && ! empty( $option['custom'] ) ) {
-			$data['custom'] = $option['custom'];
-		}
-
-		return $this->success( $data );
+		$config = Sutwx_Settings::get_theme_config();
+		return $this->success( $config );
 	}
 }

@@ -4,6 +4,39 @@
 
 ## [Unreleased]
 
+## [3.4.0] - 2026-09-13
+
+### 新功能（后端插件 P2 主题后台配置，插件版本 0.2.0 → 0.3.0）
+
+- 新增 `sutwx-app-api/includes/class-settings.php`：主题配置读写与校验中心。内置 `THEME_PRESETS`（5 套，与小程序 `models/theme.js` 严格对齐）、`THEME_KEYS`（11 个字段白名单），提供 `get_theme_config` / `sanitize_custom` / `sanitize_theme_config` / `update_theme_config`，写入前强制校验 presetId 合法性并清洗 custom 颜色字段（仅保留白名单字段 + 合法十六进制色）。
+- 新增 `sutwx-app-api/admin/settings-page.php`：WP 后台「设置 → 小程序设置」页，含 5 套预设下拉 + 11 个字段 `<input type="color">` 自定义色选择器，提交经 `Sutwx_Settings::update_theme_config` 校验后落库 option `sutwx_theme`（带 nonce 防护）。
+- `sutwx-app-api/includes/sanitize.php` 新增颜色校验器 `sutwx_is_valid_color` / `sutwx_sanitize_color`（标准化小写十六进制）。
+- `sutwx-app-api/includes/rest/class-rest-theme.php` 改用 `Sutwx_Settings::get_theme_config()`，确保 `/api/theme` 返回的 custom 已清洗。
+- `sutwx-app-api/includes/class-loader.php` 实现 `register_admin_menu`，注册「小程序设置」菜单并加载设置页。
+- 新增独立单测 `sutwx-app-api/tests/run-settings-tests.php`（无需 WP 环境，`php tests/run-settings-tests.php`），覆盖颜色校验、预设/字段常量对齐、custom 字段过滤、整份配置清洗与读写闭环（含非法字段不落库）。
+- **验收**：后台切换预设/自定义色并保存后，小程序重启即从 `/api/theme` 拉取新配置，经 `models/theme.js` 解析全站应用（导航栏 + tabBar + CSS 变量）。
+
+### 文件变更
+```
+新增:
+- sutwx-app-api/includes/class-settings.php
+- sutwx-app-api/admin/settings-page.php
+- sutwx-app-api/tests/run-settings-tests.php
+
+修改:
+- sutwx-app-api/sutwx-app-api.php（版本 0.2.0 → 0.3.0，加载 class-settings.php）
+- sutwx-app-api/includes/sanitize.php（新增颜色校验器 + 版本）
+- sutwx-app-api/includes/rest/class-rest-theme.php（改用 Sutwx_Settings + 版本）
+- sutwx-app-api/includes/class-loader.php（实现 register_admin_menu + 版本）
+- sutwx-app-api/readme.txt（Stable tag 0.3.0 + Changelog 0.3.0）
+- docs/wordpress-plugin/DEVELOPMENT_PLAN.md（P2 勾选）
+- openspec/specs/backend/spec.md（版本历史 0.3.0）
+- SutWxApp/app.js（版本 3.3.0 → 3.4.0）
+- SutWxApp/package.json（版本 3.3.0 → 3.4.0）
+- README.md（版本徽章 3.4.0）
+- CHANGELOG.md（新增 v3.4.0 条目）
+```
+
 ## [3.3.0] - 2026-09-13
 
 ### 重构（设计规范对齐）

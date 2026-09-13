@@ -48,10 +48,10 @@
 
 ### P2 — 主题后台配置（约 1–2 天）
 
-- [ ] `admin/settings-page.php`：预设下拉（5 套）+ 自定义色选择器。
-- [ ] `class-settings.php`：option 读写 + 十六进制校验（`sanitize.php`）。
-- [ ] `class-rest-theme.php`：读取 option 返回 `{presetId,custom}`。
-- [ ] 预设列表与小程序 `models/theme.js` 对齐检查。
+- [x] `admin/settings-page.php`：预设下拉（5 套）+ 自定义色选择器。
+- [x] `class-settings.php`：option 读写 + 十六进制校验（`sanitize.php`）。
+- [x] `class-rest-theme.php`：读取 option 返回 `{presetId,custom}`。
+- [x] 预设列表与小程序 `models/theme.js` 对齐检查。
 
 **验收**：后台切换预设/自定义色后，小程序重启即应用新主题（导航栏 + tabBar + 全站 CSS 变量）。
 

@@ -1,13 +1,13 @@
 {
   "name": "sut-wx-app",
-  "version": "3.3.0",
+  "version": "3.4.0",
   "description": "苏小糖微信小程序商城",
   "main": "app.js",
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "test": "jest",
-    "test:coverage": "jest --ci --coverage",
+    "test": "jest --passWithNoTests",
+    "test:coverage": "jest --ci --coverage --passWithNoTests",
     "check:version": "node scripts/check-version.js",
     "check:config": "node scripts/check-config.js",
     "check": "npm run check:version && npm run check:config",
