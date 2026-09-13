@@ -1,6 +1,6 @@
 /**
  * 文件名: app.js
- * 版本号: 3.2.0
+ * 版本号: 3.3.0
  * 更新日期: 2026-09-13
  * 描述: 微信小程序应用入口文件，处理应用生命周期事件和全局数据（逻辑见 helpers.js）
  */
@@ -15,9 +15,9 @@ App({
     this.initApp();
   },
 
-  onShow(options) {},
+  onShow(options) { },
 
-  onHide() {},
+  onHide() { },
 
   onError(msg) {
     console.error("[App] onError - 小程序错误:", msg);
@@ -45,7 +45,7 @@ App({
     productSource: "mock", // 'mock'（默认）| 'woocommerce'：商品数据源（WooCommerce 需配套 WP 插件）
     theme: null, // 当前主题色值（由 themeService 加载）
     themeStyle: "", // 当前主题 CSS 变量声明字符串（供页面根容器绑定）
-    version: "3.2.0",
+    version: "3.3.0",
     debug: false,
     request: {
       CancelToken: helpers.CancelToken,

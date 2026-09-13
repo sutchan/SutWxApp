@@ -4,7 +4,54 @@
 
 ## [Unreleased]
 
-### 文档（后端插件规划）
+## [3.3.0] - 2026-09-13
+
+### 重构（设计规范对齐）
+
+#### 全局样式系统升级（app.wxss v3.0.0 → v3.1.1）
+- 补全受控语义色变量：`--error-color/light`、`--success-color/light`、`--warning-color/light`、`--info-color/light`，共 8 个新 token
+- 补全品牌衍生渐变 token：`--grad-leaf-1~6`、`--grad-banner-1~3`、`--grad-user-header`，共 10 个新 token（对齐 design/spec.md §4.1.4）
+- 纠正 `.bg-secondary` 脏值 `#2a9d8f`（青）→ `var(--background-secondary)`
+- 纠正 `.bg-accent` 脏值 `#f4a261`（橙）→ `var(--primary-light)`
+- 纠正 `.btn-secondary` 脏值 `#2a9d8f`（青填充）→ 改为白底描边次按钮（`.btn-secondary` 语义回归）
+- 全局硬编码状态色（`#F44336`/`#4CAF50`/`#FF9800`）统一变量化（`.bg-error/success/warning`、`.badge-error/success/warning`、`.text-error/success/warning`、`.badge-dot`）
+- app.json tabBar `color: #999999` → `#86868B`（对齐 `--text-secondary`）
+
+#### 全站脏值清除（38 处硬编码红/橙/青 → CSS 变量）
+- **pages/product/index.wxss**（11 处）：价格/折扣标签/底栏按钮/规格选中态/确认按钮 → 深绿 `var(--primary-dark)` 或主绿 `var(--primary-color)`，`#ff9700`/`#e93b3d` 全部替换
+- **pages/order/{index,detail,confirm}.wxss**（15 处）：tab 指示条/状态/金额/操作按钮 → 主绿；订单详情页红橙渐变 → `var(--grad-user-header)`（品牌绿渐变）
+- **pages/category/index.wxss**（4 处）：选中态文字/侧栏竖条/价格/加购按钮 → 主绿/深绿
+- **pages/user/index.wxss**（2 处）：头部红渐变 → `var(--grad-user-header)`；退出登录 `#e93b3d` → `var(--error-color)`（保留红色语义，因属危险操作）
+- **components/product-card/index.wxss**（2 处）：价格/加购按钮 → 深绿/主绿
+- **components/empty-state/index.wxss**（1 处）：插画底 + 按钮 → 浅绿底/主绿
+
+#### 硬编码灰阶对齐
+- 全仓库 `#333`/`#666`/`#999`/`#f5f5f5`/`#eeeeee` 统一替换为 `var(--text-primary)`/`var(--text-secondary)`/`var(--text-tertiary)`/`var(--background-secondary)`/`var(--border-color)` 对应变量
+
+### 文件变更
+```
+修改:
+- SutWxApp/app.wxss（全局 token 补全 + 脏值纠正 + 版本 3.0.0 → 3.1.1）
+- SutWxApp/app.json（tabBar color #999 → #86868B）
+- SutWxApp/app.js（版本号 3.2.0 → 3.3.0）
+- SutWxApp/package.json（版本号 3.2.0 → 3.3.0）
+- SutWxApp/pages/product/index.wxss（11 处脏值清除 + 语义色变量化 + 版本 3.0.0 → 3.1.1）
+- SutWxApp/pages/order/index.wxss（7 处脏值清除 + 变量化 + 版本号）
+- SutWxApp/pages/order/detail.wxss（5 处脏值清除 + 绿渐变 + 版本号）
+- SutWxApp/pages/order/confirm.wxss（4 处脏值清除 + 变量化 + 版本号）
+- SutWxApp/pages/category/index.wxss（4 处脏值清除 + 变量化 + 版本号）
+- SutWxApp/pages/user/index.wxss（2 处脏值清除 + 绿渐变头部 + 版本号）
+- SutWxApp/components/product-card/index.wxss（2 处脏值清除 + 版本号）
+- SutWxApp/components/empty-state/index.wxss（1 处脏值清除 + 版本号）
+- CHANGELOG.md（新增 v3.3.0 条目）
+```
+
+### 影响范围说明
+- 视觉上红色/橙色价格与 CTA 全部回归品牌绿（深绿 `#1B5E20`/主绿 `#2E7D32`）
+- 唯一保留红色的元素：退出登录按钮（危险语义）、空购物车提示等确认弹窗（error 语义）
+- 旧版 `.bg-accent`/`.btn-secondary` 的橙色/青色填充已清除，替换为中性/品牌绿系方案
+
+## [3.2.0] - 2026-09-13
 - 新增 `openspec/specs/backend/spec.md`：定义配套 WordPress 插件 `sutwx-app-api` 的架构、目录结构、REST 命名空间映射（`/api/*` ↔ `wp-json/sutwx/v1`）、v1 只读端点契约（商品/文章/分类/主题）、主题后台配置、鉴权与订单预留、安全/缓存/部署要求。
 - 新增 `docs/wordpress-plugin/DEVELOPMENT_PLAN.md`：后端插件分阶段开发计划（P0 脚手架 → P1 只读 MVP → P2 主题配置 → P3 鉴权基建 → P4 联调测试 → P5 订单支付预留），含技术决策、验收与风险对策。
 - 完善 `openspec/specs/api/spec.md`：补全缺失的「文章 API」「分类 API」契约（与 `services/{post,category}Service.js`、`models/{post,category}.js` 对齐），并新增「端点与后端命名空间映射」说明与后续阶段标注。

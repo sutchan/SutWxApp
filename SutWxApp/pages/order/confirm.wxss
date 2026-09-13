@@ -1,20 +1,20 @@
 
 /**
- * 文件名: confirm.wxss
- * 版本号: 3.0.0
- * 更新日期: 2026-07-01
- * 描述: 订单确认页面样式
+ * 文件名: pages/order/confirm.wxss
+ * 版本号: 3.1.1
+ * 更新日期: 2026-09-13
+ * 描述: 订单确认页面样式，对齐 design/spec.md v3.1.1 品牌绿策略
  */
 
 .confirm-container {
   min-height: 100vh;
-  background-color: #f5f5f5;
+  background-color: var(--background-secondary);
   padding-bottom: 120rpx;
 }
 
 /* 收货地址 */
 .address-section {
-  background-color: white;
+  background-color: var(--background-primary);
   padding: 30rpx;
 }
 
@@ -31,13 +31,13 @@
 
 .name-phone text {
   font-size: 30rpx;
-  color: #333;
+  color: var(--text-primary);
   font-weight: 500;
 }
 
 .address-detail {
   font-size: 26rpx;
-  color: #666;
+  color: var(--text-secondary);
   line-height: 1.6;
 }
 
@@ -45,18 +45,18 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: #999;
+  color: var(--text-secondary);
   font-size: 28rpx;
 }
 
 .arrow {
   font-size: 32rpx;
-  color: #ccc;
+  color: var(--text-tertiary);
 }
 
 /* 商品列表 */
 .products-section {
-  background-color: white;
+  background-color: var(--background-primary);
   margin-top: 20rpx;
   padding: 24rpx;
 }
@@ -64,7 +64,7 @@
 .product-item {
   display: flex;
   padding: 20rpx 0;
-  border-bottom: 1rpx solid #f5f5f5;
+  border-bottom: 1rpx solid var(--border-color);
 }
 
 .product-item:last-child {
@@ -74,7 +74,7 @@
 .product-image {
   width: 160rpx;
   height: 160rpx;
-  border-radius: 12rpx;
+  border-radius: var(--border-radius-md);
   margin-right: 20rpx;
 }
 
@@ -87,7 +87,7 @@
 
 .product-name {
   font-size: 28rpx;
-  color: #333;
+  color: var(--text-primary);
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
@@ -97,7 +97,7 @@
 
 .product-spec {
   font-size: 24rpx;
-  color: #999;
+  color: var(--text-secondary);
   margin-top: 8rpx;
 }
 
@@ -109,18 +109,18 @@
 
 .product-price {
   font-size: 30rpx;
-  color: #ff6b6b;
+  color: var(--primary-dark);
   font-weight: bold;
 }
 
 .product-quantity {
   font-size: 26rpx;
-  color: #999;
+  color: var(--text-secondary);
 }
 
 /* 备注 */
 .remark-section {
-  background-color: white;
+  background-color: var(--background-primary);
   margin-top: 20rpx;
   padding: 24rpx;
   display: flex;
@@ -129,19 +129,19 @@
 
 .remark-label {
   font-size: 28rpx;
-  color: #333;
+  color: var(--text-primary);
   margin-right: 20rpx;
 }
 
 .remark-input {
   flex: 1;
   font-size: 26rpx;
-  color: #333;
+  color: var(--text-primary);
 }
 
 /* 价格明细 */
 .price-section {
-  background-color: white;
+  background-color: var(--background-primary);
   margin-top: 20rpx;
   padding: 24rpx;
 }
@@ -154,16 +154,16 @@
 
 .price-label {
   font-size: 26rpx;
-  color: #666;
+  color: var(--text-secondary);
 }
 
 .price-value {
   font-size: 26rpx;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .price-value.discount {
-  color: #ff6b6b;
+  color: var(--primary-dark);
 }
 
 /* 底部栏 */
@@ -175,7 +175,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: white;
+  background-color: var(--background-primary);
   padding: 20rpx 24rpx;
   padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
   box-shadow: 0 -2rpx 10rpx rgba(0, 0, 0, 0.05);
@@ -188,12 +188,12 @@
 
 .total-label {
   font-size: 26rpx;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .total-price {
   font-size: 36rpx;
-  color: #ff6b6b;
+  color: var(--primary-dark);
   font-weight: bold;
   margin-left: 10rpx;
 }
@@ -202,15 +202,20 @@
   width: 240rpx;
   height: 80rpx;
   line-height: 80rpx;
-  background-color: #ff6b6b;
-  color: white;
+  background-color: var(--primary-color);
+  color: var(--text-inverse);
   font-size: 28rpx;
+  font-weight: 600;
   border-radius: 40rpx;
   padding: 0;
   border: none;
+  transition: opacity var(--transition-fast);
+}
+
+.submit-btn:active {
+  opacity: 0.85;
 }
 
 .submit-btn[disabled] {
-  background-color: #ddd;
+  background-color: var(--text-tertiary);
 }
-

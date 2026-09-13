@@ -1,3 +1,9 @@
+/**
+ * 文件名: components/empty-state/index.wxss
+ * 版本号: 3.1.1
+ * 更新日期: 2026-09-13
+ * 描述: 空状态组件样式，对齐 design/spec.md v3.1.1
+ */
 
 .empty-state {
   display: flex;
@@ -11,11 +17,17 @@
   width: 300rpx;
   height: 300rpx;
   margin-bottom: 30rpx;
+  background-color: var(--primary-light);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-color);
 }
 
 .empty-text {
   font-size: 28rpx;
-  color: #999;
+  color: var(--text-secondary);
   margin-bottom: 40rpx;
 }
 
@@ -23,11 +35,16 @@
   width: 200rpx;
   height: 70rpx;
   line-height: 70rpx;
-  background-color: #ff6b6b;
-  color: white;
+  background-color: var(--primary-color);
+  color: var(--text-inverse);
   font-size: 26rpx;
+  font-weight: 500;
   border-radius: 35rpx;
   border: none;
   padding: 0;
+  transition: opacity var(--transition-fast);
 }
 
+.empty-button:active {
+  opacity: 0.85;
+}

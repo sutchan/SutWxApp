@@ -1,20 +1,20 @@
 
 /**
- * 文件名: index.wxss
- * 版本号: 3.0.0
- * 更新日期: 2026-07-01
- * 描述: 订单列表页面样式
+ * 文件名: pages/order/index.wxss
+ * 版本号: 3.1.1
+ * 更新日期: 2026-09-13
+ * 描述: 订单列表页面样式，对齐 design/spec.md v3.1.1
  */
 
 .order-container {
   min-height: 100vh;
-  background-color: #f5f5f5;
+  background-color: var(--background-secondary);
 }
 
 /* 标签页 */
 .tabs {
   display: flex;
-  background-color: white;
+  background-color: var(--background-primary);
   position: sticky;
   top: 0;
   z-index: 10;
@@ -28,12 +28,12 @@
   align-items: center;
   justify-content: center;
   font-size: 28rpx;
-  color: #666;
+  color: var(--text-secondary);
   position: relative;
 }
 
 .tab-item.active {
-  color: #ff6b6b;
+  color: var(--primary-color);
   font-weight: 500;
 }
 
@@ -42,7 +42,7 @@
   bottom: 0;
   width: 60rpx;
   height: 4rpx;
-  background-color: #ff6b6b;
+  background-color: var(--primary-color);
   border-radius: 2rpx;
 }
 
@@ -63,7 +63,7 @@
 
 .empty-text {
   font-size: 28rpx;
-  color: #999;
+  color: var(--text-secondary);
 }
 
 /* 订单列表 */
@@ -72,8 +72,8 @@
 }
 
 .order-item {
-  background-color: white;
-  border-radius: 16rpx;
+  background-color: var(--background-primary);
+  border-radius: var(--border-radius-lg);
   margin-bottom: 20rpx;
   overflow: hidden;
 }
@@ -84,17 +84,17 @@
   align-items: center;
   justify-content: space-between;
   padding: 24rpx;
-  border-bottom: 1rpx solid #f5f5f5;
+  border-bottom: 1rpx solid var(--border-color);
 }
 
 .order-sn {
   font-size: 26rpx;
-  color: #666;
+  color: var(--text-secondary);
 }
 
 .order-status {
   font-size: 26rpx;
-  color: #ff6b6b;
+  color: var(--primary-color);
 }
 
 /* 商品列表 */
@@ -114,7 +114,7 @@
 .product-image {
   width: 160rpx;
   height: 160rpx;
-  border-radius: 12rpx;
+  border-radius: var(--border-radius-md);
   margin-right: 20rpx;
 }
 
@@ -127,7 +127,7 @@
 
 .product-name {
   font-size: 28rpx;
-  color: #333;
+  color: var(--text-primary);
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
@@ -137,7 +137,7 @@
 
 .product-spec {
   font-size: 24rpx;
-  color: #999;
+  color: var(--text-secondary);
   margin-top: 8rpx;
 }
 
@@ -149,13 +149,13 @@
 
 .product-price {
   font-size: 30rpx;
-  color: #ff6b6b;
+  color: var(--primary-dark);
   font-weight: bold;
 }
 
 .product-quantity {
   font-size: 26rpx;
-  color: #999;
+  color: var(--text-secondary);
 }
 
 /* 订单底部 */
@@ -164,17 +164,17 @@
   align-items: center;
   justify-content: space-between;
   padding: 24rpx;
-  border-top: 1rpx solid #f5f5f5;
+  border-top: 1rpx solid var(--border-color);
 }
 
 .order-total {
   font-size: 26rpx;
-  color: #666;
+  color: var(--text-secondary);
 }
 
 .order-total .price {
   font-size: 32rpx;
-  color: #ff6b6b;
+  color: var(--primary-dark);
   font-weight: bold;
 }
 
@@ -193,14 +193,13 @@
 }
 
 .cancel-btn {
-  background-color: #f5f5f5;
-  color: #666;
+  background-color: var(--background-tertiary);
+  color: var(--text-secondary);
 }
 
 .pay-btn,
 .confirm-btn,
 .comment-btn {
-  background-color: #ff6b6b;
-  color: white;
+  background-color: var(--primary-color);
+  color: var(--text-inverse);
 }
-

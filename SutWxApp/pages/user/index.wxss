@@ -1,12 +1,12 @@
 /**
- * 文件名: index.wxss
- * 版本号: 3.0.0
- * 更新日期: 2025-12-26
- * 描述: 用户中心页面样式表
+ * 文件名: pages/user/index.wxss
+ * 版本号: 3.1.1
+ * 更新日期: 2026-09-13
+ * 描述: 用户中心页面样式，对齐 design/spec.md v3.1.1 品牌绿头部渐变
  */
 
 page {
-  background-color: #f5f5f5;
+  background-color: var(--background-secondary);
 }
 
 .container {
@@ -16,7 +16,7 @@ page {
 }
 
 .header-section {
-  background: linear-gradient(135deg, #e93b3d 0%, #ff6b6b 100%);
+  background: linear-gradient(135deg, var(--grad-user-header));
   padding: 40rpx 30rpx 100rpx;
 }
 
@@ -30,7 +30,7 @@ page {
   height: 120rpx;
   border-radius: 50%;
   border: 4rpx solid rgba(255, 255, 255, 0.3);
-  background-color: #ffffff;
+  background-color: var(--background-primary);
 }
 
 .avatar.placeholder {
@@ -46,7 +46,7 @@ page {
   display: block;
   font-size: 36rpx;
   font-weight: bold;
-  color: #ffffff;
+  color: var(--text-inverse);
   margin-bottom: 8rpx;
 }
 
@@ -71,17 +71,17 @@ page {
 .login-text {
   margin-left: 20rpx;
   font-size: 32rpx;
-  color: #ffffff;
+  color: var(--text-inverse);
 }
 
 .stats-section {
   display: flex;
   align-items: center;
-  background-color: #ffffff;
+  background-color: var(--background-primary);
   margin: -60rpx 30rpx 20rpx;
-  border-radius: 16rpx;
+  border-radius: var(--border-radius-lg);
   padding: 40rpx 0;
-  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-md);
 }
 
 .stats-item {
@@ -94,19 +94,19 @@ page {
 .stats-value {
   font-size: 40rpx;
   font-weight: bold;
-  color: #333333;
+  color: var(--text-primary);
   margin-bottom: 8rpx;
 }
 
 .stats-label {
   font-size: 24rpx;
-  color: #999999;
+  color: var(--text-secondary);
 }
 
 .stats-divider {
   width: 1rpx;
   height: 60rpx;
-  background-color: #eeeeee;
+  background-color: var(--border-color);
 }
 
 .menu-section {
@@ -115,21 +115,21 @@ page {
 }
 
 .menu-group {
-  background-color: #ffffff;
-  border-radius: 16rpx;
+  background-color: var(--background-primary);
+  border-radius: var(--border-radius-lg);
   margin-bottom: 20rpx;
   overflow: hidden;
 }
 
 .menu-group-header {
   padding: 24rpx 30rpx;
-  border-bottom: 1rpx solid #eeeeee;
+  border-bottom: 1rpx solid var(--border-color);
 }
 
 .menu-group-name {
   font-size: 28rpx;
   font-weight: bold;
-  color: #333333;
+  color: var(--text-primary);
 }
 
 .menu-group-content {
@@ -140,7 +140,7 @@ page {
   display: flex;
   align-items: center;
   padding: 28rpx 30rpx;
-  border-bottom: 1rpx solid #f5f5f5;
+  border-bottom: 1rpx solid var(--border-color);
 }
 
 .menu-item:last-child {
@@ -156,7 +156,7 @@ page {
 .menu-name {
   flex: 1;
   font-size: 30rpx;
-  color: #333333;
+  color: var(--text-primary);
 }
 
 .menu-arrow {
@@ -170,17 +170,17 @@ page {
 }
 
 .logout-btn {
-  background-color: #ffffff;
-  border-radius: 16rpx;
+  background-color: var(--background-primary);
+  border-radius: var(--border-radius-lg);
   padding: 28rpx 0;
   text-align: center;
   font-size: 32rpx;
-  color: #e93b3d;
+  color: var(--error-color);
   font-weight: bold;
 }
 
 .logout-btn:active {
-  background-color: #f5f5f5;
+  background-color: var(--error-light);
 }
 
 .version-info {
@@ -190,5 +190,5 @@ page {
 
 .version-text {
   font-size: 24rpx;
-  color: #999999;
+  color: var(--text-secondary);
 }

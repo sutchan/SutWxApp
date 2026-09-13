@@ -1,6 +1,6 @@
 {
   "name": "sut-wx-app",
-  "version": "3.2.0",
+  "version": "3.3.0",
   "description": "苏小糖微信小程序商城",
   "main": "app.js",
   "scripts": {
@@ -32,8 +32,9 @@
   },
   "jest": {
     "testEnvironment": "node",
+    "rootDir": "..",
     "testMatch": [
-      "**/__tests__/**/*.test.js"
+      "<rootDir>/tests/**/*.test.js"
     ],
     "moduleFileExtensions": [
       "js",
