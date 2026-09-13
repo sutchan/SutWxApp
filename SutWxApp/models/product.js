@@ -1,39 +1,12 @@
 /**
  * 文件名: product.js
- * 版本号: 1.0.0
+ * 版本号: 3.0.14
  * 更新日期: 2026-09-12
  * 描述: 商品数据模型与 WooCommerce 商品映射层
  *       将 WordPress/WooCommerce REST 返回的商品对象映射为小程序统一的商品 DTO。
  */
 
-/**
- * 安全转为数字
- * @param {*} value 原始值
- * @param {number} fallback 失败回退值
- * @returns {number}
- */
-function toNumber(value, fallback) {
-  if (value === null || value === undefined || value === "") return fallback;
-  const n = parseFloat(value);
-  return Number.isNaN(n) ? fallback : n;
-}
-
-/**
- * 去除 HTML 标签（用于摘要/短描述）
- * @param {string} html 原始 HTML
- * @returns {string}
- */
-function stripHtml(html) {
-  if (!html || typeof html !== "string") return "";
-  return html
-    .replace(/<[^>]+>/g, "")
-    .replace(/&nbsp;/g, " ")
-    .replace(/&amp;/g, "&")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/\s+/g, " ")
-    .trim();
-}
+const { toNumber, stripHtml } = require("../utils/text");
 
 /**
  * 由 WooCommerce 商品构建规格选项（specs）

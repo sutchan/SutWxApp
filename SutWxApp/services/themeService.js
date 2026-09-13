@@ -1,11 +1,12 @@
 /**
  * 文件名: themeService.js
- * 版本号: 3.0.7
+ * 版本号: 3.0.14
  * 更新日期: 2026-09-12
  * 描述: 主题服务层：从 WordPress 后端 /api/theme 拉取主题配置并应用全局。
  */
 
 const request = require("../utils/request");
+const { unwrap } = require("../utils/api");
 const themeModel = require("../models/theme");
 
 const THEME_STORAGE_KEY = "appTheme";
@@ -18,14 +19,6 @@ function getCachedTheme() {
     }
   } catch (e) {}
   return null;
-}
-
-// 兼容后端包络 { code, data } 或直接返回对象
-function unwrap(res) {
-  if (res && typeof res === "object" && "code" in res && res.data !== undefined) {
-    return res.data;
-  }
-  return res;
 }
 
 // 从后端拉取主题配置，失败回退默认预设

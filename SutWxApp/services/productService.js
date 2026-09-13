@@ -1,37 +1,18 @@
 /**
  * 文件名: productService.js
- * 版本号: 3.0.9
+ * 版本号: 3.0.14
  * 更新日期: 2026-09-12
  * 描述: 产品服务层，提供产品相关功能（支持 WooCommerce 数据源）
  */
 
 const request = require("../utils/request");
+const { unwrap } = require("../utils/api");
+const { getDataSource } = require("./dataSource");
 const { mapWooCommerceProduct, mapWooCommerceProducts } = require("../models/product");
 const { mockProducts } = require("./productService.mock");
 
-// 商品数据源：'mock'（默认，演示/离线）| 'woocommerce'（WordPress + WooCommerce 插件）
-function getProductSource() {
-  try {
-    const app = typeof getApp === "function" ? getApp() : null;
-    if (app && app.globalData && app.globalData.productSource) {
-      return app.globalData.productSource;
-    }
-  } catch (e) {
-    // 测试或非小程序环境：回退 mock
-  }
-  return "mock";
-}
-
-// 兼容后端包络 { code, data } 或直接返回数据
-function unwrap(res) {
-  if (res && typeof res === "object" && "code" in res && res.data !== undefined) {
-    return res.data;
-  }
-  return res;
-}
-
 async function getProductList(params = {}) {
-  if (getProductSource() === "woocommerce") {
+  if (getDataSource() === "woocommerce") {
     try {
       const raw = await request.get("/api/product/list", params, { needAuth: false });
       const payload = unwrap(raw);
@@ -67,7 +48,7 @@ async function getProductList(params = {}) {
 }
 
 async function getProductDetail(productId, options = {}) {
-  if (getProductSource() === "woocommerce") {
+  if (getDataSource() === "woocommerce") {
     const reqOptions = { needAuth: false };
     if (options && options.cancelToken) reqOptions.cancelToken = options.cancelToken;
     const raw = await request.get(

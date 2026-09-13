@@ -1,37 +1,18 @@
 /**
  * 文件名: categoryService.js
- * 版本号: 3.0.11
+ * 版本号: 3.0.14
  * 更新日期: 2026-09-13
  * 描述: 分类服务层，提供分类相关功能（支持 WooCommerce 数据源）
  */
 
 const request = require("../utils/request");
+const { unwrap } = require("../utils/api");
+const { getDataSource } = require("./dataSource");
 const { mapWooCommerceCategory, mapWooCommerceCategories } = require("../models/category");
 const { mockCategories } = require("./categoryService.mock");
 
-// 分类数据源：'mock'（默认，演示/离线）| 'woocommerce'（WordPress + WooCommerce 插件）
-function getCategorySource() {
-  try {
-    const app = typeof getApp === "function" ? getApp() : null;
-    if (app && app.globalData && app.globalData.productSource) {
-      return app.globalData.productSource;
-    }
-  } catch (e) {
-    // 测试或非小程序环境：回退 mock
-  }
-  return "mock";
-}
-
-// 兼容后端包络 { code, data } 或直接返回数据
-function unwrap(res) {
-  if (res && typeof res === "object" && "code" in res && res.data !== undefined) {
-    return res.data;
-  }
-  return res;
-}
-
 async function getCategoryList() {
-  if (getCategorySource() === "woocommerce") {
+  if (getDataSource() === "woocommerce") {
     try {
       const raw = await request.get("/api/category/list", {}, { needAuth: false });
       const payload = unwrap(raw);
@@ -52,7 +33,7 @@ async function getCategoryList() {
 }
 
 async function getCategoryDetail(categoryId) {
-  if (getCategorySource() === "woocommerce") {
+  if (getDataSource() === "woocommerce") {
     try {
       const raw = await request.get(
         "/api/category/detail",

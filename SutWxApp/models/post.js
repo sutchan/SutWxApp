@@ -1,29 +1,13 @@
 /**
  * 文件名: post.js
- * 版本号: 3.0.13
+ * 版本号: 3.0.14
  * 更新日期: 2026-09-13
  * 描述: 文章数据模型与 WordPress 文章映射层
  *       将 WordPress REST 返回的文章对象映射为小程序统一的文章 DTO（正文经 rich-text 安全清洗）。
  */
 
 const { sanitizeArticleHtml } = require("../utils/richtext");
-
-/**
- * 去除 HTML 标签（用于摘要/短描述）
- * @param {string} html 原始 HTML
- * @returns {string}
- */
-function stripHtmlToText(html) {
-  if (!html || typeof html !== "string") return "";
-  return html
-    .replace(/<[^>]+>/g, "")
-    .replace(/&nbsp;/g, " ")
-    .replace(/&amp;/g, "&")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/\s+/g, " ")
-    .trim();
-}
+const { stripHtml } = require("../utils/text");
 
 /**
  * 由 WP _embedded 中提取封面图地址
@@ -54,13 +38,13 @@ function mapWpPost(p) {
   const content = sanitizeArticleHtml(
     (p.content && p.content.rendered) || p.content || "",
   );
-  const excerpt = stripHtmlToText(
+  const excerpt = stripHtml(
     (p.excerpt && p.excerpt.rendered) || p.excerpt || p.content || "",
   );
 
   return {
     id: p.id,
-    title: stripHtmlToText(title),
+    title: stripHtml(title),
     content,
     excerpt: excerpt.slice(0, 60),
     cover: pickCover(p),
@@ -82,7 +66,7 @@ function mapWpPosts(arr) {
 }
 
 module.exports = {
-  stripHtmlToText,
+  stripHtmlToText: stripHtml,
   mapWpPost,
   mapWpPosts,
   pickCover,

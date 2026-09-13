@@ -5,9 +5,10 @@
 - 界面 Apple 极简 + 品牌绿（#2E7D32 / #1B5E20 / #F1F8E9）。
 - 文档体系 `openspec/`（`specs/` 10 类 + 多个 md）；`design/spec.md` 为 UI 权威源（以 `app.wxss` 为事实）。
 - WP 对接已落地：WooCommerce 商品（`models/product.js` mapWooCommerceProduct，v3.0.6）、分类（`models/category.js`，v3.0.11）、主题换肤（v3.0.7，`models/theme.js`+`themeService.js`+`behaviors/theme.js`）、文章渲染（v3.0.12，`utils/richtext.js`+`models/post.js`+`services/postService.js`+`pages/article/{list,detail}`）。
+- 去重公共模块（v3.0.14 抽出）：`utils/text.js`（`toNumber`/`stripHtml`）、`utils/api.js`（`unwrap`）、`services/dataSource.js`（`getDataSource`）；各 service/model 改引用，导出契约不变。
 
 ## 版本（单一来源）
-- 权威：`SutWxApp/package.json` 的 `version` 与 `SutWxApp/app.js` 的 `globalData.version`，当前 **3.0.12**（`npm run check:version` 校验）。展示位同步 README 徽章 + `CHANGELOG.md` 顶节。
+- 权威：`SutWxApp/package.json` 的 `version` 与 `SutWxApp/app.js` 的 `globalData.version`，当前 **3.0.14**（`npm run check:version` 校验）。展示位同步 README 徽章 + `CHANGELOG.md` 顶节。
 - 每次改动 bump 最小版本（≥patch）；仅更新被改文件的 `// 版本号:` 头注释，禁止全仓库批量刷写。改文档前先实查版本（会话间隙常被外部 bump）。
 
 ## 原型目录
@@ -16,7 +17,7 @@
 
 ## 工程与质量
 - 门禁：`npm run lint`（eslint 10 纯声明式 flat config `eslint.config.js`，**零外部 require**）/ `npm test`（jest，`__tests__/**/*.test.js`）/ `npm run check`（版本+配置）/ `npm run ci`（lint+check+test）。
-- **ESLint 关键坑**：eslint 10 已把 `@eslint/js`/`globals`/`@eslint/eslintrc` 移出运行时依赖，`npm ci` 树无这些包；配置必须**自包含**（recommended 规则与全局变量全内联，`__tests__` 内联 jest 全局）。基线 0 error / 11 warning（全 `eqeqeq`，故意保留）。升级 ESLint 主版本勿依赖 `@eslint/js`/FlatCompat。
+- **ESLint 关键坑**：eslint 10 已把 `@eslint/js`/`globals`/`@eslint/eslintrc` 移出运行时依赖，`npm ci` 树无这些包；配置必须**自包含**（recommended 规则与全局变量全内联，`__tests__` 内联 jest 全局）。基线 0 error / 12 warning（全 `eqeqeq`，故意保留）。升级 ESLint 主版本勿依赖 `@eslint/js`/FlatCompat。
 - 源文件 `.js` 单文件 ≤200 行，超出按职责拆分（如 `pages/product/parts.js`、`pages/home/utils.js`）。
 - `images/tabbar/` 由 `scripts/generate-tabbar-icons.js` 生成 8 个品牌线性 PNG（v3.0.12）。
 
@@ -26,8 +27,8 @@
 - 仓库存在**自动提交机制**（会话中自动 commit）；临时文件 `SutWxApp/ci-*.txt` 曾被误提交，事后用 node 脚本删。
 
 ## 小程序运行时已知缺陷（2026-09-13 审查，逐条实测；需后续修复）
-- P0：① 7 个 WXML 被 HTML 实体转义（`&lt;view`）：`pages/category|cart/index.wxml`、`pages/order/{index,detail,confirm}.wxml`、`components/{product-card,empty-state}/index.wxml` → 无法渲染（category/cart 是 tabBar 页）。② 首页 JS↔WXML 契约不符（WXML 用 `categoryList/currentCategory/productList`+`handleSearchBarTap/handleFavorite/handleShare`；JS 用 `categories/selectedCategory/products`+`handleSearchTap`）。③ 用户页同理（WXML 引 `handleLogin/handlePointsTap/handleFollowingTap/handleFollowersTap/handleLogout/followStats`+`userInfo.avatar/nickname`；JS 未定义且字段为 `nickName/avatarUrl`）。④ 请求层 `baseURL:""` 且 `setBaseURL` 无调用、服务层用相对 `/api/*`。⑤ `pages/settings|address/index.js` require 越级 `../../../services/authService`（应 `../../`）。⑥ 跳转目标不存在：`/pages/product/detail`（实际 `pages/product/index`）、`/pages/search/index`、`/pages/auth/login`、`/pages/product/poster`、`/pages/settings/{password,phone,about,feedback}/index`。
-- P1/P2：`utils/richtext.js` 把 `</a>` 无条件换 `</span>`；`models/post.js:24` 正则 `/\\s+/`（应 `/\s+/`）；`components/` 两组件无人引用；`pages/user/index.wxml` 硬编码"苏铁 v1.0.18"；`utils/request.js:72` 用 `process.env.NODE_ENV`（小程序无 `process` 全局风险）；重复代码（`unwrap`×3、数据源判定×3、`stripHtml`×3、`toNumber`×2）。
+- P0：① 7 个 WXML 被 HTML 实体转义（`&lt;view`）：`pages/category|cart/index.wxml`、`pages/order/{index,detail,confirm}.wxml`、`components/{product-card,empty-state}/index.wxml` → 无法渲染（category/cart 是 tabBar 页）。② 首页 JS↔WXML 契约不符（WXML 用 `categoryList/currentCategory/productList`+`handleSearchBarTap/handleFavorite/handleShare`；JS 用 `categories/selectedCategory/products`+`handleSearchTap`）。③ 用户页同理（WXML 引 `handleLogin/handlePointsTap/handleFollowingTap/handleFollowersTap/handleLogout/followStats`+`userInfo.avatar/nickname`；JS 未定义且字段为 `nickName/avatarUrl`）。④ 请求层 `baseURL:""` 且 `setBaseURL` 无调用、服务层用相对 `/api/*`。⑤ `pages/settings|address/index.js` require 越级 `../../../services/authService`（应 `../../`）。⑥ 跳转目标不存在：`/pages/product/detail`（实际 `pages/product/index`）、`/pages/search/index`、`/pages/auth/login`、`/pages/product/poster`、`/pages/settings/{password,phone,about,feedback}/index`。（**P0 ①~⑥ 已于 v3.0.13 全部修复**）
+- P1/P2：`utils/richtext.js` 把 `</a>` 无条件换 `</span>`；`models/post.js:24` 正则 `/\\s+/`（应 `/\s+/`）；`components/` 两组件无人引用；`pages/user/index.wxml` 硬编码"苏铁 v1.0.18"；`utils/request.js:72` 用 `process.env.NODE_ENV`（小程序无 `process` 全局风险）；重复代码（`unwrap`×3、数据源判定×3、`stripHtml`×3、`toNumber`×2）。（**richtext/post/request/version/两组件 项已于 v3.0.13 修复；重复代码 unwrap×3/数据源判定×3/stripHtml×3/toNumber×2 已于 v3.0.14 抽出公共模块**）
 - P3：`.wxss`/部分 `.wxml` >200 行（`.js` 均 ≤200）；`project.config.json` ignore 漂移；appid `touristappid`/baseUrl `api.example.com`/大量 `/images/placeholder.svg`；支付/物流/客服/评价/登录为"开发中"占位。
 
 ## 工具链坑（Windows/PowerShell）

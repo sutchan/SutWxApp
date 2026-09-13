@@ -1,6 +1,6 @@
 {
   "name": "sut-wx-app",
-  "version": "3.0.13",
+  "version": "3.0.14",
   "description": "苏小糖微信小程序商城",
   "main": "app.js",
   "scripts": {

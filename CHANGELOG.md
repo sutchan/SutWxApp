@@ -2,6 +2,13 @@
 
 所有重要的项目变更都将记录在此文件中。
 
+## [3.0.14] - 2026-09-13
+
+### 重构（去重，导出契约不变）
+- 抽出公共模块：`utils/text.js`（`toNumber`/`stripHtml`）、`utils/api.js`（`unwrap`）、`services/dataSource.js`（`getDataSource`）。
+- `services/{product,category,post,theme}Service.js` 移除本地 `unwrap` / `getXxxSource`，改引用共享模块；调用处 `getXxxSource()==="woocommerce"` 统一为 `getDataSource()==="woocommerce"`。
+- `models/{product,category}.js` 移除本地 `toNumber` / `stripHtml`；`models/post.js` 的 `stripHtmlToText` 改用共享 `stripHtml`（保留同名导出别名）。既有单测依赖的 `module.exports` 导出名保持不变。
+
 ## [3.0.13] - 2026-09-13
 
 ### 修复（运行时可用性与一致性）
