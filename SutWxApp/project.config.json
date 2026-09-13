@@ -28,7 +28,7 @@
       },
       {
         "type": "file",
-        "value": ".eslintrc.js"
+        "value": "eslint.config.js"
       },
       {
         "type": "file",

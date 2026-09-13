@@ -1,6 +1,6 @@
 /**
  * 文件名: index.js
- * 版本号: 3.0.2
+ * 版本号: 3.0.13
  * 更新日期: 2026-08-13
  * 描述: 首页逻辑控制层（编排层，业务细节见 parts.js / utils.js）
  */
@@ -82,9 +82,7 @@ Page({
     this.setData({ isLoading: true });
 
     const pageNum = reset ? 1 : this.data.pageNum + 1;
-    const categoryId = this.data.categories[this.data.selectedCategory]
-      ? this.data.categories[this.data.selectedCategory].id
-      : 0;
+    const categoryId = this.data.selectedCategory || 0;
 
     return this.fetch("/api/product/list", {
       pageNum,
@@ -111,14 +109,14 @@ Page({
   },
 
   handleCategoryTap: function (e) {
-    const index = pickCategory(e.currentTarget.dataset.index);
-    this.setData({ selectedCategory: index });
+    const id = pickCategory(e.currentTarget.dataset.id);
+    this.setData({ selectedCategory: id });
     this.loadProducts(true);
   },
 
   handleProductTap: function (e) {
     const { id } = e.currentTarget.dataset;
-    wx.navigateTo({ url: `/pages/product/detail?id=${id}` });
+    wx.navigateTo({ url: `/pages/product/index?id=${id}` });
   },
 
   handleBannerTap: function (e) {
@@ -129,7 +127,15 @@ Page({
   },
 
   handleSearchTap: function () {
-    wx.navigateTo({ url: "/pages/search/index" });
+    wx.showToast({ title: "搜索功能开发中", icon: "none" });
+  },
+
+  handleFavorite: function () {
+    wx.showToast({ title: "收藏功能开发中", icon: "none" });
+  },
+
+  handleShare: function () {
+    wx.showToast({ title: "分享功能开发中", icon: "none" });
   },
 
   goToCart: function () {

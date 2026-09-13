@@ -1,6 +1,6 @@
 /**
  * 文件名: richtext.js
- * 版本号: 3.0.12
+ * 版本号: 3.0.13
  * 更新日期: 2026-09-13
  * 描述: 文章 HTML 安全清洗（供 rich-text 渲染）
  *       相比 request-security 的 sanitizeHtml（激进移除所有 src/href，用于接口字段清洗），
@@ -56,14 +56,13 @@ function sanitizeArticleHtml(html) {
     return `<img src="${srcVal}"${alt ? ` alt="${alt[1]}"` : ""}/>`;
   });
 
-  // 4. 重写 <a>：仅保留 http(s) 的 href，否则降级为 <span>
-  out = out.replace(/<a([^>]*)>/gi, (m, attrs) => {
+  // 4. 重写 <a>：仅保留 http(s) 的 href，否则整体降级为 <span>（开闭标签一并处理，避免标签不匹配）
+  out = out.replace(/<a\b([^>]*)>([\s\S]*?)<\/a>/gi, (m, attrs, inner) => {
     const href = /href="([^"]*)"/i.exec(attrs);
     const hrefVal = href ? href[1] : "";
-    if (hrefVal && SAFE_PROTOCOL.test(hrefVal)) return `<a href="${hrefVal}">`;
-    return "<span>";
+    if (hrefVal && SAFE_PROTOCOL.test(hrefVal)) return `<a href="${hrefVal}">${inner}</a>`;
+    return `<span>${inner}</span>`;
   });
-  out = out.replace(/<\/a>/gi, "</span>");
 
   // 5. 移除其余不安全属性（class/style/id 等），仅保留白名单标签本身
   out = out.replace(/\s+(class|style|id|target|rel)="[^"]*"/gi, "");

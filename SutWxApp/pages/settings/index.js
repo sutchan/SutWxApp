@@ -1,12 +1,12 @@
 /**
  * 文件名: index.js
- * 版本号: 3.0.8
+ * 版本号: 3.0.13
  * 更新日期: 2026-09-12
  * 描述: 设置页面，处理用户账户安全、通知、隐私等设置
  */
 
 const app = getApp();
-const authService = require("../../../services/authService");
+const authService = require("../../services/authService");
 
 const themeBehavior = require("../../behaviors/theme");
 
@@ -64,18 +64,17 @@ Page({
 
   onNavigateTo: function (e) {
     const page = e.currentTarget.dataset.page;
+    // 仅 help 页真实存在；其余设置子页尚未实现，避免导航到未注册页面报错
     const pageMap = {
-      password: "/pages/settings/password/index",
-      phone: "/pages/settings/phone/index",
-      about: "/pages/settings/about/index",
       help: "/pages/help/index",
-      feedback: "/pages/settings/feedback/index",
     };
 
     if (pageMap[page]) {
       wx.navigateTo({
         url: pageMap[page],
       });
+    } else {
+      wx.showToast({ title: "功能开发中", icon: "none" });
     }
   },
 

@@ -1,6 +1,6 @@
 /**
  * 文件名: request.js
- * 版本号: 3.0.9
+ * 版本号: 3.0.13
  * 更新日期: 2026-09-12
  * 描述: 网络请求主模块，封装 wx.request；缓存/CSRF/XSS/取消令牌等实现见同级子模块
  */
@@ -69,7 +69,10 @@ function request(options) {
     `${config.method}:${config.url}:${JSON.stringify(config.data || {})}`;
 
   const isTestEnv =
-    typeof jest !== "undefined" || process.env.NODE_ENV === "test";
+    typeof jest !== "undefined" ||
+    (typeof process !== "undefined" &&
+      process.env &&
+      process.env.NODE_ENV === "test");
 
   if (config.useCache && config.method === "GET" && !isTestEnv) {
     const cachedData = cache.cacheGet(cacheKey);

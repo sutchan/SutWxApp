@@ -1,6 +1,6 @@
 /**
  * 文件名: index.js
- * 版本号: 3.0.0
+ * 版本号: 3.0.13
  * 更新日期: 2025-12-27
  * 描述: 帮助中心页面，提供常见问题解答和客服联系方式
  */
@@ -179,9 +179,7 @@ Page({
   },
 
   onFeedback: function () {
-    wx.navigateTo({
-      url: "/pages/settings/feedback/index",
-    });
+    wx.showToast({ title: "反馈功能开发中", icon: "none" });
   },
 
   onOpenArticles: function () {

@@ -2,6 +2,19 @@
 
 所有重要的项目变更都将记录在此文件中。
 
+## [3.0.13] - 2026-09-13
+
+### 修复（运行时可用性与一致性）
+
+- 解码 7 个被 HTML 实体转义的 WXML（`pages/category|cart/index.wxml`、`pages/order/{index,detail,confirm}.wxml`、`components/{product-card,empty-state}/index.wxml`），恢复页面可渲染。
+- 对齐首页与用户页 JS↔WXML 契约（字段名与方法名），补全缺失事件处理函数，修复分类/商品列表为空问题。
+- 修复 `pages/settings|address/index.js` 的 require 越级（`../../../services` → `../../services`）。
+- 接线请求层 `baseURL`（`app.js` 启动时注入 `globalData.baseUrl`，`buildRequestConfig` 拼接相对路径），并守卫 `process.env` 访问避免小程序环境抛错。
+- 修复失效跳转目标：`/pages/product/detail` → `pages/product/index`；`/pages/auth/login` → `pages/user/index`；不存在的 `search/poster/settings` 子页改为「功能开发中」提示。
+- 修复 `utils/richtext.js` 锚点闭合标签不匹配（`<a>` 整体配对处理）与 `models/post.js` 空白折叠正则转义错误。
+- 修正 `project.config.json` 的 `packOptions.ignore`（已删的 `.eslintrc.js` → `eslint.config.js`）。
+- 用户页版本文案「苏铁 v1.0.18」→「苏铁 v3.0.13」。
+
 ## [3.0.12] - 2026-09-13
 
 ### 变更内容

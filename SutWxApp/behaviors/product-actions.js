@@ -1,6 +1,6 @@
 /**
  * 文件名: product-actions.js
- * 版本号: 3.0.9
+ * 版本号: 3.0.13
  * 更新日期: 2026-09-12
  * 描述: 商品详情页交互行为（加购/立即购买/收藏/分享/客服/相关点击），从 pages/product/index.js 抽离
  */
@@ -13,7 +13,7 @@ module.exports = Behavior({
   methods: {
     handleAddToCart: function () {
       if (!this.data.isLoggedIn) {
-        wx.navigateTo({ url: "/pages/auth/login" });
+        wx.navigateTo({ url: "/pages/user/index" });
         return;
       }
       this.setData({ showSpecPopup: true });
@@ -56,7 +56,7 @@ module.exports = Behavior({
 
     handleBuyNow: function () {
       if (!this.data.isLoggedIn) {
-        wx.navigateTo({ url: "/pages/auth/login" });
+        wx.navigateTo({ url: "/pages/user/index" });
         return;
       }
 
@@ -75,7 +75,7 @@ module.exports = Behavior({
 
     handleToggleFavorite: function () {
       if (!this.data.isLoggedIn) {
-        wx.navigateTo({ url: "/pages/auth/login" });
+        wx.navigateTo({ url: "/pages/user/index" });
         return;
       }
 
@@ -115,10 +115,10 @@ module.exports = Behavior({
           if (index === 0) {
             wx.showShareMenu();
           } else if (index === 1) {
-            wx.navigateTo({ url: `/pages/product/poster?id=${that.data.productId}` });
+            wx.showToast({ title: "海报功能开发中", icon: "none" });
           } else if (index === 2) {
             wx.setClipboardData({
-              data: `/pages/product/detail?id=${that.data.productId}`,
+              data: `/pages/product/index?id=${that.data.productId}`,
               success: function () {
                 wx.showToast({ title: "链接已复制", icon: "success" });
               },
@@ -130,7 +130,7 @@ module.exports = Behavior({
 
     handleRelatedProductTap: function (e) {
       const { id } = e.currentTarget.dataset;
-      wx.redirectTo({ url: `/pages/product/detail?id=${id}` });
+      wx.redirectTo({ url: `/pages/product/index?id=${id}` });
     },
 
     handleLoadMoreReviews: function () {

@@ -1,6 +1,6 @@
 /**
  * 文件名: request-api.js
- * 版本号: 3.0.9
+ * 版本号: 3.0.13
  * 更新日期: 2026-09-12
  * 描述: request.js 的配置组装、响应处理与公共 API 注册（保持 request 主文件精简）
  */
@@ -17,9 +17,16 @@ const cache = require("./request-cache");
  * @returns {Object}
  */
 function buildRequestConfig(options, config, csrfToken) {
+  const baseURL = config.baseURL || "";
+  let url = options.url || "";
+  // 相对路径（/api/...）拼接 baseURL，否则 wx.request 会因非绝对 URL 失败
+  if (baseURL && url && !/^https?:\/\//i.test(url) && !/^\/\//.test(url)) {
+    url = baseURL.replace(/\/+$/, "") + "/" + url.replace(/^\/+/, "");
+  }
   return {
     ...config,
     ...options,
+    url,
     method: options.method || "GET",
     header: {
       "content-type": "application/json",

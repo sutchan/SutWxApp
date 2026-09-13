@@ -1,11 +1,11 @@
 /**
  * 文件名: index.js
- * 版本号: 3.0.9
+ * 版本号: 3.0.13
  * 更新日期: 2026-09-12
  * 描述: 地址管理页面，处理收货地址的增删改查（校验/格式化/回调见同级子模块）
  */
 
-const authService = require("../../../services/authService");
+const authService = require("../../services/authService");
 
 const { validateAddress } = require("./validators");
 const { mapAddressItem, buildSavePayload, emptyForm, selectAddressPatch } = require("./format");

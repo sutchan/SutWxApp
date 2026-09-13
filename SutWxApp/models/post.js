@@ -1,6 +1,6 @@
 /**
  * 文件名: post.js
- * 版本号: 3.0.12
+ * 版本号: 3.0.13
  * 更新日期: 2026-09-13
  * 描述: 文章数据模型与 WordPress 文章映射层
  *       将 WordPress REST 返回的文章对象映射为小程序统一的文章 DTO（正文经 rich-text 安全清洗）。
@@ -21,7 +21,7 @@ function stripHtmlToText(html) {
     .replace(/&amp;/g, "&")
     .replace(/&lt;/g, "<")
     .replace(/&gt;/g, ">")
-    .replace(/\\s+/g, " ")
+    .replace(/\s+/g, " ")
     .trim();
 }
 

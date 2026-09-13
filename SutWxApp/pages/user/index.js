@@ -1,6 +1,6 @@
 /**
  * 文件名: index.js
- * 版本号: 3.0.8
+ * 版本号: 3.0.13
  * 更新日期: 2026-09-12
  * 描述: 用户中心页面逻辑控制层
  */
@@ -12,6 +12,7 @@ Page({
   data: {
     userInfo: null,
     points: 0,
+    followStats: { following: 0, followers: 0 },
     menuList: [
       {
         groupName: "我的订单",
@@ -93,6 +94,37 @@ Page({
     wx.showToast({
       title: "登录功能开发中",
       icon: "none"
+    });
+  },
+
+  handleLogin: function () {
+    this.handleAvatarTap();
+  },
+
+  handlePointsTap: function () {
+    wx.showToast({ title: "积分功能开发中", icon: "none" });
+  },
+
+  handleFollowingTap: function () {
+    wx.showToast({ title: "关注功能开发中", icon: "none" });
+  },
+
+  handleFollowersTap: function () {
+    wx.showToast({ title: "粉丝功能开发中", icon: "none" });
+  },
+
+  handleLogout: function () {
+    const that = this;
+    wx.showModal({
+      title: "提示",
+      content: "确定退出登录？",
+      success: function (res) {
+        if (res.confirm) {
+          wx.removeStorageSync("token");
+          wx.removeStorageSync("userInfo");
+          that.setData({ userInfo: null, isLoggedIn: false, points: 0 });
+        }
+      },
     });
   },
 
