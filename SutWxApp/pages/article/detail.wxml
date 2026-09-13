@@ -1,0 +1,14 @@
+<view class="article-detail" id="page-root" style="{{themeStyle}}">
+  <block wx:if="{{post}}">
+    <view class="article-header">
+      <text class="article-title">{{post.title}}</text>
+      <text class="article-date">{{post.date}}</text>
+    </view>
+    <image class="article-cover" src="{{post.cover}}" mode="aspectFill" wx:if="{{post.cover}}"></image>
+    <rich-text class="article-content" nodes="{{post.content}}"></rich-text>
+  </block>
+
+  <view wx:if="{{loading}}" class="loading">
+    <text>加载中...</text>
+  </view>
+</view>

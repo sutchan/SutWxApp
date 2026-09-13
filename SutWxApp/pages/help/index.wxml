@@ -62,4 +62,12 @@
       <text class="feedback-hint">帮助我们做得更好</text>
     </view>
   </view>
+
+  <view class="article-entry" id="article-entry" bindtap="onOpenArticles">
+    <text class="article-entry-icon">📖</text>
+    <view class="article-entry-texts">
+      <text class="article-entry-title">养护文章</text>
+      <text class="article-entry-hint">绿植养护知识</text>
+    </view>
+  </view>
 </view>

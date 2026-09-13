@@ -16,7 +16,9 @@
       "pages": [
         "address/index",
         "settings/index",
-        "help/index"
+        "help/index",
+        "article/list",
+        "article/detail"
       ]
     }
   ],

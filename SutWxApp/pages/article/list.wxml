@@ -1,0 +1,22 @@
+<view class="article-list" id="page-root" style="{{themeStyle}}">
+  <view class="list-header">
+    <text class="title">养护文章</text>
+    <text class="subtitle">绿植养护知识</text>
+  </view>
+
+  <view class="post-item" wx:for="{{list}}" wx:key="id" data-id="{{item.id}}" bindtap="onOpenPost">
+    <image class="post-cover" src="{{item.cover}}" mode="aspectFill" wx:if="{{item.cover}}"></image>
+    <view class="post-info">
+      <text class="post-title">{{item.title}}</text>
+      <text class="post-excerpt">{{item.excerpt}}</text>
+      <text class="post-date">{{item.date}}</text>
+    </view>
+  </view>
+
+  <view wx:if="{{list.length === 0 && !loading}}" class="empty">
+    <text>暂无文章</text>
+  </view>
+  <view wx:if="{{loading}}" class="loading">
+    <text>加载中...</text>
+  </view>
+</view>

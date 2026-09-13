@@ -1,7 +1,7 @@
 # SutWxApp 项目长期记忆
 
 ## 项目概况
-- 苏铁微信小程序，位于 `SutWxApp/` 子目录（纯前端原生小程序：WXML/WXSS/JS，无后端代码）。**后端为 WordPress（headless CMS）**，内容经 REST API 提供（`app.js` 的 `globalData.baseUrl`）；当前代码接口约定 `/api/*`、鉴权 `/auth/*`，但 `productService`/`categoryService` 仍为 mock、baseUrl 占位未真对接。
+- 苏铁微信小程序，位于 `SutWxApp/` 子目录（纯前端原生小程序：WXML/WXSS/JS，无后端代码）。**后端为 WordPress（headless CMS）**，内容经 REST API 提供（`app.js` 的 `globalData.baseUrl`）；当前代码接口约定 `/api/*`、鉴权 `/auth/*`；`productService` 与 `categoryService` 均已支持 `mock`/`woocommerce` 数据源切换（v3.0.11 起分类亦对接 WC），但 `baseUrl` 仍占位未真对接。
 - 界面 Apple 极简风格 + 品牌绿（#2E7D32 / #1B5E20 / #F1F8E9）。
 - 文档体系：`openspec/`（`specs/` 10 个规范：api/architecture/data/design/development/features/ops/project/testing/user-guide，另有 `archive/`、`项目概述.md`、`README.md`、`AGENTS.md`、`IMPROVEMENTS_REPORT.md`、`TECH_STACK_REPORT.md`、`docs_mapping_plan.md`）。
 
@@ -30,7 +30,7 @@
 - 单测基线：5 suites / 32 tests 通过，语句覆盖率 ~82%（`npm run test:coverage`）。
 - 源文件单文件 ≤200 行，超出按职责拆分（如 `pages/product/parts.js`、`pages/home/utils.js`）。
 - 约定为业务逻辑加中文注释，未启用 i18n 代码层（多语言走 `locales/` 的 .po/.pot）。
-- `SutWxApp/images/tabbar/` 现为 8 个图标（home/category/cart/user 各含 -active），**全部为同一占位图**（MD5 相同），真实图标待美术资源替换。
+- `SutWxApp/images/tabbar/` 现由 `scripts/generate-tabbar-icons.js`（无依赖 PNG 光栅化）生成 8 个品牌线性图标（home/category/cart/user × 未选中灰 #9E9E9E / 选中绿 #2E7D32，81×81），覆盖原占位图（v3.0.12）。
 
 ## CI/CD（2026-09-12 落地，v3.0.8）
 - `.github/workflows/ci.yml`：push（main/dev/feature/fix/hotfix）+ PR + 手动；jobs = `lint` / `test`（`test:coverage` + 覆盖率 Artifact）/ `checks`（纯 Node 校验，无需装依赖）；Node 20、npm 缓存指向 `SutWxApp/package-lock.json`、`defaults.run.working-directory: SutWxApp`、concurrency 取消旧运行。
@@ -47,9 +47,10 @@
 - 经典开源参考：**微慕 Minapper / Watch-Life**（`https://github.com/iamxjb/winxin-app-watch-life.net`），配套 WP 插件 `rest-api-to-miniprogram`（gitee：iamxjb/rest-api-to-miniprogram）。
 - 真实对接形态（来自参考项目源码）：配套 WP 插件在 WP 侧注册**自定义 REST 命名空间**（如 `wp-json/minapper/v1/`、`wp-json/watch-life-net/v1/`），小程序直接调用该命名空间路由（如 `posts`/`categories`/`comments`/`wechatshop/product/getlist`），而非裸 `wp-json/wp/v2/`；核心 `wp-json/wp/v2/` 亦可复用。
 - 鉴权：典型为微信 `wx.login` 拿 code → 插件签发 token（非通用 JWT）；用户以 openid 关联 WP 用户。
-- 文章 HTML 渲染：参考项目用 `wxParse`（HTML→WXML）；本项目 `utils/request.js` 的 `sanitizeHtml()` 做安全清洗，渲染层待补（建议 rich-text / towxml / wxParse）。
+- 文章 HTML 渲染：参考项目用 `wxParse`（HTML→WXML）；本项目 `utils/request.js` 的 `sanitizeHtml()` 做接口字段清洗（激进移除所有 src/href）。文章正文渲染层已接入（v3.0.12）：`utils/richtext.js` 的 `sanitizeArticleHtml` 仅保留安全 `img`/`a`（http(s)），`pages/article/detail` 用 `rich-text` 组件渲染，`postService` 经 `globalData.productSource` 切换 mock/woocommerce。
 - 本项目当前用自定义 `/api/*` + `/auth/*`（占位 baseUrl、部分 mock），属于"插件/代理命名空间"的等价约定；接入真实 WP 时建议采用插件命名空间方案并补齐渲染层。
 - 已落地 WooCommerce 商品支持（v3.0.6）：`SutWxApp/models/product.js` 的 `mapWooCommerceProduct` 将 WC 商品（`wp-json/wc/v3/products`）映射为统一商品 DTO（price/originPrice/images/category/stock/sku/specs/rating/description 等）；`services/productService.js` 用 `globalData.productSource`（`mock` 默认 / `woocommerce`）切换数据源，WooCommerce 路径调 `/api/product/list`、`/api/product/detail`（由配套 WP 插件映射）；详情页 `pages/product/index.js` 改为经 `productService.getProductDetail` 获取。单测 `__tests__/product.mapper.test.js`。
+- 已落地 WooCommerce 分类对接（v3.0.11）：`models/category.js` 的 `mapWooCommerceCategory`/`mapWooCommerceCategories` 将 WC 分类（`wp-json/wc/v3/products/categories` 或插件 `/api/category/list`）映射为统一分类 DTO（id/name/icon/count/parentId/slug/permalink）；`categoryService.js` 经 `globalData.productSource` 切换，`woocommerce` 路径调 `/api/category/list`、`/api/category/detail`，演示数据抽至 `categoryService.mock.js`；单测 `__tests__/category.mapper.test.js`。
 
 - 已落地主题换肤（v3.0.7）：`SutWxApp/models/theme.js` 内置 5 套默认配色预设（`THEME_PRESETS`：sut-green/sky-blue/sunny-orange/violet/graphite），`resolveTheme({presetId,custom})` 合并后台自定义色值，`toCssVars` 生成对应 `app.wxss` CSS 变量的声明字符串；`services/themeService.js` 从 `/api/theme` 拉取（缓存优先、失败回退默认）并经 `globalData.theme`/`themeStyle` + `wx.setNavigationBarColor`/`wx.setTabBarStyle` 全站下发；`behaviors/theme.js` 注入页面根容器 `style="{{themeStyle}}"`，`app.js` 启动加载。配套 WP 插件实现 `/api/theme`（返回 `presetId` 或 `custom` 色值）。category/cart/order 等 wxml 为 HTML 实体转义存储，编辑须用属性片段精确匹配。
 

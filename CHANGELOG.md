@@ -2,6 +2,28 @@
 
 所有重要的项目变更都将记录在此文件中。
 
+## [3.0.12] - 2026-09-13
+
+### 变更内容
+
+#### 文章 HTML 渲染层（WordPress 内容展示）
+- 新增 `utils/richtext.js`：`sanitizeArticleHtml` 文章正文安全清洗，保留 `<img src>`/`<a href>`（仅 http(s)），移除危险标签/事件属性/危险协议；区别于 `request-security.sanitizeHtml`（激进移除所有 src/href，用于接口字段）。
+- 新增 `models/post.js`（`mapWpPost`/`mapWpPosts`）与 `services/postService.js`（mock/woocommerce 切换，调 `/api/post/list`、`/api/post/detail`），演示数据抽至 `postService.mock.js`。
+- 新增文章列表页与详情页 `pages/article/{list,detail}`，详情页用 `rich-text` 渲染安全清洗后的 HTML；`app.json` 分包注册两页，`pages/help/index` 增加「养护文章」入口。
+
+#### tabBar 图标
+- 新增 `scripts/tabbar-icons/`（draw.js 无依赖 PNG 编码器 + shapes.js 形状定义）与 `scripts/generate-tabbar-icons.js`，生成 8 个品牌线性 PNG 图标（home/category/cart/user × 灰/绿）覆盖原占位图（微信原生 tabBar 仅支持本地 PNG）。
+
+## [3.0.11] - 2026-09-13
+
+### 变更内容
+
+#### 后端对接：分类服务对接 WooCommerce（对称商品服务）
+- 新增 `models/category.js`：将 WordPress/WooCommerce REST 分类对象映射为统一分类 DTO（`mapWooCommerceCategory` / `mapWooCommerceCategories`，含图标、数量、父级、slug、permalink）。
+- `categoryService.js` 由纯 mock（v3.0.0）升级为支持 `mock` / `woocommerce` 数据源切换（读取 `globalData.productSource`），WooCommerce 路径调用 `/api/category/list`、`/api/category/detail`（由配套 WP 插件映射）。
+- 演示数据抽离至 `categoryService.mock.js`（与 `productService.mock.js` 结构对齐）。
+- 新增 `__tests__/category.mapper.test.js` 覆盖映射纯函数（含缺省/无效项过滤），单测基线 +7 用例。
+
 ## [3.0.10] - 2026-09-13
 
 ### 变更内容

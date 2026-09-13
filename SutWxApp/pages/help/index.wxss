@@ -210,3 +210,34 @@
   font-size: 24rpx;
   opacity: 0.85;
 }
+
+.article-entry {
+  margin: 30rpx;
+  background: #f1f8e9;
+  border-radius: 16rpx;
+  padding: 32rpx;
+  display: flex;
+  align-items: center;
+}
+
+.article-entry-icon {
+  font-size: 44rpx;
+  margin-right: 20rpx;
+}
+
+.article-entry-texts {
+  display: flex;
+  flex-direction: column;
+}
+
+.article-entry-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1b5e20;
+}
+
+.article-entry-hint {
+  font-size: 24rpx;
+  color: #2e7d32;
+  margin-top: 6rpx;
+}

@@ -184,6 +184,12 @@ Page({
     });
   },
 
+  onOpenArticles: function () {
+    wx.navigateTo({
+      url: "/pages/article/list",
+    });
+  },
+
   onShareAppMessage: function () {
     return {
       title: "苏铁商城 - 帮助中心",
