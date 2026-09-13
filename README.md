@@ -204,6 +204,8 @@ npm run ci            # 等价于 CI 全流程：lint + check + test
   - [设计规范](openspec/specs/design/spec.md)
   - [运维与发布规范](openspec/specs/ops/spec.md)
   - [测试规范](openspec/specs/testing/spec.md)
+  - [后端（WordPress 插件）规范](openspec/specs/backend/spec.md)
+  - [WordPress 插件开发计划](docs/wordpress-plugin/DEVELOPMENT_PLAN.md)
 - [原型目录（prototype/）](prototype/README.md)
   - [核心 6 页高保真原型](prototype/prototype.html)：首页 / 分类 / 商品详情 / 购物车 / 订单确认 / 我的
   - [扩展 5 页原型](prototype/prototype-extra.html)：订单列表 / 订单详情 / 地址管理 / 设置 / 帮助中心

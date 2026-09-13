@@ -359,6 +359,42 @@ https://api.example.com/v{version}/{resource}/{id}?{query_parameters}
 
 > 后端不可用时回退内置默认预设；主题配置在 `app.js` 启动时加载并缓存到本地（`appTheme`）。
 
+### 文章 API（数据源：WordPress 文章）
+
+小程序文章来自 WordPress `wp_posts`（post 类型）。配套 WP 插件将 `wp-json/wp/v2/posts` 映射为小程序命名空间端点，由 `services/postService.js` 消费并经 `models/post.js` 的 `mapWpPost` 映射为统一 DTO（正文为 HTML，小程序侧用 `rich-text` + `sanitizeArticleHtml` 安全渲染）。
+
+- **获取文章列表**
+  - **URL**: `GET /api/post/list`
+  - **查询参数**: `page`、`pageSize`、`categoryId`、`keyword`（与列表筛选一致）
+  - **响应**: `{ "list": [ <WP 文章> ], "total": 100, "page": 1, "pageSize": 20 }`；字段经 `mapWpPost` 映射
+- **获取文章详情**
+  - **URL**: `GET /api/post/detail?id={id}`
+  - **响应**: 单个 <WP 文章> 对象（映射为 DTO）
+
+> 接口免鉴权（`needAuth: false`）。正文为 HTML，由小程序 `rich-text` 组件渲染。
+
+### 分类 API（数据源：WooCommerce 商品分类）
+
+小程序分类来自 WooCommerce 商品分类（`product_cat`）。配套 WP 插件将 WC 分类映射为小程序命名空间端点，由 `services/categoryService.js` 消费并经 `models/category.js` 的 `mapWooCommerceCategory` 映射为统一 DTO。
+
+- **获取分类列表**
+  - **URL**: `GET /api/category/list`
+  - **响应**: `{ "list": [ <WC 分类> ], "total": 20, "page": 1, "pageSize": 50 }` 或数组；字段经 `mapWooCommerceCategory` 映射
+- **获取分类详情**
+  - **URL**: `GET /api/category/detail?id={id}`
+  - **响应**: 单个 <WC 分类> 对象（映射为 DTO）
+
+> 接口免鉴权（`needAuth: false`）。
+
+### 端点与后端命名空间映射
+
+小程序调用路径统一为 `/api/*`（见上文各端点）。后端为 WordPress 配套插件，落地方式二选一：
+
+- **推荐（路径直连）**：插件注册 WP REST 命名空间 `sutwx/v1`（路由 `product/list`、`post/list`、`theme` 等），并用 `add_rewrite_rule` 将 `/api/(.*)` 重写到 `rest_route=/sutwx/v1/$1`；小程序 `globalData.baseUrl` 设为站点根（如 `https://example.com`）。这样 `/api/*` 即为真实可访问路径。
+- **备选（直连 wp-json）**：小程序 `baseUrl` 设为 `https://example.com/wp-json/sutwx/v1`，跳过重写层。
+
+> 鉴权接口（`/api/v1/users`、`/api/v1/orders`）为后续阶段；当前 v1 只读内容端点全部免登录。详见 `openspec/specs/backend/spec.md` 与 `docs/wordpress-plugin/DEVELOPMENT_PLAN.md`。
+
 ### 订单API
 
 #### 创建订单

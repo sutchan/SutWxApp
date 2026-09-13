@@ -2,6 +2,14 @@
 
 所有重要的项目变更都将记录在此文件中。
 
+## [Unreleased]
+
+### 文档（后端插件规划）
+- 新增 `openspec/specs/backend/spec.md`：定义配套 WordPress 插件 `sutwx-app-api` 的架构、目录结构、REST 命名空间映射（`/api/*` ↔ `wp-json/sutwx/v1`）、v1 只读端点契约（商品/文章/分类/主题）、主题后台配置、鉴权与订单预留、安全/缓存/部署要求。
+- 新增 `docs/wordpress-plugin/DEVELOPMENT_PLAN.md`：后端插件分阶段开发计划（P0 脚手架 → P1 只读 MVP → P2 主题配置 → P3 鉴权基建 → P4 联调测试 → P5 订单支付预留），含技术决策、验收与风险对策。
+- 完善 `openspec/specs/api/spec.md`：补全缺失的「文章 API」「分类 API」契约（与 `services/{post,category}Service.js`、`models/{post,category}.js` 对齐），并新增「端点与后端命名空间映射」说明与后续阶段标注。
+- 更新 `openspec/README.md`、`README.md` 索引，链接后端规范与插件开发计划。
+
 ## [3.0.14] - 2026-09-13
 
 ### 重构（去重，导出契约不变）

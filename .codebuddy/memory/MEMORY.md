@@ -15,6 +15,12 @@
 - 统一为仓库根 `/prototype/`（`prototype.html` 主 + `prototype-extra.html` 二级页 + `wireframes.html` 组件库，彼此相对跳转、无 CDN）。引用用相对路径 `prototype/prototype.html`。
 - 截图流程：缓存 Chromium + `playwright-core` 渲染后截 `.phone` 元素存 `docs/screenshots/`；临时依赖装仓库外 `.shots/`，用完删。
 
+## 后端插件规划（2026-09-13 立项，缺代码仅文档）
+- 插件名 `sutwx-app-api`（独立 WP 插件，自研不依赖微慕）。规范 `openspec/specs/backend/spec.md`，开发计划 `docs/wordpress-plugin/DEVELOPMENT_PLAN.md`。
+- 决策基线（已与产品确认）：① 商品数据源=**WooCommerce**；② v1=**只读 MVP**（文章/商品/分类/主题，全部免登录）；③ 鉴权=**wx.login→JWT**（基建本期落地，内容端点仍公开）；④ 订单/支付=**本期不做，仅预留契约**。
+- 小程序实际公开端点：`/api/product/{list,detail}`、`/api/post/{list,detail}`、`/api/category/{list,detail}`、`/api/theme`（均在 `services/*.js` + `models/*.js` 有映射，DTO 字段见 backend/spec.md）。`utils/api.unwrap` 兼容 `{code,data}` 包络或裸数据。
+- 命名空间映射：插件注册 `sutwx/v1` + rewrite `/api/*` → `rest_route=/sutwx/v1/$1`（推荐，使 spec 路径即真实路径）；备选直连 `wp-json/sutwx/v1`。预设列表（`sut-green` 等 5 套）须与 `models/theme.js` 同步。
+
 ## 工程与质量
 - 门禁：`npm run lint`（eslint 10 纯声明式 flat config `eslint.config.js`，**零外部 require**）/ `npm test`（jest，`__tests__/**/*.test.js`）/ `npm run check`（版本+配置）/ `npm run ci`（lint+check+test）。
 - **ESLint 关键坑**：eslint 10 已把 `@eslint/js`/`globals`/`@eslint/eslintrc` 移出运行时依赖，`npm ci` 树无这些包；配置必须**自包含**（recommended 规则与全局变量全内联，`__tests__` 内联 jest 全局）。基线 0 error / 12 warning（全 `eqeqeq`，故意保留）。升级 ESLint 主版本勿依赖 `@eslint/js`/FlatCompat。
