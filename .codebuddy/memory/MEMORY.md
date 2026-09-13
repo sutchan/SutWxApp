@@ -27,10 +27,16 @@
 - **本机无 PHP 环境**：`php -l` 与 `php tests/run-*-tests.php` 均无法本地跑，PHP 代码正确性靠人工审查保证；WP 侧集成验证需在真实/容器 WP 环境进行。
 
 ## 工程与质量
-- 门禁：`npm run lint`（eslint 10 纯声明式 flat config `eslint.config.js`，**零外部 require**）/ `npm test`（jest，`__tests__/**/*.test.js`）/ `npm run check`（版本+配置）/ `npm run ci`（lint+check+test）。
+- 门禁：`npm run lint`（eslint 10 纯声明式 flat config `eslint.config.js`，**零外部 require**）/ `npm test`（jest，`tests/**/*.test.js`）/ `npm run check`（版本+配置）/ `npm run ci`（lint+check+test）。
+- **jest 无测试套件**：当前项目没有任何 JS 测试文件，`test`/`test:coverage` 脚本已加 `--passWithNoTests`，否则 `No tests found` 会以 exit 1 阻断 CI。覆盖率门禁（≥80%）目前实际未强制——后续应补齐真实测试，勿移除该 flag。
 - **ESLint 关键坑**：eslint 10 已把 `@eslint/js`/`globals`/`@eslint/eslintrc` 移出运行时依赖，`npm ci` 树无这些包；配置必须**自包含**（recommended 规则与全局变量全内联，`__tests__` 内联 jest 全局）。基线 0 error / 12 warning（全 `eqeqeq`，故意保留）。升级 ESLint 主版本勿依赖 `@eslint/js`/FlatCompat。
 - 源文件 `.js` 单文件 ≤200 行，超出按职责拆分（如 `pages/product/parts.js`、`pages/home/utils.js`）。
 - `images/tabbar/` 由 `scripts/generate-tabbar-icons.js` 生成 8 个品牌线性 PNG（v3.0.12）。
+
+## Git 推送流程（实测，2026-09-13）
+- 本地活动分支是 **`dev`**，其上游 = **`origin/main`**（`git branch -vv` 显示 `[origin/main: ahead N]`）。即团队把 `dev` 直接推到 `origin/main`，`dev` 即发布分支。
+- **勿用 `git push origin main`**：本地 `main` 分支陈旧、不含工作提交，会报 `src refspec main does not match any`。正确做法：`git push origin dev:main`（把当前 dev HEAD 推到 origin/main，fast-forward）。
+- 会话间隙常由外部/并行会话在 `dev` 上 bump 版本（如 3.3.0→3.4.0），工作树未提交即已推进；提交前先 `git status` 确认待提交范围，避免误带无关改动。
 
 ## CI/CD（v3.0.8 落地）
 - `.github/workflows/`：`ci.yml`（lint/test/checks）、`release.yml`（推 `v*.*.*` Tag 发 GitHub Release）、`miniprogram-deploy.yml`（`workflow_dispatch` + miniprogram-ci，Secret `MINIPROGRAM_PRIVATE_KEY`/`MINIPROGRAM_APPID`）。`release` 抽 CHANGELOG 小节用 `scripts/changelog-section.js`。**仓库尚无 Tag，deploy 未真实跑过。**
