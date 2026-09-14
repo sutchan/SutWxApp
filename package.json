@@ -1,0 +1,15 @@
+{
+  "name": "sut-wx-app",
+  "version": "3.4.0",
+  "description": "苏铁微信小程序商城 - Apple 极简风格高保真交互原型与商城应用",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "dev": "node server.js",
+    "build": "node build.js",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
