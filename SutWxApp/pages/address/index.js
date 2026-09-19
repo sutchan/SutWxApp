@@ -1,15 +1,15 @@
 /**
  * 文件名: index.js
- * 版本号: 3.0.13
- * 更新日期: 2026-09-12
- * 描述: 地址管理页面，处理收货地址的增删改查（校验/格式化/回调见同级子模块）
+ * 版本号: 3.4.1
+ * 更新日期: 2026-09-19
+ * 描述: 地址管理页面，处理收货地址的增删改查（校验/格式化/删除回调见同级子模块）
  */
 
-const authService = require("../../services/authService");
+const addressService = require("../../services/addressService");
 
 const { validateAddress } = require("./validators");
 const { mapAddressItem, buildSavePayload, emptyForm, selectAddressPatch } = require("./format");
-const { confirmDeleteAddress, buildSaveCallbacks } = require("./handlers");
+const { confirmDeleteAddress } = require("./handlers");
 
 const themeBehavior = require("../../behaviors/theme");
 
@@ -40,25 +40,19 @@ Page({
     this.loadAddressList();
   },
 
-  loadAddressList: function () {
-    const that = this;
+  loadAddressList: async function () {
     wx.showLoading({ title: "加载中..." });
-
-    authService.getAddressList({
-      success: function (res) {
-        wx.hideLoading();
-        if (res.code === 0 && res.data) {
-          that.setData({ addressList: res.data.map((item) => mapAddressItem(item)) });
-        } else {
-          that.setData({ addressList: [] });
-        }
-      },
-      fail: function (err) {
-        wx.hideLoading();
-        console.error("获取地址列表失败:", err);
-        wx.showToast({ title: "加载失败", icon: "none" });
-      },
-    });
+    try {
+      const list = await addressService.getAddressList();
+      this.setData({
+        addressList: (list || []).map((item) => mapAddressItem(item)),
+      });
+    } catch (err) {
+      console.error("获取地址列表失败:", err);
+      wx.showToast({ title: "加载失败", icon: "none" });
+    } finally {
+      wx.hideLoading();
+    }
   },
 
   onSelectAddress: function (e) {
@@ -134,7 +128,7 @@ Page({
     this.setData({ showModal: false });
   },
 
-  onSaveAddress: function () {
+  onSaveAddress: async function () {
     const { formData, isEdit, editId } = this.data;
     const { valid, message } = validateAddress(formData);
     if (!valid) {
@@ -144,12 +138,21 @@ Page({
 
     wx.showLoading({ title: "保存中..." });
     const requestData = buildSavePayload(formData);
-    const { success, fail } = buildSaveCallbacks(this);
 
-    if (isEdit) {
-      authService.updateAddress({ id: editId, ...requestData, success, fail });
-    } else {
-      authService.addAddress({ ...requestData, success, fail });
+    try {
+      if (isEdit) {
+        await addressService.updateAddress(editId, requestData);
+      } else {
+        await addressService.addAddress(requestData);
+      }
+      wx.hideLoading();
+      wx.showToast({ title: "保存成功", icon: "success" });
+      this.setData({ showModal: false });
+      this.loadAddressList();
+    } catch (err) {
+      wx.hideLoading();
+      console.error("保存地址失败:", err);
+      wx.showToast({ title: "保存失败", icon: "none" });
     }
   },
 

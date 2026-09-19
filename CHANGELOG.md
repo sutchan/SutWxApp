@@ -11,6 +11,25 @@
 - `release.yml`（1.0.0 → 1.1.0）在 Release 中附加三份交付物：`sutwxapp-site-<tag>.zip`（静态站点）、`sutwxapp-miniprogram-<tag>.zip`（小程序源码，排除 node_modules / coverage / 私钥）、`sutwx-app-api-<tag>.zip`（WordPress 插件）。
 - `.gitignore` 新增 `/dist`（构建产物由 Actions 生成，不入库）。
 
+## [3.4.1] - 2026-09-19
+
+### 修复
+
+- **地址管理页服务引用错配（运行时崩溃）**：`pages/address/index.js` 与 `pages/address/handlers.js` 此前 `require` 认证服务 `authService`，却调用只存在于 `addressService` 的 `getAddressList`/`addAddress`/`updateAddress`/`deleteAddress`，导致地址页 `TypeError`。现改引用 `addressService` 并统一改用 Promise/`await`；`addressService` 各方法补充 `unwrap` 解包，与 `categoryService`/`postService` 等保持一致（同时修正 `pages/order/confirm.js` 对返回值的数组假设）。
+- 修正 `services/authService.js` 头注释版本号滞后（3.0.1 → 3.4.1）。
+
+### 重构
+
+- 拆分超 200 行源文件以符合单文件 ≤200 行约定：
+  - `utils/request.js`：并发队列控制抽离为 `utils/request-queue.js`；
+  - `utils/request-api.js`：公共 API 注册抽离为 `utils/request-methods.js`；
+  - `eslint.config.js`：规则集与全局变量常量抽离为 `eslint.presets.js`（并加入 `project.config.json` 打包忽略）。
+- 移除已废弃的空目录 `SutWxApp/types/`。
+
+### 版本
+
+- 版本号 3.4.0 → 3.4.1（`SutWxApp/package.json` / `SutWxApp/app.js` / `README.md` 徽章）。
+
 ## [3.4.0] - 2026-09-13
 
 ### 新功能（后端插件 P2 主题后台配置，插件版本 0.2.0 → 0.3.0）

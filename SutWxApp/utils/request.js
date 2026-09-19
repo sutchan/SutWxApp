@@ -1,8 +1,8 @@
 /**
  * 文件名: request.js
- * 版本号: 3.0.13
- * 更新日期: 2026-09-12
- * 描述: 网络请求主模块，封装 wx.request；缓存/CSRF/XSS/取消令牌等实现见同级子模块
+ * 版本号: 3.4.1
+ * 更新日期: 2026-09-19
+ * 描述: 网络请求主模块，封装 wx.request；缓存/并发队列/CSRF/XSS/取消令牌等实现见同级子模块
  */
 
 const CONFIG = require("./request-config");
@@ -10,18 +10,15 @@ const { checkWx } = require("./request-platform");
 const cache = require("./request-cache");
 const security = require("./request-security");
 const { CancelToken, isCancel } = require("./request-cancel");
-const {
-  buildRequestConfig,
-  handleResponse,
-  registerRequestApi,
-} = require("./request-api");
+const { buildRequestConfig, handleResponse } = require("./request-api");
+const { registerRequestApi } = require("./request-methods");
+const { createQueueController } = require("./request-queue");
 
 const requestInterceptors = [];
 const responseInterceptors = [];
 
-// 队列并发控制状态
-let activeRequests = 0;
-const requestQueue = [];
+// 并发队列控制器（并发上限与排队逻辑见 request-queue.js）
+const queue = createQueueController(CONFIG);
 
 /**
  * 网络请求主函数
@@ -110,8 +107,7 @@ function request(options) {
       const requestParams = {
         ...processedConfig,
         success: (res) => {
-          activeRequests--;
-          processQueue();
+          queue.release();
 
           let processedResponse = res;
           for (const interceptor of responseInterceptors) {
@@ -123,8 +119,7 @@ function request(options) {
           handleResponse(processedResponse, config, cacheKey, resolve, reject, processedConfig, wxInstance);
         },
         fail: (err) => {
-          activeRequests--;
-          processQueue();
+          queue.release();
 
           if (config.cancelToken && config.cancelToken.isCancel()) {
             reject(new Error("Request cancelled"));
@@ -167,29 +162,8 @@ function request(options) {
       });
     }
 
-    if (CONFIG.enableQueue && activeRequests >= CONFIG.maxConcurrent) {
-      requestQueue.push(sendRequest);
-    } else {
-      activeRequests++;
-      sendRequest();
-    }
+    queue.acquire(sendRequest);
   });
-}
-
-/**
- * 处理请求队列
- */
-function processQueue() {
-  while (
-    requestQueue.length > 0 &&
-    activeRequests < CONFIG.maxConcurrent
-  ) {
-    const nextRequest = requestQueue.shift();
-    if (nextRequest) {
-      activeRequests++;
-      nextRequest();
-    }
-  }
 }
 
 // 注册公共 API（缓存方法 / 配置 setter / HTTP 动词 / 拦截器）

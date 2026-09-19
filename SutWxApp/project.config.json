@@ -32,6 +32,10 @@
       },
       {
         "type": "file",
+        "value": "eslint.presets.js"
+      },
+      {
+        "type": "file",
         "value": "utils/compress-images.js"
       }
     ],
