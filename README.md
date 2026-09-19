@@ -159,9 +159,14 @@ SutWxApp/
 
 | 工作流 | 触发方式 | 作用 |
 |--------|----------|------|
-| `ci.yml` | push（main / dev / feature / fix / hotfix）、PR、手动 | ESLint 检查、Jest 单元测试（覆盖率归档）、版本号与小程序配置校验 |
-| `release.yml` | 推送 `v*.*.*` Tag（或手动补发） | 校验 Tag 与版本号一致，并抽取 `CHANGELOG.md` 对应小节创建 GitHub Release |
+| `ci.yml` | push（main / dev / feature / fix / hotfix）、PR、手动 | ESLint 检查、Jest 单元测试（覆盖率归档）、版本号与小程序配置校验、静态站点构建冒烟、PHP 插件语法检查与单测 |
+| `site.yml` | push `main`（`prototype/`、`docs/`、`build.js` 等变更）、手动 | 构建静态站点产物并部署到 GitHub Pages |
+| `release.yml` | 推送 `v*.*.*` Tag（或手动补发） | 校验 Tag 与版本号一致，打包站点 / 小程序 / 插件三份交付物，并抽取 `CHANGELOG.md` 对应小节创建 GitHub Release |
 | `miniprogram-deploy.yml` | 手动触发 | 经 `miniprogram-ci` 生成预览二维码或上传体验版 |
+
+### 静态站点（GitHub Pages）
+
+`site.yml` 以仓库根 `build.js` 构建 `dist/` 并发布。首次使用需在仓库 **Settings → Pages → Build and deployment** 将 Source 设为 **GitHub Actions**；此后推送 `main`（命中 `prototype/**`、`docs/**`、`build.js` 等路径）即自动发布，发布地址见工作流运行环境 `github-pages`。
 
 ### 本地质量门禁
 
@@ -172,6 +177,14 @@ npm run lint          # ESLint 检查
 npm test              # 单元测试
 npm run check         # 版本号一致性 + 小程序配置完整性校验
 npm run ci            # 等价于 CI 全流程：lint + check + test
+
+# 仓库根：静态站点构建（零依赖）与本地预览
+node build.js         # 生成 index.html 与 dist/
+npm install && npm run dev   # http://localhost:3000
+
+# WordPress 插件单测（需本地 PHP 8.1+）
+php sutwx-app-api/tests/run-mapping-tests.php
+php sutwx-app-api/tests/run-settings-tests.php
 ```
 
 ### 上传小程序（CD）

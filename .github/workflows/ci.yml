@@ -1,7 +1,8 @@
 # 文件路径: .github/workflows/ci.yml
-# 版本号: 1.0.0
-# 更新日期: 2026-09-12
-# 描述: 持续集成流水线：ESLint 代码检查、Jest 单元测试、版本与小程序配置一致性校验
+# 版本号: 1.1.0
+# 更新日期: 2026-09-15
+# 描述: 持续集成流水线：ESLint 代码检查、Jest 单元测试、版本与小程序配置一致性校验、
+#       静态站点（原型展示站）构建冒烟、WordPress 插件（PHP）语法检查与单测
 
 name: CI
 
@@ -73,6 +74,15 @@ jobs:
       - name: 安装依赖
         run: npm ci
 
+      # Jest 的 rootDir 为仓库根、testMatch 指向 tests/**/*.test.js，而 /tests 已被 .gitignore 忽略，
+      # 若用例未纳入版本控制，CI 会因 --passWithNoTests 静默通过。此处显式告警，避免"假绿"。
+      - name: 检查用例是否纳入版本控制
+        working-directory: .
+        run: |
+          if [ -z "$(git ls-files 'tests/**/*.test.js' 'SutWxApp/**/*.test.js')" ]; then
+            echo "::warning::未发现受版本控制的 Jest 用例（仓库根 tests/ 已被 .gitignore 忽略），本次为 0 用例空跑。请将用例迁入受控目录并同步 jest.testMatch。"
+          fi
+
       - name: 运行单元测试（含覆盖率）
         run: npm run test:coverage
 
@@ -104,3 +114,119 @@ jobs:
 
       - name: 校验 app.json 页面与资源配置
         run: node scripts/check-config.js
+
+  # ---------- 4. 静态站点（原型展示站）构建与冒烟 ----------
+  site:
+    name: 静态站点构建与冒烟
+    runs-on: ubuntu-latest
+    # 覆盖文件级 defaults：站点工程位于仓库根
+    defaults:
+      run:
+        working-directory: .
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v7
+
+      # 仓库根仅有 bun.lock，缺少 npm lockfile，故不启用依赖缓存；
+      # build.js 仅依赖 Node 内置模块，构建阶段零依赖。
+      - name: 配置 Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 20
+
+      - name: 构建站点产物
+        run: node build.js
+
+      - name: 校验产物完整性
+        run: |
+          node -e '
+          const fs = require("fs");
+          const required = [
+            "index.html",
+            "dist/index.html",
+            "dist/prototype.html",
+            "dist/prototype-extra.html",
+            "dist/wireframes.html",
+            "dist/docs/PROJECT_OVERVIEW.md"
+          ];
+          const missing = required.filter((f) => !fs.existsSync(f));
+          if (missing.length) {
+            console.error("缺少产物：" + missing.join("，"));
+            process.exit(1);
+          }
+          const html = fs.readFileSync("dist/index.html", "utf8");
+          if (!html.includes("<title>") || !html.includes("og:title")) {
+            console.error("dist/index.html 缺少 title / og 元信息，build.js 注入可能失败");
+            process.exit(1);
+          }
+          console.log("产物校验通过：" + required.length + " 个文件");
+          '
+
+      - name: 安装运行时依赖（供冒烟服务使用）
+        run: npm install --omit=dev --no-audit --no-fund
+
+      - name: 启动服务并冒烟验证
+        run: |
+          node server.js &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID" 2>/dev/null || true' EXIT
+          for _ in $(seq 1 20); do
+            curl -sf -o /dev/null http://127.0.0.1:3000/ && break
+            sleep 1
+          done
+          for path in / /prototype.html /prototype-extra.html /wireframes.html /docs/PROJECT_OVERVIEW.md; do
+            code=$(curl -s -o /dev/null -w "%{http_code}" "http://127.0.0.1:3000${path}")
+            echo "${path} -> ${code}"
+            if [ "$code" != "200" ]; then
+              echo "::error::路由 ${path} 返回 ${code}"
+              exit 1
+            fi
+          done
+
+      - name: 归档站点产物
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: site-dist
+          path: dist/
+          if-no-files-found: warn
+          retention-days: 7
+
+  # ---------- 5. WordPress 插件（PHP）语法检查与单测 ----------
+  php:
+    name: PHP 插件语法检查与单测
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: .
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ["8.1", "8.3"]
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v7
+
+      - name: 配置 PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mbstring
+          coverage: none
+
+      - name: 语法检查（php -l）
+        run: |
+          find sutwx-app-api -name '*.php' -print0 \
+            | xargs -0 -n1 -P 4 php -l | tee php-lint.log
+          if grep -q 'Errors parsing' php-lint.log; then
+            echo "::error::PHP 语法检查未通过"
+            exit 1
+          fi
+          echo "PHP 语法检查通过"
+
+      # 两个脚本自带 WP/WC 桩，可脱离 WordPress 独立运行，退出码 0=通过 / 1=失败
+      - name: 运行映射层单测
+        run: php sutwx-app-api/tests/run-mapping-tests.php
+
+      - name: 运行主题配置单测
+        run: php sutwx-app-api/tests/run-settings-tests.php

@@ -4,6 +4,13 @@
 
 ## [Unreleased]
 
+### 变更（CI/CD）
+
+- `ci.yml`（1.0.0 → 1.1.0）新增两个 Job：①`site`：仓库根执行 `node build.js` 构建静态站点，校验 `dist/` 产物完整性与 `title`/`og` 元信息注入，安装运行时依赖后启动 `server.js` 并对 `/`、`/prototype.html`、`/prototype-extra.html`、`/wireframes.html`、`/docs/PROJECT_OVERVIEW.md` 做 HTTP 200 冒烟，产物归档为 `site-dist`；②`php`：PHP 8.1 / 8.3 矩阵，对 `sutwx-app-api` 全量 `php -l` 语法检查，并运行 `run-mapping-tests.php`、`run-settings-tests.php` 两个独立单测。同时在 `test` Job 增加用例受控性检查，未发现受版本控制的 Jest 用例时输出告警。
+- 新增 `site.yml`（1.0.0）：push `main` 命中 `prototype/**`、`docs/**`、`build.js`、`server.js`、`index.html`、`package.json` 或手动触发时，构建 `dist/` 并经 `actions/deploy-pages` 发布到 GitHub Pages（需在 Settings → Pages 将 Source 设为 GitHub Actions）。
+- `release.yml`（1.0.0 → 1.1.0）在 Release 中附加三份交付物：`sutwxapp-site-<tag>.zip`（静态站点）、`sutwxapp-miniprogram-<tag>.zip`（小程序源码，排除 node_modules / coverage / 私钥）、`sutwx-app-api-<tag>.zip`（WordPress 插件）。
+- `.gitignore` 新增 `/dist`（构建产物由 Actions 生成，不入库）。
+
 ## [3.4.0] - 2026-09-13
 
 ### 新功能（后端插件 P2 主题后台配置，插件版本 0.2.0 → 0.3.0）

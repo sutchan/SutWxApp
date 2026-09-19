@@ -1,7 +1,8 @@
 # 文件路径: .github/workflows/release.yml
-# 版本号: 1.0.0
-# 更新日期: 2026-09-12
-# 描述: 持续交付流水线：推送 v*.*.* Tag 时校验版本一致性并以 CHANGELOG 小节创建 GitHub Release
+# 版本号: 1.1.0
+# 更新日期: 2026-09-15
+# 描述: 持续交付流水线：推送 v*.*.* Tag 时校验版本一致性，构建并打包交付物，
+#       以 CHANGELOG 小节创建 GitHub Release
 
 name: Release
 
@@ -50,11 +51,24 @@ jobs:
       - name: 从 CHANGELOG 提取发布说明
         run: node scripts/changelog-section.js "$TAG" > release-notes.md
 
-      - name: 创建 Release
+      - name: 构建静态站点产物
+        run: node build.js
+
+      - name: 打包交付物
+        run: |
+          mkdir -p release-assets
+          zip -qr "release-assets/sutwxapp-site-${TAG}.zip" dist
+          zip -qr "release-assets/sutwxapp-miniprogram-${TAG}.zip" SutWxApp \
+            -x "SutWxApp/node_modules/*" "SutWxApp/coverage/*" "SutWxApp/private.key" "SutWxApp/preview.jpg"
+          zip -qr "release-assets/sutwx-app-api-${TAG}.zip" sutwx-app-api
+          ls -lh release-assets
+
+      - name: 创建 Release 并附加交付物
         uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ env.TAG }}
           name: ${{ env.TAG }}
           body_path: release-notes.md
+          files: release-assets/*.zip
           draft: false
           prerelease: ${{ contains(env.TAG, '-') }}

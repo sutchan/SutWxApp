@@ -1,0 +1,82 @@
+# 文件路径: .github/workflows/site.yml
+# 版本号: 1.0.0
+# 更新日期: 2026-09-15
+# 描述: 静态站点（原型展示站）持续部署：构建 dist/ 并发布到 GitHub Pages
+#       仓库需在 Settings → Pages 将 Source 设为「GitHub Actions」
+
+name: Deploy Site
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "prototype/**"
+      - "docs/**"
+      - "build.js"
+      - "server.js"
+      - "index.html"
+      - "package.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Pages 部署串行执行，避免并发发布互相覆盖
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: 构建站点产物
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v7
+
+      # 仓库根仅有 bun.lock，缺少 npm lockfile，故不启用依赖缓存；构建零依赖
+      - name: 配置 Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 20
+
+      - name: 构建站点产物
+        run: node build.js
+
+      - name: 校验产物完整性
+        run: |
+          node -e '
+          const fs = require("fs");
+          const required = [
+            "dist/index.html",
+            "dist/prototype.html",
+            "dist/prototype-extra.html",
+            "dist/wireframes.html"
+          ];
+          const missing = required.filter((f) => !fs.existsSync(f));
+          if (missing.length) {
+            console.error("缺少产物：" + missing.join("，"));
+            process.exit(1);
+          }
+          console.log("产物校验通过：" + required.length + " 个文件");
+          '
+
+      - name: 上传 Pages 产物
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist/
+
+  deploy:
+    name: 发布到 GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: 部署
+        id: deployment
+        uses: actions/deploy-pages@v4
