@@ -27,8 +27,8 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.7",
-    "eslint": "^10.10.0",
-    "jest": "^30.5.1"
+    "eslint": "^10.11.0",
+    "jest": "^30.5.2"
   },
   "jest": {
     "testEnvironment": "node",
