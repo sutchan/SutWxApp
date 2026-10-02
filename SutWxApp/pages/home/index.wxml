@@ -44,7 +44,7 @@
     <view class="section-header">
       <text class="section-title">推荐商品</text>
     </view>
-    <view class="product-grid">
+    <view class="product-grid {{fadeIn ? 'fade-in' : ''}}">
       <block wx:for="{{products}}" wx:key="id">
         <view class="product-card" bindtap="handleProductTap" data-id="{{item.id}}">
           <image class="product-image" src="{{item.imageUrl}}" mode="aspectFill" lazy-load="true"></image>
@@ -70,6 +70,63 @@
     <view class="empty-tip" wx:if="{{products.length === 0 && !isLoading}}">
       <image class="empty-image" src="/images/empty.png" mode="aspectFit"></image>
       <text class="empty-text">暂无商品</text>
+    </view>
+  </view>
+
+  <!-- 搜索历史浮层 -->
+  <view class="search-mask {{showSearchHistory ? 'show' : ''}}" id="search-history-mask" bindtap="handleCloseSearch"></view>
+  <view class="search-history-layer {{showSearchHistory ? 'show' : ''}}" id="search-history-layer">
+    <view class="sh-layer-header">
+      <view class="sh-input-wrapper">
+        <view class="sh-loading-spinner" wx:if="{{isSearching}}"></view>
+        <image class="sh-icon" src="/images/search.png" mode="aspectFit" wx:else></image>
+        <input class="sh-input" id="search-input" placeholder="搜索商品、植物好物..." value="{{searchKeyword}}" bindinput="handleSearchInput" bindconfirm="handleSearchConfirm" confirm-type="search" />
+        <view class="sh-clear-input" wx:if="{{searchKeyword}}" bindtap="handleClearSearchInput">✕</view>
+      </view>
+      <text class="sh-cancel-btn" bindtap="handleCloseSearch">取消</text>
+    </view>
+    <view class="sh-layer-body">
+      <!-- 输入联想建议区 -->
+      <view class="sh-section" id="sh-suggestions-section" wx:if="{{searchKeyword}}">
+        <view class="sh-title-row">
+          <text class="sh-title">搜索建议</text>
+        </view>
+        <view class="sh-suggestions-list" wx:if="{{suggestions.length > 0}}">
+          <block wx:for="{{suggestions}}" wx:key="id">
+            <view class="sh-suggestion-item" bindtap="handleSelectHistoryTag" data-keyword="{{item.name}}">
+              <image class="sh-sug-icon" src="/images/search.png" mode="aspectFit"></image>
+              <text class="sh-sug-text">{{item.name}}</text>
+            </view>
+          </block>
+        </view>
+        <view class="sh-empty-text" wx:else>暂无匹配商品建议</view>
+      </view>
+
+      <!-- 搜索历史区与猜你想搜 -->
+      <block wx:else>
+        <view class="sh-section" id="sh-history-section">
+          <view class="sh-title-row">
+            <text class="sh-title">搜索历史</text>
+            <text class="sh-clear-action" id="clear-history-btn" bindtap="handleClearHistory" wx:if="{{searchHistory.length > 0}}">清空历史</text>
+          </view>
+          <view class="sh-tags-box" wx:if="{{searchHistory.length > 0}}">
+            <block wx:for="{{searchHistory}}" wx:key="*this">
+              <view class="sh-tag-item" bindtap="handleSelectHistoryTag" data-keyword="{{item}}">{{item}}</view>
+            </block>
+          </view>
+          <view class="sh-empty-text" wx:else>暂无搜索历史</view>
+        </view>
+        <view class="sh-section" id="sh-hot-section">
+          <view class="sh-title-row">
+            <text class="sh-title">猜你想搜</text>
+          </view>
+          <view class="sh-tags-box">
+            <view class="sh-tag-item hot" bindtap="handleSelectHistoryTag" data-keyword="苏铁盆栽">苏铁盆栽 🔥</view>
+            <view class="sh-tag-item hot" bindtap="handleSelectHistoryTag" data-keyword="琴叶榕">琴叶榕</view>
+            <view class="sh-tag-item hot" bindtap="handleSelectHistoryTag" data-keyword="多肉植物">多肉植物</view>
+          </view>
+        </view>
+      </block>
     </view>
   </view>
 </view>

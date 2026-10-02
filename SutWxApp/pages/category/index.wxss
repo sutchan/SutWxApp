@@ -18,8 +18,17 @@
   background-color: var(--background-secondary);
 }
 
+.category-group-header {
+  padding: 18rpx 10rpx 6rpx;
+  font-size: 20rpx;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  text-align: center;
+  background-color: var(--background-secondary);
+}
+
 .category-item {
-  height: 100rpx;
+  height: 90rpx;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -51,6 +60,21 @@
 .product-area {
   flex: 1;
   background-color: var(--background-primary);
+}
+
+.product-area.fade-in {
+  animation: wxSubtleFadeIn 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes wxSubtleFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(10rpx);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .product-list {

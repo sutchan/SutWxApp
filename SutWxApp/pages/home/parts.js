@@ -15,6 +15,36 @@ function pickCategory(index) {
   return Number.isNaN(num) || num < 0 ? 0 : num;
 }
 
+const SEARCH_HISTORY_KEY = "sut_search_history_v1";
+const DEFAULT_SEARCH_HISTORY = ["琴叶榕", "龟背竹", "虎皮兰"];
+
+function loadSearchHistory() {
+  try {
+    const list = wx.getStorageSync(SEARCH_HISTORY_KEY);
+    if (Array.isArray(list)) return list.slice(0, 3);
+  } catch (e) {}
+  return DEFAULT_SEARCH_HISTORY.slice(0, 3);
+}
+
+function saveSearchHistory(list) {
+  try {
+    wx.setStorageSync(SEARCH_HISTORY_KEY, list.slice(0, 3));
+  } catch (e) {}
+}
+
+function appendSearchKeyword(kw, currentList) {
+  if (!kw || typeof kw !== "string") return currentList || [];
+  const trimmed = kw.trim();
+  if (!trimmed) return currentList || [];
+  const filtered = (currentList || []).filter((item) => item !== trimmed);
+  const next = [trimmed, ...filtered].slice(0, 3);
+  saveSearchHistory(next);
+  return next;
+}
+
 module.exports = {
   pickCategory,
+  loadSearchHistory,
+  saveSearchHistory,
+  appendSearchKeyword,
 };
