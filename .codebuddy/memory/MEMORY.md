@@ -25,7 +25,7 @@
 
 ## 工程与质量
 - 门禁：`npm run lint`（eslint 10 纯声明式 flat config，**零外部 require**；规则集/全局变量已抽至 `eslint.presets.js`）/ `npm test`（jest，`tests/**/*.test.js`）/ `npm run check`（版本+配置）/ `npm run ci`（lint+check+test）。
-- **jest 无测试套件**：无真实 JS 用例，`test`/`test:coverage` 已加 `--passWithNoTests`；覆盖率 ≥80% 未强制，后续应补真实用例，勿移除该 flag。
+- **jest 已有真实用例**（2026-10-02 修正）：仓库根 `tests/` 下 `integration.test.js`/`store.test.js`/`request.test.js` 三套真实 Jest 用例（共 92 例，77 通过）；其中 `request.test.js` 15 例失败（根因见 daily `2026-10-02.md`：401 跳转目标 bug + 无 token 阻断匿名请求 + 测试拦截器污染/mock 写法/错误对象契约）。`--passWithNoTests` 已失必要性但可保留防退化；覆盖率 ≥80% 未强制。
 - **ESLint 关键坑**：eslint 10 已把 `@eslint/js`/`globals`/`@eslint/eslintrc` 移出运行时依赖，配置必须**自包含**（规则与全局变量全内联）。基线 0 error / 12 warning（全 `eqeqeq`，故意保留）。
 - 源文件 `.js` 单文件 **≤200 行**（超出按职责拆分；已拆：`monitor-*`、`request-queue`/`request-methods`、`productService.mock` 等）。
 - `images/tabbar/` 由 `scripts/generate-tabbar-icons.js` 生成。
