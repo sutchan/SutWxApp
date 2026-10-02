@@ -6,22 +6,26 @@
 描述: 分类页面模板
 -->
 <view class="category-container" id="page-root" style="{{themeStyle}}">
-  <!-- 分类列表 -->
-  <scroll-view class="category-sidebar" scroll-y>
-    <view
-      wx:for="{{categoryList}}"
-      wx:key="id"
-      class="category-item {{activeCategoryIndex === index ? 'active' : ''}}"
-      data-index="{{index}}"
-      bindtap="onCategoryChange"
-    >
-      <text>{{item.name}}</text>
-    </view>
+  <!-- 分类侧边栏（包含“热门分类”等分组头） -->
+  <scroll-view class="category-sidebar" scroll-y id="category-sidebar">
+    <block wx:for="{{categoryGroups}}" wx:key="title" wx:for-item="group" wx:for-index="gIdx">
+      <view class="category-group-header" id="cat-group-header-{{gIdx}}" wx:if="{{group.title}}">{{group.title}}</view>
+      <view
+        wx:for="{{group.items}}"
+        wx:key="id"
+        class="category-item {{activeCategoryId === item.id ? 'active' : ''}}"
+        data-id="{{item.id}}"
+        bindtap="onCategoryChange"
+        id="cat-item-{{item.id}}"
+      >
+        <text>{{item.name}}</text>
+      </view>
+    </block>
   </scroll-view>
 
-  <!-- 商品列表 -->
-  <scroll-view class="product-area" scroll-y>
-    <view class="product-list">
+  <!-- 商品列表区域（带微淡入动效） -->
+  <scroll-view class="product-area {{fadeIn ? 'fade-in' : ''}}" scroll-y id="category-product-area">
+    <view class="product-list" id="category-product-list">
       <view
         wx:for="{{productList}}"
         wx:key="id"

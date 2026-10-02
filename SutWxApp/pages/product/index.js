@@ -35,6 +35,8 @@ Page({
     visibleImages: [],
     imageLoaded: {},
     isPageVisible: true,
+    headerParallaxStyle: "",
+    headerOverlayStyle: "",
   },
 
   // 请求取消令牌
@@ -128,6 +130,24 @@ Page({
 
   handleHideReviewPopup: function () {
     this.setData({ showReviewPopup: false });
+  },
+
+  onPageScroll: function (e) {
+    const st = e.scrollTop;
+    if (st > 0) {
+      const py = Math.min(st * 0.4, 70);
+      const scale = 1 + Math.min(st * 0.0006, 0.1);
+      const blur = Math.min(st / 25, 8);
+      this.setData({
+        headerParallaxStyle: `transform: translate3d(0, ${py}px, 0) scale(${scale}); filter: blur(${blur.toFixed(1)}px);`,
+        headerOverlayStyle: `opacity: ${Math.min(st / 220, 0.45).toFixed(2)};`,
+      });
+    } else {
+      this.setData({
+        headerParallaxStyle: "transform: translate3d(0, 0, 0) scale(1); filter: blur(0px);",
+        headerOverlayStyle: "opacity: 0;",
+      });
+    }
   },
 
   getCurrentSpecPrice: function () {

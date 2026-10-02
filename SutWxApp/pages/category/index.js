@@ -15,10 +15,34 @@ const themeBehavior = require("../../behaviors/theme");
 Page({
   behaviors: [themeBehavior],
   data: {
+    categoryGroups: [
+      {
+        title: "热门分类",
+        items: [
+          { id: 0, name: "全部商品" },
+          { id: 1, name: "观叶植物" },
+          { id: 2, name: "多肉植物" },
+        ],
+      },
+      {
+        title: "特色绿植",
+        items: [
+          { id: 3, name: "花卉绿植" },
+        ],
+      },
+      {
+        title: "园艺资材",
+        items: [
+          { id: 4, name: "园艺工具" },
+          { id: 5, name: "花盆资材" },
+        ],
+      },
+    ],
     categoryList: [],
-    activeCategoryIndex: 0,
+    activeCategoryId: 0,
     productList: [],
-    loading: false
+    loading: false,
+    fadeIn: true,
   },
 
   onLoad() {
@@ -38,34 +62,29 @@ Page({
         loading: false
       });
 
-      if (categoryList.length > 0) {
-        this.loadProductList(categoryList[0].id);
-      }
+      this.loadProductList(this.data.activeCategoryId);
     } catch (error) {
       console.error('加载分类失败:', error);
-      wx.showToast({
-        title: '加载失败',
-        icon: 'none'
-      });
       this.setData({ loading: false });
     }
   },
 
   /**
-   * 加载商品列表
+   * 加载商品列表（含淡入切换）
    */
   async loadProductList(categoryId) {
     try {
-      this.setData({ loading: true });
+      this.setData({ loading: true, fadeIn: false });
       const productList = await productService.getProductList({ categoryId });
       
       this.setData({
         productList: formatProductListPrices(productList),
-        loading: false
+        loading: false,
+        fadeIn: true,
       });
     } catch (error) {
       console.error('加载商品失败:', error);
-      this.setData({ loading: false });
+      this.setData({ loading: false, fadeIn: true });
     }
   },
 
@@ -73,14 +92,14 @@ Page({
    * 切换分类
    */
   onCategoryChange(e) {
-    const index = e.currentTarget.dataset.index;
-    const category = this.data.categoryList[index];
-    
+    const id = e.currentTarget.dataset.id;
+    if (id === this.data.activeCategoryId) return;
+
     this.setData({
-      activeCategoryIndex: index
+      activeCategoryId: id,
     });
 
-    this.loadProductList(category.id);
+    this.loadProductList(id);
   },
 
   /**
