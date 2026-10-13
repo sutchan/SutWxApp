@@ -72,17 +72,27 @@ class Sutwx_Rest_Posts extends Sutwx_Rest_Base {
 			$query_args['s'] = $keyword;
 		}
 
-		$query = new WP_Query( $query_args );
-		$items = sutwx_map_posts( $query->posts );
-
-		return $this->success(
+		$payload = Sutwx_Cache::remember(
+			'post',
 			array(
-				'list'     => $items,
-				'total'    => (int) $query->found_posts,
 				'page'     => $paging['page'],
 				'pageSize' => $paging['pageSize'],
-			)
+				'keyword'  => $keyword,
+			),
+			function () use ( $query_args ) {
+				$query = new WP_Query( $query_args );
+
+				return array(
+					'list'     => sutwx_map_posts( $query->posts ),
+					'total'    => (int) $query->found_posts,
+					'page'     => (int) $query_args['paged'],
+					'pageSize' => (int) $query_args['posts_per_page'],
+				);
+			},
+			Sutwx_Cache::TTL
 		);
+
+		return $this->success( $payload );
 	}
 
 	/**
@@ -97,8 +107,16 @@ class Sutwx_Rest_Posts extends Sutwx_Rest_Base {
 			return $this->error( __( '文章 ID 无效', 'sutwx-app-api' ), 400, 'sutwx_invalid_param' );
 		}
 
-		$post  = get_post( $id );
-		$mapped = $post ? sutwx_map_post( $post ) : null;
+		$mapped = Sutwx_Cache::remember(
+			'post',
+			array( 'detail' => $id ),
+			function () use ( $id ) {
+				$post = get_post( $id );
+				return $post ? sutwx_map_post( $post ) : null;
+			},
+			Sutwx_Cache::TTL_DETAIL
+		);
+
 		if ( ! $mapped ) {
 			return $this->error( __( '文章不存在或未发布', 'sutwx-app-api' ), 404, 'sutwx_not_found' );
 		}

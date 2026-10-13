@@ -39,7 +39,14 @@ class Sutwx_Rest_Theme extends Sutwx_Rest_Base {
 	 * @return array
 	 */
 	public function get_item( $request ) {
-		$config = Sutwx_Settings::get_theme_config();
+		$config = Sutwx_Cache::remember(
+			'theme',
+			array(),
+			function () {
+				return Sutwx_Settings::get_theme_config();
+			},
+			Sutwx_Cache::TTL
+		);
 		return $this->success( $config );
 	}
 }

@@ -83,27 +83,41 @@ class Sutwx_Rest_Products extends Sutwx_Rest_Base {
 			);
 		}
 
-		$query = new WP_Query( $query_args );
-		$items = array();
-		foreach ( $query->posts as $product_id ) {
-			$product = function_exists( 'wc_get_product' ) ? wc_get_product( (int) $product_id ) : null;
-			if ( ! $product ) {
-				continue;
-			}
-			$mapped = sutwx_map_product( $product );
-			if ( $mapped ) {
-				$items[] = $mapped;
-			}
-		}
-
-		return $this->success(
-			array(
-				'list'     => $items,
-				'total'    => (int) $query->found_posts,
-				'page'     => $paging['page'],
-				'pageSize' => $paging['pageSize'],
-			)
+		$cache_params = array(
+			'page'       => $paging['page'],
+			'pageSize'   => $paging['pageSize'],
+			'categoryId' => $categoryId,
+			'keyword'    => $keyword,
 		);
+
+		$payload = Sutwx_Cache::remember(
+			'product',
+			$cache_params,
+			function () use ( $query_args ) {
+				$query = new WP_Query( $query_args );
+				$items = array();
+				foreach ( $query->posts as $product_id ) {
+					$product = function_exists( 'wc_get_product' ) ? wc_get_product( (int) $product_id ) : null;
+					if ( ! $product ) {
+						continue;
+					}
+					$mapped = sutwx_map_product( $product );
+					if ( $mapped ) {
+						$items[] = $mapped;
+					}
+				}
+
+				return array(
+					'list'     => $items,
+					'total'    => (int) $query->found_posts,
+					'page'     => (int) $query_args['paged'],
+					'pageSize' => (int) $query_args['posts_per_page'],
+				);
+			},
+			Sutwx_Cache::TTL
+		);
+
+		return $this->success( $payload );
 	}
 
 	/**
@@ -118,14 +132,21 @@ class Sutwx_Rest_Products extends Sutwx_Rest_Base {
 			return $this->error( __( '商品 ID 无效', 'sutwx-app-api' ), 400, 'sutwx_invalid_param' );
 		}
 
-		$product = function_exists( 'wc_get_product' ) ? wc_get_product( $id ) : null;
-		if ( ! $product || ! $product->get_id() || 'publish' !== $product->get_status() ) {
-			return $this->error( __( '商品不存在', 'sutwx-app-api' ), 404, 'sutwx_not_found' );
-		}
+		$mapped = Sutwx_Cache::remember(
+			'product',
+			array( 'detail' => $id ),
+			function () use ( $id ) {
+				$product = function_exists( 'wc_get_product' ) ? wc_get_product( $id ) : null;
+				if ( ! $product || ! $product->get_id() || 'publish' !== $product->get_status() ) {
+					return null;
+				}
+				return sutwx_map_product( $product );
+			},
+			Sutwx_Cache::TTL_DETAIL
+		);
 
-		$mapped = sutwx_map_product( $product );
 		if ( ! $mapped ) {
-			return $this->error( __( '商品数据映射失败', 'sutwx-app-api' ), 500, 'sutwx_map_failed' );
+			return $this->error( __( '商品不存在', 'sutwx-app-api' ), 404, 'sutwx_not_found' );
 		}
 
 		return $this->success( $mapped );

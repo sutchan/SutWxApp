@@ -66,21 +66,31 @@ class Sutwx_Rest_Categories extends Sutwx_Rest_Base {
 			$args['parent'] = $parentId;
 		}
 
-		$terms = get_terms( $args );
-		if ( is_wp_error( $terms ) ) {
-			return $this->error( $terms->get_error_message(), 500, 'sutwx_terms_error' );
+		$payload = Sutwx_Cache::remember(
+			'category',
+			array( 'parentId' => $parentId ),
+			function () use ( $args ) {
+				$terms = get_terms( $args );
+				if ( is_wp_error( $terms ) ) {
+					return null;
+				}
+				$items = sutwx_map_categories( $terms );
+
+				return array(
+					'list'     => $items,
+					'total'    => count( $items ),
+					'page'     => 1,
+					'pageSize' => 50,
+				);
+			},
+			Sutwx_Cache::TTL
+		);
+
+		if ( null === $payload ) {
+			return $this->error( __( '分类读取失败', 'sutwx-app-api' ), 500, 'sutwx_terms_error' );
 		}
 
-		$items = sutwx_map_categories( $terms );
-
-		return $this->success(
-			array(
-				'list'     => $items,
-				'total'    => count( $items ),
-				'page'     => 1,
-				'pageSize' => 50,
-			)
-		);
+		return $this->success( $payload );
 	}
 
 	/**
@@ -100,7 +110,15 @@ class Sutwx_Rest_Categories extends Sutwx_Rest_Base {
 			return $this->error( __( '分类不存在', 'sutwx-app-api' ), 404, 'sutwx_not_found' );
 		}
 
-		$mapped = sutwx_map_category( $term );
+		$mapped = Sutwx_Cache::remember(
+			'category',
+			array( 'detail' => $id ),
+			function () use ( $term ) {
+				return sutwx_map_category( $term );
+			},
+			Sutwx_Cache::TTL_DETAIL
+		);
+
 		if ( ! $mapped ) {
 			return $this->error( __( '分类数据映射失败', 'sutwx-app-api' ), 500, 'sutwx_map_failed' );
 		}

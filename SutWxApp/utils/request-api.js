@@ -1,7 +1,7 @@
 /**
  * 文件名: request-api.js
- * 版本号: 3.4.1
- * 更新日期: 2026-09-19
+ * 版本号: 3.5.0
+ * 更新日期: 2026-10-13
  * 描述: request.js 的配置组装与响应处理（公共 API 注册见 request-methods.js）
  */
 
@@ -80,20 +80,12 @@ function handleResponse(processedResponse, config, cacheKey, resolve, reject, pr
     resolve(processedResponse.data);
   } else {
     const errorMessage = mapStatusCodeErrorMessage(processedResponse.statusCode, processedResponse);
-    if (processedResponse.statusCode === 401) {
-      if (wxInstance.removeStorageSync && wxInstance.navigateTo) {
-        try {
-          wxInstance.removeStorageSync("token");
-          wxInstance.removeStorageSync("userInfo");
-          setTimeout(() => {
-            wxInstance.navigateTo({ url: "/pages/home/index" });
-          }, 500);
-        } catch (error) {
-          console.warn("清除存储和跳转失败:", error);
-        }
-      }
+    const err = new Error(errorMessage);
+    if (processedResponse.statusCode) {
+      err.statusCode = processedResponse.statusCode;
     }
-    reject(new Error(errorMessage));
+    // 401 的「清除登录态 + 跳转」由 request.js 的自动刷新兜底统一处理，避免与无感刷新冲突
+    reject(err);
   }
 }
 

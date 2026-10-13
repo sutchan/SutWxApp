@@ -8,7 +8,7 @@
 - WP 对接：WooCommerce 商品/分类、主题换肤、文章渲染。公共模块：`utils/text.js`、`utils/api.js`（`unwrap` 解包 `{code,data}`）、`services/dataSource.js`（`getDataSource`）。
 
 ## 版本（单一来源）
-- 权威：`SutWxApp/package.json` 的 `version` 与 `SutWxApp/app.js` 的 `globalData.version`，当前 **3.4.1**（`npm run check:version` 校验 4 处：两者 + README 徽章 + CHANGELOG 首个数字小节）。
+- 权威：`SutWxApp/package.json` 的 `version` 与 `SutWxApp/app.js` 的 `globalData.version`，当前 **3.5.0**（`npm run check:version` 校验 4 处：两者 + README 徽章 + CHANGELOG 首个数字小节）。后端插件 `sutwx-app-api` 独立版本 **0.4.0**（`sutwx-app-api.php` 常量 + 各 PHP 头注释）。
 - 展示位同步：README 徽章、CHANGELOG 顶节；根 `package.json` 版本一并同进。
 - 每次改动 bump 最小版本（patch）；**仅更新被改文件的 `// 版本号:` 头注释**，禁止全仓库批量刷写。改文档前先实查版本（会话间隙常被外部 bump）。
 - `scripts/check-version.js` 读取 REPO_ROOT=仓库根、PROJECT_ROOT=SutWxApp。
@@ -16,15 +16,17 @@
 ## 原型目录
 - 统一为仓库根 `/prototype/`（`prototype.html` 主 + `prototype-extra.html` 二级页 + `wireframes.html` 组件库，彼此相对跳转、无 CDN）。截图流程：Chromium + `playwright-core` 渲染 `.phone` 存 `docs/screenshots/`。
 
-## 后端插件 sutwx-app-api（独立版本 0.3.0，2026-09-13 立项，P0/P1/P2 已落地）
+## 后端插件 sutwx-app-api（独立版本 0.4.0，P0/P1/P2 已落地，含鉴权）
 - 入口声明 `Requires Plugins: woocommerce`；`sutwx/v1` 命名空间 + rewrite `/api/*` → `rest_route=/sutwx/v1/$1`；响应包络 `{code,message,data,timestamp,requestId}`（pageSize≤50）。
-- 决策基线：商品数据源=WooCommerce；v1=只读 MVP（内容免登录）；鉴权=wx.login→JWT（基建本期落地，内容端点仍公开）；订单/支付本期不做仅预留契约。
-- P2：`class-settings.php`（`THEME_PRESETS` 5 套 / `THEME_KEYS` 11 字段，与 `SutWxApp/models/theme.js` 严格对齐）+ 后台「设置 → 小程序设置」页 + 颜色校验器。预设/字段为双向同步事实源。
-- 小程序实际公开端点：`/api/product/{list,detail}`、`/api/post/{list,detail}`、`/api/category/{list,detail}`、`/api/theme`。
+- 决策基线：商品数据源=WooCommerce；v1=只读 MVP（内容免登录）；鉴权=wx.login→JWT（BE-001~003 已落地：`class-jwt.php`(HS256) + `class-wechat-auth.php`(code2session) + `class-auth-service.php`(双 Token/绑定/吊销) + `class-auth-guard.php`(Bearer 校验) + `class-rest-auth.php`(`/auth/login|refresh-token|logout`、`/user/info`) + `class-credentials.php`(AppID/AppSecret/JWT 密钥)）；订单/支付本期不做仅预留契约。
+- BE-004 缓存：`class-cache.php`（分组版本号策略 + `save_post`/`woocommerce_update_product`/`edited_product_cat`/`update_option_sutwx_theme` 精准失效）；BE-005 限频：`class-rate-limit.php`（`rest_pre_dispatch` 拦截 + `X-RateLimit-*` 头，公开 120/min、鉴权 20/min）。
+- P2：`class-settings.php`（`THEME_PRESETS` 5 套 / `THEME_KEYS` 11 字段，与 `SutWxApp/models/theme.js` 严格对齐）+ 后台「设置 → 小程序设置」页 + 颜色校验器 + 凭证表单。预设/字段为双向同步事实源。
+- 小程序实际公开端点：`/api/product/{list,detail}`、`/api/post/{list,detail}`、`/api/category/{list,detail}`、`/api/theme`；鉴权端点：`/api/auth/*`、`/api/user/info`。
+- 独立单测（无需 WP）：`tests/run-auth-tests.php`、`tests/run-cache-tests.php`、`run-mapping-tests.php`、`run-settings-tests.php`，依赖 `tests/stubs-runtime.php` 桩 option/transient/user/过滤器。
 - **本机无 PHP 环境**：`php -l` 与 `php tests/run-*-tests.php` 无法本地跑，靠人工审查 + CI（PHP 8.1/8.3 矩阵）保证。
 
 ## 工程与质量
-- 门禁：`npm run lint`（eslint 10 纯声明式 flat config，**零外部 require**；规则集/全局变量已抽至 `eslint.presets.js`）/ `npm test`（jest，`tests/**/*.test.js`）/ `npm run check`（版本+配置）/ `npm run ci`（lint+check+test）。
+- 门禁：`npm run lint`（eslint 10 纯声明式 flat config，**零外部 require**；规则集/全局变量已抽至 `eslint.presets.js`）/ `npm test`（jest，根 `tests/**/*.test.js` + `SutWxApp/__tests__/**/*.test.js`）/ `npm run check`（版本+配置）/ `npm run ci`（lint+check+test）。
 - **jest 已有真实用例**（2026-10-02 修正）：仓库根 `tests/` 下 `integration.test.js`/`store.test.js`/`request.test.js` 三套真实 Jest 用例（共 92 例，77 通过）；其中 `request.test.js` 15 例失败（根因见 daily `2026-10-02.md`：401 跳转目标 bug + 无 token 阻断匿名请求 + 测试拦截器污染/mock 写法/错误对象契约）。`--passWithNoTests` 已失必要性但可保留防退化；覆盖率 ≥80% 未强制。
 - **ESLint 关键坑**：eslint 10 已把 `@eslint/js`/`globals`/`@eslint/eslintrc` 移出运行时依赖，配置必须**自包含**（规则与全局变量全内联）。基线 0 error / 12 warning（全 `eqeqeq`，故意保留）。
 - 源文件 `.js` 单文件 **≤200 行**（超出按职责拆分；已拆：`monitor-*`、`request-queue`/`request-methods`、`productService.mock` 等）。

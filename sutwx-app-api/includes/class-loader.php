@@ -1,9 +1,9 @@
 <?php
 /**
- * 统一注册 REST 路由、/api/* rewrite 与后台菜单（设置页 P2 实现）。
+ * 统一注册 REST 路由、/api/* rewrite、缓存失效钩子、限频与后台菜单。
  *
  * @package SutwxAppApi
- * @version 0.2.0
+ * @version 0.4.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -12,10 +12,18 @@ require_once SUTWX_API_DIR . 'includes/sanitize.php';
 require_once SUTWX_API_DIR . 'includes/mappings/map-product.php';
 require_once SUTWX_API_DIR . 'includes/mappings/map-post.php';
 require_once SUTWX_API_DIR . 'includes/mappings/map-category.php';
+require_once SUTWX_API_DIR . 'includes/class-jwt.php';
+require_once SUTWX_API_DIR . 'includes/class-credentials.php';
+require_once SUTWX_API_DIR . 'includes/class-wechat-auth.php';
+require_once SUTWX_API_DIR . 'includes/class-auth-service.php';
+require_once SUTWX_API_DIR . 'includes/class-auth-guard.php';
+require_once SUTWX_API_DIR . 'includes/class-cache.php';
+require_once SUTWX_API_DIR . 'includes/class-rate-limit.php';
 require_once SUTWX_API_DIR . 'includes/rest/class-rest-products.php';
 require_once SUTWX_API_DIR . 'includes/rest/class-rest-posts.php';
 require_once SUTWX_API_DIR . 'includes/rest/class-rest-categories.php';
 require_once SUTWX_API_DIR . 'includes/rest/class-rest-theme.php';
+require_once SUTWX_API_DIR . 'includes/rest/class-rest-auth.php';
 
 /**
  * 插件加载器。
@@ -30,6 +38,10 @@ final class Sutwx_Loader {
 		add_action( 'init', array( __CLASS__, 'register_rewrite_rules' ) );
 		add_action( 'admin_menu', array( __CLASS__, 'register_admin_menu' ) );
 		add_action( 'admin_notices', array( __CLASS__, 'woocommerce_missing_notice' ) );
+
+		// BE-004：内容变更精准清缓存；BE-005：公开端点限频。
+		Sutwx_Cache::register_invalidation_hooks();
+		Sutwx_Rate_Limit::init();
 	}
 
 	/**
@@ -41,6 +53,7 @@ final class Sutwx_Loader {
 			new Sutwx_Rest_Posts(),
 			new Sutwx_Rest_Categories(),
 			new Sutwx_Rest_Theme(),
+			new Sutwx_Rest_Auth(),
 		);
 		foreach ( $controllers as $controller ) {
 			$controller->register_routes();

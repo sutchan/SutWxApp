@@ -11,6 +11,21 @@
 - `release.yml`（1.0.0 → 1.1.0）在 Release 中附加三份交付物：`sutwxapp-site-<tag>.zip`（静态站点）、`sutwxapp-miniprogram-<tag>.zip`（小程序源码，排除 node_modules / coverage / 私钥）、`sutwx-app-api-<tag>.zip`（WordPress 插件）。
 - `.gitignore` 新增 `/dist`（构建产物由 Actions 生成，不入库）。
 
+## [3.5.0] - 2026-10-13
+
+### 新功能（前端登录态自动刷新 FE-001；后端插件 0.3.0 → 0.4.0）
+
+- 新增 `SutWxApp/utils/auth-token.js`：登录态令牌存储、JWT `exp` 解析、过期预判（`willExpireSoon`）与读写，作为前端令牌唯一存储源（纯逻辑，便于 Node 单测）。
+- 新增 `SutWxApp/utils/request-auth.js`：401 无感刷新与请求重放。access token 过期时静默调用 `/api/auth/refresh-token` 刷新并自动重放原请求一次；刷新失败或无刷新令牌则清除登录态并跳转登录页；并发 401 通过单飞锁仅刷新一次。与 `request.js` 通过延迟 require 避免循环依赖。
+- `utils/request.js` 接入自动刷新兜底层；`utils/request-api.js` 错误对象挂载 `statusCode`，并将 401 清理跳转统一收敛至刷新兜底，避免与无感刷新冲突。
+- `services/authService.js` 登录态读写统一委托 `auth-token.js`（`saveAuth` / `clearAuth`），消除与请求层的重复实现。
+- 后端插件 `sutwx-app-api` 0.4.0：落地微信登录 JWT 签发（`class-jwt.php` / `class-wechat-auth.php`）、Bearer 校验与权限中间件（`class-auth-guard.php` / `class-rest-auth.php`）、AppID/AppSecret 后台配置（`class-credentials.php`）、Transients 缓存与精准失效（`class-cache.php`）、IP 限频与防刷（`class-rate-limit.php`），及对应独立单测（`tests/run-auth-tests.php` / `tests/run-cache-tests.php`）。
+
+### 测试
+
+- 新增 `SutWxApp/__tests__/auth-token.test.js` 与 `request-auth.test.js` 两个 Jest 用例（令牌解析 / 存储 / 单飞刷新 / 重放 / 兜底跳转）。
+- `SutWxApp/package.json` 的 Jest `testMatch` 新增 `SutWxApp/__tests__/**/*.test.js`，使新增用例纳入版本控制并消除根 `/tests` 被 `.gitignore` 忽略导致的 CI 假绿（QA-001 部分）。
+
 ## [3.4.1] - 2026-09-19
 
 ### 修复

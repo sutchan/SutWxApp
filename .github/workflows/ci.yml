@@ -224,9 +224,15 @@ jobs:
           fi
           echo "PHP 语法检查通过"
 
-      # 两个脚本自带 WP/WC 桩，可脱离 WordPress 独立运行，退出码 0=通过 / 1=失败
+      # 四个脚本自带 WP/WC 桩，可脱离 WordPress 独立运行，退出码 0=通过 / 1=失败
       - name: 运行映射层单测
         run: php sutwx-app-api/tests/run-mapping-tests.php
 
       - name: 运行主题配置单测
         run: php sutwx-app-api/tests/run-settings-tests.php
+
+      - name: 运行鉴权单测
+        run: php sutwx-app-api/tests/run-auth-tests.php
+
+      - name: 运行缓存与限频单测
+        run: php sutwx-app-api/tests/run-cache-tests.php

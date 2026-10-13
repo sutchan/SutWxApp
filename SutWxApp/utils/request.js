@@ -1,7 +1,7 @@
 /**
  * 文件名: request.js
- * 版本号: 3.4.1
- * 更新日期: 2026-09-19
+ * 版本号: 3.5.0
+ * 更新日期: 2026-10-13
  * 描述: 网络请求主模块，封装 wx.request；缓存/并发队列/CSRF/XSS/取消令牌等实现见同级子模块
  */
 
@@ -13,6 +13,7 @@ const { CancelToken, isCancel } = require("./request-cancel");
 const { buildRequestConfig, handleResponse } = require("./request-api");
 const { registerRequestApi } = require("./request-methods");
 const { createQueueController } = require("./request-queue");
+const requestAuth = require("./request-auth");
 
 const requestInterceptors = [];
 const responseInterceptors = [];
@@ -82,7 +83,7 @@ function request(options) {
     return Promise.reject(new Error("Request cancelled"));
   }
 
-  return new Promise((resolve, reject) => {
+  const promise = new Promise((resolve, reject) => {
     let retryCount = 0;
     const maxRetry =
       processedConfig.retry !== undefined ? processedConfig.retry : CONFIG.retry;
@@ -163,6 +164,26 @@ function request(options) {
     }
 
     queue.acquire(sendRequest);
+  });
+
+  // 401 无感刷新兜底：仅在需要鉴权的请求上触发，避免与内部刷新请求 / 已重试请求形成递归
+  if (options && (options.needAuth === false || options._authInternal || options._authRetried)) {
+    return promise;
+  }
+  return promise.catch((err) => {
+    if (err && err.statusCode === 401) {
+      return requestAuth
+        .handleUnauthorized(processedConfig, request)
+        .catch((refreshErr) => {
+          requestAuth.clearAndRedirect(checkWx());
+          const msg =
+            refreshErr && refreshErr.message === "token_refresh_failed"
+              ? "登录已过期，请重新登录"
+              : (refreshErr && refreshErr.message) || "登录已过期，请重新登录";
+          throw new Error(msg);
+        });
+    }
+    throw err;
   });
 }
 

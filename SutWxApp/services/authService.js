@@ -1,11 +1,13 @@
 /**
  * 文件名: authService.js
- * 版本号: 3.4.1
- * 更新日期: 2026-09-19
- * 描述: 认证服务，处理登录、注册、登出、token刷新等认证相关功能
+ * 版本号: 3.5.0
+ * 更新日期: 2026-10-13
+ * 描述: 认证服务，处理登录、注册、登出、token刷新等认证相关功能。
+ *       登录态存储统一委托 auth-token.js（saveAuth / clearAuth），避免与请求层重复实现。
  */
 
 const request = require("../utils/request");
+const authToken = require("../utils/auth-token");
 
 /**
  * 认证服务模块
@@ -24,12 +26,7 @@ const authService = {
         needAuth: false,
         useCache: false,
       });
-      if (result && result.token) {
-        wx.setStorageSync("token", result.token);
-        if (result.userInfo) {
-          wx.setStorageSync("userInfo", result.userInfo);
-        }
-      }
+      authToken.saveAuth(result || {});
       if (typeof success === "function") success(result);
       return Promise.resolve(result);
     } catch (error) {
@@ -89,8 +86,7 @@ const authService = {
   async logout(success, fail) {
     try {
       const result = await request.post("/auth/logout", {}, { useCache: false });
-      wx.removeStorageSync("token");
-      wx.removeStorageSync("userInfo");
+      authToken.clearAuth();
       if (typeof success === "function") success(result);
       return Promise.resolve(result);
     } catch (error) {
@@ -113,9 +109,7 @@ const authService = {
         { refreshToken },
         { needAuth: false, useCache: false },
       );
-      if (result && result.token) {
-        wx.setStorageSync("token", result.token);
-      }
+      authToken.saveAuth(result || {});
       if (typeof success === "function") success(result);
       return Promise.resolve(result);
     } catch (error) {
@@ -169,13 +163,10 @@ const authService = {
   },
 
   /**
-   * 清除认证信息
+   * 清除认证信息（委托 auth-token.js）
    */
   clearAuth() {
-    try {
-      wx.removeStorageSync("token");
-      wx.removeStorageSync("userInfo");
-    } catch (e) {}
+    authToken.clearAuth();
   },
 };
 
