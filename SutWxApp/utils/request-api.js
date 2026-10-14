@@ -1,6 +1,6 @@
 /**
  * 文件名: request-api.js
- * 版本号: 3.5.0
+ * 版本号: 3.5.1
  * 更新日期: 2026-10-13
  * 描述: request.js 的配置组装与响应处理（公共 API 注册见 request-methods.js）
  */
@@ -8,6 +8,7 @@
 const CONFIG = require("./request-config");
 const security = require("./request-security");
 const cache = require("./request-cache");
+const offline = require("./offline-snapshot");
 
 /**
  * 组装请求配置（合并默认配置、CSRF 头、缓存开关）
@@ -76,6 +77,10 @@ function handleResponse(processedResponse, config, cacheKey, resolve, reject, pr
   ) {
     if (config.useCache && config.method === "GET") {
       cache.cacheSet(cacheKey, processedResponse.data);
+      // FE-003：持久化成功响应为离线快照
+      if (CONFIG.enableOffline) {
+        offline.saveSnapshot(cacheKey, processedResponse.data);
+      }
     }
     resolve(processedResponse.data);
   } else {

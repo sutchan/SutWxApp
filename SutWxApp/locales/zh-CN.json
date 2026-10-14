@@ -1,0 +1,22 @@
+{
+  "appName": "苏铁",
+  "tabHome": "首页",
+  "tabCategory": "分类",
+  "tabCart": "购物车",
+  "tabUser": "我的",
+  "loading": "加载中…",
+  "networkError": "网络异常，请稍后重试",
+  "offlineTip": "当前为离线模式，展示缓存内容",
+  "retry": "重试",
+  "login": "登录",
+  "logout": "退出登录",
+  "guest": "游客",
+  "myOrders": "我的订单",
+  "myAddresses": "收货地址",
+  "help": "帮助中心",
+  "settings": "设置",
+  "points": "积分",
+  "following": "关注",
+  "followers": "粉丝",
+  "noNetwork": "无网络连接"
+}

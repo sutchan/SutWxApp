@@ -1,6 +1,6 @@
 {
   "name": "sut-wx-app",
-  "version": "3.5.0",
+  "version": "3.5.1",
   "description": "苏小糖微信小程序商城",
   "main": "app.js",
   "scripts": {
@@ -10,7 +10,8 @@
     "test:coverage": "jest --ci --coverage --passWithNoTests",
     "check:version": "node scripts/check-version.js",
     "check:config": "node scripts/check-config.js",
-    "check": "npm run check:version && npm run check:config",
+    "check:contract": "node scripts/check-contract.js",
+    "check": "npm run check:version && npm run check:config && npm run check:contract",
     "ci": "npm run lint && npm run check && npm test",
     "deploy:preview": "node scripts/deploy.js --action=preview",
     "deploy:upload": "node scripts/deploy.js --action=upload"

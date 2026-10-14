@@ -1,6 +1,6 @@
 /**
  * 文件名: request.js
- * 版本号: 3.5.0
+ * 版本号: 3.5.1
  * 更新日期: 2026-10-13
  * 描述: 网络请求主模块，封装 wx.request；缓存/并发队列/CSRF/XSS/取消令牌等实现见同级子模块
  */
@@ -14,6 +14,7 @@ const { buildRequestConfig, handleResponse } = require("./request-api");
 const { registerRequestApi } = require("./request-methods");
 const { createQueueController } = require("./request-queue");
 const requestAuth = require("./request-auth");
+const offline = require("./offline-snapshot");
 
 const requestInterceptors = [];
 const responseInterceptors = [];
@@ -137,6 +138,15 @@ function request(options) {
             );
             setTimeout(sendRequest, retryDelayWithJitter);
           } else {
+            // FE-003：断网降级——GET 请求失败时回退离线快照
+            if (CONFIG.enableOffline && config.method === "GET" && config.useCache) {
+              const snap = offline.getSnapshot(cacheKey);
+              if (snap && snap.data !== undefined) {
+                console.warn(`网络不可用，回退离线快照：${cacheKey}`);
+                resolve(snap.data);
+                return;
+              }
+            }
             let errorMessage = "网络请求失败";
             if (err.errMsg) {
               errorMessage = err.errMsg;

@@ -1,6 +1,6 @@
 /**
  * 文件名: request-methods.js
- * 版本号: 3.4.1
+ * 版本号: 3.5.1
  * 更新日期: 2026-09-19
  * 描述: request 公共 API 注册（缓存方法 / 配置 setter / HTTP 动词 / 拦截器），从 request-api.js 抽离
  */
@@ -53,6 +53,10 @@ function registerRequestApi(request, config, requestInterceptors, responseInterc
 
   request.enableCache = function (enable) {
     config.enableCache = enable;
+  };
+
+  request.enableOffline = function (enable) {
+    config.enableOffline = enable;
   };
 
   request.setCacheTimeout = function (timeout) {

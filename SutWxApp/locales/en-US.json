@@ -1,0 +1,22 @@
+{
+  "appName": "Sutie",
+  "tabHome": "Home",
+  "tabCategory": "Category",
+  "tabCart": "Cart",
+  "tabUser": "Me",
+  "loading": "Loading…",
+  "networkError": "Network error, please retry later",
+  "offlineTip": "Offline mode, showing cached content",
+  "retry": "Retry",
+  "login": "Sign In",
+  "logout": "Sign Out",
+  "guest": "Guest",
+  "myOrders": "My Orders",
+  "myAddresses": "Addresses",
+  "help": "Help Center",
+  "settings": "Settings",
+  "points": "Points",
+  "following": "Following",
+  "followers": "Followers",
+  "noNetwork": "No network connection"
+}

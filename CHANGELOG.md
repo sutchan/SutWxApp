@@ -11,6 +11,25 @@
 - `release.yml`（1.0.0 → 1.1.0）在 Release 中附加三份交付物：`sutwxapp-site-<tag>.zip`（静态站点）、`sutwxapp-miniprogram-<tag>.zip`（小程序源码，排除 node_modules / coverage / 私钥）、`sutwx-app-api-<tag>.zip`（WordPress 插件）。
 - `.gitignore` 新增 `/dist`（构建产物由 Actions 生成，不入库）。
 
+## [3.5.1] - 2026-10-14
+
+### 新功能（前端离线降级 FE-003；用户中心真实数据 FE-005；i18n 运行时 FE-002）
+
+- 新增 `SutWxApp/utils/offline-snapshot.js`：将最近成功的 GET 响应持久化到本地存储，网络异常时回退为离线快照避免白屏；与 `request-cache.js`（内存 LRU）互补。`request.js` 在重试耗尽后、`request-api.js` 在成功响应时接入该机制，由 `CONFIG.enableOffline`（默认关闭）控制，`request.enableOffline()` 可开启。
+- `SutWxApp/pages/user/index.js` 接入真实 `authService.getUserInfo()`（FE-005）：登录态下从 `/user/info` 拉取资料与积分，本地缓存作为兜底；登出改为统一调用 `authService.logout()` 清理令牌。
+- 新增 `SutWxApp/utils/i18n.js` 轻量 i18n 运行时与 `locales/zh-CN.json`、`locales/en-US.json` 两套资源（FE-002），支持 `{var}` 插值与按系统语言/本地偏好自动选语；`app.js` 启动时 `i18n.initLocale()` 初始化 `globalData.locale`。其余 9 语种资源待专业翻译（阻塞项）。
+
+### 测试（QA-001 收尾；QA-002 复核；QA-004 新增）
+
+- 修复 QA-001 假绿：将受控目录外、被 `.gitignore` 忽略的根 `tests/` 有效用例（`request.test.js`/`store.test.js`/`integration.test.js`）迁移至 `SutWxApp/__tests__/`；删除引用已移除 API 的失效 ESM 测试（`authService.test.ts`/`cache.test.ts`/`security.test.ts`）；重写 `request.test.js` 对齐 `request.js v3.5.0` 当前语义（鉴权头、无 token 拦截、401 兜底、状态码分发、重试、拦截器、baseURL、异常边界）；移除 `.gitignore` 的 `/tests` 规则。
+- 后端 PHP 单测（`sutwx-app-api/tests/run-auth-tests.php`、`run-cache-tests.php`、`run-mapping-tests.php`、`run-settings-tests.php`）经复核已完整落地，标记 QA-002 完成。
+- 新增 `SutWxApp/scripts/check-contract.js`（QA-004）：比对插件 DTO 映射字段与小程序 `models/` 期望字段、列表端点分页包络，接入 `npm run check` 的 `check:contract`。
+- 新增 `SutWxApp/__tests__/i18n.test.js` 与 `offline-snapshot.test.js` 覆盖新增模块。
+
+### 工程（OPS-003）
+
+- 新增 `SutWxApp/scripts/package-plugin.js`：解析并校验 `SUTWX_API_VERSION`、清理测试代码（排除 `tests/` 等）后生成标准 zip 至 `dist/sutwx-app-api-v<version>.zip`（自包含 store-only ZIP 写器，跨平台、无外部依赖）；根 `package.json` 增加 `package:plugin` 脚本。
+
 ## [3.5.0] - 2026-10-13
 
 ### 新功能（前端登录态自动刷新 FE-001；后端插件 0.3.0 → 0.4.0）
