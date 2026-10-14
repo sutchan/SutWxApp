@@ -211,7 +211,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: mbstring
+          extensions: mbstring, openssl
           coverage: none
 
       - name: 语法检查（php -l）
@@ -236,3 +236,9 @@ jobs:
 
       - name: 运行缓存与限频单测
         run: php sutwx-app-api/tests/run-cache-tests.php
+
+      - name: 运行订单映射单测
+        run: php sutwx-app-api/tests/run-order-tests.php
+
+      - name: 运行微信支付 V3 单测
+        run: php sutwx-app-api/tests/run-pay-tests.php

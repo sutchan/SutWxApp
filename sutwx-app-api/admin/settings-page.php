@@ -1,9 +1,9 @@
 <?php
 /**
- * 后台「设置 → 小程序设置」页面：主题预设下拉 + 自定义色选择器 + 小程序凭证。
+ * 后台「设置 → 小程序设置」页面：主题预设下拉 + 自定义色选择器 + 小程序凭证 + 支付凭证。
  *
  * @package SutwxAppApi
- * @version 0.4.0
+ * @version 0.5.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -13,6 +13,9 @@ if ( ! class_exists( 'Sutwx_Settings' ) ) {
 }
 if ( ! class_exists( 'Sutwx_Credentials' ) ) {
 	require_once SUTWX_API_DIR . 'includes/class-credentials.php';
+}
+if ( ! class_exists( 'Sutwx_Settings_Pay' ) ) {
+	require_once SUTWX_API_DIR . 'admin/settings-pay.php';
 }
 
 /**
@@ -37,6 +40,7 @@ class Sutwx_Settings_Page {
 		}
 
 		self::maybe_save_credentials();
+		Sutwx_Settings_Pay::maybe_save();
 
 		$config    = Sutwx_Settings::get_theme_config();
 		$preset_id = $config['presetId'];
@@ -127,6 +131,10 @@ class Sutwx_Settings_Page {
 				</table>
 				<?php submit_button( __( '保存凭证', 'sutwx-app-api' ) ); ?>
 			</form>
+
+			<hr />
+
+			<?php Sutwx_Settings_Pay::render(); ?>
 		</div>
 		<?php
 	}
