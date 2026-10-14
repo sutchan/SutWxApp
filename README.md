@@ -1,6 +1,6 @@
 # SutWxApp - 苏铁微信小程序
 
-![版本](https://img.shields.io/badge/version-3.5.3-blue)
+![版本](https://img.shields.io/badge/version-3.5.4-blue)
 ![设计风格](https://img.shields.io/badge/design-Apple%20Style-green)
 ![CI](https://github.com/sutchan/SutWxApp/actions/workflows/ci.yml/badge.svg)
 

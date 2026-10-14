@@ -11,6 +11,15 @@
 - `release.yml`（1.0.0 → 1.1.0）在 Release 中附加三份交付物：`sutwxapp-site-<tag>.zip`（静态站点）、`sutwxapp-miniprogram-<tag>.zip`（小程序源码，排除 node_modules / coverage / 私钥）、`sutwx-app-api-<tag>.zip`（WordPress 插件）。
 - `.gitignore` 新增 `/dist`（构建产物由 Actions 生成，不入库）。
 
+## [3.5.4] - 2026-10-14
+
+### 新功能（订单与支付全流程 FE-004；E2E 脚本交付 QA-003）
+
+- 后端插件（0.4.0 → 0.5.0）：新增 BE-006 订单管理接口（`/api/order/list|detail|create|cancel|confirm`，鉴权 + WC 订单 DTO 映射 + 归属校验 + 状态机流转）与 BE-007 微信支付 V3（`class-wechat-pay-sign` 签名 / `class-wechat-pay-trade` 预支付与查单 / `class-wechat-pay-notify` 验签解密 / `class-pay-order-sync` 幂等落库 / `class-pay-credentials` 凭证配置），附 `run-order-tests.php`、`run-pay-tests.php` 独立单测。
+- 小程序前端：新增 `models/order.js`（订单 DTO 映射）与 `services/payService.js`（prepay → `wx.requestPayment` → 查单兜底同步）；`services/orderService.js` 拆出 `orderService.api.js` 并接入 woocommerce 数据源分支；订单确认页提交真实地址快照，列表/详情页「立即支付」接入支付全流程（mock 数据源保留「开发中」提示）。
+- QA-003：新增 `scripts/e2e/`（`run-e2e.js` 入口 + 首页/商品/购物车/登录守卫四套件，基于 `miniprogram-automator`），新增 `npm run test:e2e` 脚本与 devDependency；运行需本地微信开发者工具开启服务端口。
+- 测试：新增 `__tests__/order.test.js`、`__tests__/pay-service.test.js`（共 21 例）；`npm test` 9 套件 128 例全绿；`npm run lint` 0 error（12 既有 eqeqeq warning）；`npm run check` 版本+配置+契约全过。
+
 ## [3.5.3] - 2026-10-14
 
 ### 重构（源文件 >200 行拆分，零行为变更）

@@ -1,12 +1,14 @@
 
 /**
  * 文件名: detail.js
- * 版本号: 3.0.0
- * 更新日期: 2026-07-01
+ * 版本号: 3.5.4
+ * 更新日期: 2026-10-14
  * 描述: 订单详情页面，展示订单详细信息
  */
 
 const orderService = require('../../services/orderService');
+const payService = require('../../services/payService');
+const { getDataSource } = require('../../services/dataSource');
 const { formatOrderDetailPrices } = require('../../utils/format');
 
 const themeBehavior = require("../../behaviors/theme");
@@ -75,13 +77,38 @@ Page({
   },
 
   /**
-   * 支付订单
+   * 支付订单（woocommerce 数据源走微信支付 V3）
    */
-  onPayOrder() {
-    wx.showToast({
-      title: '支付功能开发中',
-      icon: 'none'
-    });
+  async onPayOrder() {
+    if (getDataSource() !== 'woocommerce') {
+      wx.showToast({
+        title: '支付功能开发中',
+        icon: 'none'
+      });
+      return;
+    }
+
+    try {
+      wx.showLoading({ title: '支付中', mask: true });
+      await payService.payOrder(this.data.orderId);
+      wx.hideLoading();
+      wx.showToast({
+        title: '支付成功',
+        icon: 'success'
+      });
+      this.loadOrderDetail();
+    } catch (error) {
+      wx.hideLoading();
+      // 用户主动取消不提示失败
+      const errMsg = (error && (error.errMsg || error.message)) || '';
+      if (!errMsg.includes('cancel')) {
+        console.error('支付失败:', error);
+        wx.showToast({
+          title: '支付失败',
+          icon: 'none'
+        });
+      }
+    }
   },
 
   /**

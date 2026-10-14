@@ -1,11 +1,15 @@
 /**
  * 文件名: orderService.js
- * 版本号: 3.0.9
- * 更新日期: 2026-09-12
- * 描述: 订单服务层，提供订单相关功能
+ * 版本号: 3.5.4
+ * 更新日期: 2026-10-14
+ * 描述: 订单服务层（编排），提供订单相关功能
+ *       woocommerce 数据源走 /api/order/* 真实端点（见 orderService.api.js），
+ *       mock 数据源沿用本地演示数据。支付能力见 payService.js。
  */
 
 const { mockOrders } = require("./orderService.mock");
+const { getDataSource } = require("./dataSource");
+const orderApi = require("./orderService.api");
 
 /**
  * 生成订单编号（SU + 年月日 + 3 位随机序号）
@@ -16,7 +20,7 @@ function genOrderNo() {
 }
 
 /**
- * 组装订单对象
+ * 组装 mock 订单对象
  * @param {Array} items 下单商品列表
  * @param {string} [remark] 订单备注
  * @returns {Object}
@@ -51,7 +55,43 @@ function buildOrderPayload(items, remark) {
   };
 }
 
+/**
+ * 购物车商品 → 后端下单 items（{productId, quantity}）
+ * @param {Array} items 页面商品列表
+ * @returns {Array<Object>}
+ */
+function toOrderItems(items) {
+  return (Array.isArray(items) ? items : []).map((item) => ({
+    productId: item.id,
+    quantity: item.quantity,
+  }));
+}
+
+/**
+ * 地址对象 → 后端地址快照 {name, phone, detail}
+ * @param {Object} address 页面地址对象
+ * @returns {Object}
+ */
+function toAddressSnapshot(address) {
+  const a = address || {};
+  return {
+    name: a.name || "",
+    phone: a.phone || "",
+    detail: a.detail || "",
+  };
+}
+
 async function getOrderList(status) {
+  if (getDataSource() === "woocommerce") {
+    try {
+      const { list } = await orderApi.fetchOrderList({ status });
+      return list;
+    } catch (error) {
+      console.error("获取订单列表失败:", error);
+      throw error;
+    }
+  }
+
   try {
     let orders = [...mockOrders];
 
@@ -67,6 +107,10 @@ async function getOrderList(status) {
 }
 
 async function getOrderDetail(orderId) {
+  if (getDataSource() === "woocommerce") {
+    return orderApi.fetchOrderDetail(orderId);
+  }
+
   try {
     const order = mockOrders.find((o) => o.id == orderId);
     if (!order) {
@@ -84,8 +128,16 @@ async function getOrderDetail(orderId) {
 }
 
 async function createOrder(orderData) {
+  if (getDataSource() === "woocommerce") {
+    return orderApi.fetchCreateOrder({
+      items: toOrderItems(orderData.items),
+      address: toAddressSnapshot(orderData.address),
+      remark: orderData.remark,
+    });
+  }
+
   try {
-    // 注：addressId 暂未使用（当前为 mock 地址），待接入 WordPress/WooCommerce 订单接口后回填真实收货地址
+    // 注：addressId 暂未使用（当前为 mock 地址），woocommerce 数据源回填真实收货地址
     const { items, remark } = orderData;
     return buildOrderPayload(items, remark);
   } catch (error) {
@@ -95,6 +147,10 @@ async function createOrder(orderData) {
 }
 
 async function cancelOrder(orderId) {
+  if (getDataSource() === "woocommerce") {
+    return orderApi.fetchCancelOrder(orderId);
+  }
+
   try {
     const orderIndex = mockOrders.findIndex((o) => o.id == orderId);
     if (orderIndex >= 0) {
@@ -109,6 +165,10 @@ async function cancelOrder(orderId) {
 }
 
 async function confirmReceive(orderId) {
+  if (getDataSource() === "woocommerce") {
+    return orderApi.fetchConfirmOrder(orderId);
+  }
+
   try {
     const orderIndex = mockOrders.findIndex((o) => o.id == orderId);
     if (orderIndex >= 0) {

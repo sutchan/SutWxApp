@@ -1,8 +1,8 @@
 
 /**
  * 文件名: confirm.js
- * 版本号: 3.0.2
- * 更新日期: 2026-08-13
+ * 版本号: 3.5.4
+ * 更新日期: 2026-10-14
  * 描述: 订单确认页面，用户确认订单信息并提交
  */
 
@@ -118,6 +118,7 @@ Page({
       
       const orderData = {
         items: this.data.items,
+        address: this.data.address,
         addressId: this.data.address.id,
         remark: this.data.remark
       };

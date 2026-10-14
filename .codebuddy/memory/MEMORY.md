@@ -8,7 +8,7 @@
 - WP 对接：WooCommerce 商品/分类、主题换肤、文章渲染。公共模块：`utils/text.js`、`utils/api.js`（`unwrap` 解包 `{code,data}`）、`services/dataSource.js`（`getDataSource`）。
 
 ## 版本（单一来源）
-- 权威：`SutWxApp/package.json` 的 `version` 与 `SutWxApp/app.js` 的 `globalData.version`，当前 **3.5.0**（`npm run check:version` 校验 4 处：两者 + README 徽章 + CHANGELOG 首个数字小节）。后端插件 `sutwx-app-api` 独立版本 **0.4.0**（`sutwx-app-api.php` 常量 + 各 PHP 头注释）。
+- 权威：`SutWxApp/package.json` 的 `version` 与 `SutWxApp/app.js` 的 `globalData.version`，当前 **3.5.4**（`npm run check:version` 校验 4 处：两者 + README 徽章 + CHANGELOG 首个数字小节）。后端插件 `sutwx-app-api` 独立版本 **0.5.0**（`sutwx-app-api.php` 常量 + 各 PHP 头注释）。
 - 展示位同步：README 徽章、CHANGELOG 顶节；根 `package.json` 版本一并同进。
 - 每次改动 bump 最小版本（patch）；**仅更新被改文件的 `// 版本号:` 头注释**，禁止全仓库批量刷写。改文档前先实查版本（会话间隙常被外部 bump）。
 - `scripts/check-version.js` 读取 REPO_ROOT=仓库根、PROJECT_ROOT=SutWxApp。
@@ -22,6 +22,7 @@
 - BE-004 缓存：`class-cache.php`（分组版本号策略 + `save_post`/`woocommerce_update_product`/`edited_product_cat`/`update_option_sutwx_theme` 精准失效）；BE-005 限频：`class-rate-limit.php`（`rest_pre_dispatch` 拦截 + `X-RateLimit-*` 头，公开 120/min、鉴权 20/min）。
 - P2：`class-settings.php`（`THEME_PRESETS` 5 套 / `THEME_KEYS` 11 字段，与 `SutWxApp/models/theme.js` 严格对齐）+ 后台「设置 → 小程序设置」页 + 颜色校验器 + 凭证表单。预设/字段为双向同步事实源。
 - 小程序实际公开端点：`/api/product/{list,detail}`、`/api/post/{list,detail}`、`/api/category/{list,detail}`、`/api/theme`；鉴权端点：`/api/auth/*`、`/api/user/info`。
+- BE-006/BE-007（插件 0.5.0）：订单端点 `/api/order/{list,detail,create,cancel,confirm}`（DTO 状态码 0 已取消/1 待付款/2 待发货/3 待收货/4 已完成/5 已退款）；支付端点 `/api/pay/{prepay,query,notify}`。前端对应 `models/order.js` + `services/orderService.api.js` + `services/payService.js`（prepay → `wx.requestPayment` → 查单兜底）；E2E 在 `SutWxApp/scripts/e2e/`（`npm run test:e2e`，需本地微信开发者工具）。
 - 独立单测（无需 WP）：`tests/run-auth-tests.php`、`tests/run-cache-tests.php`、`run-mapping-tests.php`、`run-settings-tests.php`，依赖 `tests/stubs-runtime.php` 桩 option/transient/user/过滤器。
 - **本机无 PHP 环境**：`php -l` 与 `php tests/run-*-tests.php` 无法本地跑，靠人工审查 + CI（PHP 8.1/8.3 矩阵）保证。
 

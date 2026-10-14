@@ -1,6 +1,6 @@
 {
   "name": "sut-wx-app",
-  "version": "3.5.3",
+  "version": "3.5.4",
   "description": "苏小糖微信小程序商城",
   "main": "app.js",
   "scripts": {
@@ -8,6 +8,7 @@
     "lint:fix": "eslint . --fix",
     "test": "jest --passWithNoTests",
     "test:coverage": "jest --ci --coverage --passWithNoTests",
+    "test:e2e": "node scripts/e2e/run-e2e.js",
     "check:version": "node scripts/check-version.js",
     "check:config": "node scripts/check-config.js",
     "check:contract": "node scripts/check-contract.js",
@@ -29,7 +30,8 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.7",
     "eslint": "^10.10.0",
-    "jest": "^30.5.1"
+    "jest": "^30.5.1",
+    "miniprogram-automator": "^0.10.0"
   },
   "jest": {
     "testEnvironment": "node",
