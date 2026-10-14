@@ -11,6 +11,17 @@
 - `release.yml`（1.0.0 → 1.1.0）在 Release 中附加三份交付物：`sutwxapp-site-<tag>.zip`（静态站点）、`sutwxapp-miniprogram-<tag>.zip`（小程序源码，排除 node_modules / coverage / 私钥）、`sutwx-app-api-<tag>.zip`（WordPress 插件）。
 - `.gitignore` 新增 `/dist`（构建产物由 Actions 生成，不入库）。
 
+## [3.5.3] - 2026-10-14
+
+### 重构（源文件 >200 行拆分，零行为变更）
+
+- `app.wxss`（1272 行）拆分为 `styles/` 下 8 个职责分片（tokens/base/text/layout/spacing/components/components-form/components-feedback），主文件仅保留 `@import` 入口；layout/spacing 再细分 flex/position/visual 与 margin/padding 子分片。
+- 页面级样式按区块拆分并改为 `@import` 入口：`pages/product/index.wxss`（765 行）→ 图区/信息/评价/详情参数/底栏/弹窗等 7 分片；`pages/home/index.wxss`（474 行）→ 头部/Banner/分类/商品网格/搜索浮层/搜索建议 6 分片；`pages/address`、`pages/cart`、`pages/help`、`pages/order`（detail/confirm/index）均拆为多分片。
+- `pages/product/index.wxml`（293 行）按区块拆为 7 个 `<include>` 分片（共享页面数据作用域，事件绑定不变）。
+- `pages/home/index.js` 拆出 `parts-data.js`/`suggestions.js`；`utils/auth-token.js` 拆出 `auth-token-jwt.js`/`auth-token-storage.js`；`utils/request.js` 拆出 `request-401.js`/`request-auth-header.js`/`request-retry.js`。
+- 删除误入库的临时扫描脚本 `scripts/_scan.mjs`。
+- 验证：`npm test` 7 套件 107 例全绿；`npm run lint` 0 error（12 既有 eqeqeq warning）；`npm run check` 版本+配置+契约全过。
+
 ## [3.5.2] - 2026-10-14
 
 ### 修复（QA 收尾：补齐 3.5.1 测试绿灯）

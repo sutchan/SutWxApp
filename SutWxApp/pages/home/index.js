@@ -7,7 +7,6 @@
  */
 
 const request = require("../../utils/request");
-const { buildBannerList } = require("./utils");
 const {
   pickCategory,
   loadSearchHistory,
