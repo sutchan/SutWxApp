@@ -1,7 +1,7 @@
 <?php
 /**
  * WC 商品分类（product_cat）→ 小程序分类 DTO。
- * 字段契约：openspec/specs/backend/spec.md 与 SutWxApp/models/category.js（mapWooCommerceCategory）。
+ * 字段契约：docs/specs/backend/spec.md 与 SutWxApp/models/category.js（mapWooCommerceCategory）。
  *
  * @package SutwxAppApi
  * @version 0.2.0

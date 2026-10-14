@@ -14,7 +14,7 @@
 
 - [README.md](../README.md)：项目介绍、快速开始、技术栈
 - [docs/PROJECT_OVERVIEW.md](../docs/PROJECT_OVERVIEW.md)：项目概览
-- [openspec/](../openspec/)：架构、数据、开发、设计、运维、测试等规范
+- [规范文档](../docs/)：架构、数据、开发、设计、运维、测试等规范
 - [CHANGELOG.md](../CHANGELOG.md)：版本变更记录
 
 ## 提问与讨论

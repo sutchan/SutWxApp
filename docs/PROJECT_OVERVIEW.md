@@ -1,6 +1,6 @@
 # 苏铁微信小程序 - 项目概览
 
-> 本文档为项目的高层概览。详细的规范（架构、数据、开发、设计、运维、测试）见 [`openspec/specs/`](../openspec/specs/)。
+> 本文档为项目的高层概览。详细的规范（架构、数据、开发、设计、运维、测试）见 [`specs/`](specs/)。
 
 ## 项目简介
 
@@ -24,7 +24,7 @@
 - 当前接口以 `/api/*` 暴露（由配套 WordPress 插件 `sutwx-app-api` 桥接 WP REST API），鉴权 `/auth/*`（JWT）
 - 认证：`Authorization: Bearer <token>`（本地存储键 `TOKEN`）
 - 内容端点（商品/分类/文章/主题）免登录；商品与文章数据源可经 `globalData.productSource` 在 `mock` / `woocommerce` 间切换
-- 后端插件规范见 [`openspec/specs/backend/spec.md`](../openspec/specs/backend/spec.md)，开发计划见 [`docs/wordpress-plugin/DEVELOPMENT_PLAN.md`](wordpress-plugin/DEVELOPMENT_PLAN.md)
+- 后端插件规范见 [`specs/backend/spec.md`](specs/backend/spec.md)，开发计划见 [`docs/wordpress-plugin/DEVELOPMENT_PLAN.md`](wordpress-plugin/DEVELOPMENT_PLAN.md)
 
 ## 项目结构
 
@@ -176,7 +176,7 @@ SutWxApp/
 ## 版本历史
 
 ### 2026-09-13（文档）
-- 新增后端插件规范 `openspec/specs/backend/spec.md` 与开发计划 `docs/wordpress-plugin/DEVELOPMENT_PLAN.md`（商品=WooCommerce、v1 只读 MVP、wx.login→JWT、订单/支付预留）
+- 新增后端插件规范 `specs/backend/spec.md` 与开发计划 `docs/wordpress-plugin/DEVELOPMENT_PLAN.md`（商品=WooCommerce、v1 只读 MVP、wx.login→JWT、订单/支付预留）
 - `api/spec.md` 补全文章/分类接口契约与端点命名空间映射
 
 ### v3.0.1 (2026-08-13)
@@ -199,8 +199,8 @@ SutWxApp/
 ## 相关链接
 
 - 仓库：https://github.com/sutchan/SutWxApp
-- 规范文档：`openspec/README.md`
-- 后端插件规范：[`openspec/specs/backend/spec.md`](../openspec/specs/backend/spec.md)
+- 规范文档：`README.md`
+- 后端插件规范：[`specs/backend/spec.md`](specs/backend/spec.md)
 - 后端插件开发计划：[`docs/wordpress-plugin/DEVELOPMENT_PLAN.md`](wordpress-plugin/DEVELOPMENT_PLAN.md)
 - 变更记录：[`CHANGELOG.md`](../CHANGELOG.md)
 

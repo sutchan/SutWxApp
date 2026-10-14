@@ -1,9 +1,9 @@
 # 苏铁微信小程序 (SutWxApp) 开发任务清单
 
 > **文档版本**: v2.3.0
-> **更新时间戳**: 2026-10-14 20:30 (UTC+8)
+> **更新时间戳**: 2026-10-14 21:40 (UTC+8)
 > **项目作者**: Sut
-> **当前状态**: 小程序前端 `v3.5.4` · WordPress 插件 `v0.5.0`
+> **当前状态**: 小程序前端 `v3.5.6` · WordPress 插件 `v0.5.0`
 > **关联规范**: [项目概述](./项目概述.md) · [功能规范](./specs/features/spec.md) · [后端规范](./specs/backend/spec.md) · [API 规范](./specs/api/spec.md) · [测试规范](./specs/testing/spec.md) · [运维规范](./specs/ops/spec.md)
 > **归档**: 已完成任务见 [tasks-done.md](./tasks-done.md)
 
@@ -48,6 +48,13 @@
 3. **FE-004 完成**：新增 `models/order.js` 与 `services/payService.js`，`orderService` 接入 woocommerce 分支，订单三页接入支付全流程。
 4. **QA-003 完成**：`scripts/e2e/` 四套件脚本交付，新增 `npm run test:e2e`。
 5. **版本同步**：插件 0.4.0 → 0.5.0；前端 3.5.3 → 3.5.4。
+
+---
+
+## 本次更新说明（2026-10-14 21:40）
+
+1. **规范目录合订（3.5.4 → 3.5.5）**：`openspec/` 目录内容整体合入 `docs/specs/`（11 类规范），`docs/AGENTS.md` 标注 OpenSpec CLI 工作流已弃用，规范改由 Git 分支 + PR 直接维护；批量修复 80+ 处陈旧 `openspec/` 路径引用（README、PROJECT_OVERVIEW、AGENTS、DEVELOPMENT_PLAN、specs 交叉引用、原型页、插件映射注释等 24 个文件），移除 README 两条死链；CHANGELOG 历史条目中的旧路径作为历史记录保留。
+2. **文档状态核对（3.5.5 → 3.5.6）**：本文件头部「当前状态」同步至真实版本；`FE-002-b`（9 语种翻译）仍为唯一阻塞项，属外部资源依赖，非代码问题。
 
 ---
 

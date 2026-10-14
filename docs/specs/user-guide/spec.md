@@ -103,7 +103,7 @@ SutWxApp/
 │   └── helper.js            # 通用工具
 ├── tests/                    # 测试文件
 ├── docs/                     # 项目文档
-└── openspec/                 # 规范文档
+└── docs/                 # 规范文档
 ```
 
 #### 前端代码结构

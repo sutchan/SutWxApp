@@ -140,7 +140,7 @@ SutWxApp/
 │   ├── store.js        # 轻量状态管理
 │   └── compress-images.js # 图片压缩工具
 ├── docs/               # 项目文档
-└── openspec/           # 规范文档
+└── docs/           # 规范文档
 ```
 
 ### 模块划分

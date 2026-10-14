@@ -1,7 +1,7 @@
 <?php
 /**
  * WC 商品 → 小程序商品 DTO。
- * 字段契约：openspec/specs/backend/spec.md 与 SutWxApp/models/product.js（mapWooCommerceProduct）。
+ * 字段契约：docs/specs/backend/spec.md 与 SutWxApp/models/product.js（mapWooCommerceProduct）。
  *
  * @package SutwxAppApi
  * @version 0.2.0

@@ -1,6 +1,6 @@
 # SutWxApp - 苏铁微信小程序
 
-![版本](https://img.shields.io/badge/version-3.5.4-blue)
+![版本](https://img.shields.io/badge/version-3.5.6-blue)
 ![设计风格](https://img.shields.io/badge/design-Apple%20Style-green)
 ![CI](https://github.com/sutchan/SutWxApp/actions/workflows/ci.yml/badge.svg)
 
@@ -208,24 +208,22 @@ php sutwx-app-api/tests/run-settings-tests.php
 
 ## 相关文档
 
-- [项目规范总览](openspec/README.md)
-- [需求与规格（openspec/specs）](openspec/specs/)
-  - [项目规范](openspec/specs/project/spec.md)
-  - [架构规范](openspec/specs/architecture/spec.md)
-  - [数据规范](openspec/specs/data/spec.md)
-  - [开发规范](openspec/specs/development/spec.md)
-  - [设计规范](openspec/specs/design/spec.md)
-  - [运维与发布规范](openspec/specs/ops/spec.md)
-  - [测试规范](openspec/specs/testing/spec.md)
-  - [后端（WordPress 插件）规范](openspec/specs/backend/spec.md)
+- [项目规范总览](docs/README.md)
+- [需求与规格（docs/specs）](docs/specs/)
+  - [项目规范](docs/specs/project/spec.md)
+  - [架构规范](docs/specs/architecture/spec.md)
+  - [数据规范](docs/specs/data/spec.md)
+  - [开发规范](docs/specs/development/spec.md)
+  - [设计规范](docs/specs/design/spec.md)
+  - [运维与发布规范](docs/specs/ops/spec.md)
+  - [测试规范](docs/specs/testing/spec.md)
+  - [后端（WordPress 插件）规范](docs/specs/backend/spec.md)
   - [WordPress 插件开发计划](docs/wordpress-plugin/DEVELOPMENT_PLAN.md)
 - [原型目录（prototype/）](prototype/README.md)
   - [核心 6 页高保真原型](prototype/prototype.html)：首页 / 分类 / 商品详情 / 购物车 / 订单确认 / 我的
   - [扩展 5 页原型](prototype/prototype-extra.html)：订单列表 / 订单详情 / 地址管理 / 设置 / 帮助中心
   - [组件库规范](prototype/wireframes.html)：基础 / 复合 / 业务组件与使用规则
 - [项目概览](docs/PROJECT_OVERVIEW.md)
-- [技术栈报告](openspec/TECH_STACK_REPORT.md)
-- [改进报告](openspec/IMPROVEMENTS_REPORT.md)
 - [WordPress 对接参考实现（微慕 Minapper/Watch-Life）](https://github.com/iamxjb/winxin-app-watch-life.net)
 
 ## 版本历史

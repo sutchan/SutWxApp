@@ -1,7 +1,7 @@
 <?php
 /**
  * WP 文章 → 小程序文章 DTO。
- * 字段契约：openspec/specs/backend/spec.md 与 SutWxApp/models/post.js（mapWpPost）。
+ * 字段契约：docs/specs/backend/spec.md 与 SutWxApp/models/post.js（mapWpPost）。
  * 正文服务端经 wp_kses_post 基础清洗；小程序侧 sanitizeArticleHtml 二次把关。
  *
  * @package SutwxAppApi

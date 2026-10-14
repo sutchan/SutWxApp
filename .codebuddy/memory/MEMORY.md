@@ -4,11 +4,11 @@
 - 苏铁/苏小糖微信小程序。小程序代码在仓库 `SutWxApp/` 子目录（原生 WXML/WXSS/JS，纯前端 CommonJS）；仓库根另有静态展示站（`build.js`/`server.js`/`index.html`/`prototype/`）与 WordPress 插件 `sutwx-app-api/`。
 - 后端为 **WordPress（headless CMS）**，REST 约定 `/api/*` + 鉴权 `/auth/*`，由 `app.js` 的 `globalData.baseUrl` 提供。当前默认数据源 `productSource:"mock"`，可切 `woocommerce`。
 - 界面 Apple 极简 + 品牌绿（#2E7D32 / #1B5E20 / #F1F8E9）。
-- 文档体系 `openspec/`（`specs/` 10 类）；`design/spec.md` 为 UI 权威源（以 `app.wxss` 为事实）。
+- 文档体系 `docs/specs/`（`specs/` 11 类）；`design/spec.md` 为 UI 权威源（以 `app.wxss` 为事实）。原 `openspec/` 目录已合入 `docs/`，OpenSpec CLI 工作流已弃用（`docs/AGENTS.md` 顶部已标注，规范现直接维护于 `docs/specs/`）。
 - WP 对接：WooCommerce 商品/分类、主题换肤、文章渲染。公共模块：`utils/text.js`、`utils/api.js`（`unwrap` 解包 `{code,data}`）、`services/dataSource.js`（`getDataSource`）。
 
 ## 版本（单一来源）
-- 权威：`SutWxApp/package.json` 的 `version` 与 `SutWxApp/app.js` 的 `globalData.version`，当前 **3.5.4**（`npm run check:version` 校验 4 处：两者 + README 徽章 + CHANGELOG 首个数字小节）。后端插件 `sutwx-app-api` 独立版本 **0.5.0**（`sutwx-app-api.php` 常量 + 各 PHP 头注释）。
+- 权威：`SutWxApp/package.json` 的 `version` 与 `SutWxApp/app.js` 的 `globalData.version`，当前 **3.5.5**（`npm run check:version` 校验 4 处：两者 + README 徽章 + CHANGELOG 首个数字小节）。后端插件 `sutwx-app-api` 独立版本 **0.5.0**（`sutwx-app-api.php` 常量 + 各 PHP 头注释）。
 - 展示位同步：README 徽章、CHANGELOG 顶节；根 `package.json` 版本一并同进。
 - 每次改动 bump 最小版本（patch）；**仅更新被改文件的 `// 版本号:` 头注释**，禁止全仓库批量刷写。改文档前先实查版本（会话间隙常被外部 bump）。
 - `scripts/check-version.js` 读取 REPO_ROOT=仓库根、PROJECT_ROOT=SutWxApp。

@@ -42,8 +42,8 @@
 - 现有行为的测试
 
 **工作流程**
-1. 查看 `openspec/project.md`、`openspec list` 和 `openspec list --specs` 以了解当前上下文。
-2. 选择唯一的动词开头的 `change-id`，并在 `openspec/changes/<id>/` 下创建 `proposal.md`、`tasks.md`、可选的 `design.md` 和规范增量。
+1. 查看 `项目概述.md`、`openspec list` 和 `openspec list --specs` 以了解当前上下文。
+2. 选择唯一的动词开头的 `change-id`，并在 `docs/changes/<id>/` 下创建 `proposal.md`、`tasks.md`、可选的 `design.md` 和规范增量。
 3. 使用 `## ADDED|MODIFIED|REMOVED Requirements` 构建规范增量，每个需求至少包含一个 `#### Scenario:`。
 4. 执行 `openspec validate <id> --strict` 并在分享提案前解决所有问题。
 
@@ -71,7 +71,7 @@
 **上下文检查清单：**
 - [ ] 阅读 `specs/[capability]/spec.md` 中的相关规范
 - [ ] 检查 `changes/` 中的待处理变更是否存在冲突
-- [ ] 阅读 `openspec/project.md` 了解约定
+- [ ] 阅读 `项目概述.md` 了解约定
 - [ ] 执行 `openspec list` 查看活动变更
 - [ ] 执行 `openspec list --specs` 查看现有功能
 
@@ -88,7 +88,7 @@
 - 显示详情：
   - 规范：`openspec show <spec-id> --type spec`（使用 `--json` 进行处理）
   - 变更：`openspec show <change-id> --json --deltas-only`
-- 全文搜索（使用 ripgrep）：`rg -n "Requirement:|Scenario:" openspec/specs`
+- 全文搜索（使用 ripgrep）：`rg -n "Requirement:|Scenario:" specs`
 
 ## 快速开始
 
@@ -127,7 +127,7 @@ openspec validate [change] --strict
 ## 目录结构
 
 ```
-openspec/
+docs/
 ├── project.md              # 项目约定
 ├── specs/                  # 当前实现 - 已构建的内容
 │   ├── [capability]/       # 单个核心功能
@@ -280,7 +280,7 @@ openspec/
 常见陷阱：使用 MODIFIED 添加新要点而不包含之前的文本。这会导致归档时丢失章节。如果您没有明确修改现有需求，而是在 ADDED 下添加一个新需求。
 
 正确编写 MODIFIED 需求：
-1) 在 `openspec/specs/<capability>/spec.md` 中找到现有需求。
+1) 在 `specs/<capability>/spec.md` 中找到现有需求。
 2) 复制整个需求块（从 `### Requirement: ...` 到其所有场景）。
 3) 将其粘贴到 `## MODIFIED Requirements` 下并编辑以反映新行为。
 4) 确保标题文本完全匹配（去除空格），并保持至少一个 `#### Scenario:`。
@@ -328,17 +328,17 @@ openspec show [spec] --json -r 1
 openspec spec list --long
 openspec list
 # 可选的全文搜索：
-# rg -n "Requirement:|Scenario:" openspec/specs
-# rg -n "^#|Requirement:" openspec/changes
+# rg -n "Requirement:|Scenario:" specs
+# rg -n "^#|Requirement:" docs/changes
 
 # 2) 选择变更 ID 并创建骨架
 CHANGE=add-two-factor-auth
-mkdir -p openspec/changes/$CHANGE/{specs/auth}
-printf "## Why\n...\n\n## What Changes\n- ...\n\n## Impact\n- ...\n" > openspec/changes/$CHANGE/proposal.md
-printf "## 1. Implementation\n- [ ] 1.1 ...\n" > openspec/changes/$CHANGE/tasks.md
+mkdir -p docs/changes/$CHANGE/{specs/auth}
+printf "## Why\n...\n\n## What Changes\n- ...\n\n## Impact\n- ...\n" > docs/changes/$CHANGE/proposal.md
+printf "## 1. Implementation\n- [ ] 1.1 ...\n" > docs/changes/$CHANGE/tasks.md
 
 # 3) 添加增量（示例）
-cat > openspec/changes/$CHANGE/specs/auth/spec.md << 'EOF'
+cat > docs/changes/$CHANGE/specs/auth/spec.md << 'EOF'
 ## ADDED Requirements
 ### Requirement: Two-Factor Authentication
 Users MUST provide a second factor during login.
@@ -355,7 +355,7 @@ openspec validate $CHANGE --strict
 ## 多功能示例
 
 ```
-openspec/changes/add-2fa-notify/
+docs/changes/add-2fa-notify/
 ├── proposal.md
 ├── tasks.md
 └── specs/

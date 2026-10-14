@@ -4,7 +4,7 @@
  * 更新日期: 2026-10-14
  * 描述: 全局设计令牌（CSS 变量）：品牌绿/文字三级/背景三级/语义色/
  *       品牌衍生渐变/字号/间距/圆角/阴影/过渡，及 page 基础排版
- *       对齐 openspec/specs/design/spec.md
+ *       对齐 docs/specs/design/spec.md
  */
 
 page {

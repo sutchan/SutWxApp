@@ -393,7 +393,7 @@ https://api.example.com/v{version}/{resource}/{id}?{query_parameters}
 - **推荐（路径直连）**：插件注册 WP REST 命名空间 `sutwx/v1`（路由 `product/list`、`post/list`、`theme` 等），并用 `add_rewrite_rule` 将 `/api/(.*)` 重写到 `rest_route=/sutwx/v1/$1`；小程序 `globalData.baseUrl` 设为站点根（如 `https://example.com`）。这样 `/api/*` 即为真实可访问路径。
 - **备选（直连 wp-json）**：小程序 `baseUrl` 设为 `https://example.com/wp-json/sutwx/v1`，跳过重写层。
 
-> 鉴权接口（`/api/v1/users`、`/api/v1/orders`）为后续阶段；当前 v1 只读内容端点全部免登录。详见 `openspec/specs/backend/spec.md` 与 `docs/wordpress-plugin/DEVELOPMENT_PLAN.md`。
+> 鉴权接口（`/api/v1/users`、`/api/v1/orders`）为后续阶段；当前 v1 只读内容端点全部免登录。详见 `../backend/spec.md` 与 `docs/wordpress-plugin/DEVELOPMENT_PLAN.md`。
 
 ### 订单API
 

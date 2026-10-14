@@ -4,7 +4,7 @@
 
 本规范定义苏铁微信小程序（SutWxApp）的配套 **WordPress 后端插件**（`sutwx-app-api`）的技术设计、目录结构、REST 端点契约、主题配置、鉴权与部署要求。
 
-> 小程序为纯前端（见 `openspec/specs/architecture/spec.md`），所有内容由 WordPress 作为 headless CMS 经 REST API 提供。当前小程序已按以下端点调用（均免鉴权）：
+> 小程序为纯前端（见 `../architecture/spec.md`），所有内容由 WordPress 作为 headless CMS 经 REST API 提供。当前小程序已按以下端点调用（均免鉴权）：
 > - `GET /api/product/list`、`GET /api/product/detail` —— 商品（WooCommerce）
 > - `GET /api/post/list`、`GET /api/post/detail` —— 文章（WordPress 文章）
 > - `GET /api/category/list`、`GET /api/category/detail` —— 分类（WooCommerce 商品分类）
@@ -74,7 +74,7 @@ add_action('rest_api_init', function () {
 
 ## 响应格式约定
 
-所有端点统一返回包络（与 `openspec/specs/api/spec.md` 一致），小程序 `utils/api.unwrap` 兼容此包络或裸数据：
+所有端点统一返回包络（与 `../api/spec.md` 一致），小程序 `utils/api.unwrap` 兼容此包络或裸数据：
 
 ```json
 { "code": 200, "message": "success", "data": {}, "timestamp": 1609459200000, "requestId": "uuid" }
@@ -198,7 +198,7 @@ add_action('rest_api_init', function () {
 
 - 插件独立版本号，与小程序 `globalData.version` 在 CHANGELOG 中对应记录。
 - 通过 WP 后台上传或 Composer 安装；`rest_route` 重写需在「设置 → 固定链接」保存一次以刷新。
-- 变更需同步更新 `openspec/specs/api/spec.md` 与本规范。
+- 变更需同步更新 `../api/spec.md` 与本规范。
 
 ## 版本历史
 

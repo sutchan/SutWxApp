@@ -11,6 +11,21 @@
 - `release.yml`（1.0.0 → 1.1.0）在 Release 中附加三份交付物：`sutwxapp-site-<tag>.zip`（静态站点）、`sutwxapp-miniprogram-<tag>.zip`（小程序源码，排除 node_modules / coverage / 私钥）、`sutwx-app-api-<tag>.zip`（WordPress 插件）。
 - `.gitignore` 新增 `/dist`（构建产物由 Actions 生成，不入库）。
 
+## [3.5.6] - 2026-10-14
+
+### 文档（任务清单状态同步）
+
+- `docs/tasks.md` 头部「当前状态」由 `v3.5.4` 修正为真实版本，并补充 openspec 规范目录合入 `docs/` 的本次更新说明。
+- `FE-002-b`（9 语种 i18n 资源）确认为唯一剩余阻塞项，依赖外部专业翻译资源。
+
+## [3.5.5] - 2026-10-14
+
+### 文档（openspec 规范目录合入 docs/）
+
+- 将规范文档统一归并至 `docs/`：`openspec/specs/*` 内容现位于 `docs/specs/*`，`openspec/README.md` 与 `项目概述.md` 对应 `docs/README.md` 与 `docs/项目概述.md`。
+- 更新全部陈旧路径引用（根 `README.md`、`docs/PROJECT_OVERVIEW.md`、`docs/AGENTS.md`、`docs/wordpress-plugin/DEVELOPMENT_PLAN.md`、`docs/specs/*` 交叉引用、`prototype/*` 原型页、`index.html`/`wireframes.html`、`SutWxApp` 样式注释与后端插件映射注释）；OpenSpec CLI 工作流在 `docs/AGENTS.md` 标注为已弃用。
+- 移除 `README.md` 中已不存在的 `TECH_STACK_REPORT.md` / `IMPROVEMENTS_REPORT.md` 死链。
+
 ## [3.5.4] - 2026-10-14
 
 ### 新功能（订单与支付全流程 FE-004；E2E 脚本交付 QA-003）

@@ -20,7 +20,7 @@
 
 ### 外部依赖（WordPress 后端 API）
 - 后端为 **WordPress 网站（headless CMS）**；小程序通过 `services/*` 调用其 REST API，基地址见 `app.js` 的 `globalData.baseUrl`。
-- 接口约定：内容以 `/api/*` 暴露，由配套 WordPress 插件 **`sutwx-app-api`** 注册自定义 REST 命名空间 `sutwx/v1`（`/api/*` 经 rewrite 直连；亦可直连 `wp-json/sutwx/v1/`），鉴权 `/auth/*`（`Authorization: Bearer <token>`，或微信 `wx.login` code 签发的 token，见 `app.js` 的 `requestWithToken`）。详见 `openspec/specs/backend/spec.md`。
+- 接口约定：内容以 `/api/*` 暴露，由配套 WordPress 插件 **`sutwx-app-api`** 注册自定义 REST 命名空间 `sutwx/v1`（`/api/*` 经 rewrite 直连；亦可直连 `wp-json/sutwx/v1/`），鉴权 `/auth/*`（`Authorization: Bearer <token>`，或微信 `wx.login` code 签发的 token，见 `app.js` 的 `requestWithToken`）。详见 `../backend/spec.md`。
 - 内容模型：文章（posts）、页面（pages）、分类（categories）、媒体（media）及自定义文章类型（如 WooCommerce 商品）均由 WordPress 提供。
 - 数据源切换：商品/分类/文章由 `globalData.productSource`（`mock` 默认 / `woocommerce`）控制；主题由 `services/themeService.js` 调 `/api/theme` 获取。
 
@@ -28,7 +28,7 @@
 
 ### 后端形态（headless CMS）
 - 后端为 WordPress 网站，作为无头 CMS 提供网站内容（文章、页面、分类、媒体、自定义文章类型）。
-- 后端实现为自研配套插件 **`sutwx-app-api`**（不依赖微慕等第三方插件；微慕 Minapper / Watch-Life 仅作参考实现：`https://github.com/iamxjb/winxin-app-watch-life.net`）。插件注册 REST 命名空间 `sutwx/v1` 并将 `/api/*` 重写直连，规范与端点契约见 `openspec/specs/backend/spec.md`，开发计划见 `docs/wordpress-plugin/DEVELOPMENT_PLAN.md`。
+- 后端实现为自研配套插件 **`sutwx-app-api`**（不依赖微慕等第三方插件；微慕 Minapper / Watch-Life 仅作参考实现：`https://github.com/iamxjb/winxin-app-watch-life.net`）。插件注册 REST 命名空间 `sutwx/v1` 并将 `/api/*` 重写直连，规范与端点契约见 `../backend/spec.md`，开发计划见 `docs/wordpress-plugin/DEVELOPMENT_PLAN.md`。
 - 商品数据来自 **WooCommerce** 插件：小程序经 `services/productService.js` 调用 `/api/product/list`、`/api/product/detail`，由 `models/product.js` 的 `mapWooCommerceProduct()` 转为统一 DTO；分类经 `categoryService.js` / `models/category.js`；文章经 `postService.js` / `models/post.js`（正文 `rich-text` 渲染，`utils/richtext.js` 安全清洗）；主题经 `themeService.js` 调 `/api/theme`。数据源由 `app.js` 的 `globalData.productSource`（`mock` / `woocommerce`）切换。
 - 阶段基线：v1 为只读 MVP（内容端点免登录）；`wx.login`→JWT 鉴权基建随后落地；订单/支付仅预留契约。
 
@@ -50,7 +50,7 @@
 5. **安全性**：请求层内置 XSS 防护与 CSRF Token 处理；所有网络请求强制 HTTPS
 6. **性能优化**：请求层 LRU 缓存避免重复请求，图片压缩工具降低包体与加载耗时
 7. **一致性**：统一的命名、响应处理与错误格式
-8. **文档化**：规范文档集中于 `openspec/`，便于团队对齐
+8. **文档化**：规范文档集中于 `docs/`，便于团队对齐
 
 ## 系统分层结构
 
@@ -162,7 +162,7 @@
 3. 公众平台提交审核
 4. 审核通过后发布上线
 
-> 小程序无独立服务器部署；后端由 WordPress 站点承载，配套插件 `sutwx-app-api` 随站点部署（规范见 `openspec/specs/backend/spec.md`，开发计划见 `docs/wordpress-plugin/DEVELOPMENT_PLAN.md`）。
+> 小程序无独立服务器部署；后端由 WordPress 站点承载，配套插件 `sutwx-app-api` 随站点部署（规范见 `../backend/spec.md`，开发计划见 `docs/wordpress-plugin/DEVELOPMENT_PLAN.md`）。
 
 ## 监控与运维
 

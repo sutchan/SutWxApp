@@ -3,7 +3,7 @@
  * 版本号: 3.5.3
  * 更新日期: 2026-10-14
  * 描述: 微信小程序全局样式入口，按职责聚合 styles/ 下各样式分片
- *       对齐 openspec/specs/design/spec.md v3.5.3
+ *       对齐 docs/specs/design/spec.md v3.5.3
  */
 
 @import "styles/tokens.wxss";

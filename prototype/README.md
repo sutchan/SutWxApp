@@ -14,14 +14,14 @@
 
 ## 设计依据
 
-- 权威设计规范：[openspec/specs/design/spec.md](../openspec/specs/design/spec.md)（v3.1.1）
+- 权威设计规范：[docs/specs/design/spec.md](../docs/specs/design/spec.md)（v3.1.1）
 - 设计令牌以规范 §4.1.2 `:root` 与 §4.1.4 渐变为准，原型内 `var(--*)` 引用，禁止硬编码色值
 - 语义色策略：CTA / 选中态 / 角标 / 价格一律绿系（价格 `var(--primary-dark)` 粗体，原价 `var(--text-secondary)` 删除线）；红色仅限错误与危险确认；橙色仅限系统级提示
 - 废弃色：#e93b3d / #ff6b6b / #ff9700 / #2a9d8f / #f4a261，禁止出现在任何渲染样式中
 
 ## 维护约定
 
-1. 新增原型或改版一律写入本目录，不得再建于 `openspec/` 或其他位置。
+1. 新增原型或改版一律写入本目录，不得再建于 `docs/` 或其他位置。
 2. 图片一律使用内联 SVG / CSS 渐变占位，禁止外链图片与字体，保证离线可打开。
 3. 演示数据须在页面底部标注「演示数据」，不冒充真实业务数据。
 4. 动效须支持 `prefers-reduced-motion: reduce` 降级，时长控制在 150 / 300 / 500ms 三档。

@@ -1,6 +1,6 @@
 # WordPress 插件（sutwx-app-api）开发计划
 
-> 配套文档：[后端规范](../../openspec/specs/backend/spec.md) · [API 规范](../../openspec/specs/api/spec.md) · [架构规范](../../openspec/specs/architecture/spec.md)
+> 配套文档：[后端规范](../specs/backend/spec.md) · [API 规范](../specs/api/spec.md) · [架构规范](../specs/architecture/spec.md)
 >
 > 决策基线（已与产品确认）：
 > 1. 商品数据源 = **WooCommerce**
