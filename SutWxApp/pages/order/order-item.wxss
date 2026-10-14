@@ -1,0 +1,37 @@
+/**
+ * 文件名: pages/order/order-item.wxss
+ * 版本号: 3.5.3
+ * 更新日期: 2026-10-14
+ * 描述: 订单卡片与订单头部（单号/状态）
+ */
+
+/* 订单列表 */
+.order-list {
+  padding: 20rpx;
+}
+
+.order-item {
+  background-color: var(--background-primary);
+  border-radius: var(--border-radius-lg);
+  margin-bottom: 20rpx;
+  overflow: hidden;
+}
+
+/* 订单头部 */
+.order-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx;
+  border-bottom: 1rpx solid var(--border-color);
+}
+
+.order-sn {
+  font-size: 26rpx;
+  color: var(--text-secondary);
+}
+
+.order-status {
+  font-size: 26rpx;
+  color: var(--primary-color);
+}

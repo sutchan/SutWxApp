@@ -1,0 +1,43 @@
+<!--
+  文件名: pages/product/product-reviews.wxml
+  版本号: 3.5.3
+  更新日期: 2026-10-14
+  描述: 商品评价区分片：摘要列表与加载更多
+-->
+
+<view class="reviews-section" wx:if="{{reviews.length > 0}}">
+  <view class="section-header">
+    <text class="section-title">商品评价</text>
+    <view class="view-all" bindtap="handleShowReviewPopup">
+      <text>查看全部</text>
+      <image src="/images/arrow-right.png" mode="aspectFit"></image>
+    </view>
+  </view>
+  <view class="review-list">
+    <block wx:for="{{reviews}}" wx:key="id" wx:for-item="review">
+      <view class="review-item">
+        <view class="review-header">
+          <image class="review-avatar" src="{{review.avatar || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+          <text class="review-username">{{review.nickname || '匿名用户'}}</text>
+          <view class="review-rating">
+            <block wx:for="{{[1,2,3,4,5]}}" wx:for-item="star" wx:key="*this">
+              <image class="star-icon" src="/images/star{{index < review.rating ? '-active' : ''}}.png" mode="aspectFit"></image>
+            </block>
+          </view>
+        </view>
+        <view class="review-content">
+          <text>{{review.content}}</text>
+        </view>
+        <view class="review-spec">
+          <text>{{review.specName}}</text>
+        </view>
+        <view class="review-time">
+          <text>{{review.createTime}}</text>
+        </view>
+      </view>
+    </block>
+  </view>
+  <view class="load-more" wx:if="{{hasMoreReviews}}" bindtap="handleLoadMoreReviews">
+    <text>加载更多评价</text>
+  </view>
+</view>

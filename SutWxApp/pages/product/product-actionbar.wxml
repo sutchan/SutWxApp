@@ -1,0 +1,30 @@
+<!--
+  文件名: pages/product/product-actionbar.wxml
+  版本号: 3.5.3
+  更新日期: 2026-10-14
+  描述: 底部操作栏分片：客服/收藏/购物车与加购、立即购买
+-->
+
+<view class="bottom-action-bar">
+  <view class="action-icons">
+    <view class="icon-item" bindtap="handleContactService">
+      <image src="/images/customer-service.png" mode="aspectFit"></image>
+      <text>客服</text>
+    </view>
+    <view class="icon-item" bindtap="handleToggleFavorite">
+      <image src="/images/favorite{{isFavorite ? '-active' : ''}}.png" mode="aspectFit"></image>
+      <text>{{isFavorite ? '已收藏' : '收藏'}}</text>
+    </view>
+    <view class="icon-item" bindtap="handleShowSpecPopup">
+      <image src="/images/cart.png" mode="aspectFit"></image>
+      <text>购物车</text>
+      <view class="cart-badge" wx:if="{{cartCount > 0}}">
+        <text>{{cartCount > 99 ? '99+' : cartCount}}</text>
+      </view>
+    </view>
+  </view>
+  <view class="action-buttons">
+    <view class="btn-add-cart" bindtap="handleAddToCart">加入购物车</view>
+    <view class="btn-buy-now" bindtap="handleBuyNow">立即购买</view>
+  </view>
+</view>

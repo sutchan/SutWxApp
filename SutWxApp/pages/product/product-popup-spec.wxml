@@ -1,0 +1,63 @@
+<!--
+  文件名: pages/product/product-popup-spec.wxml
+  版本号: 3.5.3
+  更新日期: 2026-10-14
+  描述: 规格选择弹窗分片：规格项、数量步进与确认
+-->
+
+<view class="spec-popup-mask" wx:if="{{showSpecPopup}}" bindtap="handleHideSpecPopup"></view>
+<view class="spec-popup {{showSpecPopup ? 'show' : ''}}">
+  <view class="spec-popup-header">
+    <image
+      class="spec-popup-image"
+      src="{{productInfo.images[0]}}"
+      mode="aspectFill"
+      lazy-load="true"
+    ></image>
+    <view class="spec-popup-info">
+      <view class="spec-popup-price">
+        <text class="price-symbol">¥</text>
+        <text class="price-value">{{getCurrentSpecPrice()}}</text>
+      </view>
+      <view class="spec-popup-stock">
+        <text>库存: {{productInfo.specs[selectedSpecIndex].stock || 99}}</text>
+      </view>
+      <view class="spec-popup-selected">
+        <text>已选: {{productInfo.specs[selectedSpecIndex].name}}</text>
+      </view>
+    </view>
+    <view class="spec-popup-close" bindtap="handleHideSpecPopup">
+      <image src="/images/close.png" mode="aspectFit"></image>
+    </view>
+  </view>
+  <scroll-view class="spec-popup-body" scroll-y="true">
+    <view class="spec-section">
+      <view class="spec-title">规格</view>
+      <view class="spec-list">
+        <block wx:for="{{productInfo.specs}}" wx:key="id" wx:for-index="specIndex">
+          <view class="spec-item {{selectedSpecIndex === specIndex ? 'active' : ''}}" bindtap="handleSpecTap" data-index="{{specIndex}}">
+            <text>{{item.name}}</text>
+          </view>
+        </block>
+      </view>
+    </view>
+    <view class="quantity-section">
+      <view class="quantity-title">数量</view>
+      <view class="quantity-selector">
+        <view class="quantity-btn {{selectedQuantity <= 1 ? 'disabled' : ''}}" bindtap="handleQuantityChange" data-type="minus">
+          <text>-</text>
+        </view>
+        <input class="quantity-input" type="number" value="{{selectedQuantity}}" bindinput="handleQuantityInput"></input>
+        <view class="quantity-btn {{selectedQuantity >= (productInfo.specs[selectedSpecIndex].stock || 99) ? 'disabled' : ''}}" bindtap="handleQuantityChange" data-type="plus">
+          <text>+</text>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+  <view class="spec-popup-footer">
+    <view class="btn-confirm" bindtap="handleConfirmAddToCart" wx:if="{{!isAddingToCart}}">确定</view>
+    <view class="btn-confirm loading" wx:if="{{isAddingToCart}}">
+      <text>加入中...</text>
+    </view>
+  </view>
+</view>

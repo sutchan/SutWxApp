@@ -1,0 +1,38 @@
+<!--
+  文件名: pages/product/product-gallery.wxml
+  版本号: 3.5.3
+  更新日期: 2026-10-14
+  描述: 商品图区分片：视差轮播、页码指示与分享/收藏浮动按钮
+-->
+
+<view class="product-image-section" id="product-header-section">
+  <view class="product-parallax-wrap entrance-blur" id="product-parallax-wrap" style="{{headerParallaxStyle}}">
+    <swiper class="product-image-swiper" indicator-dots="true" indicator-color="rgba(0,0,0,0.3)" indicator-active-color="#ffffff" circular="true" bindchange="handleImageChange">
+      <block wx:for="{{productInfo.images}}" wx:key="index">
+        <swiper-item>
+          <image
+            class="product-image"
+            src="{{item}}"
+            mode="aspectFill"
+            lazy-load="true"
+            bindload="onImageLoad"
+            binderror="onImageError"
+            data-index="{{index}}"
+          ></image>
+        </swiper-item>
+      </block>
+    </swiper>
+    <view class="product-blur-overlay" style="{{headerOverlayStyle}}"></view>
+  </view>
+  <view class="image-indicator">
+    <text>{{currentImageIndex + 1}}/{{productInfo.images.length}}</text>
+  </view>
+  <view class="product-actions-overlay">
+    <view class="action-btn" catchtap="handleShare">
+      <image src="/images/share-white.png" mode="aspectFit"></image>
+    </view>
+    <view class="action-btn" catchtap="handleCollect">
+      <image src="/images/collect{{isFavorite ? '-active' : ''}}.png" mode="aspectFit"></image>
+    </view>
+  </view>
+</view>

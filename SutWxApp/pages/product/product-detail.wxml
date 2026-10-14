@@ -1,0 +1,26 @@
+<!--
+  文件名: product-detail.wxml
+  版本号: 3.5.3
+  更新日期: 2026-10-14
+  描述: 商品详情页 - 图文详情与产品参数区块（相关推荐见 product-related.wxml）
+-->
+
+<view class="product-detail-section">
+  <view class="section-header">
+    <text class="section-title">商品详情</text>
+  </view>
+  <view class="detail-content">
+    <rich-text nodes="{{productInfo.detailHtml || ''}}"></rich-text>
+  </view>
+  <view class="params-section" wx:if="{{productInfo.params && productInfo.params.length > 0}}">
+    <view class="params-title">产品参数</view>
+    <view class="params-list">
+      <block wx:for="{{productInfo.params}}" wx:key="name">
+        <view class="params-item">
+          <text class="params-name">{{item.name}}</text>
+          <text class="params-value">{{item.value}}</text>
+        </view>
+      </block>
+    </view>
+  </view>
+</view>

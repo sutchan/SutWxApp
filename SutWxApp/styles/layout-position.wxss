@@ -1,0 +1,118 @@
+/**
+ * 文件名: styles/layout-position.wxss
+ * 版本号: 3.5.3
+ * 更新日期: 2026-10-14
+ * 描述: 定位与偏移工具类（position / top / right / bottom / left）
+ */
+
+.relative {
+  position: relative;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.fixed {
+  position: fixed;
+}
+
+.sticky {
+  position: sticky;
+}
+
+.top-0 {
+  top: 0;
+}
+
+.top-xs {
+  top: var(--spacing-xs);
+}
+
+.top-sm {
+  top: var(--spacing-sm);
+}
+
+.top-md {
+  top: var(--spacing-md);
+}
+
+.top-lg {
+  top: var(--spacing-lg);
+}
+
+.top-xl {
+  top: var(--spacing-xl);
+}
+
+.right-0 {
+  right: 0;
+}
+
+.right-xs {
+  right: var(--spacing-xs);
+}
+
+.right-sm {
+  right: var(--spacing-sm);
+}
+
+.right-md {
+  right: var(--spacing-md);
+}
+
+.right-lg {
+  right: var(--spacing-lg);
+}
+
+.right-xl {
+  right: var(--spacing-xl);
+}
+
+.bottom-0 {
+  bottom: 0;
+}
+
+.bottom-xs {
+  bottom: var(--spacing-xs);
+}
+
+.bottom-sm {
+  bottom: var(--spacing-sm);
+}
+
+.bottom-md {
+  bottom: var(--spacing-md);
+}
+
+.bottom-lg {
+  bottom: var(--spacing-lg);
+}
+
+.bottom-xl {
+  bottom: var(--spacing-xl);
+}
+
+.left-0 {
+  left: 0;
+}
+
+.left-xs {
+  left: var(--spacing-xs);
+}
+
+.left-sm {
+  left: var(--spacing-sm);
+}
+
+.left-md {
+  left: var(--spacing-md);
+}
+
+.left-lg {
+  left: var(--spacing-lg);
+}
+
+.left-xl {
+  left: var(--spacing-xl);
+}

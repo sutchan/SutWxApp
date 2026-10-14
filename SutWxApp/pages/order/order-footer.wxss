@@ -1,0 +1,52 @@
+/**
+ * 文件名: pages/order/order-footer.wxss
+ * 版本号: 3.5.3
+ * 更新日期: 2026-10-14
+ * 描述: 订单卡片底部合计与操作按钮
+ */
+
+/* 订单底部 */
+.order-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx;
+  border-top: 1rpx solid var(--border-color);
+}
+
+.order-total {
+  font-size: 26rpx;
+  color: var(--text-secondary);
+}
+
+.order-total .price {
+  font-size: 32rpx;
+  color: var(--primary-dark);
+  font-weight: bold;
+}
+
+.order-actions {
+  display: flex;
+  gap: 16rpx;
+}
+
+.action-btn {
+  height: 60rpx;
+  line-height: 60rpx;
+  padding: 0 24rpx;
+  font-size: 26rpx;
+  border-radius: 30rpx;
+  border: none;
+}
+
+.cancel-btn {
+  background-color: var(--background-tertiary);
+  color: var(--text-secondary);
+}
+
+.pay-btn,
+.confirm-btn,
+.comment-btn {
+  background-color: var(--primary-color);
+  color: var(--text-inverse);
+}

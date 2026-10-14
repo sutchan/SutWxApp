@@ -1,0 +1,28 @@
+<!--
+  文件名: pages/product/product-related.wxml
+  版本号: 3.5.3
+  更新日期: 2026-10-14
+  描述: 相关推荐区分片
+-->
+
+<view class="related-section" wx:if="{{relatedProducts.length > 0}}">
+  <view class="section-header">
+    <text class="section-title">为你推荐</text>
+  </view>
+  <view class="related-list">
+    <block wx:for="{{relatedProducts}}" wx:key="id">
+      <view class="related-item" bindtap="handleRelatedProductTap" data-id="{{item.id}}">
+        <image
+          class="related-image"
+          src="{{item.imageUrl}}"
+          mode="aspectFill"
+          lazy-load="true"
+        ></image>
+        <view class="related-info">
+          <text class="related-name">{{item.name}}</text>
+          <text class="related-price">¥{{item.price}}</text>
+        </view>
+      </view>
+    </block>
+  </view>
+</view>
