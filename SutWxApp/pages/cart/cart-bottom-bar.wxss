@@ -1,0 +1,74 @@
+/**
+ * 文件名: pages/cart/cart-bottom-bar.wxss
+ * 版本号: 3.5.3
+ * 更新日期: 2026-10-14
+ * 描述: 底部结算栏：全选、合计金额与结算按钮
+ */
+
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  background-color: var(--background-primary);
+  padding: 20rpx 24rpx;
+  padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+  box-shadow: 0 -2rpx 10rpx rgba(0, 0, 0, 0.05);
+  z-index: 100;
+}
+
+.select-all-box {
+  display: flex;
+  align-items: center;
+  margin-right: 20rpx;
+}
+
+.select-all-text {
+  font-size: 26rpx;
+  color: var(--text-primary);
+  margin-left: 10rpx;
+  font-weight: 500;
+}
+
+.total-box {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.total-label {
+  font-size: 26rpx;
+  color: var(--text-secondary);
+  font-weight: 400;
+}
+
+.total-price {
+  font-size: 36rpx;
+  color: var(--primary-dark);
+  font-weight: 700;
+  margin-left: 10rpx;
+}
+
+.total-price::before {
+  content: '¥';
+  font-size: 26rpx;
+}
+
+.checkout-btn {
+  width: 200rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+  background-color: var(--primary-color);
+  color: var(--text-inverse);
+  font-size: 28rpx;
+  font-weight: 600;
+  border-radius: 40rpx;
+  margin-left: 20rpx;
+}
+
+.checkout-btn[disabled] {
+  background-color: var(--border-color);
+}

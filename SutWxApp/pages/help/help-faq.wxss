@@ -1,0 +1,93 @@
+/**
+ * 文件名: pages/help/help-faq.wxss
+ * 版本号: 3.5.3
+ * 更新日期: 2026-10-14
+ * 描述: 常见问题折叠列表与联系方式卡片
+ */
+
+.faq-section,
+.contact-section {
+  background-color: #fff;
+  margin: 20rpx 30rpx;
+  border-radius: 16rpx;
+  padding: 30rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 24rpx;
+  padding-left: 16rpx;
+  border-left: 6rpx solid #ff4d4f;
+}
+
+.faq-list {
+  margin-top: 10rpx;
+}
+
+.faq-item {
+  border-bottom: 1rpx solid #f5f5f5;
+}
+
+.faq-item:last-child {
+  border-bottom: none;
+}
+
+.faq-question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx 0;
+}
+
+.question-text {
+  flex: 1;
+  font-size: 28rpx;
+  color: #333;
+  line-height: 1.5;
+}
+
+.toggle-icon {
+  font-size: 36rpx;
+  color: #999;
+  margin-left: 20rpx;
+}
+
+.faq-answer {
+  padding: 0 0 24rpx;
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.8;
+}
+
+.contact-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+  margin-top: 10rpx;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  padding: 24rpx;
+  background-color: #fafafa;
+  border-radius: 12rpx;
+}
+
+.contact-icon {
+  font-size: 40rpx;
+  margin-right: 20rpx;
+}
+
+.contact-text {
+  flex: 1;
+  font-size: 28rpx;
+  color: #333;
+}
+
+.contact-value {
+  font-size: 26rpx;
+  color: #ff4d4f;
+}

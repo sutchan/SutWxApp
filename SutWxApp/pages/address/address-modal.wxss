@@ -1,0 +1,134 @@
+/**
+ * 文件名: pages/address/address-modal.wxss
+ * 版本号: 3.5.3
+ * 更新日期: 2026-10-14
+ * 描述: 地址编辑底部弹窗：结构、表单项与取消/确认按钮
+ */
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+}
+
+.modal-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  border-radius: 32rpx 32rpx 0 0;
+  max-height: 85vh;
+  overflow: hidden;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.modal-title {
+  font-size: 34rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.modal-close {
+  font-size: 48rpx;
+  color: #999;
+  line-height: 1;
+}
+
+.modal-body {
+  padding: 20rpx 30rpx;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.form-item {
+  margin-bottom: 30rpx;
+}
+
+.form-label {
+  font-size: 28rpx;
+  color: #333;
+  margin-bottom: 16rpx;
+}
+
+.form-input {
+  width: 100%;
+  height: 88rpx;
+  padding: 0 24rpx;
+  font-size: 30rpx;
+  background-color: #f5f5f5;
+  border-radius: 12rpx;
+  box-sizing: border-box;
+}
+
+.picker-input {
+  display: flex;
+  align-items: center;
+}
+
+.picker-input .placeholder {
+  color: #999;
+}
+
+.form-textarea {
+  width: 100%;
+  height: 160rpx;
+  padding: 20rpx 24rpx;
+  font-size: 30rpx;
+  background-color: #f5f5f5;
+  border-radius: 12rpx;
+  box-sizing: border-box;
+}
+
+.switch-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-footer {
+  display: flex;
+  padding: 30rpx;
+  border-top: 1rpx solid #f0f0f0;
+}
+
+.btn-cancel,
+.btn-confirm {
+  flex: 1;
+  height: 88rpx;
+  line-height: 88rpx;
+  text-align: center;
+  font-size: 32rpx;
+  border-radius: 12rpx;
+}
+
+.btn-cancel {
+  margin-right: 20rpx;
+  background-color: #f5f5f5;
+  color: #666;
+}
+
+.btn-confirm {
+  margin-left: 20rpx;
+  background: linear-gradient(135deg, #ff4d4f 0%, #ff7875 100%);
+  color: #fff;
+}

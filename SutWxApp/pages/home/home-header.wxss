@@ -1,0 +1,43 @@
+/**
+ * 文件名: pages/home/home-header.wxss
+ * 版本号: 3.5.3
+ * 更新日期: 2026-10-14
+ * 描述: 首页顶部固定栏与搜索入口
+ */
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background-color: var(--background-primary);
+  padding: 20rpx 30rpx;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  height: 72rpx;
+  background-color: var(--background-tertiary);
+  border-radius: 36rpx;
+  padding: 0 30rpx;
+  transition: background-color var(--transition-fast);
+}
+
+.search-bar:active {
+  background-color: var(--border-color);
+}
+
+.search-icon {
+  width: 32rpx;
+  height: 32rpx;
+  margin-right: 16rpx;
+  opacity: 0.5;
+}
+
+.search-placeholder {
+  font-size: 28rpx;
+  color: var(--text-secondary);
+  font-weight: 300;
+}

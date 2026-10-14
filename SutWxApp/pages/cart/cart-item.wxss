@@ -1,0 +1,101 @@
+/**
+ * 文件名: pages/cart/cart-item.wxss
+ * 版本号: 3.5.3
+ * 更新日期: 2026-10-14
+ * 描述: 购物车商品项：勾选框、商品图、名称规格与价格行
+ */
+
+.cart-list {
+  padding: 20rpx;
+}
+
+.cart-item {
+  display: flex;
+  align-items: flex-start;
+  background-color: var(--background-primary);
+  border-radius: var(--border-radius-lg);
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition-fast);
+}
+
+.cart-item:active {
+  box-shadow: var(--shadow-md);
+}
+
+.select-box {
+  padding: 10rpx;
+}
+
+.select-icon {
+  width: 44rpx;
+  height: 44rpx;
+  border: 2rpx solid var(--border-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--background-primary);
+  transition: all var(--transition-fast);
+}
+
+.select-icon.selected {
+  border-color: var(--primary-color);
+  background-color: var(--primary-color);
+}
+
+.select-icon .icon {
+  color: var(--text-inverse);
+  font-size: 24rpx;
+  font-weight: bold;
+}
+
+.product-image {
+  width: 176rpx;
+  height: 176rpx;
+  border-radius: var(--border-radius-md);
+  margin-right: 20rpx;
+  background-color: var(--background-tertiary);
+}
+
+.product-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-name {
+  font-size: 28rpx;
+  color: var(--text-primary);
+  font-weight: 500;
+  margin-bottom: 10rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.product-spec {
+  font-size: 24rpx;
+  color: var(--text-secondary);
+  margin-bottom: 20rpx;
+}
+
+.product-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.product-price {
+  font-size: 32rpx;
+  color: var(--primary-dark);
+  font-weight: 700;
+}
+
+.product-price::before {
+  content: '¥';
+  font-size: 24rpx;
+}

@@ -1,0 +1,44 @@
+/**
+ * 文件名: pages/help/help-search.wxss
+ * 版本号: 3.5.3
+ * 更新日期: 2026-10-14
+ * 描述: 帮助中心搜索框（悬浮于渐变头部之上）
+ */
+
+.search-box {
+  display: flex;
+  align-items: center;
+  padding: 0 30rpx;
+  margin-top: -50rpx;
+}
+
+.search-input-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  height: 88rpx;
+  background-color: #fff;
+  border-radius: 44rpx;
+  padding: 0 30rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.1);
+}
+
+.search-icon {
+  font-size: 32rpx;
+  margin-right: 16rpx;
+}
+
+.search-input {
+  flex: 1;
+  height: 100%;
+  font-size: 28rpx;
+}
+
+.search-btn {
+  margin-left: 20rpx;
+  padding: 20rpx 36rpx;
+  background: linear-gradient(135deg, #ff4d4f 0%, #ff7875 100%);
+  color: #fff;
+  font-size: 28rpx;
+  border-radius: 44rpx;
+}

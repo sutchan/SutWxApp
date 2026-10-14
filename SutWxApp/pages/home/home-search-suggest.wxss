@@ -1,0 +1,52 @@
+/**
+ * 文件名: pages/home/home-search-suggest.wxss
+ * 版本号: 3.5.3
+ * 更新日期: 2026-10-14
+ * 描述: 搜索建议列表与加载动效
+ */
+
+.sh-loading-spinner {
+  width: 28rpx;
+  height: 28rpx;
+  border: 3rpx solid rgba(46, 125, 50, 0.2);
+  border-top-color: var(--primary-color);
+  border-radius: 50%;
+  margin-right: 12rpx;
+  animation: spin-anim 0.8s linear infinite;
+  flex-shrink: 0;
+}
+@keyframes spin-anim {
+  100% { transform: rotate(360deg); }
+}
+
+.sh-suggestions-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.sh-suggestion-item {
+  display: flex;
+  align-items: center;
+  padding: 22rpx 10rpx;
+  border-bottom: 1rpx solid var(--border-color);
+}
+
+.sh-suggestion-item:active {
+  background-color: var(--primary-light);
+}
+
+.sh-sug-icon {
+  width: 26rpx;
+  height: 26rpx;
+  margin-right: 16rpx;
+  opacity: 0.4;
+}
+
+.sh-sug-text {
+  flex: 1;
+  font-size: 28rpx;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

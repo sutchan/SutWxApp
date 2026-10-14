@@ -1,0 +1,56 @@
+/**
+ * 文件名: pages/home/home-category.wxss
+ * 版本号: 3.5.3
+ * 更新日期: 2026-10-14
+ * 描述: 首页分类横滑区
+ */
+
+.category-section {
+  background-color: var(--background-primary);
+  padding: 24rpx 0;
+  margin: 20rpx 0;
+}
+
+.category-scroll {
+  white-space: nowrap;
+}
+
+.category-list {
+  display: inline-flex;
+  padding: 0 30rpx;
+}
+
+.category-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 40rpx;
+  padding: 10rpx;
+  border-radius: var(--border-radius-md);
+  transition: background-color var(--transition-fast);
+}
+
+.category-item:last-child {
+  margin-right: 0;
+}
+
+.category-item:active {
+  background-color: var(--background-tertiary);
+}
+
+.category-icon {
+  width: 88rpx;
+  height: 88rpx;
+  background-color: var(--primary-light);
+  border-radius: var(--border-radius-lg);
+  margin-bottom: 12rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.category-name {
+  font-size: 24rpx;
+  color: var(--text-primary);
+  font-weight: 500;
+}

@@ -1,0 +1,46 @@
+/**
+ * 文件名: pages/help/help-category.wxss
+ * 版本号: 3.5.3
+ * 更新日期: 2026-10-14
+ * 描述: 帮助分类宫格（四列，图标 + 名称 + 数量）
+ */
+
+.help-categories {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 30rpx;
+  margin-top: 20rpx;
+}
+
+.category-item {
+  width: calc(25% - 15rpx);
+  background-color: #fff;
+  border-radius: 16rpx;
+  padding: 30rpx 16rpx;
+  margin-right: 20rpx;
+  margin-bottom: 20rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.category-item:nth-child(4n) {
+  margin-right: 0;
+}
+
+.category-icon {
+  font-size: 48rpx;
+  margin-bottom: 16rpx;
+}
+
+.category-name {
+  font-size: 26rpx;
+  color: #333;
+  margin-bottom: 8rpx;
+  text-align: center;
+}
+
+.category-count {
+  font-size: 22rpx;
+  color: #999;
+}
