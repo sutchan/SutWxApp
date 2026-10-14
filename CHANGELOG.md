@@ -19,7 +19,7 @@
 - 页面级样式按区块拆分并改为 `@import` 入口：`pages/product/index.wxss`（765 行）→ 图区/信息/评价/详情参数/底栏/弹窗等 7 分片；`pages/home/index.wxss`（474 行）→ 头部/Banner/分类/商品网格/搜索浮层/搜索建议 6 分片；`pages/address`、`pages/cart`、`pages/help`、`pages/order`（detail/confirm/index）均拆为多分片。
 - `pages/product/index.wxml`（293 行）按区块拆为 7 个 `<include>` 分片（共享页面数据作用域，事件绑定不变）。
 - `pages/home/index.js` 拆出 `parts-data.js`/`suggestions.js`；`utils/auth-token.js` 拆出 `auth-token-jwt.js`/`auth-token-storage.js`；`utils/request.js` 拆出 `request-401.js`/`request-auth-header.js`/`request-retry.js`。
-- 删除误入库的临时扫描脚本 `scripts/_scan.mjs`。
+- 删除误入库的临时校验脚本 `scripts/_scan.mjs`、`scripts/_verify-refs.mjs`。
 - 验证：`npm test` 7 套件 107 例全绿；`npm run lint` 0 error（12 既有 eqeqeq warning）；`npm run check` 版本+配置+契约全过。
 
 ## [3.5.2] - 2026-10-14

@@ -41,7 +41,8 @@
 - `.github/workflows/`：`ci.yml`（lint/test/checks/site/php 五 Job）、`release.yml`（推 `v*.*.*` Tag 发 Release，附 site/miniprogram 插件三份 zip）、`miniprogram-deploy.yml`（手动 + miniprogram-ci）、`site.yml`（Pages 发布）。`release` 抽 CHANGELOG 用 `scripts/changelog-section.js`。
 - **CI 缓存依赖**：`ci.yml`/`miniprogram-deploy.yml` 用 `cache: npm` + `cache-dependency-path: SutWxApp/package-lock.json`；该 lockfile **必须入库**（曾因未提交报 `Some specified paths were not resolved, unable to cache dependencies`，commit `dbe1a81` 恢复后解决）。
 - `project.config.json` 的 `packOptions.ignore` 须与部署 ignores 一致（含 `eslint.config.js`/`eslint.presets.js`/`package*.json`/`scripts`/`__tests__`/`node_modules`/`coverage`/`utils/compress-images.js`）。
-- 仓库存在**自动提交机制**；临时文件 `*.txt` 已被 .gitignore 忽略。
+- 仓库存在**自动提交机制**（会把工作区未提交改动周期性提交，作者显示为 Sut；本人临时脚本也会被误带入库，需记得删除）。临时文件 `*.txt` 已被 .gitignore 忽略。
+- **多会话并行实况**（2026-10-14 实测）：可能有另一个 agent 会话同时在改同一仓库（如并行拆 >200 行文件）。应对：①动文件前实查磁盘 + `git log`；②抢无人认领的文件快速做完，避开对方正在改的目录；③对方产生的孤儿片段（如 `product-related.wxml`）应兼容接引用而非删除；④临时校验脚本放系统临时目录执行，避免被对方清理或误入库。
 
 ## 小程序运行时已知缺陷
 - （v3.0.13 已修）WXML 实体转义、首页/用户页 JS↔WXML 契约、跳转目标缺失、require 越级。
