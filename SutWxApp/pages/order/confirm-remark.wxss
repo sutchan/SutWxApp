@@ -1,0 +1,27 @@
+/**
+ * 文件名: pages/order/confirm-remark.wxss
+ * 版本号: 3.5.3
+ * 更新日期: 2026-10-14
+ * 描述: 订单确认页备注输入行
+ */
+
+/* 备注 */
+.remark-section {
+  background-color: var(--background-primary);
+  margin-top: 20rpx;
+  padding: 24rpx;
+  display: flex;
+  align-items: center;
+}
+
+.remark-label {
+  font-size: 28rpx;
+  color: var(--text-primary);
+  margin-right: 20rpx;
+}
+
+.remark-input {
+  flex: 1;
+  font-size: 26rpx;
+  color: var(--text-primary);
+}

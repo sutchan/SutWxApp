@@ -1,0 +1,73 @@
+/**
+ * 文件名: pages/order/detail-info.wxss
+ * 版本号: 3.5.3
+ * 更新日期: 2026-10-14
+ * 描述: 订单信息键值对与价格明细（含合计）
+ */
+
+/* 订单信息 */
+.info-section {
+  background-color: var(--background-primary);
+  margin-top: 20rpx;
+  padding: 24rpx;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid var(--border-color);
+}
+
+.info-item:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  font-size: 26rpx;
+  color: var(--text-secondary);
+}
+
+.info-value {
+  font-size: 26rpx;
+  color: var(--text-primary);
+}
+
+/* 价格信息 */
+.price-section {
+  background-color: var(--background-primary);
+  margin-top: 20rpx;
+  padding: 24rpx;
+}
+
+.price-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 12rpx 0;
+}
+
+.price-label {
+  font-size: 26rpx;
+  color: var(--text-secondary);
+}
+
+.price-value {
+  font-size: 26rpx;
+  color: var(--text-primary);
+}
+
+.price-value.discount {
+  color: var(--primary-dark);
+}
+
+.price-item.total {
+  border-top: 1rpx solid var(--border-color);
+  margin-top: 12rpx;
+  padding-top: 24rpx;
+}
+
+.total-value {
+  font-size: 36rpx;
+  color: var(--primary-dark);
+  font-weight: bold;
+}

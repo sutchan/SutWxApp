@@ -1,0 +1,48 @@
+/**
+ * 文件名: pages/order/confirm-address.wxss
+ * 版本号: 3.5.3
+ * 更新日期: 2026-10-14
+ * 描述: 订单确认页收货地址区块（含空地址态）
+ */
+
+/* 收货地址 */
+.address-section {
+  background-color: var(--background-primary);
+  padding: 30rpx;
+}
+
+.address-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.name-phone {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12rpx;
+}
+
+.name-phone text {
+  font-size: 30rpx;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.address-detail {
+  font-size: 26rpx;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.address-empty {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--text-secondary);
+  font-size: 28rpx;
+}
+
+.arrow {
+  font-size: 32rpx;
+  color: var(--text-tertiary);
+}

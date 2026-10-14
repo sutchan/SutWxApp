@@ -1,0 +1,33 @@
+/**
+ * 文件名: pages/order/confirm-price.wxss
+ * 版本号: 3.5.3
+ * 更新日期: 2026-10-14
+ * 描述: 订单确认页价格明细
+ */
+
+/* 价格明细 */
+.price-section {
+  background-color: var(--background-primary);
+  margin-top: 20rpx;
+  padding: 24rpx;
+}
+
+.price-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 12rpx 0;
+}
+
+.price-label {
+  font-size: 26rpx;
+  color: var(--text-secondary);
+}
+
+.price-value {
+  font-size: 26rpx;
+  color: var(--text-primary);
+}
+
+.price-value.discount {
+  color: var(--primary-dark);
+}

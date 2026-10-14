@@ -1,0 +1,41 @@
+/**
+ * 文件名: pages/order/detail-bottom-bar.wxss
+ * 版本号: 3.5.3
+ * 更新日期: 2026-10-14
+ * 描述: 订单详情底部操作栏与主/次按钮
+ */
+
+/* 底部操作栏 */
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16rpx;
+  background-color: var(--background-primary);
+  padding: 20rpx 24rpx;
+  padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+  box-shadow: 0 -2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+.action-btn {
+  height: 70rpx;
+  line-height: 70rpx;
+  padding: 0 32rpx;
+  font-size: 26rpx;
+  border-radius: 35rpx;
+  border: none;
+}
+
+.action-btn.secondary {
+  background-color: var(--background-tertiary);
+  color: var(--text-secondary);
+}
+
+.action-btn.primary {
+  background-color: var(--primary-color);
+  color: var(--text-inverse);
+}
