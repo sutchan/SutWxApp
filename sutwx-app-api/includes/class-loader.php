@@ -12,6 +12,8 @@ require_once SUTWX_API_DIR . 'includes/sanitize.php';
 require_once SUTWX_API_DIR . 'includes/mappings/map-product.php';
 require_once SUTWX_API_DIR . 'includes/mappings/map-post.php';
 require_once SUTWX_API_DIR . 'includes/mappings/map-category.php';
+require_once SUTWX_API_DIR . 'includes/mappings/map-order-parts.php';
+require_once SUTWX_API_DIR . 'includes/mappings/map-order.php';
 require_once SUTWX_API_DIR . 'includes/class-jwt.php';
 require_once SUTWX_API_DIR . 'includes/class-credentials.php';
 require_once SUTWX_API_DIR . 'includes/class-wechat-auth.php';
@@ -24,6 +26,8 @@ require_once SUTWX_API_DIR . 'includes/rest/class-rest-posts.php';
 require_once SUTWX_API_DIR . 'includes/rest/class-rest-categories.php';
 require_once SUTWX_API_DIR . 'includes/rest/class-rest-theme.php';
 require_once SUTWX_API_DIR . 'includes/rest/class-rest-auth.php';
+require_once SUTWX_API_DIR . 'includes/rest/class-rest-orders.php';
+require_once SUTWX_API_DIR . 'includes/rest/class-rest-order-actions.php';
 
 /**
  * 插件加载器。
@@ -54,6 +58,8 @@ final class Sutwx_Loader {
 			new Sutwx_Rest_Categories(),
 			new Sutwx_Rest_Theme(),
 			new Sutwx_Rest_Auth(),
+			new Sutwx_Rest_Orders(),
+			new Sutwx_Rest_Order_Actions(),
 		);
 		foreach ( $controllers as $controller ) {
 			$controller->register_routes();
