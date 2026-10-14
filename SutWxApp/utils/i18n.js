@@ -1,6 +1,6 @@
 /**
  * 文件名: i18n.js
- * 版本号: 3.5.1
+ * 版本号: 3.5.2
  * 更新日期: 2026-10-14
  * 描述: 轻量级 i18n 运行时（FE-002）。内置 zh-CN / en-US 资源，支持 {var} 插值、
  *       按系统语言或本地偏好自动选择 locale。其余语种资源待专业翻译后补充（阻塞项）。
@@ -71,15 +71,18 @@ function initLocale() {
   return currentLocale;
 }
 
-/** 取翻译；缺失时回退默认 locale，再缺失时返回 key */
+/** 取翻译；缺失时回退默认 locale，再缺失时返回 key（不插值占位符） */
 function t(key, vars) {
   const dict = RESOURCES[currentLocale] || RESOURCES[DEFAULT_LOCALE];
   let str = dict[key];
+  let found = true;
   if (str === undefined) {
+    found = false;
     str =
       (RESOURCES[DEFAULT_LOCALE] && RESOURCES[DEFAULT_LOCALE][key]) || key;
   }
-  if (vars && typeof str === "string") {
+  // 仅对真实命中的词条做插值；缺失 key 直接返回原串，避免误替换占位符
+  if (found && vars && typeof str === "string") {
     str = str.replace(/\{(\w+)\}/g, (m, name) =>
       vars[name] !== undefined ? vars[name] : m,
     );

@@ -1,7 +1,7 @@
 /**
  * 文件名: request.js
- * 版本号: 3.5.1
- * 更新日期: 2026-10-13
+ * 版本号: 3.5.2
+ * 更新日期: 2026-10-14
  * 描述: 网络请求主模块，封装 wx.request；缓存/并发队列/CSRF/XSS/取消令牌等实现见同级子模块
  */
 
@@ -48,10 +48,11 @@ function request(options) {
           Authorization: `Bearer ${token}`,
         };
       } else {
-        throw new Error("未授权，请重新登录");
+        // 改为返回 rejected Promise，避免同步 throw 破坏 .rejects 契约
+        return Promise.reject(new Error("未授权，请重新登录"));
       }
     } catch (error) {
-      throw new Error("未授权，请重新登录");
+      return Promise.reject(new Error("未授权，请重新登录"));
     }
   }
 

@@ -1,7 +1,7 @@
 /**
  * 文件名: request-auth.js
- * 版本号: 3.5.0
- * 更新日期: 2026-10-13
+ * 版本号: 3.5.2
+ * 更新日期: 2026-10-14
  * 描述: 401 无感刷新与请求重放（FE-001）。access token 过期时静默调用 refresh-token
  *       端点刷新并自动重放原请求一次；刷新失败或无刷新令牌则清除登录态并跳转登录页。
  *       与 auth-token.js 配合，刷新请求通过延迟 require 避免与 request.js 形成循环依赖。
@@ -39,6 +39,11 @@ function refreshAccessToken() {
     .then((data) => {
       authToken.saveAuth(data);
       return data;
+    })
+    // 刷新请求本身失败（非「无刷新令牌」）→ 归一化为 token_refresh_failed，
+    // 便于 request.js 统一展示「登录已过期，请重新登录」
+    .catch(() => {
+      throw new Error("token_refresh_failed");
     })
     .finally(() => {
       refreshPromise = null;

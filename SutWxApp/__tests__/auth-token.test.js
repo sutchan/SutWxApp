@@ -84,15 +84,17 @@ describe("auth-token 存储读写", () => {
   });
 
   it("saveAuth 写入 token/refreshToken/userInfo/openid", () => {
+    const future = Math.floor(Date.now() / 1000) + 3600;
+    const jwt = makeToken({ exp: future });
     const saved = authToken.saveAuth({
-      token: "T1",
+      token: jwt,
       refreshToken: "R1",
       userInfo: { nickName: "苏小糖", openid: "o123" },
     });
-    expect(authToken.getToken()).toBe("T1");
+    expect(authToken.getToken()).toBe(jwt);
     expect(authToken.getRefreshToken()).toBe("R1");
     expect(authToken.getUserInfo()).toEqual({ nickName: "苏小糖", openid: "o123" });
-    expect(saved.expiresAt).toBeGreaterThan(0);
+    expect(saved.expiresAt).toBe(future);
   });
 
   it("isLoggedIn 有未过期 token 时为真", () => {

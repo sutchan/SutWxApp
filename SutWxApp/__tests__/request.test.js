@@ -121,7 +121,7 @@ describe("状态码处理", () => {
 
   test("500 应抛出状态码错误", async () => {
     global.wx.request = jest.fn((o) => o.success({ statusCode: 500, data: {} }));
-    await expect(request.get("/api/test")).rejects.toThrow("请求失败：500");
+    await expect(request.get("/api/test")).rejects.toThrow("服务器内部错误");
   });
 
   test("401 无刷新令牌应拒绝 no_refresh_token 并清除登录态跳转首页", async () => {

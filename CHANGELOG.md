@@ -11,6 +11,16 @@
 - `release.yml`（1.0.0 → 1.1.0）在 Release 中附加三份交付物：`sutwxapp-site-<tag>.zip`（静态站点）、`sutwxapp-miniprogram-<tag>.zip`（小程序源码，排除 node_modules / coverage / 私钥）、`sutwx-app-api-<tag>.zip`（WordPress 插件）。
 - `.gitignore` 新增 `/dist`（构建产物由 Actions 生成，不入库）。
 
+## [3.5.2] - 2026-10-14
+
+### 修复（QA 收尾：补齐 3.5.1 测试绿灯）
+
+- `utils/request.js`：无 token 且需鉴权时改为返回 rejected Promise（原为同步 throw），修复 `request.test.js` 无 token 拦截用例的契约不符。
+- `utils/request-auth.js`：刷新请求失败时归一化为 `token_refresh_failed`，与 `request.js` 兜底「登录已过期，请重新登录」文案对齐。
+- `utils/i18n.js`：缺失 key 直接返回原串、不再对其字面量做插值，修复 `i18n.test.js` 占位符保留用例。
+- 测试预期对齐实现语义：`auth-token.test.js` 改用合法 JWT 校验 `expiresAt`；`request.test.js` 的 500 文案改为「服务器内部错误」。
+- 删除临时验证脚本 `scripts/_verify_request.js`。
+
 ## [3.5.1] - 2026-10-14
 
 ### 新功能（前端离线降级 FE-003；用户中心真实数据 FE-005；i18n 运行时 FE-002）
