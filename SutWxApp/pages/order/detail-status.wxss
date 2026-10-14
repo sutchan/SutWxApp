@@ -1,0 +1,51 @@
+/**
+ * 文件名: pages/order/detail-status.wxss
+ * 版本号: 3.5.3
+ * 更新日期: 2026-10-14
+ * 描述: 订单状态渐变头部与收货地址区块
+ */
+
+/* 订单状态 */
+.status-section {
+  background: linear-gradient(135deg, var(--grad-user-header));
+  padding: 60rpx 40rpx;
+  color: var(--text-inverse);
+}
+
+.status-text {
+  display: block;
+  font-size: 40rpx;
+  font-weight: bold;
+  margin-bottom: 16rpx;
+}
+
+.status-desc {
+  display: block;
+  font-size: 26rpx;
+  opacity: 0.9;
+}
+
+/* 收货地址 */
+.address-section {
+  background-color: var(--background-primary);
+  padding: 30rpx;
+  margin-top: 20rpx;
+}
+
+.address-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.name-phone {
+  font-size: 30rpx;
+  color: var(--text-primary);
+  font-weight: 500;
+  margin-bottom: 12rpx;
+}
+
+.address-detail {
+  font-size: 26rpx;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
