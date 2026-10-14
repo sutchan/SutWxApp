@@ -1,0 +1,105 @@
+/**
+ * 文件名: pages/product/product-popup.wxss
+ * 版本号: 3.5.3
+ * 更新日期: 2026-10-14
+ * 描述: 底部弹窗通用结构：遮罩、滑入动画、弹窗头（缩略图/价格/库存/关闭）
+ */
+
+.spec-popup-mask,
+.review-popup-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 200;
+}
+
+.spec-popup,
+.review-popup {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--background-primary);
+  border-radius: 24rpx 24rpx 0 0;
+  z-index: 201;
+  transform: translateY(100%);
+  transition: transform var(--transition-normal);
+}
+
+.spec-popup.show,
+.review-popup.show {
+  transform: translateY(0);
+}
+
+.spec-popup-header,
+.review-popup-header {
+  display: flex;
+  align-items: flex-end;
+  padding: 30rpx;
+  border-bottom: 1rpx solid var(--border-color);
+  position: relative;
+}
+
+.spec-popup-image {
+  width: 180rpx;
+  height: 180rpx;
+  border-radius: var(--border-radius-md);
+  background-color: var(--background-secondary);
+}
+
+.spec-popup-info {
+  flex: 1;
+  margin-left: 24rpx;
+}
+
+.spec-popup-price {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 10rpx;
+}
+
+.spec-popup-price .price-symbol {
+  font-size: 28rpx;
+}
+
+.spec-popup-price .price-value {
+  font-size: 48rpx;
+}
+
+.spec-popup-stock {
+  font-size: 24rpx;
+  color: var(--text-secondary);
+  margin-bottom: 10rpx;
+}
+
+.spec-popup-selected {
+  font-size: 24rpx;
+  color: var(--text-primary);
+}
+
+.spec-popup-close,
+.review-popup-close {
+  position: absolute;
+  top: 30rpx;
+  right: 30rpx;
+  width: 48rpx;
+  height: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spec-popup-close image,
+.review-popup-close image {
+  width: 32rpx;
+  height: 32rpx;
+}
+
+.spec-popup-body,
+.review-popup-body {
+  max-height: 60vh;
+  padding-bottom: 120rpx;
+}

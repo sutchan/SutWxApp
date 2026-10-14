@@ -1,0 +1,155 @@
+/**
+ * 文件名: styles/components.wxss
+ * 版本号: 3.5.3
+ * 更新日期: 2026-10-14
+ * 描述: 基础容器组件样式：边框/圆角、背景、阴影、页面容器与卡片
+ */
+
+.border {
+  border: 1rpx solid var(--border-color);
+}
+
+.border-top {
+  border-top: 1rpx solid var(--border-color);
+}
+
+.border-bottom {
+  border-bottom: 1rpx solid var(--border-color);
+}
+
+.border-left {
+  border-left: 1rpx solid var(--border-color);
+}
+
+.border-right {
+  border-right: 1rpx solid var(--border-color);
+}
+
+.border-none {
+  border: none;
+}
+
+.border-radius-sm {
+  border-radius: var(--border-radius-sm);
+}
+
+.border-radius-md {
+  border-radius: var(--border-radius-md);
+}
+
+.border-radius-lg {
+  border-radius: var(--border-radius-lg);
+}
+
+.border-radius-xl {
+  border-radius: var(--border-radius-xl);
+}
+
+.border-radius-circle {
+  border-radius: 50%;
+}
+
+.bg-primary {
+  background-color: var(--primary-color);
+}
+
+.bg-secondary {
+  background-color: var(--background-secondary);
+}
+
+.bg-accent {
+  background-color: var(--primary-light);
+}
+
+.bg-background {
+  background-color: var(--background-secondary);
+}
+
+.bg-surface {
+  background-color: var(--background-primary);
+}
+
+.bg-white {
+  background-color: #ffffff;
+}
+
+.bg-transparent {
+  background-color: transparent;
+}
+
+.bg-error {
+  background-color: var(--error-color);
+}
+
+.bg-error-light {
+  background-color: var(--error-light);
+}
+
+.bg-success {
+  background-color: var(--success-color);
+}
+
+.bg-success-light {
+  background-color: var(--success-light);
+}
+
+.bg-warning {
+  background-color: var(--warning-color);
+}
+
+.bg-warning-light {
+  background-color: var(--warning-light);
+}
+
+.bg-info {
+  background-color: var(--info-color);
+}
+
+.bg-info-light {
+  background-color: var(--info-light);
+}
+
+.bg-tertiary {
+  background-color: var(--background-tertiary);
+}
+
+.shadow-sm {
+  box-shadow: var(--shadow-sm);
+}
+
+.shadow-md {
+  box-shadow: var(--shadow-md);
+}
+
+.shadow-lg {
+  box-shadow: var(--shadow-lg);
+}
+
+.shadow-none {
+  box-shadow: none;
+}
+
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--background-secondary);
+}
+
+.content {
+  flex: 1;
+  padding: var(--spacing-md);
+}
+
+.card {
+  background-color: var(--background-primary);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.card-hover:active {
+  transform: scale(0.98);
+  box-shadow: var(--shadow-sm);
+}

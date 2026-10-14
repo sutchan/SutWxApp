@@ -1,8 +1,10 @@
 /**
  * 文件名: request.js
- * 版本号: 3.5.2
+ * 版本号: 3.5.3
  * 更新日期: 2026-10-14
- * 描述: 网络请求主模块，封装 wx.request；缓存/并发队列/CSRF/XSS/取消令牌等实现见同级子模块
+ * 描述: 网络请求主模块（编排层），封装 wx.request；缓存/并发队列/CSRF/XSS/取消令牌
+ *       见同级子模块，鉴权头注入见 request-auth-header.js，重试与离线降级见
+ *       request-retry.js，401 无感刷新兜底见 request-401.js
  */
 
 const CONFIG = require("./request-config");
@@ -13,8 +15,9 @@ const { CancelToken, isCancel } = require("./request-cancel");
 const { buildRequestConfig, handleResponse } = require("./request-api");
 const { registerRequestApi } = require("./request-methods");
 const { createQueueController } = require("./request-queue");
-const requestAuth = require("./request-auth");
-const offline = require("./offline-snapshot");
+const { applyAuthHeader } = require("./request-auth-header");
+const { createFailHandler } = require("./request-retry");
+const { withUnauthorizedFallback } = require("./request-401");
 
 const requestInterceptors = [];
 const responseInterceptors = [];
@@ -39,21 +42,11 @@ function request(options) {
   }
 
   if (config.needAuth !== false) {
-    try {
-      const wx = checkWx();
-      const token = wx.getStorageSync("token");
-      if (typeof token === "string" && token.length > 0) {
-        config.header = {
-          ...config.header,
-          Authorization: `Bearer ${token}`,
-        };
-      } else {
-        // 改为返回 rejected Promise，避免同步 throw 破坏 .rejects 契约
-        return Promise.reject(new Error("未授权，请重新登录"));
-      }
-    } catch (error) {
-      return Promise.reject(new Error("未授权，请重新登录"));
+    const auth = applyAuthHeader(config);
+    if (!auth.ok) {
+      return Promise.reject(auth.error);
     }
+    config.header = auth.header;
   }
 
   let processedConfig = { ...config };
@@ -86,7 +79,7 @@ function request(options) {
   }
 
   const promise = new Promise((resolve, reject) => {
-    let retryCount = 0;
+    const retryState = { count: 0 };
     const maxRetry =
       processedConfig.retry !== undefined ? processedConfig.retry : CONFIG.retry;
     const retryDelay =
@@ -119,44 +112,26 @@ function request(options) {
               processedResponse = result;
             }
           }
-          handleResponse(processedResponse, config, cacheKey, resolve, reject, processedConfig, wxInstance);
+          handleResponse(
+            processedResponse,
+            config,
+            cacheKey,
+            resolve,
+            reject,
+            processedConfig,
+            wxInstance,
+          );
         },
-        fail: (err) => {
-          queue.release();
-
-          if (config.cancelToken && config.cancelToken.isCancel()) {
-            reject(new Error("Request cancelled"));
-            return;
-          }
-
-          if (retryCount < maxRetry) {
-            retryCount++;
-            const delay = retryDelay * Math.pow(2, retryCount - 1);
-            const jitter = Math.random() * delay * 0.5;
-            const retryDelayWithJitter = delay + jitter;
-            console.warn(
-              `请求失败，${retryCount}/${maxRetry}，${Math.round(retryDelayWithJitter)}ms后重试`,
-            );
-            setTimeout(sendRequest, retryDelayWithJitter);
-          } else {
-            // FE-003：断网降级——GET 请求失败时回退离线快照
-            if (CONFIG.enableOffline && config.method === "GET" && config.useCache) {
-              const snap = offline.getSnapshot(cacheKey);
-              if (snap && snap.data !== undefined) {
-                console.warn(`网络不可用，回退离线快照：${cacheKey}`);
-                resolve(snap.data);
-                return;
-              }
-            }
-            let errorMessage = "网络请求失败";
-            if (err.errMsg) {
-              errorMessage = err.errMsg;
-            } else if (err.message) {
-              errorMessage = err.message;
-            }
-            reject(new Error(errorMessage));
-          }
-        },
+        fail: createFailHandler({
+          config,
+          maxRetry,
+          retryDelay,
+          cacheKey,
+          retryState,
+          sendRequest,
+          resolve,
+          reject,
+        }),
         complete: () => {
           requestTask = null;
         },
@@ -177,25 +152,7 @@ function request(options) {
     queue.acquire(sendRequest);
   });
 
-  // 401 无感刷新兜底：仅在需要鉴权的请求上触发，避免与内部刷新请求 / 已重试请求形成递归
-  if (options && (options.needAuth === false || options._authInternal || options._authRetried)) {
-    return promise;
-  }
-  return promise.catch((err) => {
-    if (err && err.statusCode === 401) {
-      return requestAuth
-        .handleUnauthorized(processedConfig, request)
-        .catch((refreshErr) => {
-          requestAuth.clearAndRedirect(checkWx());
-          const msg =
-            refreshErr && refreshErr.message === "token_refresh_failed"
-              ? "登录已过期，请重新登录"
-              : (refreshErr && refreshErr.message) || "登录已过期，请重新登录";
-          throw new Error(msg);
-        });
-    }
-    throw err;
-  });
+  return withUnauthorizedFallback(promise, options, processedConfig, request);
 }
 
 // 注册公共 API（缓存方法 / 配置 setter / HTTP 动词 / 拦截器）

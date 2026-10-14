@@ -1,0 +1,24 @@
+/**
+ * 文件名: pages/product/product-popup-review.wxss
+ * 版本号: 3.5.3
+ * 更新日期: 2026-10-14
+ * 描述: 评价弹窗：居中标题与完整评价列表
+ */
+
+.review-popup-header {
+  justify-content: center;
+}
+
+.review-popup-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.review-popup-body {
+  padding: 0 30rpx;
+}
+
+.review-list-full {
+  padding: 20rpx 0;
+}

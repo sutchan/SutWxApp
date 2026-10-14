@@ -1,0 +1,122 @@
+/**
+ * 文件名: pages/product/product-popup-spec.wxss
+ * 版本号: 3.5.3
+ * 更新日期: 2026-10-14
+ * 描述: 规格弹窗主体：规格选项、数量步进器与确认按钮
+ */
+
+.spec-section {
+  padding: 30rpx;
+}
+
+.spec-title {
+  font-size: 28rpx;
+  color: var(--text-secondary);
+  margin-bottom: 20rpx;
+}
+
+.spec-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20rpx;
+}
+
+.spec-item {
+  padding: 16rpx 32rpx;
+  background-color: var(--background-tertiary);
+  border-radius: var(--border-radius-sm);
+  font-size: 26rpx;
+  color: var(--text-primary);
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.spec-item:active {
+  opacity: 0.8;
+}
+
+.spec-item.active {
+  background-color: var(--primary-color);
+  color: var(--text-inverse);
+  font-weight: 500;
+}
+
+.quantity-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30rpx;
+  border-top: 1rpx solid var(--border-color);
+}
+
+.quantity-title {
+  font-size: 28rpx;
+  color: var(--text-secondary);
+}
+
+.quantity-selector {
+  display: flex;
+  align-items: center;
+}
+
+.quantity-btn {
+  width: 56rpx;
+  height: 56rpx;
+  background-color: var(--background-tertiary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  color: var(--text-primary);
+}
+
+.quantity-btn:first-child {
+  border-radius: var(--border-radius-sm) 0 0 var(--border-radius-sm);
+}
+
+.quantity-btn:last-child {
+  border-radius: 0 var(--border-radius-sm) var(--border-radius-sm) 0;
+}
+
+.quantity-btn.disabled {
+  opacity: 0.5;
+}
+
+.quantity-input {
+  width: 80rpx;
+  height: 56rpx;
+  text-align: center;
+  font-size: 28rpx;
+  color: var(--text-primary);
+  background-color: var(--background-tertiary);
+}
+
+.spec-popup-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20rpx 30rpx;
+  padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+  background-color: var(--background-primary);
+  border-top: 1rpx solid var(--border-color);
+}
+
+.btn-confirm {
+  height: 88rpx;
+  background-color: var(--primary-color);
+  border-radius: 44rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  color: var(--text-inverse);
+  transition: opacity var(--transition-fast);
+}
+
+.btn-confirm:active {
+  opacity: 0.85;
+}
+
+.btn-confirm.loading {
+  opacity: 0.7;
+}

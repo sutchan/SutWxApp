@@ -1,0 +1,151 @@
+/**
+ * 文件名: pages/product/product-info.wxss
+ * 版本号: 3.5.3
+ * 更新日期: 2026-10-14
+ * 描述: 商品信息区：价格行、名称描述、标签、规格入口与服务保障
+ */
+
+.product-info-section {
+  background-color: var(--background-primary);
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 20rpx;
+}
+
+.price-info {
+  display: flex;
+  align-items: baseline;
+}
+
+.price-label {
+  font-size: 24rpx;
+  color: var(--primary-dark);
+  margin-right: 10rpx;
+}
+
+.price-symbol {
+  font-size: 28rpx;
+  color: var(--primary-dark);
+  font-weight: bold;
+}
+
+.price-value {
+  font-size: 48rpx;
+  color: var(--primary-dark);
+  font-weight: bold;
+}
+
+.price-origin {
+  font-size: 26rpx;
+  color: var(--text-secondary);
+  text-decoration: line-through;
+  margin-left: 16rpx;
+}
+
+.discount-badge {
+  background-color: var(--primary-light);
+  padding: 4rpx 12rpx;
+  border-radius: 6rpx;
+  margin-left: 16rpx;
+}
+
+.discount-badge text {
+  font-size: 22rpx;
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.sales-info {
+  font-size: 24rpx;
+  color: var(--text-secondary);
+}
+
+.product-name {
+  font-size: 32rpx;
+  color: var(--text-primary);
+  font-weight: bold;
+  line-height: 1.5;
+  margin-bottom: 16rpx;
+}
+
+.product-desc {
+  font-size: 26rpx;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 20rpx;
+}
+
+.product-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.tag-item {
+  background-color: var(--background-secondary);
+  padding: 8rpx 16rpx;
+  border-radius: 6rpx;
+}
+
+.tag-item text {
+  font-size: 22rpx;
+  color: var(--text-secondary);
+}
+
+.spec-section {
+  display: flex;
+  align-items: center;
+  background-color: var(--background-primary);
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.spec-label {
+  font-size: 28rpx;
+  color: var(--text-secondary);
+  margin-right: 30rpx;
+}
+
+.spec-content {
+  flex: 1;
+}
+
+.spec-text {
+  font-size: 28rpx;
+  color: var(--text-primary);
+}
+
+.arrow-icon {
+  width: 16rpx;
+  height: 28rpx;
+}
+
+.service-section {
+  display: flex;
+  justify-content: space-around;
+  background-color: var(--background-primary);
+  padding: 24rpx 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.service-item {
+  display: flex;
+  align-items: center;
+}
+
+.service-item image {
+  width: 28rpx;
+  height: 28rpx;
+  margin-right: 10rpx;
+}
+
+.service-item text {
+  font-size: 24rpx;
+  color: var(--text-secondary);
+}

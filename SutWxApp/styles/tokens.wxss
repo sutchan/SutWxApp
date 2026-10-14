@@ -1,0 +1,94 @@
+/**
+ * 文件名: styles/tokens.wxss
+ * 版本号: 3.5.3
+ * 更新日期: 2026-10-14
+ * 描述: 全局设计令牌（CSS 变量）：品牌绿/文字三级/背景三级/语义色/
+ *       品牌衍生渐变/字号/间距/圆角/阴影/过渡，及 page 基础排版
+ *       对齐 openspec/specs/design/spec.md
+ */
+
+page {
+  /* ===== 品牌绿 ===== */
+  --primary-color: #2E7D32;
+  --primary-light: #F1F8E9;
+  --primary-dark: #1B5E20;
+
+  /* ===== 文字三级 ===== */
+  --text-primary: #1D1D1F;
+  --text-secondary: #86868B;
+  --text-tertiary: #AEAEB2;
+  --text-inverse: #FFFFFF;
+
+  /* ===== 背景三级 / 边框 ===== */
+  --background-primary: #FFFFFF;
+  --background-secondary: #F5F5F7;
+  --background-tertiary: #FAFAFA;
+  --border-color: #E8E8ED;
+
+  /* ===== 受控语义色 ===== */
+  --error-color: #F44336;
+  --error-light: #FFEBEE;
+  --success-color: #4CAF50;
+  --success-light: #E8F5E9;
+  --warning-color: #FF9800;
+  --warning-light: #FFF3E0;
+  --info-color: #2196F3;
+  --info-light: #E3F2FD;
+
+  /* ===== 品牌衍生渐变 token（spec §4.1.4）===== */
+  --grad-leaf-1: #F1F8E9, #C8E6C9;
+  --grad-leaf-2: #E8F5E9, #DCEDC8;
+  --grad-leaf-3: #F1F8E9, #A5D6A7;
+  --grad-leaf-4: #E8F5E9, #C5E1A5;
+  --grad-leaf-5: #F1F8E9, #D7EFD3;
+  --grad-leaf-6: #E8F5E9, #B9DFC0;
+  --grad-banner-1: #F1F8E9, #C8E6C9;
+  --grad-banner-2: #E8F5E9, #DCEDC8;
+  --grad-banner-3: #F1F8E9, #A5D6A7;
+  --grad-user-header: #2E7D32, #1B5E20;
+
+  /* ===== 字号 ===== */
+  --font-size-xs: 10px;
+  --font-size-sm: 12px;
+  --font-size-md: 14px;
+  --font-size-lg: 16px;
+  --font-size-xl: 18px;
+  --font-size-xxl: 24px;
+  --font-size-h1: 28px;
+  --font-size-h2: 22px;
+  --font-size-h3: 18px;
+
+  /* ===== 间距 ===== */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 20px;
+  --spacing-xxl: 24px;
+
+  /* ===== 圆角 ===== */
+  --border-radius-sm: 8px;
+  --border-radius-md: 12px;
+  --border-radius-lg: 16px;
+  --border-radius-xl: 24px;
+
+  /* ===== 阴影 ===== */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.1);
+
+  /* ===== 过渡 ===== */
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+  background-color: var(--background-secondary);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  font-size: var(--font-size-md);
+  line-height: 1.5;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

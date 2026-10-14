@@ -1,0 +1,111 @@
+/**
+ * 文件名: pages/product/product-reviews.wxss
+ * 版本号: 3.5.3
+ * 更新日期: 2026-10-14
+ * 描述: 评价区：区块头、评价列表、评分头像与加载更多
+ */
+
+.reviews-section {
+  background-color: var(--background-primary);
+  margin-bottom: 20rpx;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx;
+  border-bottom: 1rpx solid var(--border-color);
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.view-all {
+  display: flex;
+  align-items: center;
+}
+
+.view-all text {
+  font-size: 26rpx;
+  color: var(--text-secondary);
+}
+
+.view-all image {
+  width: 16rpx;
+  height: 28rpx;
+  margin-left: 10rpx;
+}
+
+.review-list {
+  padding: 0 30rpx;
+}
+
+.review-item {
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid var(--border-color);
+}
+
+.review-item:last-child {
+  border-bottom: none;
+}
+
+.review-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.review-avatar {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  margin-right: 16rpx;
+}
+
+.review-username {
+  font-size: 28rpx;
+  color: var(--text-primary);
+  margin-right: 16rpx;
+}
+
+.review-rating {
+  display: flex;
+}
+
+.star-icon {
+  width: 24rpx;
+  height: 24rpx;
+  margin-right: 4rpx;
+}
+
+.review-content {
+  font-size: 28rpx;
+  color: var(--text-primary);
+  line-height: 1.6;
+  margin-bottom: 16rpx;
+}
+
+.review-spec {
+  font-size: 24rpx;
+  color: var(--text-secondary);
+  margin-bottom: 10rpx;
+}
+
+.review-time {
+  font-size: 24rpx;
+  color: var(--text-secondary);
+}
+
+.load-more {
+  text-align: center;
+  padding: 30rpx;
+}
+
+.load-more text {
+  font-size: 28rpx;
+  color: var(--text-secondary);
+}

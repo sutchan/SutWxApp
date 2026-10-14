@@ -1,0 +1,95 @@
+/**
+ * 文件名: pages/product/product-detail.wxss
+ * 版本号: 3.5.3
+ * 更新日期: 2026-10-14
+ * 描述: 图文详情区与商品参数、相关推荐列表
+ */
+
+.product-detail-section {
+  background-color: var(--background-primary);
+  margin-bottom: 20rpx;
+}
+
+.detail-content {
+  padding: 30rpx;
+}
+
+.detail-content image {
+  max-width: 100%;
+}
+
+.params-section {
+  padding: 0 30rpx 30rpx;
+}
+
+.params-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: var(--text-primary);
+  margin-bottom: 20rpx;
+}
+
+.params-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.params-item {
+  width: 50%;
+  display: flex;
+  padding: 16rpx 0;
+}
+
+.params-name {
+  font-size: 26rpx;
+  color: var(--text-secondary);
+  width: 160rpx;
+}
+
+.params-value {
+  font-size: 26rpx;
+  color: var(--text-primary);
+  flex: 1;
+}
+
+.related-section {
+  background-color: var(--background-primary);
+}
+
+.related-list {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 20rpx;
+}
+
+.related-item {
+  width: calc(33.33% - 26rpx);
+  margin: 13rpx;
+}
+
+.related-image {
+  width: 100%;
+  height: 220rpx;
+  border-radius: var(--border-radius-md);
+  background-color: var(--background-secondary);
+}
+
+.related-info {
+  padding: 16rpx 0;
+}
+
+.related-name {
+  font-size: 26rpx;
+  color: var(--text-primary);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 10rpx;
+}
+
+.related-price {
+  font-size: 28rpx;
+  color: var(--primary-dark);
+  font-weight: bold;
+}
