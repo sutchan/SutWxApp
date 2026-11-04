@@ -176,87 +176,61 @@ https://api.example.com/v{version}/{resource}/{id}?{query_parameters}
 
 ## 核心API接口
 
-### 用户API
+### 认证API
 
-#### 注册用户
-- **URL**: `POST /api/v1/users/register`
-- **描述**: 注册新用户账号
-- **请求体**: 
-  ```json
-  {
-    "username": "test",
-    "password": "password",
-    "email": "test@example.com",
-    "phone": "13800138000"
-  }
-  ```
-- **响应**: 
-  ```json
-  {
-    "code": 201,
-    "message": "success",
-    "data": {
-      "id": 1,
-      "username": "test",
-      "email": "test@example.com",
-      "phone": "13800138000",
-      "createdAt": "2025-12-01T00:00:00.000Z"
-    },
-    "timestamp": 1609459200000,
-    "requestId": "uuid"
-  }
-  ```
+> 账号体系为**微信静默授权**：`wx.login` 换取 `code` → 后端 `code2session` 换取 `openid` → 签发 JWT。**没有用户名密码注册/登录流程**，小程序不采集手机号与邮箱。
+> 全部端点由 `includes/rest/class-rest-auth.php` 注册，命名空间 `/api/v1`，小程序侧路径为 `/api/auth/*`。
 
-#### 用户登录
-- **URL**: `POST /api/v1/users/login`
-- **描述**: 认证用户并返回JWT令牌
-- **请求体**: 
+#### 微信登录
+- **URL**: `POST /api/auth/login`
+- **认证**: 不需要
+- **请求体**:
   ```json
-  {
-    "username": "test",
-    "password": "password"
-  }
+  { "code": "081Xyz...", "nickname": "苏小糖", "avatarUrl": "https://..." }
   ```
-- **响应**: 
+  - `code`：`wx.login()` 返回的临时凭证，5 分钟内有效且只能消费一次
+  - `nickname` / `avatarUrl`：可选，仅用于首登建档
+- **响应**（`data` 为令牌对象）:
   ```json
   {
     "code": 200,
-    "message": "success",
     "data": {
-      "token": "jwt-token",
-      "user": {
-        "id": 1,
-        "username": "test",
-        "email": "test@example.com",
-        "phone": "13800138000",
-        "createdAt": "2025-12-01T00:00:00.000Z"
-      }
-    },
-    "timestamp": 1609459200000,
-    "requestId": "uuid"
+      "token": "<access_token>",
+      "refreshToken": "<refresh_token>",
+      "expiresIn": 7200,
+      "userInfo": { "id": 12, "nickname": "苏小糖", "avatarUrl": "https://..." }
+    }
   }
   ```
 
-#### 获取用户信息
-- **URL**: `GET /api/v1/users/{id}`
-- **描述**: 通过ID获取用户信息
-- **认证**: 需要
-- **响应**: 
-  ```json
-  {
-    "code": 200,
-    "message": "success",
-    "data": {
-      "id": 1,
-      "username": "test",
-      "email": "test@example.com",
-      "phone": "13800138000",
-      "createdAt": "2025-12-01T00:00:00.000Z"
-    },
-    "timestamp": 1609459200000,
-    "requestId": "uuid"
-  }
-  ```
+#### 刷新令牌
+- **URL**: `POST /api/auth/refresh-token`
+- **认证**: 不需要
+- **请求体**: `{ "refreshToken": "<refresh_token>" }`
+- **响应**: 同「微信登录」的 `data` 结构（新令牌对）
+- **说明**: access token 过期（401）时由 `utils/request-auth.js` 自动调用并重放原请求，用户无感
+
+#### 登出
+- **URL**: `POST /api/auth/logout`
+- **认证**: 需要（Bearer）
+- **请求体**: `{}`
+- **响应**: `{ "code": 200, "data": { "ok": true } }`
+- **说明**: 服务端将令牌 `jti` 加入黑名单（`includes/auth/class-auth-token-store.php`），前端在 `finally` 中清除本地登录态
+
+#### 获取当前用户信息
+- **URL**: `GET /api/user/info`
+- **认证**: 需要（Bearer）
+- **响应**: `{ "code": 200, "data": { "id": 12, "nickname": "苏小糖", "avatarUrl": "https://...", "points": 320, "createdAt": "2026-01-01 00:00:00" } }`
+- **说明**: 小程序用户中心据此渲染真实资料与积分，网络异常时回退本地缓存
+
+### 监控上报API（规划中）
+
+> 前端监控模块 `SutWxApp/utils/monitor*.js` 已就绪（网络/FPS/内存/页面加载/API 五类采集器 + 自动上报调度），上报目标为 `/api/monitor/data`，**后端接收端点尚未实现**（见 `docs/tasks.md` BE-013）。当前该请求返回 404，监控数据不会落地。
+
+- **URL**: `POST /api/monitor/data`
+- **认证**: 不需要（匿名上报，字段中不得含用户标识）
+- **请求体**: `{ "type": "error|performance|behavior", "payload": { }, "systemInfo": { } }`
+- **约束**: 限频 10 次/分钟；字段长度上限；服务端需做字段白名单校验
 
 ### 产品API
 

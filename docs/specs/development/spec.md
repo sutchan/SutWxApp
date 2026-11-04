@@ -1,321 +1,468 @@
- 开发规范
+# 开发规范
 
-## 目的
-本规范定义了苏铁微信小程序（SutWxApp）项目的开发环境设置、配置和最佳实践，包括前端和后端环境要求、安装步骤、项目配置和开发指南。
+> **文档版本**: v3.0.0
+> **更新时间戳**: 2026-11-04
+> **适用范围**: `SutWxApp/`（小程序）与 `sutwx-app-api/`（WordPress 插件）全部源码
+> **定位**: 本文件是**工程规范的单一事实来源**。`specs/project/spec.md` 只保留项目定位与设计风格，涉及命名/提交/分支/审查/测试/门禁的条款一律以本文件为准。
+> **配套**: 协作流程与红线见 [`../../AGENTS.md`](../../AGENTS.md)；任务见 [`../../tasks.md`](../../tasks.md)。
 
-## 环境要求
+---
 
-### 前端开发环境
-- **微信开发者工具**：最新稳定版（用于预览、调试、上传）
-- **VS Code**：最新稳定版（用于代码编辑，可选）
-- **Node.js**：仅用于运行可能的脚本工具（如图片压缩、i18n 处理）
-- **Git**：最新稳定版
+## 1. 环境要求
 
-> 本项目为纯前端微信小程序，使用 JavaScript 开发，**无需 Bun、TypeScript 编译器或数据库**。
+| 工具 | 版本 | 必需 | 说明 |
+|------|------|------|------|
+| Node.js | ≥ 18（CI 固定 20） | 是 | 校验脚本、测试、构建、部署 |
+| 微信开发者工具 | 最新稳定版 | 是 | 预览、真机调试、上传、自动化端口 |
+| PHP | 8.1 / 8.3 | 否 | 插件单测与 `php -l`；本地无 PHP 时由 CI 承担 |
+| Git | 最新稳定版 | 是 | — |
 
-## 项目安装
+**包管理器统一 npm**。仓库根 `bun.lock` 为历史残留，不得据此引入 Bun 流程。
 
-### 1. 克隆仓库
 ```bash
 git clone https://github.com/sutchan/SutWxApp.git
-cd SutWxApp
+cd SutWxApp/SutWxApp && npm ci        # 安装 ESLint / Jest / miniprogram-automator
 ```
 
-### 2. 用微信开发者工具打开
-- 打开微信开发者工具 → 导入项目
-- 项目目录选择 `SutWxApp/SutWxApp`
-- 填入自己的小程序 AppID（测试号可使用「测试号」）
+微信开发者工具**导入 `SutWxApp/`**（即仓库根下的 `SutWxApp` 子目录，不是 `SutWxApp/SutWxApp`）。
 
-## 项目配置
+---
 
-### 前端配置
+## 2. 目录组织
 
-1. **在 project.config.json 中设置 AppID**：
-```json
-{
-  "appid": "your-app-id-here"
-}
+### 2.1 顶层
+
+```
+SutWxApp/                      # 仓库根
+├── SutWxApp/                  # 小程序工程（微信开发者工具导入此目录）
+├── sutwx-app-api/             # WordPress 插件
+├── prototype/                 # 单文件交互原型（源）
+├── docs/                      # 规范与任务文档
+├── scripts/                   # 仓库级脚本（changelog 抽取）
+├── build.js                   # 站点构建：由 prototype/ 生成根目录站点文件
+├── server.js                  # 本地静态站点服务（原型预览）
+├── index.html / prototype-extra.html / wireframes.html   # 构建产物，勿手改
+└── package.json               # 根包（站点服务 + 插件打包）
 ```
 
-2. **在 app.js 中配置 API 基础 URL**（`globalData.baseUrl`）：
-```javascript
-App({
-  globalData: {
-    baseUrl: 'https://your-api-server.com'
-  }
-})
+### 2.2 小程序分层与落位
+
+| 层 | 目录 | 职责 | 禁止 |
+|----|------|------|------|
+| 入口 | `app.js` / `app.json` / `app.wxss` | 生命周期、全局数据、路由、全局样式 | 在 `app.js` 写业务逻辑（应下沉到 `helpers.js` / `services/`） |
+| 页面 | `pages/<name>/` | 每页一个目录，四件套 `.js/.json/.wxml/.wxss` | 页面间直接互相调用，必须经 `services/` |
+| 组件 | `components/<PascalCase>/` | 可复用 UI，四件套 | 组件内直接调 `wx.request`（必须经 `utils/request.js`） |
+| 行为 | `behaviors/` | 跨页面复用的 mixin | 存放业务数据（应放 `services/`） |
+| 服务 | `services/` | 领域业务（一个领域一文件） | 直接 `wx.request`（必须经 `utils/request.js`） |
+| 模型 | `models/` | 后端 DTO → 视图模型 | 发起网络请求 |
+| 工具 | `utils/` | 无业务语义基础设施 | 引入业务判断 |
+| 全局样式 | `styles/` | 由 `app.wxss` 用 `@import` 汇聚的分片 | 在分片里写 `@import` 之外的副作用 |
+| 脚本 | `scripts/` | Node CLI（校验、部署、图标、打包） | 被小程序运行时代码 `require` |
+| 静态资源 | `images/`、`locales/` | 图片、`tabbar/` 图标、语言包 | 存放业务数据 |
+
+**新增文件落位决策树**：
+
+```
+是页面吗？        → pages/<name>/四件套
+是复用 UI 吗？    → components/<PascalCase>/四件套
+是领域业务吗？    → services/xxxService.js（+ 可选 xxxService.mock.js）
+是字段转换吗？    → models/xxx.js
+是通用能力吗？    → utils/xxx.js
+是构建期工具吗？  → SutWxApp/scripts/xxx.js
 ```
 
-3. **配置合法域名**：在微信公众平台「开发 > 开发设置 > 服务器域名」中添加 request 合法域名（HTTPS）。
+### 2.3 插件分层与落位
 
-## 开发工具配置
+| 层 | 目录 | 职责 |
+|----|------|------|
+| 入口 | `sutwx-app-api.php` | 插件头、版本常量、依赖声明、加载 `class-loader.php` |
+| 加载 | `includes/class-loader.php` | 常量、钩子、路由注册 |
+| 清单 | `includes/class-modules.php` | **唯一**的类加载清单（顺序敏感：trait 必须先于使用它的类） |
+| 基础类 | `includes/class-*.php` | JWT、凭证、鉴权、缓存、限频、支付、设置 |
+| 职责子目录 | `includes/auth|cache|order|pay|rate-limit/` | 拆出的 trait（按职责而非按类） |
+| REST | `includes/rest/class-rest-*.php` | 一个端点组一个类 |
+| 映射 | `includes/mappings/map-*.php` | WordPress/WooCommerce → 小程序 DTO |
+| 后台 | `admin/` | 设置页 |
+| 测试 | `tests/` | `run-*-tests.php` 六套件 + `bootstrap.php` + `stubs-runtime.php` |
 
-### VS Code 配置（可选）
+**新增插件类**：在 `includes/class-modules.php` 中登记；被拆分为 trait 时，trait 文件必须先于使用它的类被 require。
 
-**推荐插件**：
-- ESLint：代码检查
-- Prettier：代码格式化
-- 微信小程序相关代码片段插件
-- GitLens：Git 增强
+---
 
-**VS Code 设置**：
-```json
-{
-  "editor.formatOnSave": true,
-  "prettier.singleQuote": true,
-  "prettier.trailingComma": "es5",
-  "prettier.tabWidth": 2
-}
-```
+## 3. 命名约定
 
-### 微信开发者工具配置
-**必需设置**：
-- 调试基础库：最新稳定版
-- ES6 转 ES5：开启
-- 增强编译：开启
-- 代码压缩：开启
-- 上传时自动压缩：开启
+> 命名按「层」区分，不是全仓库一刀切。以现有代码为准，新增代码必须落在既有约定内。
 
-**域名白名单配置**：
-1. 登录微信公众平台
-2. 导航到开发 > 开发设置
-3. 将 API 服务器域名添加到服务器域名列表（需 HTTPS）
+### 3.1 JavaScript
 
-## 运行项目
+| 对象 | 约定 | 示例 |
+|------|------|------|
+| 变量、函数、方法 | camelCase | `loadTheme()`、`cacheToken` |
+| 常量 | UPPER_SNAKE_CASE | `THEME_CACHE_TTL_MS`、`STORAGE_KEY` |
+| 服务文件 | camelCase + `Service` 后缀 | `authService.js`、`orderService.js`、`payService.js` |
+| 模型文件 | camelCase 单数 | `product.js`、`order.js`、`category.js` |
+| 工具文件 | kebab-case | `request-cache.js`、`auth-token.js`、`i18n.js`、`search-handlers.js` |
+| 页面目录 | kebab-case | `pages/order/confirm/`、`pages/article/list/` |
+| 组件目录 | PascalCase | `components/product-card/` → **例外**：现有为 kebab-case，新增组件统一 kebab-case 以与 `components/` 现状一致 |
+| Behavior 文件 | kebab-case | `product-actions.js` |
+| 脚本文件 | kebab-case | `check-config.js`、`package-plugin.js` |
+| 常量引用 | 静态 import | `const { unwrap } = require("../utils/api");` |
+| 私有成员 | 前缀 `_`（仅组件/类内部约定） | `this._timer` |
 
-### 前端（小程序）
-1. 打开微信开发者工具
-2. 从 `SutWxApp/SutWxApp` 目录导入项目
-3. 点击「编译」按钮运行项目
-4. 点击「预览」按钮在真机上测试
-5. 点击「上传」按钮上传代码包用于提审发布
+**布尔命名**：`is` / `has` / `can` 前缀（`isStale`、`hasMore`、`canRetry`）。
 
-> 小程序无本地后端进程；接口由 `globalData.baseUrl` 指向的外部服务承载。本地联调可将 `baseUrl` 指向后端测试地址。
+### 3.2 PHP
 
-## 代码规范
+| 对象 | 约定 | 示例 |
+|------|------|------|
+| 类名 | `Sutwx_` 前缀 + Studly_Case | `Sutwx_Cache`、`Sutwx_Rate_Limit`、`Sutwx_Wechat_Pay` |
+| trait 名 | `Sutwx_` 前缀 + Studly_Case | `Sutwx_Cache_Invalidation`、`Sutwx_Auth_Token_Store` |
+| 方法 / 函数 | snake_case | `register_invalidation_hooks()`、`on_save_post()` |
+| 常量 | `UPPER_SNAKE_CASE` + 插件前缀 | `SUTWX_API_VERSION`、`SUTWX_API_REST_NS` |
+| 类文件 | kebab-case，`class-` 前缀 | `class-rest-order-ship.php`、`class-jwt-codec.php` |
+| trait 文件 | kebab-case，**按职责而非按类** | `auth/class-auth-token-store.php` |
+| REST 控制器 | `class-rest-<域>-<动作>.php` | `class-rest-order-actions.php`、`class-rest-pay-query.php` |
+| 映射文件 | `map-<域>.php` | `map-order-parts.php` |
+| 数组键（下划线） | snake_case | `billing_state`、`product_id` |
+| 数组键（REST 出参） | camelCase | `productId`、`billingState` |
 
-### 命名规范
-- **变量/函数**：camelCase（小驼峰命名法）
-- **类/构造函数**：PascalCase（大驼峰命名法）
-- **常量**：UPPER_SNAKE_CASE（全大写，下划线分隔）
-- **文件/目录**：kebab-case（短横线分隔）
-- **组件**：PascalCase（大驼峰命名法）
+### 3.3 WXML / WXSS
 
-### 代码格式化
-- 使用2个空格进行缩进
-- 每行代码不超过100个字符
-- 文件末尾添加空行
-- 在运算符周围添加空格
-- 函数括号前添加空格
-- 逗号后添加空格
+| 对象 | 约定 | 示例 |
+|------|------|------|
+| `id` | kebab-case **语义化**（禁止 `id="box1"`、`id="a"`） | `product-actionbar`、`product-info-section`、`product-spec-popup` |
+| `class` | kebab-case，组件根用组件名 | `product-card`、`action-icon` |
+| 组件根节点 | 必须有语义化 `id` | `<view id="product-actionbar" class="bottom-action-bar">` |
+| CSS 变量 | kebab-case | `--primary-color`、`--spacing-md` |
+| 分片文件名 | kebab-case，与被 `@import` 的父文件对应 | `styles/layout-flex.wxss` |
 
-### 注释规范
-- 每个函数必须添加函数级注释
-- 注释使用中文
-- 复杂逻辑添加行内注释
-- 文件头部添加文件说明注释
+**语义化 ID 规则**：ID 用于调试定位与自动化测试选择器，必须能回答「这是哪个区块」。新增 include 分片时同步补 ID。
+
+---
+
+## 4. 编码风格
+
+### 4.1 强制门禁（由 ESLint 裁决，`npm run lint`）
+
+| 规则 | 级别 | 实际含义 |
+|------|------|---------|
+| `no-unused-vars` | error | 未使用变量/导入即失败（未使用函数参数不报） |
+| `no-console` | error | 生产代码禁止 `console.log`，**允许 `console.error` / `console.warn`**；`scripts/**` 全放开 |
+| `no-debugger` | error | 禁止遗留断点 |
+| `no-empty` | error | 禁止空块（`catch {}` 允许为空） |
+| `eqeqeq` | warn | 禁止 `==`/`!=`（`null` 比较豁免）。需要类型宽容时显式 `String(a) === String(b)`，不要加 `eslint-disable` |
+
+`npm run lint` 必须 **0 error / 0 warning**。`eqeqeq` 的 warn 视为未完成。
+
+### 4.2 JavaScript 风格
+
+- 缩进 **2 空格**；文件末尾保留换行；单行 ≤ 100 字符（超长提取常量或换行）
+- 字符串用**双引号**；对象键用双引号包裹（`{ "code": 1 }`）
+- 语句结尾带分号
+- `const` 优先，`let` 仅在需重赋值时使用，禁止 `var`
+- 早期返回替代嵌套；单个函数只做一件事，**单文件 ≤ 200 行**（`prototype/*.html` 与生成物除外）
+- 注释解释**为什么**，不复述代码；复杂分支用中文单行注释标注原因
+- 禁止提交注释掉的死代码（版本历史由 Git 承担）
+- 空值处理：优先返回空集合/默认值并显式抛错，不返回 `null` 让调用方到处判空
+
+### 4.3 文件头注释（统一模板）
 
 ```javascript
 /**
  * 文件名: example.js
- * 版本号: 1.0.0
- * 更新日期: 2025-12-26
- * 功能描述: 示例函数
- * @param {Object} options - 查询参数
- * @param {string} options.type - 类型
- * @returns {Promise<Object>} 结果
+ * 版本号: 3.5.10
+ * 更新日期: 2026-11-04
+ * 描述: 一句话说明本文件职责（复杂模块注明「实现在 xxx」）
  */
-async function exampleFunction(options = {}) {
-  // 实现逻辑
-}
 ```
 
-### 代码质量
-- 避免使用全局变量，使用const/let代替var
-- 避免深层嵌套，保持代码扁平
-- 函数职责单一，避免过长函数
-- 使用模块化设计，提高代码复用性
-
-## Git工作流
-
-### 分支策略
-- **main/master**：生产分支，保持稳定
-- **develop**：集成分支，用于测试
-- **feature/xxx**：功能开发分支
-- **bugfix/xxx**：bug修复分支
-- **hotfix/xxx**：紧急修复分支
-
-### 提交规范
-使用语义化提交消息，格式为：`<type>: <description>`
-
-**类型说明**：
-- `feat`: 新功能
-- `fix`: 修复bug
-- `docs`: 文档更新
-- `style`: 代码样式修改（不影响功能）
-- `refactor`: 代码重构
-- `test`: 测试相关
-- `chore`: 构建或辅助工具的变动
-
-**示例**：
-```
-feat: 添加用户积分系统
-fix: 修复购物车数量计算错误
-docs: 更新API文档
+```php
+/**
+ * 职责说明。
+ *
+ * @package SutwxAppApi
+ * @version 0.5.3
+ */
 ```
 
-### 分支合并
-- feature → develop
-- bugfix → develop 和 main
-- release → main 和 develop
+PHP 注释块之间空一行；类内方法之间空一行。PHP 缩进用 **Tab**（WordPress 编码规范），行内注释对齐代码。
 
-## 开发流程
+### 4.4 PHP 风格
 
-1. **需求分析**：分析业务需求，确定解决方案，评估工作量，创建开发计划
-2. **设计阶段**：进行架构设计、详细设计，编写设计文档，并评审设计文档
-3. **开发阶段**：克隆仓库，创建功能分支，编写代码和单元测试，并提交更改
-4. **测试阶段**：进行集成测试、系统测试、性能测试和安全测试
-5. **部署阶段**：部署到测试环境，进行验收测试，部署到生产环境，并监控系统状态
-6. **维护阶段**：修复生产问题，优化性能，添加新功能，并更新文档
+- 缩进 **Tab**；遵循 WordPress 编码规范（`Yoda` 条件、`array()` 长语法、SQL 需 `prepare()`）
+- 所有对外输入必须经 `sanitize_*` / `absint()` 处理；SQL 必须使用 `$wpdb->prepare()`
+- 直接读取 `$_SERVER` / `$_GET` 等超全局需附 `// phpcs:ignore` 说明理由
+- 类常量统一用 `const`；配置项通过 `get_option()` 读取并提供默认值
+- 副作用（写 option、发请求、触发钩子）不放在查询方法里；命令与查询分离
+- 公开方法必须有 `@param` / `@return`；数组返回标注形状 `@return array{ok:bool,error:string}`
 
-## 最佳实践
+### 4.5 WXML / WXSS 风格
 
-### 代码复用
-- 创建可复用组件，而不是重复代码
-- 提取通用函数，而不是重复实现
-- 使用工具类封装常用功能
+- 缩进 2 空格；属性顺序 `class` → `id` → 数据绑定 → 事件
+- 事件处理函数命名 `handle<Event>`（如 `handleAddToCart`）；组件对外事件 `on<Event>`
+- 数据源字段用 `models/` 产出的 camelCase 字段，禁止在 WXML 里做复杂运算
+- 样式全部走 `styles/` 的 CSS 变量，不写死颜色与间距（设计令牌见 `specs/design/spec.md`）
+- 列表项必须带 `wx:key`
 
-### 错误处理
-- 使用try-catch、Promises和async/await进行适当的错误处理
-- 记录完整的错误信息，以便调试
-- 向用户提供清晰、有帮助的错误提示
+---
 
-### 性能优化
-- 优化图片大小和格式
-- 实现懒加载和分页
-- 合理使用缓存策略
-- 优化API响应时间
-- 减少不必要的网络请求
+## 5. 提交信息格式
 
-### 安全实践
-- 验证和清理所有输入，防止SQL注入、XSS、CSRF等安全漏洞
-- 对敏感数据和传输中的数据进行加密
-- 使用适当的安全机制，如JWT和RBAC
-- 定期更新依赖，修复安全漏洞
+采用 Conventional Commits，并**强制带 scope**（本仓库多模块并行，无 scope 无法定位影响面）。
 
-## 调试技巧
+```
+<type>(<scope>): <祈使句标题>
 
-### 前端调试
-- 使用微信开发者工具的调试器
-- 使用console.log进行调试
-- 利用微信开发者工具的网络面板查看请求
-- 使用真机调试验证功能
+<正文：为什么改、改了什么、影响范围与验证方式>
+```
 
-### 后端调试
-- 使用VS Code的调试功能
-- 利用日志记录关键信息
-- 使用Postman测试API
-- 监控数据库查询性能
+**type**：`feat` 新功能 · `fix` 缺陷修复 · `docs` 文档 · `refactor` 重构（行为不变）· `test` 测试 · `perf` 性能 · `chore` 杂项 · `build` 构建 · `ci` 流水线
 
-## 常见问题
+**scope**（与模块对应）：`首页` `分类` `商品` `购物车` `订单` `用户` `auth` `order` `pay` `cache` `theme` `request` `monitor` `插件` `docs` `ci`
 
-### API连接问题
-- 检查后端服务是否正在运行
-- 验证API基础URL配置
-- 确保服务器域名在白名单中
-- 确认请求在允许的域名列表中
+**规则**
 
-### 编译错误
-- 验证Bun版本兼容性
-- 必要时重新安装依赖：`bun install`
-- 检查代码中的语法错误
+- 标题 ≤ 50 字，现在时祈使句，不加句号，不写「修复了」「修改了」
+- 正文说明**为什么**；多段用空行分隔，附影响范围与验证方式
+- 一个提交只做一件事；重构与功能改动分开提交
+- 引用任务编号：`FE-008`、`BE-011`
 
-### 页面加载缓慢
-- 优化图片资源
-- 实现懒加载和分页
-- 优化缓存策略
-- 提高API响应时间
+**示例**
 
-## 代码审查
+```
+feat(order): 新增商家发货端点与小程序发货入口
 
-### 审查目的
-- 提高代码质量
-- 确保符合规范
-- 发现潜在问题
-- 提高性能和安全性
+商家此前无法在小程序侧标记发货，订单只能在线下流转。
+新增 /api/order/ship（归属与状态机校验）+ 订单详情页发货按钮，
+并补 run-order-tests.php 用例覆盖非本人订单与状态非法两条路径。
 
-### 审查流程
-1. 创建Pull Request
-2. 团队成员进行审查并提供反馈
-3. 在合并前进行修改
-4. 至少有一个人批准后才能合并
+关联：BE-006
+```
 
-### 审查要点
-- 代码质量和可读性
-- 符合命名规范情况
-- 潜在问题
-- 性能和安全性
-- 测试覆盖率
+---
 
-## CI/CD
+## 6. 分支管理
 
-### 持续集成
-- 已落地 GitHub Actions 流水线（`.github/workflows/ci.yml`）：push（main / dev / feature / fix / hotfix）与 PR 时自动执行 ESLint、Jest 单元测试（覆盖率报告归档）与一致性校验（版本号单一来源、小程序配置完整性）
-- 任一阶段失败即阻断合并，建议在分支保护中将 `lint` / `test` / `checks` 设为必需检查
+| 分支 | 用途 | 保护 |
+|------|------|------|
+| `main` | 生产发布分支，始终可发布 | 只接受 `hotfix/` 与发版合并；禁止直接 push |
+| `dev` | 集成分支，日常合并目标 | 禁止直接 push |
+| `feature/<简述>` | 新功能/重构 | PR → `dev` |
+| `fix/<简述>` | 缺陷修复 | PR → `dev` |
+| `hotfix/<简述>` | 线上紧急修复 | PR → `main` **并**回合 `dev` |
 
-### 持续部署
-- 小程序形态不支持蓝绿部署或滚动更新：代码经 `miniprogram-ci` 上传为体验版后，由人工在微信公众平台提交审核并可控放量发布
-- 回滚方式为重新上传上一稳定版本代码包，配合 Git Tag 保留可重打源码（详见 `../ops/spec.md`）
-- 版本发布由 Tag 触发（`v*.*.*`，须与项目版本号一致），自动创建 GitHub Release
+**命名**：短横线分隔、小写、动词开头（`feature/order-ship`、`fix/home-unwrap`）。
 
-### CI/CD工具
-- GitHub Actions（当前使用，Node.js 20 运行环境）
-- 其余工具（GitLab CI/CD、Jenkins、CircleCI）未采用；如迁移需同步更新本节与 `../ops/spec.md`
+**规则**
 
-## 版本管理
+1. 分支从 `dev` 切出，从 `dev` 合并回；`hotfix` 从 `main` 切出。
+2. 分支存活不超过 3 天；超过需在 PR 中说明原因。
+3. 一个分支只做一件事；规模超出「一次评审可覆盖」时拆分。
+4. 合并方式：**Squash merge**（保持主线历史线性），PR 标题即最终提交信息。
+5. 合并前必须满足：CI 全绿 + 至少 1 人批准 + PR 自检清单勾选。
+6. 提交 `main` 后打 Tag `v<version>`，Tag 必须与 `package.json` 版本一致（`npm run check:version` 校验）。
 
-### 版本号格式
-采用语义化版本号：MAJOR.MINOR.PATCH
+**CI 触发的分支**（`.github/workflows/ci.yml`）：`push` 于 `main` / `dev` / `feature/**` / `fix/**` / `hotfix/**`；`pull_request` 目标 `main` / `dev`。
 
-- **MAJOR**：不兼容的API更改
-- **MINOR**：向下兼容的功能性新增
-- **PATCH**：向下兼容的问题修正
+---
 
-### 版本发布
-1. 更新版本号
-2. 编写发布说明
-3. 执行构建和测试
-4. 部署到生产环境
-5. 创建版本标签
+## 7. 代码审查流程
 
-## 文档管理
+### 7.1 流程
 
-### 文档更新
-- 代码变更时同步更新相关文档
-- 使用Markdown格式编写文档
-- 保持文档结构清晰
-- 定期审查和更新文档
+```
+提交 PR → CI 自动跑 lint/check/test → 评审人按清单审查 → 作者响应 → 全部通过 → Squash 合并
+```
 
-### 文档类型
-- 需求文档
-- 设计文档
-- API文档
-- 测试文档
-- 用户文档
+- 评审人 ≥ 1 名；作者不能自审（单人项目例外，但需自述验证证据）
+- 评审意见分为**必须修改（blocking）**与**建议（non-blocking）**，作者逐条回应
+- 24 小时内给出首轮意见；PR 超过 3 天无响应自动提醒
+- 合并后 24 小时内发现问题 → 直接 revert，不做 hotfix 流程
 
-## 协作规范
+### 7.2 审查清单
 
-### 沟通方式
-- 使用团队协作工具进行沟通
-- 定期召开站会和评审会议
-- 及时更新任务状态
+**正确性**
+- [ ] 边界条件（空数组、0、null、并发）是否处理
+- [ ] 分页/加载更多是否可能重复或漏数据
+- [ ] 错误路径是否有明确反馈，而非静默失败
 
-### 代码共享
-- 遵循Git工作流
-- 及时提交和推送代码
-- 避免长时间占用分支
+**契约一致性**
+- [ ] 接口路径带 `/api` 前缀（后端 rewrite 仅匹配 `^api/`）
+- [ ] 前端已 `unwrap` `{code,data}` 包络
+- [ ] DTO 字段与 `models/`、`mappings/` 一致，且 `npm run check:contract` 通过
 
-### 知识共享
-- 定期分享技术知识
-- 记录和分享解决问题的经验
-- 更新和维护技术文档
+**安全**
+- [ ] 用户输入经校验/清洗；SQL 使用 `prepare()`
+- [ ] 鉴权与归属校验存在（不可只校验登录态）
+- [ ] 敏感信息不入日志、不入响应
+
+**可观测**
+- [ ] 关键失败路径有日志或可定位的错误信息
+
+**质量**
+- [ ] 新增逻辑有测试；缺陷修复先有失败用例
+- [ ] 单文件 ≤ 200 行；无重复代码；无注释掉的死代码
+- [ ] 命名符合 §3；注释解释「为什么」
+- [ ] 无 `eslint-disable` 滥用；`eqeqeq` 零告警
+
+**文档与版本**
+- [ ] 涉及接口/页面/脚本的变更已同步对应 spec（见 `AGENTS.md` §7 联动矩阵）
+- [ ] 版本号与 `CHANGELOG.md` 已同步
+
+### 7.3 缺陷分级与响应
+
+| 级别 | 定义 | 响应 |
+|------|------|------|
+| P0 | 线上不可用、数据错误、资金/鉴权失效 | 立即 hotfix，当日闭环 |
+| P1 | 核心流程不可用但有绕过 | 1 个工作日内修复 |
+| P2 | 体验问题、非核心功能异常 | 进入 `docs/tasks.md` 排期 |
+| P3 | 优化、重构、文档 | 择机处理 |
+
+---
+
+## 8. 测试要求
+
+| 层级 | 工具 | 位置 | 要求 |
+|------|------|------|------|
+| 单元测试 | Jest | `SutWxApp/__tests__/*.test.js` | 新增逻辑必须有覆盖；缺陷修复先写失败用例 |
+| 契约测试 | `npm run check:contract` | `scripts/check-contract.js` | 改动 DTO 必须同步，否则 CI 红 |
+| 配置测试 | `npm run check:config` | `scripts/check-config.js` | 页面四件套、路由、tabBar 图标完整 |
+| 版本测试 | `npm run check:version` | `scripts/check-version.js` | 版本号四处一致 |
+| 后端单测 | `php tests/run-*.php` | `sutwx-app-api/tests/` | 新增端点/映射必须补用例；不依赖 WordPress |
+| E2E | `npm run test:e2e` | `scripts/e2e/` | 核心链路（首页/商品/购物车/登录守卫）改动后跑 |
+
+**覆盖率**：不设硬性百分比门槛，但新增模块应覆盖正常路径 + 至少一条失败路径。
+
+**测试风格**：一个用例只测一个行为；用例名描述行为（`shouldRejectExpiredToken`）；不 mock 被测逻辑本身；不依赖执行顺序。
+
+---
+
+## 9. CI/CD 与门禁
+
+| 工作流 | 触发 | 内容 |
+|--------|------|------|
+| `ci.yml` | push / PR / 手动 | 5 个 Job：`lint`、`test`、`checks`、`site`（构建+冒烟）、`php`（8.1/8.3 语法检查 + 6 套单测） |
+| `miniprogram-deploy.yml` | 手动 | `miniprogram-ci` 上传体验版/正式版（私钥走 Secrets） |
+| `release.yml` | Tag `v*.*.*` | 构建插件 ZIP 并创建 GitHub Release |
+| `site.yml` | push（站点相关路径） | 构建并发布 GitHub Pages |
+
+**本地等价命令**：`cd SutWxApp && npm run ci`（= lint + check + test）。
+
+**门禁失败处理**：修实现，不改断言；确需放宽规则时，先在 PR 中说明理由并同步本文件。
+
+---
+
+## 10. 版本管理
+
+语义化版本 `MAJOR.MINOR.PATCH`：
+
+- **MAJOR**：不兼容的 API/数据结构变更（如 DTO 字段删除）
+- **MINOR**：向后兼容的功能新增（如新端点、新页面）
+- **PATCH**：向后兼容的缺陷修复与文档修正
+
+**双版本号**：小程序 `SutWxApp/package.json` 与插件 `sutwx-app-api/sutwx-app-api.php`（`SUTWX_API_VERSION`）各自独立。
+
+**版本号四处必须一致**（`npm run check:version` 校验）：`package.json`、`app.js` 的 `globalData.version`、`README.md` 徽章、`CHANGELOG.md` 首个版本小节。插件侧另需同步 `readme.txt` 的 `Stable tag` 与 `Changelog`。
+
+**改动文件的头注释版本号**同步更新为当次版本。
+
+**发布流程**：更新版本号 → 更新 `CHANGELOG.md` → `npm run ci` → `npm run package:plugin` 验证产物 → 合并 `dev` → 发版合并 `main` → 打 Tag → 平台审核发布。
+
+---
+
+## 11. 文档管理
+
+| 文档类型 | 位置 | 更新时机 |
+|----------|------|---------|
+| 工程规范 | `docs/specs/development/spec.md`（本文件） | 工具链、命令、规范变更时 |
+| 接口契约 | `docs/specs/api/spec.md`、`backend/spec.md`、`data/spec.md` | 端点/DTO 变更时 |
+| 功能说明 | `docs/specs/features/spec.md`、`user-guide/spec.md` | 页面/交互变更时 |
+| 设计规范 | `docs/specs/design/spec.md` | 令牌、组件视觉变更时 |
+| 运维 | `docs/specs/ops/spec.md` | 部署、监控、备份流程变更时 |
+| 任务 | `docs/tasks.md`（活动）→ `docs/tasks-done.md`（归档） | 任务状态变化时 |
+| 变更记录 | `CHANGELOG.md` | 每次发版 |
+
+**规则**
+
+- 文件名用英文 kebab-case，文档标题与正文用中文（`docs/项目概述.md` 为历史保留名，不再新增中文文件名）
+- 文档头部维护「文档版本 / 更新时间戳 / 定位」三项元信息
+- 代码变更与文档同 PR 提交；不在后续 PR 里「顺手补文档」
+- 文档内引用代码位置用 `路径:行号`，引用文件用相对链接
+- 同一事实只在一处定义，其他位置用链接引用，避免复制粘贴
+
+---
+
+## 12. 调试技巧
+
+**小程序**
+- 微信开发者工具 → 调试器（Console / Network / AppData）
+- Network 面板确认请求是否带 `Authorization`、是否命中缓存
+- Storage 面板核对 `token`、`userInfo`、`appTheme` 及 `appThemeFetchedAt`
+- 真机调试验证基础库差异与授权弹窗行为
+- 监控数据在 `utils/monitor.js`（`monitorUtil.error()` / `mark()` / `measure()`）
+
+**插件**
+- `error_log` / `wp_debug_log()` 输出（生产环境受 `WP_DEBUG` 控制）
+- `WP_CLI` 或临时 REST 端点验证 DTO
+- 用 `tests/stubs-runtime.php` 在无 WordPress 环境复现问题
+
+**通用**
+- `node .tmp-check.cjs` 之类的临时脚本做静态自检（用完即删，不入库）
+
+---
+
+## 13. 常见问题
+
+**Q：`npm run check:contract` 报字段不一致**
+A：后端 `mappings/*.php` 与前端 `models/*` 漂移。以契约为准同步另一侧，并同步 `docs/specs/data/spec.md`。
+
+**Q：本地没有 PHP，跑不了插件测试**
+A：交给 CI 的 PHP 8.1/8.3 矩阵。本地可用脚本做括号配平与结构自检，但**不能替代** `php -l`。
+
+**Q：接口 404**
+A：后端 rewrite 仅匹配 `^api/`，端点必须写 `/api/xxx`；同时确认 `class-modules.php` 已登记对应 REST 类。
+
+**Q：Jest 报「worker 未优雅退出」**
+A：有未清理的定时器。`npx jest --detectOpenHandles` 定位，对定时器调用 `unref()` 或在 `afterEach` 清理。
+
+**Q：请求返回 `{code,data}` 但页面空白**
+A：前端未 `unwrap`（`utils/api.js`）；或字段名与 `models/` 不一致。
+
+**Q：提交被 CI 拦在 `check:version`**
+A：版本号四处（`package.json` / `app.js` / `README.md` 徽章 / `CHANGELOG.md`）未同步。
+
+**Q：改了代码但真机行为没变**
+A：检查 `project.config.json` 的 `packOptions.ignore` 是否把该文件排除在打包外；重新上传体验版再验证。
+
+---
+
+## 14. 附录
+
+**提交前速查**
+
+```bash
+cd SutWxApp
+npm run lint          # 0 error / 0 warning
+npm run check         # 版本 / 配置 / 契约
+npm test              # 全绿
+```
+
+**规范速查**
+
+| 项 | 约定 |
+|----|------|
+| 缩进 | JS/WXML/WXSS 2 空格；PHP Tab |
+| 引号 | 双引号 |
+| 文件长度 | ≤ 200 行（原型与生成物除外） |
+| 文件命名 | 工具/脚本/插件类 kebab-case；服务/模型 camelCase + 语义后缀 |
+| 提交 | `<type>(<scope>): <标题>` + 正文 |
+| 分支 | `feature/` `fix/` `hotfix/` → `dev`；`main` 只接发版与 hotfix |
+| 合并 | Squash merge，需 CI 绿 + 1 人批准 |
+| 注释 | 解释「为什么」，中文 |
+| 文档 | 与代码同 PR；同一事实只在一处定义 |
+
+**参考**
+
+- 微信小程序开发文档：https://developers.weixin.qq.com/miniprogram/dev/framework/
+- WordPress Coding Standards：https://developer.wordpress.org/coding-standards/wordpress-coding-standards/
+- Conventional Commits：https://www.conventionalcommits.org/zh-hans/
