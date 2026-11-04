@@ -1,7 +1,7 @@
 /**
  * 文件名: request-security.js
- * 版本号: 3.0.9
- * 更新日期: 2026-09-12
+ * 版本号: 3.5.7
+ * 更新日期: 2026-11-04
  * 描述: request.js 的安全相关实现（CSRF 令牌、HTML 清洗防 XSS）；SQL 注入校验见 request-security-sql.js
  */
 
