@@ -1,6 +1,6 @@
 /**
  * 文件名: orderService.js
- * 版本号: 3.5.4
+ * 版本号: 3.5.8
  * 更新日期: 2026-10-14
  * 描述: 订单服务层（编排），提供订单相关功能
  *       woocommerce 数据源走 /api/order/* 真实端点（见 orderService.api.js），

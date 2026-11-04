@@ -3,7 +3,7 @@
  * 统一注册 REST 路由、/api/* rewrite、缓存失效钩子、限频与后台菜单。
  *
  * @package SutwxAppApi
- * @version 0.5.0
+ * @version 0.5.1
  */
 
 defined( 'ABSPATH' ) || exit;

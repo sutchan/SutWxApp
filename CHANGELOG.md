@@ -11,6 +11,17 @@
 - `release.yml`（1.0.0 → 1.1.0）在 Release 中附加三份交付物：`sutwxapp-site-<tag>.zip`（静态站点）、`sutwxapp-miniprogram-<tag>.zip`（小程序源码，排除 node_modules / coverage / 私钥）、`sutwx-app-api-<tag>.zip`（WordPress 插件）。
 - `.gitignore` 新增 `/dist`（构建产物由 Actions 生成，不入库）。
 
+## [3.5.8] - 2026-11-04
+
+### 新增（订单生命周期补全，配套插件 0.5.1）
+
+- **订单「待收货」状态闭环**：后端新增商家发货能力与确认收货（兼容待发货/待收货）；前端订单列表「待收货」标签与详情「确认收货」按钮已就绪。
+- **详情页发货时间展示**：订单 DTO 新增 `deliveryTime`，模型层 `mapWooCommerceOrder` 已映射，详情页「发货时间」区块可正常显示。
+
+### 修复（代码缺陷）
+
+- **下单收货地址省/市/区丢失**：下单快照 `toAddressSnapshot` 补传 `province/city/district`，配合后端写入「省/市/区」，地址不再丢省/市。
+
 ## [3.5.7] - 2026-11-04
 
 ### 修复（代码缺陷与健壮性）

@@ -7,7 +7,7 @@
  *   0 已取消 / 1 待付款 / 2 待发货 / 3 待收货 / 4 已完成 / 5 已退款
  *
  * @package SutwxAppApi
- * @version 0.5.0
+ * @version 0.5.1
  */
 
 defined( 'ABSPATH' ) || exit;
