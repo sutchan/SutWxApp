@@ -128,6 +128,8 @@ final class Sutwx_Loader {
 	public static function register_order_statuses() {
 		add_filter( 'woocommerce_register_shop_order_post_statuses', array( __CLASS__, 'add_shipped_status' ) );
 		add_filter( 'wc_order_statuses', array( __CLASS__, 'add_shipped_to_status_list' ) );
+		// 进入 shipped 时记录发货时间（REST 发货与 WC 后台手动发货均会触发）。
+		add_action( 'woocommerce_order_status_shipped', array( __CLASS__, 'record_shipped_at' ), 10, 1 );
 	}
 
 	/**
@@ -161,6 +163,26 @@ final class Sutwx_Loader {
 	public static function add_shipped_to_status_list( $statuses ) {
 		$statuses['wc-shipped'] = _x( 'Shipped', 'Order status', 'sutwx-app-api' );
 		return $statuses;
+	}
+
+	/**
+	 * 订单进入「待收货(shipped)」时记录发货时间（供小程序展示发货时间）。
+	 * 仅在尚未记录时写入，避免重复发货覆盖首次时间。
+	 *
+	 * @param int $order_id 订单 ID。
+	 */
+	public static function record_shipped_at( $order_id ) {
+		if ( ! function_exists( 'wc_get_order' ) ) {
+			return;
+		}
+		$order = wc_get_order( (int) $order_id );
+		if ( ! $order ) {
+			return;
+		}
+		if ( ! $order->get_meta( SUTWX_META_SHIPPED_AT ) ) {
+			$order->update_meta_data( SUTWX_META_SHIPPED_AT, current_time( 'mysql' ) );
+			$order->save();
+		}
 	}
 
 	/**

@@ -89,6 +89,7 @@ function mapWooCommerceOrder(order) {
     address: mapOrderAddress(order.address),
     remark: order.remark || "",
     payTime: order.payTime || "",
+    deliveryTime: order.deliveryTime || "",
     completeTime: order.completeTime || "",
   };
 }

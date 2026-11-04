@@ -101,6 +101,7 @@ class Fake_Order {
 				'date_created'      => null,
 				'date_paid'         => null,
 				'date_completed'    => null,
+				'meta'              => array(),
 				'items'             => array(),
 			),
 			$data
@@ -159,6 +160,10 @@ class Fake_Order {
 	}
 	public function get_items() {
 		return $this->data['items'];
+	}
+	public function get_meta( $key = '', $single = true ) {
+		$meta = $this->data['meta'];
+		return isset( $meta[ $key ] ) ? $meta[ $key ] : '';
 	}
 }
 
@@ -270,6 +275,23 @@ check( 4 === $d2['status'] && 0.0 === $d2['totalPrice'] && 0 === count( $d2['pro
 
 check( null === sutwx_map_order( 'nope' ), '无效输入返回 null' );
 check( 1 === count( sutwx_map_orders( array( $full, 'bad' ) ) ), '批量映射过滤无效项' );
+
+echo "== 发货时间字段 ==\n";
+
+$shipped_order = new Fake_Order(
+	array(
+		'id'         => 77,
+		'status'     => 'shipped',
+		'total'      => 50.0,
+		'meta'       => array( SUTWX_META_SHIPPED_AT => '2026-10-20 09:30:00' ),
+		'date_paid'  => new Fake_DateTime(),
+	)
+);
+$ds = sutwx_map_order( $shipped_order );
+check( 3 === $ds['status'] && '2026-10-20 09:30:00' === $ds['deliveryTime'], 'shipped 订单映射发货时间' );
+
+$no_ship = new Fake_Order( array( 'id' => 78, 'status' => 'processing', 'total' => 50.0 ) );
+check( '' === sutwx_map_order( $no_ship )['deliveryTime'], '未发货订单发货时间为空串' );
 
 echo "\n" . ( $failures ? "失败 {$failures} 项\n" : "全部通过\n" );
 exit( $failures ? 1 : 0 );
