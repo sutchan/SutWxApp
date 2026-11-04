@@ -74,7 +74,8 @@ function monitorMemory() {
         : typeof global !== "undefined"
           ? global
           : {};
-  memoryMonitor = (globalObj.setInterval || setTimeout)(() => {
+  // 优先使用全局 setInterval（小程序中 wx.setInterval 不存在，否则退化为一次性 setTimeout）
+  memoryMonitor = (globalThis.setInterval || globalObj.setInterval || setTimeout)(() => {
     try {
       const memory = wx.getPerformance().getEntriesByName("memory", "measure");
       if (memory && memory.length > 0) {
@@ -147,7 +148,7 @@ function resetCollectors() {
           : typeof global !== "undefined"
             ? global
             : {};
-    (globalObj.clearInterval || globalObj.clearTimeout)(memoryMonitor);
+    (globalThis.clearInterval || globalObj.clearInterval || globalObj.clearTimeout)(memoryMonitor);
     memoryMonitor = null;
   }
   const orig = core.getOriginalRequest();

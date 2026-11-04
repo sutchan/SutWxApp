@@ -26,7 +26,8 @@ function startAutoReport() {
           ? global
           : {};
 
-  reportTimer = (globalObj.setInterval || setTimeout)(() => {
+  // 优先使用全局 setInterval（小程序中 wx.setInterval 不存在，否则退化为一次性 setTimeout）
+  reportTimer = (globalThis.setInterval || globalObj.setInterval || setTimeout)(() => {
     core.reportData();
   }, CONFIG.reportInterval);
 }
@@ -44,7 +45,7 @@ function stopAutoReport() {
           : typeof global !== "undefined"
             ? global
             : {};
-    (globalObj.clearInterval || globalObj.clearTimeout)(reportTimer);
+    (globalThis.clearInterval || globalObj.clearInterval || globalObj.clearTimeout)(reportTimer);
     reportTimer = null;
   }
 }

@@ -111,7 +111,8 @@ function startCacheCleanup() {
           ? global
           : {};
 
-  cacheCleanupTimer = (globalObj.setInterval || setTimeout)(() => {
+  // 小程序中 wx.setInterval 不存在，应优先使用全局 setInterval（避免退化为一次性 setTimeout）
+  cacheCleanupTimer = (globalThis.setInterval || globalObj.setInterval || setTimeout)(() => {
     cleanupExpiredCache();
   }, 5 * 60 * 1000);
 }
@@ -129,7 +130,7 @@ function stopCacheCleanup() {
           : typeof global !== "undefined"
             ? global
             : {};
-    (globalObj.clearInterval || globalObj.clearTimeout)(cacheCleanupTimer);
+    (globalThis.clearInterval || globalObj.clearInterval || globalObj.clearTimeout)(cacheCleanupTimer);
     cacheCleanupTimer = null;
   }
 }
