@@ -149,7 +149,7 @@ if ( ! function_exists( 'sutwx_map_order' ) ) {
 			'address'       => sutwx_order_address_dto( $order ),
 			'remark'        => method_exists( $order, 'get_customer_note' ) ? (string) $order->get_customer_note() : '',
 			'payTime'       => sutwx_order_datetime( method_exists( $order, 'get_date_paid' ) ? $order->get_date_paid() : null ),
-			'deliveryTime'  => sutwx_order_datetime( method_exists( $order, 'get_meta' ) ? $order->get_meta( SUTWX_META_SHIPPED_AT ) : '' ),
+			'deliveryTime'  => method_exists( $order, 'get_meta' ) ? (string) $order->get_meta( SUTWX_META_SHIPPED_AT ) : '',
 			'completeTime'  => sutwx_order_datetime( method_exists( $order, 'get_date_completed' ) ? $order->get_date_completed() : null ),
 		);
 	}

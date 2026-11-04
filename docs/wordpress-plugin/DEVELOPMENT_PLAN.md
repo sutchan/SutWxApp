@@ -6,7 +6,7 @@
 > 1. 商品数据源 = **WooCommerce**
 > 2. v1 范围 = **只读 MVP**（文章/页面 + 商品 + 主题，全部免登录公开接口）
 > 3. 鉴权 = **wx.login → JWT**（基建本期落地，内容端点仍公开）
-> 4. 订单/支付 = **本期不做**，仅预留接口契约
+> 4. 订单/支付 = **已实现**（BE-006/007：订单创建/查询/取消/确认/发货，微信支付 V3 预支付/通知/查单）。
 
 ## 目标
 
@@ -55,28 +55,29 @@
 
 **验收**：后台切换预设/自定义色后，小程序重启即应用新主题（导航栏 + tabBar + 全站 CSS 变量）。
 
-### P3 — 鉴权基建（约 2–3 天，内容仍公开）
+### P3 — 鉴权基建（已实现，BE-003）
 
-- [ ] `class-rest-auth.php`：`POST /api/v1/users/login`，`wx.login` code → `code2session` → 自签 JWT。
-- [ ] JWT 签发/校验工具（HS256，密钥存 `wp-config` 常量或 option）。
-- [ ] 小程序侧 `requestWithToken` 联通验证（仅验证 token 流程，内容接口暂不强制鉴权）。
+- [x] `class-rest-auth.php`：`POST /api/users/login`，`wx.login` code → `code2session` → 自签 JWT。
+- [x] JWT 签发/校验工具（HS256，密钥存 `wp-config` 常量或 option）。
+- [x] 小程序侧 `requestWithToken` 联通验证（token 流程，内容接口仍免登录）。
 
 **验收**：小程序 `wx.login` 拿到 code → 插件返回 JWT → 后续请求可携 `Authorization: Bearer`。
 
-### P4 — 联调、缓存与测试（约 2 天）
+### P4 — 联调、缓存与测试（已实现）
 
-- [ ] 列表/详情端点加 Transients 缓存（TTL 5–10 分钟），`save_post`/`woocommerce_update_product` 清缓存。
-- [ ] 限频（`X-RateLimit`）。
-- [ ] 集成测试：用小程序真实请求路径跑通全链路（Postman / `miniprogram-ci` 预览）。
-- [ ] 文档：在 `api/spec.md` 标注各端点「已实现/预留」状态。
+- [x] 列表/详情端点加 Transients 缓存（TTL 5–10 分钟），`save_post`/`woocommerce_update_product` 精准清缓存。
+- [x] 限频（IP 维度，公开端点）。
+- [x] 独立单测：映射/设置/鉴权/订单/支付（`tests/run-*-tests.php`，CI PHP 矩阵运行）。
+- [x] 文档：已在 `api/spec.md` 标注各端点「已实现」状态。
 
 **验收**：联调通过，缓存命中正确，异常有统一错误包络。
 
-### P5（后续，非本期）— 订单与支付
+### P5 — 订单与支付（已实现，BE-006/007）
 
-- [ ] `POST /api/v1/orders` 创建、`GET /api/v1/orders/{id}` 查询（鉴权）。
-- [ ] 微信支付对接（需商户号 + 证书）。
-- [ ] 小程序购物车/订单从本地逻辑切换为接口驱动。
+- [x] `POST /api/order/create`、`GET /api/order/detail`、`GET /api/order/list`、`POST /api/order/cancel`、`POST /api/order/confirm`（鉴权）。
+- [x] 微信支付 V3：`POST /api/pay/prepay`、异步通知 `/api/pay/notify`、主动查单 `/api/pay/query`（需商户号 + 证书）。
+- [x] 新增 `POST /api/order/ship`（商家发货）与自定义状态 `wc-shipped`，补全「待收货」生命周期。
+- [x] 小程序购物车/订单在 `productSource="woocommerce"` 下切换为接口驱动（`orderService`/`payService`）。
 
 ## 风险与对策
 
