@@ -11,6 +11,30 @@
 - `release.yml`（1.0.0 → 1.1.0）在 Release 中附加三份交付物：`sutwxapp-site-<tag>.zip`（静态站点）、`sutwxapp-miniprogram-<tag>.zip`（小程序源码，排除 node_modules / coverage / 私钥）、`sutwx-app-api-<tag>.zip`（WordPress 插件）。
 - `.gitignore` 新增 `/dist`（构建产物由 Actions 生成，不入库）。
 
+## [3.5.7] - 2026-11-04
+
+### 修复（代码缺陷与健壮性）
+
+- **请求缓存跨用户串号（隐私/数据隔离）**：`utils/request.js` 缓存键仅由 `method:url:data` 组成，已登录 GET 响应被全局共享；退出登录后另一用户命中缓存可见前用户资料。现把当前登录 token 纳入缓存键，鉴权接口响应按用户隔离。
+- **SQL 注入校验正则过激**：`utils/request-security-sql.js` 原关键字表含 `FROM|WHERE|GROUP|ORDER|INTO|VALUES|LIMIT|ALL|END|CALL|CONVERT|CAST` 等常见英文整词，地址备注/搜索词/商品名含这些词即被误拒。收窄为仅匹配真实注入结构（注释符、堆叠危险动词、`UNION SELECT`、`OR/AND 1=1` 恒真、`DROP/TRUNCATE TABLE`）。
+- **XSS 全局清洗误删富文本**：`utils/request-security.js` 的 `sanitizeHtml` 无条件剥离所有 `href/src/style`，导致文章/商品富文本的图片、链接、排版样式全部丢失，与 `richtext.js` 设计意图冲突。现仅移除危险标签/事件处理器、中和危险协议，保留合法链接/图片/样式。
+- **商品详情页登录跳转失效**：`behaviors/product-actions.js` 对 tabBar 页 `pages/user/index` 误用 `wx.navigateTo`（tabBar 页不支持），去登录跳转静默失败；改为 `wx.switchTab`。
+- **分享卡片打开失败**：`pages/product/index.js` 的 `onShareAppMessage` 路径指向未注册的 `pages/product/detail`，修正为已注册的 `pages/product/index`。
+- **立即购买链路断裂（崩溃）**：`behaviors/product-actions.js` 从 `pages/product/utils.js` 错误引入 `buildBuyNowItem`（实际定义于 `pages/product/parts.js`），导致立即购买直接抛 `TypeError`；修正引入路径，并为构建项补充 `price` 字段。
+- **立即购买确认页无商品**：`pages/order/confirm.js` 仅读取 URL 参数 `items`，从不读取本地存储的 `buyNowItem`；现增加从 `buyNowItem` 回退读取并在结算后清理。
+- **地址选择回写断裂**：`pages/address/format.js` 的 `selectAddressPatch` 写入 `formData.receiverXxx`/`selectedAddress`，但订单确认页数据形态为 `address` 字段且无 `formData`；改为直接写入 `address`，修复从确认页选地址返回后提交被「请选择收货地址」拦截。
+- **并发队列泄漏**：`utils/request.js` 仅在成功回调释放队列名额，失败/取消/重试耗尽路径永不释放，多次失败可耗尽并发导致后续请求挂起；`utils/request-retry.js` 在终态统一释放。
+- **周期定时器退化**：`utils/request-cache.js`、`monitor-scheduler.js`、`monitor-collectors.js` 中 `(globalObj.setInterval || setTimeout)`，小程序 `wx.setInterval` 不存在，回退为一次性 `setTimeout`，缓存清理/监控自动上报/内存采样仅执行一次；优先使用全局 `setInterval` 恢复周期执行。
+
+### 工程（语义化 ID 与规范对齐）
+
+- 原型 `prototype.html` 补充应用外壳语义化 id（`app-phone`/`app-shell`/`app-navbar`/`app-body`、订单/用户页滚动容器 `orderScroll`/`userScroll`）。
+- 全部 13 个页面 WXML 根容器由重复的 `page-root` 改为页面级语义 id（`home-root`/`category-root`/`product-root`/`cart-root`/`order-list-root`/`order-detail-root`/`order-confirm-root`/`user-root`/`address-root`/`settings-root`/`help-root`/`article-list-root`/`article-detail-root`），便于调试定位与端到端测试。
+
+### 版本
+
+- 版本号 3.5.6 → 3.5.7（`package.json`×2 / `app.js` / 各修改文件头注释 / README 徽章 / CHANGELOG）。
+
 ## [3.5.6] - 2026-10-14
 
 ### 文档（任务清单状态同步）
