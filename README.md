@@ -94,6 +94,10 @@
 
 > 小程序为纯前端应用，后端为 **WordPress 网站**，内容经 REST API 提供（基地址见 `app.js` 的 `globalData.baseUrl`）。本地联调时将该地址指向 WordPress 站点或其 API 代理即可。
 
+### WordPress 插件（后端）
+
+插件安装与配置详见 [`sutwx-app-api/readme.txt`](sutwx-app-api/readme.txt)：上传 `sutwx-app-api/` 至 `/wp-content/plugins/` 并启用（需先启用 WooCommerce），在「设置 → 固定链接」保存一次以刷新 `/api/*` 重写规则；随后将小程序 `app.js` 的 `globalData.baseUrl` 指向站点根即可对接（备选直连 `wp-json/sutwx/v1`）。
+
 ## 项目结构
 
 ```

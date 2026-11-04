@@ -1,12 +1,15 @@
-# 苏铁微信小程序 - 项目概览
+# 苏铁 SutWxApp - 微信小程序 × WordPress 电商桥接方案 项目概览
 
 > 本文档为项目的高层概览。详细的规范（架构、数据、开发、设计、运维、测试）见 [`specs/`](specs/)。
 
 ## 项目简介
 
-苏铁微信小程序（SutWxApp）以 **WordPress 网站为后端（headless CMS）**，在微信侧对网站内容进行「优化排版并显示」，为用户提供文章/商品浏览、搜索、加购、下单、订单跟踪与个人中心等核心体验。界面采用 Apple 极简设计风格，支持中英文多语言。
+**苏铁 SutWxApp** 是一套打通 **微信小程序** 与 **WordPress 网站** 的电商桥接方案，由前后端两端协同组成：
 
-> 本项目为**纯前端微信小程序**，使用 JavaScript 开发，代码仓库内不含后端服务与数据库。后端为 **WordPress 网站（headless CMS）**，内容经 REST API 提供，网络层统一封装于 `utils/request.js` 与 `services/*`。
+- **微信小程序（前端）**：Apple 极简风格商城，提供文章/商品浏览、搜索、加购、下单、订单跟踪与个人中心等核心体验，支持中英文多语言，主题可由 WordPress 后台下发。
+- **WordPress 插件 `sutwx-app-api`（后端）**：以 headless 方式为小程序提供 REST API（`/api/*` 路径、统一 `{code,data}` 包络），承载 `wx.login → JWT` 鉴权、订单管理、微信支付 V3 与商家发货；商品/分类数据源为 WooCommerce，文章为 WP 核心。
+
+> 微信小程序为纯前端应用，使用 JavaScript 开发；WordPress 插件 `sutwx-app-api` 为后端 PHP 代码，需部署在 WordPress 站点运行。本仓库同时包含两端源码，不含 WP 运行时与数据库。后端规范见 [`specs/backend/spec.md`](specs/backend/spec.md)，开发计划见 [`docs/wordpress-plugin/DEVELOPMENT_PLAN.md`](wordpress-plugin/DEVELOPMENT_PLAN.md)。
 
 ## 技术栈
 
@@ -19,11 +22,13 @@
 - 多语言：gettext 风格 `.po` / `.pot`（见 `locales/`）
 - 开发工具：微信开发者工具、VS Code
 
-### 后端说明（WordPress 无头 CMS）
-- 小程序通过 `services/*` 调用 WordPress 提供的 REST API，基地址见 `app.js` 的 `globalData.baseUrl`
-- 当前接口以 `/api/*` 暴露（由配套 WordPress 插件 `sutwx-app-api` 桥接 WP REST API），鉴权 `/auth/*`（JWT）
-- 认证：`Authorization: Bearer <token>`（本地存储键 `TOKEN`）
-- 内容端点（商品/分类/文章/主题）免登录；商品与文章数据源可经 `globalData.productSource` 在 `mock` / `woocommerce` 间切换
+### 后端技术栈（WordPress 插件 sutwx-app-api）
+- PHP（≥ 7.4），WordPress 插件（需 PHP 8.1+ 运行单测），依赖 WooCommerce
+- 注册 REST 命名空间 `sutwx/v1`，以 `/api/*` 重写桥接 WP REST API（备选直连 `wp-json/sutwx/v1`）
+- 鉴权：`wx.login → JWT` 双 Token（access / refresh）刷新与吊销、Bearer 中间件、IP 限频
+- 数据：WooCommerce（商品 / 分类 / 订单 / 支付）、WP 核心（文章 / 分类）；Transients 缓存（内容变更精准失效）
+- 小程序通过 `services/*` 调用这些接口，基地址见 `app.js` 的 `globalData.baseUrl`；内容端点（商品/分类/文章/主题）免登录，鉴权/订单/支付端点使用 `Authorization: Bearer <token>`（本地存储键 `TOKEN`）
+- 商品与文章数据源可经 `globalData.productSource` 在 `mock` / `woocommerce` 间切换
 - 后端插件规范见 [`specs/backend/spec.md`](specs/backend/spec.md)，开发计划见 [`docs/wordpress-plugin/DEVELOPMENT_PLAN.md`](wordpress-plugin/DEVELOPMENT_PLAN.md)
 
 ## 项目结构
