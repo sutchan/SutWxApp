@@ -1201,7 +1201,7 @@ body {
     </div>
 
     <!-- 导航栏 -->
-    <div class="navbar">
+    <div class="navbar" id="app-navbar">
       <div class="nav-back" id="navBack" onclick="goBack()">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
       </div>
@@ -1214,7 +1214,7 @@ body {
     </div>
 
     <!-- ============ 页面区 ============ -->
-    <div class="body-area">
+    <div class="body-area" id="app-body">
 
       <!-- ========== 页面 1: 首页 ========== -->
       <div class="page active" id="page-home">
@@ -1322,7 +1322,7 @@ body {
 
       <!-- ========== 页面 5: 订单确认 ========== -->
       <div class="page" id="page-order">
-        <div class="page-scroll">
+        <div class="page-scroll" id="orderScroll">
           <!-- 收货地址（真实感演示示例） -->
           <div class="card order-address" onclick="location.href='prototype-extra.html#address'">
             <div class="oa-row">
@@ -1362,7 +1362,7 @@ body {
 
       <!-- ========== 页面 6: 我的 ========== -->
       <div class="page" id="page-user">
-        <div class="page-scroll">
+        <div class="page-scroll" id="userScroll">
           <!-- 头部（品牌绿渐变 token） -->
           <div class="user-header">
             <div class="user-row" onclick="toast('个人信息演示')">
