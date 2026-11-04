@@ -52,7 +52,8 @@
 | PHP | 8.1 / 8.3 | 仅用于跑插件单测与 `php -l`；**本地无 PHP 时由 CI 承担** | 否 |
 | Git | 最新稳定版 | 版本控制 | 是 |
 
-> **包管理器统一用 npm**。仓库根的 `bun.lock` 是历史残留，CI 使用 `npm ci` / `npm install`；不要新增 Bun 相关流程，也不要在文档中建议 `bun install`。
+> **包管理器统一用 npm**。仓库根的 `bun.lock` 是历史残留，CI 使用 npm；不要新增 Bun 相关流程，也不要在文档中建议 `bun install`。
+> **注意**：仓库当前未提交 `package-lock.json`，本地请用 `npm install` 安装依赖（`npm ci` 无 lockfile 会直接报错）；CI 的 `lint`/`test` Job 因此处于失败状态，修复计划见 `docs/tasks.md` 的 REL-002。
 
 ---
 

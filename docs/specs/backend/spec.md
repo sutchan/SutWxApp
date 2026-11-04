@@ -207,24 +207,41 @@ add_action('rest_api_init', function () {
 
 > 预设列表变动时需同步更新小程序 `models/theme.js` 与后台下拉，保持双向一致。
 
-## 鉴权（后续阶段，本期预留）
+## 鉴权（已实现）
 
-- `class-rest-auth.php` 预留 `POST /api/v1/users/login`：`wx.login` code → 微信 `code2session` → 换取自签 JWT（`Authorization: Bearer <token>`）。
-- 与小程序 `utils/request.requestWithToken`、`app.js` 的 `requestWithToken` 对齐。
-- v1 内容端点保持 `permission_callback => __return_true`（免登录）。
+- `POST /api/auth/login`：`wx.login` code → 微信 `code2session` → 换取 `openid` → 签发 JWT（access 2 小时 + refresh 令牌），返回用户资料
+- `POST /api/auth/refresh-token`：用 refresh 令牌换新令牌对
+- `POST /api/auth/logout`：令牌 `jti` 加入黑名单（`includes/auth/class-auth-token-store.php`）
+- `GET /api/user/info`：返回当前用户资料与积分
+- 令牌格式 `Authorization: Bearer <token>`；小程序侧由 `utils/request-auth.js` 在 401 时自动刷新并重放
+- 越权防护依赖**资源归属校验**（按 `openid`），不使用角色体系
+- v1 内容端点（product/post/category/theme）保持 `permission_callback => __return_true`（免登录）
 
-## 订单与支付（后续阶段，本期仅预留契约）
+## 订单与支付（已实现）
 
-- `POST /api/v1/orders` 创建订单、`GET /api/v1/orders/{id}` 查询（鉴权）。
-- 微信支付对接需商户号 + 证书，独立阶段实施。
-- 小程序当前订单/购物车为本地逻辑，待后端就绪后切换为接口驱动。
+- `GET /api/order/list`、`GET /api/order/detail`（鉴权 + 归属校验）
+- `POST /api/order/create`（商品装配 + 库存校验 + 收货地址快照）、`/api/order/cancel`、`/api/order/confirm`
+- `POST /api/order/ship`（商家发货，独立控制器 `rest/class-rest-order-ship.php`）
+- 微信支付 V3：签名 / 预支付 / 通知验签解密 / 查单 / 退款（`class-wechat-pay*.php`、`class-pay-order-sync.php`）
+- `POST /api/pay/prepay`、`POST /api/pay/notify`（服务端回调）、`GET /api/pay/query`
+- 订单状态机：`0` 已取消 / `1` 待付款 / `2` 待发货 / `3` 待收货 / `4` 已完成 / `5` 已退款
+- 小程序侧对应 `services/orderService.js`（woocommerce 分支）、`services/payService.js`
+- **待落地**：真实商户号与 API 证书联调、退款接入订单取消流程、掉单 cron 兜底（见 `docs/tasks.md` INF-005/INF-006、BE-012/BE-014）
+
+## 未实现端点（缺口）
+
+| 端点 | 状态 | 说明 |
+|------|------|------|
+| `GET /api/banner/list` | **未实现** | 前端 `pages/home/parts-data.js` 已请求并静默降级为空轮播；首页运营位不可用（`docs/tasks.md` BE-008） |
+| `POST /api/monitor/data` | **未实现** | 小程序 `utils/monitor*.js` 上报目标，当前 404，监控数据不落地（`docs/tasks.md` BE-013） |
+| `GET /api/health` | **未实现** | 运维拨测端点缺失（`docs/tasks.md` BE-009） |
 
 ## 安全、缓存与性能
 
-- **安全**：内容端点公开但限频（`X-RateLimit`）；校验/转义所有输出；文章 HTML 服务端预清洗 + 小程序 `sanitizeArticleHtml` 双重把关；禁止直接 `echo` 未转义内容。
-- **缓存**：列表/详情端点建议 `cache` 层（WP Transients，TTL 5–10 分钟）或反向代理；商品/文章变更时清缓存（`save_post`/`woocommerce_update_product` 钩子）。
+- **安全**：内容端点公开但限频（`X-RateLimit-*`）；校验/转义所有输出；文章 HTML 服务端预清洗 + 小程序 `sanitizeArticleHtml` 双重把关；禁止直接 `echo` 未转义内容。
+- **缓存**：已实现 `class-cache.php`（WP Transients，TTL 5–10 分钟 + 分组版本号），内容变更钩子精准失效（`save_post` / `woocommerce_update_product` / `edited_product_cat` / 主题选项更新），失效逻辑见 `includes/cache/class-cache-invalidation.php`。
 - **性能**：仅返回 DTO 必要字段；图片走 WP 媒体缩略图；分页强制上限 `pageSize<=50`。
-- **监控**：记录响应耗时与异常（可对接小程序 `utils/monitor` 上报通道，后续扩展）。
+- **监控**：**服务端当前无日志与错误上报**（`includes/` 内无 `error_log` 调用），线上问题只能靠响应包络与 WordPress 错误日志定位；结构化日志与 `/api/monitor/data` 接收端点为待建项（`docs/tasks.md` BE-010 / BE-013）。
 
 ## 部署与版本管理
 

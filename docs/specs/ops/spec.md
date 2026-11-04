@@ -54,7 +54,9 @@
 | 单元测试 | `npm run test:coverage` | Jest 运行 `__tests__/` 用例，覆盖率报告归档为 Artifact |
 | 一致性校验 | `npm run check` | 版本号单一来源一致性 + 小程序配置完整性（JSON 可解析、页面四件套、tabBar 图标 ≤ 40KB、分包与 sitemap 指向文件存在） |
 
-运行环境为 `ubuntu-latest` + Node.js 20，工作目录 `SutWxApp/`，依赖以 `npm ci` 依据 `package-lock.json` 锁定安装；同一分支的重复推送会取消上一次未完成的运行。
+运行环境为 `ubuntu-latest` + Node.js 20，工作目录 `SutWxApp/`；同一分支的重复推送会取消上一次未完成的运行。
+
+> **已知问题（待修复）**：`lint` 与 `test` Job 以 `npm ci` 安装依赖并缓存 `SutWxApp/package-lock.json`，但该 lockfile 尚未提交入库，`npm ci` 会直接报错。修复方案见 `docs/tasks.md` 的 REL-002（提交 lockfile 或改用 `npm install`）。在此之前，本地请使用 `npm install` 安装依赖。
 
 ### 持续交付
 
@@ -62,11 +64,11 @@
 - **小程序上传**：`miniprogram-deploy.yml` 手动触发，经 `miniprogram-ci` 生成预览二维码（`preview`）或上传体验版（`upload`）；须在仓库 Secrets 配置 `MINIPROGRAM_PRIVATE_KEY`（上传密钥，必填）与 `MINIPROGRAM_APPID`（AppID，`project.config.json` 仍为占位值 `touristappid` 时必填）。
 - **密钥安全**：上传私钥仅在运行期写入临时文件、任务结束即删除；`.gitignore` 已屏蔽 `private.*.key` 等文件，禁止入库。
 - **代码包精简**：`project.config.json` 的 `packOptions.ignore` 与部署脚本的 `ignores` 保持一致，上传时忽略 `__tests__`、`scripts`、`node_modules`、`package*.json` 等开发文件。
-- **依赖治理**：`dependabot.yml` 每周检查 npm 开发依赖与 GitHub Actions 版本，以 PR 形式提出更新。
+- **依赖治理**：npm 开发依赖与 GitHub Actions 版本的例行更新尚未配置（仓库暂无 `dependabot.yml`），如需启用可采用官方 Dependabot 配置。
 
 ### 质量门禁与合并要求
 
-- 提交前本地执行 `npm run ci`（等价于 CI 全流程，需先 `npm ci`）
+- 提交前本地执行 `npm run ci`（等价于 CI 全流程，需先 `npm install` 安装依赖）
 - PR 须 CI 全绿方可合并；建议在分支保护中将 `lint` / `test` / `checks` 三项设为必需检查
 - 发布 Tag 必须与项目版本号一致，由 `check-version.js` 强制校验
 

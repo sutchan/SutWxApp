@@ -21,8 +21,10 @@
 
 ```bash
 git clone https://github.com/sutchan/SutWxApp.git
-cd SutWxApp/SutWxApp && npm ci        # 安装 ESLint / Jest / miniprogram-automator
+cd SutWxApp && npm install     # 安装 ESLint / Jest / miniprogram-automator
 ```
+
+> 仓库当前**未提交** `package-lock.json`，因此请使用 `npm install` 而非 `npm ci`（后者无 lockfile 会直接报错）。lockfile 的提交计划见 `docs/tasks.md` 的 REL-002。
 
 微信开发者工具**导入 `SutWxApp/`**（即仓库根下的 `SutWxApp` 子目录，不是 `SutWxApp/SutWxApp`）。
 

@@ -98,49 +98,53 @@
 
 ### 目录结构
 ```
-SutWxApp/
-├── app.js              # 小程序入口文件（App 实例、生命周期、全局数据）
-├── app.json            # 全局配置（页面路由、tabBar、窗口样式）
-├── app.wxss            # 全局样式（Apple 设计系统 CSS 变量）
-├── sitemap.json        # 索引配置
-├── project.config.json # 微信开发者工具项目配置
-├── components/         # 自定义组件
-│   ├── empty-state/    # 空状态组件
-│   └── product-card/    # 商品卡片组件
-├── images/             # 图片资源
-│   └── tabbar/         # 底部导航图标
-├── locales/            # 多语言文件
-│   ├── sut-wechat-mini.pot    # 翻译模板
-│   ├── sut-wechat-mini-zh_CN.po # 中文翻译
-│   └── sut-wechat-mini-en_US.po # 英文翻译
-├── pages/              # 页面文件（每个页面含 .js/.wxml/.wxss/.json）
-│   ├── home/           # 首页
-│   ├── category/       # 分类页
-│   ├── product/        # 商品详情页
-│   ├── cart/           # 购物车
-│   ├── order/          # 订单模块
-│   │   ├── index/      # 订单列表
-│   │   ├── detail/     # 订单详情
-│   │   └── confirm/    # 订单确认
-│   ├── user/           # 用户中心
-│   ├── address/        # 地址管理（分包）
-│   ├── settings/        # 设置页（分包）
-│   └── help/           # 帮助中心（分包）
-├── services/           # 服务层（API 调用封装，按业务域拆分）
-│   ├── authService.js  # 认证服务
-│   ├── productService.js # 商品服务
-│   ├── categoryService.js # 分类服务
-│   ├── cartService.js  # 购物车服务
-│   ├── orderService.js # 订单服务
-│   └── addressService.js # 地址服务
-├── utils/              # 工具类
-│   ├── request.js      # 网络请求封装（拦截器/重试/缓存/取消/队列）
-│   ├── format.js       # 格式化工具（价格、日期等）
-│   ├── monitor.js      # 监控与错误上报
-│   ├── store.js        # 轻量状态管理
-│   └── compress-images.js # 图片压缩工具
-├── docs/               # 项目文档
-└── docs/           # 规范文档
+仓库根/
+├── SutWxApp/                 # 小程序工程（微信开发者工具导入此目录）
+│   ├── app.js                # 小程序入口（生命周期、全局数据、错误上报挂载）
+│   ├── app.json              # 全局配置（页面路由、subpackages、tabBar、窗口样式）
+│   ├── app.wxss              # 全局样式（汇聚 styles/ 分片 + 设计令牌变量）
+│   ├── sitemap.json          # 索引配置
+│   ├── project.config.json   # 开发者工具项目配置（appid、packOptions）
+│   ├── components/           # 自定义组件（四件套）
+│   │   ├── empty-state/      # 空状态
+│   │   └── product-card/     # 商品卡片
+│   ├── pages/                # 页面（每页一个目录，四件套）
+│   │   ├── home/             # 首页（搜索、轮播、分类、商品瀑布流）
+│   │   ├── category/         # 分类页
+│   │   ├── product/          # 商品详情（8 个 include 分片）
+│   │   ├── cart/             # 购物车
+│   │   ├── order/            # 订单模块（index / detail / confirm）
+│   │   ├── user/             # 用户中心
+│   │   ├── address/          # 地址管理（分包）
+│   │   ├── settings/         # 设置页（分包）
+│   │   ├── help/             # 帮助中心（分包）
+│   │   └── article/          # 文章列表（分包）
+│   ├── services/             # 服务层（按业务域拆分）
+│   │   ├── authService.js / productService.js / categoryService.js
+│   │   ├── cartService.js / orderService.js / orderService.api.js
+│   │   ├── payService.js / postService.js / themeService.js
+│   │   ├── addressService.js / dataSource.js
+│   │   └── *.mock.js         # mock 数据源
+│   ├── models/               # DTO 映射（product / order / post / category / page）
+│   ├── utils/                # 基础设施（request*、auth-token*、monitor*、api、store、i18n）
+│   ├── behaviors/            # 跨页面复用行为
+│   ├── styles/               # 全局样式分片（由 app.wxss @import）
+│   ├── scripts/              # 构建与校验脚本（check-*、deploy、compress-images、e2e）
+│   ├── locales/              # 多语言（zh-CN.json、en-US.json 等 JSON + .po/.pot 模板）
+│   ├── images/               # 图片资源（tabbar/ 子目录）
+│   ├── __tests__/            # Jest 测试（137 用例）
+│   ├── helpers.js            # 全局助手
+│   └── eslint.config.js      # ESLint 配置（规则集在 eslint.presets.js）
+├── sutwx-app-api/            # WordPress 插件
+│   ├── sutwx-app-api.php     # 插件入口（版本常量、依赖声明）
+│   ├── includes/             # 类与 trait（class-modules.php 为加载清单，顺序敏感）
+│   │   ├── auth/ cache/ order/ pay/ rate-limit/ rest/ mappings/
+│   ├── admin/                # 后台设置页
+│   └── tests/                # PHP 单测（6 套件）
+├── prototype/                # 单文件交互原型（源，浏览器直接打开可交互）
+├── docs/                     # 规范与任务文档（索引见 docs/README.md）
+├── build.js / server.js      # 站点构建与本地静态服务
+└── package.json              # 根包（站点服务 + 插件打包）
 ```
 
 ### 模块划分
@@ -211,312 +215,32 @@ SutWxApp/
 - 用户管理
 - 数据统计
 
-## 开发流程
+## 相关规范索引
 
-### 1. 需求分析
-- 分析业务需求
-- 确定功能范围
-- 评估工作量
-- 创建开发计划
+> 本节原「开发流程 / 代码规范 / Git 工作流 / 文档规范 / 质量保证 / 部署策略 / 监控与运维 / 安全策略 / 性能优化 / 团队协作 / 版本管理 / 变更管理」等章节已迁移至下列规范文档。同一主题只在唯一文档中定义，此处仅保留索引，避免内容重复与前后矛盾。
 
-### 2. 设计阶段
-- 架构设计
-- 详细设计
-- 编写设计文档
-- 设计评审
+| 主题 | 规范文档 | 要点 |
+|------|---------|------|
+| 目录组织、命名约定、编码风格、文件头注释 | [development/spec.md](../development/spec.md) | 工程规范的**单一事实来源** |
+| 提交信息格式、分支管理、代码审查流程与清单 | [development/spec.md](../development/spec.md) | 提交 `<type>(<scope>):`；分支 `feature/` `fix/` `hotfix/` |
+| 测试分层、门禁命令、缺陷分级 | [testing/spec.md](../testing/spec.md)、[development/spec.md](../development/spec.md) | 四道门禁：lint / check / test / e2e |
+| 部署、配置常量、监控告警、备份与故障处理 | [ops/spec.md](../ops/spec.md) | runbook、拨测与值班响应 |
+| 接口契约、响应包络、错误码 | [api/spec.md](../api/spec.md) | 19 个已实现端点与未实现清单 |
+| 插件目录、路由注册与部署 | [backend/spec.md](../backend/spec.md) | `class-modules.php` 加载顺序敏感 |
+| 数据字段、DTO、订单状态机 | [data/spec.md](../data/spec.md) | 前后端字段一致性依据 |
+| 术语统一 | [GLOSSARY.md](../../GLOSSARY.md) | 标准术语与禁用叫法 |
+| 协作流程、硬性红线、排障速查 | [AGENTS.md](../../AGENTS.md) | 贡献与 AI 助手指南 |
 
-### 3. 开发阶段
-- 代码编写
-- 单元测试
-- 代码审查
-- 集成测试
+### 需求到上线的一般流程（简版）
 
-### 4. 测试阶段
-- 功能测试
-- 性能测试
-- 兼容性测试
-- 回归测试
-- 安全测试
+1. **立项**：在 [tasks.md](../../tasks.md) 登记，写明优先级、最小交付物与依赖。
+2. **设计**：涉及接口或数据结构时，先更新 `api/spec.md` 与 `data/spec.md`，再写实现。
+3. **开发**：按 [development/spec.md](../development/spec.md) 的目录与命名规范落地，同步测试与版本号。
+4. **自测**：本地跑通四道门禁；改动端点时同步补后端单测。
+5. **评审**：PR 需 1 人批准且 CI 全绿，按工程规范的审查清单逐项核对。
+6. **发布**：版本号与 `CHANGELOG.md` 同步，打 Tag 发版；线上问题按 P0 至 P3 分级响应。
 
-### 5. 部署阶段
-- 部署到测试环境
-- 验收测试
-- 部署到生产环境
-- 监控系统状态
-
-### 6. 维护阶段
-- 修复生产问题
-- 优化性能
-- 添加新功能
-- 更新文档
-
-## 代码规范
-
-### 命名规范
-- **变量/函数**：camelCase（小驼峰命名法）
-- **类/构造函数**：PascalCase（大驼峰命名法）
-- **常量**：UPPER_SNAKE_CASE（全大写，下划线分隔）
-- **文件/目录**：kebab-case（短横线分隔）
-- **组件**：PascalCase（大驼峰命名法）
-- **CSS变量**：kebab-case（短横线分隔），如 `--primary-color`
-
-### 样式规范
-- 使用 CSS 变量定义设计系统（颜色、间距、字体、圆角、阴影）
-- 遵循 Apple 设计风格，使用柔和的阴影和圆润的边角
-- 保持样式一致性，使用统一的间距和字体大小
-- 使用 `cubic-bezier(0.4, 0, 0.2, 1)` 缓动函数实现自然的动画效果
-
-### 组件规范
-- 组件应遵循单一职责原则
-- 使用 `_` 前缀表示私有方法和属性
-- 组件间通信应通过 props 和事件
-- 复杂组件应提供完整的文档注释
-
-### 代码格式化
-- 使用2个空格进行缩进
-- 每行代码不超过100个字符
-- 文件末尾添加空行
-- 在运算符周围添加空格
-- 函数括号前添加空格
-- 逗号后添加空格
-
-### 注释规范
-- 每个函数必须添加函数级注释
-- 注释使用中文
-- 复杂逻辑添加行内注释
-- 文件头部添加文件说明注释
-
-```javascript
-/**
- * 文件名: example.js
- * 版本号: 1.0.0
- * 更新日期: 2025-12-26
- * 功能描述: 示例函数
- * @param {Object} options - 查询参数
- * @param {string} options.type - 类型
- * @returns {Promise<Object>} 结果
- */
-async function exampleFunction(options = {}) {
-  // 实现逻辑
-}
-```
-
-### 代码质量
-- 避免使用全局变量，使用const/let代替var
-- 避免深层嵌套，保持代码扁平
-- 函数职责单一，避免过长函数
-- 使用模块化设计，提高代码复用性
-
-## Git工作流
-
-### 分支策略
-- **main/master**：生产分支，保持稳定
-- **develop**：集成分支，用于测试
-- **feature/xxx**：功能开发分支
-- **bugfix/xxx**：bug修复分支
-- **hotfix/xxx**：紧急修复分支
-
-### 提交规范
-使用语义化提交消息，格式为：`<type>: <description>`
-
-**类型说明**：
-- `feat`: 新功能
-- `fix`: 修复bug
-- `docs`: 文档更新
-- `style`: 代码样式修改（不影响功能）
-- `refactor`: 代码重构
-- `test`: 测试相关
-- `chore`: 构建或辅助工具的变动
-
-**示例**：
-```
-feat: 添加用户积分系统
-fix: 修复购物车数量计算错误
-docs: 更新API文档
-```
-
-### 分支合并
-- feature → develop
-- bugfix → develop 和 main
-- release → main 和 develop
-
-## 文档规范
-
-### 文档类型
-- **需求文档**：描述项目需求
-- **设计文档**：描述系统设计
-- **API文档**：描述API接口
-- **测试文档**：描述测试用例
-- **用户文档**：描述用户操作
-
-### 文档格式
-- 使用Markdown格式编写
-- 保持文档结构清晰
-- 使用一致的标题层级
-- 代码块使用正确的语法高亮
-- 表格使用Markdown表格语法
-
-### 文档更新
-- 代码变更时同步更新相关文档
-- 定期审查和更新文档
-- 保持文档的准确性和完整性
-
-## 质量保证
-
-### 测试策略
-- **单元测试**：测试单个函数或组件
-- **集成测试**：测试多个组件或模块的交互
-- **系统测试**：测试整个系统的功能
-- **性能测试**：测试系统的性能表现
-- **兼容性测试**：测试在不同设备和环境下的表现
-- **安全测试**：测试系统的安全性
-
-### 测试覆盖率
-- 单元测试覆盖率：≥80%
-- 集成测试覆盖率：≥70%
-- 系统测试覆盖率：≥100%（核心功能）
-
-### 代码审查
-- 所有代码提交前必须进行代码审查
-- 代码审查关注点：
-  - 代码质量和可读性
-  - 符合编码规范
-  - 潜在问题
-  - 性能和安全性
-  - 测试覆盖率
-
-## 部署策略
-
-### 环境划分
-- **开发环境**：供开发人员使用
-- **测试环境**：供测试人员使用
-- **预生产环境**：模拟生产环境
-- **生产环境**：正式上线环境
-
-### 部署流程
-1. 代码提交到GitHub
-2. GitHub Actions自动运行测试和构建
-3. 构建成功后部署到测试环境
-4. 测试通过后部署到预生产环境
-5. 预生产环境验证通过后部署到生产环境
-
-### 回滚策略
-- 保留历史部署版本
-- 实现一键回滚功能
-- 回滚前备份数据
-- 回滚后验证系统功能
-
-## 监控与运维
-
-### 监控指标
-- **服务器指标**：CPU、内存、磁盘、网络
-- **应用指标**：响应时间、请求成功率、并发数、错误率
-- **数据库指标**：查询响应时间、连接数、缓存命中率
-
-### 告警机制
-- 设置合理的告警阈值
-- 多种告警渠道（邮件、Slack、电话）
-- 告警分级管理
-
-### 日志管理
-- 集中式日志管理
-- 结构化日志格式
-- 日志保留策略
-- 日志查询和分析工具
-
-## 安全策略
-
-### 数据安全
-- 敏感数据加密存储
-- 传输数据加密
-- 定期数据备份
-- 访问控制和权限管理
-
-### 应用安全
-- 防止SQL注入
-- 防止XSS攻击
-- 防止CSRF攻击
-- 输入验证和过滤
-- 安全的认证和授权机制
-
-### 基础设施安全
-- 防火墙配置
-- 定期安全扫描
-- 漏洞修复
-- 安全审计
-
-## 性能优化
-
-### 前端优化
-- 图片优化（压缩、懒加载）
-- 代码压缩
-- 减少网络请求
-- 合理使用缓存
-
-### 后端优化
-- 数据库查询优化
-- 合理使用缓存
-- 异步处理
-- 负载均衡
-
-### 基础设施优化
-- 服务器配置优化
-- CDN加速
-- 数据库优化
-
-## 团队协作
-
-### 沟通机制
-- 定期站会
-- 每周例会
-- 项目管理工具（如Jira、Trello）
-- 即时通讯工具（如微信、Slack）
-
-### 角色与职责
-- **项目经理**：负责项目管理和协调
-- **产品经理**：负责产品设计和需求管理
-- **开发人员**：负责代码编写和维护
-- **测试人员**：负责测试和质量保证
-- **运维人员**：负责部署和运维
-
-### 知识共享
-- 定期技术分享
-- 文档共享
-- 代码评审
-- 经验总结
-
-## 版本管理
-
-### 版本号格式
-采用语义化版本号：MAJOR.MINOR.PATCH
-
-- **MAJOR**：不兼容的API更改
-- **MINOR**：向下兼容的功能性新增
-- **PATCH**：向下兼容的问题修正
-
-### 发布流程
-1. 更新版本号
-2. 编写发布说明
-3. 执行构建和测试
-4. 部署到生产环境
-5. 创建版本标签
-
-## 变更管理
-
-### 变更流程
-1. 提出变更请求
-2. 评估变更影响
-3. 审批变更请求
-4. 实施变更
-5. 验证变更结果
-6. 记录变更
-
-### 变更类型
-- **功能变更**：添加新功能或修改现有功能
-- **bug修复**：修复系统bug
-- **性能优化**：提高系统性能
-- **安全修复**：修复安全漏洞
-
+<!-- BLOCK -->
 ## 交互、多语言提示与自我修复规范
 
 1. **Suggestions（推荐回复）中文显示**：所有对话提示与 Suggestions 引导保持使用中文显示。
@@ -525,30 +249,34 @@ docs: 更新API文档
 
 ## 术语表
 
+> 完整术语表见 [GLOSSARY.md](../../GLOSSARY.md)（含标准术语与禁用叫法）。此处仅列项目级核心概念。
+
 | 术语 | 解释 |
 |------|------|
-| SutWxApp | 苏铁微信小程序 |
-| JWT | JSON Web Token，用于认证和授权 |
-| RBAC | Role-Based Access Control，基于角色的访问控制 |
-| RESTful | 一种API设计风格 |
-| CI/CD | 持续集成/持续部署 |
-| ELK Stack | Elasticsearch、Logstash、Kibana，用于日志管理 |
-| Prometheus | 用于监控的开源系统 |
-| Grafana | 用于数据可视化的开源工具 |
-| Docker | 容器化平台 |
-| Kubernetes | 容器编排平台 |
+| SutWxApp | 苏铁微信小程序；仓库内含小程序端（`SutWxApp/`）与插件端（`sutwx-app-api/`） |
+| 小程序端 | 微信小程序工程，原生 JavaScript，无框架、无 TypeScript、无 npm 运行时依赖 |
+| 插件端 | WordPress 插件，把 WooCommerce 数据经 REST 暴露给小程序 |
+| JWT | JSON Web Token，本项目用于小程序登录态（HS256），含 access 与 refresh 两类令牌 |
+| openid | 微信用户在本应用下的唯一标识，用于登录建档与资源归属校验 |
+| 归属校验 | 按 openid 校验资源归属以防越权；本项目**无角色体系** |
+| RESTful | 一种 API 设计风格，本项目端点统一走 `/api/*` 前缀 |
+| CI/CD | 持续集成与持续部署，本项目含 lint、test、checks、site、php 五类 Job |
+| DTO | 后端映射后输出给小程序的数据结构，与前端 `models/` 一一对应 |
+| 包络 | 后端统一响应结构 `{code, message, data, timestamp, requestId}` |
+| 契约校验 | `npm run check:contract` 比对后端映射与前端模型的字段一致性 |
+| 门禁 | 提交前必须通过的自动检查（lint / check / test） |
 
 ## 附录
 
 ### 参考文档
 - [微信小程序开发文档](https://developers.weixin.qq.com/miniprogram/dev/framework/)
 - [Node.js官方文档](https://nodejs.org/en/docs/)
-- [Express.js官方文档](https://expressjs.com/)
+- [WordPress Coding Standards](https://developer.wordpress.org/coding-standards/wordpress-coding-standards/)
 - [RESTful API设计指南](https://restfulapi.net/)
 - [JWT官方文档](https://jwt.io/)
 
 ### 联系方式
 - **项目负责人**：Sut
-- **邮箱**：sut@example.com
 - **微信**：sutwxapp
-- **GitHub**：https://github.com/sutchan/SutWxApp
+- **问题反馈**：[GitHub Issues](https://github.com/sutchan/SutWxApp/issues)
+- **代码仓库**：https://github.com/sutchan/SutWxApp

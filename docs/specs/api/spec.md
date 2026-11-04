@@ -90,22 +90,24 @@ https://api.example.com/v{version}/{resource}/{id}?{query_parameters}
 ## 认证与授权
 
 ### JWT认证
-- 所有需要认证的API请求必须在Authorization头中携带JWT令牌
+- 所有需要认证的 API 请求必须在 `Authorization` 头中携带 JWT 令牌
 - 令牌格式：`Authorization: Bearer {token}`
-- 令牌有效期：24小时
-- 刷新机制：支持令牌刷新
+- 令牌由 `wx.login` → `code2session` → `openid` 换取后签发，**无用户名密码体系**
+- 访问令牌有效期 2 小时（`expiresIn: 7200`），刷新令牌用于静默续期
+- 刷新机制：访问令牌过期返回 401 → `utils/request-auth.js` 用刷新令牌换新令牌并重放原请求
+- 登出后令牌 `jti` 进入黑名单（`includes/auth/class-auth-token-store.php`），无法继续使用
 
-### RBAC授权
-- 基于角色的访问控制
-- 支持角色：普通用户、管理员
-- 细粒度权限控制
-- 动态权限分配
+### 授权与归属校验
+- **无角色体系（不使用 RBAC）**：小程序侧只有「登录用户」一种身份
+- 越权防护依赖**资源归属校验**：订单、地址等资源按 `openid` 校验归属，非本人访问返回 403/404
+- 管理能力（发货、退款、凭证配置）不暴露给小程序端，仅在 WordPress 后台或服务端内部调用
+- 写操作端点（`/api/order/create|cancel|confirm|ship`、`/api/pay/prepay`）必须校验归属与状态机
 
 ## 请求格式
 
 ### URL参数
 - 用于标识资源或过滤、排序
-- 示例：`/api/v1/users?page=1&pageSize=10&sortBy=createdAt&sortOrder=desc`
+- 示例：`/api/product/list?page=1&pageSize=20&categoryId=3&keyword=绿萝`
 
 ### 查询参数
 - 用于过滤、排序、分页等
@@ -367,7 +369,7 @@ https://api.example.com/v{version}/{resource}/{id}?{query_parameters}
 - **推荐（路径直连）**：插件注册 WP REST 命名空间 `sutwx/v1`（路由 `product/list`、`post/list`、`theme` 等），并用 `add_rewrite_rule` 将 `/api/(.*)` 重写到 `rest_route=/sutwx/v1/$1`；小程序 `globalData.baseUrl` 设为站点根（如 `https://example.com`）。这样 `/api/*` 即为真实可访问路径。
 - **备选（直连 wp-json）**：小程序 `baseUrl` 设为 `https://example.com/wp-json/sutwx/v1`，跳过重写层。
 
-> 鉴权接口（`/api/users`、`/api/order/*`、`/api/pay/*`）已实现，需 Bearer JWT（`wx.login` 换取）；内容端点（product/post/category/theme）仍免登录。详见 `../backend/spec.md` 与 `docs/wordpress-plugin/DEVELOPMENT_PLAN.md`。
+> 鉴权接口（`/api/auth/login`、`/api/auth/refresh-token`、`/api/auth/logout`、`/api/user/info`）需 Bearer JWT（`wx.login` 换取）；写操作（`/api/order/create|cancel|confirm|ship`）与支付（`/api/pay/prepay|notify|query`）需鉴权；内容端点（product/post/category/theme）仍免登录。完整清单见 `../backend/spec.md`。
 
 ### 订单API
 
@@ -388,37 +390,47 @@ https://api.example.com/v{version}/{resource}/{id}?{query_parameters}
         "quantity": 1
       }
     ],
-    "addressId": 1,
-    "paymentMethod": "alipay"
+    "paymentMethod": "wechat_pay"
   }
   ```
+
+> 订单 `status` 为数字：`0` 已取消 / `1` 待付款 / `2` 待发货 / `3` 待收货 / `4` 已完成 / `5` 已退款；`statusText` 为其中文文案；金额单位为元。
 - **响应**: 
   ```json
   {
-    "code": 201,
+    "code": 200,
     "message": "success",
     "data": {
-      "id": 1,
-      "orderNo": "ORD20251201000001",
-      "totalAmount": 400,
-      "status": "pending",
+      "id": 1024,
+      "orderNo": "1024",
+      "status": 1,
+      "statusText": "待付款",
+      "totalPrice": 400.00,
+      "productPrice": 380.00,
+      "shippingFee": 20.00,
+      "totalQuantity": 3,
+      "createTime": "2026-11-04 10:20:30",
       "products": [
         {
           "productId": 1,
-          "name": "产品1",
-          "price": 100,
+          "name": "绿萝盆栽",
+          "price": 100.00,
           "quantity": 2
-        },
-        {
-          "productId": 2,
-          "name": "产品2",
-          "price": 200,
-          "quantity": 1
         }
       ],
-      "addressId": 1,
-      "paymentMethod": "alipay",
-      "createdAt": "2025-12-01T00:00:00.000Z"
+      "address": {
+        "name": "张三",
+        "phone": "13800138000",
+        "province": "广东省",
+        "city": "深圳市",
+        "district": "南山区",
+        "address1": "科技园路 1 号",
+        "address2": "A#301"
+      },
+      "remark": "尽快发货",
+      "payTime": "",
+      "deliveryTime": "",
+      "completeTime": ""
     },
     "timestamp": 1609459200000,
     "requestId": "uuid"
@@ -429,35 +441,33 @@ https://api.example.com/v{version}/{resource}/{id}?{query_parameters}
 
 ### 错误类型
 
-| 错误码 | 描述 | HTTP状态码 |
-|--------|------|------------|
-| 40001 | 参数错误 | 400 |
-| 40101 | 未认证 | 401 |
-| 40102 | 认证过期 | 401 |
-| 40103 | 认证无效 | 401 |
-| 40301 | 无权限 | 403 |
-| 40401 | 资源不存在 | 404 |
-| 50001 | 服务器错误 | 500 |
-| 50002 | 数据库错误 | 500 |
-| 50003 | 第三方服务错误 | 500 |
+后端统一以 `WP_Error` 返回，`data.status` 决定 HTTP 状态码；`code` 为字符串错误码（默认 `sutwx_error`）。
+
+| HTTP 状态码 | 含义 | 典型场景 |
+|------------|------|---------|
+| 400 | 参数错误 | 缺少必填参数、参数格式非法、分页越界 |
+| 401 | 未认证 / 认证过期 / 令牌无效 | 未带 `Authorization`、令牌过期或已被登出加入黑名单 |
+| 403 | 无权限 | 访问非本人订单等越权资源 |
+| 404 | 资源不存在 | 商品/文章/订单不存在或已删除 |
+| 429 | 触发限频 | 超出 `X-RateLimit-Limit` 阈值 |
+| 500 | 服务器错误 | 未预期异常（第三方服务失败由具体端点返回 502/503） |
 
 ### 错误响应格式
 
 ```json
 {
-  "code": 40001,
-  "message": "参数错误",
-  "data": null,
-  "timestamp": 1609459200000,
-  "requestId": "uuid",
-  "errors": [
-    {
-      "field": "username",
-      "message": "用户名不能为空"
-    }
-  ]
+  "code": "sutwx_error",
+  "message": "参数错误：缺少 productId",
+  "data": { "status": 400 }
 }
 ```
+
+### 分页与查询约定
+
+- 分页参数统一为 `page`（从 1 起）与 `pageSize`（默认 20，上限 50）
+- 列表响应：`{ "list": [...], "total": 100, "page": 1, "pageSize": 20 }`
+- 搜索关键词参数 `keyword`，服务端 trim 且截断至 64 字符
+- 空结果返回 `list: []` 与 `total: 0`，不返回 `null`
 
 ## 版本管理
 
@@ -465,7 +475,7 @@ https://api.example.com/v{version}/{resource}/{id}?{query_parameters}
 - **语义化版本号**: MAJOR.MINOR.PATCH（例如：v1.0.0）
 
 ### 版本控制
-- **URL路径版本控制**: `/api/v{version}/resources`
+- **命名空间版本控制**: WordPress REST 命名空间为 `sutwx/v1`；小程序侧统一访问 `/api/*`（由 `add_rewrite_rule` 重写到 `rest_route=/sutwx/v1/$1`），路径本身不带版本号
 
 ### 升级策略
 - **MAJOR**: 破坏性变更，与以前版本不兼容
@@ -485,149 +495,114 @@ https://api.example.com/v{version}/{resource}/{id}?{query_parameters}
 - **curl**: 命令行HTTP客户端
 
 ### 自动化测试
-- **Jest**: 用于单元测试和集成测试
-- **Supertest**: 用于HTTP API测试
-- **Newman**: 用于Postman集合自动化测试
+- **Jest**（`SutWxApp/__tests__/`）：小程序侧单元与集成测试，`npm test`
+- **PHP 自研 runner**（`sutwx-app-api/tests/run-*.php`）：后端映射/设置/鉴权/缓存/订单/支付六套件，独立运行不依赖 WordPress
+- **契约校验**（`npm run check:contract`）：比对后端 `mappings/*.php` 与前端 `models/*` 的字段与分页包络
+- **E2E**（`npm run test:e2e`）：基于 `miniprogram-automator` 的四套件，需本地微信开发者工具开启自动化端口
 
 ### 测试示例
 
 ```javascript
-const request = require('supertest');
-const app = require('../app');
+const request = require('../utils/request');
+const { unwrap } = require('../utils/api');
 
-describe('User API', () => {
+describe('认证接口', () => {
   let token;
 
-  // 登录获取token
+  // 微信登录换取令牌（后端 code2session 需真实 code，单测中以桩替代）
   beforeAll(async () => {
-    const response = await request(app)
-      .post('/api/v1/users/login')
-      .send({
-        username: 'test',
-        password: 'password'
-      });
-    token = response.body.data.token;
+    token = 'test-token';
   });
 
-  describe('GET /api/v1/users/:id', () => {
-    it('should get user info', async () => {
-      const response = await request(app)
-        .get('/api/v1/users/1')
-        .set('Authorization', `Bearer ${token}`);
-      
-      expect(response.statusCode).toBe(200);
-      expect(response.body.code).toBe(200);
-      expect(response.body.data).toHaveProperty('id', 1);
-      expect(response.body.data).toHaveProperty('username', 'test');
-    });
+  it('登录后应返回令牌与用户资料', async () => {
+    const data = await request({
+      url: '/api/auth/login',
+      method: 'POST',
+      data: { code: 'stub-code' },
+      needAuth: false,
+    }).then(unwrap);
+
+    expect(data).toHaveProperty('token');
+    expect(data).toHaveProperty('refreshToken');
+    expect(data).toHaveProperty('userInfo');
+  });
+
+  it('带令牌访问用户信息应返回资料', async () => {
+    const data = await request({
+      url: '/api/user/info',
+      method: 'GET',
+    }).then(unwrap);
+
+    expect(data).toHaveProperty('id');
   });
 });
 ```
 
 ## API使用示例
 
-### 使用Axios
+> 本项目为**微信小程序**，不使用 Axios / Fetch / localStorage。统一走 `SutWxApp/utils/request.js` 封装（基于 `wx.request`），令牌由请求层自动注入。
+
+### 在服务层调用（推荐）
 
 ```javascript
-const axios = require('axios');
+const request = require("../utils/request");
+const { unwrap } = require("../utils/api");
 
-// 设置基础URL
-const api = axios.create({
-  baseURL: 'https://api.example.com/api/v1',
-  timeout: 10000,
-  headers: {
-    'Content-Type': 'application/json'
-  }
-});
-
-// 添加认证拦截器
-api.interceptors.request.use(config => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
-
-// 登录
-async function login(username, password) {
-  try {
-    const response = await api.post('/users/login', {
-      username,
-      password
-    });
-    return response.data;
-  } catch (error) {
-    console.error('登录失败:', error.response.data);
-    throw error;
-  }
+// 公开数据（无需鉴权）
+async function fetchProducts(page = 1, pageSize = 20) {
+  // request 层返回 {code,data} 包络，unwrap 后交给 models/ 映射
+  const data = await request({
+    url: "/api/product/list",
+    method: "GET",
+    data: { page, pageSize },
+    needAuth: false,
+  }).then(unwrap);
+  return (data && data.list) || [];
 }
 
-// 获取用户信息
-async function getUserInfo(userId) {
-  try {
-    const response = await api.get(`/users/${userId}`);
-    return response.data;
-  } catch (error) {
-    console.error('获取用户信息失败:', error.response.data);
-    throw error;
-  }
+// 鉴权数据（令牌由 request 层自动附加）
+async function fetchUserInfo() {
+  return request({ url: "/api/user/info", method: "GET" }).then(unwrap);
 }
 ```
 
-### 使用Fetch
+### 页面/组件中调用
 
 ```javascript
-// 设置基础URL
-const baseURL = 'https://api.example.com/api/v1';
+const authService = require("../../services/authService");
 
-// 登录
-async function login(username, password) {
-  try {
-    const response = await fetch(`${baseURL}/users/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        username,
-        password
-      })
-    });
-    const data = await response.json();
-    if (response.ok) {
-      return data;
-    } else {
-      throw new Error(data.message);
-    }
-  } catch (error) {
-    console.error('登录失败:', error);
-    throw error;
-  }
-}
-
-// 获取用户信息
-async function getUserInfo(userId, token) {
-  try {
-    const response = await fetch(`${baseURL}/users/${userId}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      }
-    });
-    const data = await response.json();
-    if (response.ok) {
-      return data;
-    } else {
-      throw new Error(data.message);
-    }
-  } catch (error) {
-    console.error('获取用户信息失败:', error);
-    throw error;
-  }
-}
+// 登录：内部已处理 /api 前缀与包络解包，成功回调收到解包后的令牌对象
+authService.login({ code, nickname, avatarUrl }, (result) => {
+  wx.showToast({ title: "登录成功", icon: "success" });
+});
 ```
+
+### 直接使用 wx.request（仅限脚本与调试）
+
+```javascript
+wx.request({
+  url: "https://api.example.com/api/product/list?page=1&pageSize=20",
+  method: "GET",
+  header: { Authorization: `Bearer ${wx.getStorageSync("token")}` },
+  success(res) {
+    if (res.data.code !== 200) {
+      console.error("接口失败:", res.data.message);
+      return;
+    }
+    console.log(res.data.data.list);
+  },
+  fail(err) {
+    console.error("网络失败:", err);
+  },
+});
+```
+
+### 约定
+
+- 请求路径**必须带 `/api` 前缀**（后端 rewrite 仅匹配 `^api/`）
+- 业务代码拿到的应是**解包后**的 `data`；忘记 `unwrap` 是最常见的「接口成功但页面为空」原因
+- `needAuth: false` 仅用于公开端点（商品/文章/分类/主题）；其余端点必须带鉴权
+- 失败分支必须给出可定位的信息（`console.error` 打印错误码与上下文），不得静默吞掉
 
 ## 性能优化
 
@@ -652,10 +627,10 @@ async function getUserInfo(userId, token) {
 ## 安全措施
 
 ### 认证与授权
-- 使用JWT进行认证
-- 基于角色的访问控制
-- 定期更换密钥
-- 限制令牌有效期
+- 使用 JWT 进行认证（HS256，密钥经 `class-credentials.php` 治理）
+- 无角色体系：写操作一律做**资源归属校验**（按 `openid`）
+- 定期更换密钥（轮换流程见 `specs/ops/spec.md`）
+- 限制令牌有效期（访问令牌 2 小时，登出即进黑名单）
 
 ### 数据安全
 - 加密敏感数据
@@ -692,7 +667,7 @@ async function getUserInfo(userId, token) {
   "timestamp": "2025-12-01T00:00:00.000Z",
   "requestId": "uuid",
   "method": "GET",
-  "url": "/api/v1/users/1",
+  "url": "/api/user/info",
   "statusCode": 200,
   "responseTime": 100,
   "ip": "127.0.0.1",

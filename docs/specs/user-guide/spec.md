@@ -30,7 +30,7 @@
 
 在开始开发之前，需要准备好以下软件环境。微信开发者工具是开发微信小程序的必备工具，用于小程序的调试、预览和上传。开发者需要前往微信公众平台官网下载并安装最新版本的微信开发者工具。安装完成后，使用微信扫码登录，并在工具中创建一个小程序项目来验证环境是否正常。
 
-Visual Studio Code 是推荐的代码编辑器，提供小程序语法高亮、ESLint 代码规范检查与 Prettier 格式化支持。推荐安装以下插件提升效率：ESLint（代码规范检查）、Prettier（代码格式化）、微信小程序相关代码片段插件、GitLens（Git 操作增强）。
+Visual Studio Code 是推荐的代码编辑器，提供小程序语法高亮与 ESLint 代码规范检查。推荐安装以下插件提升效率：ESLint（代码规范检查）、微信小程序相关代码片段插件、GitLens（Git 操作增强）。项目**未引入 Prettier**，格式化以 ESLint 规则与开发规范为准（见 `specs/development/spec.md`）。
 
 > 本项目为纯前端小程序，无需 Bun、数据库或 Docker。若需要运行图片压缩、i18n 处理等可选脚本工具，安装 Node.js（LTS）即可。
 
@@ -173,27 +173,31 @@ async function getUserInfo(userId) {
 
 #### 开发环境问题
 
-问题一：微信开发者工具提示"没有找到 app.json"错误。解决方法是在微信开发者工具中点击"导入项目"，选择 `SutWxApp/SutWxApp` 目录（注意不是项目根目录），然后选择 AppID（可以使用测试号），点击确定导入项目。
+问题一：微信开发者工具提示「没有找到 app.json」错误。解决方法是在微信开发者工具中点击「导入项目」，选择仓库中的 **`SutWxApp/`** 目录（即 `SutWxApp/SutWxApp` 的上一级，注意不是仓库根目录），然后选择 AppID（本地可用测试号），点击确定导入项目。
 
-问题二：后端服务启动失败，提示数据库连接错误。首先检查 MySQL 服务是否启动，然后验证 `.env` 文件中的数据库配置是否正确，包括主机地址、端口号、用户名、密码和数据库名称。如果使用 Docker 启动的 MySQL，需要确保容器正在运行。
+问题二：安装依赖慢或失败。工程统一使用 **npm**：在 `SutWxApp/` 目录下执行 `npm install`（仓库当前未提交 lockfile，`npm ci` 会报错）。若下载缓慢，可切换国内镜像源 `npm config set registry https://registry.npmmirror.com`；若安装异常，删除 `node_modules` 目录后重新安装。**不要使用 Bun**（仓库根的 `bun.lock` 为历史残留，CI 亦使用 npm）。
 
-问题三：Bun 安装依赖时速度慢或失败。可以尝试使用国内镜像源加速安装，配置方式为设置环境变量 `BUN_INSTALL_URL=https://registry.npmmirror.com`。如果仍然失败，可以删除 `node_modules` 目录和 `bun.lockb` 文件后重新安装。
+问题三：接口请求 404。小程序端点必须带 `/api` 前缀（后端重写规则仅匹配 `^api/`），且 `app.js` 中 `globalData.baseUrl` 需指向已部署的站点根地址（默认占位 `https://api.example.com`）。
 
 #### 功能开发问题
 
-问题四：如何添加新的 API 接口。在对应功能模块的 `routes/` 目录下创建新的路由文件，定义路由路径和请求处理函数。然后在模块的入口文件中注册路由。API 接口应当遵循 RESTful 设计规范，使用标准的 HTTP 方法和状态码。
+问题四：如何添加新的 API 接口。在插件 `includes/rest/` 下新建 `class-rest-<域>-<动作>.php`（继承 `Sutwx_Rest_Base`），用 `register_rest_route()` 注册路由，并在 `includes/class-modules.php` 中登记该类（顺序敏感）。前端在 `services/` 中新增对应服务文件，路径必须带 `/api` 前缀。
 
-问题五：如何在页面中调用后端 API。项目封装了统一的网络请求工具 `utils/request.js`，提供了 `get`、`post`、`put` 和 `delete` 方法。调用示例如下，首先导入请求工具，然后调用相应的方法发起请求，请求会自动携带用户认证 Token。
+问题五：如何在页面中调用后端 API。统一使用 `utils/request.js` 封装（基于 `wx.request`），令牌由请求层自动注入，响应为 `{code,data}` 包络，需用 `utils/api.js` 的 `unwrap` 解包。
 
 ```javascript
-import { get } from '../../utils/request';
+const request = require("../../utils/request");
+const { unwrap } = require("../../utils/api");
 
 // 获取商品列表
-const products = await get('/api/v1/products', {
-  categoryId: 'cat_001',
-  page: 1,
-  pageSize: 20,
-});
+const data = await request({
+  url: "/api/product/list",
+  method: "GET",
+  data: { categoryId: 3, page: 1, pageSize: 20 },
+  needAuth: false,
+}).then(unwrap);
+
+const products = (data && data.list) || [];
 ```
 
 问题六：如何调试小程序前端代码。微信开发者工具提供了调试器功能，可以在 Sources 面板中设置断点，在 Console 面板中执行 JavaScript 代码查看变量值。网络面板可以查看所有网络请求的请求参数和响应数据。真机调试功能可以在真实手机上预览和调试小程序。

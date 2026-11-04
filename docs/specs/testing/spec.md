@@ -10,7 +10,7 @@
 
 ## 目的
 
-本规范定义了苏铁微信小程序（SutWxApp）项目的测试策略、测试环境配置、测试用例编写标准、测试执行流程和测试覆盖率要求，以确保产品质量和代码可靠性。本规范基于 Bun 测试框架（bun test）编写，涵盖单元测试、集成测试、端到端测试、性能测试和安全测试等多个方面。
+本规范定义了苏铁微信小程序（SutWxApp）项目的测试策略、测试环境配置、测试用例编写标准、测试执行流程和测试覆盖率要求，以确保产品质量和代码可靠性。本规范基于 Jest 编写，涵盖单元测试、集成测试、端到端测试、性能测试和安全测试等多个方面。
 
 ## 测试策略
 
@@ -46,7 +46,7 @@
 ```json
 {
   "scripts": {
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "test:coverage": "jest --coverage",
     "test:unit": "jest tests/unit"
   }
@@ -83,51 +83,42 @@ export const mockUserInfo = (userId) => ({
 
 ### 目录结构
 
-测试文件统一存放在 `tests/` 目录下，按照测试类型进行组织：
+测试统一放在受版本控制的 `SutWxApp/__tests__/` 目录（根 `tests/` 已被 `.gitignore` 忽略，不可放测试）：
 
 ```
-tests/
-├── unit/                    # 单元测试
-│   ├── utils/              # 工具函数测试
-│   │   ├── date-helper.test.ts
-│   │   ├── format-helper.test.ts
-│   │   └── validator.test.ts
-│   ├── services/           # 服务层测试
-│   │   ├── user-service.test.ts
-│   │   ├── points-service.test.ts
-│   │   └── order-service.test.ts
-│   └── components/         # 组件测试（小程序）
-│       ├── button.test.ts
-│       └── card.test.ts
-├── integration/             # 集成测试
-│   ├── api/                # API 接口测试
-│   │   ├── user-api.test.ts
-│   │   ├── product-api.test.ts
-│   │   └── order-api.test.ts
-│   └── database/           # 数据库交互测试
-│       ├── user-repository.test.ts
-│       └── order-repository.test.ts
-├── e2e/                     # 端到端测试
-│   ├── user-flows.test.ts
-│   ├── shopping-flows.test.ts
-│   └── payment-flows.test.ts
-├── fixtures/                # 测试数据
-│   ├── users.json
-│   ├── products.json
-│   └── orders.json
-├── mocks/                   # Mock 服务
-│   ├── wechat-api.ts
-│   └── third-party.ts
-├── setup.ts                 # 测试环境初始化
-├── teardown.ts              # 测试环境清理
-└── coverage/                # 覆盖率报告
+SutWxApp/
+├── __tests__/                 # Jest 用例（CommonJS，与被测模块同风格）
+│   ├── request.test.js        # 请求层：重试、缓存、取消、队列
+│   ├── request-auth.test.js   # 鉴权层：401 刷新与重放
+│   ├── auth-token.test.js     # 令牌：过期预判、刷新锁
+│   ├── store.test.js          # 轻量状态管理
+│   ├── i18n.test.js           # 多语言
+│   ├── offline-snapshot.test.js # 离线快照降级
+│   ├── order.test.js          # 订单服务与 DTO 映射
+│   ├── pay-service.test.js    # 支付流程
+│   ├── integration.test.js    # 跨模块集成
+│   └── regression-2026-11.test.js # 缺陷回归（按月份命名）
+├── scripts/
+│   └── e2e/                   # E2E（miniprogram-automator，需开发者工具）
+│       ├── run-e2e.js         # 入口：npm run test:e2e
+│       ├── e2e-config.js      # 环境与端口配置
+│       ├── e2e-home.js / e2e-product.js / e2e-cart.js / e2e-auth.js
+└── ../sutwx-app-api/tests/    # PHP 单测（独立运行，不依赖 WordPress）
+    ├── bootstrap.php          # 引导：桩与常量
+    ├── stubs-runtime.php      # WP/WC 运行时桩
+    └── run-*-tests.php        # mapping / settings / auth / cache / order / pay
 ```
+
+Jest 配置位于 `SutWxApp/package.json` 的 `jest` 字段：`rootDir` 为仓库根，`testMatch` 覆盖 `SutWxApp/__tests__/**/*.test.js`，测试环境为 `node`。
 
 ### 测试文件命名规范
 
-测试文件命名应当遵循以下规范：使用源文件名作为基础，添加 `.test.js` 后缀；文件名使用小驼峰命名法，与源文件保持一致。例如，`user-service.js` 对应的测试文件为 `user-service.test.js`。
+- 单元与集成测试：`<主题>.test.js`，置于 `SutWxApp/__tests__/`，与被测模块同名或主题一致（如 `order.test.js` 对应 `services/orderService.js`）。
+- 缺陷回归：按月份归档，如 `regression-2026-11.test.js`，一个文件覆盖该批次的全部回归点。
+- 后端单测：`sutwx-app-api/tests/run-<主题>-tests.php`，一个主题一套件，可独立 `php` 执行。
+- E2E：`SutWxApp/scripts/e2e/e2e-<场景>.js`，由 `run-e2e.js` 统一编排。
 
-对于组件测试，小程序组件文件 `component.js` 对应的测试文件为 `component.test.js`，存放在组件目录或统一的组件测试目录中。
+> 项目为纯 JavaScript（无 TypeScript），测试文件一律 `.js`，不使用 `.ts`。
 
 ## 测试用例编写标准
 
@@ -135,7 +126,7 @@ tests/
 
 每个测试文件应当包含清晰的测试结构，使用 `describe` 块组织相关测试，使用 `it` 或 `test` 定义单个测试用例。测试用例应当遵循 Arrange-Act-Assert 模式：首先准备测试数据（Arrange），然后执行被测功能（Act），最后验证结果是否符合预期（Assert）。
 
-```typescript
+```javascript
 // tests/unit/utils/date-helper.test.ts
 
 describe('日期处理工具', () => {
@@ -192,7 +183,7 @@ describe('日期处理工具', () => {
 
 测试数据应当独立管理，避免在测试用例中硬编码。常用的测试数据管理方式包括：使用常量定义固定测试数据、使用测试夹具（Fixtures）加载外部数据文件、使用工厂函数动态生成测试数据。测试数据应当在每个测试用例执行前初始化，执行后清理，确保测试的独立性。
 
-```typescript
+```javascript
 // tests/fixtures/users.ts
 export const testUsers = [
   {
@@ -222,9 +213,9 @@ export const createTestUser = (overrides = {}) => {
 
 ### Mock 和 Stub 使用
 
-对于外部依赖（如文件系统、网络请求、数据库连接），应当使用 Mock 或 Stub 进行隔离。Mock 技术可以控制外部依赖的行为，确保测试的稳定性和可重复性。项目推荐使用 Bun 内置的 Mock 功能或第三方 Mock 库（如 mock-fs、nock）。
+对于外部依赖（如文件系统、网络请求、数据库连接），应当使用 Mock 或 Stub 进行隔离。Mock 技术可以控制外部依赖的行为，确保测试的稳定性和可重复性。项目统一使用 Jest 内置能力（jest.fn() / jest.spyOn() / jest.mock()），不额外引入 Mock 库。
 
-```typescript
+```javascript
 // tests/unit/services/points-service.test.ts
 describe('积分服务', () => {
   describe('getUserPoints', () => {
@@ -265,9 +256,9 @@ describe('积分服务', () => {
 
 ### 异步测试规范
 
-异步测试应当正确处理 Promise 和 async/await 语法。Bun 测试框架原生支持异步测试，使用 `async it` 或 `async test` 定义异步测试用例。异步测试应当包含错误处理，确保 Promise rejected 情况能够被正确捕获和验证。
+异步测试应当正确处理 Promise 和 async/await 语法。Jest 原生支持 async/await 与 Promise，用例可直接写成 `async () => {}`。异步测试应当包含错误处理，确保 Promise rejected 情况能够被正确捕获和验证。
 
-```typescript
+```javascript
 // tests/integration/api/user-api.test.ts
 describe('用户 API', () => {
   describe('GET /api/v1/users/:id', () => {
@@ -327,11 +318,11 @@ describe('用户 API', () => {
 
 ### 覆盖率报告
 
-测试覆盖率报告通过 `bun test --coverage` 命令生成，报告文件存放在 `coverage/` 目录下。覆盖率报告支持多种格式，包括 HTML、LCov 和 JSON。HTML 报告提供可视化的代码覆盖率展示，便于识别未覆盖的代码区域。
+测试覆盖率报告通过 `npm run test:coverage` 命令生成，报告文件存放在 `coverage/` 目录下。覆盖率报告支持多种格式，包括 HTML、LCov 和 JSON。HTML 报告提供可视化的代码覆盖率展示，便于识别未覆盖的代码区域。
 
 ```bash
 # 运行测试并生成覆盖率报告
-bun run test:coverage
+npm run test:coverage
 
 # 查看 HTML 覆盖率报告
 open coverage/index.html
@@ -344,7 +335,7 @@ open coverage/index.html
 ```yaml
 # .github/workflows/test.yml
 - name: Run tests with coverage
-  run: bun run test:coverage
+  run: npm run test:coverage
 
 - name: Upload coverage to Codecov
   uses: codecov/codecov-action@v3
@@ -363,29 +354,31 @@ open coverage/index.html
 
 ```bash
 # 运行所有测试
-bun run test
+npm test
 
 # 运行测试并生成覆盖率报告
-bun run test:coverage
+npm run test:coverage
 ```
 
 其次，针对变更的模块运行单元测试，缩短反馈周期：
 
 ```bash
 # 运行特定模块的测试
-bun run test:unit -- tests/unit/services/user-service.test.ts
+npx jest SutWxApp/__tests__/order.test.js
 ```
 
 最后，运行集成测试验证模块间的交互：
 
 ```bash
 # 运行集成测试
-bun run test:integration
+npm test
 ```
 
 ### 持续集成测试
 
-项目已建立 GitHub Actions 持续集成流水线（`.github/workflows/ci.yml`），运行环境为 `ubuntu-latest` + Node.js 20，工作目录为 `SutWxApp/`，依赖通过 `npm ci` 按 `package-lock.json` 锁定安装；同一分支的重复推送会取消上一次未完成的运行。流水线包含三个阶段，任一阶段失败即阻断合并：
+项目已建立 GitHub Actions 持续集成流水线（`.github/workflows/ci.yml`），运行环境为 `ubuntu-latest` + Node.js 20，工作目录为 `SutWxApp/`；同一分支的重复推送会取消上一次未完成的运行。流水线包含五个 Job，任一失败即阻断合并：
+
+> **已知问题（待修复）**：`lint` 与 `test` 两个 Job 使用 `npm ci` 并缓存 `SutWxApp/package-lock.json`，但仓库**未提交 lockfile**，`npm ci` 在无 lockfile 时会直接报错退出。修复方案为提交 `SutWxApp/package-lock.json` 锁定依赖版本（推荐），或改用 `npm install`。见 `docs/tasks.md` 的 REL-002。
 
 **第一阶段：代码检查**。执行 `npm run lint`（ESLint），在测试前快速发现代码规范问题，无需等待测试执行。
 
@@ -463,7 +456,7 @@ jobs:
 
 微信小程序组件的测试需要使用专门的小程序测试工具。项目推荐使用 `miniprogram-simulate` 或类似的测试库进行组件测试。组件测试应当验证组件的渲染正确性、事件处理、属性传递和生命周期方法。
 
-```typescript
+```javascript
 // tests/unit/components/card.test.ts
 import { simulate } from 'miniprogram-simulate';
 
@@ -507,7 +500,7 @@ describe('商品卡片组件', () => {
 
 小程序页面的测试需要模拟页面生命周期和路由参数。页面测试应当验证页面的初始化逻辑、数据加载、用户交互和页面跳转。
 
-```typescript
+```javascript
 // tests/unit/pages/home.test.ts
 import { simulate } from 'miniprogram-simulate';
 
