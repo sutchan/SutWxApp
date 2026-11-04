@@ -77,6 +77,30 @@ if ( ! function_exists( 'sutwx_order_status_text' ) ) {
 	}
 }
 
+if ( ! function_exists( 'sutwx_order_can_ship' ) ) {
+	/**
+	 * 是否可标记发货（仅「待发货」可发货）。
+	 *
+	 * @param string $wc_status WC 状态（不含 wc- 前缀）。
+	 * @return bool
+	 */
+	function sutwx_order_can_ship( $wc_status ) {
+		return 'processing' === (string) $wc_status;
+	}
+}
+
+if ( ! function_exists( 'sutwx_order_can_confirm' ) ) {
+	/**
+	 * 是否可确认收货（「待发货」或「待收货」均可）。
+	 *
+	 * @param string $wc_status WC 状态（不含 wc- 前缀）。
+	 * @return bool
+	 */
+	function sutwx_order_can_confirm( $wc_status ) {
+		return in_array( (string) $wc_status, array( 'processing', 'shipped' ), true );
+	}
+}
+
 if ( ! function_exists( 'sutwx_map_order' ) ) {
 	/**
 	 * 单个 WC 订单 → 订单 DTO（无效输入返回 null）。

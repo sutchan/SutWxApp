@@ -186,6 +186,11 @@ check( array( 'pending', 'on-hold' ) === sutwx_order_statuses_for_code( 1 ), '�
 check( array() === sutwx_order_statuses_for_code( 0 ), '全部（0）不限状态' );
 check( array( 'completed' ) === sutwx_order_statuses_for_code( 4 ), '已完成筛选 completed' );
 
+echo "== 发货/确认状态机 ==\n";
+
+check( sutwx_order_can_ship( 'processing' ) && ! sutwx_order_can_ship( 'shipped' ) && ! sutwx_order_can_ship( 'pending' ) && ! sutwx_order_can_ship( 'completed' ), '仅 processing 可标记发货' );
+check( sutwx_order_can_confirm( 'processing' ) && sutwx_order_can_confirm( 'shipped' ) && ! sutwx_order_can_confirm( 'pending' ) && ! sutwx_order_can_confirm( 'cancelled' ), 'processing/shipped 均可确认收货' );
+
 echo "== 商品行 DTO ==\n";
 
 $GLOBALS['sutwx_fake_product'][11] = new Fake_Product( array( 'id' => 11, 'image_id' => 3 ) );

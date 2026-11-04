@@ -77,6 +77,9 @@ function toAddressSnapshot(address) {
   return {
     name: a.name || "",
     phone: a.phone || "",
+    province: a.province || "",
+    city: a.city || "",
+    district: a.district || "",
     detail: a.detail || "",
   };
 }

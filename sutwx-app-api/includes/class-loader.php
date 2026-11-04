@@ -55,6 +55,9 @@ final class Sutwx_Loader {
 		// BE-004：内容变更精准清缓存；BE-005：公开端点限频。
 		Sutwx_Cache::register_invalidation_hooks();
 		Sutwx_Rate_Limit::init();
+
+		// BE-006：注册「待收货(shipped)」自定义订单状态，对齐小程序状态码 3。
+		self::register_order_statuses();
 	}
 
 	/**
@@ -116,6 +119,48 @@ final class Sutwx_Loader {
 			'sutwx-app-api',
 			array( 'Sutwx_Settings_Page', 'render' )
 		);
+	}
+
+	/**
+	 * 注册自定义订单状态（待收货 shipped），使商家可在 WC 后台标记发货，
+	 * 与小程序状态码 3（待收货）对齐。仅当 WooCommerce 存在时挂钩才生效。
+	 */
+	public static function register_order_statuses() {
+		add_filter( 'woocommerce_register_shop_order_post_statuses', array( __CLASS__, 'add_shipped_status' ) );
+		add_filter( 'wc_order_statuses', array( __CLASS__, 'add_shipped_to_status_list' ) );
+	}
+
+	/**
+	 * 向 WooCommerce 注册 shipped 状态（含后台展示）。
+	 *
+	 * @param array $statuses WC 状态定义。
+	 * @return array
+	 */
+	public static function add_shipped_status( $statuses ) {
+		$statuses['wc-shipped'] = array(
+			'label'                     => _x( 'Shipped', 'Order status', 'sutwx-app-api' ),
+			'public'                    => false,
+			'exclude_from_search'       => false,
+			'show_in_admin_all_list'    => true,
+			'show_in_admin_status_list' => true,
+			'label_count'               => _n_noop(
+				'Shipped <span class="count">(%s)</span>',
+				'Shipped <span class="count">(%s)</span>',
+				'sutwx-app-api'
+			),
+		);
+		return $statuses;
+	}
+
+	/**
+	 * 将 shipped 加入订单状态下拉，便于后台手动发货。
+	 *
+	 * @param array $statuses WC 状态下拉。
+	 * @return array
+	 */
+	public static function add_shipped_to_status_list( $statuses ) {
+		$statuses['wc-shipped'] = _x( 'Shipped', 'Order status', 'sutwx-app-api' );
+		return $statuses;
 	}
 
 	/**
