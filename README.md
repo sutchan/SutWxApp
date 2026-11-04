@@ -1,4 +1,4 @@
-# SutWxApp - 苏铁微信小程序
+# 苏铁 SutWxApp - 微信小程序 × WordPress 电商桥接方案
 
 ![版本](https://img.shields.io/badge/version-3.5.9-blue)
 ![设计风格](https://img.shields.io/badge/design-Apple%20Style-green)
@@ -6,7 +6,21 @@
 
 ## 简介
 
-苏铁微信小程序以 **WordPress 网站为后端（headless CMS）**，在微信侧对网站内容进行「优化排版并显示」，提供文章/商品浏览、购物车、订单管理、用户中心等核心功能。界面设计采用 Apple 极简风格，提供优质的用户体验。
+**苏铁 SutWxApp** 是一套打通 **微信小程序** 与 **WordPress 网站** 的电商桥接方案，由前后端两端协同组成：
+
+- **微信小程序（前端）**：Apple 极简风格商城，提供文章/商品浏览、购物车、订单管理、微信支付、用户中心等核心功能，支持中英文多语言，主题可由 WordPress 后台下发换肤。
+- **WordPress 插件 `sutwx-app-api`（后端）**：以 headless 方式为小程序提供 REST API（统一 `/api/*` 路径与 `{code,data}` 包络），承载 `wx.login → JWT` 鉴权、订单管理、微信支付 V3 与商家发货能力；商品/分类数据源为 WooCommerce，文章为 WP 核心。
+
+两端通过 REST API 对接：小程序 `baseUrl` 指向站点根即可直连，内容端点免登录，鉴权/订单/支付端点使用 Bearer JWT。界面采用 Apple 极简设计风格，提供优质的用户体验。
+
+## 项目组成
+
+| 组件 | 路径 | 说明 | 版本 |
+|------|------|------|------|
+| 微信小程序（前端） | `SutWxApp/` | Apple 极简风格商城，原生小程序框架（WXML / WXSS / JS） | 3.5.9 |
+| WordPress 插件（后端） | `sutwx-app-api/` | headless REST API 插件，桥接 WP / WooCommerce 与小程序 | 0.5.1 |
+
+小程序详细规范见 [`docs/`](docs/README.md)；插件说明见 [`sutwx-app-api/readme.txt`](sutwx-app-api/readme.txt) 与开发计划 [`docs/wordpress-plugin/DEVELOPMENT_PLAN.md`](docs/wordpress-plugin/DEVELOPMENT_PLAN.md)。
 
 ## 设计风格
 

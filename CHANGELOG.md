@@ -17,6 +17,15 @@
 
 - **下单库存校验**：`POST /api/order/create` 现聚合同一商品数量，缺货（已售罄）返回 409 `sutwx_out_of_stock`；开启库存管理时校验数量不超过可用库存，返回 409 `sutwx_insufficient_stock`。
 
+## [3.5.9] - 2026-11-04
+
+### 文档（项目描述与文案完善）
+
+- 更新仓库级「项目描述」（`package.json` / `metadata.json`）：由「仅微信小程序」修正为「微信小程序 × WordPress 电商桥接方案」，明确项目含微信小程序与配套 WordPress 插件 `sutwx-app-api` 两端。
+- `metadata.json` 移除与项目无关的 `MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API` 能力声明。
+- `README.md` / `docs/PROJECT_OVERVIEW.md` 标题与简介重排为「小程序 + 插件」两端并列结构，补充项目组成与后端技术栈说明。
+- 同步版本号至 3.5.9（与 `SutWxApp/app.js` 对齐）。
+
 ## [3.5.8] - 2026-11-04
 
 ### 新增（订单生命周期补全，配套插件 0.5.1）
