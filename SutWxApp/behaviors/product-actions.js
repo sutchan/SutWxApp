@@ -7,13 +7,13 @@
 
 const cartService = require("../services/cartService");
 const request = require("../utils/request");
-const { buildBuyNowItem } = require("../pages/product/utils");
+const { buildBuyNowItem } = require("../pages/product/parts");
 
 module.exports = Behavior({
   methods: {
     handleAddToCart: function () {
       if (!this.data.isLoggedIn) {
-        wx.navigateTo({ url: "/pages/user/index" });
+        wx.switchTab({ url: "/pages/user/index" });
         return;
       }
       this.setData({ showSpecPopup: true });
@@ -56,7 +56,7 @@ module.exports = Behavior({
 
     handleBuyNow: function () {
       if (!this.data.isLoggedIn) {
-        wx.navigateTo({ url: "/pages/user/index" });
+        wx.switchTab({ url: "/pages/user/index" });
         return;
       }
 
@@ -75,7 +75,7 @@ module.exports = Behavior({
 
     handleToggleFavorite: function () {
       if (!this.data.isLoggedIn) {
-        wx.navigateTo({ url: "/pages/user/index" });
+        wx.switchTab({ url: "/pages/user/index" });
         return;
       }
 

@@ -18,6 +18,7 @@ const { createQueueController } = require("./request-queue");
 const { applyAuthHeader } = require("./request-auth-header");
 const { createFailHandler } = require("./request-retry");
 const { withUnauthorizedFallback } = require("./request-401");
+const { readStorage } = require("./auth-token-storage");
 
 const requestInterceptors = [];
 const responseInterceptors = [];
@@ -57,9 +58,12 @@ function request(options) {
     }
   }
 
+  // 缓存键纳入当前登录 token：避免同设备不同用户命中彼此的 GET 缓存（隐私/数据隔离）
+  const cacheToken =
+    config.needAuth !== false ? readStorage("token") || "anon" : "public";
   const cacheKey =
     config.cacheKey ||
-    `${config.method}:${config.url}:${JSON.stringify(config.data || {})}`;
+    `${config.method}:${config.url}:${JSON.stringify(config.data || {})}:${cacheToken}`;
 
   const isTestEnv =
     typeof jest !== "undefined" ||
@@ -131,6 +135,7 @@ function request(options) {
           sendRequest,
           resolve,
           reject,
+          release: () => queue.release(),
         }),
         complete: () => {
           requestTask = null;

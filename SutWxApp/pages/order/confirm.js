@@ -30,11 +30,10 @@ Page({
   },
 
   onLoad(options) {
+    let items = [];
     if (options.items) {
       try {
-        const items = JSON.parse(decodeURIComponent(options.items));
-        this.setData({ items: formatProductListPrices(items) });
-        this.calculatePrice();
+        items = JSON.parse(decodeURIComponent(options.items));
       } catch (error) {
         console.error('解析商品信息失败:', error);
         wx.showToast({
@@ -42,6 +41,17 @@ Page({
           icon: 'none'
         });
       }
+    } else {
+      // 立即购买：从本地存储读取临时项（结算后清理）
+      const buyNowItem = wx.getStorageSync('buyNowItem');
+      if (buyNowItem) {
+        items = [buyNowItem];
+        wx.removeStorageSync('buyNowItem');
+      }
+    }
+    if (items.length > 0) {
+      this.setData({ items: formatProductListPrices(items) });
+      this.calculatePrice();
     }
     this.loadAddress();
   },

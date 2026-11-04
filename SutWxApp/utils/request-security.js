@@ -120,10 +120,8 @@ function sanitizeHtml(html) {
     sanitizedHtml = sanitizedHtml.replace(new RegExp(protocol, "gi"), "");
   }
 
-  sanitizedHtml = sanitizedHtml.replace(/<style[^>]*>([\s\S]*?)<\/style>/gi, "");
-  sanitizedHtml = sanitizedHtml.replace(/style="[^"]*"/gi, "");
-  sanitizedHtml = sanitizedHtml.replace(/href="[^"]*"/gi, "");
-  sanitizedHtml = sanitizedHtml.replace(/src="[^"]*"/gi, "");
+  // 保留合法 href/src/style：危险协议（javascript: 等）已在上方 dangerousProtocols 中中和，
+  // 此处不再无差别剥离，避免破坏文章富文本中的图片/链接/排版样式。
   sanitizedHtml = sanitizedHtml.replace(/<!--[^>]*-->/gi, "");
   sanitizedHtml = sanitizedHtml.replace(/&lt;script/gi, "&lt;");
   sanitizedHtml = sanitizedHtml.replace(/&lt;iframe/gi, "&lt;");

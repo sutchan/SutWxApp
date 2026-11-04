@@ -31,10 +31,16 @@ function createFailHandler(deps) {
     sendRequest,
     resolve,
     reject,
+    release,
   } = deps;
+
+  function releaseQueue() {
+    if (typeof release === "function") release();
+  }
 
   return function handleFail(err) {
     if (config.cancelToken && config.cancelToken.isCancel()) {
+      releaseQueue();
       reject(new Error("Request cancelled"));
       return;
     }
@@ -56,6 +62,7 @@ function createFailHandler(deps) {
       const snap = offline.getSnapshot(cacheKey);
       if (snap && snap.data !== undefined) {
         console.warn(`网络不可用，回退离线快照：${cacheKey}`);
+        releaseQueue();
         resolve(snap.data);
         return;
       }
@@ -67,6 +74,7 @@ function createFailHandler(deps) {
     } else if (err.message) {
       errorMessage = err.message;
     }
+    releaseQueue();
     reject(new Error(errorMessage));
   };
 }

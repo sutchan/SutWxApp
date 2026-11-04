@@ -78,7 +78,7 @@ Page({
     const { productInfo, productId } = this.data;
     return {
       title: productInfo ? productInfo.name : "分享商品",
-      path: `/pages/product/detail?id=${productId}`,
+      path: `/pages/product/index?id=${productId}`,
       imageUrl: productInfo && productInfo.images ? productInfo.images[0] : "",
     };
   },

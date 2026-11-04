@@ -55,6 +55,7 @@ function buildBuyNowItem(productInfo, selectedSpecIndex, selectedQuantity) {
     productImage: productInfo.images && productInfo.images[0],
     specName: spec.name,
     specPrice: spec.price,
+    price: spec.price,
     quantity: selectedQuantity,
     selected: true,
   };

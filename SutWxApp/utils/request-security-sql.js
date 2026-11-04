@@ -11,15 +11,15 @@
  * @throws {Error} 检测到潜在注入时抛出错误
  */
 function validateRequestData(data) {
+  // 仅匹配真实 SQL 注入结构，避免误杀含 order/from/group 等常见英文词的合法文本
+  // （服务端才是 SQL 注入的真正防线，客户端仅做粗粒度拦截）
   const sqlInjectionPatterns = [
-    /('|--|;|#|-- | --|\/\*)/i,
-    /\b(SELECT|INSERT|UPDATE|DELETE|DROP|ALTER|CREATE|TRUNCATE|EXECUTE|UNION|JOIN|FROM|WHERE|GROUP|ORDER|HAVING|LIMIT|OFFSET|INTO|VALUES|CALL|EXEC|DECLARE|BEGIN|END|FETCH|LOCK|MERGE|ROLLBACK|COMMIT|SAVEPOINT|GRANT|REVOKE|DENY|TRANSACTION)\b/i,
-    /\/\*.*?\*\//i,
-    /\b(WAITFOR|SLEEP|DELAY)\b/i,
-    /\b(UNION|ALL)\b.*?\b(SELECT|INSERT|UPDATE|DELETE)\b/i,
-    /\(\s*SELECT\s+/i,
-    /\b(OR|AND|NOT)\s+\d+\s*=\s*\d+\b/i,
-    /\b(CONVERT|CAST)\b/i,
+    /(--|#|\/\*|\*\/)/i, // SQL 注释符
+    /;\s*(drop|delete|update|insert|alter|create|truncate|exec|execute)\b/i, // 堆叠查询 + 危险动词
+    /\bunion\b\s+(all\s+)?select\b/i, // UNION SELECT
+    /\bor\b\s+\d+\s*=\s*\d+/i, // OR 1=1 类恒真条件
+    /\band\b\s+\d+\s*=\s*\d+/i, // AND 1=1 类恒真条件
+    /\b(drop|truncate)\s+table\b/i, // DROP/TRUNCATE TABLE
   ];
 
   function checkStringForSqlInjection(value, fieldPath) {

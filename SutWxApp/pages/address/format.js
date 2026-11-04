@@ -70,19 +70,24 @@ function emptyForm(isFirst) {
 
 /**
  * 构造回写上一页（下单页）的 setData 补丁
+ * 下单页数据形态为 { address: {...} }，直接写入 address 字段，
+ * 使用真实手机号（fullPhone）便于展示，提交时以 address.id 作为 addressId。
  * @param {Object} address 列表中的地址项
  * @returns {Object}
  */
 function selectAddressPatch(address) {
   return {
-    selectedAddress: address,
-    "formData.receiverName": address.name,
-    "formData.receiverPhone": address.fullPhone,
-    "formData.receiverAddress": address.address,
-    "formData.receiverProvince": address.province,
-    "formData.receiverCity": address.city,
-    "formData.receiverDistrict": address.district,
-    "formData.receiverDetail": address.detail,
+    address: {
+      id: address.id,
+      name: address.name,
+      phone: address.fullPhone,
+      province: address.province,
+      city: address.city,
+      district: address.district,
+      detail: address.detail,
+      address: address.address,
+      isDefault: address.isDefault,
+    },
   };
 }
 
