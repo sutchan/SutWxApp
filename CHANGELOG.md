@@ -11,6 +11,12 @@
 - `release.yml`（1.0.0 → 1.1.0）在 Release 中附加三份交付物：`sutwxapp-site-<tag>.zip`（静态站点）、`sutwxapp-miniprogram-<tag>.zip`（小程序源码，排除 node_modules / coverage / 私钥）、`sutwx-app-api-<tag>.zip`（WordPress 插件）。
 - `.gitignore` 新增 `/dist`（构建产物由 Actions 生成，不入库）。
 
+## [3.5.9] - 2026-11-04
+
+### 新增（订单健壮性，配套插件 0.5.2）
+
+- **下单库存校验**：`POST /api/order/create` 现聚合同一商品数量，缺货（已售罄）返回 409 `sutwx_out_of_stock`；开启库存管理时校验数量不超过可用库存，返回 409 `sutwx_insufficient_stock`。
+
 ## [3.5.8] - 2026-11-04
 
 ### 新增（订单生命周期补全，配套插件 0.5.1）

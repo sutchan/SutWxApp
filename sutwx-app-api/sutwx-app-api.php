@@ -3,7 +3,7 @@
  * Plugin Name:       苏铁小程序 API
  * Plugin URI:        https://github.com/sutchan/SutWxApp
  * Description:       为「苏铁」微信小程序提供 headless REST API（/api/* 路径、{code,data} 包络）。商品与分类数据源为 WooCommerce，文章为 WP 核心。含 wx.login → JWT 鉴权、Transients 缓存、IP 限频、订单管理与微信支付 V3。
- * Version:           0.5.1
+ * Version:           0.5.2
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Requires Plugins:  woocommerce
@@ -13,12 +13,12 @@
  * Text Domain:       sutwx-app-api
  *
  * @package SutwxAppApi
- * @version 0.5.1
+ * @version 0.5.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'SUTWX_API_VERSION', '0.5.1' );
+define( 'SUTWX_API_VERSION', '0.5.2' );
 define( 'SUTWX_API_FILE', __FILE__ );
 define( 'SUTWX_API_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SUTWX_API_REST_NS', 'sutwx/v1' );

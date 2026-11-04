@@ -3,7 +3,7 @@
  * /api/order/create|cancel|confirm 路由：订单创建与状态流转（BE-006，鉴权）。
  *
  * @package SutwxAppApi
- * @version 0.5.1
+ * @version 0.5.2
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -109,7 +109,8 @@ class Sutwx_Rest_Order_Actions extends Sutwx_Rest_Base {
 		$order->set_customer_id( $user_id );
 		$order->set_currency( function_exists( 'get_woocommerce_currency' ) ? get_woocommerce_currency() : 'CNY' );
 
-		$has_item = false;
+		// 库存聚合：同一商品分多条出现时按总数量校验，避免分项各自通过但合计超库存。
+		$quantities = array();
 		foreach ( $items as $item ) {
 			if ( ! is_array( $item ) ) {
 				continue;
@@ -119,9 +120,23 @@ class Sutwx_Rest_Order_Actions extends Sutwx_Rest_Base {
 			if ( $product_id <= 0 || $quantity <= 0 ) {
 				continue;
 			}
+			$quantities[ $product_id ] = ( isset( $quantities[ $product_id ] ) ? (int) $quantities[ $product_id ] : 0 ) + $quantity;
+		}
+
+		$has_item = false;
+		foreach ( $quantities as $product_id => $quantity ) {
 			$product = wc_get_product( $product_id );
 			if ( ! $product || ! $product->is_purchasable() ) {
 				return $this->error( __( '存在不可购买的商品', 'sutwx-app-api' ), 400, 'sutwx_invalid_product' );
+			}
+			if ( ! $product->is_in_stock() ) {
+				return $this->error( sprintf( __( '商品「%s」已售罄', 'sutwx-app-api' ), $product->get_name() ), 409, 'sutwx_out_of_stock' );
+			}
+			if ( $product->managing_stock() ) {
+				$available = (int) $product->get_stock_quantity();
+				if ( $quantity > $available ) {
+					return $this->error( sprintf( __( '商品「%s」库存不足，仅剩 %d 件', 'sutwx-app-api' ), $product->get_name(), $available ), 409, 'sutwx_insufficient_stock' );
+				}
 			}
 			$order->add_product( $product, $quantity );
 			$has_item = true;

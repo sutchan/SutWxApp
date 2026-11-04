@@ -46,7 +46,7 @@ App({
     productSource: "mock", // 'mock'（默认）| 'woocommerce'：商品数据源（WooCommerce 需配套 WP 插件）
     theme: null, // 当前主题色值（由 themeService 加载）
     themeStyle: "", // 当前主题 CSS 变量声明字符串（供页面根容器绑定）
-    version: "3.5.8",
+    version: "3.5.9",
     locale: "zh-CN", // 当前界面语言（由 i18n 初始化）
     debug: false,
     request: {
