@@ -5,7 +5,7 @@
   描述: 产品详情页结构模板入口，按区块聚合各分片
 -->
 
-<view class="container" id="page-root" style="{{themeStyle}}">
+<view class="container" id="product-root" style="{{themeStyle}}">
   <include src="./product-gallery.wxml" />
   <include src="./product-info.wxml" />
   <include src="./product-reviews.wxml" />

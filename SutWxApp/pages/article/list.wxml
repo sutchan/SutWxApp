@@ -1,4 +1,4 @@
-<view class="article-list" id="page-root" style="{{themeStyle}}">
+<view class="article-list" id="article-list-root" style="{{themeStyle}}">
   <view class="list-header">
     <text class="title">养护文章</text>
     <text class="subtitle">绿植养护知识</text>

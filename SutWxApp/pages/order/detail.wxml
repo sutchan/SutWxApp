@@ -5,7 +5,7 @@
 更新日期: 2026-07-01
 描述: 订单详情页面模板
 -->
-<view class="detail-container" id="page-root" style="{{themeStyle}}" wx:if="{{!loading}}">
+<view class="detail-container" id="order-detail-root" style="{{themeStyle}}" wx:if="{{!loading}}">
   <!-- 订单状态 -->
   <view class="status-section">
     <text class="status-text">{{orderDetail.statusText}}</text>

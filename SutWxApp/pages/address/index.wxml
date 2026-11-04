@@ -1,4 +1,4 @@
-<view class="container" id="page-root" style="{{themeStyle}}">
+<view class="container" id="address-root" style="{{themeStyle}}">
   <view class="header">
     <view class="title">地址管理</view>
   </view>

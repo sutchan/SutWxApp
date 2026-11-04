@@ -1,4 +1,4 @@
-<view class="article-detail" id="page-root" style="{{themeStyle}}">
+<view class="article-detail" id="article-detail-root" style="{{themeStyle}}">
   <block wx:if="{{post}}">
     <view class="article-header">
       <text class="article-title">{{post.title}}</text>

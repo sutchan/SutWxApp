@@ -5,7 +5,7 @@
 更新日期: 2026-07-01
 描述: 分类页面模板
 -->
-<view class="category-container" id="page-root" style="{{themeStyle}}">
+<view class="category-container" id="category-root" style="{{themeStyle}}">
   <!-- 分类侧边栏（包含“热门分类”等分组头） -->
   <scroll-view class="category-sidebar" scroll-y id="category-sidebar">
     <block wx:for="{{categoryGroups}}" wx:key="title" wx:for-item="group" wx:for-index="gIdx">
