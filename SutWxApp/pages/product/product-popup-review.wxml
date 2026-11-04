@@ -1,12 +1,12 @@
 <!--
   文件名: pages/product/product-popup-review.wxml
-  版本号: 3.5.3
+  版本号: 3.5.10
   更新日期: 2026-10-14
   描述: 评价弹窗分片：完整评价列表
 -->
 
-<view class="review-popup-mask" wx:if="{{showReviewPopup}}" bindtap="handleHideReviewPopup"></view>
-<view class="review-popup {{showReviewPopup ? 'show' : ''}}">
+<view id="product-review-popup-mask" class="review-popup-mask" wx:if="{{showReviewPopup}}" bindtap="handleHideReviewPopup"></view>
+<view id="product-review-popup" class="review-popup {{showReviewPopup ? 'show' : ''}}">
   <view class="review-popup-header">
     <text class="review-popup-title">商品评价</text>
     <view class="review-popup-close" bindtap="handleHideReviewPopup">

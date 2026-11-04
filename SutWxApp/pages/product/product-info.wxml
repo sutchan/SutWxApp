@@ -1,11 +1,11 @@
 <!--
   文件名: pages/product/product-info.wxml
-  版本号: 3.5.3
+  版本号: 3.5.10
   更新日期: 2026-10-14
   描述: 商品信息区分片：价格行、名称描述、标签、规格入口与服务保障
 -->
 
-<view class="product-info-section">
+<view id="product-info-section" class="product-info-section">
   <view class="price-row">
     <view class="price-info">
       <text class="price-label">促销价</text>

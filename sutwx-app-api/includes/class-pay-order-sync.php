@@ -3,7 +3,7 @@
  * 支付订单同步：归属校验、商户订单号反查与支付成功落库（BE-007，拆自 class-rest-pay.php）。
  *
  * @package SutwxAppApi
- * @version 0.5.0
+ * @version 0.5.3
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -35,7 +35,10 @@ class Sutwx_Pay_Order_Sync {
 			return false;
 		}
 
-		if ( 'processing' !== (string) $order->get_status() ) {
+		// 仅「待付款类」状态可推进到「待发货」；已取消/已完成/已发货等终态
+		// 不因旧通知重放而状态回退（重放只补写交易号，保持幂等）。
+		$status = (string) $order->get_status();
+		if ( in_array( $status, array( 'pending', 'on-hold', 'failed' ), true ) ) {
 			$order->set_payment_method_title( __( '微信支付', 'sutwx-app-api' ) );
 			$order->set_date_paid( time() );
 			$order->update_status( 'processing', __( '用户已完成支付', 'sutwx-app-api' ) );

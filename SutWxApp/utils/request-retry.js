@@ -1,6 +1,6 @@
 /**
  * 文件名: request-retry.js
- * 版本号: 3.5.7
+ * 版本号: 3.5.10
  * 更新日期: 2026-11-04
  * 描述: 请求失败重试与离线降级（指数退避 + 抖动；GET 请求耗尽重试后回退离线快照）
  */
@@ -45,7 +45,13 @@ function createFailHandler(deps) {
       return;
     }
 
-    if (retryState.count < maxRetry) {
+    // 仅幂等方法（或显式标记 idempotent 的请求）可自动重试：
+    // POST 下单/支付重试会造成重复扣款、重复订单，网络抖动必须交由业务层显式处理。
+    const method = String(config.method || "GET").toUpperCase();
+    const retryableMethods = ["GET", "HEAD", "OPTIONS"];
+    const canRetry = retryableMethods.indexOf(method) !== -1 || config.idempotent === true;
+
+    if (canRetry && retryState.count < maxRetry) {
       retryState.count++;
       const delay = retryDelay * Math.pow(2, retryState.count - 1);
       const jitter = Math.random() * delay * 0.5;

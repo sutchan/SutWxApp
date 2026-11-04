@@ -1,28 +1,20 @@
 /**
  * 文件名: index.js
- * 版本号: 3.5.3
+ * 版本号: 3.5.10
  * 更新日期: 2026-10-14
  * 描述: 首页逻辑控制层（编排层）。业务细节见 parts.js / parts-data.js /
  *       suggestions.js / utils.js
  */
 
 const request = require("../../utils/request");
-const {
-  pickCategory,
-  loadSearchHistory,
-  saveSearchHistory,
-  appendSearchKeyword,
-} = require("./parts");
+const { unwrap } = require("../../utils/api");
+const { pickCategory, loadSearchHistory } = require("./parts");
 const {
   loadBanners,
   loadCategories,
   loadProducts,
 } = require("./parts-data");
-const {
-  SEARCH_DELAY_MS,
-  filterSuggestions,
-  matchSuggestionId,
-} = require("./suggestions");
+const { searchHandlers } = require("./search-handlers");
 
 const themeBehavior = require("../../behaviors/theme");
 
@@ -60,6 +52,14 @@ Page({
     this.setData({ isLoggedIn: !!token, userInfo });
   },
 
+  onUnload: function () {
+    // 搜索跳转用了延时器，页面卸载后必须清理，避免对已销毁页面 setData。
+    this.clearSearchTimer();
+  },
+
+  // 搜索交互（历史浮层/联想/执行跳转）见 search-handlers.js
+  ...searchHandlers,
+
   onPullDownRefresh: function () {
     this.loadBanners();
     this.loadCategories();
@@ -72,9 +72,10 @@ Page({
     }
   },
 
-  // 统一请求封装（首页数据公开，needAuth: false）
+  // 统一请求封装（首页数据公开，needAuth: false）。
+  // 后端统一返回 {code,data} 包络，此处解包后交给 parts-data，避免读 data.list 恒为空。
   fetch: function (url, data) {
-    return request({ url, method: "GET", data, needAuth: false });
+    return request({ url, method: "GET", data, needAuth: false }).then(unwrap);
   },
 
   loadBanners: function () {
@@ -105,79 +106,6 @@ Page({
     if (link) {
       wx.navigateTo({ url: link });
     }
-  },
-
-  handleSearchTap: function () {
-    this.setData({
-      showSearchHistory: true,
-      searchHistory: loadSearchHistory(),
-    });
-  },
-
-  handleCloseSearch: function () {
-    this.setData({ showSearchHistory: false });
-  },
-
-  handleClearHistory: function () {
-    saveSearchHistory([]);
-    this.setData({ searchHistory: [] });
-    wx.showToast({ title: "已清空搜索历史", icon: "none" });
-  },
-
-  handleSearchInput: function (e) {
-    const val = e.detail.value;
-    this.setData({ searchKeyword: val });
-    this.updateSuggestions(val);
-  },
-
-  updateSuggestions: function (val) {
-    this.setData({ suggestions: filterSuggestions(val) });
-  },
-
-  handleClearSearchInput: function () {
-    this.setData({ searchKeyword: "", suggestions: [] });
-  },
-
-  handleSelectHistoryTag: function (e) {
-    const { keyword } = e.currentTarget.dataset;
-    this.executeSearch(keyword);
-  },
-
-  handleSearchConfirm: function (e) {
-    const kw = (e.detail && e.detail.value) || this.data.searchKeyword;
-    this.executeSearch(kw);
-  },
-
-  executeSearch: function (kw) {
-    if (!kw || !kw.trim()) {
-      wx.showToast({ title: "请输入搜索词", icon: "none" });
-      return;
-    }
-    const text = kw.trim();
-    const history = appendSearchKeyword(text, this.data.searchHistory);
-    const matchedId = matchSuggestionId(text);
-
-    // 显示微小加载动效，不要立刻关闭历史浮层
-    this.setData({
-      searchHistory: history,
-      isSearching: true,
-      searchKeyword: text,
-    });
-
-    setTimeout(() => {
-      this.setData({
-        showSearchHistory: false,
-        isSearching: false,
-        suggestions: [],
-      });
-      wx.showToast({ title: `已搜索：${text}`, icon: "none" });
-
-      if (matchedId) {
-        wx.navigateTo({ url: `/pages/product/index?id=${matchedId}` });
-      } else {
-        wx.showToast({ title: "未匹配到相关商品", icon: "none" });
-      }
-    }, SEARCH_DELAY_MS);
   },
 
   handleFavorite: function () {

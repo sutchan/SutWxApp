@@ -1,6 +1,6 @@
 /**
  * 文件名: category.js
- * 版本号: 3.0.14
+ * 版本号: 3.5.10
  * 更新日期: 2026-09-13
  * 描述: 分类数据模型与 WooCommerce 分类映射层
  *       将 WordPress/WooCommerce REST 返回的商品分类对象映射为小程序统一的分类 DTO。
@@ -17,7 +17,7 @@ const { toNumber, stripHtml } = require("../utils/text");
 function pickIcon(image) {
   if (!image) return "";
   if (typeof image === "string") return image;
-  return image.src || "";
+  return image.src || image.icon || "";
 }
 
 /**
@@ -31,7 +31,8 @@ function mapWooCommerceCategory(c) {
   return {
     id: c.id,
     name: c.name || "",
-    icon: pickIcon(c.image),
+    // 后端 DTO 返回 icon 字符串；WC 原始分类返回 image 对象，两者兼容。
+    icon: typeof c.icon === "string" && c.icon ? c.icon : pickIcon(c.image),
     count: toNumber(c.count, 0),
     description: stripHtml(c.description || ""),
     parentId: toNumber(c.parent, 0),

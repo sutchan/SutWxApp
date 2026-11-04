@@ -3,7 +3,7 @@
  * /api/post/* 路由：WP 文章 → 文章 DTO（P1 实现）。
  *
  * @package SutwxAppApi
- * @version 0.2.0
+ * @version 0.5.3
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -57,7 +57,7 @@ class Sutwx_Rest_Posts extends Sutwx_Rest_Base {
 	 */
 	public function list_items( $request ) {
 		$paging  = $this->get_paging_args( $request );
-		$keyword = (string) ( $request->get_param( 'keyword' ) ? $request->get_param( 'keyword' ) : '' );
+		$keyword = $this->normalize_keyword( $request );
 
 		$query_args = array(
 			'post_type'           => 'post',
@@ -71,6 +71,9 @@ class Sutwx_Rest_Posts extends Sutwx_Rest_Base {
 		if ( '' !== $keyword ) {
 			$query_args['s'] = $keyword;
 		}
+
+		// 搜索请求缓存键无限扩张：带关键词时用短 TTL，避免灌爆 transient 表。
+		$cache_ttl = '' !== $keyword ? 60 : Sutwx_Cache::TTL;
 
 		$payload = Sutwx_Cache::remember(
 			'post',
@@ -89,7 +92,7 @@ class Sutwx_Rest_Posts extends Sutwx_Rest_Base {
 					'pageSize' => (int) $query_args['posts_per_page'],
 				);
 			},
-			Sutwx_Cache::TTL
+			$cache_ttl
 		);
 
 		return $this->success( $payload );

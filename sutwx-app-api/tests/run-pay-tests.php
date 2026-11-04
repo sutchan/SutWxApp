@@ -8,7 +8,7 @@
  *       全链路与防篡改、错误文案映射（BE-007）。
  *
  * @package SutwxAppApi
- * @version 0.5.0
+ * @version 0.5.3
  */
 
 require __DIR__ . '/bootstrap.php';
@@ -137,16 +137,19 @@ check( Sutwx_Wechat_Pay_Sign::verify( $pay_sign_msg, $pay_params['paySign'], $pu
 echo "== 通知资源解密（AES-256-GCM） ==\n";
 
 $key    = 'abcdefghijklmnopqrstuvwxyz012345';
-$iv     = random_bytes( 12 );
+// 微信 V3 resource.nonce 为 12 字节明文字符串（非 Base64），直接作为 GCM IV。
+$iv     = 'abcdefghijkl';
 $aad    = 'transaction';
 $plain  = wp_json_encode_safe( array( 'out_trade_no' => 'SUT55T1554208460', 'trade_state' => 'SUCCESS' ) );
 $tag    = '';
 $cipher = openssl_encrypt( $plain, 'aes-256-gcm', $key, OPENSSL_RAW_DATA, $iv, $tag, $aad );
+// 微信 V3 ciphertext = Base64(密文 ‖ 16 字节 GCM 认证标签)。
+$wechat_ciphertext_b64 = base64_encode( $cipher . $tag );
 
-$decrypted = Sutwx_Wechat_Pay_Sign::decrypt_resource( base64_encode( $cipher ), base64_encode( $iv ), $aad, $key );
-check( $plain === $decrypted, 'AES-256-GCM 加解密 roundtrip' );
-check( '' === Sutwx_Wechat_Pay_Sign::decrypt_resource( base64_encode( $cipher ), base64_encode( $iv ), 'wrong-aad', $key ), '关联数据不符解密失败' );
-check( '' === Sutwx_Wechat_Pay_Sign::decrypt_resource( '!!!not-base64!!!', base64_encode( $iv ), $aad, $key ), '非法 Base64 密文返回空' );
+$decrypted = Sutwx_Wechat_Pay_Sign::decrypt_resource( $wechat_ciphertext_b64, $iv, $aad, $key );
+check( $plain === $decrypted, 'AES-256-GCM 加解密 roundtrip（含 tag）' );
+check( '' === Sutwx_Wechat_Pay_Sign::decrypt_resource( $wechat_ciphertext_b64, $iv, 'wrong-aad', $key ), '关联数据不符解密失败' );
+check( '' === Sutwx_Wechat_Pay_Sign::decrypt_resource( '!!!not-base64!!!', $iv, $aad, $key ), '非法 Base64 密文返回空' );
 
 echo "== 通知解析全链路 ==\n";
 
@@ -158,9 +161,9 @@ $notify_body = wp_json_encode_safe(
 		'resource'    => array(
 			'original_type'   => 'transaction',
 			'algorithm'       => 'AEAD_AES_256_GCM',
-			'ciphertext'      => base64_encode( $cipher ),
+			'ciphertext'      => $wechat_ciphertext_b64,
 			'associated_data' => $aad,
-			'nonce'           => base64_encode( $iv ),
+			'nonce'           => $iv,
 		),
 	)
 );

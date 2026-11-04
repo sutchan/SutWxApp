@@ -1,6 +1,6 @@
 /**
  * 文件名: parts-data.js
- * 版本号: 3.5.3
+ * 版本号: 3.5.10
  * 更新日期: 2026-10-14
  * 描述: 首页数据加载子逻辑（轮播图 / 分类 / 商品分页列表），以页面实例为参数
  *       复用 page.fetch / page.setData，保持 index.js 编排层精简。
@@ -21,7 +21,8 @@ function loadBanners(page) {
     })
     .catch((err) => {
       if (request.isCancel(err)) return;
-      console.error("获取轮播图失败:", err);
+      // 后端暂无 /api/banner/list 时静默降级为空轮播，避免无意义报错刷屏。
+      page.setData({ bannerList: [] });
     });
 }
 
@@ -33,7 +34,11 @@ function loadCategories(page) {
   page
     .fetch("/api/category/list", {})
     .then((data) => {
-      page.setData({ categories: Array.isArray(data) ? data : [] });
+      // 后端分类端点返回 {list, total, page, pageSize}，不是裸数组。
+      const list = Array.isArray(data)
+        ? data
+        : (data && Array.isArray(data.list) ? data.list : []);
+      page.setData({ categories: list });
     })
     .catch((err) => {
       if (request.isCancel(err)) return;
@@ -56,13 +61,19 @@ function loadProducts(page, reset) {
 
   return page
     .fetch("/api/product/list", {
-      pageNum,
+      // 后端分页参数是 page / pageSize，不是 pageNum。
+      page: pageNum,
       pageSize: page.data.pageSize,
       categoryId,
     })
     .then((data) => {
-      const list = (data && data.list) || [];
-      const hasMore = data ? data.hasMore : false;
+      const list = Array.isArray(data)
+        ? data
+        : ((data && Array.isArray(data.list)) ? data.list : []);
+      const total = data ? Number(data.total) || 0 : 0;
+      // 后端不返回 hasMore，按 total 与已加载数量推算。
+      const pageSize = page.data.pageSize;
+      const hasMore = total > 0 ? pageNum * pageSize < total : list.length >= pageSize;
       page.setData({
         products: reset ? list : [...page.data.products, ...list],
         pageNum,

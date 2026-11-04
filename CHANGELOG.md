@@ -11,6 +11,36 @@
 - `release.yml`（1.0.0 → 1.1.0）在 Release 中附加三份交付物：`sutwxapp-site-<tag>.zip`（静态站点）、`sutwxapp-miniprogram-<tag>.zip`（小程序源码，排除 node_modules / coverage / 私钥）、`sutwx-app-api-<tag>.zip`（WordPress 插件）。
 - `.gitignore` 新增 `/dist`（构建产物由 Actions 生成，不入库）。
 
+## [3.5.10] - 2026-11-04
+
+### 修复（核心流程与契约一致性，配套插件 0.5.3）
+
+- **首页数据全为空**：`page.fetch` 未解包 `{code,data}` 包络、分页参数 `pageNum` 与后端 `page` 不符、分类/轮播读裸数组而后端返回 `{list}`、`hasMore` 后端不返回。现统一解包并按 `total` 推算 `hasMore`；轮播字段对齐 WXML 的 `imageUrl`；`/api/banner/list` 缺失时静默降级为空轮播。
+- **登录/登出/用户信息失效**：`authService` 路径缺 `/api` 前缀（后端 rewrite 仅匹配 `^api/`），且把整个包络传给 `saveAuth`。现补前缀并用 `unwrap` 解包；登出在 `finally` 中清除本地登录态。
+- **分类图标恒空**：后端 DTO 返回 `icon` 字符串，前端只读 WC 原始 `image`，现两者兼容。
+- **商品 DTO 被误判重解析**：`type` 为 DTO 与 WC 原始结构共有字段，导致 DTO 被当作原始商品解析而丢价格/图片。改用 DTO 独有字段判定。
+- **下单商品 ID 丢失**：`toOrderItems` 只读 `item.id`，购物车项用 `productId`，现两者兼容。
+- **购物车静默加错商品**：mock 商品不存在时回退到第一个商品，现返回明确失败。
+- **主题永久不更新**：本地主题缓存无 TTL，现加 6 小时有效期。
+- **SQL 校验误杀合法文本**：裸 `#`/`--` 会拦截门牌号 `A#301`、备注「加急--勿拆」，现改为「注释符 + SQL 关键字」组合。
+- **订单列表筛选 0 被吞**：`params.status` 用真值判断，现改为显式 `undefined/null` 判断（`0` 为「全部」）。
+- 清理 12 处 `eqeqeq` 警告：ID 比较改为显式 `String()` 转换后严格相等，保持原有类型宽容语义。
+
+### 重构（拆分 >200 行源码文件）
+
+- 插件：`class-auth-service.php` → 用户资料/用户 meta/Token 黑名单 3 个 trait；`class-jwt.php` → 编码基建 trait；`class-cache.php` → 失效钩子 trait；`class-rate-limit.php` → IP 解析 trait；`class-pay-credentials.php` → 写入 trait；`class-rest-order-actions.php` → 订单装配类 + 独立发货控制器；`class-loader.php` → 模块加载清单 `class-modules.php`。
+- 小程序：`pages/home/index.js` 搜索交互拆至 `pages/home/search-handlers.js`，并在 `onUnload` 清理延时器（避免对已销毁页面 `setData`）。
+- 说明：`prototype/*.html` 与其构建产物按规范保持单文件自包含（浏览器直接打开即可交互，由 `build.js` 生成），不做拆分。
+
+### 测试
+
+- 新增 `__tests__/regression-2026-11.test.js`：覆盖 SQL 不误杀合法文本、首页轮播规整、下单 items 映射、分类图标契约、商品 DTO 判别。
+- 全部 137 个 Jest 用例通过；ESLint 0 error / 0 warning；`check:version`、`check:config`、`check:contract` 均通过。
+
+### 可访问性（调试定位）
+
+- 商品页 8 个 WXML 分片补齐语义化根 ID（`product-actionbar`、`product-info-section`、`product-spec-popup` 等）。
+
 ## [3.5.9] - 2026-11-04
 
 ### 新增（订单健壮性，配套插件 0.5.2）

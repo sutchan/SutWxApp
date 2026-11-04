@@ -5,7 +5,7 @@
  * 优先级：wp-config.php 常量 > option；常量存在时后台只读，避免密钥落库。
  *
  * @package SutwxAppApi
- * @version 0.4.0
+ * @version 0.5.3
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -34,6 +34,11 @@ class Sutwx_Credentials {
 	 * refresh token 有效期（秒）。
 	 */
 	const REFRESH_TTL = 2592000; // 30 天。
+
+	/**
+	 * JWT 密钥最小长度（HS256 至少 32 字节熵）。
+	 */
+	const MIN_SECRET_LENGTH = 32;
 
 	/**
 	 * 读取 AppID。
@@ -68,6 +73,8 @@ class Sutwx_Credentials {
 	/**
 	 * 读取 JWT 签名密钥；缺省时自动生成并落库。
 	 *
+	 * 安全：绝不接受空串或弱密钥；生成失败直接抛错，避免用可预测密钥签发 token。
+	 *
 	 * @return string
 	 */
 	public static function get_jwt_secret() {
@@ -76,10 +83,12 @@ class Sutwx_Credentials {
 		}
 
 		$secret = get_option( self::SECRET_OPTION, '' );
-		if ( ! is_string( $secret ) || strlen( $secret ) < 32 ) {
-			$secret = self::generate_secret();
-			update_option( self::SECRET_OPTION, $secret );
+		if ( is_string( $secret ) && strlen( $secret ) >= self::MIN_SECRET_LENGTH ) {
+			return $secret;
 		}
+
+		$secret = self::generate_secret();
+		update_option( self::SECRET_OPTION, $secret );
 		return $secret;
 	}
 
@@ -102,7 +111,9 @@ class Sutwx_Credentials {
 	}
 
 	/**
-	 * 写入凭证（清洗后仅保留合法字段；锁定态直接返回 false）。
+	 * 写入凭证（清洗后按字段合并；锁定态直接返回 false）。
+	 *
+	 * 修复：原实现用全新数组覆盖 option，单独提交脱敏后的 appSecret 会清空 appId。
 	 *
 	 * @param array $raw 原始提交。
 	 * @return bool
@@ -113,7 +124,7 @@ class Sutwx_Credentials {
 		}
 
 		$raw = is_array( $raw ) ? $raw : array();
-		$out = array();
+		$out = self::get_option();
 
 		if ( isset( $raw['appId'] ) ) {
 			$out['appId'] = self::sanitize_text( $raw['appId'] );
@@ -123,8 +134,6 @@ class Sutwx_Credentials {
 			// 脱敏值（如 wx****abcd）视为「未修改」，保留原值。
 			if ( '' !== $secret && false === strpos( $secret, '*' ) ) {
 				$out['appSecret'] = $secret;
-			} else {
-				$out['appSecret'] = self::get_app_secret();
 			}
 		}
 
@@ -156,19 +165,20 @@ class Sutwx_Credentials {
 	}
 
 	/**
-	 * 生成高强度随机密钥。
+	 * 生成高强度随机密钥（失败即中止，绝不退化到可预测值）。
 	 *
 	 * @return string
+	 * @throws RuntimeException CSPRNG 不可用时。
 	 */
 	private static function generate_secret() {
-		if ( function_exists( 'random_bytes' ) ) {
-			try {
-				return bin2hex( random_bytes( 32 ) );
-			} catch ( Exception $e ) {
-				return '';
-			}
+		if ( ! function_exists( 'random_bytes' ) ) {
+			throw new RuntimeException( 'CSPRNG unavailable: cannot generate JWT secret' );
 		}
-		return md5( uniqid( 'sutwx', true ) . mt_rand() );
+		try {
+			return bin2hex( random_bytes( 32 ) );
+		} catch ( Exception $e ) {
+			throw new RuntimeException( 'CSPRNG failed: cannot generate JWT secret', 0, $e );
+		}
 	}
 
 	/**

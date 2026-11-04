@@ -1,6 +1,6 @@
 /**
  * 文件名: categoryService.js
- * 版本号: 3.0.14
+ * 版本号: 3.5.10
  * 更新日期: 2026-09-13
  * 描述: 分类服务层，提供分类相关功能（支持 WooCommerce 数据源）
  */
@@ -48,7 +48,9 @@ async function getCategoryDetail(categoryId) {
   }
 
   try {
-    const category = mockCategories.find((c) => c.id == categoryId);
+    const category = mockCategories.find(
+      (c) => String(c.id) === String(categoryId),
+    );
     return category || null;
   } catch (error) {
     console.error("获取分类详情失败:", error);

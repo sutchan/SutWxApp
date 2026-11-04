@@ -1,6 +1,6 @@
 /**
  * 文件名: productService.js
- * 版本号: 3.0.14
+ * 版本号: 3.5.10
  * 更新日期: 2026-09-12
  * 描述: 产品服务层，提供产品相关功能（支持 WooCommerce 数据源）
  */
@@ -28,7 +28,10 @@ async function getProductList(params = {}) {
     let products = [...mockProducts];
 
     if (params.categoryId) {
-      products = products.filter((p) => p.categoryId == params.categoryId);
+      // 分类 ID 可能来自 URL（字符串），显式转字符串后严格比较。
+      products = products.filter(
+        (p) => String(p.categoryId) === String(params.categoryId),
+      );
     }
 
     if (params.keyword) {
@@ -64,7 +67,7 @@ async function getProductDetail(productId, options = {}) {
   }
 
   try {
-    const product = mockProducts.find((p) => p.id == productId);
+    const product = mockProducts.find((p) => String(p.id) === String(productId));
     if (!product) {
       throw new Error("产品不存在");
     }
@@ -82,11 +85,13 @@ async function getProductDetail(productId, options = {}) {
 
 async function getRelatedProducts(productId, limit = 4) {
   try {
-    const product = mockProducts.find((p) => p.id == productId);
+    const product = mockProducts.find((p) => String(p.id) === String(productId));
     if (!product) return [];
 
     let related = mockProducts.filter(
-      (p) => p.id != productId && p.categoryId == product.categoryId,
+      (p) =>
+        String(p.id) !== String(productId) &&
+        String(p.categoryId) === String(product.categoryId),
     );
     return related.slice(0, limit);
   } catch (error) {
@@ -97,7 +102,7 @@ async function getRelatedProducts(productId, limit = 4) {
 
 async function addToFavorite(productId) {
   try {
-    const product = mockProducts.find((p) => p.id == productId);
+    const product = mockProducts.find((p) => String(p.id) === String(productId));
     if (product) {
       product.isFavorite = true;
     }
@@ -110,7 +115,7 @@ async function addToFavorite(productId) {
 
 async function removeFromFavorite(productId) {
   try {
-    const product = mockProducts.find((p) => p.id == productId);
+    const product = mockProducts.find((p) => String(p.id) === String(productId));
     if (product) {
       product.isFavorite = false;
     }

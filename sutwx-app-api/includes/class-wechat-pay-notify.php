@@ -3,7 +3,7 @@
  * 微信支付 V3 异步通知解析：平台证书验签 + APIv3 密钥解密（BE-007，拆自 class-wechat-pay.php）。
  *
  * @package SutwxAppApi
- * @version 0.5.0
+ * @version 0.5.3
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -30,6 +30,18 @@ class Sutwx_Wechat_Pay_Notify {
 
 		if ( '' === $cert ) {
 			return array( 'ok' => false, 'data' => array(), 'error' => 'platform_cert_missing' );
+		}
+
+		// 防重放：拒绝 ±5 分钟之外的时间戳，避免合法报文被无限期重放。
+		$ts = (int) $timestamp;
+		if ( $ts <= 0 || abs( time() - $ts ) > 300 ) {
+			return array( 'ok' => false, 'data' => array(), 'error' => 'timestamp_expired' );
+		}
+
+		// 若站点配置了平台证书序列号，则校验通知来源证书一致（未配置时跳过，兼容轮换期）。
+		$expected_serial = defined( 'SUTWX_WX_PLATFORM_SERIAL' ) ? (string) SUTWX_WX_PLATFORM_SERIAL : '';
+		if ( '' !== $expected_serial && ! hash_equals( $expected_serial, $serial ) ) {
+			return array( 'ok' => false, 'data' => array(), 'error' => 'serial_mismatch' );
 		}
 
 		$message = Sutwx_Wechat_Pay_Sign::notify_message( $timestamp, $nonce, $body );

@@ -3,13 +3,16 @@
  * /api/order/create|cancel|confirm 路由：订单创建与状态流转（BE-006，鉴权）。
  *
  * @package SutwxAppApi
- * @version 0.5.2
+ * @version 0.5.3
  */
 
 defined( 'ABSPATH' ) || exit;
 
 if ( ! class_exists( 'Sutwx_Auth_Guard' ) ) {
 	require_once SUTWX_API_DIR . 'includes/class-auth-guard.php';
+}
+if ( ! class_exists( 'Sutwx_Order_Items' ) ) {
+	require_once SUTWX_API_DIR . 'includes/order/class-order-items.php';
 }
 
 /**
@@ -63,21 +66,6 @@ class Sutwx_Rest_Order_Actions extends Sutwx_Rest_Base {
 			)
 		);
 
-		register_rest_route(
-			SUTWX_API_REST_NS,
-			'/order/ship',
-			array(
-				'methods'             => WP_REST_Server::CREATABLE,
-				'callback'            => array( $this, 'ship' ),
-				'permission_callback' => array( __CLASS__, 'permission_manage_orders' ),
-				'args'                => array(
-					'id' => array(
-						'required'          => true,
-						'sanitize_callback' => 'absint',
-					),
-				),
-			)
-		);
 	}
 
 	/**
@@ -109,48 +97,13 @@ class Sutwx_Rest_Order_Actions extends Sutwx_Rest_Base {
 		$order->set_customer_id( $user_id );
 		$order->set_currency( function_exists( 'get_woocommerce_currency' ) ? get_woocommerce_currency() : 'CNY' );
 
-		// 库存聚合：同一商品分多条出现时按总数量校验，避免分项各自通过但合计超库存。
-		$quantities = array();
-		foreach ( $items as $item ) {
-			if ( ! is_array( $item ) ) {
-				continue;
-			}
-			$product_id = isset( $item['productId'] ) ? (int) $item['productId'] : 0;
-			$quantity   = isset( $item['quantity'] ) ? (int) $item['quantity'] : 0;
-			if ( $product_id <= 0 || $quantity <= 0 ) {
-				continue;
-			}
-			$quantities[ $product_id ] = ( isset( $quantities[ $product_id ] ) ? (int) $quantities[ $product_id ] : 0 ) + $quantity;
+		// 商品聚合 + 库存校验（细节见 includes/order/class-order-items.php）。
+		$applied = Sutwx_Order_Items::apply( $order, $items );
+		if ( ! $applied['ok'] ) {
+			return $this->error( $applied['error'], $applied['status'], $applied['code'] );
 		}
 
-		$has_item = false;
-		foreach ( $quantities as $product_id => $quantity ) {
-			$product = wc_get_product( $product_id );
-			if ( ! $product || ! $product->is_purchasable() ) {
-				return $this->error( __( '存在不可购买的商品', 'sutwx-app-api' ), 400, 'sutwx_invalid_product' );
-			}
-			if ( ! $product->is_in_stock() ) {
-				return $this->error( sprintf( __( '商品「%s」已售罄', 'sutwx-app-api' ), $product->get_name() ), 409, 'sutwx_out_of_stock' );
-			}
-			if ( $product->managing_stock() ) {
-				$available = (int) $product->get_stock_quantity();
-				if ( $quantity > $available ) {
-					return $this->error( sprintf( __( '商品「%s」库存不足，仅剩 %d 件', 'sutwx-app-api' ), $product->get_name(), $available ), 409, 'sutwx_insufficient_stock' );
-				}
-			}
-			$order->add_product( $product, $quantity );
-			$has_item = true;
-		}
-		if ( ! $has_item ) {
-			return $this->error( __( '订单商品不能为空', 'sutwx-app-api' ), 400, 'sutwx_invalid_param' );
-		}
-
-		$order->set_billing_first_name( isset( $address['name'] ) ? (string) $address['name'] : '' );
-		$order->set_billing_phone( isset( $address['phone'] ) ? (string) $address['phone'] : '' );
-		$order->set_billing_state( isset( $address['province'] ) ? (string) $address['province'] : '' );
-		$order->set_billing_city( isset( $address['city'] ) ? (string) $address['city'] : '' );
-		$order->set_billing_address_1( isset( $address['detail'] ) ? (string) $address['detail'] : '' );
-		$order->set_billing_address_2( isset( $address['district'] ) ? (string) $address['district'] : '' );
+		Sutwx_Order_Items::apply_address( $order, $address );
 		$order->set_customer_note( $remark );
 
 		$order->calculate_totals();
@@ -225,47 +178,4 @@ class Sutwx_Rest_Order_Actions extends Sutwx_Rest_Base {
 		return $this->success( sutwx_map_order( wc_get_order( $id ) ) );
 	}
 
-	/**
-	 * 商家标记发货：仅「待发货」可发货，已发货幂等返回（BE-006 补全 shipped 状态）。
-	 *
-	 * 该端点供商家/WC 后台侧调用（需 manage_woocommerce 权限），非小程序顾客 JWT。
-	 *
-	 * @param WP_REST_Request $request 请求对象。
-	 * @return array|WP_Error
-	 */
-	public function ship( $request ) {
-		$id = (int) $request->get_param( 'id' );
-		if ( $id <= 0 ) {
-			return $this->error( __( '订单 ID 无效', 'sutwx-app-api' ), 400, 'sutwx_invalid_param' );
-		}
-		if ( ! function_exists( 'wc_get_order' ) ) {
-			return $this->error( __( 'WooCommerce 未启用', 'sutwx-app-api' ), 503, 'sutwx_woocommerce_missing' );
-		}
-
-		$order = wc_get_order( $id );
-		if ( ! $order ) {
-			return $this->error( __( '订单不存在', 'sutwx-app-api' ), 404, 'sutwx_not_found' );
-		}
-
-		$current = (string) $order->get_status();
-		if ( 'shipped' === $current ) {
-			return $this->success( sutwx_map_order( $order ) ); // 已发货，幂等。
-		}
-		if ( ! sutwx_order_can_ship( $current ) ) {
-			return $this->error( __( '仅待发货订单可标记发货', 'sutwx-app-api' ), 409, 'sutwx_invalid_status' );
-		}
-
-		$order->update_status( 'shipped', __( '商家已发货', 'sutwx-app-api' ) );
-
-		return $this->success( sutwx_map_order( wc_get_order( $id ) ) );
-	}
-
-	/**
-	 * 商家/WC 后台权限：需 manage_woocommerce 能力（标记发货等后台操作）。
-	 *
-	 * @return bool
-	 */
-	public static function permission_manage_orders() {
-		return (bool) current_user_can( 'manage_woocommerce' );
-	}
 }

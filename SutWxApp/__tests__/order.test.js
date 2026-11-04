@@ -1,6 +1,6 @@
 /**
  * 文件名: order.test.js
- * 版本号: 3.5.4
+ * 版本号: 3.5.10
  * 更新日期: 2026-10-14
  * 描述: 订单模块单测（FE-004）：DTO 映射、mock 数据源分支、woocommerce 分支端点调用。
  */
@@ -161,7 +161,14 @@ describe("orderService woocommerce 数据源", () => {
       "/api/order/create",
       {
         items: [{ productId: 7, quantity: 2 }],
-        address: { name: "张三", phone: "13800138000", detail: "北京市朝阳区某某路 1 号" },
+        address: {
+          name: "张三",
+          phone: "13800138000",
+          province: "",
+          city: "",
+          district: "",
+          detail: "北京市朝阳区某某路 1 号",
+        },
         remark: "尽快发货",
       },
       expect.objectContaining({ useCache: false }),

@@ -1,6 +1,6 @@
 /**
  * 文件名: request-cache.js
- * 版本号: 3.5.7
+ * 版本号: 3.5.10
  * 更新日期: 2026-11-04
  * 描述: request.js 的 LRU 请求缓存实现（独立维护缓存状态，与请求主逻辑解耦）
  */
@@ -81,19 +81,18 @@ function cleanupExpiredCache() {
   if (!CONFIG.enableCache) return;
 
   const now = Date.now();
-  let removedCount = 0;
 
   for (const [key, cacheItem] of requestCache.entries()) {
     if (now - cacheItem.timestamp >= CONFIG.cacheTimeout) {
       requestCache.delete(key);
-      removedCount++;
+      const orderIndex = requestCacheOrder.indexOf(key);
+      if (orderIndex >= 0) {
+        requestCacheOrder.splice(orderIndex, 1);
+      }
     }
   }
-
-  if (removedCount > 0) {
-    requestCacheOrder.length = 0;
-    requestCacheOrder.push(...requestCache.keys());
-  }
+  // 不能用 requestCache.keys() 重建顺序：Map 是插入顺序（旧→新），
+  // 而 requestCacheOrder 由 unshift 维护（新→旧），重建会让 pop() 误删最新条目。
 }
 
 /**

@@ -28,28 +28,60 @@
 
 ```
 sutwx-app-api/
-├── sutwx-app-api.php            # 插件入口（注册钩子、加载类、声明依赖）
+├── sutwx-app-api.php            # 插件入口（常量、加载类、声明依赖）
 ├── readme.txt                  # WP 插件目录元数据
-├── composer.json               # 可选：自动加载（PSR-4）
 ├── includes/
-│   ├── class-loader.php        # 钩子/路由统一注册
+│   ├── class-modules.php       # 模块加载清单（顺序敏感，trait 先于类）
+│   ├── class-loader.php        # 钩子/路由统一注册（含 /api/* rewrite）
 │   ├── class-settings.php      # 主题配置（后台设置页 + option 读写）
 │   ├── class-rest-base.php     # 响应包络与错误处理基类
+│   ├── sanitize.php            # 颜色/字段校验
+│   ├── class-jwt.php           # JWT 签发/校验（HS256）
+│   ├── class-jwt-codec.php     # JWT 编码基建（trait）
+│   ├── class-credentials.php   # JWT 密钥治理
+│   ├── class-wechat-auth.php   # code2session
+│   ├── class-auth-service.php  # 登录/刷新/签发
+│   ├── auth/                   # 鉴权职责拆分（trait）
+│   │   ├── class-auth-user-profile.php  # 用户查找/绑定/资料
+│   │   ├── class-auth-user-meta.php     # 用户 meta 与文本工具
+│   │   └── class-auth-token-store.php   # jti 黑名单
+│   ├── class-auth-guard.php    # Bearer 鉴权中间件
+│   ├── class-cache.php         # Transients 缓存（分组版本号）
+│   ├── cache/
+│   │   └── class-cache-invalidation.php # 内容变更失效钩子（trait）
+│   ├── class-rate-limit.php    # IP 限频
+│   ├── rate-limit/
+│   │   └── class-rate-limit-ip.php      # 客户端 IP / 可信代理（trait）
+│   ├── class-pay-credentials.php        # 支付凭证读写
+│   ├── pay/
+│   │   └── class-pay-credentials-store.php # 凭证写入/锁定（trait）
+│   ├── class-wechat-pay*.php   # 微信支付 V3（签名/工具/下单/通知）
+│   ├── class-pay-order-sync.php# 查单同步订单状态
+│   ├── order/
+│   │   └── class-order-items.php        # 订单商品装配 + 库存校验 + 地址
 │   ├── rest/
-│   │   ├── class-rest-products.php   # /api/product/*
-│   │   ├── class-rest-posts.php      # /api/post/*
-│   │   ├── class-rest-categories.php # /api/category/*
-│   │   ├── class-rest-theme.php      # /api/theme
-│   │   └── class-rest-auth.php       # 预留：/api/v1/users（wx.login）
-│   ├── mappings/
-│   │   ├── map-product.php     # WC 商品 → 小程序商品 DTO
-│   │   ├── map-post.php        # WP 文章 → 小程序文章 DTO
-│   │   └── map-category.php    # WC 分类 → 小程序分类 DTO
-│   └── sanitize.php            # 颜色/字段校验
+│   │   ├── class-rest-products.php      # /api/product/*
+│   │   ├── class-rest-posts.php         # /api/post/*
+│   │   ├── class-rest-categories.php    # /api/category/*
+│   │   ├── class-rest-theme.php         # /api/theme
+│   │   ├── class-rest-auth.php          # /api/auth/* 与 /api/user/info
+│   │   ├── class-rest-orders.php        # /api/order/list|detail
+│   │   ├── class-rest-order-actions.php # /api/order/create|cancel|confirm
+│   │   ├── class-rest-order-ship.php    # /api/order/ship（商家发货）
+│   │   ├── class-rest-pay.php           # /api/pay/prepay|notify
+│   │   └── class-rest-pay-query.php     # /api/pay/query
+│   └── mappings/
+│       ├── map-product.php     # WC 商品 → 小程序商品 DTO
+│       ├── map-post.php        # WP 文章 → 小程序文章 DTO
+│       ├── map-category.php    # WC 分类 → 小程序分类 DTO
+│       └── map-order*.php      # WC 订单 → 小程序订单 DTO
 ├── admin/
-│   └── settings-page.php       # 后台「小程序设置」页（主题预设 + 自定义色）
+│   ├── settings-page.php       # 后台「小程序设置」页（主题预设 + 自定义色）
+│   └── settings-pay.php        # 微信支付凭证设置页
 └── tests/
-    └── rest-api-test.php       # WP 单元测试 / Codeception 集成测试
+    ├── bootstrap.php           # 单测引导
+    ├── stubs-runtime.php       # WP/WC 运行时桩
+    └── run-*-tests.php         # 映射/设置/鉴权/订单/支付/缓存单测
 ```
 
 ## REST 路由与命名空间映射

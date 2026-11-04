@@ -1,6 +1,6 @@
 /**
  * 文件名: request.js
- * 版本号: 3.5.7
+ * 版本号: 3.5.10
  * 更新日期: 2026-11-04
  * 描述: 网络请求主模块（编排层），封装 wx.request；缓存/并发队列/CSRF/XSS/取消令牌
  *       见同级子模块，鉴权头注入见 request-auth-header.js，重试与离线降级见
@@ -92,14 +92,25 @@ function request(options) {
         : CONFIG.retryDelay;
     let requestTask = null;
 
+    // 一次 Promise 生命周期对应一个并发名额，任何终止路径都恰好释放一次：
+    // 取消 + fail 双触发不会重复释放，提前 reject 也不会泄漏名额。
+    let released = false;
+    function releaseOnce() {
+      if (released) return;
+      released = true;
+      queue.release();
+    }
+
     function sendRequest() {
       if (config.cancelToken && config.cancelToken.isCancel()) {
+        releaseOnce();
         reject(new Error("Request cancelled"));
         return;
       }
 
       const wxInstance = checkWx();
       if (!wxInstance.request) {
+        releaseOnce();
         reject(new Error("wx.request未定义"));
         return;
       }
@@ -107,7 +118,7 @@ function request(options) {
       const requestParams = {
         ...processedConfig,
         success: (res) => {
-          queue.release();
+          releaseOnce();
 
           let processedResponse = res;
           for (const interceptor of responseInterceptors) {
@@ -135,7 +146,7 @@ function request(options) {
           sendRequest,
           resolve,
           reject,
-          release: () => queue.release(),
+          release: releaseOnce,
         }),
         complete: () => {
           requestTask = null;

@@ -6,7 +6,7 @@
  * - notify：公开；验签解密后将订单置为「待发货」，幂等处理重复通知。
  *
  * @package SutwxAppApi
- * @version 0.5.0
+ * @version 0.5.3
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -91,9 +91,12 @@ class Sutwx_Rest_Pay extends Sutwx_Rest_Base {
 		}
 
 		// out_trade_no 首试生成并固化，重试复用（避免 OUT_TRADE_NO_USED）。
+		// 采用「订单 ID + 确定性短签名」而非 time()：并发预支付不会各自生成不同单号
+		// 并互相覆盖，微信侧也就不会残留无效商户单。
 		$out_trade_no = (string) $order->get_meta( self::META_OUT_TRADE_NO );
 		if ( '' === $out_trade_no ) {
-			$out_trade_no = 'SUT' . $order->get_id() . 'T' . time();
+			$salt = defined( 'SECURE_AUTH_KEY' ) ? (string) SECURE_AUTH_KEY : 'sutwx';
+			$out_trade_no = 'SUT' . $order->get_id() . 'X' . strtoupper( substr( md5( $salt . ':' . $order->get_id() ), 0, 8 ) );
 			$order->update_meta_data( self::META_OUT_TRADE_NO, $out_trade_no );
 			$order->save();
 		}

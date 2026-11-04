@@ -1,6 +1,6 @@
 /**
  * 文件名: orderService.js
- * 版本号: 3.5.8
+ * 版本号: 3.5.10
  * 更新日期: 2026-10-14
  * 描述: 订单服务层（编排），提供订单相关功能
  *       woocommerce 数据源走 /api/order/* 真实端点（见 orderService.api.js），
@@ -61,8 +61,9 @@ function buildOrderPayload(items, remark) {
  * @returns {Array<Object>}
  */
 function toOrderItems(items) {
+  // 购物车项用 productId，部分页面/测试传 id，两者都兼容，避免下单商品 ID 丢失。
   return (Array.isArray(items) ? items : []).map((item) => ({
-    productId: item.id,
+    productId: item.productId !== undefined ? item.productId : item.id,
     quantity: item.quantity,
   }));
 }
@@ -115,7 +116,7 @@ async function getOrderDetail(orderId) {
   }
 
   try {
-    const order = mockOrders.find((o) => o.id == orderId);
+    const order = mockOrders.find((o) => String(o.id) === String(orderId));
     if (!order) {
       throw new Error("订单不存在");
     }
@@ -155,7 +156,9 @@ async function cancelOrder(orderId) {
   }
 
   try {
-    const orderIndex = mockOrders.findIndex((o) => o.id == orderId);
+    const orderIndex = mockOrders.findIndex(
+      (o) => String(o.id) === String(orderId),
+    );
     if (orderIndex >= 0) {
       mockOrders[orderIndex].status = 0;
       mockOrders[orderIndex].statusText = "已取消";
@@ -173,7 +176,9 @@ async function confirmReceive(orderId) {
   }
 
   try {
-    const orderIndex = mockOrders.findIndex((o) => o.id == orderId);
+    const orderIndex = mockOrders.findIndex(
+      (o) => String(o.id) === String(orderId),
+    );
     if (orderIndex >= 0) {
       mockOrders[orderIndex].status = 4;
       mockOrders[orderIndex].statusText = "已完成";

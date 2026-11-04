@@ -3,40 +3,13 @@
  * 统一注册 REST 路由、/api/* rewrite、缓存失效钩子、限频与后台菜单。
  *
  * @package SutwxAppApi
- * @version 0.5.1
+ * @version 0.5.3
  */
 
 defined( 'ABSPATH' ) || exit;
 
-require_once SUTWX_API_DIR . 'includes/sanitize.php';
-require_once SUTWX_API_DIR . 'includes/mappings/map-product.php';
-require_once SUTWX_API_DIR . 'includes/mappings/map-post.php';
-require_once SUTWX_API_DIR . 'includes/mappings/map-category.php';
-require_once SUTWX_API_DIR . 'includes/mappings/map-order-parts.php';
-require_once SUTWX_API_DIR . 'includes/mappings/map-order.php';
-require_once SUTWX_API_DIR . 'includes/class-jwt.php';
-require_once SUTWX_API_DIR . 'includes/class-credentials.php';
-require_once SUTWX_API_DIR . 'includes/class-wechat-auth.php';
-require_once SUTWX_API_DIR . 'includes/class-auth-service.php';
-require_once SUTWX_API_DIR . 'includes/class-auth-guard.php';
-require_once SUTWX_API_DIR . 'includes/class-cache.php';
-require_once SUTWX_API_DIR . 'includes/class-rate-limit.php';
-require_once SUTWX_API_DIR . 'includes/class-pay-credentials.php';
-require_once SUTWX_API_DIR . 'includes/class-wechat-pay-sign.php';
-require_once SUTWX_API_DIR . 'includes/class-wechat-pay-util.php';
-require_once SUTWX_API_DIR . 'includes/class-wechat-pay.php';
-require_once SUTWX_API_DIR . 'includes/class-wechat-pay-trade.php';
-require_once SUTWX_API_DIR . 'includes/class-wechat-pay-notify.php';
-require_once SUTWX_API_DIR . 'includes/class-pay-order-sync.php';
-require_once SUTWX_API_DIR . 'includes/rest/class-rest-products.php';
-require_once SUTWX_API_DIR . 'includes/rest/class-rest-posts.php';
-require_once SUTWX_API_DIR . 'includes/rest/class-rest-categories.php';
-require_once SUTWX_API_DIR . 'includes/rest/class-rest-theme.php';
-require_once SUTWX_API_DIR . 'includes/rest/class-rest-auth.php';
-require_once SUTWX_API_DIR . 'includes/rest/class-rest-orders.php';
-require_once SUTWX_API_DIR . 'includes/rest/class-rest-order-actions.php';
-require_once SUTWX_API_DIR . 'includes/rest/class-rest-pay.php';
-require_once SUTWX_API_DIR . 'includes/rest/class-rest-pay-query.php';
+// 模块加载清单见 includes/class-modules.php（顺序敏感，勿在 loader 内零散 include）。
+require_once SUTWX_API_DIR . 'includes/class-modules.php';
 
 /**
  * 插件加载器。
@@ -72,6 +45,7 @@ final class Sutwx_Loader {
 			new Sutwx_Rest_Auth(),
 			new Sutwx_Rest_Orders(),
 			new Sutwx_Rest_Order_Actions(),
+			new Sutwx_Rest_Order_Ship(),
 			new Sutwx_Rest_Pay(),
 			new Sutwx_Rest_Pay_Query(),
 		);

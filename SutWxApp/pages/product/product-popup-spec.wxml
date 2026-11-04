@@ -1,12 +1,12 @@
 <!--
   文件名: pages/product/product-popup-spec.wxml
-  版本号: 3.5.3
+  版本号: 3.5.10
   更新日期: 2026-10-14
   描述: 规格选择弹窗分片：规格项、数量步进与确认
 -->
 
-<view class="spec-popup-mask" wx:if="{{showSpecPopup}}" bindtap="handleHideSpecPopup"></view>
-<view class="spec-popup {{showSpecPopup ? 'show' : ''}}">
+<view id="product-spec-popup-mask" class="spec-popup-mask" wx:if="{{showSpecPopup}}" bindtap="handleHideSpecPopup"></view>
+<view id="product-spec-popup" class="spec-popup {{showSpecPopup ? 'show' : ''}}">
   <view class="spec-popup-header">
     <image
       class="spec-popup-image"

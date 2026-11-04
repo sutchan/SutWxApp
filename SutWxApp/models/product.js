@@ -1,6 +1,6 @@
 /**
  * 文件名: product.js
- * 版本号: 3.0.14
+ * 版本号: 3.5.10
  * 更新日期: 2026-09-12
  * 描述: 商品数据模型与 WooCommerce 商品映射层
  *       将 WordPress/WooCommerce REST 返回的商品对象映射为小程序统一的商品 DTO。
@@ -52,13 +52,17 @@ function buildSpecs(p) {
  * @returns {boolean}
  */
 function isWooCommerceShape(p) {
+  if (!p) return false;
+  // 后端 /api/product/* 返回的已是 DTO，且 DTO 含 type 字段；
+  // 因此优先用 DTO 独有字段识别，避免把 DTO 当成 WC 原始对象重新解析（会丢失价格/图片）。
+  const dtoOnlyFields = ["specs", "stockStatus", "categoryId", "originPrice", "onSale"];
+  if (dtoOnlyFields.some((key) => key in p)) return false;
   return (
-    p &&
-    (("regular_price" in p) ||
-      ("type" in p) ||
-      ("variations" in p) ||
-      ("stock_status" in p) ||
-      ("short_description" in p))
+    "regular_price" in p ||
+    "stock_status" in p ||
+    "short_description" in p ||
+    "variations" in p ||
+    ("type" in p && "categories" in p)
   );
 }
 

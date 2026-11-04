@@ -1,6 +1,6 @@
 /**
  * 文件名: orderService.api.js
- * 版本号: 3.5.4
+ * 版本号: 3.5.10
  * 更新日期: 2026-10-14
  * 描述: 订单端点原始调用（FE-004，woocommerce 数据源），从 orderService.js 抽离
  *       以保持主模块精简。全部为鉴权端点（needAuth 默认 true）。
@@ -17,9 +17,10 @@ const { mapWooCommerceOrder, mapWooCommerceOrders } = require("../models/order")
  */
 async function fetchOrderList(params = {}) {
   const query = { page: 1, pageSize: 20 };
-  if (params.status) query.status = params.status;
-  if (params.page) query.page = params.page;
-  if (params.pageSize) query.pageSize = params.pageSize;
+  // 显式判断，避免 0 / 空字符串被静默吞掉；status=0 表示「全部」，后端按不限处理。
+  if (params.status !== undefined && params.status !== null) query.status = params.status;
+  if (params.page !== undefined && params.page !== null) query.page = params.page;
+  if (params.pageSize !== undefined && params.pageSize !== null) query.pageSize = params.pageSize;
 
   const payload = unwrap(await request.get("/api/order/list", query, { useCache: false }));
   const list = payload && Array.isArray(payload.list) ? payload.list : [];

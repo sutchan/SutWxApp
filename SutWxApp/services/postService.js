@@ -1,6 +1,6 @@
 /**
  * 文件名: postService.js
- * 版本号: 3.0.14
+ * 版本号: 3.5.10
  * 更新日期: 2026-09-13
  * 描述: 文章服务层，提供文章列表与详情（支持 WooCommerce / WordPress 数据源）
  */
@@ -48,7 +48,7 @@ async function getPostDetail(postId) {
   }
 
   try {
-    const post = mockPosts.find((p) => p.id == postId);
+    const post = mockPosts.find((p) => String(p.id) === String(postId));
     return post || null;
   } catch (error) {
     console.error("获取文章详情失败:", error);

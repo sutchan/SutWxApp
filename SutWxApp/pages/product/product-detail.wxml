@@ -1,11 +1,11 @@
 <!--
   文件名: product-detail.wxml
-  版本号: 3.5.3
+  版本号: 3.5.10
   更新日期: 2026-10-14
   描述: 商品详情页 - 图文详情与产品参数区块（相关推荐见 product-related.wxml）
 -->
 
-<view class="product-detail-section">
+<view id="product-detail-section" class="product-detail-section">
   <view class="section-header">
     <text class="section-title">商品详情</text>
   </view>

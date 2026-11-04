@@ -1,6 +1,6 @@
 /**
  * 文件名: request-queue.js
- * 版本号: 3.4.1
+ * 版本号: 3.5.10
  * 更新日期: 2026-09-19
  * 描述: 请求队列并发控制（从 request.js 抽离，保持主文件精简）
  */
@@ -37,9 +37,12 @@ function createQueueController(config) {
     }
   }
 
-  /** 释放一个并发名额并调度队列中等待的请求 */
+  /**
+   * 释放一个并发名额并调度队列中等待的请求。
+   * 下限保护：重复释放（取消 + fail 双触发）不能让计数变负，否则并发上限会失效。
+   */
   function release() {
-    activeRequests--;
+    activeRequests = Math.max(0, activeRequests - 1);
     processQueue();
   }
 

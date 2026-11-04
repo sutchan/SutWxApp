@@ -7,15 +7,22 @@
  *       SUTWX_WX_API_V3_KEY。
  *
  * @package SutwxAppApi
- * @version 0.5.0
+ * @version 0.5.3
  */
 
 defined( 'ABSPATH' ) || exit;
+
+if ( ! trait_exists( 'Sutwx_Pay_Credentials_Store' ) ) {
+	// 用 __DIR__ 而非插件常量：独立单测可能未定义 SUTWX_API_DIR。
+	require_once __DIR__ . '/pay/class-pay-credentials-store.php';
+}
 
 /**
  * 支付凭证读写。
  */
 class Sutwx_Pay_Credentials {
+
+	use Sutwx_Pay_Credentials_Store;
 
 	/**
 	 * 支付凭证 option 键名。
@@ -135,53 +142,4 @@ class Sutwx_Pay_Credentials {
 		);
 	}
 
-	/**
-	 * 写入支付凭证（锁定态与脱敏值处理同 BE-003）。
-	 *
-	 * @param array $raw 原始提交。
-	 * @return bool
-	 */
-	public static function update( $raw ) {
-		$raw = is_array( $raw ) ? $raw : array();
-		$out = array();
-
-		$fields = array( 'mchId', 'serialNo', 'apiV3Key' );
-		foreach ( $fields as $field ) {
-			if ( isset( $raw[ $field ] ) ) {
-				$out[ $field ] = self::sanitize_text( $raw[ $field ] );
-			}
-		}
-		// 私钥为多行长文本，单独处理（脱敏值视为未修改）。
-		if ( isset( $raw['privateKey'] ) ) {
-			$key = (string) $raw['privateKey'];
-			if ( '' !== $key && false === strpos( $key, '*' ) ) {
-				$out['privateKey'] = $key;
-			}
-		}
-
-		return update_option( self::OPTION, $out );
-	}
-
-	/**
-	 * 读取原始 option。
-	 *
-	 * @return array
-	 */
-	public static function get_option() {
-		$option = get_option( self::OPTION, array() );
-		return is_array( $option ) ? $option : array();
-	}
-
-	/**
-	 * 文本清洗（兼容无 WP 函数环境）。
-	 *
-	 * @param mixed $value 原值。
-	 * @return string
-	 */
-	private static function sanitize_text( $value ) {
-		if ( function_exists( 'sanitize_text_field' ) ) {
-			return sanitize_text_field( (string) $value );
-		}
-		return trim( strip_tags( (string) $value ) );
-	}
 }

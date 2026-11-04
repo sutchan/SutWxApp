@@ -7,7 +7,7 @@
  *       登录→绑定用户→双 Token、刷新与吊销（QA-002 / BE-001~003）。
  *
  * @package SutwxAppApi
- * @version 0.4.0
+ * @version 0.5.3
  */
 
 require __DIR__ . '/stubs-runtime.php';
@@ -15,6 +15,9 @@ require __DIR__ . '/stubs-runtime.php';
 require dirname( __DIR__ ) . '/includes/class-jwt.php';
 require dirname( __DIR__ ) . '/includes/class-credentials.php';
 require dirname( __DIR__ ) . '/includes/class-wechat-auth.php';
+require dirname( __DIR__ ) . '/includes/auth/class-auth-user-meta.php';
+require dirname( __DIR__ ) . '/includes/auth/class-auth-user-profile.php';
+require dirname( __DIR__ ) . '/includes/auth/class-auth-token-store.php';
 require dirname( __DIR__ ) . '/includes/class-auth-service.php';
 require dirname( __DIR__ ) . '/includes/class-auth-guard.php';
 

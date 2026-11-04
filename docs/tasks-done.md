@@ -228,6 +228,25 @@
 
 ---
 
+### QA-005 — 全量代码审查、契约对齐与 >200 行源码拆分
+
+| 项 | 内容 |
+|----|------|
+| 优先级 | P1 |
+| 完成日期 | 2026-11-04 |
+| 交付物 | 前端 `pages/home/*`、`services/*`、`models/*`、8 个商品页 WXML；插件 `includes/auth|cache|order|pay|rate-limit/*`、`class-modules.php`、`rest/class-rest-order-ship.php`；`__tests__/regression-2026-11.test.js` |
+
+**实现要点**：
+1. 契约对齐：首页统一解包 `{code,data}`、分页参数改 `page`、分类/轮播取 `{list}`、`hasMore` 按 `total` 推算；认证服务补 `/api` 前缀并 `unwrap`；分类 `icon`、商品 DTO 判别、下单 items 字段兼容。
+2. 缺陷修复：购物车静默加错商品、主题缓存无 TTL、SQL 校验误杀门牌号/备注、订单筛选 `status=0`、12 处 `eqeqeq`。
+3. 拆分：鉴权服务 → 3 trait；JWT → 编码 trait；缓存 → 失效 trait；限频 → IP trait；支付凭证 → 写入 trait；订单写操作 → 装配类 + 发货控制器；加载器 → 模块清单；首页搜索 → `search-handlers.js`（含延时器清理）。
+4. 语义化 ID：商品页 8 个 WXML 分片补齐根 ID。
+5. `prototype/*.html` 与 build 产物按「单文件自包含、浏览器直接打开可交互」规范保留不拆。
+
+**验收结论**：137 个 Jest 用例通过、ESLint 0 error / 0 warning、`check:version`/`check:config`/`check:contract` 通过；所有运行时源码 ≤200 行。
+
+---
+
 ## 历史完成成果（v3.4.1 之前，供追溯）
 
 | 模块 | 阶段 | 主要交付成果 | 版本 |

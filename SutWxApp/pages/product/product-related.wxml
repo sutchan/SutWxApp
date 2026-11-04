@@ -1,11 +1,11 @@
 <!--
   文件名: pages/product/product-related.wxml
-  版本号: 3.5.3
+  版本号: 3.5.10
   更新日期: 2026-10-14
   描述: 相关推荐区分片
 -->
 
-<view class="related-section" wx:if="{{relatedProducts.length > 0}}">
+<view id="product-related-section" class="related-section" wx:if="{{relatedProducts.length > 0}}">
   <view class="section-header">
     <text class="section-title">为你推荐</text>
   </view>

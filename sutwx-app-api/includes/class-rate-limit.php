@@ -3,15 +3,22 @@
  * API 限频与防刷保护（BE-005）：按 IP + 桶计数，响应头回传 X-RateLimit-*。
  *
  * @package SutwxAppApi
- * @version 0.4.0
+ * @version 0.5.3
  */
 
 defined( 'ABSPATH' ) || exit;
+
+if ( ! trait_exists( 'Sutwx_Rate_Limit_Ip' ) ) {
+	// 用 __DIR__ 而非插件常量：独立单测可能未定义 SUTWX_API_DIR。
+	require_once __DIR__ . '/rate-limit/class-rate-limit-ip.php';
+}
 
 /**
  * 限频器。
  */
 class Sutwx_Rate_Limit {
+
+	use Sutwx_Rate_Limit_Ip;
 
 	/**
 	 * 计数窗口（秒）。
@@ -96,9 +103,7 @@ class Sutwx_Rate_Limit {
 		$reset   = ( $slot + 1 ) * $window;
 		$key     = 'sutwx_rl_' . $bucket . '_' . md5( self::client_ip() ) . '_' . $slot;
 
-		$count = self::counter( $key );
-		$count++;
-		self::store( $key, $count, max( 1, $reset - $now ) );
+		$count = self::increment( $key, max( 1, $reset - $now ) );
 
 		$result = array(
 			'ok'        => $count <= $limit,
@@ -135,29 +140,30 @@ class Sutwx_Rate_Limit {
 	}
 
 	/**
-	 * 获取客户端 IP（兼容代理头，仅取首个）。
+	 * 自增计数器：存在持久对象缓存时用原子 incr（并发安全），
+	 * 否则退回 transient 读改写（默认 WP 对象缓存不跨请求持久，不能替代 transient）。
 	 *
-	 * @return string
+	 * @param string $key 计数键。
+	 * @param int    $ttl 剩余窗口秒数。
+	 * @return int 自增后的计数值。
 	 */
-	public static function client_ip() {
-		$keys = array( 'HTTP_CF_CONNECTING_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_REAL_IP', 'REMOTE_ADDR' );
-		foreach ( $keys as $key ) {
-			if ( empty( $_SERVER[ $key ] ) ) {
-				continue;
+	private static function increment( $key, $ttl ) {
+		$has_persistent_cache = function_exists( 'wp_using_ext_object_cache' )
+			&& function_exists( 'wp_cache_add' )
+			&& function_exists( 'wp_cache_incr' )
+			&& wp_using_ext_object_cache();
+
+		if ( $has_persistent_cache ) {
+			wp_cache_add( $key, 0, 'sutwx_rate_limit', max( 1, (int) $ttl ) );
+			$count = wp_cache_incr( $key, 1, 'sutwx_rate_limit' );
+			if ( false !== $count ) {
+				return (int) $count;
 			}
-			$value = trim( (string) $_SERVER[ $key ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
-			if ( '' === $value ) {
-				continue;
-			}
-			if ( 'HTTP_X_FORWARDED_FOR' === $key && false !== strpos( $value, ',' ) ) {
-				$value = trim( explode( ',', $value )[0] );
-			}
-			if ( function_exists( 'inet_pton' ) && false === inet_pton( $value ) ) {
-				continue;
-			}
-			return $value;
 		}
-		return 'unknown';
+
+		$count = self::counter( $key ) + 1;
+		self::store( $key, $count, $ttl );
+		return $count;
 	}
 
 	/**

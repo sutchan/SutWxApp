@@ -3,7 +3,7 @@
 > **文档版本**: v2.3.0
 > **更新时间戳**: 2026-10-14 21:40 (UTC+8)
 > **项目作者**: Sut
-> **当前状态**: 小程序前端 `v3.5.7` · WordPress 插件 `v0.5.0`
+> **当前状态**: 小程序前端 `v3.5.10` · WordPress 插件 `v0.5.3`
 > **关联规范**: [项目概述](./项目概述.md) · [功能规范](./specs/features/spec.md) · [后端规范](./specs/backend/spec.md) · [API 规范](./specs/api/spec.md) · [测试规范](./specs/testing/spec.md) · [运维规范](./specs/ops/spec.md)
 > **归档**: 已完成任务见 [tasks-done.md](./tasks-done.md)
 
@@ -55,6 +55,16 @@
 
 1. **规范目录合订（3.5.4 → 3.5.5）**：`openspec/` 目录内容整体合入 `docs/specs/`（11 类规范），`docs/AGENTS.md` 标注 OpenSpec CLI 工作流已弃用，规范改由 Git 分支 + PR 直接维护；批量修复 80+ 处陈旧 `openspec/` 路径引用（README、PROJECT_OVERVIEW、AGENTS、DEVELOPMENT_PLAN、specs 交叉引用、原型页、插件映射注释等 24 个文件），移除 README 两条死链；CHANGELOG 历史条目中的旧路径作为历史记录保留。
 2. **文档状态核对（3.5.5 → 3.5.6）**：本文件头部「当前状态」同步至真实版本；`FE-002-b`（9 语种翻译）仍为唯一阻塞项，属外部资源依赖，非代码问题。
+
+---
+
+## 本次更新说明（2026-11-04 全量审查与重构）
+
+1. **核心流程缺陷修复**：首页取数（解包络 / `page` 参数 / `{list}` 结构 / `hasMore` 推算 / banner `imageUrl`）、认证服务（`/api` 前缀、`unwrap`、登出清理）、分类图标 `icon` 契约、商品 DTO 判别（`type` 误判）、下单 items（`productId`/`id` 兼容）、购物车静默加错商品、主题缓存 TTL、SQL 校验误杀门牌号、订单筛选 `status=0`、12 处 `eqeqeq`。
+2. **>200 行源码拆分**：插件侧鉴权/JWT/缓存/限频/支付凭证/订单写操作/加载器按职责拆为 trait 或独立类（对外调用不变）；小程序首页搜索交互拆至 `search-handlers.js`。`prototype/*.html` 与 build 产物按「单文件自包含」规范保留不拆。
+3. **语义化 ID**：商品页 8 个 WXML 分片补齐语义化根 ID。
+4. **测试**：新增 `__tests__/regression-2026-11.test.js`，覆盖本轮修复；全量 137 用例通过，ESLint 0 error / 0 warning。
+5. **版本同步**：前端 `3.5.9 → 3.5.10`；插件 `0.5.2 → 0.5.3`；CHANGELOG / readme.txt / 本文档同步。
 
 ---
 

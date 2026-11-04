@@ -1,7 +1,7 @@
 
 /**
  * 文件名: cartService.js
- * 版本号: 3.0.8
+ * 版本号: 3.5.10
  * 更新日期: 2026-09-12
  * 描述: 购物车服务层，提供购物车相关的API调用和本地存储管理
  */
@@ -57,7 +57,8 @@ function calculateCartCount(cartList) {
 }
 
 function getMockProduct(productId) {
-  return mockProducts.find(p => p.id === productId) || mockProducts[0];
+  // 找不到时返回 null，绝不静默回退到第一个商品（会把错误商品加入购物车）。
+  return mockProducts.find(p => p.id === productId) || null;
 }
 
 async function addToCart(options) {
@@ -65,6 +66,9 @@ async function addToCart(options) {
 
   try {
     const product = getMockProduct(productId);
+    if (!product) {
+      return { success: false, message: "商品不存在" };
+    }
     const cartList = getCartFromStorage();
     const existingIndex = cartList.findIndex(function (item) {
       return item.productId === productId && item.specId === specId;

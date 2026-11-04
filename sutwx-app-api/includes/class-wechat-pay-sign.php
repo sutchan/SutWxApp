@@ -11,7 +11,7 @@
  * - 通知资源解密：AEAD_AES_256_GCM，密钥为 APIv3 密钥（32 字节）。
  *
  * @package SutwxAppApi
- * @version 0.5.0
+ * @version 0.5.3
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -32,10 +32,11 @@ class Sutwx_Wechat_Pay_Sign {
 	 * @return string
 	 */
 	public static function nonce() {
+		// 用于请求签名的随机串必须来自 CSPRNG；失败即中止支付请求，绝不退化到可预测值。
 		try {
 			return strtoupper( bin2hex( random_bytes( 16 ) ) );
 		} catch ( Exception $e ) {
-			return strtoupper( md5( uniqid( 'sutwx', true ) . mt_rand() ) );
+			throw new RuntimeException( 'CSPRNG failed: cannot generate payment nonce', 0, $e );
 		}
 	}
 
@@ -165,12 +166,14 @@ class Sutwx_Wechat_Pay_Sign {
 	 * @return string 明文 JSON（失败返回空串）。
 	 */
 	public static function decrypt_resource( $ciphertext_b64, $nonce, $associated_data, $key ) {
-		$ciphertext = base64_decode( (string) $ciphertext_b64, true );
-		if ( false === $ciphertext || '' === $ciphertext ) {
+		$raw = base64_decode( (string) $ciphertext_b64, true );
+		// 微信支付 V3：resource.ciphertext = AES-GCM 密文 ‖ 末尾 16 字节认证标签。
+		if ( false === $raw || strlen( $raw ) <= 16 ) {
 			return '';
 		}
+		$ciphertext = substr( $raw, 0, -16 );
+		$tag        = substr( $raw, -16 );
 
-		$tag = '';
 		$plain = openssl_decrypt(
 			$ciphertext,
 			'aes-256-gcm',

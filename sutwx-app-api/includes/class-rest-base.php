@@ -3,7 +3,7 @@
  * REST 基类：统一 {code,data} 响应包络与错误处理。
  *
  * @package SutwxAppApi
- * @version 0.1.0
+ * @version 0.5.3
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -73,5 +73,20 @@ abstract class Sutwx_Rest_Base {
 			'page'     => $page,
 			'pageSize' => $page_size,
 		);
+	}
+
+	/**
+	 * 归一化搜索关键词：trim + 限制长度，避免超长/任意关键词生成无限缓存键灌爆 transient 表。
+	 *
+	 * @param WP_REST_Request $request 请求对象。
+	 * @return string
+	 */
+	protected function normalize_keyword( $request ) {
+		$keyword = (string) ( $request->get_param( 'keyword' ) ? $request->get_param( 'keyword' ) : '' );
+		$keyword = trim( $keyword );
+		if ( function_exists( 'mb_substr' ) ) {
+			return (string) mb_substr( $keyword, 0, 64, 'UTF-8' );
+		}
+		return (string) substr( $keyword, 0, 64 );
 	}
 }

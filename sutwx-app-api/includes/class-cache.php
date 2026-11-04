@@ -5,15 +5,22 @@
  * 采用「分组版本号」策略：清缓存只需递增版本号，避免遍历删除 transient。
  *
  * @package SutwxAppApi
- * @version 0.4.0
+ * @version 0.5.3
  */
 
 defined( 'ABSPATH' ) || exit;
+
+if ( ! trait_exists( 'Sutwx_Cache_Invalidation' ) ) {
+	// 用 __DIR__ 而非插件常量：独立单测可能未定义 SUTWX_API_DIR。
+	require_once __DIR__ . '/cache/class-cache-invalidation.php';
+}
 
 /**
  * 只读端点缓存。
  */
 class Sutwx_Cache {
+
+	use Sutwx_Cache_Invalidation;
 
 	/**
 	 * 默认 TTL（秒）：5 分钟。
@@ -65,8 +72,9 @@ class Sutwx_Cache {
 		self::flag_hit( $hit_flag );
 		$data = call_user_func( $callback );
 
-		// 空结果不落缓存：避免「不存在」被长时间固化（如商品刚发布但尚未索引）。
-		if ( null === $data ) {
+		// 空结果不落缓存：避免「不存在」/空列表被长时间固化（如商品刚发布但尚未索引）。
+		// 注意：false / 空数组 / 空字符串同样是「空」，原实现仅拦截 null 会把空列表固化 5–10 分钟。
+		if ( null === $data || false === $data || '' === $data || ( is_array( $data ) && array() === $data ) ) {
 			return $data;
 		}
 
@@ -120,60 +128,6 @@ class Sutwx_Cache {
 			$GLOBALS['sutwx_cache_versions'] = $versions;
 		}
 		return $next;
-	}
-
-	/**
-	 * 注册内容变更钩子：文章/商品/分类/主题变更时精准失效对应分组。
-	 */
-	public static function register_invalidation_hooks() {
-		add_action( 'save_post', array( __CLASS__, 'on_save_post' ), 10, 2 );
-		add_action( 'woocommerce_update_product', array( __CLASS__, 'on_product_change' ) );
-		add_action( 'woocommerce_new_product', array( __CLASS__, 'on_product_change' ) );
-		add_action( 'created_product_cat', array( __CLASS__, 'on_category_change' ) );
-		add_action( 'edited_product_cat', array( __CLASS__, 'on_category_change' ) );
-		add_action( 'update_option_' . SUTWX_API_THEME_OPTION, array( __CLASS__, 'on_theme_change' ) );
-	}
-
-	/**
-	 * 文章/商品保存：按 post_type 失效对应分组。
-	 *
-	 * @param int    $post_id 文章 ID。
-	 * @param object $post    文章对象。
-	 */
-	public static function on_save_post( $post_id, $post = null ) {
-		$type = is_object( $post ) && isset( $post->post_type ) ? $post->post_type : '';
-		if ( 'product' === $type ) {
-			self::bump( 'product' );
-			self::bump( 'category' );
-			return;
-		}
-		if ( 'post' === $type || 'page' === $type ) {
-			self::bump( 'post' );
-		}
-	}
-
-	/**
-	 * 商品变更。
-	 *
-	 * @param mixed $product_id 商品 ID（不同钩子签名不同，未使用）。
-	 */
-	public static function on_product_change( $product_id = 0 ) {
-		self::bump( 'product' );
-		self::bump( 'category' );
-	}
-
-	/**
-	 * 分类变更。
-	 */
-	public static function on_category_change() {
-		self::bump( 'category' );
-	}
-
-	/**
-	 * 主题配置变更。
-	 */
-	public static function on_theme_change() {
-		self::bump( 'theme' );
 	}
 
 	/**

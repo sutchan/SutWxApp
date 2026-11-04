@@ -1,11 +1,11 @@
 <!--
   文件名: pages/product/product-actionbar.wxml
-  版本号: 3.5.3
+  版本号: 3.5.10
   更新日期: 2026-10-14
   描述: 底部操作栏分片：客服/收藏/购物车与加购、立即购买
 -->
 
-<view class="bottom-action-bar">
+<view id="product-actionbar" class="bottom-action-bar">
   <view class="action-icons">
     <view class="icon-item" bindtap="handleContactService">
       <image src="/images/customer-service.png" mode="aspectFit"></image>

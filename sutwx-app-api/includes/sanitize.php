@@ -4,7 +4,7 @@
  * （颜色校验器于 P2 主题设置页阶段补充）
  *
  * @package SutwxAppApi
- * @version 0.2.0
+ * @version 0.5.3
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -60,36 +60,38 @@ if ( ! function_exists( 'sutwx_attachment_url' ) ) {
 		}
 		return '';
 	}
+}
 
-	if ( ! function_exists( 'sutwx_is_valid_color' ) ) {
-		/**
-		 * 校验十六进制颜色字符串（#RGB 或 #RRGGBB）。
-		 *
-		 * @param string $value 颜色值。
-		 * @return bool
-		 */
-		function sutwx_is_valid_color( $value ) {
-			return is_string( $value )
-				&& preg_match( '/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/', trim( $value ) ) === 1;
-		}
+// 颜色校验器必须在外层独立声明：若嵌套在 sutwx_attachment_url 的条件块内，
+// 一旦该函数由外部（含测试桩）先行定义，颜色校验函数将不会被声明。
+if ( ! function_exists( 'sutwx_is_valid_color' ) ) {
+	/**
+	 * 校验十六进制颜色字符串（#RGB 或 #RRGGBB）。
+	 *
+	 * @param string $value 颜色值。
+	 * @return bool
+	 */
+	function sutwx_is_valid_color( $value ) {
+		return is_string( $value )
+			&& preg_match( '/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/', trim( $value ) ) === 1;
 	}
+}
 
-	if ( ! function_exists( 'sutwx_sanitize_color' ) ) {
-		/**
-		 * 标准化颜色：合法返回小写十六进制，非法返回 null。
-		 *
-		 * @param string $value 颜色值。
-		 * @return string|null
-		 */
-		function sutwx_sanitize_color( $value ) {
-			if ( ! is_string( $value ) ) {
-				return null;
-			}
-			$value = trim( $value );
-			if ( ! sutwx_is_valid_color( $value ) ) {
-				return null;
-			}
-			return strtolower( $value );
+if ( ! function_exists( 'sutwx_sanitize_color' ) ) {
+	/**
+	 * 标准化颜色：合法返回小写十六进制，非法返回 null。
+	 *
+	 * @param string $value 颜色值。
+	 * @return string|null
+	 */
+	function sutwx_sanitize_color( $value ) {
+		if ( ! is_string( $value ) ) {
+			return null;
 		}
+		$value = trim( $value );
+		if ( ! sutwx_is_valid_color( $value ) ) {
+			return null;
+		}
+		return strtolower( $value );
 	}
 }

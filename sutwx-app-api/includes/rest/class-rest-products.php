@@ -3,7 +3,7 @@
  * /api/product/* 路由：WC 商品 → 商品 DTO（P1 实现）。
  *
  * @package SutwxAppApi
- * @version 0.2.0
+ * @version 0.5.3
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -58,7 +58,7 @@ class Sutwx_Rest_Products extends Sutwx_Rest_Base {
 	 */
 	public function list_items( $request ) {
 		$paging     = $this->get_paging_args( $request );
-		$keyword    = (string) ( $request->get_param( 'keyword' ) ? $request->get_param( 'keyword' ) : '' );
+		$keyword    = $this->normalize_keyword( $request );
 		$categoryId = (int) $request->get_param( 'categoryId' );
 
 		$query_args = array(
@@ -90,6 +90,9 @@ class Sutwx_Rest_Products extends Sutwx_Rest_Base {
 			'keyword'    => $keyword,
 		);
 
+		// 搜索请求缓存键无限扩张：带关键词时用短 TTL，避免灌爆 transient 表。
+		$cache_ttl = '' !== $keyword ? 60 : Sutwx_Cache::TTL;
+
 		$payload = Sutwx_Cache::remember(
 			'product',
 			$cache_params,
@@ -114,7 +117,7 @@ class Sutwx_Rest_Products extends Sutwx_Rest_Base {
 					'pageSize' => (int) $query_args['posts_per_page'],
 				);
 			},
-			Sutwx_Cache::TTL
+			$cache_ttl
 		);
 
 		return $this->success( $payload );

@@ -2,16 +2,25 @@
 /**
  * JWT（HS256）签发与校验：无第三方依赖，可脱离 WordPress 独立单测。
  *
+ * 编解码基建（Base64URL/JSON/随机字节）见 includes/class-jwt-codec.php。
+ *
  * @package SutwxAppApi
- * @version 0.4.0
+ * @version 0.5.3
  */
 
 defined( 'ABSPATH' ) || exit;
+
+if ( ! trait_exists( 'Sutwx_Jwt_Codec' ) ) {
+	// 用 __DIR__ 而非插件常量：独立单测可能未定义 SUTWX_API_DIR。
+	require_once __DIR__ . '/class-jwt-codec.php';
+}
 
 /**
  * JWT 编解码工具。
  */
 class Sutwx_Jwt {
+
+	use Sutwx_Jwt_Codec;
 
 	/**
 	 * 支持的算法（仅 HS256，避免 alg=none 混淆攻击）。
@@ -80,7 +89,9 @@ class Sutwx_Jwt {
 			return $fail;
 		}
 
-		$expected = self::base64url_encode( hash_hmac( 'sha256', $h_b64 . '.' . $p_b64, (string) $secret, true ) );
+		$expected = self::base64url_encode(
+			hash_hmac( 'sha256', $h_b64 . '.' . $p_b64, (string) $secret, true )
+		);
 		if ( ! self::hash_equals( $expected, $s_b64 ) ) {
 			$fail['error'] = 'signature_mismatch';
 			return $fail;
@@ -92,7 +103,12 @@ class Sutwx_Jwt {
 			return $fail;
 		}
 
-		if ( isset( $payload['exp'] ) && time() >= (int) $payload['exp'] ) {
+		// 强制要求 exp：缺失或非法一律拒绝，避免构造永不过期的 token。
+		if ( ! isset( $payload['exp'] ) || ! is_numeric( $payload['exp'] ) ) {
+			$fail['error'] = 'invalid_token';
+			return $fail;
+		}
+		if ( time() >= (int) $payload['exp'] ) {
 			$fail['error'] = 'token_expired';
 			return $fail;
 		}
@@ -129,77 +145,11 @@ class Sutwx_Jwt {
 		if ( function_exists( 'wp_generate_uuid4' ) ) {
 			return wp_generate_uuid4();
 		}
-		return bin2hex( self::random_bytes( 16 ) );
-	}
-
-	/**
-	 * 安全随机字节（random_bytes 不可用时退化，仅用于 jti 非密钥场景）。
-	 *
-	 * @param int $length 字节数。
-	 * @return string
-	 */
-	private static function random_bytes( $length ) {
-		if ( function_exists( 'random_bytes' ) ) {
-			try {
-				return random_bytes( $length );
-			} catch ( Exception $e ) {
-				return '';
-			}
+		$jti = bin2hex( self::random_bytes( 16 ) );
+		if ( '' === $jti ) {
+			// 空 jti 会导致 token 无法被吊销，直接中止签发。
+			throw new RuntimeException( 'Unable to generate token id' );
 		}
-		$out = '';
-		for ( $i = 0; $i < $length; $i++ ) {
-			$out .= chr( mt_rand( 0, 255 ) );
-		}
-		return $out;
-	}
-
-	/**
-	 * 恒定时间字符串比较（兼容无 hash_equals 环境）。
-	 *
-	 * @param string $a 期望值。
-	 * @param string $b 实际值。
-	 * @return bool
-	 */
-	private static function hash_equals( $a, $b ) {
-		if ( function_exists( 'hash_equals' ) ) {
-			return hash_equals( $a, $b );
-		}
-		return $a === $b;
-	}
-
-	/**
-	 * JSON 编码（失败时回落为空对象，避免签名空串）。
-	 *
-	 * @param mixed $data 数据。
-	 * @return string
-	 */
-	private static function json_encode( $data ) {
-		$json = json_encode( $data );
-		return false === $json ? '{}' : $json;
-	}
-
-	/**
-	 * Base64URL 编码。
-	 *
-	 * @param string $data 原始数据。
-	 * @return string
-	 */
-	public static function base64url_encode( $data ) {
-		return rtrim( strtr( base64_encode( (string) $data ), '+/', '-_' ), '=' );
-	}
-
-	/**
-	 * Base64URL 解码。
-	 *
-	 * @param string $data 编码数据。
-	 * @return string
-	 */
-	public static function base64url_decode( $data ) {
-		$remainder = strlen( $data ) % 4;
-		if ( $remainder ) {
-			$data .= str_repeat( '=', 4 - $remainder );
-		}
-		$decoded = base64_decode( strtr( $data, '-_', '+/' ), true );
-		return false === $decoded ? '' : $decoded;
+		return $jti;
 	}
 }
