@@ -371,6 +371,47 @@ https://api.example.com/v{version}/{resource}/{id}?{query_parameters}
 
 > 鉴权接口（`/api/auth/login`、`/api/auth/refresh-token`、`/api/auth/logout`、`/api/user/info`）需 Bearer JWT（`wx.login` 换取）；写操作（`/api/order/create|cancel|confirm|ship`）与支付（`/api/pay/prepay|notify|query`）需鉴权；内容端点（product/post/category/theme）仍免登录。完整清单见 `../backend/spec.md`。
 
+### 端点总览（与后端代码一一对应）
+
+> 本表由 `SutWxApp/scripts/check-docs.js` 在 CI 中巡检：后端每新增一个 `register_rest_route`，本表与会话端点小节必须同步更新，否则 CI 失败。
+
+| 方法 | 路径 | 鉴权 | 限频档 | 说明 |
+|------|------|------|--------|------|
+| POST | `/api/auth/login` | 免鉴权 | 公开 | `wx.login` code 换取 access/refresh 双令牌 |
+| POST | `/api/auth/refresh-token` | 免鉴权 | 公开 | 用 refresh token 换新 access token |
+| POST | `/api/auth/logout` | 需鉴权 | 鉴权 | 令牌加入黑名单 |
+| GET | `/api/user/info` | 需鉴权 | 鉴权 | 当前用户资料 |
+| GET | `/api/theme` | 免鉴权 | 公开 | 小程序主题色配置 |
+| GET | `/api/product/list` | 免鉴权 | 公开 | 商品列表（分页 / 分类 / 关键词） |
+| GET | `/api/product/detail` | 免鉴权 | 公开 | 商品详情（`id`） |
+| GET | `/api/category/list` | 免鉴权 | 公开 | 商品分类列表 |
+| GET | `/api/category/detail` | 免鉴权 | 公开 | 分类详情（`id`） |
+| GET | `/api/post/list` | 免鉴权 | 公开 | 文章列表 |
+| GET | `/api/post/detail` | 免鉴权 | 公开 | 文章详情（`id`） |
+| GET | `/api/banner/list` | 免鉴权 | 公开 | 运营轮播位（后台可配置） |
+| GET | `/api/order/list` | 需鉴权 | 鉴权 | 本人订单分页列表（`status` 状态码过滤） |
+| GET | `/api/order/detail` | 需鉴权 | 鉴权 | 本人订单详情（`id`） |
+| POST | `/api/order/create` | 需鉴权 | 鉴权 | 创建订单（`clientRequestId` 幂等，10 秒窗口） |
+| POST | `/api/order/cancel` | 需鉴权 | 鉴权 | 取消订单；已支付订单触发整单退款 |
+| POST | `/api/order/confirm` | 需鉴权 | 鉴权 | 确认收货（待发货 / 待收货） |
+| POST | `/api/order/ship` | 需鉴权（管理员） | 鉴权 | 后台发货，`manage_woocommerce` 权限 |
+| POST | `/api/pay/prepay` | 需鉴权 | 支付 | 发起 JSAPI 预支付，返回 `wx.requestPayment` 参数 |
+| POST | `/api/pay/query` | 需鉴权 | 支付 | 主动查单并同步支付状态（掉单兜底手动触发） |
+| POST | `/api/pay/notify` | 免鉴权（验签） | 豁免 | 微信支付结果通知；平台证书验签 + 金额校验 + 幂等 |
+| POST | `/api/pay/refund-notify` | 免鉴权（验签） | 豁免 | 微信退款结果通知；按 `out_refund_no` 落「已退款」 |
+| GET | `/api/health` | 免鉴权 | 公开 | 健康检查：`version/php/wcActive/payConfigured` |
+| POST | `/api/monitor/data` | 免鉴权 | 监控 | 客户端监控批量上报（≤20 条，字段白名单） |
+
+**订单状态码**：`0` 已取消 · `1` 待付款 · `2` 待发货 · `3` 待收货 · `4` 已完成 · `5` 已退款。
+
+**支付异常约定**：
+
+- 通知/退款回调验签失败返回 `{code:"FAIL"}` 且**不落库**，微信侧会重试；
+- 通知金额与订单金额不一致时拒绝落库（`apply_paid` 返回 false）；
+- 重复通知幂等：仅「待付款 / 挂起 / 失败」状态可推进为「待发货」，终态不回退；
+- 退款金额上限等于订单实付，不接受客户端传入金额；
+- 掉单由 `Sutwx_Pay_Cron` 每 5 分钟查单兜底（`sutwx_pay_query_cron`）。
+
 ### 订单API
 
 #### 创建订单

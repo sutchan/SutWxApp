@@ -71,6 +71,23 @@ SutWxApp/                      # 仓库根
 是字段转换吗？    → models/xxx.js
 是通用能力吗？    → utils/xxx.js
 是构建期工具吗？  → SutWxApp/scripts/xxx.js
+
+### 可执行脚本清单（与 `SutWxApp/scripts/` 实况对应，OPS-007）
+
+| 脚本 | 用途 | 调用方 |
+|------|------|--------|
+| `check-version.js` | 前端版本四处一致（package.json / app.js / README 徽章 / CHANGELOG） | `npm run check`、CI、Release |
+| `check-plugin-version.js` | 插件版本三源一致（`SUTWX_API_VERSION` / 插件头 / readme） | `npm run check`、CI、Release |
+| `check-config.js` | `app.json` 页面与资源配置、tabBar 图标体积 | `npm run check`、CI |
+| `check-contract.js` | 前后端 DTO 字段与分页包络 | `npm run check`、CI |
+| `check-bundle.js` | 主包体积预算（1.5MB） | `npm run check`、CI |
+| `check-docs.js` | 端点/免鉴权清单/版本声明与代码一致性 | `npm run check`、CI |
+| `package-plugin.js` | 生成插件 zip（排除 tests，含 readme） | Release、发布前手动 |
+| `deploy.js` | 小程序预览/上传（`miniprogram-ci`） | `npm run deploy:*`、部署工作流 |
+| `generate-tabbar-icons.js` | 生成 tabBar 图标 | 手动（一次性） |
+
+> 新增脚本须同时更新本表，并优先实现为纯 Node 内置模块（零依赖，CI 秒级）。
+
 ```
 
 ### 2.3 插件分层与落位

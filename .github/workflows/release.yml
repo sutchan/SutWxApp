@@ -1,6 +1,6 @@
 # 文件路径: .github/workflows/release.yml
-# 版本号: 1.1.0
-# 更新日期: 2026-09-15
+# 版本号: 1.2.0
+# 更新日期: 2026-11-05
 # 描述: 持续交付流水线：推送 v*.*.* Tag 时校验版本一致性，构建并打包交付物，
 #       以 CHANGELOG 小节创建 GitHub Release
 
@@ -48,6 +48,10 @@ jobs:
           RELEASE_TAG: ${{ env.TAG }}
         run: node SutWxApp/scripts/check-version.js
 
+      # OPS-006：插件三处版本源（常量 / 插件头 / readme）必须一致
+      - name: 校验插件版本一致性
+        run: node SutWxApp/scripts/check-plugin-version.js
+
       - name: 从 CHANGELOG 提取发布说明
         run: node scripts/changelog-section.js "$TAG" > release-notes.md
 
@@ -60,7 +64,16 @@ jobs:
           zip -qr "release-assets/sutwxapp-site-${TAG}.zip" dist
           zip -qr "release-assets/sutwxapp-miniprogram-${TAG}.zip" SutWxApp \
             -x "SutWxApp/node_modules/*" "SutWxApp/coverage/*" "SutWxApp/private.key" "SutWxApp/preview.jpg"
-          zip -qr "release-assets/sutwx-app-api-${TAG}.zip" sutwx-app-api
+
+          # OPS-006：插件包由 package-plugin.js 生成（排除 tests/、含 readme.txt）
+          node SutWxApp/scripts/package-plugin.js
+          PLUGIN_ZIP=$(ls dist/sutwx-app-api-v*.zip | head -n 1)
+          cp "$PLUGIN_ZIP" "release-assets/"
+
+          # 校验插件包内容完整（readme 与入口文件）
+          unzip -l "$PLUGIN_ZIP" | grep -q "sutwx-app-api/readme.txt"; { echo "插件包缺少 readme.txt"; exit 1; }
+          unzip -l "$PLUGIN_ZIP" | grep -q "sutwx-app-api/sutwx-app-api.php"; { echo "插件包缺少入口文件"; exit 1; }
+
           ls -lh release-assets
 
       - name: 创建 Release 并附加交付物
@@ -72,3 +85,36 @@ jobs:
           files: release-assets/*.zip
           draft: false
           prerelease: ${{ contains(env.TAG, '-') }}
+
+  # OPS-006：体验版自动上传（可选）。未配置 MINIPROGRAM_PRIVATE_KEY 时自动跳过，
+  # 不阻断 Release 创建。需在仓库 Secrets 配置小程序代码上传密钥与 IP 白名单。
+  miniprogram-preview:
+    name: 上传小程序体验版
+    runs-on: ubuntu-latest
+    needs: release
+    continue-on-error: true
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v7
+
+      - name: 配置 Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 20
+
+      - name: 安装依赖
+        working-directory: SutWxApp
+        run: npm ci
+
+      - name: 上传体验版
+        working-directory: SutWxApp
+        env:
+          MINIPROGRAM_PRIVATE_KEY: ${{ secrets.MINIPROGRAM_PRIVATE_KEY }}
+        run: |
+          if [ -z "$MINIPROGRAM_PRIVATE_KEY" ]; then
+            echo "::notice::未配置 MINIPROGRAM_PRIVATE_KEY，跳过体验版上传"
+            exit 0
+          fi
+          printf "%s" "$MINIPROGRAM_PRIVATE_KEY" > private.key
+          npm run deploy:preview
+

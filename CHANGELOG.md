@@ -8,6 +8,18 @@
 - 后端插件 v0.7.0：已支付订单取消自动退款 + /api/pay/refund-notify 退款回调（BE-014）
 - 新增支付异常路径单测第 8 套件 `run-pay-exception-tests.php`（QA-006 / SEC-002 审计断言）
 
+### 工程化（第三批：OPS-004~008、SEC-003/004、QA-010）
+
+- OPS-004：运维规范新增生产部署 Runbook（安装/升级/`wp-config` 常量全表/缓存预热/回滚/故障处置）
+- OPS-005：新增 `health-probe.yml` 每 5 分钟拨测 `/api/health`，失败推送企业微信机器人；运维规范补告警规则、告警通道与值班响应
+- OPS-006：Release 改用 `package-plugin.js` 产物并校验包内 `readme.txt`；新增 `check-plugin-version.js`（插件三源版本一致）；新增可选体验版上传 Job
+- OPS-008：新增 `check-docs.js` 巡检端点清单/免鉴权清单/版本声明与代码一致性，接入 `npm run check` 与 CI
+- SEC-003：运维规范新增密钥与凭证管理（JWT 双密钥轮换、支付凭证泄露处置、黑名单全量失效、演练模板）
+- SEC-004：运维规范新增 WordPress 安全基线（CORS 策略、14 个免鉴权端点清单与防护手段、后台与主机加固项）
+- QA-010：清理 13 张未引用图片（释放 278KB）与历史 `bun.lock`，同步 CI 过时注释；`metadata.json` 与 2 个组件经核实保留
+- 文档：`api/spec.md` 补齐 24 端点总表与支付异常约定；`development/spec.md` 新增可执行脚本清单
+
+
 ## [3.5.11] - 2026-11-05
 
 ### Added

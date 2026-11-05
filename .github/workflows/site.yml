@@ -37,7 +37,7 @@ jobs:
       - name: 检出代码
         uses: actions/checkout@v7
 
-      # 仓库根仅有 bun.lock，缺少 npm lockfile，故不启用依赖缓存；构建零依赖
+      # 构建零依赖（纯 Node 内置模块），故不启用依赖缓存
       - name: 配置 Node.js
         uses: actions/setup-node@v7
         with:

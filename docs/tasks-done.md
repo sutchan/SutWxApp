@@ -1,6 +1,6 @@
 # 苏铁微信小程序 (SutWxApp) 已完成任务归档
 
-> **文档版本**: v1.3.0
+> **文档版本**: v1.4.0
 > **创建时间**: 2026-10-13
 > **更新时间戳**: 2026-11-05
 > **说明**: 本文件归档所有已完成的任务项与历史更新说明，从 [`tasks.md`](./tasks.md) 迁移而来，保留验收结论与交付物位置，便于追溯。
@@ -221,7 +221,7 @@
 |----|------|
 | 优先级 | P2 |
 | 完成日期 | 2026-10-14 |
-| 交付物 | `scripts/package-plugin.js`（根 `package.json` 增加 `package:plugin`） |
+| 交付物 | `SutWxApp/scripts/package-plugin.js`（根 `package.json` 增加 `package:plugin`） |
 
 **实现要点**：解析并校验 `SUTWX_API_VERSION`（SemVer）；排除 `tests/` 等开发目录；自包含 store-only ZIP 写器（含 CRC32，无外部依赖）生成 `dist/sutwx-app-api-v<version>.zip`。
 
@@ -321,7 +321,7 @@
 1. **收尾 QA-001（P0 假绿）**：将根 `tests/` 被 `.gitignore` 忽略的有效 Jest 用例迁移至受控目录 `SutWxApp/__tests__/`；删除引用已移除 API 的失效 ESM 测试（`authService.test.ts`/`cache.test.ts`/`security.test.ts`）；重写 `request.test.js` 对齐 `request.js v3.5.0` 当前语义；移除 `.gitignore` 的 `/tests` 忽略规则，CI 至此纳入真实用例。
 2. **复核并标记 QA-002 完成**：后端 PHP 单测（`run-auth-tests.php`/`run-cache-tests.php`/`run-mapping-tests.php`/`run-settings-tests.php`）经核实已完整落地。
 3. **新增 QA-004 契约校验**：`scripts/check-contract.js` 比对插件 DTO 映射字段与 `models/` 期望字段、列表端点分页包络，接入 `npm run check`。
-4. **新增 OPS-003 插件打包脚本**：`scripts/package-plugin.js`（版本校验 + 清理测试代码 + 生成标准 zip），根 `package.json` 增加 `package:plugin`。
+4. **新增 OPS-003 插件打包脚本**：`SutWxApp/scripts/package-plugin.js`（版本校验 + 清理测试代码 + 生成标准 zip），根 `package.json` 增加 `package:plugin`。
 5. **完成 FE-002（运行时部分）**：新增 `utils/i18n.js` + `locales/zh-CN.json`/`en-US.json`，`app.js` 启动时 `i18n.initLocale()` 初始化；其余 9 语种资源另列阻塞子项 `FE-002-b`。
 6. **完成 FE-003**：新增 `utils/offline-snapshot.js`，`request` 层在重试耗尽后回退离线快照（默认关闭，按需开启）。
 7. **完成 FE-005**：用户中心登录态下拉取真实 `/user/info`，登出统一调用 `authService.logout()` 清理令牌。
@@ -383,7 +383,7 @@
 |----|------|
 | 优先级 | **P0** |
 | 完成日期 | 2026-11-05 |
-| 验收口径 | 加例外 `!sutwx-app-api/readme.txt`；`git add -f` 入库；`node scripts/package-plugin.js` 产物含 readme.txt（本地与 CI 各验一次） |
+| 验收口径 | 加例外 `!sutwx-app-api/readme.txt`；`git add -f` 入库；`node SutWxApp/scripts/package-plugin.js` 产物含 readme.txt（本地与 CI 各验一次） |
 | 依赖项 | 无 |
 
 #### REL-002 — 修复 CI 依赖安装链路断裂
@@ -530,6 +530,92 @@
 | 依赖项 | 无 |
 
 **批次验收结论**：前端 lint 0 error、`check` 四项（版本/配置/契约/包体）通过、137 用例全绿；后端新增 `run-platform-tests.php`（日志/banner/限频分档，30+ 断言）与 `run-pay-exception-tests.php`（支付异常五类场景 + 幂等锁 + cron，30+ 断言）两套件并接入 CI；`.gitignore` 例外修复使插件打包元数据完整；`package-lock.json` 入库解除 CI `npm ci` 断裂。
+
+---
+
+## 2026-11-05 归档批次（第三批：8 项，自 tasks.md 移入）
+
+> 本轮为工程化与安全加固收尾：部署 runbook、监控告警与拨测、发布流水线串联、文档一致性巡检、密钥管理、WordPress 安全基线、冗余资产清理。
+
+### 发布工程与运维 OPS
+
+#### OPS-004 — 生产部署 runbook
+
+| 项 | 内容 |
+|----|------|
+| 优先级 | **P1** |
+| 完成日期 | 2026-11-05 |
+| 验收口径 | 运维规范新增 runbook：插件安装与升级步骤、`wp-config` 常量全表、HTTPS 要求、缓存预热、回滚步骤、常见故障处置 |
+| 依赖项 | INF-003 |
+
+#### OPS-005 — 监控告警与拨测
+
+| 项 | 内容 |
+|----|------|
+| 优先级 | **P1** |
+| 完成日期 | 2026-11-05 |
+| 验收口径 | 服务器 `error_log` 转告警通道（企业微信机器人或邮件）；外部拨测 `/api/health` 每 5 分钟；告警阈值与值班响应写入 runbook |
+| 依赖项 | BE-009/010 |
+
+#### OPS-006 — 发布流水线串联
+
+| 项 | 内容 |
+|----|------|
+| 优先级 | **P2** |
+| 完成日期 | 2026-11-05 |
+| 验收口径 | release 工作流增加版本一致性校验（`check:version`）、`package:plugin` 产物归档、小程序 CI 上传体验版；CHANGELOG 抽取（`changelog-section.js`）自动附到 Release Notes |
+| 依赖项 | REL-001 |
+
+#### OPS-007 — 文档一致性修正
+
+| 项 | 内容 |
+|----|------|
+| 优先级 | **P3** |
+| 完成日期 | 2026-11-05 |
+| 验收口径 | 修正 `tasks-done.md` 中 `package-plugin.js` 位置描述（实际在 `SutWxApp/scripts/`）；核对规范目录树与实际文件差异 |
+| 依赖项 | 无 |
+
+#### OPS-008 — 文档与代码一致性巡检
+
+| 项 | 内容 |
+|----|------|
+| 优先级 | **P2** |
+| 完成日期 | 2026-11-05 |
+| 验收口径 | 脚本自动比对规范中的端点清单、文件路径、版本号与代码实况（可扩展 `check-config.js`）；纳入 CI，偏差即失败 |
+| 依赖项 | 无 |
+
+### 安全加固 SEC
+
+#### SEC-003 — 密钥轮换与应急预案文档
+
+| 项 | 内容 |
+|----|------|
+| 优先级 | **P2** |
+| 完成日期 | 2026-11-05 |
+| 验收口径 | 运维规范补：JWT 密钥轮换步骤（双密钥过渡）、支付凭证泄露处置、令牌黑名单全量失效操作；附演练记录模板 |
+| 依赖项 | 无 |
+
+#### SEC-004 — WordPress 安全基线核查
+
+| 项 | 内容 |
+|----|------|
+| 优先级 | **P2** |
+| 完成日期 | 2026-11-05 |
+| 验收口径 | CORS 白名单仅放行小程序 API 路由；免鉴权端点清单最小化复核（theme、banner、health）；wp-admin 访问限制建议写入 runbook |
+| 依赖项 | INF-003 |
+
+### 测试与质量 QA
+
+#### QA-010 — 冗余资产清理执行
+
+| 项 | 内容 |
+|----|------|
+| 优先级 | **P3** |
+| 完成日期 | 2026-11-05 |
+| 验收口径 | 执行 2026-11-04 冗余审计中的人工确认项：14 张未引用图片、`bun.lock`（同步 CI 注释）、`metadata.json` 取舍、两个未注册组件去留 |
+| 依赖项 | 无 |
+
+**批次验收结论**：`npm run check` 七项全绿（新增插件版本、文档一致性两项）；137 用例通过；`check-docs.js` 首次运行即发现 10 个端点未在 `api/spec.md` 登记并已补全 24 端点总表；`health-probe.yml` 每 5 分钟拨测，失败推送企业微信机器人；Release 流水线改用 `package-plugin.js` 产物并校验包内 `readme.txt`，新增可选体验版上传 Job。
 
 ---
 

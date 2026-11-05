@@ -119,6 +119,14 @@ jobs:
       - name: 校验主包体积预算
         run: node scripts/check-bundle.js
 
+      # OPS-006：插件三处版本源一致
+      - name: 校验插件版本一致性
+        run: node scripts/check-plugin-version.js
+
+      # OPS-008：端点清单、免鉴权清单与版本声明与代码比对
+      - name: 校验文档与代码一致性
+        run: node scripts/check-docs.js
+
   # ---------- 4. 静态站点（原型展示站）构建与冒烟 ----------
   site:
     name: 静态站点构建与冒烟
@@ -131,7 +139,7 @@ jobs:
       - name: 检出代码
         uses: actions/checkout@v7
 
-      # 仓库根仅有 bun.lock，缺少 npm lockfile，故不启用依赖缓存；
+      # 
       # build.js 仅依赖 Node 内置模块，构建阶段零依赖。
       - name: 配置 Node.js
         uses: actions/setup-node@v7
