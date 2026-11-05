@@ -1,4 +1,13 @@
 # Changelog
+## [3.5.11-p2] - 2026-11-05
+
+### Added
+
+- 后端插件 v0.7.0：下单幂等（clientRequestId 短锁，BE-011）
+- 后端插件 v0.7.0：WP-Cron 每 5 分钟掉单兜底查单（BE-012）
+- 后端插件 v0.7.0：已支付订单取消自动退款 + /api/pay/refund-notify 退款回调（BE-014）
+- 新增支付异常路径单测第 8 套件 `run-pay-exception-tests.php`（QA-006 / SEC-002 审计断言）
+
 ## [3.5.11] - 2026-11-05
 
 ### Added

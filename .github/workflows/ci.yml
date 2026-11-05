@@ -249,3 +249,6 @@ jobs:
 
       - name: 运行平台能力单测
         run: php sutwx-app-api/tests/run-platform-tests.php
+
+      - name: 运行支付异常路径单测
+        run: php sutwx-app-api/tests/run-pay-exception-tests.php

@@ -6,7 +6,7 @@
  * - notify：公开；验签解密后将订单置为「待发货」，幂等处理重复通知。
  *
  * @package SutwxAppApi
- * @version 0.6.0
+ * @version 0.7.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -59,8 +59,55 @@ class Sutwx_Rest_Pay extends Sutwx_Rest_Base {
 				'permission_callback' => '__return_true', // 微信回调，靠验签保证安全。
 			)
 		);
+
+		// BE-014：退款结果异步通知（公开，微信服务端调用；验签解密后更新订单为已退款）。
+		register_rest_route(
+			SUTWX_API_REST_NS,
+			'/pay/refund-notify',
+			array(
+				'methods'             => WP_REST_Server::CREATABLE,
+				'callback'            => array( $this, 'refund_notify' ),
+				'permission_callback' => '__return_true', // 微信回调，靠验签保证安全。
+			)
+		);
 	}
 
+	/**
+	 * 退款结果异步通知：验签解密后按 out_refund_no 落库（BE-014，幂等）。
+	 *
+	 * @param WP_REST_Request $request 请求对象。
+	 * @return WP_REST_Response
+	 */
+	public function refund_notify( $request ) {
+		$body   = (string) $request->get_body();
+		$parsed = Sutwx_Wechat_Pay_Notify::parse( $this->request_headers( $request ), $body );
+
+		if ( empty( $parsed['ok'] ) ) {
+			$this->log_error(
+				'pay_exception',
+				array(
+					'code'   => isset( $parsed['error'] ) ? $parsed['error'] : 'refund_notify_failed',
+					'status' => 422,
+					'route'  => '/pay/refund-notify',
+				)
+			);
+			return rest_ensure_response( Sutwx_Wechat_Pay_Notify::receipt( false ) );
+		}
+
+		$ok = Sutwx_Pay_Refund::apply_refund_notified( $parsed['data'] );
+		if ( ! $ok ) {
+			$this->log_error(
+				'pay_exception',
+				array(
+					'code'   => 'apply_refund_failed',
+					'status' => 500,
+					'route'  => '/pay/refund-notify',
+				)
+			);
+		}
+
+		return rest_ensure_response( Sutwx_Wechat_Pay_Notify::receipt( $ok ) );
+	}
 	/**
 	 * 预支付：返回小程序调起支付参数。
 	 *

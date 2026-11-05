@@ -8,7 +8,7 @@
  * - REST 控制器统一在 class-loader.php 中实例化并注册路由。
  *
  * @package SutwxAppApi
- * @version 0.6.0
+ * @version 0.7.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -42,6 +42,9 @@ require_once SUTWX_API_DIR . 'includes/class-wechat-pay-notify.php';
 require_once SUTWX_API_DIR . 'includes/class-pay-order-sync.php';
 require_once SUTWX_API_DIR . 'includes/order/class-order-items.php';
 require_once SUTWX_API_DIR . 'includes/class-error-log.php';
+require_once SUTWX_API_DIR . 'includes/order/class-order-idempotency.php';
+require_once SUTWX_API_DIR . 'includes/class-pay-refund.php';
+require_once SUTWX_API_DIR . 'includes/class-pay-cron.php';
 require_once SUTWX_API_DIR . 'includes/class-banner-settings.php';
 require_once SUTWX_API_DIR . 'includes/rest/class-rest-products.php';
 require_once SUTWX_API_DIR . 'includes/rest/class-rest-posts.php';

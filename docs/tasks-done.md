@@ -392,6 +392,22 @@
 
 ---
 
+### 2026-11-05 任务归档（第二批：支付链路生产化）
+
+完成第二批 5 项任务：
+
+| 编号 | 任务 | 交付物与验收 |
+|------|------|--------------|
+| BE-011 | 下单幂等 | `class-order-idempotency.php`：clientRequestId 短锁（10s transient），重复请求返回原订单号，处理中返回 409；`create` 全链路接线（成功 commit / 失败 release） |
+| BE-012 | WP-Cron 掉单兜底 | `class-pay-cron.php`：5 分钟扫描待付款+有商户单号订单，查单 SUCCESS 走 apply_paid 同一落库通道；init 自愈式调度 + cron_schedules 注册 + deactivate 清理 |
+| BE-014 | 退款接取消 | `class-pay-refund.php`：已支付订单取消 → 整单退款（金额=实付）；`/pay/refund-notify` 验签解密回调按 out_refund_no 落库（状态 5，幂等） |
+| SEC-002 | 支付安全审计 | 审计结论：通知金额与订单一致性校验（apply_paid 内）、重复通知幂等（仅待付款状态推进）、验签失败不落库（parse 失败直接 return）、退款上限=实付（不接受客户端金额）；断言并入 `run-pay-exception-tests.php` |
+| QA-006 | 支付异常路径单测 | 新套件 `run-pay-exception-tests.php`（八组 30+ 断言）：掉单落库、重复通知幂等、金额不符拒绝、退款回调（成功/重复/非SUCCESS/未知单号）、退款前置校验、幂等锁、cron 注册 |
+
+验收：CI 新增 `run-pay-exception-tests.php` 第 8 套件；插件 `0.6.0 → 0.7.0`；`tasks.md` 待开发降至 14 项。
+
+---
+
 ## 历史完成成果（v3.4.1 之前，供追溯）
 
 | 模块 | 阶段 | 主要交付成果 | 版本 |

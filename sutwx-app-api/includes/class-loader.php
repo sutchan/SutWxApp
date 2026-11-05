@@ -3,7 +3,7 @@
  * 统一注册 REST 路由、/api/* rewrite、缓存失效钩子、限频与后台菜单。
  *
  * @package SutwxAppApi
- * @version 0.6.0
+ * @version 0.7.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -81,6 +81,8 @@ final class Sutwx_Loader {
 	 * 停用：刷新 rewrite 清理规则。
 	 */
 	public static function deactivate() {
+		// BE-012：停用时清理兜底定时任务。
+		Sutwx_Pay_Cron::clear();
 		flush_rewrite_rules();
 	}
 
@@ -107,6 +109,9 @@ final class Sutwx_Loader {
 		add_filter( 'wc_order_statuses', array( __CLASS__, 'add_shipped_to_status_list' ) );
 		// 进入 shipped 时记录发货时间（REST 发货与 WC 后台手动发货均会触发）。
 		add_action( 'woocommerce_order_status_shipped', array( __CLASS__, 'record_shipped_at' ), 10, 1 );
+		// BE-012：掉单兜底定时查单（自愈式调度 + 5 分钟间隔）。
+		Sutwx_Pay_Cron::init();
+		add_filter( 'cron_schedules', array( 'Sutwx_Pay_Cron', 'intervals' ) );
 	}
 
 	/**

@@ -3,7 +3,7 @@
  * /api/order/create|cancel|confirm 路由：订单创建与状态流转（BE-006，鉴权）。
  *
  * @package SutwxAppApi
- * @version 0.5.3
+ * @version 0.7.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -13,6 +13,12 @@ if ( ! class_exists( 'Sutwx_Auth_Guard' ) ) {
 }
 if ( ! class_exists( 'Sutwx_Order_Items' ) ) {
 	require_once SUTWX_API_DIR . 'includes/order/class-order-items.php';
+}
+if ( ! class_exists( 'Sutwx_Order_Idempotency' ) ) {
+	require_once SUTWX_API_DIR . 'includes/order/class-order-idempotency.php';
+}
+if ( ! class_exists( 'Sutwx_Pay_Refund' ) ) {
+	require_once SUTWX_API_DIR . 'includes/class-pay-refund.php';
 }
 
 /**
@@ -83,6 +89,21 @@ class Sutwx_Rest_Order_Actions extends Sutwx_Rest_Base {
 			return $this->error( __( 'WooCommerce 未启用', 'sutwx-app-api' ), 503, 'sutwx_woocommerce_missing' );
 		}
 
+		// BE-011：下单幂等 —— clientRequestId 短锁去重，重复请求返回原订单。
+		$client_request_id = (string) ( $request->get_param( 'clientRequestId' ) ? $request->get_param( 'clientRequestId' ) : '' );
+		$idem = array( 'status' => 'acquired', 'order_id' => 0 );
+		if ( '' !== $client_request_id ) {
+			$idem = Sutwx_Order_Idempotency::acquire( $user_id, $client_request_id );
+			if ( 'duplicate' === $idem['status'] ) {
+				$duplicate = wc_get_order( $idem['order_id'] );
+				if ( $duplicate && (int) $duplicate->get_customer_id() === $user_id ) {
+					return $this->success( sutwx_map_order( $duplicate ) );
+				}
+			}
+			if ( 'processing' === $idem['status'] ) {
+				return $this->error( __( '订单正在创建中，请稍后重试', 'sutwx-app-api' ), 409, 'sutwx_order_processing' );
+			}
+		}
 		$items   = $request->get_param( 'items' );
 		$address = $request->get_param( 'address' );
 		$remark  = (string) ( $request->get_param( 'remark' ) ? $request->get_param( 'remark' ) : '' );
@@ -110,7 +131,14 @@ class Sutwx_Rest_Order_Actions extends Sutwx_Rest_Base {
 		$order_id = $order->save();
 
 		if ( ! $order_id ) {
+			if ( '' !== $client_request_id ) {
+				Sutwx_Order_Idempotency::release( $user_id, $client_request_id );
+			}
 			return $this->error( __( '下单失败，请稍后重试', 'sutwx-app-api' ), 500, 'sutwx_order_create_failed' );
+		}
+
+		if ( '' !== $client_request_id ) {
+			Sutwx_Order_Idempotency::commit( $user_id, $client_request_id, (int) $order_id );
 		}
 
 		return $this->success( sutwx_map_order( wc_get_order( $order_id ) ) );
@@ -164,6 +192,23 @@ class Sutwx_Rest_Order_Actions extends Sutwx_Rest_Base {
 
 		$current = (string) $order->get_status();
 		if ( 'cancel' === $action ) {
+			if ( 'processing' === $current ) {
+				// BE-014：已支付订单取消 → 发起微信整单退款（金额=实付，SEC-002）。
+				$refund = Sutwx_Pay_Refund::refund_order( $order );
+				if ( empty( $refund['ok'] ) ) {
+					$this->log_error(
+						'pay_exception',
+						array(
+							'code'    => 'refund_' . $refund['error'],
+							'status'  => 502,
+							'route'   => '/order/cancel',
+							'orderId' => $id,
+						)
+					);
+					return $this->error( __( '退款发起失败，请稍后重试', 'sutwx-app-api' ), 502, 'sutwx_refund_failed' );
+				}
+				return $this->success( sutwx_map_order( wc_get_order( $id ) ) );
+			}
 			if ( ! in_array( $current, array( 'pending', 'on-hold', 'failed' ), true ) ) {
 				return $this->error( __( '当前订单状态不可取消', 'sutwx-app-api' ), 409, 'sutwx_invalid_status' );
 			}
