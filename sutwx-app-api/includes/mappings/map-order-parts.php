@@ -59,7 +59,8 @@ if ( ! function_exists( 'sutwx_order_address_dto' ) ) {
 	function sutwx_order_address_dto( $order ) {
 		$first = method_exists( $order, 'get_billing_first_name' ) ? (string) $order->get_billing_first_name() : '';
 		$last  = method_exists( $order, 'get_billing_last_name' ) ? (string) $order->get_billing_last_name() : '';
-		$name  = trim( $first . ' ' . $last );
+		// 中文姓名语境：WooCommerce 的 first=名、last=姓，姓在前更符合国内展示习惯。
+		$name  = trim( $last . ' ' . $first );
 
 		$phone = method_exists( $order, 'get_billing_phone' ) ? (string) $order->get_billing_phone() : '';
 

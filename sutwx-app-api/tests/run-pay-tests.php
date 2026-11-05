@@ -118,8 +118,8 @@ check( 0 === strpos( $auth_header, 'WECHATPAY2-SHA256-RSA2048 mchid="1900007291"
 check( false !== strpos( $auth_header, 'serial_no="408B07E79B8269FEC3D5D3E6AB8ED163A6A380DB"' ), 'Authorization 证书序列号' );
 
 preg_match( '/nonce_str="([^"]+)",signature="([^"]+)",timestamp="([^"]+)"/', $auth_header, $m );
-check( 3 === count( $m ), 'Authorization 含 nonce/signature/timestamp' );
-if ( 3 === count( $m ) ) {
+check( 4 === count( $m ), 'Authorization 含 nonce/signature/timestamp' );
+if ( 4 === count( $m ) ) {
 	$rebuild = Sutwx_Wechat_Pay_Sign::authorization_message( 'POST', 'https://api.mch.weixin.qq.com/v3/pay/transactions/jsapi', $m[3], $m[1], '{"a":1}' );
 	check( Sutwx_Wechat_Pay_Sign::verify( $rebuild, $m[2], $public_key_pem ), 'Authorization 签名可被对应公钥验签' );
 }
