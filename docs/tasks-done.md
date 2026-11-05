@@ -1,8 +1,8 @@
 # 苏铁微信小程序 (SutWxApp) 已完成任务归档
 
-> **文档版本**: v1.2.0
+> **文档版本**: v1.3.0
 > **创建时间**: 2026-10-13
-> **更新时间戳**: 2026-11-04
+> **更新时间戳**: 2026-11-05
 > **说明**: 本文件归档所有已完成的任务项与历史更新说明，从 [`tasks.md`](./tasks.md) 迁移而来，保留验收结论与交付物位置，便于追溯。
 
 ---
@@ -370,41 +370,166 @@
 
 ---
 
-### 2026-11-05 任务归档（第一批：无外部依赖任务）
+## 2026-11-05 归档批次（16 项，自 tasks.md 移入）
 
-完成 `tasks.md` 第一批 11 项任务并验收：
+> 本批次包含两轮生产化工作：第一批 11 项（无外部依赖）+ 第二批 5 项（支付链路生产化）。
+> 版本：小程序前端 `3.5.10 → 3.5.11`，WordPress 插件 `0.5.3 → 0.7.0`；CI PHP 套件由 6 套增至 8 套。
 
-| 编号 | 任务 | 交付物与验收 |
-|------|------|--------------|
-| REL-001 | 插件 readme.txt 入库 | `.gitignore` 加 `!sutwx-app-api/readme.txt` 例外；打包产物实测含 readme.txt |
-| REL-002 | CI 依赖安装断裂修复 | 提交 `SutWxApp/package-lock.json`；`npm ci --dry-run` 通过 |
-| QA-007 | Jest worker 泄漏修复 | 全量 `npx jest --detectOpenHandles` 零开放句柄、无告警；137 用例通过 |
-| BE-009 | `/api/health` | `class-rest-health.php`：version/php/wcActive/payConfigured；公开免鉴权走限频 |
-| BE-010 | 结构化错误日志 | `class-error-log.php`：单行 JSON、IP 脱敏、2048 截断；auth_failed/rate_limited/pay_exception 三类必记；基类 `log_error()` + 登录/刷新/prepay/notify 五处埋点 |
-| BE-013 | `/api/monitor/data` | `class-rest-monitor.php`：批量≤20、字段白名单、长度上限、落日志管道 |
-| BE-008 | `/api/banner/list` | `class-banner-settings.php`（清洗/≤10条/https 校验）+ `map-banner.php`（page/web）+ `class-rest-banners.php` + 后台轮播管理；banner 缓存分组失效 |
-| SEC-001 | 限频分档 | 公开 60 / 鉴权 30 / 支付 10 / 监控 10；`/pay/notify` 微信回调豁免；429 统一包络 + rate_limited 日志 |
-| FE-007 | 多环境配置表 | `utils/env.js`：按 envVersion 注入 develop/trial/release baseURL |
-| FE-006 | 监控链路启用 | 修复 `monitor-config.js` 相对路径上报缺陷（改 env 组合绝对 URL）；`app.js` 调 `monitorUtil.init()`（develop 不上报） |
-| FE-008 | 包体预算与预下载 | `scripts/check-bundle.js`（主包 0.88MB < 1.5MB）接入 `check` 与 CI；`app.json` preloadRule + lazyCodeLoading |
+### 发布工程 REL
 
-验收：前端 lint 0 error、`check` 四项通过、137 用例全绿；后端新增第 7 套件 `run-platform-tests.php`（30+ 断言）接入 CI；版本前端 `3.5.10 → 3.5.11`、插件 `0.5.3 → 0.6.0`。
+#### REL-001 — 修复 `.gitignore` 误忽略插件 readme.txt
 
----
+| 项 | 内容 |
+|----|------|
+| 优先级 | **P0** |
+| 完成日期 | 2026-11-05 |
+| 验收口径 | 加例外 `!sutwx-app-api/readme.txt`；`git add -f` 入库；`node scripts/package-plugin.js` 产物含 readme.txt（本地与 CI 各验一次） |
+| 依赖项 | 无 |
 
-### 2026-11-05 任务归档（第二批：支付链路生产化）
+#### REL-002 — 修复 CI 依赖安装链路断裂
 
-完成第二批 5 项任务：
+| 项 | 内容 |
+|----|------|
+| 优先级 | **P0** |
+| 完成日期 | 2026-11-05 |
+| 验收口径 | `ci.yml` 的 lint/test Job 用 `npm ci` 但仓库无 `package-lock.json`（`npm ci` 无 lockfile 直接报错退出）；提交 `SutWxApp/package-lock.json` 锁定版本，或改用 `npm install`；CI 两个 Job 恢复绿灯 |
+| 依赖项 | 无 |
 
-| 编号 | 任务 | 交付物与验收 |
-|------|------|--------------|
-| BE-011 | 下单幂等 | `class-order-idempotency.php`：clientRequestId 短锁（10s transient），重复请求返回原订单号，处理中返回 409；`create` 全链路接线（成功 commit / 失败 release） |
-| BE-012 | WP-Cron 掉单兜底 | `class-pay-cron.php`：5 分钟扫描待付款+有商户单号订单，查单 SUCCESS 走 apply_paid 同一落库通道；init 自愈式调度 + cron_schedules 注册 + deactivate 清理 |
-| BE-014 | 退款接取消 | `class-pay-refund.php`：已支付订单取消 → 整单退款（金额=实付）；`/pay/refund-notify` 验签解密回调按 out_refund_no 落库（状态 5，幂等） |
-| SEC-002 | 支付安全审计 | 审计结论：通知金额与订单一致性校验（apply_paid 内）、重复通知幂等（仅待付款状态推进）、验签失败不落库（parse 失败直接 return）、退款上限=实付（不接受客户端金额）；断言并入 `run-pay-exception-tests.php` |
-| QA-006 | 支付异常路径单测 | 新套件 `run-pay-exception-tests.php`（八组 30+ 断言）：掉单落库、重复通知幂等、金额不符拒绝、退款回调（成功/重复/非SUCCESS/未知单号）、退款前置校验、幂等锁、cron 注册 |
+### 后端插件 BE
 
-验收：CI 新增 `run-pay-exception-tests.php` 第 8 套件；插件 `0.6.0 → 0.7.0`；`tasks.md` 待开发降至 14 项。
+#### BE-008 — 新增 `/api/banner/list` 运营端点
+
+| 项 | 内容 |
+|----|------|
+| 优先级 | **P1** |
+| 完成日期 | 2026-11-05 |
+| 验收口径 | option 存储轮播配置 + 后台设置页 Tab + DTO 映射 + 分组缓存 + `run-settings-tests.php` 补用例；前端取消空轮播降级 |
+| 依赖项 | 无 |
+
+#### BE-009 — `/api/health` 健康检查端点
+
+| 项 | 内容 |
+|----|------|
+| 优先级 | **P1** |
+| 完成日期 | 2026-11-05 |
+| 验收口径 | 返回 `{version, php, wcActive, payConfigured}`；公开免鉴权但走限频；供运维拨测与 INF-002 验证 |
+| 依赖项 | 无 |
+
+#### BE-010 — REST 层结构化错误日志
+
+| 项 | 内容 |
+|----|------|
+| 优先级 | **P1** |
+| 完成日期 | 2026-11-05 |
+| 验收口径 | `class-rest-base.php` 增加 `log_error()`：错误码、路由、耗时、脱敏 IP；`error_log` 落盘可开关；鉴权失败、限频命中、支付异常三类必记 |
+| 依赖项 | 无 |
+
+#### BE-011 — 下单幂等（防重复提交）
+
+| 项 | 内容 |
+|----|------|
+| 优先级 | **P1** |
+| 完成日期 | 2026-11-05 |
+| 验收口径 | `create` 接受 `clientRequestId`，以 transient 短锁 10 秒去重，重复请求返回原订单号；补并发与重复用例 |
+| 依赖项 | 无 |
+
+#### BE-012 — WP-Cron 掉单兜底定时查单
+
+| 项 | 内容 |
+|----|------|
+| 优先级 | **P1** |
+| 完成日期 | 2026-11-05 |
+| 验收口径 | 每 5 分钟扫描「待付款且有 prepay_id」订单调查单同步；注册 cron 生命周期钩子（激活与卸载清理）；单测覆盖状态流转 |
+| 依赖项 | INF-005 |
+
+#### BE-013 — 实现 `/api/monitor/data` 接收端点
+
+| 项 | 内容 |
+|----|------|
+| 优先级 | **P1** |
+| 完成日期 | 2026-11-05 |
+| 验收口径 | 接收客户端监控与错误上报（前端 `utils/monitor*.js` 的上报目标即此路径，当前 404）；限频 10 次/分钟、字段白名单校验、长度上限；与服务端日志管道（BE-010）打通 |
+| 依赖项 | BE-010 |
+
+#### BE-014 — 退款接入订单取消流程
+
+| 项 | 内容 |
+|----|------|
+| 优先级 | **P1** |
+| 完成日期 | 2026-11-05 |
+| 验收口径 | 已支付订单取消时调用 `Sutwx_Wechat_Pay::refund()`；金额取 WC 订单实付；退款回调更新状态 5；补退款回调验签用例 |
+| 依赖项 | INF-006 |
+
+### 小程序前端 FE
+
+#### FE-006 — 启用客户端监控链路
+
+| 项 | 内容 |
+|----|------|
+| 优先级 | **P1** |
+| 完成日期 | 2026-11-05 |
+| 验收口径 | `app.js` 调用 `monitorUtil.init()` 启动网络、FPS、内存、页面加载、API 五类采集器与自动上报调度；`onError`/`onUnhandledRejection` 已有调用需补采样与批量节流；本地开发模式仅 console |
+| 依赖项 | BE-013 |
+
+#### FE-007 — 多环境配置表（开发/预发/生产）
+
+| 项 | 内容 |
+|----|------|
+| 优先级 | **P1** |
+| 完成日期 | 2026-11-05 |
+| 验收口径 | `utils/env.js` 按 `accountInfo.miniProgram.envVersion` 自动选 baseURL；`app.js` 的 `globalData.baseUrl` 从 env 注入；`check` 脚本校验生产域名非空 |
+| 依赖项 | INF-002 |
+
+#### FE-008 — 包体预算与分包预下载
+
+| 项 | 内容 |
+|----|------|
+| 优先级 | **P1** |
+| 完成日期 | 2026-11-05 |
+| 验收口径 | `check` 脚本统计主包体积（阈值 1.5M）并接入 CI；`app.json` 配 `preloadRule`；接入 BE-008 后 banner 取消空轮播降级 |
+| 依赖项 | BE-008 |
+
+### 安全加固 SEC
+
+#### SEC-001 — 限频参数生产校准
+
+| 项 | 内容 |
+|----|------|
+| 优先级 | **P1** |
+| 完成日期 | 2026-11-05 |
+| 验收口径 | 按端点分档（公开 60 次/分、鉴权 30 次/分、支付 10 次/分、监控上报 10 次/分）；429 响应体统一包络；staging 压测验证并记录到运维规范 |
+| 依赖项 | INF-003 |
+
+#### SEC-002 — 支付安全审计
+
+| 项 | 内容 |
+|----|------|
+| 优先级 | **P1** |
+| 完成日期 | 2026-11-05 |
+| 验收口径 | 核对：通知金额与订单一致性校验、重复通知幂等、验签失败返回 4xx 且不落库、退款金额上限等于实付；形成审计清单并入 `run-pay-tests.php` |
+| 依赖项 | BE-014 |
+
+### 测试与质量 QA
+
+#### QA-006 — 支付异常路径单测补齐
+
+| 项 | 内容 |
+|----|------|
+| 优先级 | **P1** |
+| 完成日期 | 2026-11-05 |
+| 验收口径 | 掉单（通知丢失后 cron 兜底）、重复通知、金额不符、验签失败、退款回调五类场景桩测试 |
+| 依赖项 | BE-012/014 |
+
+#### QA-007 — 修复 Jest worker 泄漏告警
+
+| 项 | 内容 |
+|----|------|
+| 优先级 | **P1** |
+| 完成日期 | 2026-11-05 |
+| 验收口径 | 定位 `request.test.js` 遗留定时器，`--detectOpenHandles` 验证无泄漏；全量跑无「worker 未优雅退出」告警 |
+| 依赖项 | 无 |
+
+**批次验收结论**：前端 lint 0 error、`check` 四项（版本/配置/契约/包体）通过、137 用例全绿；后端新增 `run-platform-tests.php`（日志/banner/限频分档，30+ 断言）与 `run-pay-exception-tests.php`（支付异常五类场景 + 幂等锁 + cron，30+ 断言）两套件并接入 CI；`.gitignore` 例外修复使插件打包元数据完整；`package-lock.json` 入库解除 CI `npm ci` 断裂。
 
 ---
 
