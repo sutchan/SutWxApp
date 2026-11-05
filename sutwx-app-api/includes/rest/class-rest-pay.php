@@ -6,7 +6,7 @@
  * - notify：公开；验签解密后将订单置为「待发货」，幂等处理重复通知。
  *
  * @package SutwxAppApi
- * @version 0.5.3
+ * @version 0.6.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -112,6 +112,17 @@ class Sutwx_Rest_Pay extends Sutwx_Rest_Base {
 		);
 
 		if ( empty( $result['ok'] ) ) {
+			// BE-010：预支付失败必记（pay_exception）。
+			$this->log_error(
+				'pay_exception',
+				array(
+					'code'    => 'sutwx_prepay_failed',
+					'status'  => 502,
+					'route'   => '/pay/prepay',
+					'orderId' => $order->get_id(),
+					'detail'  => array( 'error' => (string) $result['error'] ),
+				)
+			);
 			return $this->error( $result['error'], 502, 'sutwx_prepay_failed' );
 		}
 
@@ -136,10 +147,30 @@ class Sutwx_Rest_Pay extends Sutwx_Rest_Base {
 		$parsed = Sutwx_Wechat_Pay_Notify::parse( $this->request_headers( $request ), $body );
 
 		if ( empty( $parsed['ok'] ) ) {
+			// BE-010：支付回调验签/解密失败必记（pay_exception），含失败原因。
+			$this->log_error(
+				'pay_exception',
+				array(
+					'code'   => $parsed['error'],
+					'status' => 422,
+					'route'  => '/pay/notify',
+					'detail' => array( 'bodyBytes' => strlen( $body ) ),
+				)
+			);
 			return rest_ensure_response( Sutwx_Wechat_Pay_Notify::receipt( false ) );
 		}
 
 		$ok = Sutwx_Pay_Order_Sync::apply_paid( $parsed['data'] );
+		if ( ! $ok ) {
+			$this->log_error(
+				'pay_exception',
+				array(
+					'code'   => 'apply_paid_failed',
+					'status' => 500,
+					'route'  => '/pay/notify',
+				)
+			);
+		}
 
 		return rest_ensure_response( Sutwx_Wechat_Pay_Notify::receipt( $ok ) );
 	}

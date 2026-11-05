@@ -1,6 +1,6 @@
 # 苏铁 SutWxApp - 微信小程序 × WordPress 电商桥接方案
 
-![版本](https://img.shields.io/badge/version-3.5.10-blue)
+![版本](https://img.shields.io/badge/version-3.5.11-blue)
 ![设计风格](https://img.shields.io/badge/design-Apple%20Style-green)
 ![CI](https://github.com/sutchan/SutWxApp/actions/workflows/ci.yml/badge.svg)
 

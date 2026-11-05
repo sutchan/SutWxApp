@@ -3,7 +3,7 @@
  * API 限频与防刷保护（BE-005）：按 IP + 桶计数，响应头回传 X-RateLimit-*。
  *
  * @package SutwxAppApi
- * @version 0.5.3
+ * @version 0.6.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -26,14 +26,24 @@ class Sutwx_Rate_Limit {
 	const WINDOW = 60;
 
 	/**
-	 * 公开内容端点：每分钟 120 次。
+	 * 公开内容端点：每分钟 60 次（SEC-001 生产分档）。
 	 */
-	const LIMIT_PUBLIC = 120;
+	const LIMIT_PUBLIC = 60;
 
 	/**
-	 * 鉴权/写端点：每分钟 20 次（防 code2session 爆破）。
+	 * 鉴权/写端点：每分钟 30 次（防 code2session 爆破）。
 	 */
-	const LIMIT_AUTH = 20;
+	const LIMIT_AUTH = 30;
+
+	/**
+	 * 支付端点：每分钟 10 次。
+	 */
+	const LIMIT_PAY = 10;
+
+	/**
+	 * 监控上报端点：每分钟 10 次。
+	 */
+	const LIMIT_MONITOR = 10;
 
 	/**
 	 * 最近一次检查结果（供响应头与单测读取）。
@@ -67,17 +77,45 @@ class Sutwx_Rate_Limit {
 			return $response;
 		}
 
-		$is_auth = false !== strpos( $route, '/auth/' );
-		$result  = self::check(
-			$is_auth ? 'auth' : 'public',
-			$is_auth ? self::LIMIT_AUTH : self::LIMIT_PUBLIC,
-			self::WINDOW
-		);
+		// SEC-001：按端点分档（支付/监控/鉴权更严格，公开内容宽松）。
+		// /pay/notify 为微信支付服务端回调，回调 IP 集中，不做限频以免误伤支付通知。
+		if ( '/pay/notify' === substr( $route, -strlen( '/pay/notify' ) ) ) {
+			return $response;
+		}
+
+		if ( false !== strpos( $route, '/pay' ) ) {
+			$bucket = 'pay';
+			$limit  = self::LIMIT_PAY;
+		} elseif ( false !== strpos( $route, '/monitor/' ) ) {
+			$bucket = 'monitor';
+			$limit  = self::LIMIT_MONITOR;
+		} elseif ( false !== strpos( $route, '/auth/' ) ) {
+			$bucket = 'auth';
+			$limit  = self::LIMIT_AUTH;
+		} else {
+			$bucket = 'public';
+			$limit  = self::LIMIT_PUBLIC;
+		}
+
+		$result = self::check( $bucket, $limit, self::WINDOW );
 
 		self::send_headers( $result );
 
 		if ( $result['ok'] || ! class_exists( 'WP_Error' ) ) {
 			return $response;
+		}
+
+		// 429 统一 {code,message,data.status} 包络（与小程序 unwrap 错误分支一致）。
+		if ( class_exists( 'Sutwx_Error_Log' ) ) {
+			Sutwx_Error_Log::log(
+				'rate_limited',
+				array(
+					'route' => $route,
+					'code'  => 'sutwx_rate_limited',
+					'status' => 429,
+					'ip'    => self::client_ip(),
+				)
+			);
 		}
 
 		return new WP_Error(

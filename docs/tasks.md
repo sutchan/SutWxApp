@@ -1,7 +1,7 @@
 # 苏铁微信小程序 (SutWxApp) 开发任务清单
 
 > **文档版本**: v2.6.0
-> **更新时间戳**: 2026-11-04 (UTC+8)
+> **更新时间戳**: 2026-11-05 (UTC+8)
 > **项目作者**: Sut
 > **当前状态**: 小程序前端 `v3.5.10` · WordPress 插件 `v0.5.3`
 > **关联规范**: [文档索引](./README.md) · [工程规范](./specs/development/spec.md) · [功能规范](./specs/features/spec.md) · [后端规范](./specs/backend/spec.md) · [API 规范](./specs/api/spec.md) · [测试规范](./specs/testing/spec.md) · [运维规范](./specs/ops/spec.md) · [术语表](./GLOSSARY.md)
@@ -10,6 +10,8 @@
 ---
 
 ## 本次更新说明（2026-11-04 文档规范化与生产成熟度规划）
+
+> **2026-11-05 更新**：第一批 11 项任务（REL-001/002、BE-008/009/010/013、FE-006/007/008、SEC-001、QA-007）全部完成并归档至 [tasks-done.md](./tasks-done.md)，版本前端 `3.5.11`、插件 `0.6.0`。
 
 1. **文档体系重建**：`docs/AGENTS.md` 由 OpenSpec CLI 指导重写为贡献与 AI 助手指南；`docs/specs/development/spec.md` 重写为工程规范单一事实来源；新增 `docs/GLOSSARY.md` 术语表；`docs/README.md` 重建为文档索引。
 2. **文档与代码对齐**：`api/spec.md` 删除虚构的注册登录与 Axios/Fetch 示例，改为真实的 `wx.login` 到 JWT 端点与实际错误码；`backend/spec.md` 把「鉴权与订单支付本期预留」改为已实现并补充未实现端点清单；`user-guide/spec.md` 移除 MySQL/Docker/Bun 等不存在的技术栈。
@@ -47,17 +49,17 @@
 
 > 已完成任务（BE-001~007、FE-001~004、QA-001~005、OPS-001~003）已全部归档至 [`tasks-done.md`](./tasks-done.md)，本文件仅保存**未完成任务**。
 
-| 分类 | 总数 | 进行中 | 待开发 | 阻塞 |
+| 分类 | 总数 | 已完成 | 进行中 | 待开发 | 阻塞 |
 |------|------|--------|--------|------|
-| 联调与基础设施 INF | 6 | 0 | 3 | 3 |
-| 合规 COM | 2 | 0 | 1 | 1 |
-| 发布工程 REL | 2 | 0 | 2 | 0 |
-| 后端插件 BE | 7 | 0 | 7 | 0 |
-| 小程序前端 FE | 5 | 0 | 4 | 1 |
-| 安全加固 SEC | 4 | 0 | 4 | 0 |
-| 测试与质量 QA | 5 | 0 | 4 | 1 |
-| 工程化 OPS | 5 | 0 | 5 | 0 |
-| **合计** | **36** | **0** | **30** | **6** |
+| 联调与基础设施 INF | 6 | 0 | 0 | 3 | 3 |
+| 合规 COM | 2 | 0 | 0 | 1 | 1 |
+| 发布工程 REL | 2 | 2 | 0 | 0 | 0 |
+| 后端插件 BE | 7 | 4 | 0 | 3 | 0 |
+| 小程序前端 FE | 5 | 3 | 0 | 1 | 1 |
+| 安全加固 SEC | 4 | 1 | 0 | 3 | 0 |
+| 测试与质量 QA | 5 | 1 | 0 | 3 | 1 |
+| 工程化 OPS | 5 | 0 | 0 | 5 | 0 |
+| **合计** | **36** | **11** | **0** | **19** | **6** |
 
 ---
 
@@ -67,8 +69,8 @@
 
 | 编号 | 任务名称 | 优先级 | 状态 | 最小交付物与验收 | 依赖项 |
 |------|----------|--------|------|------------------|--------|
-| **REL-001** | 修复 `.gitignore` 误忽略插件 readme.txt | **P0** | 待开发 | 加例外 `!sutwx-app-api/readme.txt`；`git add -f` 入库；`node scripts/package-plugin.js` 产物含 readme.txt（本地与 CI 各验一次） | 无 |
-| **REL-002** | 修复 CI 依赖安装链路断裂 | **P0** | 待开发 | `ci.yml` 的 lint/test Job 用 `npm ci` 但仓库无 `package-lock.json`（`npm ci` 无 lockfile 直接报错退出）；提交 `SutWxApp/package-lock.json` 锁定版本，或改用 `npm install`；CI 两个 Job 恢复绿灯 | 无 |
+| **REL-001** | 修复 `.gitignore` 误忽略插件 readme.txt | **P0** | 已完成 ✅（2026-11-05） | 加例外 `!sutwx-app-api/readme.txt`；`git add -f` 入库；`node scripts/package-plugin.js` 产物含 readme.txt（本地与 CI 各验一次） | 无 |
+| **REL-002** | 修复 CI 依赖安装链路断裂 | **P0** | 已完成 ✅（2026-11-05） | `ci.yml` 的 lint/test Job 用 `npm ci` 但仓库无 `package-lock.json`（`npm ci` 无 lockfile 直接报错退出）；提交 `SutWxApp/package-lock.json` 锁定版本，或改用 `npm install`；CI 两个 Job 恢复绿灯 | 无 |
 | **INF-001** | 申请并配置真实 AppID | **P0（外部）** | 阻塞 | 注册小程序主体获取 AppID；替换 `project.config.json` 的 `touristappid`；部署工作流配置 Secrets；`npm run deploy:preview` 验证 | 无 |
 | **INF-002** | 生产域名 / HTTPS / ICP 备案 | **P0（外部）** | 阻塞 | 域名 ICP 备案与 HTTPS 证书；微信公众平台配置 request 合法域名；`curl -f https://<域名>/api/health`（BE-009 后）返回 200 | INF-001 |
 | **INF-003** | WooCommerce staging 联调环境 | **P0** | 待开发 | 独立 WP+WC 站点装插件；`wp-config` 配置 `SUTWX_WX_APPID/SECRET/MCHID/...` 常量；`/api/theme`、`/api/product/list` 真实返回 | 无 |
@@ -82,21 +84,21 @@
 
 | 编号 | 任务名称 | 优先级 | 状态 | 最小交付物与验收 | 依赖项 |
 |------|----------|--------|------|------------------|--------|
-| **BE-008** | 新增 `/api/banner/list` 运营端点 | **P1** | 待开发 | option 存储轮播配置 + 后台设置页 Tab + DTO 映射 + 分组缓存 + `run-settings-tests.php` 补用例；前端取消空轮播降级 | 无 |
-| **BE-009** | `/api/health` 健康检查端点 | **P1** | 待开发 | 返回 `{version, php, wcActive, payConfigured}`；公开免鉴权但走限频；供运维拨测与 INF-002 验证 | 无 |
-| **BE-010** | REST 层结构化错误日志 | **P1** | 待开发 | `class-rest-base.php` 增加 `log_error()`：错误码、路由、耗时、脱敏 IP；`error_log` 落盘可开关；鉴权失败、限频命中、支付异常三类必记 | 无 |
+| **BE-008** | 新增 `/api/banner/list` 运营端点 | **P1** | 已完成 ✅（2026-11-05） | option 存储轮播配置 + 后台设置页 Tab + DTO 映射 + 分组缓存 + `run-settings-tests.php` 补用例；前端取消空轮播降级 | 无 |
+| **BE-009** | `/api/health` 健康检查端点 | **P1** | 已完成 ✅（2026-11-05） | 返回 `{version, php, wcActive, payConfigured}`；公开免鉴权但走限频；供运维拨测与 INF-002 验证 | 无 |
+| **BE-010** | REST 层结构化错误日志 | **P1** | 已完成 ✅（2026-11-05） | `class-rest-base.php` 增加 `log_error()`：错误码、路由、耗时、脱敏 IP；`error_log` 落盘可开关；鉴权失败、限频命中、支付异常三类必记 | 无 |
 | **BE-011** | 下单幂等（防重复提交） | **P1** | 待开发 | `create` 接受 `clientRequestId`，以 transient 短锁 10 秒去重，重复请求返回原订单号；补并发与重复用例 | 无 |
 | **BE-012** | WP-Cron 掉单兜底定时查单 | **P1** | 待开发 | 每 5 分钟扫描「待付款且有 prepay_id」订单调查单同步；注册 cron 生命周期钩子（激活与卸载清理）；单测覆盖状态流转 | INF-005 |
-| **BE-013** | 实现 `/api/monitor/data` 接收端点 | **P1** | 待开发 | 接收客户端监控与错误上报（前端 `utils/monitor*.js` 的上报目标即此路径，当前 404）；限频 10 次/分钟、字段白名单校验、长度上限；与服务端日志管道（BE-010）打通 | BE-010 |
+| **BE-013** | 实现 `/api/monitor/data` 接收端点 | **P1** | 已完成 ✅（2026-11-05） | 接收客户端监控与错误上报（前端 `utils/monitor*.js` 的上报目标即此路径，当前 404）；限频 10 次/分钟、字段白名单校验、长度上限；与服务端日志管道（BE-010）打通 | BE-010 |
 | **BE-014** | 退款接入订单取消流程 | **P1** | 待开发 | 已支付订单取消时调用 `Sutwx_Wechat_Pay::refund()`；金额取 WC 订单实付；退款回调更新状态 5；补退款回调验签用例 | INF-006 |
 
 ## 3. 里程碑 3 — 前端生产化（P1）
 
 | 编号 | 任务名称 | 优先级 | 状态 | 最小交付物与验收 | 依赖项 |
 |------|----------|--------|------|------------------|--------|
-| **FE-006** | 启用客户端监控链路 | **P1** | 待开发 | `app.js` 调用 `monitorUtil.init()` 启动网络、FPS、内存、页面加载、API 五类采集器与自动上报调度；`onError`/`onUnhandledRejection` 已有调用需补采样与批量节流；本地开发模式仅 console | BE-013 |
-| **FE-007** | 多环境配置表（开发/预发/生产） | **P1** | 待开发 | `utils/env.js` 按 `accountInfo.miniProgram.envVersion` 自动选 baseURL；`app.js` 的 `globalData.baseUrl` 从 env 注入；`check` 脚本校验生产域名非空 | INF-002 |
-| **FE-008** | 包体预算与分包预下载 | **P1** | 待开发 | `check` 脚本统计主包体积（阈值 1.5M）并接入 CI；`app.json` 配 `preloadRule`；接入 BE-008 后 banner 取消空轮播降级 | BE-008 |
+| **FE-006** | 启用客户端监控链路 | **P1** | 已完成 ✅（2026-11-05） | `app.js` 调用 `monitorUtil.init()` 启动网络、FPS、内存、页面加载、API 五类采集器与自动上报调度；`onError`/`onUnhandledRejection` 已有调用需补采样与批量节流；本地开发模式仅 console | BE-013 |
+| **FE-007** | 多环境配置表（开发/预发/生产） | **P1** | 已完成 ✅（2026-11-05） | `utils/env.js` 按 `accountInfo.miniProgram.envVersion` 自动选 baseURL；`app.js` 的 `globalData.baseUrl` 从 env 注入；`check` 脚本校验生产域名非空 | INF-002 |
+| **FE-008** | 包体预算与分包预下载 | **P1** | 已完成 ✅（2026-11-05） | `check` 脚本统计主包体积（阈值 1.5M）并接入 CI；`app.json` 配 `preloadRule`；接入 BE-008 后 banner 取消空轮播降级 | BE-008 |
 | **FE-009** | 基础库版本与真机兼容性审计 | **P2** | 阻塞 | `project.config.json` 锁定最低基础库；真机矩阵（iOS 与 Android 各 2 台）回归核心 8 页；`compress-images.js` 纳入上传前流程 | INF-001 |
 | **FE-010** | 隐私接口前置授权改造 | **P1** | 待开发 | 按 COM-001 清单逐接口核对调用时机与拒绝兜底；头像昵称改用 `avatarUrl` 选择器路径；设置页隐私开关与官方指引文案对齐 | COM-001 |
 
@@ -104,7 +106,7 @@
 
 | 编号 | 任务名称 | 优先级 | 状态 | 最小交付物与验收 | 依赖项 |
 |------|----------|--------|------|------------------|--------|
-| **SEC-001** | 限频参数生产校准 | **P1** | 待开发 | 按端点分档（公开 60 次/分、鉴权 30 次/分、支付 10 次/分、监控上报 10 次/分）；429 响应体统一包络；staging 压测验证并记录到运维规范 | INF-003 |
+| **SEC-001** | 限频参数生产校准 | **P1** | 已完成 ✅（2026-11-05） | 按端点分档（公开 60 次/分、鉴权 30 次/分、支付 10 次/分、监控上报 10 次/分）；429 响应体统一包络；staging 压测验证并记录到运维规范 | INF-003 |
 | **SEC-002** | 支付安全审计 | **P1** | 待开发 | 核对：通知金额与订单一致性校验、重复通知幂等、验签失败返回 4xx 且不落库、退款金额上限等于实付；形成审计清单并入 `run-pay-tests.php` | BE-014 |
 | **SEC-003** | 密钥轮换与应急预案文档 | **P2** | 待开发 | 运维规范补：JWT 密钥轮换步骤（双密钥过渡）、支付凭证泄露处置、令牌黑名单全量失效操作；附演练记录模板 | 无 |
 | **SEC-004** | WordPress 安全基线核查 | **P2** | 待开发 | CORS 白名单仅放行小程序 API 路由；免鉴权端点清单最小化复核（theme、banner、health）；wp-admin 访问限制建议写入 runbook | INF-003 |
@@ -114,7 +116,7 @@
 | 编号 | 任务名称 | 优先级 | 状态 | 最小交付物与验收 | 依赖项 |
 |------|----------|--------|------|------------------|--------|
 | **QA-006** | 支付异常路径单测补齐 | **P1** | 待开发 | 掉单（通知丢失后 cron 兜底）、重复通知、金额不符、验签失败、退款回调五类场景桩测试 | BE-012/014 |
-| **QA-007** | 修复 Jest worker 泄漏告警 | **P1** | 待开发 | 定位 `request.test.js` 遗留定时器，`--detectOpenHandles` 验证无泄漏；全量跑无「worker 未优雅退出」告警 | 无 |
+| **QA-007** | 修复 Jest worker 泄漏告警 | **P1** | 已完成 ✅（2026-11-05） | 定位 `request.test.js` 遗留定时器，`--detectOpenHandles` 验证无泄漏；全量跑无「worker 未优雅退出」告警 | 无 |
 | **QA-008** | E2E 进 CI | **P2（部分外部）** | 阻塞 | `miniprogram-automator` + 微信开发者工具 CI 模式（需工具授权）；夜间 `workflow_dispatch` 跑四套件并归档报告；无法 CI 化则降级为发版前手动清单 | INF-001 |
 | **QA-009** | staging 负载与缓存演练 | **P2** | 待开发 | 缓存命中率、限频触发、`X-RateLimit-*` 头行为实测；结果记录到运维规范基线表 | INF-003 |
 | **QA-010** | 冗余资产清理执行 | **P3** | 待开发 | 执行 2026-11-04 冗余审计中的人工确认项：14 张未引用图片、`bun.lock`（同步 CI 注释）、`metadata.json` 取舍、两个未注册组件去留 | 无 |

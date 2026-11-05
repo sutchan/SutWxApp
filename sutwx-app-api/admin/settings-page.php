@@ -17,6 +17,9 @@ if ( ! class_exists( 'Sutwx_Credentials' ) ) {
 if ( ! class_exists( 'Sutwx_Settings_Pay' ) ) {
 	require_once SUTWX_API_DIR . 'admin/settings-pay.php';
 }
+if ( ! class_exists( 'Sutwx_Settings_Banners' ) ) {
+	require_once SUTWX_API_DIR . 'admin/settings-banners.php';
+}
 
 /**
  * 设置页渲染。
@@ -41,6 +44,7 @@ class Sutwx_Settings_Page {
 
 		self::maybe_save_credentials();
 		Sutwx_Settings_Pay::maybe_save();
+		Sutwx_Settings_Banners::maybe_save();
 
 		$config    = Sutwx_Settings::get_theme_config();
 		$preset_id = $config['presetId'];
@@ -135,6 +139,10 @@ class Sutwx_Settings_Page {
 			<hr />
 
 			<?php Sutwx_Settings_Pay::render(); ?>
+
+			<hr />
+
+			<?php Sutwx_Settings_Banners::render(); ?>
 		</div>
 		<?php
 	}

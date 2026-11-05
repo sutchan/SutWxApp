@@ -1,4 +1,21 @@
 # Changelog
+## [3.5.11] - 2026-11-05
+
+### Added
+
+- FE-007：新增 `utils/env.js` 多环境配置表，按 develop/trial/release 自动注入 baseURL
+- FE-008：新增 `scripts/check-bundle.js` 主包体积预算校验（1.5MB），接入 `check` 与 CI；`app.json` 配置分包 `preloadRule` 与 `lazyCodeLoading`
+- FE-006：`app.js` 启用客户端监控链路（`monitorUtil.init()`），develop 环境默认不上报
+
+### Fixed
+
+- 修复 `monitor-config.js` 上报地址为相对路径的缺陷（wx.request 不支持相对 URL），改为按环境组合绝对地址
+
+### Changed
+
+- 后端插件 v0.6.0：新增 /api/banner/list、/api/health、/api/monitor/data 端点；REST 层结构化错误日志；限频按端点分档（SEC-001）
+- CI：新增 `run-platform-tests.php` 第 7 套件与 `check-bundle` 步骤
+
 
 所有重要的项目变更都将记录在此文件中。
 

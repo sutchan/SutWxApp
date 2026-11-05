@@ -370,6 +370,28 @@
 
 ---
 
+### 2026-11-05 任务归档（第一批：无外部依赖任务）
+
+完成 `tasks.md` 第一批 11 项任务并验收：
+
+| 编号 | 任务 | 交付物与验收 |
+|------|------|--------------|
+| REL-001 | 插件 readme.txt 入库 | `.gitignore` 加 `!sutwx-app-api/readme.txt` 例外；打包产物实测含 readme.txt |
+| REL-002 | CI 依赖安装断裂修复 | 提交 `SutWxApp/package-lock.json`；`npm ci --dry-run` 通过 |
+| QA-007 | Jest worker 泄漏修复 | 全量 `npx jest --detectOpenHandles` 零开放句柄、无告警；137 用例通过 |
+| BE-009 | `/api/health` | `class-rest-health.php`：version/php/wcActive/payConfigured；公开免鉴权走限频 |
+| BE-010 | 结构化错误日志 | `class-error-log.php`：单行 JSON、IP 脱敏、2048 截断；auth_failed/rate_limited/pay_exception 三类必记；基类 `log_error()` + 登录/刷新/prepay/notify 五处埋点 |
+| BE-013 | `/api/monitor/data` | `class-rest-monitor.php`：批量≤20、字段白名单、长度上限、落日志管道 |
+| BE-008 | `/api/banner/list` | `class-banner-settings.php`（清洗/≤10条/https 校验）+ `map-banner.php`（page/web）+ `class-rest-banners.php` + 后台轮播管理；banner 缓存分组失效 |
+| SEC-001 | 限频分档 | 公开 60 / 鉴权 30 / 支付 10 / 监控 10；`/pay/notify` 微信回调豁免；429 统一包络 + rate_limited 日志 |
+| FE-007 | 多环境配置表 | `utils/env.js`：按 envVersion 注入 develop/trial/release baseURL |
+| FE-006 | 监控链路启用 | 修复 `monitor-config.js` 相对路径上报缺陷（改 env 组合绝对 URL）；`app.js` 调 `monitorUtil.init()`（develop 不上报） |
+| FE-008 | 包体预算与预下载 | `scripts/check-bundle.js`（主包 0.88MB < 1.5MB）接入 `check` 与 CI；`app.json` preloadRule + lazyCodeLoading |
+
+验收：前端 lint 0 error、`check` 四项通过、137 用例全绿；后端新增第 7 套件 `run-platform-tests.php`（30+ 断言）接入 CI；版本前端 `3.5.10 → 3.5.11`、插件 `0.5.3 → 0.6.0`。
+
+---
+
 ## 历史完成成果（v3.4.1 之前，供追溯）
 
 | 模块 | 阶段 | 主要交付成果 | 版本 |

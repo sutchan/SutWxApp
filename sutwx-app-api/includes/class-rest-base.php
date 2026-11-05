@@ -3,7 +3,7 @@
  * REST 基类：统一 {code,data} 响应包络与错误处理。
  *
  * @package SutwxAppApi
- * @version 0.5.3
+ * @version 0.6.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -35,10 +35,30 @@ abstract class Sutwx_Rest_Base {
 	 * @param string $message 错误信息。
 	 * @param int    $status  HTTP 状态码。
 	 * @param string $code    错误码。
+	 * @param array  $context 额外日志上下文（可选）。
 	 * @return WP_Error
 	 */
-	protected function error( $message, $status = 400, $code = 'sutwx_error' ) {
+	protected function error( $message, $status = 400, $code = 'sutwx_error', array $context = array() ) {
+		if ( class_exists( 'Sutwx_Error_Log' ) ) {
+			$context['code']   = $code;
+			$context['status'] = $status;
+			Sutwx_Error_Log::log( isset( $context['event'] ) ? $context['event'] : 'rest_error', $context );
+		}
 		return new WP_Error( $code, $message, array( 'status' => $status ) );
+	}
+
+	/**
+	 * 记录一条业务错误日志（BE-010 包装：错误码、路由、耗时、脱敏 IP 由 Error_Log 统一处理）。
+	 *
+	 * @param string $event   事件名（auth_failed / rate_limited / pay_exception / rest_error ...）。
+	 * @param array  $context 上下文。
+	 * @return bool 是否写入。
+	 */
+	protected function log_error( $event, array $context = array() ) {
+		if ( ! class_exists( 'Sutwx_Error_Log' ) ) {
+			return false;
+		}
+		return Sutwx_Error_Log::log( $event, $context );
 	}
 
 	/**

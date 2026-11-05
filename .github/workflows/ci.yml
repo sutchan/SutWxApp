@@ -115,6 +115,10 @@ jobs:
       - name: 校验 app.json 页面与资源配置
         run: node scripts/check-config.js
 
+      # FE-008：主包体积预算（1.5MB），纯 Node 内置模块实现
+      - name: 校验主包体积预算
+        run: node scripts/check-bundle.js
+
   # ---------- 4. 静态站点（原型展示站）构建与冒烟 ----------
   site:
     name: 静态站点构建与冒烟
@@ -242,3 +246,6 @@ jobs:
 
       - name: 运行微信支付 V3 单测
         run: php sutwx-app-api/tests/run-pay-tests.php
+
+      - name: 运行平台能力单测
+        run: php sutwx-app-api/tests/run-platform-tests.php

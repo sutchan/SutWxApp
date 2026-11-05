@@ -22,6 +22,11 @@
       ]
     }
   ],
+  "preloadRule": {
+    "pages/home/index": { "network": "all", "packages": ["pages/"] },
+    "pages/user/index": { "network": "wifi", "packages": ["pages/"] }
+  },
+  "lazyCodeLoading": "requiredComponents",
   "window": {
     "backgroundTextStyle": "dark",
     "navigationBarBackgroundColor": "#ffffff",

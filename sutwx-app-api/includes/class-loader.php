@@ -3,7 +3,7 @@
  * 统一注册 REST 路由、/api/* rewrite、缓存失效钩子、限频与后台菜单。
  *
  * @package SutwxAppApi
- * @version 0.5.3
+ * @version 0.6.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -42,6 +42,9 @@ final class Sutwx_Loader {
 			new Sutwx_Rest_Posts(),
 			new Sutwx_Rest_Categories(),
 			new Sutwx_Rest_Theme(),
+			new Sutwx_Rest_Banners(),
+			new Sutwx_Rest_Health(),
+			new Sutwx_Rest_Monitor(),
 			new Sutwx_Rest_Auth(),
 			new Sutwx_Rest_Orders(),
 			new Sutwx_Rest_Order_Actions(),

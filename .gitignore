@@ -21,3 +21,5 @@ SutWxApp/private.key
 SutWxApp/preview.jpg
 .miniprogram-ci/
 *.txt
+# 插件必需的 readme.txt（WordPress 插件元数据，打包与 wp.org 规范需要）
+!sutwx-app-api/readme.txt

@@ -85,6 +85,14 @@ class Sutwx_Rest_Auth extends Sutwx_Rest_Base {
 
 		$result = Sutwx_Auth_Service::login( $code, $profile );
 		if ( ! $result['ok'] ) {
+			$this->log_error(
+				'auth_failed',
+				array(
+					'code'   => $result['error'],
+					'status' => $result['status'],
+					'route'  => '/auth/login',
+				)
+			);
 			return $this->error( self::error_text( $result['error'] ), $result['status'], $result['error'] );
 		}
 
@@ -102,6 +110,14 @@ class Sutwx_Rest_Auth extends Sutwx_Rest_Base {
 		$result  = Sutwx_Auth_Service::refresh( $refresh );
 
 		if ( ! $result['ok'] ) {
+			$this->log_error(
+				'auth_failed',
+				array(
+					'code'   => $result['error'],
+					'status' => $result['status'],
+					'route'  => '/auth/refresh-token',
+				)
+			);
 			return $this->error( self::error_text( $result['error'] ), $result['status'], $result['error'] );
 		}
 		return $this->success( $result['data'] );

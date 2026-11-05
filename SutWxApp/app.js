@@ -1,7 +1,7 @@
 /**
  * 文件名: app.js
- * 版本号: 3.5.10
- * 更新日期: 2026-10-14
+ * 版本号: 3.5.11
+ * 更新日期: 2026-11-05
  * 描述: 微信小程序应用入口文件，处理应用生命周期事件和全局数据（逻辑见 helpers.js）
  */
 
@@ -10,6 +10,7 @@ const monitorUtil = require("./utils/monitor").default;
 const helpers = require("./helpers");
 const request = require("./utils/request");
 const i18n = require("./utils/i18n");
+const env = require("./utils/env");
 
 App({
   onLaunch(options) {
@@ -46,7 +47,7 @@ App({
     productSource: "mock", // 'mock'（默认）| 'woocommerce'：商品数据源（WooCommerce 需配套 WP 插件）
     theme: null, // 当前主题色值（由 themeService 加载）
     themeStyle: "", // 当前主题 CSS 变量声明字符串（供页面根容器绑定）
-    version: "3.5.10",
+    version: "3.5.11",
     locale: "zh-CN", // 当前界面语言（由 i18n 初始化）
     debug: false,
     request: {
@@ -55,6 +56,9 @@ App({
   },
 
   initApp() {
+    // FE-007：按运行环境（develop/trial/release）注入 baseURL
+    const envConfig = env.getEnvConfig();
+    this.globalData.baseUrl = envConfig.baseUrl;
     // 将全局 baseUrl 注入请求层（request-api 的 setBaseURL 修改共享 CONFIG）
     request.setBaseURL(this.globalData.baseUrl);
     // FE-002：依据系统语言 / 本地偏好初始化界面语言
@@ -63,6 +67,14 @@ App({
     helpers.checkVersion(this.globalData);
     helpers.reportAnalytics(this.globalData);
     helpers.loadTheme(this);
+    // FE-006：启用客户端监控链路（采集器 + 自动上报，目标 /api/monitor/data）。
+    // develop 环境不上报（enableMonitor=false 时仅本地采集，见 monitor-config）。
+    if (envConfig.enableMonitor) {
+      monitorUtil.init({
+        reportUrl: env.apiUrl("/api/monitor/data"),
+        appId: "sut-wx-app",
+      });
+    }
   },
 
   loadTheme() {

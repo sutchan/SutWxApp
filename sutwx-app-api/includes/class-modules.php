@@ -8,7 +8,7 @@
  * - REST 控制器统一在 class-loader.php 中实例化并注册路由。
  *
  * @package SutwxAppApi
- * @version 0.5.3
+ * @version 0.6.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -41,10 +41,15 @@ require_once SUTWX_API_DIR . 'includes/class-wechat-pay-trade.php';
 require_once SUTWX_API_DIR . 'includes/class-wechat-pay-notify.php';
 require_once SUTWX_API_DIR . 'includes/class-pay-order-sync.php';
 require_once SUTWX_API_DIR . 'includes/order/class-order-items.php';
+require_once SUTWX_API_DIR . 'includes/class-error-log.php';
+require_once SUTWX_API_DIR . 'includes/class-banner-settings.php';
 require_once SUTWX_API_DIR . 'includes/rest/class-rest-products.php';
 require_once SUTWX_API_DIR . 'includes/rest/class-rest-posts.php';
 require_once SUTWX_API_DIR . 'includes/rest/class-rest-categories.php';
 require_once SUTWX_API_DIR . 'includes/rest/class-rest-theme.php';
+require_once SUTWX_API_DIR . 'includes/rest/class-rest-banners.php';
+require_once SUTWX_API_DIR . 'includes/rest/class-rest-health.php';
+require_once SUTWX_API_DIR . 'includes/rest/class-rest-monitor.php';
 require_once SUTWX_API_DIR . 'includes/rest/class-rest-auth.php';
 require_once SUTWX_API_DIR . 'includes/rest/class-rest-orders.php';
 require_once SUTWX_API_DIR . 'includes/rest/class-rest-order-actions.php';

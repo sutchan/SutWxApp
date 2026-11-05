@@ -5,7 +5,7 @@
  * 采用「分组版本号」策略：清缓存只需递增版本号，避免遍历删除 transient。
  *
  * @package SutwxAppApi
- * @version 0.5.3
+ * @version 0.6.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -40,7 +40,7 @@ class Sutwx_Cache {
 	/**
 	 * 受管分组。
 	 */
-	const GROUPS = array( 'product', 'post', 'category', 'theme' );
+	const GROUPS = array( 'product', 'post', 'category', 'theme', 'banner' );
 
 	/**
 	 * 缓存语义：命中直接返回，未命中执行回调并写入。
