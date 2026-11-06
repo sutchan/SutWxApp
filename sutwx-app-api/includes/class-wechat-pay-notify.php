@@ -82,4 +82,18 @@ class Sutwx_Wechat_Pay_Notify {
 			'code' => $ok ? 'SUCCESS' : 'FAIL',
 		);
 	}
+
+	/**
+	 * 通知回执的 HTTP 状态码。
+	 *
+	 * 微信 V3 只以 HTTP 状态码判定通知是否送达：200/204 视为成功并停止重试，
+	 * 4xx/5xx 才会按退避策略重发。因此失败时必须返回 5xx —— 否则「验签暂时失败」
+	 * （如平台证书尚未缓存）或「落库暂时失败」会被当成已送达，订单会永久停在待付款。
+	 *
+	 * @param bool $ok 是否处理成功。
+	 * @return int
+	 */
+	public static function receipt_status( $ok ) {
+		return $ok ? 200 : 500;
+	}
 }

@@ -125,23 +125,37 @@ class Sutwx_Rest_Pay extends Sutwx_Rest_Base {
 	 * 异步通知：验签解密 → 订单置「待发货」（幂等）。
 	 *
 	 * @param WP_REST_Request $request 请求对象。
-	 * @return array
+	 * @return WP_REST_Response
 	 */
 	public function notify( $request ) {
 		if ( ! function_exists( 'wc_get_order' ) ) {
-			return rest_ensure_response( Sutwx_Wechat_Pay_Notify::receipt( false ) );
+			return $this->notify_response( false );
 		}
 
 		$body   = (string) $request->get_body();
 		$parsed = Sutwx_Wechat_Pay_Notify::parse( $this->request_headers( $request ), $body );
 
 		if ( empty( $parsed['ok'] ) ) {
-			return rest_ensure_response( Sutwx_Wechat_Pay_Notify::receipt( false ) );
+			return $this->notify_response( false );
 		}
 
 		$ok = Sutwx_Pay_Order_Sync::apply_paid( $parsed['data'] );
 
-		return rest_ensure_response( Sutwx_Wechat_Pay_Notify::receipt( $ok ) );
+		return $this->notify_response( $ok );
+	}
+
+	/**
+	 * 构造通知回执：失败时必须用 5xx，微信才会按退避策略重发（200 会被视为已送达）。
+	 *
+	 * @param bool $ok 是否处理成功。
+	 * @return WP_REST_Response
+	 */
+	private function notify_response( $ok ) {
+		$response = rest_ensure_response( Sutwx_Wechat_Pay_Notify::receipt( $ok ) );
+		if ( is_object( $response ) && method_exists( $response, 'set_status' ) ) {
+			$response->set_status( Sutwx_Wechat_Pay_Notify::receipt_status( $ok ) );
+		}
+		return $response;
 	}
 
 	/**

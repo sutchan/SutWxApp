@@ -182,6 +182,8 @@ check( ! empty( $parsed['ok'] ), '合法通知验签+解密成功' );
 check( isset( $parsed['data']['trade_state'] ) && 'SUCCESS' === $parsed['data']['trade_state'], '解密出交易状态' );
 check( isset( $parsed['data']['_serial'] ) && '' !== $parsed['data']['_serial'], '通知携带证书序列号' );
 check( array( 'code' => 'SUCCESS' ) === Sutwx_Wechat_Pay_Notify::receipt( true ), '回执 SUCCESS' );
+check( 200 === Sutwx_Wechat_Pay_Notify::receipt_status( true ), '成功回执 HTTP 200' );
+check( 500 === Sutwx_Wechat_Pay_Notify::receipt_status( false ), '失败回执 HTTP 500（微信才会重试）' );
 
 $bad = $headers;
 $bad['Wechatpay-Signature'] = 'tampered' . $sig;
