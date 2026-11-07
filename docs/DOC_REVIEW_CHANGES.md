@@ -15,7 +15,7 @@
 - 运营/监控：`/api/banner/list`、`/api/monitor/data`、`/api/health` 均已实现；`class-error-log.php` 结构化日志；`health-probe.yml` 每 5 分钟拨测。
 - 门禁：`npm run check` 串联 **8 项**校验（version / config / images / ids / contract / bundle / plugin-version / docs）。
 - CI/CD：`ci.yml` 五 Job（lint / test / checks / site / php，PHP 8.1 & 8.3 矩阵共 8 套件）；`auto-release.yml` 五 Job 全绿后自动按版本号打 Tag，`release.yml` 打包发版；另有 `site.yml`、`health-probe.yml`、`miniprogram-deploy.yml`，共 6 个工作流。
-- 依赖：`npm ci`（`SutWxApp/package-lock.json` 已入库）；根站点 `express ^5.2.1`；Jest 30、ESLint 10、miniprogram-automator 0.10；无 TypeScript / Bun / Docker / MySQL / Vitest / Codecov。
+- 依赖：`npm ci`（`SutWxApp/package-lock.json` 已入库）；根站点 `express ^5.2.1`；Jest 30、ESLint 10、miniprogram-automator 0.13；无 TypeScript / Bun / Docker / MySQL / Vitest / Codecov。
 - 前端：主包 8 页 + 分包 5 页；`utils/env.js` 按 develop/trial/release 注入 baseUrl；`utils/monitor*.js` 8 模块由 `monitorUtil.init()` 启用；隐私授权链路（`utils/privacy.js` + `pages/privacy/`）代码侧已就绪。
 - 测试：Jest 10 套件 / 137 用例；PHP 8 套件；E2E 4 套件（未进 CI）。
 
@@ -107,7 +107,23 @@
 
 ## 六、提交与版本
 
-- 本轮按用户规则 bump 一次 patch：小程序 `3.5.14` → **`3.5.15`**；插件保持 `0.7.1`（见待确认 #3）。
-- 版本同步覆盖：两个 `package.json`、`package-lock.json`、`app.js`（含头注释）、README 徽章/表格/Tag 示例、`CHANGELOG.md` 首个版本小节、`docs/tasks.md` 当前状态，以及各文档头部的「对齐版本」行。
-- 变更清单本身为交付物，不写入仓库。
+- 第一轮（3.5.14 → **3.5.15**）：插件保持 `0.7.1`（见待确认 #3）；版本同步覆盖两个 `package.json`、`package-lock.json`、`app.js`（含头注释）、README 徽章/表格/Tag 示例、`CHANGELOG.md` 首个版本小节、`docs/tasks.md` 当前状态，以及各文档头部的「对齐版本」行。
+- 第二轮（3.5.15 → **3.5.16**）：目录结构整改（`.tmp/` 落位、删除空 `tests/`、临时文件约定入三份文档）。
+- 本清单交付物已按用户要求写入仓库 `docs/DOC_REVIEW_CHANGES.md`（提交 `3d96217`）。
+
+## 七、增量复核（2026-11-07 第二轮，v3.5.16 后）
+
+> 范围：上轮全面对齐之后的新增提交（dependabot 三连：`deploy-pages` 4→5、`upload-pages-artifact` 4→5、`miniprogram-automator` ^0.10.0→^0.13.0）造成的文档漂移。其余规范经抽查无需改动。
+
+| 文档 | 更新内容 | 原因 |
+|------|---------|------|
+| `docs/specs/testing/spec.md` | E2E 工具版本 `miniprogram-automator ^0.10.0` → `^0.13.0` | dependabot 提交 `45d0923` 已升级 devDependency |
+| `docs/specs/development/spec.md` | 本地起步命令 `npm install` → `npm ci`（注明锁定版本） | 与锁文件约定及 CONTRIBUTING 的临时文件/依赖口径统一 |
+| `docs/DOC_REVIEW_CHANGES.md` | 基线表 automator 0.10 → 0.13 | 同上 |
+
+**本轮待确认 / 阻塞**：
+
+1. **工作区存在进行中的合并**（MERGE_HEAD `e46fc67`，冲突未决：`SutWxApp/package-lock.json` both added、`sutwx-app-api/includes/rest/class-rest-pay.php` both modified）。为避免干扰并行会话，本轮**未提交、未 bump 版本、未触碰合并状态**；版本 bump（3.5.16 → 3.5.17）需在合并完成后再执行（lockfile 处于冲突态，不宜编辑）。
+2. 暂存区含根目录临时包 `.trae-html-share-packages/*.zip`，违反刚建立的临时文件红线，建议合并提交前移出并加入 `.gitignore`。
+3. 暂存的支付对账（pay-sync）新代码未提交，文档暂不记录，待落库后随版本同步补记。
 

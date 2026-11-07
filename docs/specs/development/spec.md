@@ -22,7 +22,7 @@
 
 ```bash
 git clone https://github.com/sutchan/SutWxApp.git
-cd SutWxApp && npm install     # 安装 ESLint / Jest / miniprogram-automator
+cd SutWxApp && npm ci           # 安装 ESLint / Jest / miniprogram-automator（锁定版本）
 ```
 
 > `SutWxApp/package-lock.json` 已入库，本地与 CI 统一使用 `npm ci` 锁定安装依赖。

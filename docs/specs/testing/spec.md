@@ -18,7 +18,7 @@
 | 小程序单元 / 集成 | Jest 30（`jest ^30.5.1`，`testEnvironment: node`） | `SutWxApp/__tests__/*.test.js` | 10 个套件、137 个用例 |
 | 插件单元 | 自研 PHP runner | `sutwx-app-api/tests/run-*-tests.php` | 8 套件，独立运行不依赖 WordPress |
 | 契约与静态校验 | Node CLI | `SutWxApp/scripts/check-*.js` | 8 项门禁（见 §5） |
-| E2E | `miniprogram-automator ^0.10.0` | `SutWxApp/scripts/e2e/` | 4 套件，需微信开发者工具，未接入 CI |
+| E2E | `miniprogram-automator ^0.13.0` | `SutWxApp/scripts/e2e/` | 4 套件，需微信开发者工具，未接入 CI |
 | 站点冒烟 | HTTP 200 探测 | `.github/workflows/ci.yml` 的 `site` Job | 构建 `dist/` 后启动 `server.js` 冒烟 |
 
 ### 2.1 目录与命名
