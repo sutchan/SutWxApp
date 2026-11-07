@@ -1,0 +1,80 @@
+# 文件路径: .github/workflows/auto-release.yml
+# 版本号: 1.0.0
+# 更新日期: 2026-11-07
+# 描述: 自动发布闸门：CI 工作流在 main 分支全绿后，读取 package.json 版本号自动
+#       创建并推送 v*.*.* Tag，由 release.yml 接续完成构建打包与 GitHub Release
+#       发布。幂等：Tag 已存在或 CI 运行已过期时自动跳过。
+
+name: Auto Release
+
+# 监听 CI 工作流在 main 分支的完成事件——CI 包含 lint / test / 版本与配置校验 /
+# 站点构建冒烟 / PHP 语法与单测五个 Job，全绿即代表可发布质量基线
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+    branches: [main]
+
+permissions:
+  contents: write
+
+# 串行执行，避免两次发布闸门并发竞争
+concurrency:
+  group: auto-release
+  cancel-in-progress: false
+
+jobs:
+  tag:
+    name: CI 全绿后打发布 Tag
+    runs-on: ubuntu-latest
+    # 仅在 CI 成功（全绿）时进入发布流程
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: 检出 main 分支代码
+        uses: actions/checkout@v7
+        with:
+          ref: main
+          fetch-depth: 0
+
+      # 防过期发布：CI 运行期间 main 又有新推送时，由最新一次运行接管发布
+      - name: 校验 CI 对应提交仍是 main 最新
+        env:
+          CI_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          MAIN_SHA=$(git rev-parse origin/main)
+          echo "CI 提交: $CI_HEAD_SHA / main 最新: $MAIN_SHA"
+          if [ "$CI_HEAD_SHA" != "$MAIN_SHA" ]; then
+            echo "::notice::CI 对应提交已不是 main 最新，跳过发布，由最新运行接管"
+            echo "RELEASE_SKIP=true" >> "$GITHUB_ENV"
+          fi
+
+      - name: 读取项目版本号
+        if: env.RELEASE_SKIP != 'true'
+        run: |
+          VERSION=$(node -p "require('./SutWxApp/package.json').version")
+          echo "项目版本: $VERSION"
+          echo "RELEASE_VERSION=$VERSION" >> "$GITHUB_ENV"
+
+      # 幂等：版本号对应的 Tag 已发布过（如回溯重跑旧 CI）则不重复发布
+      - name: 校验发布 Tag 是否已存在
+        if: env.RELEASE_SKIP != 'true'
+        env:
+          RELEASE_TAG: v${{ env.RELEASE_VERSION }}
+        run: |
+          if git ls-remote --tags origin "refs/tags/${RELEASE_TAG}" | grep -q "refs/tags/${RELEASE_TAG}"; then
+            echo "::notice::Tag ${RELEASE_TAG} 已存在，跳过自动发布"
+            echo "RELEASE_SKIP=true" >> "$GITHUB_ENV"
+          fi
+
+      - name: 创建并推送发布 Tag
+        if: env.RELEASE_SKIP != 'true'
+        env:
+          RELEASE_TAG: v${{ env.RELEASE_VERSION }}
+        run: |
+          git tag "$RELEASE_TAG"
+          git push origin "$RELEASE_TAG"
+          echo "已推送 Tag ${RELEASE_TAG}，release.yml 将校验版本一致性并创建 GitHub Release"
+
+      - name: 发布闸门结果
+        if: env.RELEASE_SKIP == 'true'
+        run: echo "本次未发布（Tag 已存在或 CI 运行已过期），无需处理"

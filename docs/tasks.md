@@ -3,7 +3,7 @@
 > **文档版本**: v2.9.0
 > **更新时间戳**: 2026-11-07 (UTC+8)
 > **项目作者**: Sut
-> **当前状态**: 小程序前端 `v3.5.12` · WordPress 插件 `v0.7.1`
+> **当前状态**: 小程序前端 `v3.5.13` · WordPress 插件 `v0.7.1`
 > **关联规范**: [文档索引](./README.md) · [工程规范](./specs/development/spec.md) · [功能规范](./specs/features/spec.md) · [后端规范](./specs/backend/spec.md) · [API 规范](./specs/api/spec.md) · [测试规范](./specs/testing/spec.md) · [运维规范](./specs/ops/spec.md) · [术语表](./GLOSSARY.md)
 > **归档**: 已完成任务与历次「本次更新说明」见 [tasks-done.md](./tasks-done.md)
 

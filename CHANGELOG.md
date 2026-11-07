@@ -1,5 +1,16 @@
 # Changelog
 
+## [3.5.13] - 2026-11-07
+
+### Added
+
+- **CI 全绿自动发布**：新增 `.github/workflows/auto-release.yml`——`ci.yml` 在 `main` 分支五个 Job（lint / test / 版本与配置校验 / 站点构建冒烟 / PHP 语法与单测）全部成功后，自动按 `SutWxApp/package.json` 版本号创建并推送 `v*.*.*` Tag，由 `release.yml` 接续完成交付物打包与 GitHub Release 创建，发布全程无需手动打 Tag。
+- 自动发布闸门具备两条幂等护栏：Tag 已存在（如回溯重跑旧 CI）跳过；CI 运行对应提交已不是 `main` 最新时跳过，由最新运行接管发布。
+
+### Changed
+
+- README「发布流程」更新为自动发布为主、手动推 Tag / `workflow_dispatch` 补发为兜底，并说明发布前置（版本号四处同步 + `npm run ci` 本地自检 + PR 合入 `main`）。
+
 ## [3.5.12] - 2026-11-07
 
 ### Fixed
