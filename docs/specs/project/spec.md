@@ -5,6 +5,7 @@
 ## 版本记录
 | 版本 | 日期 | 变更内容 | 作者 |
 |------|------|----------|------|
+| 2.1.0 | 2026-11-07 | 对齐 3.5.15 / 插件 0.7.1：技术定位改为双端同仓、24 端点契约、支付与监控列为已实现、术语表指向 GLOSSARY、目录树按实况重画 | Sut |
 | 2.0.0 | 2026-06-08 | 采用Apple极简设计风格，更新全局样式和页面样式 | Sut |
 | 1.0.0 | 2025-12-26 | 初始版本 | Sut |
 
@@ -19,7 +20,7 @@
 ### 项目定位
 - **目标用户**：微信内读者与消费者
 - **核心价值**：在微信中优化排版、清晰呈现网站内容（文章/商品等）
-- **技术定位**：纯前端微信小程序 + WordPress 无头内容源
+- **技术定位**：微信小程序端 + 同仓 WordPress 插件端（REST 桥接 WooCommerce 商品/分类与 WP 文章）
 
 ### 项目目标
 - 稳定呈现 WordPress 网站内容，保证排版一致与阅读体验
@@ -75,7 +76,7 @@
 
 ## 技术栈
 
-> 实际项目为**纯前端微信小程序**，使用 JavaScript 开发，代码仓库内不含后端服务与数据库。
+> 本仓库包含**小程序端**（原生 JavaScript）与 **WordPress 插件端**（PHP，`sutwx-app-api/`），另有仓库根基于 Express 的站点预览服务；不含 WordPress 运行时与数据库。
 > 后端为 **WordPress 网站（headless CMS）**，内容经 REST API 提供；网络请求通过 `utils/request.js` 封装，基地址见 `app.js` 的 `globalData.baseUrl`。
 
 ### 前端技术栈
@@ -90,7 +91,7 @@
 
 ### 后端说明（WordPress 无头 CMS）
 - 小程序本身不含后端代码；内容源为 **WordPress 网站**，经 REST API 提供。
-- 当前接口约定以 `/api/*` 暴露（由 WordPress 插件或反向代理桥接 WP REST API `/wp-json/wp/v2/` 提供），鉴权走 `/auth/*`（JWT）。
+- 当前接口以 `/api/*` 暴露（插件注册 `sutwx/v1` 命名空间并重写 `/api/*`），共 24 个端点；鉴权走 `/api/auth/*`（`wx.login` code → JWT）。
 - 文章、页面、分类、媒体、自定义文章类型（含 WooCommerce 商品/订单）均由 WordPress 持久化，小程序仅消费与渲染。
 - 请求封装统一在 `services/*` 中，便于对接上述后端。
 
@@ -149,7 +150,7 @@
 
 ### 模块划分
 
-> 以下为产品功能模块划分。**当前代码基线已实现**：首页、分类、商品详情、购物车、订单、用户中心、地址、设置、帮助。其余模块（积分、支付、物流、客服、管理后台等）为规划能力，待与 WordPress 内容模型对齐后逐步接入。
+> 以下为产品功能模块划分。**当前代码基线已实现**：首页、分类、商品详情、购物车、订单、用户中心、地址、设置、帮助、文章、主题换肤、微信支付 V3 与退款、监控与可观测。支付模块已实现并纳入后端单测；积分、社交、评价、优惠券、消息通知、客服与管理后台等**未实现**，见 `../features/spec.md` 第 9 节。
 
 #### 1. 首页模块
 - 轮播图展示
@@ -225,7 +226,7 @@
 | 提交信息格式、分支管理、代码审查流程与清单 | [development/spec.md](../development/spec.md) | 提交 `<type>(<scope>):`；分支 `feature/` `fix/` `hotfix/` |
 | 测试分层、门禁命令、缺陷分级 | [testing/spec.md](../testing/spec.md)、[development/spec.md](../development/spec.md) | 四道门禁：lint / check / test / e2e |
 | 部署、配置常量、监控告警、备份与故障处理 | [ops/spec.md](../ops/spec.md) | runbook、拨测与值班响应 |
-| 接口契约、响应包络、错误码 | [api/spec.md](../api/spec.md) | 19 个已实现端点与未实现清单 |
+| 接口契约、响应包络、错误码 | [api/spec.md](../api/spec.md) | 24 个已实现端点的唯一总表 |
 | 插件目录、路由注册与部署 | [backend/spec.md](../backend/spec.md) | `class-modules.php` 加载顺序敏感 |
 | 数据字段、DTO、订单状态机 | [data/spec.md](../data/spec.md) | 前后端字段一致性依据 |
 | 术语统一 | [GLOSSARY.md](../../GLOSSARY.md) | 标准术语与禁用叫法 |

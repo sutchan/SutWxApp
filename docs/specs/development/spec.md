@@ -1,7 +1,8 @@
 # 开发规范
 
-> **文档版本**: v3.0.0
-> **更新时间戳**: 2026-11-04
+> **文档版本**: v3.1.0
+> **更新时间戳**: 2026-11-07
+> **对齐版本**: 小程序 `3.5.15` · WordPress 插件 `0.7.1`
 > **适用范围**: `SutWxApp/`（小程序）与 `sutwx-app-api/`（WordPress 插件）全部源码
 > **定位**: 本文件是**工程规范的单一事实来源**。`specs/project/spec.md` 只保留项目定位与设计风格，涉及命名/提交/分支/审查/测试/门禁的条款一律以本文件为准。
 > **配套**: 协作流程与红线见 [`../../AGENTS.md`](../../AGENTS.md)；任务见 [`../../tasks.md`](../../tasks.md)。
@@ -71,24 +72,27 @@ SutWxApp/                      # 仓库根
 是字段转换吗？    → models/xxx.js
 是通用能力吗？    → utils/xxx.js
 是构建期工具吗？  → SutWxApp/scripts/xxx.js
+```
 
 ### 可执行脚本清单（与 `SutWxApp/scripts/` 实况对应，OPS-007）
 
 | 脚本 | 用途 | 调用方 |
 |------|------|--------|
 | `check-version.js` | 前端版本四处一致（package.json / app.js / README 徽章 / CHANGELOG） | `npm run check`、CI、Release |
-| `check-plugin-version.js` | 插件版本三源一致（`SUTWX_API_VERSION` / 插件头 / readme） | `npm run check`、CI、Release |
 | `check-config.js` | `app.json` 页面与资源配置、tabBar 图标体积 | `npm run check`、CI |
+| `check-images.js` | WXML 中所有 `/images/*` 引用（含 `{{}}` 动态展开）真实存在 | `npm run check`、CI |
+| `check-ids.js` | WXML 根容器语义化 id 与全量 id 唯一性 | `npm run check`、CI |
 | `check-contract.js` | 前后端 DTO 字段与分页包络 | `npm run check`、CI |
 | `check-bundle.js` | 主包体积预算（1.5MB） | `npm run check`、CI |
+| `check-plugin-version.js` | 插件版本三源一致 | `npm run check`、CI、Release |
 | `check-docs.js` | 端点/免鉴权清单/版本声明与代码一致性 | `npm run check`、CI |
-| `package-plugin.js` | 生成插件 zip（排除 tests，含 readme） | Release、发布前手动 |
+| `package-plugin.js` | 生成插件 zip（排除 tests，含 readme.txt） | Release、发布前手动 |
 | `deploy.js` | 小程序预览/上传（`miniprogram-ci`） | `npm run deploy:*`、部署工作流 |
 | `generate-tabbar-icons.js` | 生成 tabBar 图标 | 手动（一次性） |
+| `generate-ui-icons.js` | 生成商城 UI 的 14 个 PNG 图标（复用 `tabbar-icons/draw.js`） | 手动（新增图标时） |
+| `e2e/run-e2e.js` | E2E 四套件编排 | `npm run test:e2e` |
 
-> 新增脚本须同时更新本表，并优先实现为纯 Node 内置模块（零依赖，CI 秒级）。
-
-```
+> `npm run check` 串联上述 8 项 `check:*` 校验；`check-version.js` 校验两个 `package.json` / `app.js` / README 徽章 / CHANGELOG 的版本一致性。新增脚本须同时更新本表，并优先实现为纯 Node 内置模块（零依赖，CI 秒级）。
 
 ### 2.3 插件分层与落位
 

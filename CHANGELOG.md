@@ -1,4 +1,25 @@
 # Changelog
+
+所有重要的项目变更都将记录在此文件中。
+
+## [Unreleased]
+
+暂无未发布变更；已发布内容见下方版本条目。
+
+## [3.5.15] - 2026-11-07
+
+### 变更
+
+- 全面审查并更新项目文档，与当前代码实况对齐（`docs/` 全量 + 根 `README.md` + `.github/` 社区文档）
+- `api/spec.md`：删除旧 `/api/v1/*` 契约与用户名密码注册登录示例，统一为 `sutwx/v1` + `/api/*` 共 24 端点；监控上报端点改为已实现；错误示例改为 `WP_Error` 包络
+- `backend/spec.md`：鉴权 / 订单 / 支付 / 运营 / 监控 / 健康端点统一标注已实现，目录树按实际重画，补结构化日志、幂等短锁、Cron 兜底与自动退款
+- 重写 `features/spec.md`、`data/spec.md`、`testing/spec.md`、`user-guide/spec.md`：删除虚构的积分 / 社交 / 消息通知、MySQL / Spring / TypeScript 建表与校验、Vitest / Codecov、RBAC / 手机号登录等内容
+- `design/spec.md`：令牌事实来源改为 `styles/tokens.wxss`，脏值纠正清单归档为已完成，页面覆盖改为主包 8 页 + 分包 5 页
+- `architecture/spec.md`、`project/spec.md`、`ops/spec.md`、`development/spec.md`、`AGENTS.md`、`GLOSSARY.md`：对齐双端同仓、24 端点、CI 五 Job 与八项门禁、自动发布、隐私授权链路与 `utils/env.js` 多环境配置
+- `CONTRIBUTING.md` / `PULL_REQUEST_TEMPLATE.md`：提交格式改为 `<type>(<scope>):`、合并方式改为 Squash merge、版本同步清单与自检项补齐
+- `CHANGELOG.md`：修正 `[Unreleased]` 位置、合并重复 `[3.2.0]` 标题并补充比较链接
+- 版本同步：`package.json` / `package-lock.json` / `app.js` / README 徽章与表格 / `tasks.md` 当前状态 / `CHANGELOG.md`
+
 ## [3.5.14] - 2026-11-07
 
 ### Added
@@ -86,17 +107,6 @@
 - 后端插件 v0.6.0：新增 /api/banner/list、/api/health、/api/monitor/data 端点；REST 层结构化错误日志；限频按端点分档（SEC-001）
 - CI：新增 `run-platform-tests.php` 第 7 套件与 `check-bundle` 步骤
 
-
-所有重要的项目变更都将记录在此文件中。
-
-## [Unreleased]
-
-### 变更（CI/CD）
-
-- `ci.yml`（1.0.0 → 1.1.0）新增两个 Job：①`site`：仓库根执行 `node build.js` 构建静态站点，校验 `dist/` 产物完整性与 `title`/`og` 元信息注入，安装运行时依赖后启动 `server.js` 并对 `/`、`/prototype.html`、`/prototype-extra.html`、`/wireframes.html`、`/docs/PROJECT_OVERVIEW.md` 做 HTTP 200 冒烟，产物归档为 `site-dist`；②`php`：PHP 8.1 / 8.3 矩阵，对 `sutwx-app-api` 全量 `php -l` 语法检查，并运行 `run-mapping-tests.php`、`run-settings-tests.php` 两个独立单测。同时在 `test` Job 增加用例受控性检查，未发现受版本控制的 Jest 用例时输出告警。
-- 新增 `site.yml`（1.0.0）：push `main` 命中 `prototype/**`、`docs/**`、`build.js`、`server.js`、`index.html`、`package.json` 或手动触发时，构建 `dist/` 并经 `actions/deploy-pages` 发布到 GitHub Pages（需在 Settings → Pages 将 Source 设为 GitHub Actions）。
-- `release.yml`（1.0.0 → 1.1.0）在 Release 中附加三份交付物：`sutwxapp-site-<tag>.zip`（静态站点）、`sutwxapp-miniprogram-<tag>.zip`（小程序源码，排除 node_modules / coverage / 私钥）、`sutwx-app-api-<tag>.zip`（WordPress 插件）。
-- `.gitignore` 新增 `/dist`（构建产物由 Actions 生成，不入库）。
 
 ## [3.5.10] - 2026-11-04
 
@@ -362,7 +372,6 @@
 - 同步 `openspec/specs/architecture/spec.md`：外部依赖/后端形态章节对齐自研插件 `sutwx-app-api`（命名空间 `sutwx/v1`、数据源切换、阶段基线），服务层补全 `postService`/`themeService`/`dataSource`，部署说明注明插件随站点部署。
 - 同步 `docs/PROJECT_OVERVIEW.md`：项目结构树对齐真实代码（补 `models/`、`behaviors/`、`pages/article/`、`postService`、`themeService`、`dataSource`、`richtext` 等），后端说明链接插件规范/计划，补全文章与主题换肤模块说明。
 
-## [3.2.0] - 2026-09-13
 
 ### 新功能（后端插件 P1 内容只读 MVP，插件版本 0.1.0 → 0.2.0）
 - `sutwx-app-api/` 新增映射层与字段净化：
@@ -894,3 +903,7 @@
 - 基础组件开发
 - 项目规范文档
 - 基础原型设计
+---
+
+[Unreleased]: https://github.com/sutchan/SutWxApp/compare/v3.5.13...HEAD
+[3.5.13]: https://github.com/sutchan/SutWxApp/compare/v3.5.12...v3.5.13

@@ -1,6 +1,7 @@
 # 贡献与 AI 助手指南
 
 > **适用对象**：本仓库的人类贡献者，以及在本地执行编码任务的 AI 助手。
+> **对齐版本**：小程序 `3.5.15` · WordPress 插件 `0.7.1`（2026-11-07 复核：24 端点、CI 五 Job、八项门禁、自动发布、隐私授权链路）
 > **规范定位**：本文件只讲「怎么在这个仓库里干活」。工程细则（编码风格、命名、提交、分支、审查）见 [`specs/development/spec.md`](./specs/development/spec.md)；文档体系总览见 [`README.md`](./README.md)。
 > **规范演进**：3.5.5 起 OpenSpec CLI 工作流已废弃，变更一律走 **Git 分支 + PR**。仓库内不存在 `openspec/` 与 `docs/changes/`，任何文档都不得再引用它们。
 
@@ -14,7 +15,7 @@
 浏览器/微信 ──> SutWxApp/            小程序前端（原生 JS，无框架、无 TypeScript）
                         │  HTTPS /api/*
                         ▼
-                sutwx-app-api/      WordPress 插件（PHP 7.4+，REST 命名空间 /api/v1）
+                sutwx-app-api/      WordPress 插件（PHP 8.1+，REST 命名空间 sutwx/v1，/api/* 重写至此）
                         │
                         ▼
                 WordPress + WooCommerce   内容与订单存储（不在本仓库）
@@ -142,10 +143,10 @@ fix(首页): 解包 {code,data} 包络并按 total 推算 hasMore
 | # | 红线 | 原因 |
 |---|------|------|
 | 1 | 不提交 `node_modules/`、`dist/`、`coverage/`、`*.key`、`private.*.key` | `.gitignore` 已排除；密钥泄露即事故 |
-| 2 | 不把 `sutwx-app-api/readme.txt` 留在工作区不入库 | `.gitignore` 的 `*.txt` 规则会误伤它；插件发布包必须含该文件（详见 `docs/tasks.md` REL-001） |
-| 3 | 不修改 `app.js` 的 `globalData.baseUrl` 为真实域名后提交 | 真实域名属环境配置，占位 `https://api.example.com` 保持入库，由环境变量/发布流程注入 |
+| 2 | 不把 `sutwx-app-api/readme.txt` 排除出版本控制 | 插件发布包必须含该文件；REL-001 已修复忽略规则，`.gitignore` 已加例外 |
+| 3 | 不把真实域名硬编码进源码（含 `app.js` 的 `globalData.baseUrl`） | 真实域名由 `utils/env.js` 按 develop / trial / release 环境自动注入，源码只保留占位值 |
 | 4 | 不在 `SutWxApp/` 引入 npm 运行时依赖 | 小程序包体限制；构建期脚本放 `SutWxApp/scripts/` |
-| 5 | 不删除或放宽 `check-version` / `check-config` / `check-contract` | 它们是版本一致性与前后端契约的唯一自动防线 |
+| 5 | 不删减或放宽 `npm run check` 的八项校验（version / config / images / ids / contract / bundle / plugin-version / docs） | 它们覆盖版本、配置、资源、语义化 ID、契约、包体、插件版本与文档一致性的唯一自动防线 |
 | 6 | 不修改 `ci.yml` 的 PHP 版本矩阵（8.1 / 8.3） | 兼容性基线，变更需同步 `docs/specs/backend/spec.md` |
 | 7 | 不在 `includes/class-modules.php` 之外零散 `require` 插件类 | 加载顺序敏感（trait 必须先于类） |
 | 8 | 不提交 `prototype/*.html` 的构建产物以外的生成文件到 `prototype/` | `prototype/` 是源，`build.js` 产出根目录站点文件 |
@@ -157,7 +158,7 @@ fix(首页): 解包 {code,data} 包络并按 total 推算 hasMore
 | 现象 | 排查路径 |
 |------|---------|
 | `npm run check:contract` 失败 | 对比 `sutwx-app-api/includes/mappings/*.php` 与 `SutWxApp/models/*` 的字段名；改生产代码而非断言 |
-| `npm run check:version` 失败 | `package.json` / `app.js` / `README.md` 徽章 / `CHANGELOG.md` 四处版本号未同步 |
+| `npm run check:version` 失败 | 两个 `package.json` / `app.js` 的 `globalData.version` / `README.md` 徽章 / `CHANGELOG.md` 版本号未同步 |
 | `npm run check:config` 失败 | 页面四件套缺失、`app.json` 路由与磁盘不一致、tabBar 图标缺失 |
 | `npm run check:images` 失败 | WXML 引用了不存在的 `/images/*` 资源；运行 `node scripts/generate-ui-icons.js` 补齐资产，不要改用 SVG（微信 `image` 不支持） |
 | `npm run check:ids` 失败 | WXML 根容器缺少语义化 id、用了 `page-root` 等通用名，或模板/原型内存在重复 id |

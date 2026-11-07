@@ -1,9 +1,9 @@
 <!--
 文件名: spec.md
-版本号: 3.1.1
+版本号: 3.5.3
 更新日期: 2026-09-12
 作者: SutWxApp Design（彩格调 / Cai）
-描述: SutWxApp 权威设计规范 v3.1.0 —— 以 app.wxss v3.0.0 代码为唯一事实来源，Apple 极简风格 + 自然绿品牌。本版本完成设计令牌权威化、语义色策略确立（品牌价签）、系统级红橙脏值纠正清单。
+描述: SutWxApp 权威设计规范 —— 以 SutWxApp/styles/tokens.wxss v3.5.3 的令牌定义为唯一事实来源，Apple 极简风格 + 自然绿品牌。含语义色策略、品牌衍生渐变令牌与已完成归档的脏值纠正清单。
 -->
 
 # 苏铁微信小程序（SutWxApp）UI 设计规范
@@ -13,20 +13,20 @@
 | 项目 | 内容 |
 |------|------|
 | 文件名 | ./spec.md |
-| 版本号 | v3.1.1 |
-| 更新日期 | 2026-09-12 |
-| 描述 | 权威设计规范：Apple 极简风格 + 自然绿品牌，含语义色策略与脏值纠正清单 |
+| 版本号 | v3.5.3（设计规范版本，独立于产品版本 3.5.13） |
+| 更新日期 | 2026-11-07 |
+| 描述 | 权威设计规范：Apple 极简风格 + 自然绿品牌，含语义色策略、渐变令牌与已完成归档的脏值纠正清单 |
 | 作者 | SutWxApp Design |
 
 ## 2. 目的与适用边界
 
-本规范以 `app.wxss v3.0.0` 的实际代码令牌为唯一事实来源，提炼、补全并纠正为权威设计规范。任何设计与实现与本规范冲突时，以本规范为准；本规范与 `app.wxss` 冲突时，以本规范声明的新令牌值与纠正决策为准，并同步回写代码。
+本规范以 `SutWxApp/styles/tokens.wxss`（v3.5.3）的令牌定义为唯一事实来源；`app.wxss` 仅通过 `@import "styles/*.wxss"` 汇聚分片，不再直接定义变量。任何设计与实现与本规范冲突时，以本规范为准；本规范与 `tokens.wxss` 冲突时，先同步回写令牌文件再更新本规范，避免两处漂移。
 
 适用边界：
 
 - 微信小程序**原生开发框架**（非 uni-app / Taro），rpx 基准宽 750。
-- **纯前端**设计规范，不涉及后端接口与数据结构。
-- 覆盖核心 6 页流程：首页、分类、商品详情、购物车、订单确认、我的。
+- 小程序端视觉规范，不涉及后端接口与数据结构。
+- 覆盖主包 8 页（首页、分类、商品详情、购物车、订单列表、订单详情、订单确认、我的）与分包 5 页（地址、设置、帮助、文章列表、文章详情）。
 - 涉及原生 tabBar（首页/分类/购物车/我的）、原生导航栏（白色、标题"苏铁"）与全面屏安全区适配。
 
 ## 3. 设计原则
@@ -68,7 +68,9 @@
 
 色彩占比约定：中性色（白/灰阶）≥ 85%，主色绿 ≤ 10%，状态语义色 ≤ 5%。
 
-#### 4.1.2 合并后的 CSS 变量块（权威定义，已剔除脏值）
+#### 4.1.2 CSS 变量块（摘自 `styles/tokens.wxss`，已剔除脏值）
+
+> 下表是本规范的**摘录**，权威定义在 `SutWxApp/styles/tokens.wxss`。该文件另含 `--grad-leaf-1~6`、`--grad-banner-1~3`、`--grad-user-header` 等品牌衍生渐变与 `box-sizing` / 字体平滑基础排版，新增令牌须先写入代码再同步本表。
 
 ```css
 page {
@@ -361,64 +363,16 @@ padding-bottom: calc(16rpx + env(safe-area-inset-bottom));
 - 骨架屏：`--background-secondary` 底 + 呼吸/扫光动画，形状对齐目标内容（卡片矩形、圆形头像、商品图方块），禁止转圈代替骨架。
 - `loading-overlay` 全屏遮罩（rgba 0.5, z-index 9999）仅用于提交订单等强阻塞操作。
 
-## 8. 脏值纠正清单
+## 8. 脏值纠正清单（已完成，归档）
 
-> 优先级：**P0 = 系统级/核心转化路径**（app.wxss 类定义、商品详情页、组件库）；**P1 = 组件级/次级页面**（我的、订单、分类、组件内非转化元素）。
+> 本节原为 v3.1.0 时期的 P0/P1 纠正工单，列出 app.wxss 与各页 WXSS 中残留的旧红橙脏值及建议替换。经核查，当前代码库中 `#e93b3d` / `#ff6b6b` / `#ff9700` / `#ff8e53` / `#2a9d8f` / `#f4a261` 已全部清零，用户头部与订单状态等位置统一走 `var(--grad-user-header)` 等品牌渐变令牌，语义色经 `styles/tokens.wxss` 变量化。
 
-### 8.1 app.wxss 自身（P0，随 v3.1.0 立即回写）
-
-| # | 位置 | 现状（脏值） | 建议替换 | 说明 |
-|---|------|--------------|----------|------|
-| 1 | `.bg-secondary`（L233） | `background-color: #2a9d8f`（青） | `var(--background-secondary)`（#F5F5F7） | 类名本意即"次级背景"，被误填品牌外青色 |
-| 2 | `.btn-secondary`（L300） | `background-color: #2a9d8f`（青） | 改为白底 + `2rpx solid var(--border-color)` + 主文字色 | 次按钮语义为描边非彩色填充 |
-| 3 | `.bg-accent`（L234） | `background-color: #f4a261`（橙） | `var(--primary-light)`（#F1F8E9）或直接删除该类 | 无橙 accent 语义；如需强调用绿系浅底 |
-| 4 | `.badge-dot`（L379） | `#F44336` | 保留，但改写为 `var(--error-color)` | 红点属警示语义，允许保留，须变量化 |
-
-### 8.2 商品详情页 pages/product/index.wxss（P0，核心转化路径）
-
-| # | 行 | 选择器 | 脏值 | 建议替换 |
-|---|-----|--------|------|----------|
-| 1 | 91/97/103 | `.price-label` / `.price-symbol` / `.price-value` | `#e93b3d` | `var(--primary-dark)`（品牌价签） |
-| 2 | 115 | `.discount-badge` | `#e93b3d` | `var(--primary-light)` 底 + 主色字 |
-| 3 | 317 | `.load-more text` | `#e93b3d` | `var(--text-secondary)`（中性"加载更多"） |
-| 4 | 405 | `.related-price` | `#e93b3d` | `var(--primary-dark)` |
-| 5 | 453 | `.cart-badge` | `#e93b3d` | `var(--primary-color)` |
-| 6 | 482 | `.btn-add-cart` | `#ff9700` | `var(--primary-dark)` 深绿白字（双绿底栏） |
-| 7 | 487 | `.btn-buy-now` | `#e93b3d` | `var(--primary-color)` 绿白字 |
-| 8 | 615 | `.spec-item.active` | `#e93b3d` | `var(--primary-color)` |
-| 9 | 682 | `.btn-confirm` | `#e93b3d` | `var(--primary-color)` |
-
-另：全页硬编码灰阶（#333/#666/#999/#f5f5f5/#eee）建议随重构统一映射到 `--text-*` / `--background-*` / `--border-color`。
-
-### 8.3 组件（P1）
-
-| # | 文件:行 | 脏值 | 建议替换 |
-|---|---------|------|----------|
-| 1 | components/product-card/index.wxss:80 | `color: #ff6b6b`（价格） | `var(--primary-dark)` |
-| 2 | components/product-card/index.wxss:96 | `background-color: #ff6b6b`（加购按钮） | `var(--primary-color)` |
-| 3 | components/empty-state/index.wxss:26 | `background-color: #ff6b6b`（插画底） | `var(--primary-light)` |
-
-### 8.4 我的 / 订单 / 分类 / 订单确认（P1）
-
-| # | 文件:行 | 现状 | 建议替换 |
-|---|---------|------|----------|
-| 1 | pages/user/index.wxss:19 | 头部 `linear-gradient(135deg, #e93b3d, #ff6b6b)` 红渐变 | `linear-gradient(135deg, #2E7D32, #1B5E20)` 绿渐变（品牌头部） |
-| 2 | pages/user/index.wxss:178 | `.logout-btn` 文字 `#e93b3d` | **保留红**但改 `var(--error-color)`（退出登录 = 危险操作，语义正确） |
-| 3 | pages/order/confirm.wxss:112/166/196 | `color: #ff6b6b`（金额/强调） | `var(--primary-dark)` |
-| 4 | pages/order/confirm.wxss:205 | `background-color: #ff6b6b`（提交订单按钮） | `var(--primary-color)`（P0 级转化按钮，可与 P1 批次同改） |
-| 5 | pages/order/detail.wxss:17 | 状态头部渐变 `#ff6b6b → #ff8e53` | 按状态色表：完成态用绿渐变 `#4CAF50 → #2E7D32`；取消态用 `--background-tertiary` 灰 |
-| 6 | pages/order/detail.wxss:115/176/187 | `color: #ff6b6b` | 金额 `var(--primary-dark)`；状态文字按状态色表 |
-| 7 | pages/order/detail.wxss:222 | `background-color: #ff6b6b`（操作按钮） | `var(--primary-color)` |
-| 8 | pages/order/index.wxss:36/97/152/177 | `color: #ff6b6b` | 同上：金额深绿、状态按色表 |
-| 9 | pages/order/index.wxss:45/203 | `background-color: #ff6b6b`（tab 指示/按钮） | 指示条/按钮 `var(--primary-color)` |
-| 10 | pages/category/index.wxss:33/108 | `color: #ff6b6b`（分类选中/价格） | 选中文字 `var(--primary-color)`；价格 `var(--primary-dark)` |
-| 11 | pages/category/index.wxss:45/117 | `background-color: #ff6b6b`（选中底/角标） | `var(--primary-color)` |
-
-**纠正总原则**：红 → 绿（品牌 CTA/价格/选中/角标）、橙 → 绿或删除、青 → 中性灰/描边；仅危险确认类场景保留红且必须走 `--error-color` 变量。纠正完成后，全仓库禁止出现 `#e93b3d / #ff6b6b / #ff9700 / #ff8e53 / #2a9d8f / #f4a261`。
+**当前约束（仍然有效）**：品牌 CTA、价格、选中态、角标一律使用绿系令牌；危险操作（退出登录、错误提示）才使用 `--error-color`；禁止在样式中硬编码上述旧色值。原清单中的文件行号已随样式分片重构失效，不再作为定位依据，如需复核请用 `grep` 搜索色值本身。
 
 ## 9. 版本历史
 
 | 版本 | 更新日期 | 更新内容 | 作者 |
+| 3.5.3 | 2026-11-07 | 对齐 `styles/tokens.wxss` 为唯一令牌事实来源；补品牌衍生渐变令牌说明；页面覆盖改为主包 8 页 + 分包 5 页；§8 脏值纠正清单标记已完成并归档，作废历史行号 | Sut |
 |------|----------|----------|------|
 | 3.1.1 | 2026-09-12 | 色彩系统新增"品牌衍生渐变 token"子小节（--grad-leaf-1~-6 / --grad-banner-1~-3 / --grad-user-header），归档占位图与横幅渐变，与高保真原型同步 | SutWxApp Design（彩格调） |
 | 3.1.0 | 2026-09-12 | 以 app.wxss v3.0.0 代码为事实来源全面重写：确立绿系语义色策略（品牌价签/绿 CTA）、受控状态色、合并权威 CSS 变量块（剔除青/橙/红橙脏值）、补全 15 类组件规范（含合规基准与常见违规）、布局/动效落地规则，并输出系统级脏值纠正清单（P0/P1） | SutWxApp Design（彩格调） |

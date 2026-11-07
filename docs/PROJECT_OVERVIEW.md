@@ -149,9 +149,9 @@ SutWxApp/
 
 ### Git 工作流
 - main：生产分支，保持稳定
-- develop：集成分支
+- dev：集成分支
 - feature/xxx：功能开发分支
-- bugfix/xxx：缺陷修复分支
+- fix/xxx：缺陷修复分支；hotfix/xxx：紧急生产修复
 
 ### 提交规范
 遵循 Conventional Commits：`type: 描述`，类型含 feat / fix / docs / refactor / style / test / chore / perf 等。详见仓库根 [`README.md`](../README.md) 与相关规范。
@@ -167,7 +167,7 @@ SutWxApp/
 
 ### 开发运行
 1. 打开微信开发者工具
-2. 导入 `SutWxApp/SutWxApp` 目录
+2. 导入仓库根下的 `SutWxApp/` 目录
 3. 配置 AppID（或使用测试号）
 4. 在 `app.js` 的 `globalData.baseUrl` 配置后端地址
 5. 点击「编译」运行，可「预览」真机调试
@@ -181,7 +181,7 @@ SutWxApp/
 ## 版本历史
 
 ### 2026-09-13（文档）
-- 新增后端插件规范 `specs/backend/spec.md` 与开发计划 `docs/wordpress-plugin/DEVELOPMENT_PLAN.md`（商品=WooCommerce、v1 只读 MVP、wx.login→JWT、订单/支付预留）
+- 新增后端插件规范 `specs/backend/spec.md` 与开发计划 `docs/wordpress-plugin/DEVELOPMENT_PLAN.md`（初期为 v1 只读 MVP 规划；当前已实现 wx.login→JWT、订单与微信支付 V3）
 - `api/spec.md` 补全文章/分类接口契约与端点命名空间映射
 
 ### v3.0.1 (2026-08-13)
@@ -195,7 +195,7 @@ SutWxApp/
 - 完善服务层实现
 
 ### v2.0.0
-- 支持 Flutter 跨平台
+- Apple 极简设计风格重构（本仓库从未引入 Flutter）
 
 ### v1.0.0
 - 微信小程序初始版本
