@@ -89,7 +89,7 @@ if ( ! function_exists( 'wc_get_orders' ) ) {
 }
 
 /**
- * 假 $wpdb：用进程内数组模拟 options 表的唯一键 INSERT IGNORE。
+ * 假 $wpdb：用进程内数组模拟 options 表的唯一键 INSERT IGNORE + SELECT + 归属校验。
  */
 class Fake_WPDB {
 	public $options   = 'wp_options';
@@ -101,26 +101,36 @@ class Fake_WPDB {
 		return $query;
 	}
 
+	public function get_var( $query ) {
+		$args = $this->last_args;
+		$name = (string) $args[0];
+		return isset( $this->rows[ $name ] ) ? (string) $this->rows[ $name ] : null;
+	}
+
 	public function query( $query ) {
 		$args = $this->last_args;
 		if ( false !== strpos( $query, 'INSERT IGNORE' ) ) {
-			$name = (string) $args[0];
+			$name  = (string) $args[0];
+			$value = (string) $args[1];
 			if ( isset( $this->rows[ $name ] ) ) {
 				return 0; // 唯一键冲突：未抢到锁。
 			}
-			$this->rows[ $name ] = (int) $args[1];
+			$this->rows[ $name ] = $value;
 			return 1;
 		}
-		if ( false !== strpos( $query, 'option_value <' ) ) {
-			foreach ( $this->rows as $name => $value ) {
-				if ( $value < (int) $args[1] ) {
-					unset( $this->rows[ $name ] );
-				}
-			}
-			return 0;
-		}
 		if ( false !== strpos( $query, 'DELETE' ) ) {
-			unset( $this->rows[ (string) $args[0] ] );
+			$name = (string) $args[0];
+			if ( count( $args ) >= 2 ) {
+				$expected = (string) $args[1];
+				if ( isset( $this->rows[ $name ] ) && (string) $this->rows[ $name ] === $expected ) {
+					unset( $this->rows[ $name ] );
+					return 1;
+				}
+				return 0; // value 不匹配，不删除。
+			}
+			if ( isset( $this->rows[ $name ] ) ) {
+				unset( $this->rows[ $name ] );
+			}
 			return 1;
 		}
 		return 0;

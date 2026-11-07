@@ -91,6 +91,8 @@ class Sutwx_Pay_Order_Sync {
 	 * 抢占商户订单号维度的互斥租约。
 	 *
 	 * 用 options 表的唯一键做原子 INSERT IGNORE：并发的第二个请求插入失败即视为未抢到锁。
+	 * 锁 value 为唯一 request ID + ':' + 抢占时间戳（非纯时间戳），release 时先验证锁是否仍归本请求持有，
+	 * 避免请求 A 持锁超时被 B 接管后，A 的 finally 误删 B 持有的锁（锁劫持竞态条件）。
 	 * 无 $wpdb（单测/CLI）时退化为不互斥，保持可测试性。
 	 *
 	 * @param string $out_trade_no 商户订单号。
@@ -102,38 +104,102 @@ class Sutwx_Pay_Order_Sync {
 			return true;
 		}
 
-		$name = self::lock_name( $out_trade_no );
-		$now  = time();
-		// 清理过期租约：请求异常中断时锁会残留。
-		$wpdb->query(
+		$name       = self::lock_name( $out_trade_no );
+		$now        = time();
+		$request_id = self::generate_lock_id();
+
+		// 清理过期租约：先查出锁的 value（request_id:timestamp），PHP 层解析 timestamp 判断是否过期。
+		// 旧格式（纯数字时间戳）的残留锁也一并清理。
+		$existing = $wpdb->get_var(
 			$wpdb->prepare(
-				"DELETE FROM {$wpdb->options} WHERE option_name = %s AND option_value < %d",
-				$name,
-				$now - self::LOCK_TTL
+				"SELECT option_value FROM {$wpdb->options} WHERE option_name = %s LIMIT 1",
+				$name
 			)
 		);
+		if ( null !== $existing ) {
+			$ts = self::parse_lock_timestamp( (string) $existing );
+			if ( 0 !== $ts && $ts < $now - self::LOCK_TTL ) {
+				$wpdb->query(
+					$wpdb->prepare(
+						"DELETE FROM {$wpdb->options} WHERE option_name = %s",
+						$name
+					)
+				);
+			} elseif ( 0 === $ts ) {
+				// 无法解析 timestamp（损坏数据），保守清理。
+				$wpdb->query(
+					$wpdb->prepare(
+						"DELETE FROM {$wpdb->options} WHERE option_name = %s",
+						$name
+					)
+				);
+			}
+		}
+
 		$inserted = $wpdb->query(
 			$wpdb->prepare(
 				"INSERT IGNORE INTO {$wpdb->options} (option_name, option_value, autoload) VALUES (%s, %s, 'no')",
 				$name,
-				$now
+				$request_id . ':' . $now
 			)
 		);
 		if ( 1 !== (int) $inserted ) {
 			return false;
 		}
 
-		self::$held_locks[ $out_trade_no ] = true;
+		self::$held_locks[ $out_trade_no ] = $request_id;
 		return true;
 	}
 
 	/**
-	 * 释放本请求持有的租约（只删除自己抢到的锁，避免误删他人租约）。
+	 * 解析锁 value 中的时间戳。
+	 *
+	 * 兼容新旧格式：
+	 * - 新格式：request_id:timestamp → 返回 timestamp
+	 * - 旧格式：纯数字 timestamp → 原样返回
+	 * - 无法解析 → 返回 0（视为损坏数据）
+	 *
+	 * @param string $value 锁 value。
+	 * @return int 时间戳，或 0。
+	 */
+	private static function parse_lock_timestamp( $value ) {
+		if ( '' === $value ) {
+			return 0;
+		}
+		$colon = strpos( $value, ':' );
+		if ( false !== $colon ) {
+			$ts = substr( $value, $colon + 1 );
+			return is_numeric( $ts ) ? (int) $ts : 0;
+		}
+		return is_numeric( $value ) ? (int) $value : 0;
+	}
+
+	/**
+	 * 生成唯一的锁归属标识。
+	 *
+	 * 优先使用 bin2hex(random_bytes(6))（12 位 hex，低碰撞），
+	 * 不可用时用 uniqid() 退化。
+	 *
+	 * @return string 唯一 ID。
+	 */
+	private static function generate_lock_id() {
+		if ( function_exists( 'random_bytes' ) ) {
+			return bin2hex( random_bytes( 6 ) );
+		}
+		return substr( uniqid( '', true ), -16 );
+	}
+
+	/**
+	 * 释放本请求持有的租约。
+	 *
+	 * 先查询数据库确认锁仍归本请求持有（通过 request_id 比对），
+	 * 若已被其他请求抢占则不删除——避免请求 A 超时后 finally 误删 B 持有的锁。
 	 *
 	 * @param string $out_trade_no 商户订单号。
 	 */
 	private static function release_lock( $out_trade_no ) {
-		if ( empty( self::$held_locks[ $out_trade_no ] ) ) {
+		$request_id = isset( self::$held_locks[ $out_trade_no ] ) ? self::$held_locks[ $out_trade_no ] : '';
+		if ( '' === $request_id ) {
 			return;
 		}
 		unset( self::$held_locks[ $out_trade_no ] );
@@ -142,10 +208,29 @@ class Sutwx_Pay_Order_Sync {
 		if ( empty( $wpdb ) || ! is_object( $wpdb ) || ! method_exists( $wpdb, 'query' ) ) {
 			return;
 		}
+
+		$name     = self::lock_name( $out_trade_no );
+		$existing = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT option_value FROM {$wpdb->options} WHERE option_name = %s LIMIT 1",
+				$name
+			)
+		);
+		if ( null === $existing ) {
+			return; // 锁已被清理（正常情况，无需处理）。
+		}
+
+		// 锁 value 格式：request_id:timestamp；比对前缀确认归属。
+		$stored_id = strstr( (string) $existing, ':', true );
+		if ( $stored_id !== $request_id ) {
+			return; // 锁已被其他请求抢占，不删除。
+		}
+
 		$wpdb->query(
 			$wpdb->prepare(
-				"DELETE FROM {$wpdb->options} WHERE option_name = %s",
-				self::lock_name( $out_trade_no )
+				"DELETE FROM {$wpdb->options} WHERE option_name = %s AND option_value = %s",
+				$name,
+				$existing
 			)
 		);
 	}
