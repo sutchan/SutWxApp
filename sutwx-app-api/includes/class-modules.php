@@ -3,12 +3,12 @@
  * 插件模块加载清单（自 class-loader.php 拆出）。
  *
  * 顺序敏感：
- * - trait 文件必须先于使用它的类（auth / cache / rate-limit / pay / jwt）；
+ * - trait 文件必须先于使用它的类（auth / cache / rate-limit / pay / order / jwt）；
  * - 映射层先于 REST 控制器；
  * - REST 控制器统一在 class-loader.php 中实例化并注册路由。
  *
  * @package SutwxAppApi
- * @version 0.7.0
+ * @version 0.7.1
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -31,6 +31,7 @@ require_once SUTWX_API_DIR . 'includes/class-auth-guard.php';
 require_once SUTWX_API_DIR . 'includes/cache/class-cache-invalidation.php';
 require_once SUTWX_API_DIR . 'includes/class-cache.php';
 require_once SUTWX_API_DIR . 'includes/rate-limit/class-rate-limit-ip.php';
+require_once SUTWX_API_DIR . 'includes/rate-limit/class-rate-limit-counter.php';
 require_once SUTWX_API_DIR . 'includes/class-rate-limit.php';
 require_once SUTWX_API_DIR . 'includes/pay/class-pay-credentials-store.php';
 require_once SUTWX_API_DIR . 'includes/class-pay-credentials.php';
@@ -46,6 +47,9 @@ require_once SUTWX_API_DIR . 'includes/order/class-order-idempotency.php';
 require_once SUTWX_API_DIR . 'includes/class-pay-refund.php';
 require_once SUTWX_API_DIR . 'includes/class-pay-cron.php';
 require_once SUTWX_API_DIR . 'includes/class-banner-settings.php';
+require_once SUTWX_API_DIR . 'includes/pay/class-pay-notify-handler.php';
+require_once SUTWX_API_DIR . 'includes/order/class-order-create.php';
+require_once SUTWX_API_DIR . 'includes/order/class-order-transition.php';
 require_once SUTWX_API_DIR . 'includes/rest/class-rest-products.php';
 require_once SUTWX_API_DIR . 'includes/rest/class-rest-posts.php';
 require_once SUTWX_API_DIR . 'includes/rest/class-rest-categories.php';

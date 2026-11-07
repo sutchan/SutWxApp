@@ -1,12 +1,14 @@
 <?php
 /**
- * /api/pay/prepay 与 /api/pay/notify 路由：微信支付 V3 对接（BE-007；查单见 class-rest-pay-query.php）。
+ * /api/pay/prepay、/api/pay/notify、/api/pay/refund-notify 路由：微信支付 V3（BE-007/014）。
  *
- * - prepay：鉴权；校验订单归属与待付款状态后发起 JSAPI 预支付，返回 wx.requestPayment 参数。
- * - notify：公开；验签解密后将订单置为「待发货」，幂等处理重复通知。
+ * 职责拆分（保持对外调用方式不变）：
+ * - 支付/退款异步通知（验签解密/落库/回执）→ includes/pay/class-pay-notify-handler.php
+ * - 预支付参数生成与路由注册 → 本文件
+ * - 主动查单 → includes/rest/class-rest-pay-query.php
  *
  * @package SutwxAppApi
- * @version 0.7.0
+ * @version 0.7.1
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -14,11 +16,17 @@ defined( 'ABSPATH' ) || exit;
 if ( ! class_exists( 'Sutwx_Auth_Guard' ) ) {
 	require_once SUTWX_API_DIR . 'includes/class-auth-guard.php';
 }
+// 自保护：独立 include 本类（含单测）时也能加载到通知处理 trait。
+if ( ! trait_exists( 'Sutwx_Rest_Pay_Notify' ) ) {
+	require_once SUTWX_API_DIR . 'includes/pay/class-pay-notify-handler.php';
+}
 
 /**
  * 支付路由控制器。
  */
 class Sutwx_Rest_Pay extends Sutwx_Rest_Base {
+
+	use Sutwx_Rest_Pay_Notify;
 
 	/**
 	 * 订单 meta：商户订单号。
@@ -31,7 +39,7 @@ class Sutwx_Rest_Pay extends Sutwx_Rest_Base {
 	const META_TRANSACTION_ID = '_sutwx_transaction_id';
 
 	/**
-	 * 注册预支付与通知路由（查单见 class-rest-pay-query.php）。
+	 * 注册预支付、支付通知与退款通知路由（查单见 class-rest-pay-query.php）。
 	 */
 	public function register_routes() {
 		register_rest_route(
@@ -72,42 +80,6 @@ class Sutwx_Rest_Pay extends Sutwx_Rest_Base {
 		);
 	}
 
-	/**
-	 * 退款结果异步通知：验签解密后按 out_refund_no 落库（BE-014，幂等）。
-	 *
-	 * @param WP_REST_Request $request 请求对象。
-	 * @return WP_REST_Response
-	 */
-	public function refund_notify( $request ) {
-		$body   = (string) $request->get_body();
-		$parsed = Sutwx_Wechat_Pay_Notify::parse( $this->request_headers( $request ), $body );
-
-		if ( empty( $parsed['ok'] ) ) {
-			$this->log_error(
-				'pay_exception',
-				array(
-					'code'   => isset( $parsed['error'] ) ? $parsed['error'] : 'refund_notify_failed',
-					'status' => 422,
-					'route'  => '/pay/refund-notify',
-				)
-			);
-			return rest_ensure_response( Sutwx_Wechat_Pay_Notify::receipt( false ) );
-		}
-
-		$ok = Sutwx_Pay_Refund::apply_refund_notified( $parsed['data'] );
-		if ( ! $ok ) {
-			$this->log_error(
-				'pay_exception',
-				array(
-					'code'   => 'apply_refund_failed',
-					'status' => 500,
-					'route'  => '/pay/refund-notify',
-				)
-			);
-		}
-
-		return rest_ensure_response( Sutwx_Wechat_Pay_Notify::receipt( $ok ) );
-	}
 	/**
 	 * 预支付：返回小程序调起支付参数。
 	 *
@@ -177,65 +149,5 @@ class Sutwx_Rest_Pay extends Sutwx_Rest_Base {
 		$pay_params['orderId'] = $order->get_id();
 
 		return $this->success( $pay_params );
-	}
-
-	/**
-	 * 异步通知：验签解密 → 订单置「待发货」（幂等）。
-	 *
-	 * @param WP_REST_Request $request 请求对象。
-	 * @return array
-	 */
-	public function notify( $request ) {
-		if ( ! function_exists( 'wc_get_order' ) ) {
-			return rest_ensure_response( Sutwx_Wechat_Pay_Notify::receipt( false ) );
-		}
-
-		$body   = (string) $request->get_body();
-		$parsed = Sutwx_Wechat_Pay_Notify::parse( $this->request_headers( $request ), $body );
-
-		if ( empty( $parsed['ok'] ) ) {
-			// BE-010：支付回调验签/解密失败必记（pay_exception），含失败原因。
-			$this->log_error(
-				'pay_exception',
-				array(
-					'code'   => $parsed['error'],
-					'status' => 422,
-					'route'  => '/pay/notify',
-					'detail' => array( 'bodyBytes' => strlen( $body ) ),
-				)
-			);
-			return rest_ensure_response( Sutwx_Wechat_Pay_Notify::receipt( false ) );
-		}
-
-		$ok = Sutwx_Pay_Order_Sync::apply_paid( $parsed['data'] );
-		if ( ! $ok ) {
-			$this->log_error(
-				'pay_exception',
-				array(
-					'code'   => 'apply_paid_failed',
-					'status' => 500,
-					'route'  => '/pay/notify',
-				)
-			);
-		}
-
-		return rest_ensure_response( Sutwx_Wechat_Pay_Notify::receipt( $ok ) );
-	}
-
-	/**
-	 * 提取请求头（兼容 REST 服务器不透传的场景）。
-	 *
-	 * @param WP_REST_Request $request 请求对象。
-	 * @return array
-	 */
-	private function request_headers( $request ) {
-		$headers = array();
-		foreach ( array( 'Wechatpay-Signature', 'Wechatpay-Timestamp', 'Wechatpay-Nonce', 'Wechatpay-Serial' ) as $name ) {
-			$value = $request->get_header( $name );
-			if ( '' !== $value ) {
-				$headers[ $name ] = $value;
-			}
-		}
-		return $headers;
 	}
 }

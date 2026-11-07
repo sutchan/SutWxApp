@@ -1,90 +1,23 @@
 /**
  * 文件名: orderService.js
- * 版本号: 3.5.10
- * 更新日期: 2026-10-14
+ * 版本号: 3.5.12
+ * 更新日期: 2026-11-07
  * 描述: 订单服务层（编排），提供订单相关功能
  *       woocommerce 数据源走 /api/order/* 真实端点（见 orderService.api.js），
  *       mock 数据源沿用本地演示数据。支付能力见 payService.js。
+ *       纯辅助函数见 orderService.helpers.js。
  */
 
 const { mockOrders } = require("./orderService.mock");
 const { getDataSource } = require("./dataSource");
 const orderApi = require("./orderService.api");
+const { buildOrderPayload, toOrderItems, toAddressSnapshot } = require("./orderService.helpers");
 
 /**
- * 生成订单编号（SU + 年月日 + 3 位随机序号）
- * @returns {string}
+ * 查询订单列表
+ * @param {number|null} status 状态码筛选
+ * @returns {Promise<Array>}
  */
-function genOrderNo() {
-  return `SU${new Date().getFullYear()}${String(new Date().getMonth() + 1).padStart(2, "0")}${String(new Date().getDate()).padStart(2, "0")}${String(Math.floor(Math.random() * 1000)).padStart(3, "0")}`;
-}
-
-/**
- * 组装 mock 订单对象
- * @param {Array} items 下单商品列表
- * @param {string} [remark] 订单备注
- * @returns {Object}
- */
-function buildOrderPayload(items, remark) {
-  const total = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  const shippingFee = total >= 99 ? 0 : 10;
-  return {
-    id: Date.now(),
-    orderNo: genOrderNo(),
-    status: 1,
-    statusText: "待付款",
-    totalPrice: total,
-    productPrice: total,
-    shippingFee,
-    totalQuantity: items.reduce((sum, item) => sum + item.quantity, 0),
-    createTime: new Date().toLocaleString(),
-    products: items.map((item) => ({
-      id: item.id,
-      name: item.name,
-      image: item.image,
-      price: item.price,
-      quantity: item.quantity,
-      spec: item.spec,
-    })),
-    address: {
-      name: "测试用户",
-      phone: "13800138000",
-      detail: "测试地址",
-    },
-    remark: remark || "",
-  };
-}
-
-/**
- * 购物车商品 → 后端下单 items（{productId, quantity}）
- * @param {Array} items 页面商品列表
- * @returns {Array<Object>}
- */
-function toOrderItems(items) {
-  // 购物车项用 productId，部分页面/测试传 id，两者都兼容，避免下单商品 ID 丢失。
-  return (Array.isArray(items) ? items : []).map((item) => ({
-    productId: item.productId !== undefined ? item.productId : item.id,
-    quantity: item.quantity,
-  }));
-}
-
-/**
- * 地址对象 → 后端地址快照 {name, phone, detail}
- * @param {Object} address 页面地址对象
- * @returns {Object}
- */
-function toAddressSnapshot(address) {
-  const a = address || {};
-  return {
-    name: a.name || "",
-    phone: a.phone || "",
-    province: a.province || "",
-    city: a.city || "",
-    district: a.district || "",
-    detail: a.detail || "",
-  };
-}
-
 async function getOrderList(status) {
   if (getDataSource() === "woocommerce") {
     try {
@@ -97,12 +30,9 @@ async function getOrderList(status) {
   }
 
   try {
-    let orders = [...mockOrders];
-
-    if (status !== null && status !== undefined) {
-      orders = orders.filter((order) => order.status === status);
-    }
-
+    const orders = status !== null && status !== undefined
+      ? mockOrders.filter((order) => order.status === status)
+      : [...mockOrders];
     return orders;
   } catch (error) {
     console.error("获取订单列表失败:", error);
@@ -110,6 +40,11 @@ async function getOrderList(status) {
   }
 }
 
+/**
+ * 查询订单详情
+ * @param {number|string} orderId 订单 ID
+ * @returns {Promise<Object>}
+ */
 async function getOrderDetail(orderId) {
   if (getDataSource() === "woocommerce") {
     return orderApi.fetchOrderDetail(orderId);
@@ -120,17 +55,18 @@ async function getOrderDetail(orderId) {
     if (!order) {
       throw new Error("订单不存在");
     }
-
-    return {
-      ...order,
-      couponDiscount: 0,
-    };
+    return { ...order, couponDiscount: 0 };
   } catch (error) {
     console.error("获取订单详情失败:", error);
     throw error;
   }
 }
 
+/**
+ * 创建订单
+ * @param {Object} orderData 下单数据
+ * @returns {Promise<Object>}
+ */
 async function createOrder(orderData) {
   if (getDataSource() === "woocommerce") {
     return orderApi.fetchCreateOrder({
@@ -141,7 +77,6 @@ async function createOrder(orderData) {
   }
 
   try {
-    // 注：addressId 暂未使用（当前为 mock 地址），woocommerce 数据源回填真实收货地址
     const { items, remark } = orderData;
     return buildOrderPayload(items, remark);
   } catch (error) {
@@ -150,18 +85,21 @@ async function createOrder(orderData) {
   }
 }
 
+/**
+ * 取消订单
+ * @param {number|string} orderId 订单 ID
+ * @returns {Promise<boolean>}
+ */
 async function cancelOrder(orderId) {
   if (getDataSource() === "woocommerce") {
     return orderApi.fetchCancelOrder(orderId);
   }
 
   try {
-    const orderIndex = mockOrders.findIndex(
-      (o) => String(o.id) === String(orderId),
-    );
-    if (orderIndex >= 0) {
-      mockOrders[orderIndex].status = 0;
-      mockOrders[orderIndex].statusText = "已取消";
+    const index = mockOrders.findIndex((o) => String(o.id) === String(orderId));
+    if (index >= 0) {
+      mockOrders[index].status = 0;
+      mockOrders[index].statusText = "已取消";
     }
     return true;
   } catch (error) {
@@ -170,19 +108,22 @@ async function cancelOrder(orderId) {
   }
 }
 
+/**
+ * 确认收货
+ * @param {number|string} orderId 订单 ID
+ * @returns {Promise<boolean>}
+ */
 async function confirmReceive(orderId) {
   if (getDataSource() === "woocommerce") {
     return orderApi.fetchConfirmOrder(orderId);
   }
 
   try {
-    const orderIndex = mockOrders.findIndex(
-      (o) => String(o.id) === String(orderId),
-    );
-    if (orderIndex >= 0) {
-      mockOrders[orderIndex].status = 4;
-      mockOrders[orderIndex].statusText = "已完成";
-      mockOrders[orderIndex].completeTime = new Date().toLocaleString();
+    const index = mockOrders.findIndex((o) => String(o.id) === String(orderId));
+    if (index >= 0) {
+      mockOrders[index].status = 4;
+      mockOrders[index].statusText = "已完成";
+      mockOrders[index].completeTime = new Date().toLocaleString();
     }
     return true;
   } catch (error) {
