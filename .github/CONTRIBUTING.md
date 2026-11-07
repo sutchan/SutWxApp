@@ -135,6 +135,12 @@ npm run ci          # lint + check + test
 - 关键逻辑添加中文注释；文件头部标注路径与版本号
 - UI 遵循 Apple 极简设计风格（见 `app.wxss` 全局 CSS 变量）
 
+## 临时文件
+
+- 一次性脚本、分析产物、备份、截图一律放入根目录 `.tmp/`（已被 git 忽略），文件名带日期前缀；任务结束后删除
+- **不要在仓库根目录散落临时文件**；根 `index.html`、`prototype-extra.html`、`wireframes.html` 是 `build.js` 的生成物，请改 `prototype/` 下的源文件，不要手工编辑
+- 提交前确认 `git status` 干净：临时文件已删除或已归入 `.tmp/`
+
 ## 提问与讨论
 
 - 提交 Issue 前请先检索是否已有相同或相关问题

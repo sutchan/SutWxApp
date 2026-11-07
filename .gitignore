@@ -14,6 +14,10 @@ coverage/
 # 静态站点构建产物（由 GitHub Actions 构建并发布到 Pages，无需入库）
 /dist
 
+# 临时与草稿文件：所有一次性脚本、分析产物、备份一律放入 .tmp/，不入库，任务结束应清理
+/.tmp/
+.tmp-*
+
 # 小程序代码上传私钥与预览产物（切勿入库）
 private.*.key
 *.private.key
