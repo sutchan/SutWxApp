@@ -1,6 +1,6 @@
 # 苏铁 SutWxApp - 微信小程序 × WordPress 电商桥接方案
 
-![版本](https://img.shields.io/badge/version-3.5.11-blue)
+![版本](https://img.shields.io/badge/version-3.5.12-blue)
 ![设计风格](https://img.shields.io/badge/design-Apple%20Style-green)
 ![CI](https://github.com/sutchan/SutWxApp/actions/workflows/ci.yml/badge.svg)
 
@@ -193,8 +193,16 @@ cd SutWxApp
 npm ci                # 安装依赖
 npm run lint          # ESLint 检查
 npm test              # 单元测试
-npm run check         # 版本号一致性 + 小程序配置完整性校验
+npm run check         # 版本 / 配置 / 图片资源 / 语义化 ID / 契约 / 包体 / 插件版本 / 文档一致性
 npm run ci            # 等价于 CI 全流程：lint + check + test
+
+# 单独运行某个门禁
+npm run check:images  # 校验 WXML 引用的 /images/* 资源真实存在
+npm run check:ids     # 校验 WXML 根容器语义化 id 与全量 id 唯一性
+
+# 本地图标资产：微信 image 组件不支持 SVG，新增 /images 图标须用纯 Node 光栅化生成
+node scripts/generate-ui-icons.js         # 商城 UI 图标（14 个，复用 tabbar-icons/draw.js）
+node scripts/generate-tabbar-icons.js     # tabBar 图标
 
 # 仓库根：静态站点构建（零依赖）与本地预览
 node build.js         # 生成 index.html 与 dist/

@@ -1,9 +1,29 @@
 # 苏铁微信小程序 (SutWxApp) 已完成任务归档
 
-> **文档版本**: v1.4.0
+> **文档版本**: v1.5.0
 > **创建时间**: 2026-10-13
-> **更新时间戳**: 2026-11-05
+> **更新时间戳**: 2026-11-07
 > **说明**: 本文件归档所有已完成的任务项与历史更新说明，从 [`tasks.md`](./tasks.md) 迁移而来，保留验收结论与交付物位置，便于追溯。
+
+---
+
+## 2026-11-07 归档批次
+
+### FE-011 — 修复本地图标引用缺失（含 QA-010 审计范围外的新增破图）
+
+| 项 | 内容 |
+|----|------|
+| 优先级 | P2 |
+| 完成日期 | 2026-11-07 |
+| 交付物 | `SutWxApp/scripts/generate-ui-icons.js`、`SutWxApp/scripts/ui-icons/shapes.js`、`SutWxApp/scripts/check-images.js`、`SutWxApp/images/*.png`（14 个） |
+
+**问题**：WXML 共引用 14 个本地 PNG 图标，资源从未入库（仓库仅有同名 `arrow-right.svg` 等 SVG，而微信 `image` 组件不支持 SVG）。涉及用户中心箭头、商品规格/服务/评价箭头与星标、操作栏客服/购物车、图集分享/收藏、弹层关闭、首页搜索/分类/空态等，运行时全部破图。
+
+**方案**：复用项目既有 `scripts/tabbar-icons/draw.js` 纯 Node 光栅化能力，新增 `generate-ui-icons.js` 一次性生成 14 个 PNG（含 `star-active`、`favorite-active`、`collect-active` 等动态模板展开态），不改动任何 WXML 结构。新增 `check:images` 门禁校验所有 `/images/*` 引用并接入 `npm run check` 与 CI，防止回归。
+
+**连带修复**：`draw.js` 的 Bresenham 直线以浮点终点 `===` 判等，星形/心形浮点顶点导致生成器死循环挂起；改为整数归一化 + 步数上限。`POST /api/order/create` 失败路径未释放幂等短锁，导致用户重试被误挡。
+
+**验证**：`node scripts/check-images.js` 扫描 21 个 WXML 全部通过；14 个 PNG 文件头校验合法；`npm test` 137 用例全绿；`npm run lint` 与 `npm run check` 全绿。
 
 ---
 

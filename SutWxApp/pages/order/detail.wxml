@@ -1,19 +1,19 @@
 
 <!--
 文件名: detail.wxml
-版本号: 3.5.7
-更新日期: 2026-07-01
+版本号: 3.5.12
+更新日期: 2026-11-07
 描述: 订单详情页面模板
 -->
 <view class="detail-container" id="order-detail-root" style="{{themeStyle}}" wx:if="{{!loading}}">
   <!-- 订单状态 -->
-  <view class="status-section">
+  <view class="status-section" id="order-detail-status">
     <text class="status-text">{{orderDetail.statusText}}</text>
     <text class="status-desc" wx:if="{{orderDetail.statusDesc}}">{{orderDetail.statusDesc}}</text>
   </view>
 
   <!-- 收货地址 -->
-  <view class="address-section">
+  <view class="address-section" id="order-detail-address">
     <view class="address-info">
       <text class="name-phone">{{orderDetail.address.name}} {{orderDetail.address.phone}}</text>
       <text class="address-detail">{{orderDetail.address.detail}}</text>
@@ -21,7 +21,7 @@
   </view>
 
   <!-- 商品列表 -->
-  <view class="products-section">
+  <view class="products-section" id="order-detail-products">
     <view
       wx:for="{{orderDetail.products}}"
       wx:key="id"
@@ -40,7 +40,7 @@
   </view>
 
   <!-- 订单信息 -->
-  <view class="info-section">
+  <view class="info-section" id="order-detail-info">
     <view class="info-item">
       <text class="info-label">订单编号</text>
       <text class="info-value">{{orderDetail.orderNo}}</text>
@@ -64,7 +64,7 @@
   </view>
 
   <!-- 价格信息 -->
-  <view class="price-section">
+  <view class="price-section" id="order-detail-price">
     <view class="price-item">
       <text class="price-label">商品金额</text>
       <text class="price-value">¥{{orderDetail.productPriceText}}</text>
@@ -84,7 +84,7 @@
   </view>
 
   <!-- 底部操作栏 -->
-  <view class="bottom-bar">
+  <view class="bottom-bar" id="order-detail-actions">
     <button
       wx:if="{{orderDetail.status === 1}}"
       class="action-btn secondary"

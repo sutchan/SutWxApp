@@ -4,7 +4,7 @@ Tags: rest-api, woocommerce, weapp, headless
 Requires at least: 6.0
 Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 0.7.0
+Stable tag: 0.7.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -43,6 +43,10 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 P2 阶段提供后台「设置 → 小程序设置」页；当前默认返回 `sut-green`，可用 WP-CLI 修改 option `sutwx_theme`。
 
 == Changelog ==
+
+= 0.7.1 =
+* 按职责拆分超过 200 行的运行时源码：限频计数器、支付/退款回调通知、下单流程、订单状态流转分别拆为 trait，并在 `class-modules.php` 加载清单登记；对外方法与调用方式不变。
+* 修复：`POST /api/order/create` 失败路径（商品为空/库存不足/落库失败）未释放 `clientRequestId` 幂等短锁，导致用户 10 秒内重试被误判「订单正在创建中」。
 
 = 0.5.3 =
 * 代码质量与可维护性：将超过 200 行的类按职责拆分为 trait / 独立类（鉴权服务、JWT 编码、缓存失效、限频 IP、支付凭证写入、订单装配与发货、模块加载清单），对外方法与调用方式保持不变。

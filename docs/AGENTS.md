@@ -159,6 +159,8 @@ fix(首页): 解包 {code,data} 包络并按 total 推算 hasMore
 | `npm run check:contract` 失败 | 对比 `sutwx-app-api/includes/mappings/*.php` 与 `SutWxApp/models/*` 的字段名；改生产代码而非断言 |
 | `npm run check:version` 失败 | `package.json` / `app.js` / `README.md` 徽章 / `CHANGELOG.md` 四处版本号未同步 |
 | `npm run check:config` 失败 | 页面四件套缺失、`app.json` 路由与磁盘不一致、tabBar 图标缺失 |
+| `npm run check:images` 失败 | WXML 引用了不存在的 `/images/*` 资源；运行 `node scripts/generate-ui-icons.js` 补齐资产，不要改用 SVG（微信 `image` 不支持） |
+| `npm run check:ids` 失败 | WXML 根容器缺少语义化 id、用了 `page-root` 等通用名，或模板/原型内存在重复 id |
 | Jest 报「worker 未优雅退出」 | 有定时器未 `unref()`；用 `npx jest --detectOpenHandles` 定位（见 `docs/tasks.md` QA-007） |
 | 本地无 PHP 跑不了插件测试 | 交由 CI 的 PHP 8.1/8.3 矩阵执行；本地可用 `node .tmp-*` 脚本做括号配平自检 |
 | 小程序请求 404 | 后端 rewrite 仅匹配 `^api/`，端点必须带 `/api` 前缀 |
@@ -175,4 +177,5 @@ fix(首页): 解包 {code,data} 包络并按 total 推算 hasMore
 - [ ] 涉及接口变更时，`docs/specs/api/spec.md`、`backend/spec.md` 与契约测试已同步
 - [ ] 未提交任何密钥、构建产物、`node_modules`
 - [ ] 提交信息符合 `<type>(<scope>): <说明>`，正文解释「为什么」
-- [ ] 单文件源码 ≤ 200 行（例外：`prototype/*.html` 单文件原型、生成物）
+- [ ] 单文件**运行时源码** ≤ 200 行（例外：测试套件 `*.test.js` / `run-*-tests.php`、`prototype/*.html` 单文件原型、生成物）；按职责拆为 trait / helpers 子模块，并在 `includes/class-modules.php` 登记加载顺序
+- [ ] 新增/修改本地图片资源后运行 `npm run check:images`；新增 WXML 区块补语义化 id 并运行 `npm run check:ids`

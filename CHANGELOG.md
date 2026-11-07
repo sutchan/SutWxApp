@@ -1,4 +1,29 @@
 # Changelog
+
+## [3.5.12] - 2026-11-07
+
+### Fixed
+
+- **运行时破图（FE-011 及同类）**：WXML 引用的 14 个本地 PNG 图标从未入库，微信 `image` 不支持 SVG，导致用户中心、商品详情、评价、弹层、首页搜索/分类/空态与操作栏图标全部加载失败。新增 `scripts/generate-ui-icons.js` + `scripts/ui-icons/shapes.js` 复用既有纯 Node 光栅化能力生成图标。
+- **图标生成器死循环**：`scripts/tabbar-icons/draw.js` 的 Bresenham 直线以浮点终点 `===` 判等，星形/心形浮点顶点永远无法命中终止条件而挂起；改为整数归一化 + 步数上限双保险。
+- **幂等锁泄漏**：`POST /api/order/create` 在「商品为空 / 库存或可购买性校验失败」等失败路径未释放 `clientRequestId` 短锁，用户在 10 秒锁期内重试会被误判为「订单正在创建中」；补齐失败路径释放。
+- **jest haste 命名冲突**：仓库根与小程序工程 `package.json` 同名 `sut-wx-app`，jest 扫描时告警；根包更名为 `sut-wx-app-workspace`（CI 工作目录不受影响）。
+- **根 `package.json` 版本漂移**：仍为 3.5.10 而小程序已是 3.5.11，现统一为 3.5.12。
+
+### Added
+
+- 新增 `scripts/check-images.js` 资源门禁：校验 WXML 中所有 `/images/*` 引用（含 `{{}}` 动态模板展开）真实存在，并接入 `npm run check` 与 CI，防止破图回归。
+
+### Changed
+
+- 按职责拆分 4 个超过 200 行的运行时源码，对外接口与调用方式不变：
+  - 小程序 `services/orderService.js` → 纯辅助函数拆至 `services/orderService.helpers.js`
+  - 插件 `class-rate-limit.php` → 计数器读写拆至 `rate-limit/class-rate-limit-counter.php`
+  - 插件 `class-rest-pay.php` → 支付/退款回调通知拆至 `pay/class-pay-notify-handler.php`
+  - 插件 `class-rest-order-actions.php` → 下单流程拆至 `order/class-order-create.php`、状态流转拆至 `order/class-order-transition.php`
+  - 新 trait 统一在 `includes/class-modules.php` 加载清单登记（trait 先于类）
+- 任务清单：FE-011 完成并归档至 `docs/tasks-done.md`，版本声明同步至前端 3.5.12 / 插件 0.7.1。
+
 ## [3.5.11-p2] - 2026-11-05
 
 ### Added
