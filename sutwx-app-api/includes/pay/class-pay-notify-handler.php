@@ -33,7 +33,7 @@ trait Sutwx_Rest_Pay_Notify {
 					'route'  => '/pay/refund-notify',
 				)
 			);
-			return rest_ensure_response( Sutwx_Wechat_Pay_Notify::receipt( false ) );
+			return $this->notify_response( false );
 		}
 
 		$ok = Sutwx_Pay_Refund::apply_refund_notified( $parsed['data'] );
@@ -48,7 +48,7 @@ trait Sutwx_Rest_Pay_Notify {
 			);
 		}
 
-		return rest_ensure_response( Sutwx_Wechat_Pay_Notify::receipt( $ok ) );
+		return $this->notify_response( $ok );
 	}
 
 	/**
@@ -59,7 +59,7 @@ trait Sutwx_Rest_Pay_Notify {
 	 */
 	public function notify( $request ) {
 		if ( ! function_exists( 'wc_get_order' ) ) {
-			return rest_ensure_response( Sutwx_Wechat_Pay_Notify::receipt( false ) );
+			return $this->notify_response( false );
 		}
 
 		$body   = (string) $request->get_body();
@@ -76,7 +76,7 @@ trait Sutwx_Rest_Pay_Notify {
 					'detail' => array( 'bodyBytes' => strlen( $body ) ),
 				)
 			);
-			return rest_ensure_response( Sutwx_Wechat_Pay_Notify::receipt( false ) );
+			return $this->notify_response( false );
 		}
 
 		$ok = Sutwx_Pay_Order_Sync::apply_paid( $parsed['data'] );
@@ -91,7 +91,21 @@ trait Sutwx_Rest_Pay_Notify {
 			);
 		}
 
-		return rest_ensure_response( Sutwx_Wechat_Pay_Notify::receipt( $ok ) );
+		return $this->notify_response( $ok );
+	}
+
+	/**
+	 * 构造通知回执：失败时必须用 5xx，微信才会按退避策略重发（200 会被视为已送达）。
+	 *
+	 * @param bool $ok 是否处理成功。
+	 * @return WP_REST_Response
+	 */
+	private function notify_response( $ok ) {
+		$response = rest_ensure_response( Sutwx_Wechat_Pay_Notify::receipt( $ok ) );
+		if ( is_object( $response ) && method_exists( $response, 'set_status' ) ) {
+			$response->set_status( Sutwx_Wechat_Pay_Notify::receipt_status( $ok ) );
+		}
+		return $response;
 	}
 
 	/**

@@ -14,7 +14,23 @@ defined( 'ABSPATH' ) || exit;
 class Sutwx_Pay_Order_Sync {
 
 	/**
+	 * 商户订单号维度的互斥租约时长（秒）。请求异常中断时锁会残留，超时后自动可被接管。
+	 */
+	const LOCK_TTL = 30;
+
+	/**
+	 * 本请求持有的锁（避免误删其他请求持有的租约）。
+	 *
+	 * @var array<string,bool>
+	 */
+	private static $held_locks = array();
+
+	/**
 	 * 支付成功落库：状态流转 + 交易号回写（幂等，重复通知安全）。
+	 *
+	 * 处理期间按商户订单号加互斥租约：/pay/notify 与 /pay/query 可能同时到达
+	 * （小程序支付成功回调会立即发起查单），若两个请求都读到「待付款」再各自推进状态，
+	 * WooCommerce 的 _order_stock_reduced 标记是「先读后写」，库存会被重复扣减。
 	 *
 	 * @param array $data 解密后的通知数据（out_trade_no/trade_state/transaction_id/amount）。
 	 * @return bool
@@ -24,6 +40,26 @@ class Sutwx_Pay_Order_Sync {
 			return true; // 非支付成功类通知直接确认收到。
 		}
 
+		$out_trade_no = (string) $data['out_trade_no'];
+		if ( ! self::acquire_lock( $out_trade_no ) ) {
+			// 另一请求正在处理该订单：让微信稍后重试，避免重复扣库存与重复状态流转。
+			return false;
+		}
+
+		try {
+			return self::apply_paid_locked( $data );
+		} finally {
+			self::release_lock( $out_trade_no );
+		}
+	}
+
+	/**
+	 * 持锁执行的落库逻辑。
+	 *
+	 * @param array $data 解密后的通知数据。
+	 * @return bool
+	 */
+	private static function apply_paid_locked( $data ) {
 		$order = self::order_by_out_trade_no( (string) $data['out_trade_no'] );
 		if ( ! $order ) {
 			return false;
@@ -49,6 +85,79 @@ class Sutwx_Pay_Order_Sync {
 		$order->save();
 
 		return true;
+	}
+
+	/**
+	 * 抢占商户订单号维度的互斥租约。
+	 *
+	 * 用 options 表的唯一键做原子 INSERT IGNORE：并发的第二个请求插入失败即视为未抢到锁。
+	 * 无 $wpdb（单测/CLI）时退化为不互斥，保持可测试性。
+	 *
+	 * @param string $out_trade_no 商户订单号。
+	 * @return bool
+	 */
+	private static function acquire_lock( $out_trade_no ) {
+		global $wpdb;
+		if ( empty( $wpdb ) || ! is_object( $wpdb ) || ! method_exists( $wpdb, 'query' ) ) {
+			return true;
+		}
+
+		$name = self::lock_name( $out_trade_no );
+		$now  = time();
+		// 清理过期租约：请求异常中断时锁会残留。
+		$wpdb->query(
+			$wpdb->prepare(
+				"DELETE FROM {$wpdb->options} WHERE option_name = %s AND option_value < %d",
+				$name,
+				$now - self::LOCK_TTL
+			)
+		);
+		$inserted = $wpdb->query(
+			$wpdb->prepare(
+				"INSERT IGNORE INTO {$wpdb->options} (option_name, option_value, autoload) VALUES (%s, %s, 'no')",
+				$name,
+				$now
+			)
+		);
+		if ( 1 !== (int) $inserted ) {
+			return false;
+		}
+
+		self::$held_locks[ $out_trade_no ] = true;
+		return true;
+	}
+
+	/**
+	 * 释放本请求持有的租约（只删除自己抢到的锁，避免误删他人租约）。
+	 *
+	 * @param string $out_trade_no 商户订单号。
+	 */
+	private static function release_lock( $out_trade_no ) {
+		if ( empty( self::$held_locks[ $out_trade_no ] ) ) {
+			return;
+		}
+		unset( self::$held_locks[ $out_trade_no ] );
+
+		global $wpdb;
+		if ( empty( $wpdb ) || ! is_object( $wpdb ) || ! method_exists( $wpdb, 'query' ) ) {
+			return;
+		}
+		$wpdb->query(
+			$wpdb->prepare(
+				"DELETE FROM {$wpdb->options} WHERE option_name = %s",
+				self::lock_name( $out_trade_no )
+			)
+		);
+	}
+
+	/**
+	 * 锁名（订单号哈希，避免超长 option_name 与特殊字符）。
+	 *
+	 * @param string $out_trade_no 商户订单号。
+	 * @return string
+	 */
+	private static function lock_name( $out_trade_no ) {
+		return 'sutwx_pay_lock_' . md5( (string) $out_trade_no );
 	}
 
 	/**

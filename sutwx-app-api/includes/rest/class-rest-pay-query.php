@@ -62,16 +62,20 @@ class Sutwx_Rest_Pay_Query extends Sutwx_Rest_Base {
 		}
 
 		$out_trade_no = (string) $order->get_meta( Sutwx_Rest_Pay::META_OUT_TRADE_NO );
-		$result       = array( 'ok' => false, 'trade_state' => '' );
+		$result       = array( 'ok' => false, 'trade_state' => '', 'amount_total' => 0 );
 		if ( '' !== $out_trade_no ) {
 			$result = Sutwx_Wechat_Pay::query_out_trade( $out_trade_no );
-			if ( ! empty( $result['ok'] ) && 'SUCCESS' === $result['trade_state'] ) {
+			// 用微信返回的实付金额做校验，不能拿本地订单总额冒充已付金额
+			// （否则 apply_paid 的金额交叉校验在查单路径上会退化为恒等式）。
+			if ( ! empty( $result['ok'] ) && 'SUCCESS' === $result['trade_state']
+				&& (int) $result['amount_total'] > 0
+				&& (int) $result['amount_total'] === (int) round( (float) $order->get_total() * 100 ) ) {
 				Sutwx_Pay_Order_Sync::apply_paid(
 					array(
 						'out_trade_no'   => $out_trade_no,
 						'trade_state'    => 'SUCCESS',
 						'transaction_id' => $result['transaction_id'],
-						'amount'         => array( 'total' => (int) round( (float) $order->get_total() * 100 ) ),
+						'amount'         => array( 'total' => (int) $result['amount_total'] ),
 					)
 				);
 			}

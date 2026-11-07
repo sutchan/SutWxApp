@@ -17,7 +17,7 @@ class Sutwx_Wechat_Pay_Trade {
 	 * 按商户订单号查询订单状态。
 	 *
 	 * @param string $order_no 商户订单号。
-	 * @return array{ok:bool,trade_state:string,transaction_id:string,error:string}
+	 * @return array{ok:bool,trade_state:string,transaction_id:string,amount_total:int,error:string}
 	 */
 	public static function query_out_trade( $order_no ) {
 		$mch_id = Sutwx_Pay_Credentials::get_mch_id();
@@ -29,6 +29,7 @@ class Sutwx_Wechat_Pay_Trade {
 				'ok'             => false,
 				'trade_state'    => '',
 				'transaction_id' => '',
+				'amount_total'   => 0,
 				'error'          => Sutwx_Wechat_Pay_Util::error_text( $result ),
 			);
 		}
@@ -37,6 +38,7 @@ class Sutwx_Wechat_Pay_Trade {
 			'ok'             => true,
 			'trade_state'    => isset( $result['data']['trade_state'] ) ? (string) $result['data']['trade_state'] : '',
 			'transaction_id' => isset( $result['data']['transaction_id'] ) ? (string) $result['data']['transaction_id'] : '',
+			'amount_total'   => isset( $result['data']['amount']['total'] ) ? (int) $result['data']['amount']['total'] : 0,
 			'error'          => '',
 		);
 	}
