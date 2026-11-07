@@ -2,11 +2,13 @@
  * 文件名: deploy.js
  * 版本号: 1.0.0
  * 更新日期: 2026-09-12
- * 描述: 经 miniprogram-ci 生成预览二维码或上传体验版，供 GitHub Actions 与本地复用
+ * 描述: 经 miniprogram-ci 生成预览二维码或上传体验版，供 GitHub Actions 与本地复用。
+ *       上传前执行图片资源门禁；--compress 时调用 utils/compress-images.js（sharp 可选依赖）
  */
 
 const fs = require("fs");
 const path = require("path");
+const { spawnSync } = require("child_process");
 
 const PROJECT_ROOT = path.resolve(__dirname, "..");
 const projectConfig = require(path.join(PROJECT_ROOT, "project.config.json"));
@@ -73,8 +75,28 @@ function loadCi() {
   }
 }
 
+/**
+ * FE-009：上传前资产流程。
+ * - 必经：check-images.js 资源门禁，失败即阻断上传；
+ * - 可选：--compress 调用 compress-images.js；sharp 未安装时仅告警不阻断。
+ */
+function runPreDeployAssets() {
+  const check = spawnSync(process.execPath, [path.join(__dirname, "check-images.js")], { stdio: "inherit" });
+  if (check.status !== 0) throw new Error("上传前图片资源门禁未通过");
+  if (!process.argv.includes("--compress")) return;
+  const compress = spawnSync(
+    process.execPath,
+    [path.join(PROJECT_ROOT, "utils", "compress-images.js")],
+    { stdio: "inherit" }
+  );
+  if (compress.status !== 0) {
+    console.warn("[deploy] 图片压缩未执行（sharp 未安装或执行失败），已跳过，不阻断上传");
+  }
+}
+
 async function main() {
   const options = resolveOptions();
+  runPreDeployAssets();
   const ci = loadCi();
   const onProgressUpdate = createProgressLogger();
 

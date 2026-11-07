@@ -17,14 +17,14 @@
 | PHP | 8.1 / 8.3 | 否 | 插件单测与 `php -l`；本地无 PHP 时由 CI 承担 |
 | Git | 最新稳定版 | 是 | — |
 
-**包管理器统一 npm**。仓库根 `bun.lock` 为历史残留，不得据此引入 Bun 流程。
+**包管理器统一 npm**。历史 `bun.lock` 已清理，不得引入 Bun 流程。
 
 ```bash
 git clone https://github.com/sutchan/SutWxApp.git
 cd SutWxApp && npm install     # 安装 ESLint / Jest / miniprogram-automator
 ```
 
-> 仓库当前**未提交** `package-lock.json`，因此请使用 `npm install` 而非 `npm ci`（后者无 lockfile 会直接报错）。lockfile 的提交计划见 `docs/tasks.md` 的 REL-002。
+> `SutWxApp/package-lock.json` 已入库，本地与 CI 统一使用 `npm ci` 锁定安装依赖。
 
 微信开发者工具**导入 `SutWxApp/`**（即仓库根下的 `SutWxApp` 子目录，不是 `SutWxApp/SutWxApp`）。
 
@@ -102,7 +102,7 @@ SutWxApp/                      # 仓库根
 | REST | `includes/rest/class-rest-*.php` | 一个端点组一个类 |
 | 映射 | `includes/mappings/map-*.php` | WordPress/WooCommerce → 小程序 DTO |
 | 后台 | `admin/` | 设置页 |
-| 测试 | `tests/` | `run-*-tests.php` 六套件 + `bootstrap.php` + `stubs-runtime.php` |
+| 测试 | `tests/` | `run-*-tests.php` 八套件 + `bootstrap.php` + `stubs-runtime.php` |
 
 **新增插件类**：在 `includes/class-modules.php` 中登记；被拆分为 trait 时，trait 文件必须先于使用它的类被 require。
 
@@ -189,7 +189,7 @@ SutWxApp/                      # 仓库根
 ```javascript
 /**
  * 文件名: example.js
- * 版本号: 3.5.10
+ * 版本号: 3.5.13
  * 更新日期: 2026-11-04
  * 描述: 一句话说明本文件职责（复杂模块注明「实现在 xxx」）
  */
@@ -200,7 +200,7 @@ SutWxApp/                      # 仓库根
  * 职责说明。
  *
  * @package SutwxAppApi
- * @version 0.5.3
+ * @version 0.7.1
  */
 ```
 

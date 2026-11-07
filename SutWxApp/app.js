@@ -11,10 +11,13 @@ const helpers = require("./helpers");
 const request = require("./utils/request");
 const i18n = require("./utils/i18n");
 const env = require("./utils/env");
+const privacy = require("./utils/privacy");
 
 App({
   onLaunch(options) {
     this.initApp();
+    this.registerPrivacyGuard();
+    this.checkBaseLibrary();
   },
 
   onShow(options) { },
@@ -47,9 +50,10 @@ App({
     productSource: "mock", // 'mock'（默认）| 'woocommerce'：商品数据源（WooCommerce 需配套 WP 插件）
     theme: null, // 当前主题色值（由 themeService 加载）
     themeStyle: "", // 当前主题 CSS 变量声明字符串（供页面根容器绑定）
-    version: "3.5.13",
+    version: "3.5.14",
     locale: "zh-CN", // 当前界面语言（由 i18n 初始化）
     debug: false,
+    privacyResolve: null, // COM-001：官方 onNeedPrivacyAuthorization 回调，由隐私授权页消费
     request: {
       CancelToken: helpers.CancelToken,
     },
@@ -74,6 +78,43 @@ App({
         reportUrl: env.apiUrl("/api/monitor/data"),
         appId: "sut-wx-app",
       });
+    }
+  },
+
+  /**
+   * COM-001：注册全局隐私授权监听。隐私接口被调用且用户未授权时，
+   * 跳转隐私授权页，由该页的 agreePrivacyAuthorization 按钮释放官方 resolve。
+   * 基础库 < 2.32.3 时能力缺失，registerNeedPrivacyAuthorization 返回 false，业务走降级。
+   */
+  registerPrivacyGuard() {
+    const registered = privacy.registerNeedPrivacyAuthorization((resolve) => {
+      this.globalData.privacyResolve = resolve;
+      wx.navigateTo({
+        url: "/pages/privacy/index",
+        fail: () => {
+          this.globalData.privacyResolve = null;
+          resolve({ event: "disagree" });
+        },
+      });
+    });
+    if (!registered) {
+      console.warn("[App] 隐私校验接口不可用（基础库过低），走兼容逻辑");
+    }
+  },
+
+  /** FE-009：隐私接口与头像选择器要求基础库 2.32.3+，低版本给出升级提示。 */
+  checkBaseLibrary() {
+    try {
+      const info = wx.getSystemInfoSync ? wx.getSystemInfoSync() : {};
+      if (privacy.compareVersion(info.SDKVersion, privacy.MIN_SDK_VERSION) < 0) {
+        wx.showModal({
+          title: "版本提示",
+          content: "当前微信版本过低，请升级微信后使用完整功能",
+          showCancel: false,
+        });
+      }
+    } catch (e) {
+      console.warn("[App] 基础库版本读取失败", e);
     }
   },
 

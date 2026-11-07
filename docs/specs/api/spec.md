@@ -3,7 +3,7 @@
 ## 目的
 本规范定义了苏铁微信小程序（SutWxApp）项目的API设计和使用，包括API结构、设计原则、认证机制、核心接口、错误处理和版本管理。
 
-> 后端为 **WordPress 网站（headless CMS）**。小程序通过 REST API 消费网站内容，当前接口以 `/api/*` 暴露（对应 WP 侧由配套插件注册的自定义 REST 命名空间，如 `wp-json/<plugin>/v1/`；核心 `wp-json/wp/v2/` 亦可复用），鉴权走 `/auth/*`（微信 `wx.login` code 换取的 token 或 JWT）。下文端点约定以小程序实际调用路径为准；若后续改为直连 WP REST，可将 `/api/*` 映射为对应命名空间路由。参考实现：微慕 Minapper / Watch-Life（`https://github.com/iamxjb/winxin-app-watch-life.net`）。
+> 后端为 **WordPress 网站 + 配套插件 `sutwx-app-api`**（本仓库 `sutwx-app-api/`，非独立仓库）。插件注册 WP REST 命名空间 `sutwx/v1`，并用 `add_rewrite_rule` 把 `/api/*` 重写到 `rest_route=/sutwx/v1/$1`；小程序统一调用 `/api/*`（共 24 个端点），鉴权端点为 `/api/auth/*`。路径本身不带版本号，版本由命名空间承载；备选直连 `wp-json/sutwx/v1`。详见 `../backend/spec.md`。
 
 ## 设计原则
 
@@ -53,13 +53,12 @@
 
 ### URL结构
 ```
-https://api.example.com/v{version}/{resource}/{id}?{query_parameters}
+https://<站点根>/api/<业务域>/<动作>?{query_parameters}
 ```
 
-- **version**: API版本号，如v1, v2
-- **resource**: 资源名称，使用复数形式，如users, products
-- **id**: 资源ID，用于标识特定资源
-- **query_parameters**: 查询参数，用于过滤、排序等
+- **站点根**：由 `utils/env.js` 按 develop / trial / release 环境注入的 WordPress 站点地址（HTTPS）
+- **业务域 / 动作**：如 `product/list`、`order/create`、`pay/query`；路径固定不带版本号
+- **query_parameters**：分页与过滤参数（`page`、`pageSize`、`categoryId`、`keyword`、`id` 等）
 
 ### HTTP方法
 
@@ -119,10 +118,9 @@ https://api.example.com/v{version}/{resource}/{id}?{query_parameters}
 - 示例：
 ```json
 {
-  "username": "test",
-  "password": "password",
-  "email": "test@example.com",
-  "phone": "13800138000"
+  "code": "081Xyz...",
+  "nickname": "苏小糖",
+  "avatarUrl": "https://..."
 }
 ```
 
@@ -158,21 +156,9 @@ https://api.example.com/v{version}/{resource}/{id}?{query_parameters}
 ### 错误响应
 ```json
 {
-  "code": 400,
-  "message": "参数错误",
-  "data": null,
-  "timestamp": 1609459200000,
-  "requestId": "uuid",
-  "errors": [
-    {
-      "field": "username",
-      "message": "用户名不能为空"
-    },
-    {
-      "field": "email",
-      "message": "邮箱格式不正确"
-    }
-  ]
+  "code": "sutwx_error",
+  "message": "缺少登录凭证 code",
+  "data": { "status": 400 }
 }
 ```
 
@@ -181,7 +167,7 @@ https://api.example.com/v{version}/{resource}/{id}?{query_parameters}
 ### 认证API
 
 > 账号体系为**微信静默授权**：`wx.login` 换取 `code` → 后端 `code2session` 换取 `openid` → 签发 JWT。**没有用户名密码注册/登录流程**，小程序不采集手机号与邮箱。
-> 全部端点由 `includes/rest/class-rest-auth.php` 注册，命名空间 `/api/v1`，小程序侧路径为 `/api/auth/*`。
+> 全部端点由 `sutwx-app-api/includes/rest/class-rest-auth.php` 注册，WP REST 命名空间 `sutwx/v1`，小程序侧路径为 `/api/auth/*`。
 
 #### 微信登录
 - **URL**: `POST /api/auth/login`
@@ -223,79 +209,21 @@ https://api.example.com/v{version}/{resource}/{id}?{query_parameters}
 - **URL**: `GET /api/user/info`
 - **认证**: 需要（Bearer）
 - **响应**: `{ "code": 200, "data": { "id": 12, "nickname": "苏小糖", "avatarUrl": "https://...", "points": 320, "createdAt": "2026-01-01 00:00:00" } }`
-- **说明**: 小程序用户中心据此渲染真实资料与积分，网络异常时回退本地缓存
+- **说明**: `data` 由 `Sutwx_Auth_Service::user_dto()` 输出（`id` / `openid` / `nickName` / `avatarUrl` / `points` / `memberLevel` / `orderStats`）。其中 `points`、`memberLevel` 为 DTO 占位字段，项目**无独立积分模块**；网络异常时回退本地缓存
 
-### 监控上报API（规划中）
+### 监控上报 API（已实现）
 
-> 前端监控模块 `SutWxApp/utils/monitor*.js` 已就绪（网络/FPS/内存/页面加载/API 五类采集器 + 自动上报调度），上报目标为 `/api/monitor/data`，**后端接收端点尚未实现**（见 `docs/tasks.md` BE-013）。当前该请求返回 404，监控数据不会落地。
+> 前端 `utils/monitor*.js` 共 8 个模块，`app.js` 由 `monitorUtil.init()` 启用；后端 `sutwx-app-api/includes/rest/class-rest-monitor.php` 已注册 `POST /monitor/data`，逐条经 `Sutwx_Error_Log` 落结构化日志。develop 环境默认不上报。
 
 - **URL**: `POST /api/monitor/data`
-- **认证**: 不需要（匿名上报，字段中不得含用户标识）
-- **请求体**: `{ "type": "error|performance|behavior", "payload": { }, "systemInfo": { } }`
-- **约束**: 限频 10 次/分钟；字段长度上限；服务端需做字段白名单校验
+- **认证**: 免鉴权（不得含 openid / 手机号等可直接识别字段，允许会话级 `sessionId`）
+- **请求体**: `{ "appId": "...", "sessionId": "...", "data": [ { "type": "error / performance / behavior", "page": "...", "detail": { } } ] }`；`data` 最多 20 条，亦兼容单条 `{type, ...}` 形式
+- **响应**: `{ "code": 200, "data": { "accepted": <条数> } }`
+- **约束**: 限频 10 次/分钟、字段长度上限与白名单校验；服务端逐条落 `monitor` 日志并汇总 `monitor_batch`
 
-### 产品API
+### 商品 / 分类 / 文章端点
 
-#### 获取产品列表
-- **URL**: `GET /api/v1/products`
-- **描述**: 获取产品列表，支持分页和搜索
-- **查询参数**: 
-  - `page`: 页码，默认1
-  - `pageSize`: 每页数量，默认20
-  - `categoryId`: 用于过滤的分类ID
-  - `keyword`: 搜索关键词
-- **响应**: 
-  ```json
-  {
-    "code": 200,
-    "message": "success",
-    "data": {
-      "list": [
-        {
-          "id": 1,
-          "name": "产品1",
-          "price": 100,
-          "categoryId": 1,
-          "createdAt": "2025-12-01T00:00:00.000Z"
-        },
-        {
-          "id": 2,
-          "name": "产品2",
-          "price": 200,
-          "categoryId": 1,
-          "createdAt": "2025-12-01T00:00:00.000Z"
-        }
-      ],
-      "total": 2,
-      "page": 1,
-      "pageSize": 10
-    },
-    "timestamp": 1609459200000,
-    "requestId": "uuid"
-  }
-  ```
-
-#### 获取产品详情
-- **URL**: `GET /api/v1/products/{id}`
-- **描述**: 获取产品详细信息
-- **响应**: 
-  ```json
-  {
-    "code": 200,
-    "message": "success",
-    "data": {
-      "id": 1,
-      "name": "产品1",
-      "price": 100,
-      "categoryId": 1,
-      "description": "产品描述",
-      "images": ["image1.jpg", "image2.jpg"],
-      "createdAt": "2025-12-01T00:00:00.000Z"
-    },
-    "timestamp": 1609459200000,
-    "requestId": "uuid"
-  }
-  ```
+> 旧版 `/api/v1/products` 契约已删除。当前商品、分类、文章与主题端点的实际路径、参数与 DTO 见下文各节及[端点总览](#端点总览与后端代码一一对应)，唯一权威来源是插件 `includes/rest/` 下的 24 个 `register_rest_route`。
 
 ### WooCommerce 商品接口（数据源：WordPress + WooCommerce 插件）
 
@@ -369,11 +297,11 @@ https://api.example.com/v{version}/{resource}/{id}?{query_parameters}
 - **推荐（路径直连）**：插件注册 WP REST 命名空间 `sutwx/v1`（路由 `product/list`、`post/list`、`theme` 等），并用 `add_rewrite_rule` 将 `/api/(.*)` 重写到 `rest_route=/sutwx/v1/$1`；小程序 `globalData.baseUrl` 设为站点根（如 `https://example.com`）。这样 `/api/*` 即为真实可访问路径。
 - **备选（直连 wp-json）**：小程序 `baseUrl` 设为 `https://example.com/wp-json/sutwx/v1`，跳过重写层。
 
-> 鉴权接口（`/api/auth/login`、`/api/auth/refresh-token`、`/api/auth/logout`、`/api/user/info`）需 Bearer JWT（`wx.login` 换取）；写操作（`/api/order/create|cancel|confirm|ship`）与支付（`/api/pay/prepay|notify|query`）需鉴权；内容端点（product/post/category/theme）仍免登录。完整清单见 `../backend/spec.md`。
+> 鉴权接口（`/api/auth/login`、`/api/auth/refresh-token`、`/api/auth/logout`、`/api/user/info`）需 Bearer JWT（`wx.login` 换取）；写操作（`/api/order/create|cancel|confirm|ship`）与支付（`/api/pay/prepay|query`）需鉴权；支付回调（`/api/pay/notify`、`/api/pay/refund-notify`）免鉴权但由平台证书验签；内容端点（product/post/category/theme）仍免登录。完整清单见 `../backend/spec.md`。
 
 ### 端点总览（与后端代码一一对应）
 
-> 本表由 `SutWxApp/scripts/check-docs.js` 在 CI 中巡检：后端每新增一个 `register_rest_route`，本表与会话端点小节必须同步更新，否则 CI 失败。
+> 本表由 `SutWxApp/scripts/check-docs.js` 在 CI 中巡检：脚本从本文档全文抽取 `/api/...` 路径与后端 `register_rest_route` 比对，并校验 `ops/spec.md` 的免鉴权清单与 `tasks.md` 的版本声明；新增端点须同步这三处，否则 CI 失败。
 
 | 方法 | 路径 | 鉴权 | 限频档 | 说明 |
 |------|------|------|--------|------|
@@ -412,71 +340,9 @@ https://api.example.com/v{version}/{resource}/{id}?{query_parameters}
 - 退款金额上限等于订单实付，不接受客户端传入金额；
 - 掉单由 `Sutwx_Pay_Cron` 每 5 分钟查单兜底（`sutwx_pay_query_cron`）。
 
-### 订单API
+### 订单与支付端点
 
-#### 创建订单
-- **URL**: `POST /api/v1/orders`
-- **描述**: 创建新订单
-- **认证**: 需要
-- **请求体**: 
-  ```json
-  {
-    "products": [
-      {
-        "productId": 1,
-        "quantity": 2
-      },
-      {
-        "productId": 2,
-        "quantity": 1
-      }
-    ],
-    "paymentMethod": "wechat_pay"
-  }
-  ```
-
-> 订单 `status` 为数字：`0` 已取消 / `1` 待付款 / `2` 待发货 / `3` 待收货 / `4` 已完成 / `5` 已退款；`statusText` 为其中文文案；金额单位为元。
-- **响应**: 
-  ```json
-  {
-    "code": 200,
-    "message": "success",
-    "data": {
-      "id": 1024,
-      "orderNo": "1024",
-      "status": 1,
-      "statusText": "待付款",
-      "totalPrice": 400.00,
-      "productPrice": 380.00,
-      "shippingFee": 20.00,
-      "totalQuantity": 3,
-      "createTime": "2026-11-04 10:20:30",
-      "products": [
-        {
-          "productId": 1,
-          "name": "绿萝盆栽",
-          "price": 100.00,
-          "quantity": 2
-        }
-      ],
-      "address": {
-        "name": "张三",
-        "phone": "13800138000",
-        "province": "广东省",
-        "city": "深圳市",
-        "district": "南山区",
-        "address1": "科技园路 1 号",
-        "address2": "A#301"
-      },
-      "remark": "尽快发货",
-      "payTime": "",
-      "deliveryTime": "",
-      "completeTime": ""
-    },
-    "timestamp": 1609459200000,
-    "requestId": "uuid"
-  }
-  ```
+> 旧版 `/api/v1/orders` 契约已删除。实际端点为 `/api/order/*` 与 `/api/pay/*`（方法、鉴权、状态码与支付异常约定见[端点总览](#端点总览与后端代码一一对应)）。订单状态码为 `0`~`5`，创建订单以 `clientRequestId` 做 10 秒幂等短锁。
 
 ## 错误处理
 
@@ -537,7 +403,7 @@ https://api.example.com/v{version}/{resource}/{id}?{query_parameters}
 
 ### 自动化测试
 - **Jest**（`SutWxApp/__tests__/`）：小程序侧单元与集成测试，`npm test`
-- **PHP 自研 runner**（`sutwx-app-api/tests/run-*.php`）：后端映射/设置/鉴权/缓存/订单/支付六套件，独立运行不依赖 WordPress
+- **PHP 自研 runner**（`sutwx-app-api/tests/run-*.php`）：后端映射/设置/鉴权/缓存/订单/支付/平台/支付异常八套件，独立运行不依赖 WordPress
 - **契约校验**（`npm run check:contract`）：比对后端 `mappings/*.php` 与前端 `models/*` 的字段与分页包络
 - **E2E**（`npm run test:e2e`）：基于 `miniprogram-automator` 的四套件，需本地微信开发者工具开启自动化端口
 
@@ -752,4 +618,5 @@ wx.request({
 
 | 版本 | 更新日期 | 更新内容 | 作者 |
 |------|----------|----------|------|
+| 3.5.13 | 2026-11-07 | 删除旧版 `/api/v1/*` 契约与用户名密码注册登录示例；统一为 `sutwx/v1` + `/api/*` 共 24 端点；监控上报端点改为已实现并补真实请求体；错误响应示例改为 `WP_Error` 包络；单测改为 PHP 八套件 | Sut |
 | 1.0.0 | 2025-12-26 | 初始版本 | Sut |

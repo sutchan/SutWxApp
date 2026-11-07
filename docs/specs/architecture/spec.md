@@ -5,7 +5,7 @@
 
 ## 技术栈
 
-> 实际项目为**纯前端微信小程序**，使用 JavaScript 开发，代码仓库内不含后端服务与数据库。后端为 **WordPress 网站（headless CMS）**，内容经 REST API 提供。
+> 本仓库包含**小程序端**（原生 JavaScript）与 **WordPress 插件端**（PHP，`sutwx-app-api/`），另有仓库根基于 Express 的静态站点预览服务；不含 WordPress 运行时与数据库。两端通过插件注册的 `/api/*` REST 端点对接。
 
 ### 前端技术栈
 - **微信小程序框架**：原生微信小程序开发框架（WXML / WXSS / JS）
@@ -16,11 +16,11 @@
 - **路由管理**：微信小程序原生路由（`app.json` 声明）
 - **网络请求**：`wx.request` API + `utils/request.js` 封装（拦截器、重试、LRU 缓存、请求取消、并发队列）
 - **本地存储**：`wx.setStorageSync` / `wx.getStorageSync`
-- **多语言**：gettext 风格 `.po` / `.pot` 文件
+- **多语言**：运行时 JSON 词条（`locales/zh-CN.json`、`en-US.json` 等）+ gettext 风格 `.po` / `.pot` 模板
 
 ### 外部依赖（WordPress 后端 API）
-- 后端为 **WordPress 网站（headless CMS）**；小程序通过 `services/*` 调用其 REST API，基地址见 `app.js` 的 `globalData.baseUrl`。
-- 接口约定：内容以 `/api/*` 暴露，由配套 WordPress 插件 **`sutwx-app-api`** 注册自定义 REST 命名空间 `sutwx/v1`（`/api/*` 经 rewrite 直连；亦可直连 `wp-json/sutwx/v1/`），鉴权 `/auth/*`（`Authorization: Bearer <token>`，或微信 `wx.login` code 签发的 token，见 `app.js` 的 `requestWithToken`）。详见 `../backend/spec.md`。
+- 后端为 **WordPress 网站（headless CMS）**；小程序通过 `services/*` 调用其 REST API，基地址由 `utils/env.js` 按 develop / trial / release 环境自动注入。
+- 接口约定：内容以 `/api/*` 暴露，由配套 WordPress 插件 **`sutwx-app-api`** 注册自定义 REST 命名空间 `sutwx/v1`（`/api/*` 经 rewrite 直连；亦可直连 `wp-json/sutwx/v1/`），鉴权 `/api/auth/*`（`wx.login` code → JWT，`Authorization: Bearer <token>`），当前共 24 个端点，含运营 / 监控 / 健康端点。详见 `../backend/spec.md`。
 - 内容模型：文章（posts）、页面（pages）、分类（categories）、媒体（media）及自定义文章类型（如 WooCommerce 商品）均由 WordPress 提供。
 - 数据源切换：商品/分类/文章由 `globalData.productSource`（`mock` 默认 / `woocommerce`）控制；主题由 `services/themeService.js` 调 `/api/theme` 获取。
 
@@ -30,12 +30,12 @@
 - 后端为 WordPress 网站，作为无头 CMS 提供网站内容（文章、页面、分类、媒体、自定义文章类型）。
 - 后端实现为自研配套插件 **`sutwx-app-api`**（不依赖微慕等第三方插件；微慕 Minapper / Watch-Life 仅作参考实现：`https://github.com/iamxjb/winxin-app-watch-life.net`）。插件注册 REST 命名空间 `sutwx/v1` 并将 `/api/*` 重写直连，规范与端点契约见 `../backend/spec.md`，开发计划见 `docs/wordpress-plugin/DEVELOPMENT_PLAN.md`。
 - 商品数据来自 **WooCommerce** 插件：小程序经 `services/productService.js` 调用 `/api/product/list`、`/api/product/detail`，由 `models/product.js` 的 `mapWooCommerceProduct()` 转为统一 DTO；分类经 `categoryService.js` / `models/category.js`；文章经 `postService.js` / `models/post.js`（正文 `rich-text` 渲染，`utils/richtext.js` 安全清洗）；主题经 `themeService.js` 调 `/api/theme`。数据源由 `app.js` 的 `globalData.productSource`（`mock` / `woocommerce`）切换。
-- 阶段基线：v1 为只读 MVP（内容端点免登录）；`wx.login`→JWT 鉴权基建随后落地；订单/支付仅预留契约。
+- 当前能力：内容端点免登录；`wx.login` → JWT（access 2h + refresh + 登出黑名单）已实现；订单状态机（0~5）、微信支付 V3（预支付 / 通知 / 查单 / 退款回调）、商家发货、下单幂等短锁、WP-Cron 每 5 分钟掉单兜底、结构化错误日志与 `/api/monitor/data` 上报均已实现。真实商户号与 WC 站点联调仍待外部资源（见 `docs/tasks.md`）。
 
 ### 内容渲染与排版优化（核心能力）
 - WordPress 文章/页面正文为 HTML，小程序需在微信侧「优化排版并显示网站内容」。
 - 渲染方案：使用 `rich-text` 组件或 HTML→WXML 解析器（如 towxml / wxparse）将 WP HTML 渲染为可显示的富文本；图片、视频等媒体按微信尺寸约束适配。
-- 安全清洗：`utils/request.js` 的 `sanitizeHtml()` 在响应层剥离 `<script>`/`<iframe>`/事件属性/`javascript:` 等危险内容，作为渲染前的安全兜底（详见「安全设计」）。
+- 安全清洗：`utils/request-security.js` 的 `sanitizeHtml()`（文章正文另由 `utils/richtext.js` 的 `sanitizeArticleHtml()` 渲染前清洗） 在响应层剥离 `<script>`/`<iframe>`/事件属性/`javascript:` 等危险内容，作为渲染前的安全兜底（详见「安全设计」）。
 - 排版规范：沿用 `app.wxss` 全局 CSS 变量设计系统（Apple 极简风格），对正文统一字号、行高、图片圆角与间距，保证网站内容在微信内阅读体验一致。
 - 图片优化：WP 媒体图经 `utils/compress-images.js` / CDN 适配，避免大图拖慢首屏。
 
@@ -127,7 +127,7 @@
 - **Bearer Token 认证**：
   - 登录后服务端返回 Token，前端存入 `wx.setStorageSync("token")`
   - 请求层在 `Authorization` 头携带 `Bearer <token>`
-  - 收到 `401` 时清空本地数据并跳转首页重新登录
+  - 收到 `401` 时先由 `utils/request-auth.js` 单飞刷新令牌并重放请求（FE-001）；无 refresh token 或刷新失败才清除登录态并跳转首页
 
 - **本地凭证保护**：
   - Token、openid、userInfo 仅存于微信安全存储，不写入日志
@@ -162,12 +162,12 @@
 3. 公众平台提交审核
 4. 审核通过后发布上线
 
-> 小程序无独立服务器部署；后端由 WordPress 站点承载，配套插件 `sutwx-app-api` 随站点部署（规范见 `../backend/spec.md`，开发计划见 `docs/wordpress-plugin/DEVELOPMENT_PLAN.md`）。
+> 小程序无独立服务器部署；后端由 WordPress 站点承载，配套插件 `sutwx-app-api` 随站点部署。代码上传支持 `miniprogram-deploy.yml`（`miniprogram-ci` 预览 / 体验版）与 CI 全绿后自动发布 Release（见 `../ops/spec.md`、`../../README.md`）。
 
 ## 监控与运维
 
 ### 应用监控
-- `utils/monitor.js` 统一捕获全局错误（`onError`、`onUnhandledRejection`）并上报
+- `utils/monitor*.js` 共 8 个模块，`app.js` 调用 `monitorUtil.init()` 启用网络 / FPS / 内存 / 页面加载 / API 五类采集与自动上报；`onError`、`onUnhandledRejection` 统一汇聚（develop 环境默认不上报）
 - 关注指标：请求成功率、平均响应时间、JS 错误率
 
 ### 日志管理
@@ -176,7 +176,7 @@
 
 ### 告警与故障处理
 - 关键错误经 `monitor.js` 上报至监控后端
-- 请求层对 `401` 做自动登出处理，对网络异常做友好提示
+- 请求层对 `401` 先做无感刷新重放、失败后才自动登出；对网络异常做友好提示
 
 ## 架构评估
 
@@ -191,6 +191,7 @@
 
 | 版本 | 更新日期 | 更新内容 | 作者 |
 |------|----------|----------|------|
+| 3.5.13 | 2026-11-07 | 对齐当前实现：插件端与 24 端点、JWT/订单/支付能力清单、401 无感刷新、监控链路启用、多环境配置与多语言资源 | Sut |
 | 3.0.2 | 2026-09-13 | 后端章节对齐配套插件 `sutwx-app-api`：命名空间 `sutwx/v1`、数据源切换、服务层补全 post/theme/dataSource、部署说明 | Sut |
 | 3.0.1 | 2026-08-13 | 修正技术栈描述，去除虚构的 TypeScript/后端内容，对齐真实 JavaScript 小程序代码 | Sut |
 | 1.0.0 | 2025-12-26 | 初始版本 | Sut |

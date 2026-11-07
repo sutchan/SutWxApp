@@ -378,7 +378,7 @@ npm test
 
 项目已建立 GitHub Actions 持续集成流水线（`.github/workflows/ci.yml`），运行环境为 `ubuntu-latest` + Node.js 20，工作目录为 `SutWxApp/`；同一分支的重复推送会取消上一次未完成的运行。流水线包含五个 Job，任一失败即阻断合并：
 
-> **已知问题（待修复）**：`lint` 与 `test` 两个 Job 使用 `npm ci` 并缓存 `SutWxApp/package-lock.json`，但仓库**未提交 lockfile**，`npm ci` 在无 lockfile 时会直接报错退出。修复方案为提交 `SutWxApp/package-lock.json` 锁定依赖版本（推荐），或改用 `npm install`。见 `docs/tasks.md` 的 REL-002。
+> `SutWxApp/package-lock.json` 已入库，`lint` 与 `test` Job 均可正常执行 `npm ci`。
 
 **第一阶段：代码检查**。执行 `npm run lint`（ESLint），在测试前快速发现代码规范问题，无需等待测试执行。
 

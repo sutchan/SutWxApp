@@ -100,3 +100,14 @@
   font-size: 24rpx;
   color: #ccc;
 }
+
+.item-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.item-desc {
+  margin-top: 6rpx;
+  font-size: 22rpx;
+  color: #86909c;
+}

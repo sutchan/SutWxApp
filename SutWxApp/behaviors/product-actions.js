@@ -8,6 +8,7 @@
 const cartService = require("../services/cartService");
 const request = require("../utils/request");
 const { buildBuyNowItem } = require("../pages/product/parts");
+const privacy = require("../utils/privacy");
 
 module.exports = Behavior({
   methods: {
@@ -117,11 +118,13 @@ module.exports = Behavior({
           } else if (index === 1) {
             wx.showToast({ title: "海报功能开发中", icon: "none" });
           } else if (index === 2) {
-            wx.setClipboardData({
-              data: `/pages/product/index?id=${that.data.productId}`,
-              success: function () {
-                wx.showToast({ title: "链接已复制", icon: "success" });
-              },
+            privacy.withPrivacy(function () {
+              wx.setClipboardData({
+                data: `/pages/product/index?id=${that.data.productId}`,
+                success: function () {
+                  wx.showToast({ title: "链接已复制", icon: "success" });
+                },
+              });
             });
           }
         },
@@ -146,13 +149,15 @@ module.exports = Behavior({
         wx.showToast({ title: "客服暂未配置", icon: "none" });
         return;
       }
-      wx.openCustomerServiceChat({
-        corpId,
-        url: kfUrl,
-        success: function () {},
-        fail: function () {
-          wx.showToast({ title: "无法联系客服", icon: "none" });
-        },
+      privacy.withPrivacy(function () {
+        wx.openCustomerServiceChat({
+          corpId,
+          url: kfUrl,
+          success: function () {},
+          fail: function () {
+            wx.showToast({ title: "无法联系客服", icon: "none" });
+          },
+        });
       });
     },
   },

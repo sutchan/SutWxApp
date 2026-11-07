@@ -6,6 +6,7 @@
  */
 
 const themeBehavior = require("../../behaviors/theme");
+const privacy = require("../../utils/privacy");
 
 Page({
   behaviors: [themeBehavior],
@@ -139,15 +140,22 @@ Page({
   },
 
   onCallService: function () {
-    wx.makePhoneCall({
-      phoneNumber: "4008888888",
-      fail: function () {
-        wx.showToast({
-          title: "拨打电话失败",
-          icon: "none",
+    privacy.withPrivacy(
+      function () {
+        wx.makePhoneCall({
+          phoneNumber: "4008888888",
+          fail: function () {
+            wx.showToast({
+              title: "拨打电话失败",
+              icon: "none",
+            });
+          },
         });
       },
-    });
+      function () {
+        wx.showToast({ title: "需同意隐私指引后拨打", icon: "none" });
+      }
+    );
   },
 
   onContactService: function () {

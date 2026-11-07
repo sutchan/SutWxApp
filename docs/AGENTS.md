@@ -33,10 +33,10 @@
 | `SutWxApp/pages/` | 页面目录 | 每页一个目录，含 `.js/.json/.wxml/.wxss` 四件套；分包页面放 `article/`、`address/` 等 |
 | `SutWxApp/components/` | 自定义组件 | `PascalCase/index.*` 四件套；注册在页面 `.json` 的 `usingComponents` |
 | `SutWxApp/styles/` | 全局样式分片 | 由 `app.wxss` 用 `@import` 汇聚；`styles/` 下只放分片 |
-| `SutWxApp/scripts/` | 构建与校验脚本 | Node CLI；`check-*.js` 三件套是 CI 门禁 |
+| `SutWxApp/scripts/` | 构建与校验脚本 | Node CLI；`check-*.js` 八项校验是 CI 门禁 |
 | `sutwx-app-api/` | WordPress 插件 | 入口 `sutwx-app-api.php`；`includes/class-modules.php` 是加载清单（顺序敏感） |
 | `sutwx-app-api/includes/` | 插件类与 trait | `class-*.php`；按职责子目录 `auth/`、`cache/`、`order/`、`pay/`、`rate-limit/`、`rest/`、`mappings/` |
-| `sutwx-app-api/tests/` | PHP 单测（6 套件） | `run-*-tests.php`，独立运行不依赖 WordPress |
+| `sutwx-app-api/tests/` | PHP 单测（8 套件） | `run-*-tests.php`，独立运行不依赖 WordPress |
 | `prototype/` | 单文件交互原型 | 浏览器直接打开即可交互；`build.js` 由其生成根目录站点文件 |
 | `docs/` | 规范与任务文档 | 索引见 `docs/README.md` |
 | `scripts/` | 仓库级脚本 | `changelog-section.js`（发布说明抽取） |
@@ -52,8 +52,8 @@
 | PHP | 8.1 / 8.3 | 仅用于跑插件单测与 `php -l`；**本地无 PHP 时由 CI 承担** | 否 |
 | Git | 最新稳定版 | 版本控制 | 是 |
 
-> **包管理器统一用 npm**。仓库根的 `bun.lock` 是历史残留，CI 使用 npm；不要新增 Bun 相关流程，也不要在文档中建议 `bun install`。
-> **注意**：仓库当前未提交 `package-lock.json`，本地请用 `npm install` 安装依赖（`npm ci` 无 lockfile 会直接报错）；CI 的 `lint`/`test` Job 因此处于失败状态，修复计划见 `docs/tasks.md` 的 REL-002。
+> **包管理器统一用 npm**。历史 `bun.lock` 已清理，CI 与本地统一使用 npm；不要新增 Bun 相关流程。
+> `SutWxApp/package-lock.json` 已入库，本地与 CI 统一使用 `npm ci` 锁定安装依赖。
 
 ---
 

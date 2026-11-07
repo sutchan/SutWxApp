@@ -8,7 +8,8 @@
     "pages/order/index",
     "pages/order/detail",
     "pages/order/confirm",
-    "pages/user/index"
+    "pages/user/index",
+    "pages/privacy/index"
   ],
   "subpackages": [
     {
@@ -23,8 +24,18 @@
     }
   ],
   "preloadRule": {
-    "pages/home/index": { "network": "all", "packages": ["pages/"] },
-    "pages/user/index": { "network": "wifi", "packages": ["pages/"] }
+    "pages/home/index": {
+      "network": "all",
+      "packages": [
+        "pages/"
+      ]
+    },
+    "pages/user/index": {
+      "network": "wifi",
+      "packages": [
+        "pages/"
+      ]
+    }
   },
   "lazyCodeLoading": "requiredComponents",
   "window": {
@@ -104,9 +115,11 @@
     },
     "useIsolateContext": true,
     "useCompilerModule": true,
-    "userConfirmedUseCompilerModuleSwitch": false
+    "userConfirmedUseCompilerModuleSwitch": false,
+    "__usePrivacyCheck__": true
   },
   "condition": {},
   "sitemapLocation": "sitemap.json",
-  "style": "v2"
+  "style": "v2",
+  "__usePrivacyCheck__": true
 }

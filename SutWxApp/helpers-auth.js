@@ -5,32 +5,38 @@
  * 描述: App 登录与带鉴权请求逻辑（从 helpers.js 抽离，自包含不依赖 helpers）
  */
 
+const privacy = require("./utils/privacy");
+
 /**
  * 获取用户信息
  * @param {Object} globalData App 全局数据对象
  * @returns {Promise<Object>}
  */
 function getUserInfo(globalData) {
-  return new Promise((resolve, reject) => {
-    if (globalData.userInfo) {
-      resolve(globalData.userInfo);
-      return;
-    }
-    wx.getUserProfile({
-      desc: "用于完善用户资料",
-      success: (res) => {
-        try {
-          wx.setStorageSync("userInfo", res.userInfo);
-          globalData.userInfo = res.userInfo;
-        } catch (e) {
-          console.error("[App] getUserInfo - 保存失败:", e);
-        }
-        resolve(res.userInfo);
-      },
-      fail: (error) => {
-        console.error("[App] getUserInfo - 获取用户信息失败:", error);
-        reject(error);
-      },
+  // FE-010：wx.getUserProfile 属隐私接口，调用前必须确认用户已同意《用户隐私保护指引》。
+  return privacy.ensurePrivacyAuthorization().then((ok) => {
+    if (!ok) return Promise.reject(new Error("用户未同意隐私保护指引"));
+    return new Promise((resolve, reject) => {
+      if (globalData.userInfo) {
+        resolve(globalData.userInfo);
+        return;
+      }
+      wx.getUserProfile({
+        desc: "用于完善用户资料",
+        success: (res) => {
+          try {
+            wx.setStorageSync("userInfo", res.userInfo);
+            globalData.userInfo = res.userInfo;
+          } catch (e) {
+            console.error("[App] getUserInfo - 保存失败:", e);
+          }
+          resolve(res.userInfo);
+        },
+        fail: (error) => {
+          console.error("[App] getUserInfo - 获取用户信息失败:", error);
+          reject(error);
+        },
+      });
     });
   });
 }

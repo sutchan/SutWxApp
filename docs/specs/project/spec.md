@@ -140,7 +140,7 @@
 │   ├── includes/             # 类与 trait（class-modules.php 为加载清单，顺序敏感）
 │   │   ├── auth/ cache/ order/ pay/ rate-limit/ rest/ mappings/
 │   ├── admin/                # 后台设置页
-│   └── tests/                # PHP 单测（6 套件）
+│   └── tests/                # PHP 单测（8 套件）
 ├── prototype/                # 单文件交互原型（源，浏览器直接打开可交互）
 ├── docs/                     # 规范与任务文档（索引见 docs/README.md）
 ├── build.js / server.js      # 站点构建与本地静态服务

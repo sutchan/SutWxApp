@@ -7,6 +7,7 @@
 
 const app = getApp();
 const authService = require("../../services/authService");
+const privacy = require("../../utils/privacy");
 
 const themeBehavior = require("../../behaviors/theme");
 
@@ -16,11 +17,17 @@ Page({
     messagePush: true,
     emailNotify: false,
     privacyMode: false,
-    locationAuth: true,
+    privacyContractName: "《用户隐私保护指引》",
   },
 
   onLoad: function () {
     this.loadSettings();
+    const that = this;
+    privacy.getPrivacySetting().then(function (setting) {
+      if (setting.privacyContractName) {
+        that.setData({ privacyContractName: setting.privacyContractName });
+      }
+    });
   },
 
   onShow: function () {
@@ -38,7 +45,6 @@ Page({
         messagePush: settings.messagePush !== false,
         emailNotify: settings.emailNotify === true,
         privacyMode: settings.privacyMode === true,
-        locationAuth: settings.locationAuth !== false,
       });
     }
   },
@@ -60,6 +66,21 @@ Page({
       icon: "success",
       duration: 1000,
     });
+  },
+
+  /** 打开隐私授权页（可查看/同意官方指引）。 */
+  onOpenPrivacyPage: function () {
+    wx.navigateTo({ url: "/pages/privacy/index" });
+  },
+
+  /** 系统授权由微信用统一设置页管理，本地开关不应伪装成权限开关。 */
+  onOpenSystemSetting: function () {
+    privacy.openAuthorizationSetting();
+  },
+
+  /** 打开官方《用户隐私保护指引》。 */
+  onViewPrivacyContract: function () {
+    privacy.openPrivacyContract();
   },
 
   onNavigateTo: function (e) {
@@ -104,6 +125,8 @@ Page({
               wx.removeStorageSync("token");
               wx.removeStorageSync("userInfo");
               wx.removeStorageSync("userSettings");
+          wx.removeStorageSync("userProfile");
+              wx.removeStorageSync("userProfile");
 
               app.globalData.userInfo = null;
               app.globalData.token = null;
@@ -126,6 +149,8 @@ Page({
               wx.removeStorageSync("token");
               wx.removeStorageSync("userInfo");
               wx.removeStorageSync("userSettings");
+          wx.removeStorageSync("userProfile");
+              wx.removeStorageSync("userProfile");
 
               app.globalData.userInfo = null;
               app.globalData.token = null;

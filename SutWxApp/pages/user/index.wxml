@@ -6,11 +6,20 @@
 -->
 
 <view class="container" id="user-root" style="{{themeStyle}}">
-  <view class="header-section" bindtap="handleAvatarTap">
+  <view class="header-section">
     <view class="user-info" wx:if="{{isLoggedIn}}">
-      <image class="avatar" src="{{userInfo.avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+      <button class="avatar-button" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+        <image class="avatar" src="{{profile.avatarUrl || userInfo.avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+      </button>
       <view class="info-content">
-      <text class="nickname">{{userInfo.nickName || userInfo.username || '用户'}}</text>
+        <input
+          class="nickname"
+          type="nickname"
+          value="{{profile.nickName || userInfo.nickName || ''}}"
+          placeholder="点击填写昵称"
+          placeholder-class="nickname-placeholder"
+          bindblur="onNicknameChange"
+        />
         <text class="user-id">ID: {{userInfo.id || ''}}</text>
       </view>
       <image class="arrow-right" src="/images/arrow-right.png" mode="aspectFit"></image>

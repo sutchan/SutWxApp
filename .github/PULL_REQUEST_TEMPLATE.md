@@ -36,11 +36,11 @@
 
 ## 检查清单
 
-- [ ] 遵循 Conventional Commits 提交规范
-- [ ] ESLint + Prettier 检查通过
+- [ ] 遵循 `<type>(<scope>): <说明>` 提交规范（scope 必填）
+- [ ] `npm run lint` 与 `npm run check`（八项）通过
 - [ ] 无遗留 `console.log` / `debugger`
 - [ ] `CHANGELOG.md` 已更新
-- [ ] 版本号已同步（`SutWxApp/app.js` 的 `globalData.version`）
+- [ ] 版本号已同步（两个 `package.json`、`app.js` 的 `globalData.version`、README 徽章与表格、`CHANGELOG.md`；插件侧三源同步）
 
 ## 关联
 

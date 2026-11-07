@@ -4,8 +4,8 @@
 >
 > 决策基线（已与产品确认）：
 > 1. 商品数据源 = **WooCommerce**
-> 2. v1 范围 = **只读 MVP**（文章/页面 + 商品 + 主题，全部免登录公开接口）
-> 3. 鉴权 = **wx.login → JWT**（基建本期落地，内容端点仍公开）
+> 2. 当前范围 = **完整电商闭环**（内容只读端点 + 鉴权 + 订单 + 微信支付 V3 + 运营 / 监控 / 健康端点，共 24 个端点）
+> 3. 鉴权 = **wx.login → JWT**（BE-003 已实现；内容端点公开，订单 / 支付 / 用户端点需 Bearer JWT）
 > 4. 订单/支付 = **已实现**（BE-006/007：订单创建/查询/取消/确认/发货，微信支付 V3 预支付/通知/查单）。
 
 ## 目标
@@ -22,7 +22,7 @@
 | 文章来源 | WP 核心 `wp/v2/posts`（含 `_embedded` 特色图） | 小程序 `mapWpPost` 已就绪 |
 | 响应格式 | 统一 `{code,data}` 包络 | 兼容小程序 `unwrap` |
 | DTO 策略 | 插件返回**已规整 DTO** | 解耦 WC 内部结构变化（映射函数幂等） |
-| 鉴权 | 预留 `wx.login`→JWT；内容端点免登录 | 渐进式，先出可用后端 |
+| 鉴权 | 已实现 `wx.login` → JWT（HS256，access 2h + refresh + 登出黑名单）；内容端点免登录 | 写操作按 openid 做资源归属校验，无角色体系 |
 
 ## 里程碑
 
@@ -30,7 +30,7 @@
 
 - [x] 初始化插件 `sutwx-app-api.php`、声明 `Requires: WooCommerce`。
 - [x] `class-loader.php` 统一注册 `rest_api_init` 与后台菜单。
-- [x] 注册命名空间 `sutwx/v1` 与 6 个路由骨架（返回占位包络）。
+- [x] 注册命名空间 `sutwx/v1` 与 6 个路由骨架（初期骨架；现已扩展为 24 个端点）。
 - [x] 加入 `/api/*` rewrite 规则，`baseUrl` 配置说明写入插件 readme。
 - [ ] 本地 WP + WC 测试环境就绪（含示例商品/文章/分类）。
 
@@ -57,7 +57,7 @@
 
 ### P3 — 鉴权基建（已实现，BE-003）
 
-- [x] `class-rest-auth.php`：`POST /api/users/login`，`wx.login` code → `code2session` → 自签 JWT。
+- [x] `class-rest-auth.php`：`POST /api/auth/login`，`wx.login` code → `code2session` → 自签 JWT。
 - [x] JWT 签发/校验工具（HS256，密钥存 `wp-config` 常量或 option）。
 - [x] 小程序侧 `requestWithToken` 联通验证（token 流程，内容接口仍免登录）。
 
@@ -90,14 +90,14 @@
 
 ## 测试策略
 
-- **单元**：`tests/` 覆盖 `map-*.php` 字段映射、颜色校验、JWT 签发/校验。
-- **集成**：本地 WP 环境启动后，用小程序预览（或 curl）验证 6 个端点包络与字段。
+- **单元**：`tests/run-*-tests.php` 共 **8 套件**（映射 / 设置 / 鉴权 / 缓存限频 / 订单 / 支付 / 平台 / 支付异常），独立运行不依赖 WordPress，CI 在 PHP 8.1 / 8.3 矩阵逐一执行。
+- **集成**：本地 WP 环境启动后，用小程序预览（或 curl）验证内容端点（product / post / category / theme）包络与字段。
 - **回归**：每次 WC/WP 升级后重跑映射单测。
 
 ## 验收总览
 
-- [ ] 6 个只读端点返回符合 DTO 的 `{code,data}` 包络
-- [ ] 小程序切 `woocommerce` 源后全站展示真实数据
-- [ ] 后台主题配置即时下发并全站生效
-- [ ] `wx.login`→JWT 流程联通（P3）
-- [ ] 缓存/限频生效，异常统一错误包络
+- [x] 24 个端点代码实现完成，返回符合 DTO 的 `{code,data}` 包络
+- [ ] 小程序切 `woocommerce` 源后在真实 WP 站点联调通过（待外部 staging 环境，见 `docs/tasks.md` 的 INF-003）
+- [x] 后台主题配置即时下发并全站生效
+- [x] `wx.login`→JWT 流程代码实现完成（真实 AppID 联调待 INF-001）
+- [x] 缓存 / 限频分档 / 结构化错误日志生效，异常统一错误包络

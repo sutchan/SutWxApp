@@ -1,6 +1,6 @@
 # 苏铁 SutWxApp - 微信小程序 × WordPress 电商桥接方案
 
-![版本](https://img.shields.io/badge/version-3.5.13-blue)
+![版本](https://img.shields.io/badge/version-3.5.14-blue)
 ![设计风格](https://img.shields.io/badge/design-Apple%20Style-green)
 ![CI](https://github.com/sutchan/SutWxApp/actions/workflows/ci.yml/badge.svg)
 
@@ -17,8 +17,8 @@
 
 | 组件 | 路径 | 说明 | 版本 |
 |------|------|------|------|
-| 微信小程序（前端） | `SutWxApp/` | Apple 极简风格商城，原生小程序框架（WXML / WXSS / JS） | 3.5.9 |
-| WordPress 插件（后端） | `sutwx-app-api/` | headless REST API 插件，桥接 WP / WooCommerce 与小程序 | 0.5.1 |
+| 微信小程序（前端） | `SutWxApp/` | Apple 极简风格商城，原生小程序框架（WXML / WXSS / JS） | 3.5.13 |
+| WordPress 插件（后端） | `sutwx-app-api/` | headless REST API 插件，桥接 WP / WooCommerce 与小程序 | 0.7.1 |
 
 小程序详细规范见 [`docs/`](docs/README.md)；插件说明见 [`sutwx-app-api/readme.txt`](sutwx-app-api/readme.txt) 与开发计划 [`docs/wordpress-plugin/DEVELOPMENT_PLAN.md`](docs/wordpress-plugin/DEVELOPMENT_PLAN.md)。
 
@@ -81,7 +81,7 @@
 
    - 打开微信开发者工具
    - 点击「导入项目」或「+」号
-   - 选择项目目录：`SutWxApp/SutWxApp/`
+   - 选择项目目录：`SutWxApp/`（仓库根下的小程序工程目录）
    - 填写项目名称和 AppID（如果没有 AppID，可以选择「测试号」）
    - 点击「导入」或「确定」
 
@@ -92,11 +92,11 @@
    - 修改代码实时预览
    - 使用真机调试功能
 
-> 小程序为纯前端应用，后端为 **WordPress 网站**，内容经 REST API 提供（基地址见 `app.js` 的 `globalData.baseUrl`）。本地联调时将该地址指向 WordPress 站点或其 API 代理即可。
+> 小程序端本身不承载服务端，后端为本仓库的 **WordPress 插件**，内容经 REST API 提供（基地址见 `app.js` 的 `globalData.baseUrl`）。本地联调时将该地址指向 WordPress 站点或其 API 代理即可。
 
 ### WordPress 插件（后端）
 
-插件安装与配置详见 [`sutwx-app-api/readme.txt`](sutwx-app-api/readme.txt)：上传 `sutwx-app-api/` 至 `/wp-content/plugins/` 并启用（需先启用 WooCommerce），在「设置 → 固定链接」保存一次以刷新 `/api/*` 重写规则；随后将小程序 `app.js` 的 `globalData.baseUrl` 指向站点根即可对接（备选直连 `wp-json/sutwx/v1`）。
+插件安装与配置详见 [`sutwx-app-api/readme.txt`](sutwx-app-api/readme.txt)：上传 `sutwx-app-api/` 至 `/wp-content/plugins/` 并启用（需先启用 WooCommerce），在「设置 → 固定链接」保存一次以刷新 `/api/*` 重写规则；随后小程序按 `utils/env.js` 的环境配置表自动注入站点根地址即可对接（备选直连 `wp-json/sutwx/v1`）。
 
 ## 项目结构
 
@@ -112,7 +112,7 @@ SutWxApp/
 │   └── product-card/       # 商品卡片组件
 ├── images/                 # 图片资源
 │   └── tabbar/             # tabBar 图标
-├── locales/                # 多语言文件（.po / .pot）
+├── locales/                # 多语言文件（zh-CN.json / en-US.json 等 JSON 词条 + .po / .pot 模板）
 ├── pages/                  # 页面文件（每页含 .js/.wxml/.wxss/.json）
 │   ├── home/               # 首页
 │   ├── category/           # 分类页
@@ -165,7 +165,7 @@ SutWxApp/
 - **UI 风格**：Apple 极简设计（全局 CSS 变量设计系统）
 - **状态管理**：`utils/store.js` + 本地存储
 - **网络请求**：`wx.request` + `utils/request.js`（拦截器 / 重试 / LRU 缓存 / 取消 / 并发队列）
-- **多语言**：gettext 风格 `.po` / `.pot`
+- **多语言**：运行时 JSON 词条（zh-CN / en-US）+ gettext 风格 `.po` / `.pot` 模板
 - **开发工具**：微信开发者工具、VS Code
 - **后端**：WordPress 网站（headless CMS），内容经 REST API（`/api/*`）提供
 - **质量门禁**：ESLint + Jest（GitHub Actions 自动执行）
@@ -205,7 +205,7 @@ npm run check:ids     # 校验 WXML 根容器语义化 id 与全量 id 唯一性
 node scripts/generate-ui-icons.js         # 商城 UI 图标（14 个，复用 tabbar-icons/draw.js）
 node scripts/generate-tabbar-icons.js     # tabBar 图标
 
-# 仓库根：静态站点构建（零依赖）与本地预览
+# 仓库根：静态站点构建与本地预览（server.js 依赖 express，需先 npm install）
 node build.js         # 生成 index.html 与 dist/
 npm install && npm run dev   # http://localhost:3000
 
@@ -229,7 +229,7 @@ php sutwx-app-api/tests/run-settings-tests.php
 
 **自动发布（默认路径）**：版本号合入 `main` 且 `ci.yml` 五个 Job 全绿后，`auto-release.yml` 自动按 `SutWxApp/package.json` 的版本号创建并推送 `v*.*.*` Tag，`release.yml` 随即校验版本一致性、打包三份交付物（站点 / 小程序 / 插件）、抽取 `CHANGELOG.md` 对应小节创建 GitHub Release，并尝试上传小程序体验版。全程无需手动打 Tag；Tag 已存在或 CI 运行已过期时自动跳过（幂等）。
 
-**手动兜底**：需要补发或重发某个版本时，推送对应 Tag（`git tag v3.0.8 && git push origin v3.0.8`）或在 Actions 中手动运行 `Release` 工作流。
+**手动兜底**：需要补发或重发某个版本时，推送对应 Tag（`git tag v3.5.14 && git push origin v3.5.14`）或在 Actions 中手动运行 `Release` 工作流。
 
 自动发布后的收尾：在 Actions 中运行部署工作流上传体验版，再到微信公众平台提交审核。
 

@@ -1,0 +1,28 @@
+<view class="privacy-page" id="privacy-root">
+  <view class="privacy-card">
+    <view class="privacy-title">用户隐私保护</view>
+    <view class="privacy-desc">
+      在使用头像、昵称、客服会话等功能前，请先阅读并同意{{contractName}}。我们仅在你主动使用时收集必要信息，不会用于其他用途。
+    </view>
+
+    <view class="privacy-contract" bindtap="onViewContract">
+      <text class="contract-link">查看{{contractName}}</text>
+    </view>
+
+    <view class="privacy-tip" wx:if="{{!supported}}">
+      当前微信版本较低，隐私校验能力不可用，可继续使用基础功能。
+    </view>
+
+    <view class="privacy-actions">
+      <button class="privacy-btn privacy-btn-reject" bindtap="onDisagree">不同意</button>
+      <button
+        id="privacy-agree-btn"
+        class="privacy-btn privacy-btn-agree"
+        open-type="agreePrivacyAuthorization"
+        bindagreeprivacyauthorization="onAgree"
+      >同意并继续</button>
+    </view>
+
+    <view class="privacy-setting" bindtap="onOpenSetting">前往微信设置页管理授权</view>
+  </view>
+</view>

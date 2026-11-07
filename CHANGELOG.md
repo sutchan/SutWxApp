@@ -1,4 +1,17 @@
 # Changelog
+## [3.5.14] - 2026-11-07
+
+### Added
+
+- COM-001 / FE-010：接入微信用户隐私保护指引——`utils/privacy.js` 统一隐私接口清单与前置授权；新增 `pages/privacy/index` 授权页（同意 / 拒绝 / 查看指引 / 手势返回兜底）；`app.json` 与 `project.config.json` 开启 `__usePrivacyCheck__`；全局 `onNeedPrivacyAuthorization` 监听
+- FE-010：用户中心头像改 `chooseAvatar` 选择器、昵称改 `type="nickname"` 输入框；设置页移除伪权限开关，改为官方指引 / 系统权限 / 隐私授权三个真实入口；`getUserProfile`、`makePhoneCall`、`openCustomerServiceChat`、`setClipboardData` 全部补齐前置授权与拒绝兜底
+- FE-009：新增最低基础库 2.32.3 运行时提示；上传前流程接入 `check-images.js` 门禁与可选 `assets:compress`
+
+### Changed
+
+- QA-008 降级：运维规范新增 E2E 发版前手动清单（四套件 + 9 页真机矩阵 + 签核表）
+- 文档：运维规范新增小程序隐私合规清单（接口 / 调用时机 / 兜底 / mp 后台待填字段）
+
 
 ## [3.5.13] - 2026-11-07
 

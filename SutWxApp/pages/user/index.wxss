@@ -192,3 +192,32 @@ page {
   font-size: 24rpx;
   color: var(--text-secondary);
 }
+
+/* FE-010：头像选择器与昵称输入框沿用原有视觉尺寸 */
+.avatar-button {
+  width: 128rpx;
+  height: 128rpx;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: transparent;
+  line-height: normal;
+  flex-shrink: 0;
+}
+
+.avatar-button::after {
+  border: none;
+}
+
+.nickname {
+  width: 100%;
+  height: 48rpx;
+  min-height: 48rpx;
+  padding: 0;
+  background: transparent;
+}
+
+.nickname-placeholder {
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: normal;
+}

@@ -57,20 +57,44 @@
       <view class="settings-item switch-item">
         <view class="item-left">
           <text class="item-icon">👁️</text>
-          <text class="item-text">隐私浏览模式</text>
+          <view class="item-body">
+            <text class="item-text">隐私浏览模式</text>
+            <text class="item-desc">仅本地保存浏览偏好，不影响微信隐私授权</text>
+          </view>
         </view>
         <view class="item-right">
           <switch color="#ff4d4f" checked="{{privacyMode}}" bindchange="onSwitchChange" data-field="privacyMode"/>
         </view>
       </view>
-      <view class="settings-item switch-item">
+      <view class="settings-item" bindtap="onOpenPrivacyPage">
+        <view class="item-left">
+          <text class="item-icon">🛡️</text>
+          <view class="item-body">
+            <text class="item-text">隐私授权</text>
+            <text class="item-desc">查看授权状态与{{privacyContractName}}</text>
+          </view>
+        </view>
+        <view class="item-right"><text class="arrow">›</text></view>
+      </view>
+      <view class="settings-item" bindtap="onOpenSystemSetting">
         <view class="item-left">
           <text class="item-icon">📍</text>
-          <text class="item-text">位置授权</text>
+          <view class="item-body">
+            <text class="item-text">微信系统权限</text>
+            <text class="item-desc">位置等权限由微信统一管理，在此打开系统设置页</text>
+          </view>
         </view>
-        <view class="item-right">
-          <switch color="#ff4d4f" checked="{{locationAuth}}" bindchange="onSwitchChange" data-field="locationAuth"/>
+        <view class="item-right"><text class="arrow">›</text></view>
+      </view>
+      <view class="settings-item" bindtap="onViewPrivacyContract">
+        <view class="item-left">
+          <text class="item-icon">📄</text>
+          <view class="item-body">
+            <text class="item-text">用户隐私保护指引</text>
+            <text class="item-desc">阅读官方指引，了解收集与使用的信息范围</text>
+          </view>
         </view>
+        <view class="item-right"><text class="arrow">›</text></view>
       </view>
     </view>
   </view>

@@ -12,6 +12,7 @@ Page({
   behaviors: [themeBehavior],
   data: {
     userInfo: null,
+    profile: {}, // FE-010：用户主动填写的头像/昵称，独立于远端资料避免被刷新覆盖
     points: 0,
     followStats: { following: 0, followers: 0 },
     menuList: [
@@ -55,10 +56,12 @@ Page({
   },
 
   onLoad: function (options) {
+    this.loadProfile();
     this.loadUserInfo();
   },
 
   onShow: function () {
+    this.loadProfile();
     this.loadUserInfo();
   },
 
@@ -103,6 +106,54 @@ Page({
     }
   },
 
+  /** 读取本地用户主动设置的头像/昵称（官方选择器路径，FE-010）。 */
+  loadProfile: function () {
+    this.setData({ profile: wx.getStorageSync("userProfile") || {} });
+  },
+
+  /** 统一持久化本地资料，避免与 /api/user/info 远端资料互相覆盖。 */
+  saveProfile: function (patch) {
+    const profile = Object.assign({}, this.data.profile || {}, patch);
+    this.setData({ profile });
+    try {
+      wx.setStorageSync("userProfile", profile);
+    } catch (err) {
+      console.error("[User] 保存资料失败:", err);
+    }
+  },
+
+  /** chooseAvatar 回调：未授权或取消时微信不回传 avatarUrl，走拒绝兜底。 */
+  onChooseAvatar: function (e) {
+    const tempPath = e.detail && e.detail.avatarUrl;
+    if (!tempPath) {
+      wx.showToast({ title: "需同意隐私指引后设置头像", icon: "none" });
+      return;
+    }
+    const that = this;
+    const apply = function (path) {
+      that.saveProfile({ avatarUrl: path });
+      wx.showToast({ title: "头像已更新", icon: "success" });
+    };
+    // 选择器返回的是临时文件，转存到用户目录以便重启后仍可显示。
+    try {
+      const fileManager = wx.getFileSystemManager();
+      fileManager.saveFile({
+        tempFilePath: tempPath,
+        success: function (res) { apply(res.savedFilePath || tempPath); },
+        fail: function () { apply(tempPath); },
+      });
+    } catch (err) {
+      apply(tempPath);
+    }
+  },
+
+  /** nickname 输入框失焦时保存，未填内容不覆盖已有昵称。 */
+  onNicknameChange: function (e) {
+    const value = (e.detail && e.detail.value || "").trim();
+    if (!value) return;
+    this.saveProfile({ nickName: value });
+  },
+
   handleMenuTap: function (e) {
     const { url } = e.currentTarget.dataset;
 
@@ -143,7 +194,8 @@ Page({
         if (res.confirm) {
           // FE-005：通过 authService 统一清理登录态（token / refreshToken / userInfo）
           authService.logout();
-          that.setData({ userInfo: null, isLoggedIn: false, points: 0 });
+          wx.removeStorageSync("userProfile");
+          that.setData({ userInfo: null, profile: {}, isLoggedIn: false, points: 0 });
         }
       },
     });

@@ -1,6 +1,6 @@
 {
   "name": "sut-wx-app",
-  "version": "3.5.13",
+  "version": "3.5.14",
   "description": "苏小糖微信小程序商城",
   "main": "app.js",
   "scripts": {
@@ -20,7 +20,8 @@
     "check:plugin-version": "node scripts/check-plugin-version.js",
     "check:docs": "node scripts/check-docs.js",
     "check:images": "node scripts/check-images.js",
-    "check:ids": "node scripts/check-ids.js"
+    "check:ids": "node scripts/check-ids.js",
+    "assets:compress": "node utils/compress-images.js"
   },
   "keywords": [
     "wechat",

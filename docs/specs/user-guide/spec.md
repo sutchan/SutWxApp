@@ -175,7 +175,7 @@ async function getUserInfo(userId) {
 
 问题一：微信开发者工具提示「没有找到 app.json」错误。解决方法是在微信开发者工具中点击「导入项目」，选择仓库中的 **`SutWxApp/`** 目录（即 `SutWxApp/SutWxApp` 的上一级，注意不是仓库根目录），然后选择 AppID（本地可用测试号），点击确定导入项目。
 
-问题二：安装依赖慢或失败。工程统一使用 **npm**：在 `SutWxApp/` 目录下执行 `npm install`（仓库当前未提交 lockfile，`npm ci` 会报错）。若下载缓慢，可切换国内镜像源 `npm config set registry https://registry.npmmirror.com`；若安装异常，删除 `node_modules` 目录后重新安装。**不要使用 Bun**（仓库根的 `bun.lock` 为历史残留，CI 亦使用 npm）。
+问题二：安装依赖慢或失败。工程统一使用 **npm**：在 `SutWxApp/` 目录下执行 `npm ci`（`package-lock.json` 已入库）。若下载缓慢，可切换国内镜像源 `npm config set registry https://registry.npmmirror.com`；若安装异常，删除 `node_modules` 目录后重新安装。**不要使用 Bun**（历史 `bun.lock` 已清理，CI 亦使用 npm）。
 
 问题三：接口请求 404。小程序端点必须带 `/api` 前缀（后端重写规则仅匹配 `^api/`），且 `app.js` 中 `globalData.baseUrl` 需指向已部署的站点根地址（默认占位 `https://api.example.com`）。
 

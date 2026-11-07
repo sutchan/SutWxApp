@@ -73,7 +73,8 @@
     "packNpmManually": false,
     "packNpmRelationList": [],
     "minifyWXSS": true,
-    "minifyWXML": true
+    "minifyWXML": true,
+    "__usePrivacyCheck__": true
   },
   "compileType": "miniprogram",
   "libVersion": "3.0.0",
