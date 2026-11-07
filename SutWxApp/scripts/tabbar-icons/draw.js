@@ -1,8 +1,8 @@
 /**
  * 文件名: draw.js
- * 版本号: 3.0.12
- * 更新日期: 2026-09-13
- * 描述: 极简位图画布与 PNG 编码器（无外部依赖，用于生成 tabBar 线性图标）
+ * 版本号: 3.5.12
+ * 更新日期: 2026-11-07
+ * 描述: 极简位图画布与 PNG 编码器（无外部依赖，用于生成 tabBar 与商城 UI 线性图标）
  *       微信原生 tabBar 仅支持本地 PNG 图标（不支持 SVG），故用纯 Node 光栅化品牌线性图标。
  */
 
@@ -65,12 +65,19 @@ function stamp(c, x, y, color, width) {
 
 function drawLine(c, x0, y0, x1, y1, color, width) {
   width = width || 4;
+  // 归一化到整数后再跑 Bresenham：浮点终点永远无法用 === 命中，会退化成死循环。
+  x0 = Math.round(x0);
+  y0 = Math.round(y0);
+  x1 = Math.round(x1);
+  y1 = Math.round(y1);
   const dx = Math.abs(x1 - x0);
   const dy = Math.abs(y1 - y0);
   const sx = x0 < x1 ? 1 : -1;
   const sy = y0 < y1 ? 1 : -1;
   let err = dx - dy;
-  while (true) {
+  // 双重保险：即使入参异常也以步数上限收尾，避免生成器挂起。
+  const maxSteps = (dx + dy) * 2 + 1;
+  for (let step = 0; step <= maxSteps; step += 1) {
     stamp(c, x0, y0, color, width);
     if (x0 === x1 && y0 === y1) break;
     const e2 = 2 * err;
