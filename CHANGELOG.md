@@ -18,6 +18,7 @@
 - **健康拨测告警**：企业微信请求体改由 Node 序列化 JSON（原手写转义在 shell 双引号中失效），移除会破坏 `GITHUB_OUTPUT` 的多行 `body` 输出，JSON 布尔字段匹配容忍空白。
 - **部署密钥安全**：`miniprogram-deploy.yml` 的 Secrets 一律经 `env` 传入，不再直接插值进 shell 脚本；私钥临时文件补 `chmod 600`。
 - **交付物与触发面**：`release.yml` 打包排除私钥 / `.env` / `.tmp` 等敏感与中间产物；`site.yml` 补 `SutWxApp/images/**` 与工作流自身为 Pages 触发路径，并补产物与超时校验。
+- **修复 Release 说明提取脚本**：根 `package.json` 声明 `"type": "module"`，而 `scripts/changelog-section.js` 仍用 CommonJS `require`，导致 `release.yml` 抽取 CHANGELOG 时必定报 `require is not defined`；改为 ESM 并转义版本号中的正则元字符。
 
 ### Changed
 
