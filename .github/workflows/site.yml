@@ -1,6 +1,6 @@
 # 文件路径: .github/workflows/site.yml
-# 版本号: 1.0.0
-# 更新日期: 2026-09-15
+# 版本号: 1.1.0
+# 更新日期: 2026-11-14
 # 描述: 静态站点（原型展示站）持续部署：构建 dist/ 并发布到 GitHub Pages
 #       仓库需在 Settings → Pages 将 Source 设为「GitHub Actions」
 
@@ -10,13 +10,16 @@ on:
   push:
     branches:
       - main
+    # build.js 的输入源：prototype/、docs/、小程序图片资源与构建脚本；
+    # 根 index.html / prototype-extra.html / wireframes.html 为生成产物，不作为触发源。
     paths:
       - "prototype/**"
       - "docs/**"
+      - "SutWxApp/images/**"
       - "build.js"
       - "server.js"
-      - "index.html"
       - "package.json"
+      - ".github/workflows/site.yml"
   workflow_dispatch:
 
 permissions:
@@ -33,6 +36,7 @@ jobs:
   build:
     name: 构建站点产物
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: 检出代码
         uses: actions/checkout@v7
@@ -54,7 +58,8 @@ jobs:
             "dist/index.html",
             "dist/prototype.html",
             "dist/prototype-extra.html",
-            "dist/wireframes.html"
+            "dist/wireframes.html",
+            "dist/docs/PROJECT_OVERVIEW.md"
           ];
           const missing = required.filter((f) => !fs.existsSync(f));
           if (missing.length) {
@@ -73,6 +78,7 @@ jobs:
     name: 发布到 GitHub Pages
     needs: build
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

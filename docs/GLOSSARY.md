@@ -75,7 +75,7 @@
 | **八项门禁** | `npm run check` 串联 version / config / images / ids / contract / bundle / plugin-version / docs 八项校验 | 三件套 / 三项门禁 |
 | **资源门禁** | `check:images` 校验 WXML 中所有 `/images/*` 引用真实存在（微信 `image` 不支持 SVG） | 图片检查 |
 | **语义化 ID 门禁** | `check:ids` 校验 WXML 根容器带语义化 id 且全量唯一 | — |
-| **自动发布** | `auto-release.yml` 在 CI 五 Job 全绿后按版本号自动创建并推送 Tag，`release.yml` 接续打包发版 | 手动打 Tag（仅作补发兜底） |
+| **自动发布** | `auto-release.yml` 在 CI 五 Job 全绿后按版本号、用已验证 SHA 推送 Tag，并显式派发 `release.yml` 打包发版（`GITHUB_TOKEN` 推 Tag 不触发 push 工作流） | 手动打 Tag（仅作补发兜底） |
 | **健康拨测** | `health-probe.yml` 每 5 分钟探测 `/api/health`，失败推送企业微信机器人 | — |
 | **隐私保护指引** | 微信《小程序用户隐私保护指引》机制：`utils/privacy.js` 前置授权 + `pages/privacy/` 授权页 | 隐私浏览开关（旧伪开关已移除） |
 | **环境配置表** | `utils/env.js` 按 develop / trial / release 自动注入 baseUrl | 手工改 `globalData.baseUrl` |

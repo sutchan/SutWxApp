@@ -1,6 +1,6 @@
 {
   "name": "sut-wx-app-workspace",
-  "version": "3.5.13",
+  "version": "3.5.17",
   "description": "苏铁 SutWxApp：打通微信小程序与 WordPress 网站的电商桥接方案。包含 Apple 极简风格的微信小程序商城，以及配套 WordPress 插件 sutwx-app-api（headless REST API，提供 wx.login→JWT 鉴权、订单管理、微信支付 V3 与商家发货）。",
   "type": "module",
   "main": "server.js",

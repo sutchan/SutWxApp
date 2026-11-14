@@ -367,10 +367,12 @@ feat(order): 新增商家发货端点与小程序发货入口
 
 | 工作流 | 触发 | 内容 |
 |--------|------|------|
-| `ci.yml` | push / PR / 手动 | 5 个 Job：`lint`、`test`、`checks`、`site`（构建+冒烟）、`php`（8.1/8.3 语法检查 + 6 套单测） |
+| `ci.yml` | push / PR / 手动 | 5 个 Job：`lint`、`test`、`checks`（八项 `npm run check`）、`site`（构建+冒烟）、`php`（8.1/8.3 语法检查 + 8 套单测） |
+| `auto-release.yml` | `ci.yml` 在 main 全绿后 | 按已验证 SHA 推送 `v*.*.*` Tag 并显式派发 `release.yml` |
 | `miniprogram-deploy.yml` | 手动 | `miniprogram-ci` 上传体验版/正式版（私钥走 Secrets） |
-| `release.yml` | Tag `v*.*.*` | 构建插件 ZIP 并创建 GitHub Release |
+| `release.yml` | Tag `v*.*.*` / 派发 / 手动补发 | 检出目标 Tag，打包站点 / 小程序 / 插件三份交付物并创建 GitHub Release |
 | `site.yml` | push（站点相关路径） | 构建并发布 GitHub Pages |
+| `health-probe.yml` | 每 5 分钟定时 | 拨测 `/api/health`，失败推送告警 |
 
 **本地等价命令**：`cd SutWxApp && npm run ci`（= lint + check + test）。
 

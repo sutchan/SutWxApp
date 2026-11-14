@@ -6,6 +6,24 @@
 
 暂无未发布变更；已发布内容见下方版本条目。
 
+## [3.5.17] - 2026-11-14
+
+### Fixed
+
+- **CI 八项门禁入流水线**：`ci.yml` 的 `checks` Job 由 5 个分散脚本改为 `npm run check`，与本地 `npm run ci` 同源，补齐此前未进 CI 的 `check:images` / `check:ids` / `check:contract` 三项门禁。
+- **消除 CI 假绿**：`test` / `test:coverage` 移除 `--passWithNoTests`，「用例是否纳入版本控制」检查由 warning 升级为失败；五个 Job 补 `timeout-minutes`，PHP 语法检查补 `set -o pipefail`。
+- **修复 Release 必然失败**：`release.yml` 校验插件包内容时误用 `;` 连接 `grep`，无论校验是否通过都会执行 `exit 1`；改为 `|| { ...; }`。
+- **修复补发版本产物错配**：`release.yml` 三种触发方式统一检出目标 Tag 代码（原 `workflow_dispatch` 检出默认分支最新），`concurrency` 按 Tag 归并，打包补 `fail_on_unmatched_files`。
+- **打通自动发布链路**：`GITHUB_TOKEN` 推送的 Tag 不会再触发 push 事件工作流，`auto-release.yml` 改为推 Tag 后显式 `gh workflow run release.yml`；闸门限定 push `main` 的 CI、固定检出 `head_sha`、按已验证 SHA 创建 Tag，消除校验与打 Tag 之间的竞态。
+- **健康拨测告警**：企业微信请求体改由 Node 序列化 JSON（原手写转义在 shell 双引号中失效），移除会破坏 `GITHUB_OUTPUT` 的多行 `body` 输出，JSON 布尔字段匹配容忍空白。
+- **部署密钥安全**：`miniprogram-deploy.yml` 的 Secrets 一律经 `env` 传入，不再直接插值进 shell 脚本；私钥临时文件补 `chmod 600`。
+- **交付物与触发面**：`release.yml` 打包排除私钥 / `.env` / `.tmp` 等敏感与中间产物；`site.yml` 补 `SutWxApp/images/**` 与工作流自身为 Pages 触发路径，并补产物与超时校验。
+
+### Changed
+
+- 版本同步 3.5.16 → 3.5.17（根 `package.json` 一并对齐，消除历史漂移；插件保持 0.7.1）。
+- README / 运维规范 / 术语表 / 工程规范同步自动发布链路与门禁实况。
+
 ## [3.5.16] - 2026-11-07
 
 ### 变更
@@ -914,5 +932,5 @@
 - 基础原型设计
 ---
 
-[Unreleased]: https://github.com/sutchan/SutWxApp/compare/v3.5.13...HEAD
+[Unreleased]: https://github.com/sutchan/SutWxApp/compare/v3.5.17...HEAD
 [3.5.13]: https://github.com/sutchan/SutWxApp/compare/v3.5.12...v3.5.13

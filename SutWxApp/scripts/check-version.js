@@ -1,8 +1,8 @@
 /**
  * 文件名: check-version.js
- * 版本号: 1.0.0
- * 更新日期: 2026-09-12
- * 描述: 版本号单一来源一致性校验，比对 package.json / app.js / README 徽章 / CHANGELOG 首节 / Git Tag
+ * 版本号: 1.1.0
+ * 更新日期: 2026-11-14
+ * 描述: 版本号单一来源一致性校验，比对两个 package.json / app.js / README 徽章 / CHANGELOG 首节 / Git Tag
  */
 
 const fs = require("fs");
@@ -38,6 +38,8 @@ function matchVersion(text, regex, label) {
 /** 收集各展示位的版本号 */
 function collectSources() {
   const pkg = require(path.join(PROJECT_ROOT, "package.json"));
+  // 仓库根包（站点构建与 workspace）也展示产品版本，一并纳入校验防止历史漂移
+  const rootPkg = require(path.join(REPO_ROOT, "package.json"));
 
   const appText = readText(path.join(PROJECT_ROOT, "app.js"));
   const appVersions = [...appText.matchAll(/version:\s*"([^"]+)"/g)].map((m) => m[1]);
@@ -50,6 +52,7 @@ function collectSources() {
 
   return [
     { name: "package.json", value: pkg.version },
+    { name: "根 package.json", value: rootPkg.version },
     { name: "app.js globalData.version", value: appVersions[0] || null },
     { name: "README.md 版本徽章", value: matchVersion(readmeText, /badge\/version-([\d.]+)-/, "README.md") },
     { name: "CHANGELOG.md 首个版本小节", value: matchVersion(changelogText, /^##\s*\[([\d.]+)\]/m, "CHANGELOG.md") },

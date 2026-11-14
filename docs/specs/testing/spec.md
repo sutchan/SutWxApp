@@ -40,10 +40,10 @@
 
 ## 4. 覆盖率
 
-- 生成报告：`npm run test:coverage`（等价于 `jest --ci --coverage --passWithNoTests`），输出到 `SutWxApp/coverage/`。
+- 生成报告：`npm run test:coverage`（等价于 `jest --ci --coverage`），输出到 `SutWxApp/coverage/`。
 - CI 的 `test` Job 用 `actions/upload-artifact@v7` 归档覆盖率报告 7 天；项目**未接入** Codecov / Coveralls 等第三方托管服务。
 - 覆盖率不作为硬性阻断阈值；用例数量与稳定性由 PR 审查把关（`docs/AGENTS.md` 的 PR 自检清单要求补充或更新测试）。
-- `--passWithNoTests` 是为兼容双 `testMatch` 路径保留的开关；CI 的 `test` Job 额外检查「受版本控制的 Jest 用例是否存在」，防止「假绿」。
+- `test` / `test:coverage` 均不使用 `--passWithNoTests`：0 用例时 Jest 直接失败；CI 的 `test` Job 另校验「受版本控制的 Jest 用例是否存在」，双重防线杜绝「假绿」。
 
 ## 5. CI 门禁（`.github/workflows/ci.yml`）
 
@@ -53,7 +53,7 @@
 |-----|------|
 | `lint` | `npm run lint`（ESLint 全量 `.js`） |
 | `test` | Jest 单元测试 + 覆盖率归档 + 用例受控性检查 |
-| `checks` | 逐个执行 8 项校验脚本（见下） |
+| `checks` | 一次 `npm run check` 串联 8 项校验脚本（见下），与本地 `npm run ci` 同源；新增门禁自动纳入 CI |
 | `site` | 仓库根 `node build.js` 构建 `dist/`，校验产物与元信息，安装 express 后启动 `server.js` 做 HTTP 200 冒烟 |
 | `php` | PHP 8.1 / 8.3 矩阵：`php -l` 全量语法检查 + 逐一运行 8 套 PHP 单测 |
 

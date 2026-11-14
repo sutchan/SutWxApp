@@ -1,6 +1,6 @@
 # 苏铁 SutWxApp - 微信小程序 × WordPress 电商桥接方案
 
-![版本](https://img.shields.io/badge/version-3.5.16-blue)
+![版本](https://img.shields.io/badge/version-3.5.17-blue)
 ![设计风格](https://img.shields.io/badge/design-Apple%20Style-green)
 ![CI](https://github.com/sutchan/SutWxApp/actions/workflows/ci.yml/badge.svg)
 
@@ -17,7 +17,7 @@
 
 | 组件 | 路径 | 说明 | 版本 |
 |------|------|------|------|
-| 小程序端 | `SutWxApp/` | Apple 极简风格商城，原生小程序框架（WXML / WXSS / JS） | 3.5.16 |
+| 小程序端 | `SutWxApp/` | Apple 极简风格商城，原生小程序框架（WXML / WXSS / JS） | 3.5.17 |
 | 插件端 | `sutwx-app-api/` | headless REST API 插件，桥接 WP / WooCommerce 与小程序 | 0.7.1 |
 
 小程序详细规范见 [`docs/`](docs/README.md)；插件说明见 [`sutwx-app-api/readme.txt`](sutwx-app-api/readme.txt) 与开发计划 [`docs/wordpress-plugin/DEVELOPMENT_PLAN.md`](docs/wordpress-plugin/DEVELOPMENT_PLAN.md)。
@@ -177,11 +177,12 @@ SutWxApp/
 
 | 工作流 | 触发方式 | 作用 |
 |--------|----------|------|
-| `ci.yml` | push（main / dev / feature / fix / hotfix）、PR、手动 | ESLint 检查、Jest 单元测试（覆盖率归档）、版本号与小程序配置校验、静态站点构建冒烟、PHP 插件语法检查与单测 |
-| `auto-release.yml` | `ci.yml` 在 `main` 全绿后自动触发 | 自动发布闸门：读取 `package.json` 版本号创建并推送 `v*.*.*` Tag（Tag 已存在或 CI 已过期则幂等跳过），交由 `release.yml` 完成发布 |
-| `site.yml` | push `main`（`prototype/`、`docs/`、`build.js` 等变更）、手动 | 构建静态站点产物并部署到 GitHub Pages |
-| `release.yml` | 推送 `v*.*.*` Tag（含 `auto-release.yml` 自动推送）、手动补发 | 校验 Tag 与版本号一致，打包站点 / 小程序 / 插件三份交付物，并抽取 `CHANGELOG.md` 对应小节创建 GitHub Release |
+| `ci.yml` | push（main / dev / feature / fix / hotfix）、PR、手动 | 五个 Job：ESLint 检查、Jest 单元测试（覆盖率归档）、八项一致性门禁（`npm run check`）、静态站点构建冒烟、PHP 语法检查与 8 套单测 |
+| `auto-release.yml` | `ci.yml` 在 `main` 全绿后自动触发 | 自动发布闸门：读取 `package.json` 版本号，按 CI 已验证的提交推送 `v*.*.*` Tag（Tag 已存在或 CI 已过期则幂等跳过），再显式派发 `release.yml` |
+| `site.yml` | push `main`（`prototype/`、`docs/`、小程序图片资源、`build.js` 等变更）、手动 | 构建静态站点产物并部署到 GitHub Pages |
+| `release.yml` | 推送 `v*.*.*` Tag、`auto-release.yml` 派发、手动补发 | 统一检出目标 Tag 代码，校验 Tag 与版本号一致，打包站点 / 小程序 / 插件三份交付物，并抽取 `CHANGELOG.md` 对应小节创建 GitHub Release |
 | `miniprogram-deploy.yml` | 手动触发 | 经 `miniprogram-ci` 生成预览二维码或上传体验版 |
+| `health-probe.yml` | 每 5 分钟定时、手动 | 拨测生产 `/api/health`，失败推送企业微信告警 |
 
 ### 静态站点（GitHub Pages）
 
@@ -227,9 +228,9 @@ php sutwx-app-api/tests/run-settings-tests.php
 
 ### 发布流程
 
-**自动发布（默认路径）**：版本号合入 `main` 且 `ci.yml` 五个 Job 全绿后，`auto-release.yml` 自动按 `SutWxApp/package.json` 的版本号创建并推送 `v*.*.*` Tag，`release.yml` 随即校验版本一致性、打包三份交付物（站点 / 小程序 / 插件）、抽取 `CHANGELOG.md` 对应小节创建 GitHub Release，并尝试上传小程序体验版。全程无需手动打 Tag；Tag 已存在或 CI 运行已过期时自动跳过（幂等）。
+**自动发布（默认路径）**：版本号合入 `main` 且 `ci.yml` 五个 Job 全绿后，`auto-release.yml` 按 `SutWxApp/package.json` 的版本号，用 CI 已验证的提交 SHA 创建并推送 `v*.*.*` Tag，随后显式派发 `release.yml`（`GITHUB_TOKEN` 推送的 Tag 不会再触发 push 事件工作流，必须走 `workflow_dispatch` 派发）。`release.yml` 检出该 Tag 代码、校验版本一致性、打包三份交付物（站点 / 小程序 / 插件）、抽取 `CHANGELOG.md` 对应小节创建 GitHub Release，并尝试上传小程序体验版。全程无需手动打 Tag；Tag 已存在或 CI 运行已过期时自动跳过（幂等）。
 
-**手动兜底**：需要补发或重发某个版本时，推送对应 Tag（`git tag v3.5.16 && git push origin v3.5.16`）或在 Actions 中手动运行 `Release` 工作流。
+**手动兜底**：需要补发或重发某个版本时，推送对应 Tag（`git tag v3.5.17 && git push origin v3.5.17`）或在 Actions 中手动运行 `Release` 工作流。
 
 自动发布后的收尾：在 Actions 中运行部署工作流上传体验版，再到微信公众平台提交审核。
 

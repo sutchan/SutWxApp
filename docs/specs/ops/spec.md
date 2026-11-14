@@ -60,7 +60,7 @@
 
 ### 持续交付
 
-- **Release（自动发布，默认路径）**：`ci.yml` 在 `main` 五个 Job 全绿后触发 `auto-release.yml`，按 `SutWxApp/package.json` 版本号自动创建并推送 `v*.*.*` Tag（Tag 已存在或 CI 运行已过期则幂等跳过）；`release.yml` 校验 Tag 与版本号一致、打包三份交付物（站点 / 小程序 / 插件）、抽取 `CHANGELOG.md` 对应小节创建 GitHub Release。手动推 Tag 或 `workflow_dispatch` 仅作补发兜底。
+- **Release（自动发布，默认路径）**：`ci.yml` 在 `main` 五个 Job 全绿后触发 `auto-release.yml`，按 `SutWxApp/package.json` 版本号、用 CI 已验证的提交 SHA 创建并推送 `v*.*.*` Tag（Tag 已存在或 CI 运行已过期则幂等跳过），随后显式派发 `release.yml`——`GITHUB_TOKEN` 推送的 Tag 不会再触发 push 事件工作流，必须走 `workflow_dispatch` 派发。`release.yml` 统一检出目标 Tag 代码、校验 Tag 与版本号一致、打包三份交付物（站点 / 小程序 / 插件）、抽取 `CHANGELOG.md` 对应小节创建 GitHub Release。手动推 Tag 或 `workflow_dispatch` 仅作补发兜底。
 - **小程序上传**：`miniprogram-deploy.yml` 手动触发，经 `miniprogram-ci` 生成预览二维码（`preview`）或上传体验版（`upload`）；须在仓库 Secrets 配置 `MINIPROGRAM_PRIVATE_KEY`（上传密钥，必填）与 `MINIPROGRAM_APPID`（AppID，`project.config.json` 仍为占位值 `touristappid` 时必填）。
 - **密钥安全**：上传私钥仅在运行期写入临时文件、任务结束即删除；`.gitignore` 已屏蔽 `private.*.key` 等文件，禁止入库。
 - **代码包精简**：`project.config.json` 的 `packOptions.ignore` 与部署脚本的 `ignores` 保持一致，上传时忽略 `__tests__`、`scripts`、`node_modules`、`package*.json` 等开发文件。

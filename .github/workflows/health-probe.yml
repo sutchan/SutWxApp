@@ -1,4 +1,6 @@
 # 文件名: health-probe.yml
+# 版本号: 1.1.0
+# 更新日期: 2026-11-14
 # 描述: 生产环境外部拨测（OPS-005）——每 5 分钟探测 /api/health，连续失败即推送告警。
 #
 # 需要的仓库配置（Settings → Secrets and variables → Actions）：
@@ -42,8 +44,8 @@ jobs:
           BODY_FILE=$(mktemp)
           CODE=$(curl -sS -m 15 -o "$BODY_FILE" -w '%{http_code}' "$PROBE_URL" || echo 000)
           BODY=$(cat "$BODY_FILE")
+          rm -f "$BODY_FILE"
           echo "http_status=$CODE" >> "$GITHUB_OUTPUT"
-          echo "body=$BODY" >> "$GITHUB_OUTPUT"
           echo "HTTP $CODE"
           echo "$BODY"
 
@@ -53,20 +55,26 @@ jobs:
           fi
 
           # 端点应返回 JSON 且 wcActive=true；payConfigured 为 false 仅告警不失败。
-          echo "$BODY" | grep -q '"wcActive":true' || { echo "::error::wcActive 不为 true"; exit 1; }
-          echo "$BODY" | grep -q '"payConfigured":true' || echo "::warning::payConfigured 为 false（支付凭证未配置）"
+          # 正则容忍 JSON 中的空白，避免 ": true" 与 ":true" 格式差异造成误判。
+          echo "$BODY" | grep -Eq '"wcActive"[[:space:]]*:[[:space:]]*true' \
+            || { echo "::error::wcActive 不为 true"; exit 1; }
+          echo "$BODY" | grep -Eq '"payConfigured"[[:space:]]*:[[:space:]]*true' \
+            || echo "::warning::payConfigured 为 false（支付凭证未配置）"
 
       - name: 推送企业微信告警
         if: failure()
         env:
           WECOM_WEBHOOK: ${{ secrets.WECOM_WEBHOOK }}
           PROBE_URL: ${{ vars.PROBE_URL }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
           if [ -z "$WECOM_WEBHOOK" ]; then
             echo "::warning::未配置 secrets.WECOM_WEBHOOK，跳过告警推送"
             exit 0
           fi
-          CONTENT="[告警] 健康检查失败\\n地址：${PROBE_URL:-未配置}\\n时间：$(date -u '+%Y-%m-%d %H:%M:%S UTC')\\n详情：${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-          curl -sS -m 10 -H 'Content-Type: application/json' \
-            -d "{\\"msgtype\\":\\"text\\",\"text\\":{\\"content\\":\\"$CONTENT\\"}}" \
-            "$WECOM_WEBHOOK" > /dev/null && echo "告警已推送"
+          CONTENT=$(printf '[告警] 健康检查失败\n地址：%s\n时间：%s\n详情：%s' \
+            "${PROBE_URL:-未配置}" "$(date -u '+%Y-%m-%d %H:%M:%S UTC')" "$RUN_URL")
+          # 由 Node 序列化 JSON，避免手写转义在 shell 双引号中被吞掉导致请求体非法
+          PAYLOAD=$(node -e 'process.stdout.write(JSON.stringify({msgtype:"text",text:{content:process.argv[1]}}))' "$CONTENT")
+          curl -sS -f -m 10 -H 'Content-Type: application/json' \
+            --data-binary "$PAYLOAD" "$WECOM_WEBHOOK" > /dev/null && echo "告警已推送"

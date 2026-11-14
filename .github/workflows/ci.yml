@@ -1,7 +1,7 @@
 # 文件路径: .github/workflows/ci.yml
-# 版本号: 1.1.0
-# 更新日期: 2026-09-15
-# 描述: 持续集成流水线：ESLint 代码检查、Jest 单元测试、版本与小程序配置一致性校验、
+# 版本号: 1.2.0
+# 更新日期: 2026-11-14
+# 描述: 持续集成流水线：ESLint 代码检查、Jest 单元测试、八项一致性门禁、
 #       静态站点（原型展示站）构建冒烟、WordPress 插件（PHP）语法检查与单测
 
 name: CI
@@ -39,6 +39,7 @@ jobs:
   lint:
     name: ESLint 代码检查
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: 检出代码
         uses: actions/checkout@v7
@@ -60,6 +61,7 @@ jobs:
   test:
     name: Jest 单元测试
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: 检出代码
         uses: actions/checkout@v7
@@ -74,13 +76,16 @@ jobs:
       - name: 安装依赖
         run: npm ci
 
-      # Jest 的 rootDir 为仓库根、testMatch 指向 tests/**/*.test.js，而 /tests 已被 .gitignore 忽略，
-      # 若用例未纳入版本控制，CI 会因 --passWithNoTests 静默通过。此处显式告警，避免"假绿"。
+      # 防线一：用例必须纳入版本控制；防线二：test:coverage 已移除 --passWithNoTests，
+      # 0 用例时 Jest 直接失败。两者共同杜绝「CI 假绿」。
       - name: 检查用例是否纳入版本控制
         working-directory: .
         run: |
-          if [ -z "$(git ls-files 'tests/**/*.test.js' 'SutWxApp/**/*.test.js')" ]; then
-            echo "::warning::未发现受版本控制的 Jest 用例（仓库根 tests/ 已被 .gitignore 忽略），本次为 0 用例空跑。请将用例迁入受控目录并同步 jest.testMatch。"
+          COUNT=$(git ls-files '*.test.js' | grep -cE '^(tests/|SutWxApp/__tests__/)' || true)
+          echo "受版本控制的 Jest 用例文件：$COUNT"
+          if [ "$COUNT" -eq 0 ]; then
+            echo "::error::未发现受版本控制的 Jest 用例，禁止 0 用例空跑"
+            exit 1
           fi
 
       - name: 运行单元测试（含覆盖率）
@@ -95,10 +100,11 @@ jobs:
           if-no-files-found: ignore
           retention-days: 7
 
-  # ---------- 3. 版本与配置一致性校验 ----------
+  # ---------- 3. 八项一致性门禁 ----------
   checks:
-    name: 版本 / 小程序配置校验
+    name: 八项一致性门禁
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: 检出代码
         uses: actions/checkout@v7
@@ -108,29 +114,17 @@ jobs:
         with:
           node-version: 20
 
-      # 纯 Node 内置模块实现，无需安装依赖，秒级完成
-      - name: 校验版本号一致性
-        run: node scripts/check-version.js
-
-      - name: 校验 app.json 页面与资源配置
-        run: node scripts/check-config.js
-
-      # FE-008：主包体积预算（1.5MB），纯 Node 内置模块实现
-      - name: 校验主包体积预算
-        run: node scripts/check-bundle.js
-
-      # OPS-006：插件三处版本源一致
-      - name: 校验插件版本一致性
-        run: node scripts/check-plugin-version.js
-
-      # OPS-008：端点清单、免鉴权清单与版本声明与代码比对
-      - name: 校验文档与代码一致性
-        run: node scripts/check-docs.js
+      # 与本地 `npm run ci` 同源：check-version / check-config / check-images /
+      # check-ids / check-contract / check-bundle / check-plugin-version / check-docs
+      # 均为纯 Node 内置模块脚本，无需安装依赖；新增门禁自动纳入 CI，避免只跑部分脚本造成漂移。
+      - name: 运行八项一致性门禁
+        run: npm run check
 
   # ---------- 4. 静态站点（原型展示站）构建与冒烟 ----------
   site:
     name: 静态站点构建与冒烟
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     # 覆盖文件级 defaults：站点工程位于仓库根
     defaults:
       run:
@@ -139,8 +133,7 @@ jobs:
       - name: 检出代码
         uses: actions/checkout@v7
 
-      # 
-      # build.js 仅依赖 Node 内置模块，构建阶段零依赖。
+      # build.js 仅依赖 Node 内置模块，构建阶段零依赖
       - name: 配置 Node.js
         uses: actions/setup-node@v7
         with:
@@ -208,6 +201,7 @@ jobs:
   php:
     name: PHP 插件语法检查与单测
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     defaults:
       run:
         working-directory: .
@@ -228,6 +222,7 @@ jobs:
 
       - name: 语法检查（php -l）
         run: |
+          set -o pipefail
           find sutwx-app-api -name '*.php' -print0 \
             | xargs -0 -n1 -P 4 php -l | tee php-lint.log
           if grep -q 'Errors parsing' php-lint.log; then
@@ -236,7 +231,7 @@ jobs:
           fi
           echo "PHP 语法检查通过"
 
-      # 四个脚本自带 WP/WC 桩，可脱离 WordPress 独立运行，退出码 0=通过 / 1=失败
+      # 八个脚本自带 WP/WC 桩，可脱离 WordPress 独立运行，退出码 0=通过 / 1=失败
       - name: 运行映射层单测
         run: php sutwx-app-api/tests/run-mapping-tests.php
 
