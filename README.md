@@ -177,12 +177,22 @@ SutWxApp/
 
 | 工作流 | 触发方式 | 作用 |
 |--------|----------|------|
-| `ci.yml` | push（main / dev / feature / fix / hotfix）、PR、手动 | 五个 Job：ESLint 检查、Jest 单元测试（覆盖率归档）、八项一致性门禁（`npm run check`）、静态站点构建冒烟、PHP 语法检查与 8 套单测 |
+| `ci.yml` | push（`main` / `dev`）、PR（`main` / `dev`）、手动 | 五个 Job：ESLint 检查、Jest 单元测试（覆盖率归档）、八项一致性门禁（`npm run check`）、静态站点构建冒烟、PHP 语法检查与 8 套单测。特性分支由 PR 覆盖，避免同一提交重复运行 |
 | `auto-release.yml` | `ci.yml` 在 `main` 全绿后自动触发 | 自动发布闸门：读取 `package.json` 版本号，按 CI 已验证的提交推送 `v*.*.*` Tag（Tag 已存在或 CI 已过期则幂等跳过），再显式派发 `release.yml` |
-| `site.yml` | push `main`（`prototype/`、`docs/`、小程序图片资源、`build.js` 等变更）、手动 | 构建静态站点产物并部署到 GitHub Pages |
-| `release.yml` | 推送 `v*.*.*` Tag、`auto-release.yml` 派发、手动补发 | 统一检出目标 Tag 代码，校验 Tag 与版本号一致，打包站点 / 小程序 / 插件三份交付物，并抽取 `CHANGELOG.md` 对应小节创建 GitHub Release |
+| `site.yml` | push `main`（`prototype/`、`docs/`、小程序图片资源、构建脚本与复用组件变更）、手动 | 构建静态站点产物并部署到 GitHub Pages |
+| `release.yml` | 推送 `v*.*.*` Tag、`auto-release.yml` 派发、手动补发 | 统一检出目标 Tag 代码，校验 Tag 与版本号一致，打包站点 / 小程序 / 插件三份交付物，抽取 `CHANGELOG.md` 对应小节创建 GitHub Release，并可选上传体验版 |
 | `miniprogram-deploy.yml` | 手动触发 | 经 `miniprogram-ci` 生成预览二维码或上传体验版 |
-| `health-probe.yml` | 每 5 分钟定时、手动 | 拨测生产 `/api/health`，失败推送企业微信告警 |
+| `health-probe.yml` | 每 15 分钟定时、手动 | 拨测生产 `/api/health`，失败重试 3 次后仍异常则推送企业微信告警 |
+
+重复逻辑统一放在 `.github/actions/` 的复用组件中，`ci.yml` / `site.yml` / `miniprogram-deploy.yml` 共用：
+
+| 组件 | 职责 |
+|------|------|
+| `setup-node` | 配置 Node.js 20、以 `SutWxApp/package-lock.json` 为缓存键执行 `npm ci`；纯内置模块脚本可用 `install: "false"` 跳过安装 |
+| `build-site` | 执行 `build.js` 并调用 `scripts/check-site-dist.js` 校验产物与首页元信息，保证 CI 冒烟与 Pages 发布口径一致 |
+| `upload-miniprogram` | 校验密钥、把私钥写入 `RUNNER_TEMP`、按需安装 `miniprogram-ci`、执行 `scripts/deploy.js`、结束清理私钥 |
+
+> `release.yml` 刻意保持自包含：手动补发旧 Tag 时，该 Tag 的代码中没有这些本地组件，引用会导致整条发布流水线加载失败。
 
 ### 静态站点（GitHub Pages）
 
@@ -228,14 +238,14 @@ php sutwx-app-api/tests/run-settings-tests.php
 
 ### 发布流程
 
-**自动发布（默认路径）**：版本号合入 `main` 且 `ci.yml` 五个 Job 全绿后，`auto-release.yml` 按 `SutWxApp/package.json` 的版本号，用 CI 已验证的提交 SHA 创建并推送 `v*.*.*` Tag，随后显式派发 `release.yml`（`GITHUB_TOKEN` 推送的 Tag 不会再触发 push 事件工作流，必须走 `workflow_dispatch` 派发）。`release.yml` 检出该 Tag 代码、校验版本一致性、打包三份交付物（站点 / 小程序 / 插件）、抽取 `CHANGELOG.md` 对应小节创建 GitHub Release，并尝试上传小程序体验版。全程无需手动打 Tag；Tag 已存在或 CI 运行已过期时自动跳过（幂等）。
+**自动发布（默认路径）**：版本号合入 `main` 且 `ci.yml` 五个 Job 全绿后，`auto-release.yml` 按 `SutWxApp/package.json` 的版本号，用 CI 已验证的提交 SHA 创建并推送 `v*.*.*` Tag，随后显式派发 `release.yml`（`GITHUB_TOKEN` 推送的 Tag 不会再触发 push 事件工作流，必须走 `workflow_dispatch` 派发）。`release.yml` 检出该 Tag 代码、校验版本一致性、打包三份交付物（站点 / 小程序 / 插件）、抽取 `CHANGELOG.md` 对应小节创建 GitHub Release，并在密钥齐备时自动上传小程序体验版（未配置则跳过，不阻断发布）。全程无需手动打 Tag；Tag 已存在或 CI 运行已过期时自动跳过（幂等）。
 
 **手动兜底**：需要补发或重发某个版本时，推送对应 Tag（`git tag v3.5.18 && git push origin v3.5.18`）或在 Actions 中手动运行 `Release` 工作流。
 
-自动发布后的收尾：在 Actions 中运行部署工作流上传体验版，再到微信公众平台提交审核。
+自动发布后的收尾：到微信公众平台提交审核。若发布时未配置上传密钥或需要重新上传，在 Actions 手动运行 `Deploy MiniProgram` 并选择 `upload`。
 
 **发布前置（两个路径一致）**：
-1. 同步版本号：`SutWxApp/package.json`、`SutWxApp/app.js` 的 `globalData.version`、README 版本徽章、`CHANGELOG.md` 新版本小节
+1. 同步版本号：`SutWxApp/package.json`、根 `package.json`、`SutWxApp/package-lock.json`、`SutWxApp/app.js` 的 `globalData.version`、README 版本徽章、`docs/tasks.md` 的「当前状态」、`CHANGELOG.md` 新版本小节（由 `check:version` 与 `check:docs` 强制校验）
 2. 本地执行 `npm run ci` 自检通过
 3. 提交并推送，经 PR 合入 `main` 触发自动发布
 

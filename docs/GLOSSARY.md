@@ -1,8 +1,8 @@
 # 术语表
 
-> **文档版本**: v1.1.0
-> **更新时间戳**: 2026-11-07
-> **对齐版本**: 小程序 `3.5.16` · WordPress 插件 `0.7.1`
+> **文档版本**: v1.1.1
+> **更新时间戳**: 2026-11-14
+> **对齐版本**: 小程序 `3.5.18` · WordPress 插件 `0.7.1`
 > **用途**: 统一项目内同一概念的标准叫法。文档、代码注释、提交信息、任务描述中涉及下列概念时，一律使用本表的标准术语；历史文档中的其它叫法不再沿用。
 
 ---
@@ -76,7 +76,7 @@
 | **资源门禁** | `check:images` 校验 WXML 中所有 `/images/*` 引用真实存在（微信 `image` 不支持 SVG） | 图片检查 |
 | **语义化 ID 门禁** | `check:ids` 校验 WXML 根容器带语义化 id 且全量唯一 | — |
 | **自动发布** | `auto-release.yml` 在 CI 五 Job 全绿后按版本号、用已验证 SHA 推送 Tag，并显式派发 `release.yml` 打包发版（`GITHUB_TOKEN` 推 Tag 不触发 push 工作流） | 手动打 Tag（仅作补发兜底） |
-| **健康拨测** | `health-probe.yml` 每 5 分钟探测 `/api/health`，失败推送企业微信机器人 | — |
+| **健康拨测** | `health-probe.yml` 每 15 分钟探测 `/api/health`，单轮重试 3 次仍失败则推送含 HTTP 状态码的企业微信告警 | — |
 | **隐私保护指引** | 微信《小程序用户隐私保护指引》机制：`utils/privacy.js` 前置授权 + `pages/privacy/` 授权页 | 隐私浏览开关（旧伪开关已移除） |
 | **环境配置表** | `utils/env.js` 按 develop / trial / release 自动注入 baseUrl | 手工改 `globalData.baseUrl` |
 | **幂等短锁** | 下单以 `clientRequestId` 做 10 秒去重，失败路径均释放锁 | 防重复提交 |

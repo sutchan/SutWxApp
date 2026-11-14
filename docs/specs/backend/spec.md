@@ -220,7 +220,7 @@ add_action('rest_api_init', function () {
 |------|------|------|
 | `GET /api/banner/list` | `rest/class-rest-banners.php` + `admin/settings-banners.php` + `mappings/map-banner.php` | 后台可配运营轮播位；前端 `pages/home/parts-data.js` 正常消费 |
 | `POST /api/monitor/data` | `rest/class-rest-monitor.php` | 接收客户端批量上报（≤20 条），逐条经 `Sutwx_Error_Log` 落日志；限频 10 次/分钟 |
-| `GET /api/health` | `rest/class-rest-health.php` | 返回 `version/php/wcActive/payConfigured`；`health-probe.yml` 每 5 分钟拨测 |
+| `GET /api/health` | `rest/class-rest-health.php` | 返回 `version/php/wcActive/payConfigured`；`health-probe.yml` 每 15 分钟拨测 |
 | `POST /api/pay/refund-notify` | `rest/class-rest-pay.php` | 退款结果通知，平台证书验签后按 `out_refund_no` 落「已退款」 |
 
 ## 安全、缓存与性能
@@ -228,7 +228,7 @@ add_action('rest_api_init', function () {
 - **安全**：内容端点公开但限频（`X-RateLimit-*`）；校验/转义所有输出；文章 HTML 服务端预清洗 + 小程序 `sanitizeArticleHtml` 双重把关；禁止直接 `echo` 未转义内容。
 - **缓存**：已实现 `class-cache.php`（WP Transients，TTL 5–10 分钟 + 分组版本号），内容变更钩子精准失效（`save_post` / `woocommerce_update_product` / `edited_product_cat` / 主题选项更新），失效逻辑见 `includes/cache/class-cache-invalidation.php`。
 - **性能**：仅返回 DTO 必要字段；图片走 WP 媒体缩略图；分页强制上限 `pageSize<=50`。
-- **监控**：`includes/class-error-log.php` 提供结构化日志（错误码、路由、耗时、脱敏 IP），`class-rest-base.php` 的 `error()` / `log_error()` 在鉴权失败、限频命中、支付异常与 REST 错误时落盘；`/api/monitor/data` 接收客户端 8 模块采集数据并逐条落 `monitor` 日志；`health-probe.yml` 每 5 分钟拨测健康端点，失败推送企业微信机器人（详见 `../ops/spec.md`）。
+- **监控**：`includes/class-error-log.php` 提供结构化日志（错误码、路由、耗时、脱敏 IP），`class-rest-base.php` 的 `error()` / `log_error()` 在鉴权失败、限频命中、支付异常与 REST 错误时落盘；`/api/monitor/data` 接收客户端 8 模块采集数据并逐条落 `monitor` 日志；`health-probe.yml` 每 15 分钟拨测健康端点，失败推送企业微信机器人（详见 `../ops/spec.md`）。
 
 ## 部署与版本管理
 

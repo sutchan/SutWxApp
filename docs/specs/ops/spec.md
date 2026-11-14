@@ -1,9 +1,9 @@
 <!--
 文件名: spec.md
-版本号: 3.1.0
-更新日期: 2026-11-07
+版本号: 3.1.1
+更新日期: 2026-11-14
 作者: Sut
-描述: SutWxApp 运维与发布规范，含 CI/CD 五 Job 与自动发布、八项质量门禁、生产部署 Runbook、wp-config 常量全表、监控告警与健康拨测、凭证治理与 WordPress 安全基线
+描述: SutWxApp 运维与发布规范，含 CI/CD 五 Job 与自动发布、工作流复用组件、八项质量门禁、生产部署 Runbook、wp-config 常量全表、监控告警与健康拨测、凭证治理与 WordPress 安全基线
 -->
 
 # 运维与发布规范
@@ -46,25 +46,25 @@
 
 ### 持续集成（GitHub Actions）
 
-工作流 `ci.yml` 在 push（main / dev / feature / fix / hotfix）、PR 与手动触发时执行五个 Job（lint / test / checks / site / php）的质量门禁，任一失败即阻断合并：
+工作流 `ci.yml` 在 push（main / dev）、PR（目标 main / dev）与手动触发时执行五个 Job（lint / test / checks / site / php）的质量门禁，任一失败即阻断合并；特性分支由 PR 覆盖：
 
 | 阶段 | 命令 | 说明 |
 |------|------|------|
 | 代码检查 | `npm run lint` | ESLint 校验全部 `.js` 源码与工程脚本 |
 | 单元测试 | `npm run test:coverage` | Jest 运行 `__tests__/` 用例，覆盖率报告归档为 Artifact |
-| 一致性校验 | `npm run check` | 版本号单一来源一致性 + 小程序配置完整性（JSON 可解析、页面四件套、tabBar 图标 ≤ 40KB、分包与 sitemap 指向文件存在） |
+| 一致性校验 | `npm run check` | 八项门禁：版本、配置、图片资源、语义化 ID、前后端契约、包体、插件版本、文档一致性 |
 
-运行环境为 `ubuntu-latest` + Node.js 20，工作目录 `SutWxApp/`；同一分支的重复推送会取消上一次未完成的运行。
+运行环境为 `ubuntu-latest` + Node.js 20，工作目录 `SutWxApp/`；`ci.yml` 的 push 触发仅覆盖 `main` / `dev`，特性分支由 PR 触发（避免同一提交重复运行），同一分支的重复推送会取消上一次未完成的运行。
 
-> `SutWxApp/package-lock.json` 已入库，`lint` 与 `test` Job 使用 `npm ci` 锁定安装依赖，并以该锁文件作为 npm 缓存键。
+> `SutWxApp/package-lock.json` 已入库，`lint` 与 `test` Job 使用 `npm ci` 锁定安装依赖，并以该锁文件作为 npm 缓存键。环境准备统一由 `.github/actions/setup-node` 提供；站点构建与产物校验由 `.github/actions/build-site`（调用 `scripts/check-site-dist.js`）提供，CI 冒烟与 Pages 发布共用同一套校验。`release.yml` 为兼容「手动补发旧 Tag」保持自包含，不引用本地组件。
 
 ### 持续交付
 
 - **Release（自动发布，默认路径）**：`ci.yml` 在 `main` 五个 Job 全绿后触发 `auto-release.yml`，按 `SutWxApp/package.json` 版本号、用 CI 已验证的提交 SHA 创建并推送 `v*.*.*` Tag（Tag 已存在或 CI 运行已过期则幂等跳过），随后显式派发 `release.yml`——`GITHUB_TOKEN` 推送的 Tag 不会再触发 push 事件工作流，必须走 `workflow_dispatch` 派发。`release.yml` 统一检出目标 Tag 代码、校验 Tag 与版本号一致、打包三份交付物（站点 / 小程序 / 插件）、抽取 `CHANGELOG.md` 对应小节创建 GitHub Release。手动推 Tag 或 `workflow_dispatch` 仅作补发兜底。
-- **小程序上传**：`miniprogram-deploy.yml` 手动触发，经 `miniprogram-ci` 生成预览二维码（`preview`）或上传体验版（`upload`）；须在仓库 Secrets 配置 `MINIPROGRAM_PRIVATE_KEY`（上传密钥，必填）与 `MINIPROGRAM_APPID`（AppID，`project.config.json` 仍为占位值 `touristappid` 时必填）。
-- **密钥安全**：上传私钥仅在运行期写入临时文件、任务结束即删除；`.gitignore` 已屏蔽 `private.*.key` 等文件，禁止入库。
+- **小程序上传**：`miniprogram-deploy.yml` 手动触发，经 `miniprogram-ci` 生成预览二维码（`preview`）或上传体验版（`upload`）；`release.yml` 在创建 Release 后于密钥齐备时自动执行一次 `upload`（未配置则跳过，不阻断发布）。两条链路共用 `.github/actions/upload-miniprogram` 的密钥校验与部署逻辑（Release 侧为兼容补发旧 Tag 保留等价的内联实现）。须在仓库 Secrets 配置 `MINIPROGRAM_PRIVATE_KEY`（上传密钥，必填）与 `MINIPROGRAM_APPID`（AppID，`project.config.json` 仍为占位值 `touristappid` 时必填）。
+- **密钥安全**：上传私钥仅写入 `RUNNER_TEMP`（权限 600）、由 `trap`/结束步骤保证删除；`.gitignore` 已屏蔽 `private.*.key` 等文件，禁止入库。Secrets 一律经 `env` 或组件 `inputs` 传入，不直接插值进 shell。
 - **代码包精简**：`project.config.json` 的 `packOptions.ignore` 与部署脚本的 `ignores` 保持一致，上传时忽略 `__tests__`、`scripts`、`node_modules`、`package*.json` 等开发文件。
-- **依赖治理**：`.github/dependabot.yml` 每周检查 npm 开发依赖与 GitHub Actions 版本，以 PR 形式提出更新。
+- **依赖治理**：`.github/dependabot.yml` 每周检查 npm 开发依赖与 GitHub Actions 版本，以 PR 形式提出更新；Actions 的 minor/patch 更新聚合为单个 PR（`actions-updates` 分组），主版本更新仍单独评审。
 
 ### 质量门禁与合并要求
 
@@ -155,7 +155,7 @@
 
 | 平均响应时间 | >2s | 警告 | 检查缓存命中与数据库慢查询 |
 
-| `/api/health` 拨测失败 | 连续 2 次（=10 分钟） | 严重 | 先看 HTTPS 与 PHP-FPM，再看插件是否被停用 |
+| `/api/health` 拨测失败 | 单轮重试 3 次仍失败 | 严重 | 先看 HTTPS 与 PHP-FPM，再看插件是否被停用 |
 
 | `pay_exception` 频率 | >5 次/5 分钟 | 严重 | 区分验签失败（疑似伪造）与超时（微信侧） |
 
@@ -169,7 +169,7 @@
 
 
 
-1. **外部拨测**：`.github/workflows/health-probe.yml` 每 5 分钟请求 `vars.PROBE_URL`，非 200 或 `wcActive!=true` 即失败，并向 `secrets.WECOM_WEBHOOK`（企业微信机器人）推送文本告警。未配置 Webhook 时仅保留 Actions 失败记录。
+1. **外部拨测**：`.github/workflows/health-probe.yml` 每 15 分钟请求 `vars.PROBE_URL`（约 96 次/天），单轮最多重试 3 次以过滤网络抖动；非 200 或 `wcActive!=true` 即失败，并向 `secrets.WECOM_WEBHOOK`（企业微信机器人）推送含 HTTP 状态码的文本告警。未配置 `vars.PROBE_URL` 时定时运行不创建 Job（手动触发仍可用）；未配置 Webhook 时仅保留 Actions 失败记录。
 
 2. **服务端日志告警**：主机侧用 `logtail`/`filebeat` 订阅 `error_log`，按上表关键字匹配后推送同一机器人；样例规则（rsyslog + curl）见下：
 

@@ -14,6 +14,7 @@
 - **CI 触发与结构精简**：`ci.yml` 的 push 触发收敛为 `main` / `dev`（特性分支由 PR 覆盖），PHP 8 套单测改为带分组日志的循环步骤，重复的环境准备步骤改由复用组件提供。
 - **拨测降噪**：`health-probe.yml` 频率由 5 分钟调整为 15 分钟（约 96 次/天），未配置 `vars.PROBE_URL` 时定时运行不再创建 Job，失败前重试 3 次减少抖动误报，告警补充 HTTP 状态码，排队中的旧运行自动取消。
 - **依赖治理**：`.github/dependabot.yml` 为 GitHub Actions 的 minor/patch 更新增加聚合分组，减少 PR 噪音。
+- **文档同步**：根 `README.md` 补复用组件清单、发布前置版本同步清单与可选体验版上传说明；`docs/README.md` 新增工作流文件索引；术语表、工程规范、后端规范、运维规范对齐 15 分钟拨测 / 单轮 3 次重试 / 告警含状态码 / 密钥经 `env` 或组件 inputs 传入 / Release 自包含等实况。
 - 版本同步 3.5.17 → 3.5.18（两个 `package.json`、`package-lock.json`、`app.js`、README 徽章、`docs/tasks.md`、CHANGELOG；插件保持 0.7.1）。
 
 ### Fixed

@@ -1,8 +1,8 @@
 # 开发规范
 
-> **文档版本**: v3.1.0
-> **更新时间戳**: 2026-11-07
-> **对齐版本**: 小程序 `3.5.16` · WordPress 插件 `0.7.1`
+> **文档版本**: v3.1.1
+> **更新时间戳**: 2026-11-14
+> **对齐版本**: 小程序 `3.5.18` · WordPress 插件 `0.7.1`
 > **适用范围**: `SutWxApp/`（小程序）与 `sutwx-app-api/`（WordPress 插件）全部源码
 > **定位**: 本文件是**工程规范的单一事实来源**。`specs/project/spec.md` 只保留项目定位与设计风格，涉及命名/提交/分支/审查/测试/门禁的条款一律以本文件为准。
 > **配套**: 协作流程与红线见 [`../../AGENTS.md`](../../AGENTS.md)；任务见 [`../../tasks.md`](../../tasks.md)。
@@ -288,7 +288,7 @@ feat(order): 新增商家发货端点与小程序发货入口
 5. 合并前必须满足：CI 全绿 + 至少 1 人批准 + PR 自检清单勾选。
 6. 提交 `main` 后打 Tag `v<version>`，Tag 必须与 `package.json` 版本一致（`npm run check:version` 校验）。
 
-**CI 触发的分支**（`.github/workflows/ci.yml`）：`push` 于 `main` / `dev` / `feature/**` / `fix/**` / `hotfix/**`；`pull_request` 目标 `main` / `dev`。
+**CI 触发的分支**（`.github/workflows/ci.yml`）：`push` 于 `main` / `dev`；`pull_request` 目标 `main` / `dev`；另支持 `workflow_dispatch`。特性分支由 PR 覆盖，避免同一提交被 push 与 PR 各跑一遍。
 
 ---
 
@@ -367,12 +367,14 @@ feat(order): 新增商家发货端点与小程序发货入口
 
 | 工作流 | 触发 | 内容 |
 |--------|------|------|
-| `ci.yml` | push / PR / 手动 | 5 个 Job：`lint`、`test`、`checks`（八项 `npm run check`）、`site`（构建+冒烟）、`php`（8.1/8.3 语法检查 + 8 套单测） |
+| `ci.yml` | push（main / dev）、PR、手动 | 5 个 Job：`lint`、`test`、`checks`（八项 `npm run check`）、`site`（构建+冒烟）、`php`（8.1/8.3 语法检查 + 8 套单测） |
 | `auto-release.yml` | `ci.yml` 在 main 全绿后 | 按已验证 SHA 推送 `v*.*.*` Tag 并显式派发 `release.yml` |
-| `miniprogram-deploy.yml` | 手动 | `miniprogram-ci` 上传体验版/正式版（私钥走 Secrets） |
-| `release.yml` | Tag `v*.*.*` / 派发 / 手动补发 | 检出目标 Tag，打包站点 / 小程序 / 插件三份交付物并创建 GitHub Release |
-| `site.yml` | push（站点相关路径） | 构建并发布 GitHub Pages |
-| `health-probe.yml` | 每 5 分钟定时 | 拨测 `/api/health`，失败推送告警 |
+| `miniprogram-deploy.yml` | 手动 | `miniprogram-ci` 生成预览二维码 / 上传体验版（私钥走 Secrets） |
+| `release.yml` | Tag `v*.*.*` / 派发 / 手动补发 | 检出目标 Tag，打包站点 / 小程序 / 插件三份交付物并创建 GitHub Release，可选上传体验版 |
+| `site.yml` | push（站点相关路径）、手动 | 构建并发布 GitHub Pages |
+| `health-probe.yml` | 每 15 分钟定时、手动 | 拨测 `/api/health`，单轮重试 3 次后仍失败推送告警 |
+
+**复用组件**（`.github/actions/`）：`setup-node`（Node 20 + npm 缓存 + `npm ci`）、`build-site`（`build.js` + `scripts/check-site-dist.js` 产物校验）、`upload-miniprogram`（密钥校验、私钥临时化、部署与清理）。改动工作流或组件时，须同步根 `README.md`、`specs/ops/spec.md`、`CHANGELOG.md` 并升级版本号。`release.yml` 为兼容补发旧 Tag 保持自包含，不引用本地组件。
 
 **本地等价命令**：`cd SutWxApp && npm run ci`（= lint + check + test）。
 

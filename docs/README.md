@@ -1,6 +1,6 @@
 # 苏铁微信小程序 (SutWxApp) 文档索引
 
-> **文档版本**: v2.1.1
+> **文档版本**: v2.1.2
 > **更新时间戳**: 2026-11-14
 > **说明**: 本目录存放项目全部规范文档与任务清单。本文件是**文档体系入口**；工程规范以 `specs/development/spec.md` 为准，术语以 `GLOSSARY.md` 为准。
 
@@ -65,6 +65,26 @@ docs/
 | 项目规范 | `specs/project/spec.md` | 项目定位、技术栈、Apple 极简设计风格、术语表、附录 |
 
 > **单一事实来源**：命名约定、提交信息、分支管理、代码审查、门禁命令**只在 `specs/development/spec.md` 定义**，其他文档以链接引用，不重复抄写。
+
+---
+
+## 工作流与自动化
+
+工作流的**完整说明以根 `README.md` 的「持续集成与交付（CI/CD）」章节为准**，本处只列文件索引：
+
+| 位置 | 内容 |
+|------|------|
+| `.github/workflows/ci.yml` | 质量门禁（lint / test / 八项 check / 站点冒烟 / PHP 单测） |
+| `.github/workflows/auto-release.yml` | CI 全绿后打 Tag 并派发 Release |
+| `.github/workflows/release.yml` | 打包三份交付物、创建 GitHub Release、可选上传体验版 |
+| `.github/workflows/site.yml` | 静态站点发布到 GitHub Pages |
+| `.github/workflows/miniprogram-deploy.yml` | 手动预览二维码 / 上传体验版 |
+| `.github/workflows/health-probe.yml` | 生产 `/api/health` 外部拨测与告警 |
+| `.github/dependabot.yml` | npm 与 GitHub Actions 依赖更新 |
+| `.github/actions/` | 复用组件：`setup-node` / `build-site` / `upload-miniprogram` |
+| `scripts/check-site-dist.js` | 站点产物校验（由 `build-site` 组件调用） |
+
+> 改动工作流或复用组件时，须同步根 `README.md`、`specs/ops/spec.md` 与 `CHANGELOG.md`，并按工程规范升级版本号。
 
 ---
 
