@@ -35,8 +35,8 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.7",
-    "eslint": "^10.10.0",
-    "jest": "^30.5.1",
+    "eslint": "^10.14.0",
+    "jest": "^30.5.2",
     "miniprogram-automator": "^0.13.0"
   },
   "jest": {
