@@ -1,7 +1,8 @@
 # 文件路径: .github/dependabot.yml
-# 版本号: 1.0.0
-# 更新日期: 2026-09-12
-# 描述: Dependabot 依赖更新配置：npm 开发依赖与 GitHub Actions 每周检查一次
+# 版本号: 1.1.0
+# 更新日期: 2026-11-14
+# 描述: Dependabot 依赖更新配置：npm 开发依赖与 GitHub Actions 每周检查一次，
+#       次要/补丁更新聚合为单个 PR，减少评审噪音；主版本更新仍单独提 PR。
 
 version: 2
 updates:
@@ -39,3 +40,10 @@ updates:
       - ci
     commit-message:
       prefix: ci
+    groups:
+      actions-updates:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch

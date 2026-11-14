@@ -1,20 +1,21 @@
 # 文件名: health-probe.yml
-# 版本号: 1.1.0
+# 版本号: 1.2.0
 # 更新日期: 2026-11-14
-# 描述: 生产环境外部拨测（OPS-005）——每 5 分钟探测 /api/health，连续失败即推送告警。
+# 描述: 生产环境外部拨测（OPS-005）——每 15 分钟探测 /api/health，失败重试后仍异常即推送告警。
 #
 # 需要的仓库配置（Settings → Secrets and variables → Actions）：
 #   vars.PROBE_URL       生产健康检查地址，如 https://api.example.com/api/health
 #   secrets.WECOM_WEBHOOK 企业微信机器人 Webhook（可选，未配置则仅在 Actions 失败可见）
 #
-# 说明：GitHub Actions 的 cron 最小间隔为 5 分钟，且高峰时段可能延迟数分钟，
-#       仅用于兜底发现；生产告警以服务端 error_log 转告警通道为主。
+# 说明：GitHub 不保证 cron 准时，高峰时段可能延迟数分钟；15 分钟间隔在拨测时效与
+#       Actions 额度（每 15 分钟一次运行，约 96 次/天）之间取平衡，仅用于兜底发现；
+#       生产告警以服务端 error_log 转告警通道为主。
 
 name: Health Probe
 
 on:
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "*/15 * * * *"
   workflow_dispatch:
 
 permissions:
@@ -22,13 +23,17 @@ permissions:
 
 concurrency:
   group: health-probe
-  cancel-in-progress: false
+  # 拨测只关心最新结果，排队中的旧运行没有意义
+  cancel-in-progress: true
 
 jobs:
   probe:
     name: 拨测 /api/health
+    # 未配置 PROBE_URL 时定时运行直接不创建 Job，避免每月数百次空跑；
+    # 手动触发始终放行，便于首次配置时验证。
+    if: ${{ github.event_name == 'workflow_dispatch' || vars.PROBE_URL != '' }}
     runs-on: ubuntu-latest
-    timeout-minutes: 3
+    timeout-minutes: 5
     steps:
       - name: 探测健康端点
         id: probe
@@ -42,11 +47,16 @@ jobs:
           fi
 
           BODY_FILE=$(mktemp)
-          CODE=$(curl -sS -m 15 -o "$BODY_FILE" -w '%{http_code}' "$PROBE_URL" || echo 000)
-          BODY=$(cat "$BODY_FILE")
+          # 网络抖动会造成单次误报：最多探测 3 次，成功即退出循环
+          for attempt in 1 2 3; do
+            CODE=$(curl -sS -m 10 -o "$BODY_FILE" -w '%{http_code}' "$PROBE_URL" || echo 000)
+            echo "第 $attempt 次探测：HTTP $CODE"
+            if [ "$CODE" = "200" ]; then break; fi
+            if [ "$attempt" -lt 3 ]; then sleep 3; fi
+          done
+          BODY=$(head -c 500 "$BODY_FILE")
           rm -f "$BODY_FILE"
           echo "http_status=$CODE" >> "$GITHUB_OUTPUT"
-          echo "HTTP $CODE"
           echo "$BODY"
 
           if [ "$CODE" != "200" ]; then
@@ -66,14 +76,16 @@ jobs:
         env:
           WECOM_WEBHOOK: ${{ secrets.WECOM_WEBHOOK }}
           PROBE_URL: ${{ vars.PROBE_URL }}
+          HTTP_STATUS: ${{ steps.probe.outputs.http_status }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
           if [ -z "$WECOM_WEBHOOK" ]; then
             echo "::warning::未配置 secrets.WECOM_WEBHOOK，跳过告警推送"
             exit 0
           fi
-          CONTENT=$(printf '[告警] 健康检查失败\n地址：%s\n时间：%s\n详情：%s' \
-            "${PROBE_URL:-未配置}" "$(date -u '+%Y-%m-%d %H:%M:%S UTC')" "$RUN_URL")
+          CONTENT=$(printf '[告警] 健康检查失败\n地址：%s\nHTTP：%s\n时间：%s\n详情：%s' \
+            "${PROBE_URL:-未配置}" "${HTTP_STATUS:-无响应}" \
+            "$(date -u '+%Y-%m-%d %H:%M:%S UTC')" "$RUN_URL")
           # 由 Node 序列化 JSON，避免手写转义在 shell 双引号中被吞掉导致请求体非法
           PAYLOAD=$(node -e 'process.stdout.write(JSON.stringify({msgtype:"text",text:{content:process.argv[1]}}))' "$CONTENT")
           curl -sS -f -m 10 -H 'Content-Type: application/json' \

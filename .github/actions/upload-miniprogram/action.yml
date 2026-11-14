@@ -1,0 +1,100 @@
+# 文件路径: .github/actions/upload-miniprogram/action.yml
+# 版本号: 1.0.0
+# 更新日期: 2026-11-14
+# 描述: 复用组件：校验密钥、临时写入上传私钥、安装 miniprogram-ci 并执行 deploy.js，
+#       结束后清理私钥。供 Deploy MiniProgram 与 Release 工作流共用，避免两套实现漂移。
+
+name: Upload MiniProgram
+description: 经 miniprogram-ci 生成预览二维码或上传体验版（调用前需已执行 setup-node）
+
+inputs:
+  action:
+    description: preview（预览二维码）或 upload（上传体验版）
+    required: false
+    default: preview
+  version:
+    description: 上传版本号（留空取 SutWxApp/package.json 的 version）
+    required: false
+    default: ""
+  desc:
+    description: 版本备注（留空自动生成）
+    required: false
+    default: ""
+  privateKey:
+    description: 小程序代码上传密钥内容（由调用方传入 Secret）
+    required: false
+    default: ""
+  appId:
+    description: 小程序 AppID（由调用方传入 Secret）
+    required: false
+    default: ""
+  allowMissingSecrets:
+    description: 密钥缺失时跳过而非失败（自动发布链路使用 true）
+    required: false
+    default: "false"
+
+runs:
+  using: composite
+  steps:
+    # 密钥一律经 env 传入，禁止把 secrets 直接插值进 shell 脚本
+    - name: 校验部署密钥
+      id: check
+      shell: bash
+      env:
+        PRIVATE_KEY: ${{ inputs.privateKey }}
+        APPID: ${{ inputs.appId }}
+        ALLOW_MISSING: ${{ inputs.allowMissingSecrets }}
+      run: |
+        skip() {
+          echo "::notice::$1"
+          echo "skip=true" >> "$GITHUB_OUTPUT"
+        }
+        if [ -z "$PRIVATE_KEY" ]; then
+          if [ "$ALLOW_MISSING" = "true" ]; then
+            skip "未配置 MINIPROGRAM_PRIVATE_KEY，跳过体验版上传"
+            exit 0
+          fi
+          echo "::error::缺少仓库 Secret「MINIPROGRAM_PRIVATE_KEY」。请在微信公众平台「开发管理 > 开发设置 > 小程序代码上传」生成密钥并写入仓库 Secrets。"
+          exit 1
+        fi
+        if [ -z "$APPID" ] && grep -q '"appid": "touristappid"' SutWxApp/project.config.json; then
+          if [ "$ALLOW_MISSING" = "true" ]; then
+            skip "AppID 仍为占位值且未配置 MINIPROGRAM_APPID，跳过体验版上传"
+            exit 0
+          fi
+          echo "::error::project.config.json 中 appid 仍为占位值 touristappid，请配置 Secret「MINIPROGRAM_APPID」或填写真实 AppID。"
+          exit 1
+        fi
+        echo "skip=false" >> "$GITHUB_OUTPUT"
+
+    - name: 写入上传私钥
+      if: steps.check.outputs.skip != 'true'
+      shell: bash
+      env:
+        PRIVATE_KEY: ${{ inputs.privateKey }}
+      run: |
+        KEY_PATH="$RUNNER_TEMP/miniprogram-private.key"
+        printf '%s' "$PRIVATE_KEY" > "$KEY_PATH"
+        chmod 600 "$KEY_PATH"
+        echo "MINIPROGRAM_PRIVATE_KEY_PATH=$KEY_PATH" >> "$GITHUB_ENV"
+
+    # miniprogram-ci 未纳入 devDependencies，部署前按需安装，避免常规 CI 依赖膨胀
+    - name: 安装 miniprogram-ci
+      if: steps.check.outputs.skip != 'true'
+      shell: bash
+      run: cd SutWxApp && npm install --no-save --no-audit --no-fund miniprogram-ci@^2
+
+    - name: 生成预览二维码 / 上传体验版
+      if: steps.check.outputs.skip != 'true'
+      shell: bash
+      env:
+        MINIPROGRAM_APPID: ${{ inputs.appId }}
+        DEPLOY_ACTION: ${{ inputs.action }}
+        DEPLOY_VERSION: ${{ inputs.version }}
+        DEPLOY_DESC: ${{ inputs.desc }}
+      run: cd SutWxApp && node scripts/deploy.js
+
+    - name: 清理私钥
+      if: always()
+      shell: bash
+      run: rm -f "$RUNNER_TEMP/miniprogram-private.key" || true

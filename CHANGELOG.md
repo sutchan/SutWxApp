@@ -6,6 +6,21 @@
 
 暂无未发布变更；已发布内容见下方版本条目。
 
+## [3.5.18] - 2026-11-14
+
+### Changed
+
+- **工作流复用组件**：新增 `.github/actions/setup-node`（Node 20 + npm 缓存 + `npm ci`）、`.github/actions/build-site`（构建 + 产物校验）、`.github/actions/upload-miniprogram`（密钥校验、私钥临时化、`miniprogram-ci` 安装与部署）；产物校验抽为 `scripts/check-site-dist.js`，由 CI 与 Pages 部署共用，消除两处校验口径漂移。
+- **CI 触发与结构精简**：`ci.yml` 的 push 触发收敛为 `main` / `dev`（特性分支由 PR 覆盖），PHP 8 套单测改为带分组日志的循环步骤，重复的环境准备步骤改由复用组件提供。
+- **拨测降噪**：`health-probe.yml` 频率由 5 分钟调整为 15 分钟（约 96 次/天），未配置 `vars.PROBE_URL` 时定时运行不再创建 Job，失败前重试 3 次减少抖动误报，告警补充 HTTP 状态码，排队中的旧运行自动取消。
+- **依赖治理**：`.github/dependabot.yml` 为 GitHub Actions 的 minor/patch 更新增加聚合分组，减少 PR 噪音。
+- 版本同步 3.5.17 → 3.5.18（两个 `package.json`、`package-lock.json`、`app.js`、README 徽章、`docs/tasks.md`、CHANGELOG；插件保持 0.7.1）。
+
+### Fixed
+
+- **Release 体验版上传**：`release.yml` 自动上传原执行 `preview`（仅生成二维码）且漏装 `miniprogram-ci`，必然失败；改为 `upload`、按需安装依赖、私钥写入 `RUNNER_TEMP` 并以 `trap` 清理，同时校验 AppID。为兼容「手动补发旧 Tag」（其代码无本地组件），`release.yml` 保持自包含，不使用 composite action。
+- **Pages 触发面**：`site.yml` 补 `scripts/check-site-dist.js` 与 `.github/actions/build-site/**` 为触发路径，避免构建逻辑变更却未重新部署。
+
 ## [3.5.17] - 2026-11-14
 
 ### Fixed
@@ -933,5 +948,5 @@
 - 基础原型设计
 ---
 
-[Unreleased]: https://github.com/sutchan/SutWxApp/compare/v3.5.17...HEAD
+[Unreleased]: https://github.com/sutchan/SutWxApp/compare/v3.5.18...HEAD
 [3.5.13]: https://github.com/sutchan/SutWxApp/compare/v3.5.12...v3.5.13

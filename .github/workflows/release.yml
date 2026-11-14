@@ -1,8 +1,9 @@
 # 文件路径: .github/workflows/release.yml
-# 版本号: 1.3.0
+# 版本号: 1.4.0
 # 更新日期: 2026-11-14
 # 描述: 持续交付流水线：推送 v*.*.* Tag 或由 auto-release.yml 触发时，校验版本一致性，
-#       构建并打包三份交付物，以 CHANGELOG 小节创建 GitHub Release
+#       构建并打包三份交付物，以 CHANGELOG 小节创建 GitHub Release。
+#       体验版上传复用 .github/actions/upload-miniprogram，与部署工作流同源。
 
 name: Release
 
@@ -38,6 +39,8 @@ jobs:
           ref: ${{ inputs.tag || github.ref }}
           fetch-depth: 0
 
+      # 校验脚本、build.js 与打包脚本均只依赖 Node 内置模块，无需 npm ci。
+      # 本工作流刻意保持自包含：手动补发旧 Tag 时，Tag 代码里没有本地 composite action。
       - name: 配置 Node.js
         uses: actions/setup-node@v7
         with:
@@ -103,8 +106,10 @@ jobs:
           draft: false
           prerelease: ${{ contains(env.TAG, '-') }}
 
-  # OPS-006：体验版自动上传（可选）。未配置 MINIPROGRAM_PRIVATE_KEY 时自动跳过，
-  # 不阻断 Release 创建。需在仓库 Secrets 配置小程序代码上传密钥与 IP 白名单。
+  # 体验版自动上传（可选）：Release 创建完成后的增强步骤，continue-on-error 避免
+  # 微信侧环境问题把整条发布链路标红。与 release Job 同理保持自包含以兼容补发旧 Tag。
+  # 修复三处历史缺陷：① 动作应为 upload 而非 preview；② 漏装 miniprogram-ci；
+  # ③ 私钥原本写入工作区，现改到 RUNNER_TEMP 并用 trap 保证清理。
   miniprogram-preview:
     name: 上传小程序体验版
     runs-on: ubuntu-latest
@@ -121,19 +126,33 @@ jobs:
         uses: actions/setup-node@v7
         with:
           node-version: 20
+          cache: npm
+          cache-dependency-path: SutWxApp/package-lock.json
 
       - name: 安装依赖
-        working-directory: SutWxApp
-        run: npm ci
+        run: cd SutWxApp && npm ci
 
       - name: 上传体验版
-        working-directory: SutWxApp
+        shell: bash
         env:
-          MINIPROGRAM_PRIVATE_KEY: ${{ secrets.MINIPROGRAM_PRIVATE_KEY }}
+          PRIVATE_KEY: ${{ secrets.MINIPROGRAM_PRIVATE_KEY }}
+          APPID: ${{ secrets.MINIPROGRAM_APPID }}
         run: |
-          if [ -z "$MINIPROGRAM_PRIVATE_KEY" ]; then
+          if [ -z "$PRIVATE_KEY" ]; then
             echo "::notice::未配置 MINIPROGRAM_PRIVATE_KEY，跳过体验版上传"
             exit 0
           fi
-          printf "%s" "$MINIPROGRAM_PRIVATE_KEY" > private.key
-          npm run deploy:preview
+          if [ -z "$APPID" ] && grep -q '"appid": "touristappid"' SutWxApp/project.config.json; then
+            echo "::notice::AppID 未配置，跳过体验版上传"
+            exit 0
+          fi
+          KEY_PATH="$RUNNER_TEMP/miniprogram-private.key"
+          printf '%s' "$PRIVATE_KEY" > "$KEY_PATH"
+          chmod 600 "$KEY_PATH"
+          trap 'rm -f "$KEY_PATH"' EXIT
+          cd SutWxApp
+          npm install --no-save --no-audit --no-fund miniprogram-ci@^2
+          MINIPROGRAM_PRIVATE_KEY_PATH="$KEY_PATH" \
+          MINIPROGRAM_APPID="$APPID" \
+          DEPLOY_ACTION=upload \
+          node scripts/deploy.js

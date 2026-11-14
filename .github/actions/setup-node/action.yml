@@ -1,0 +1,29 @@
+# 文件路径: .github/actions/setup-node/action.yml
+# 版本号: 1.0.0
+# 更新日期: 2026-11-14
+# 描述: 复用组件：配置 Node.js 20、以 package-lock.json 为缓存键，并锁定安装小程序工程依赖。
+
+name: Setup Node
+description: 配置 Node.js 20 并用 npm ci 安装 SutWxApp 依赖；纯内置模块脚本可关闭安装
+
+inputs:
+  install:
+    description: 是否执行 npm ci（checks / site 等纯 Node 内置模块任务可设为 false）
+    required: false
+    default: "true"
+
+runs:
+  using: composite
+  steps:
+    - name: 配置 Node.js 20
+      uses: actions/setup-node@v7
+      with:
+        node-version: 20
+        cache: ${{ inputs.install == 'true' && 'npm' || '' }}
+        cache-dependency-path: SutWxApp/package-lock.json
+
+    # composite action 的 run 不继承调用方 defaults.run.working-directory，显式 cd
+    - name: 锁定安装依赖
+      if: inputs.install == 'true'
+      shell: bash
+      run: cd SutWxApp && npm ci

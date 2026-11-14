@@ -1,19 +1,18 @@
 # 文件路径: .github/workflows/ci.yml
-# 版本号: 1.2.0
+# 版本号: 1.3.0
 # 更新日期: 2026-11-14
 # 描述: 持续集成流水线：ESLint 代码检查、Jest 单元测试、八项一致性门禁、
-#       静态站点（原型展示站）构建冒烟、WordPress 插件（PHP）语法检查与单测
+#       静态站点（原型展示站）构建冒烟、WordPress 插件（PHP）语法检查与单测。
+#       环境准备与站点构建校验统一由 .github/actions/ 下的复用组件提供。
 
 name: CI
 
 on:
+  # 特性分支通过 PR 触发，避免同一提交被 push 与 PR 各跑一遍
   push:
     branches:
       - main
       - dev
-      - "feature/**"
-      - "fix/**"
-      - "hotfix/**"
   pull_request:
     branches:
       - main
@@ -44,15 +43,8 @@ jobs:
       - name: 检出代码
         uses: actions/checkout@v7
 
-      - name: 配置 Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version: 20
-          cache: npm
-          cache-dependency-path: SutWxApp/package-lock.json
-
-      - name: 安装依赖
-        run: npm ci
+      - name: 准备 Node 环境
+        uses: ./.github/actions/setup-node
 
       - name: 运行 ESLint
         run: npm run lint
@@ -66,15 +58,8 @@ jobs:
       - name: 检出代码
         uses: actions/checkout@v7
 
-      - name: 配置 Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version: 20
-          cache: npm
-          cache-dependency-path: SutWxApp/package-lock.json
-
-      - name: 安装依赖
-        run: npm ci
+      - name: 准备 Node 环境
+        uses: ./.github/actions/setup-node
 
       # 防线一：用例必须纳入版本控制；防线二：test:coverage 已移除 --passWithNoTests，
       # 0 用例时 Jest 直接失败。两者共同杜绝「CI 假绿」。
@@ -109,10 +94,10 @@ jobs:
       - name: 检出代码
         uses: actions/checkout@v7
 
-      - name: 配置 Node.js
-        uses: actions/setup-node@v7
+      - name: 准备 Node 环境
+        uses: ./.github/actions/setup-node
         with:
-          node-version: 20
+          install: "false"
 
       # 与本地 `npm run ci` 同源：check-version / check-config / check-images /
       # check-ids / check-contract / check-bundle / check-plugin-version / check-docs
@@ -133,39 +118,15 @@ jobs:
       - name: 检出代码
         uses: actions/checkout@v7
 
-      # build.js 仅依赖 Node 内置模块，构建阶段零依赖
-      - name: 配置 Node.js
-        uses: actions/setup-node@v7
+      # build.js 与产物校验均为纯 Node 内置模块，无需安装依赖
+      - name: 准备 Node 环境
+        uses: ./.github/actions/setup-node
         with:
-          node-version: 20
+          install: "false"
 
-      - name: 构建站点产物
-        run: node build.js
-
-      - name: 校验产物完整性
-        run: |
-          node -e '
-          const fs = require("fs");
-          const required = [
-            "index.html",
-            "dist/index.html",
-            "dist/prototype.html",
-            "dist/prototype-extra.html",
-            "dist/wireframes.html",
-            "dist/docs/PROJECT_OVERVIEW.md"
-          ];
-          const missing = required.filter((f) => !fs.existsSync(f));
-          if (missing.length) {
-            console.error("缺少产物：" + missing.join("，"));
-            process.exit(1);
-          }
-          const html = fs.readFileSync("dist/index.html", "utf8");
-          if (!html.includes("<title>") || !html.includes("og:title")) {
-            console.error("dist/index.html 缺少 title / og 元信息，build.js 注入可能失败");
-            process.exit(1);
-          }
-          console.log("产物校验通过：" + required.length + " 个文件");
-          '
+      # 与 site.yml 共用同一组件，确保 CI 冒烟与 Pages 发布校验口径一致
+      - name: 构建并校验站点产物
+        uses: ./.github/actions/build-site
 
       - name: 安装运行时依赖（供冒烟服务使用）
         run: npm install --omit=dev --no-audit --no-fund
@@ -231,27 +192,14 @@ jobs:
           fi
           echo "PHP 语法检查通过"
 
-      # 八个脚本自带 WP/WC 桩，可脱离 WordPress 独立运行，退出码 0=通过 / 1=失败
-      - name: 运行映射层单测
-        run: php sutwx-app-api/tests/run-mapping-tests.php
-
-      - name: 运行主题配置单测
-        run: php sutwx-app-api/tests/run-settings-tests.php
-
-      - name: 运行鉴权单测
-        run: php sutwx-app-api/tests/run-auth-tests.php
-
-      - name: 运行缓存与限频单测
-        run: php sutwx-app-api/tests/run-cache-tests.php
-
-      - name: 运行订单映射单测
-        run: php sutwx-app-api/tests/run-order-tests.php
-
-      - name: 运行微信支付 V3 单测
-        run: php sutwx-app-api/tests/run-pay-tests.php
-
-      - name: 运行平台能力单测
-        run: php sutwx-app-api/tests/run-platform-tests.php
-
-      - name: 运行支付异常路径单测
-        run: php sutwx-app-api/tests/run-pay-exception-tests.php
+      # 八个脚本自带 WP/WC 桩，可脱离 WordPress 独立运行，退出码 0=通过 / 1=失败。
+      # 用循环替代八个同构 step；分组日志保留单套可定位性，set -e 保证失败即中断。
+      - name: 运行 PHP 单测（8 套）
+        shell: bash
+        run: |
+          set -euo pipefail
+          for suite in mapping settings auth cache order pay platform pay-exception; do
+            echo "::group::PHP 单测 - $suite"
+            php "sutwx-app-api/tests/run-$suite-tests.php"
+            echo "::endgroup::"
+          done

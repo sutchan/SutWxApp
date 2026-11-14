@@ -1,0 +1,18 @@
+# 文件路径: .github/actions/build-site/action.yml
+# 版本号: 1.0.0
+# 更新日期: 2026-11-14
+# 描述: 复用组件：构建静态站点产物并校验完整性，供 ci.yml 与 site.yml 共用，避免两处校验逻辑漂移。
+
+name: Build Site
+description: 执行 build.js 并校验 dist/ 产物与页面元信息
+
+runs:
+  using: composite
+  steps:
+    - name: 构建站点产物
+      shell: bash
+      run: node build.js
+
+    - name: 校验产物完整性
+      shell: bash
+      run: node scripts/check-site-dist.js

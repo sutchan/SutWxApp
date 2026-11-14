@@ -1,7 +1,8 @@
 # 文件路径: .github/workflows/miniprogram-deploy.yml
-# 版本号: 1.1.0
+# 版本号: 1.2.0
 # 更新日期: 2026-11-14
-# 描述: 小程序持续部署流水线：手动触发，经 miniprogram-ci 生成预览二维码或上传体验版
+# 描述: 小程序持续部署流水线：手动触发，经 miniprogram-ci 生成预览二维码或上传体验版。
+#       部署步骤复用 .github/actions/upload-miniprogram，与 release.yml 的自动上传同源。
 
 name: Deploy MiniProgram
 
@@ -35,10 +36,6 @@ concurrency:
   group: deploy-miniprogram
   cancel-in-progress: false
 
-defaults:
-  run:
-    working-directory: SutWxApp
-
 jobs:
   deploy:
     name: 上传小程序代码包
@@ -49,51 +46,18 @@ jobs:
       - name: 检出代码
         uses: actions/checkout@v7
 
-      - name: 配置 Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version: 20
-          cache: npm
-          cache-dependency-path: SutWxApp/package-lock.json
+      - name: 准备 Node 环境
+        uses: ./.github/actions/setup-node
 
-      - name: 安装依赖
-        run: npm ci
-
-      # 密钥一律经 env 传入，禁止把 secrets 直接插值进 shell 脚本
-      # （含引号 / $ / 换行时会破坏语法并可能泄漏到日志）。
-      - name: 校验部署密钥是否配置
-        env:
-          PRIVATE_KEY: ${{ secrets.MINIPROGRAM_PRIVATE_KEY }}
-          APPID: ${{ secrets.MINIPROGRAM_APPID }}
-        run: |
-          if [ -z "$PRIVATE_KEY" ]; then
-            echo "::error::缺少仓库 Secret「MINIPROGRAM_PRIVATE_KEY」。请在微信公众平台「开发管理 > 开发设置 > 小程序代码上传」生成密钥并写入仓库 Secrets。"
-            exit 1
-          fi
-          if [ -z "$APPID" ] && grep -q '"appid": "touristappid"' project.config.json; then
-            echo "::error::project.config.json 中 appid 仍为占位值 touristappid，请配置 Secret「MINIPROGRAM_APPID」或在 project.config.json 中填写真实 AppID。"
-            exit 1
-          fi
-
-      - name: 写入上传私钥
-        env:
-          PRIVATE_KEY: ${{ secrets.MINIPROGRAM_PRIVATE_KEY }}
-        run: |
-          KEY_PATH="$RUNNER_TEMP/miniprogram-private.key"
-          printf '%s' "$PRIVATE_KEY" > "$KEY_PATH"
-          chmod 600 "$KEY_PATH"
-          echo "MINIPROGRAM_PRIVATE_KEY_PATH=$KEY_PATH" >> "$GITHUB_ENV"
-
-      - name: 安装 miniprogram-ci
-        run: npm install --no-save miniprogram-ci@^2
-
+      # 手动触发时密钥缺失直接失败；密钥一律经 action inputs → env 传入，不插值进 shell
       - name: 生成预览二维码 / 上传体验版
-        env:
-          MINIPROGRAM_APPID: ${{ secrets.MINIPROGRAM_APPID }}
-          DEPLOY_ACTION: ${{ inputs.action }}
-          DEPLOY_VERSION: ${{ inputs.version }}
-          DEPLOY_DESC: ${{ inputs.desc }}
-        run: node scripts/deploy.js
+        uses: ./.github/actions/upload-miniprogram
+        with:
+          action: ${{ inputs.action }}
+          version: ${{ inputs.version }}
+          desc: ${{ inputs.desc }}
+          privateKey: ${{ secrets.MINIPROGRAM_PRIVATE_KEY }}
+          appId: ${{ secrets.MINIPROGRAM_APPID }}
 
       - name: 归档预览二维码
         if: ${{ inputs.action == 'preview' }}
@@ -104,6 +68,3 @@ jobs:
           if-no-files-found: warn
           retention-days: 7
 
-      - name: 清理私钥
-        if: always()
-        run: rm -f "$MINIPROGRAM_PRIVATE_KEY_PATH" || true
